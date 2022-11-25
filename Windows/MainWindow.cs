@@ -43,7 +43,6 @@ namespace StarsectorTools.Windows
                         MessageBox.Show(this, "未确认游戏本体路径,软件即将退出", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
                         Application.Current.Shutdown();
                     }
-                    Global.SetGamePath(toml["GamePath"].AsString);
                     toml["GamePath"] = Global.gamePath;
                     toml.SaveTo(Global.configPath);
                 }

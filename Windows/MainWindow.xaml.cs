@@ -79,7 +79,7 @@ namespace StarsectorTools.Windows
 
         private void ListBox_Menu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ListBox_Menu.SelectedIndex >= 0)
+            if (ListBox_Menu.SelectedIndex == 0)
             {
                 Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Content.ToString()!];
             }
