@@ -185,14 +185,13 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
-                    <TextBox x:Name="TextBox_ModsSearch" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,150,0" TextChanged="TextBox_ModsSearch_TextChanged"/>
-                    <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="120" Margin="0,0,30,0">
+                    <TextBox x:Name="TextBox_ModsSearch" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,120,0" TextChanged="TextBox_ModsSearch_TextChanged"/>
+                    <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="120">
                         <ComboBoxItem Content="Name" Tag="Name"/>
                         <ComboBoxItem Content="Id" Tag="Id"/>
                         <ComboBoxItem Content="Author" Tag="Author"/>
                         <ComboBoxItem Content="UserDescription" Tag="UserDescription"/>
                     </ComboBox>
-                    <Button x:Name="Button_DataGridMenu" Content="📱" HorizontalAlignment="Right" VerticalAlignment="Top" Height="30" Width="30" FontSize="16" />
                 </Grid>
                 <Grid Grid.Column="2">
                     <Button x:Name="Button_ImportEnabledList" Content="导入启用列表" Margin="10,0,10,120" Click="Button_ImportEnabledList_Click" VerticalAlignment="Bottom" Height="30"/>
