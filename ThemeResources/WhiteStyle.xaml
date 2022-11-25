@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="GroupBox_Style" TargetType="GroupBox" BasedOn="{StaticResource GroupBox_Style}">
+        <Setter Property="Background" Value="#33FFFFFF" />
+        <Setter Property="BorderBrush" Value="#66ADD8E6" />
+        <Setter Property="Foreground" Value="#FF000000" />
+    </Style>
+</ResourceDictionary>

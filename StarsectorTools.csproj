@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Config.toml" />
+    <None Remove="Resources\ModGroup.toml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\ModGroup.toml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Panuon.WPF.UI" Version="1.1.6.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Config.toml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Langs\MessageBox\MessageBoxCaption_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MessageBoxCaption_I18n.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Langs\MessageBox\MessageBoxText_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MessageBoxText_I18n.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Langs\Pages\ModManager_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModManager_I18n.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Langs\Windows\MainWindow\MainWindow_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>MainWindow_I18n.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Langs\MessageBox\MessageBoxCaption_I18n.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxCaption_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\MessageBox\MessageBoxText_I18n.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessageBoxText_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Pages\ModManager_I18n.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModManager_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Windows\MainWindow\MainWindow_I18n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainWindow_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

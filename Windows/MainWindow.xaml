@@ -1,0 +1,51 @@
+﻿<Window x:Class="StarsectorTools.Windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+        xmlns:local="clr-namespace:StarsectorTools"
+        xmlns:I18n="clr-namespace:StarsectorTools.Langs.Windows.MainWindow"
+        mc:Ignorable="d"
+        Title="StarsectorTools" Height="500" Width="1000" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#33FFFFFF" Padding="5" MouseDown="Window_MouseDown" FontFamily="Consolas">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="-1" ResizeBorderThickness="5" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <Style TargetType="{x:Type Panel}" x:Key="WindowMainPanelStyle">
+            <Setter Property="Margin" Value="0" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
+                    <Setter Property="Margin" Value="7" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid Style="{StaticResource WindowMainPanelStyle}" >
+        <Grid x:Name="Grid_TitleBar" VerticalAlignment="Top" MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown" Background="#4CFFFFFF">
+            <Grid HorizontalAlignment="Center">
+                <Image x:Name="Image_Title" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Source="/Resources/recycling.ico" Margin="5,5,0,0"/>
+                <Label x:Name="Label_Title" Content="{x:Static I18n:MainWindow_I18n.StarsectorTools}" Padding="0,0,0,0" VerticalContentAlignment="Center" Background="{x:Null}" HorizontalAlignment="Center" Margin="30,0,0,0" FontSize="16"/>
+            </Grid>
+            <Button x:Name="Button_TitleMin" Content="➖" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#4CEAEAEA" Width="40" Height="30" BorderBrush="{x:Null}" Margin="0,0,80,0" Click="Button_TitleMin_Click" FontSize="16"/>
+            <Button x:Name="Button_TitleMax" Content="🔲" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#4CEAEAEA" Width="40" Height="30" BorderBrush="{x:Null}" Margin="0,0,40,0" Click="Button_TitleMax_Click" FontSize="16"/>
+            <Button x:Name="Button_TitleClose" Content="❌" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#4CEAEAEA" Width="40" Height="30" BorderBrush="{x:Null}"  Click="Button_TitleClose_Click" FontSize="16"/>
+            <Button x:Name="Button_MainMenu" Content="📘" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Background="#4CEAEAEA" Click="Button_MainMenu_Click" FontSize="16"/>
+        </Grid>
+        <Grid Margin="0,30,0,0">
+            <Grid x:Name="Grid_Menu" Width="30" HorizontalAlignment="Left" SizeChanged="Grid_Menu_SizeChanged">
+                <ListBox x:Name="ListBox_Menu" Margin="0,0,0,30" HorizontalAlignment="Left" BorderThickness="0" Background="#4CEAEAEA"
+                 pu:IconHelper.Margin="0,0,15,0" SelectionChanged="ListBox_Menu_SelectionChanged" >
+                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="ModManager" />
+                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="Trending" />
+                    <ListBoxItem pu:ListBoxItemHelper.Icon="3" Content="Streaming" />
+                    <ListBoxItem pu:ListBoxItemHelper.Icon="4" Content="Playlist" />
+                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="Bookmark" />
+                </ListBox>
+                <Button x:Name="Button_SettingsMenu" Content="⚙" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Width="30" Background="#4CEAEAEA" Click="Button_SettingsMenu_Click" FontSize="16"/>
+                <Label Content="{x:Static I18n:MainWindow_I18n.Settings}" Margin="30,0,0,0" VerticalAlignment="Bottom" Background="#4CEAEAEA" Height="30"/>
+            </Grid>
+            <Frame x:Name="Frame_MainFrame" NavigationUIVisibility="Hidden" Margin="30,0,0,0" />
+        </Grid>
+    </Grid>
+</Window>
