@@ -23,166 +23,6 @@ namespace StarsectorTools.Pages
 {
     public partial class ModManager
     {
-        const string modGroupPath = @"ModGroup.toml";
-        readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
-        const string userGroupPath = @"UserGroup.toml";
-        Dictionary<string, ModInfo> allModsInfo = new();
-        HashSet<string> enabledModsId = new();
-        HashSet<string> collectedModsId = new();
-        Dictionary<string, HashSet<string>> allModsGroupId = new();
-        Dictionary<string, ListBoxItem> allListBoxItemsFromGroup = new();
-        Dictionary<string, ModShowInfo> allModShowInfo = new();
-
-        bool groupMenuOpen = false;
-        bool showModInfo = false;
-        string? nowSelectedMod = null;
-        string nowGroup = GroupType.All;
-        Dictionary<string, HashSet<string>> allUserGroup = new();
-        static class GroupType
-        {
-            /// <summary>全部模组</summary>
-            public const string All = "All";
-            /// <summary>已启用模组</summary>
-            public const string Enabled = "Enabled";
-            /// <summary>未启用模组</summary>
-            public const string Disable = "Disable";
-            /// <summary>前置模组</summary>
-            public const string Libraries = "Libraries";
-            /// <summary>大型模组</summary>
-            public const string Megamods = "Megamods";
-            /// <summary>派系模组</summary>
-            public const string FactionMods = "FactionMods";
-            /// <summary>内容模组</summary>
-            public const string ContentExpansions = "ContentExpansions";
-            /// <summary>功能模组</summary>
-            public const string UtilityMods = "UtilityMods";
-            /// <summary>闲杂模组</summary>
-            public const string MiscellaneousMods = "MiscellaneousMods";
-            /// <summary>美化模组</summary>
-            public const string BeautifyMods = "BeautifyMods";
-            /// <summary>全部模组</summary>
-            public const string Unknown = "Unknown";
-            /// <summary>已收藏模组</summary>
-            public const string Collected = "Collected";
-        };
-
-        Dictionary<string, ObservableCollection<ModShowInfo>> allShowModInfoAtGroup = new()
-        {
-            {GroupType.All,new() },
-            {GroupType.Enabled,new() },
-            {GroupType.Disable,new() },
-            {GroupType.Libraries,new() },
-            {GroupType.Megamods,new() },
-            {GroupType.FactionMods,new() },
-            {GroupType.ContentExpansions,new() },
-            {GroupType.UtilityMods,new() },
-            {GroupType.MiscellaneousMods,new() },
-            {GroupType.BeautifyMods,new() },
-            {GroupType.Unknown,new() },
-            {GroupType.Collected,new() },
-        };
-        class ButtonStyle
-        {
-            public Style Enabled = null!;
-            public Style Disable = null!;
-            public Style Collected = null!;
-            public Style Uncollected = null!;
-        }
-        readonly ButtonStyle buttonStyle = new();
-        class LabelStyle
-        {
-            public Style VersionNormal = null!;
-            public Style VersionWarn = null!;
-            public Style IsUtility = null!;
-            public Style NotUtility = null!;
-        }
-        readonly LabelStyle labelStyle = new();
-        public class ModShowInfo : INotifyPropertyChanged
-        {
-            public string? Id { get; set; }
-            public string? Name { get; set; }
-            public string? Author { get; set; }
-            public string? Version { get; set; }
-            public string? GameVersion { get; set; }
-            private Style? gameVersionStyle = null;
-            public Style? GameVersionStyle
-            {
-                get { return gameVersionStyle; }
-                set
-                {
-                    gameVersionStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(GameVersionStyle)));
-                }
-            }
-            public bool? Utility { get; set; }
-            private Style? utilityStyle = null;
-            public Style? UtilityStyle
-            {
-                get { return utilityStyle; }
-                set
-                {
-                    utilityStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(UtilityStyle)));
-                }
-            }
-            public bool? Enabled { get; set; }
-            public string? ImagePath { get; set; }
-            public string? Group { get; set; }
-            private string? dependencies { get; set; }
-            public string? Dependencies
-            {
-                get { return dependencies; }
-                set
-                {
-                    dependencies = value;
-                    PropertyChanged?.Invoke(this, new(nameof(Dependencies)));
-                }
-            }
-            public List<string>? DependenciesList { get; set; }
-            private double rowDetailsHight { get; set; }
-            public double RowDetailsHight
-            {
-                get { return rowDetailsHight; }
-                set
-                {
-                    rowDetailsHight = value;
-                    PropertyChanged?.Invoke(this, new(nameof(RowDetailsHight)));
-                }
-            }
-            public string? UserDescription { get; set; }
-            private Style? enabledStyle = null;
-            public Style? EnabledStyle
-            {
-                get { return enabledStyle; }
-                set
-                {
-                    enabledStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(EnabledStyle)));
-                }
-            }
-            public bool? Collected { get; set; }
-            private Style? collectedStyle = null;
-            public Style? CollectedStyle
-            {
-                get { return collectedStyle; }
-                set
-                {
-                    collectedStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(CollectedStyle)));
-                }
-            }
-            private ContextMenu? contextMenu = null;
-            public ContextMenu? ContextMenu
-            {
-                get { return contextMenu; }
-                set
-                {
-                    contextMenu = value;
-                    PropertyChanged?.Invoke(this, new(nameof(ContextMenu)));
-                }
-            }
-            public event PropertyChangedEventHandler? PropertyChanged;
-        }
         void InitializeData()
         {
             buttonStyle.Enabled = (Style)Resources["EnabledStyle"];
@@ -196,9 +36,8 @@ namespace StarsectorTools.Pages
         }
         void GetAllMods()
         {
-            List<string> errList = null!;
             DirectoryInfo dirs = new(Global.gameModsPath);
-            string nope = null!;
+            string err = null!;
             foreach (var dir in dirs.GetDirectories())
             {
                 try
@@ -213,19 +52,22 @@ namespace StarsectorTools.Pages
                     modInfo.Path = dir.FullName;
                     allModsInfo.Add(modInfo.Id!, modInfo);
                 }
-                catch (Exception e)
+                catch
                 {
-                    errList ??= new();
-                    nope ??= "以下模组加载错误\n";
-                    nope += $"{dir.Name}\n";
-                    errList.Add($"ModPath:{dir.FullName}\n Message:{e.Message}\n");
+                    err ??= "以下模组加载错误\n";
+                    err += $"{dir.Name}\n";
                 }
             }
-            if (nope != null)
-                MessageBox.Show(nope, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+            if (err != null)
+                MessageBox.Show(err, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
         }
         void GetEnabledMods()
         {
+            if (!File.Exists(Global.enabledModsJsonPath))
+            {
+                MessageBox.Show($"启用列表不存在\n{Global.enabledModsJsonPath}", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             string datas = File.ReadAllText(Global.enabledModsJsonPath);
             if (datas.Length > 0)
             {
@@ -236,46 +78,28 @@ namespace StarsectorTools.Pages
                     JsonArray enabledModsJsonArray = enabledModsJson["enabledMods"]!.AsArray();
                     foreach (var mod in enabledModsJsonArray)
                     {
-                        var key = mod!.ToString();
-                        if (allModsInfo.ContainsKey(key))
+                        var id = mod!.GetValue<string>();
+                        if (allModsInfo.ContainsKey(id))
                         {
-                            enabledModsId.Add(key);
+                            if (!enabledModsId.Add(id))
+                            {
+                                err ??= "";
+                                err += $"{id} 已存在\n";
+                            }
                         }
                         else
                         {
                             err ??= "并未找到游戏启用模组列表中的以下模组:\n";
-                            err += $"{key}\n";
+                            err += $"{id}\n";
                         }
                     }
                     if (err != null)
                         MessageBox.Show(err, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                catch (Exception)
+                catch
                 {
                     MessageBox.Show("启用列表载入错误", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-        }
-        void GetAllModGroup()
-        {
-            if (!File.Exists(modGroupPath))
-            {
-                using StreamReader sr = new(Application.GetResourceStream(modGroupUri).Stream);
-                File.WriteAllText(modGroupPath, sr.ReadToEnd());
-            }
-            try
-            {
-                using TomlTable toml = TOML.Parse(modGroupPath);
-                foreach (var kv in toml)
-                {
-                    allModsGroupId.Add(kv.Key, new());
-                    foreach (string id in kv.Value.AsTomlArray)
-                        allModsGroupId[kv.Key].Add(id);
-                }
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("???", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         void CheckUserGroup()
@@ -291,76 +115,79 @@ namespace StarsectorTools.Pages
         }
         void GetAllUserGroup(string path)
         {
+            string err = null!;
             using TomlTable toml = TOML.Parse(path);
             List<string> errList = new();
             try
             {
                 foreach (var kv in toml)
                 {
-                    switch (kv.Key)
+                    if (kv.Key == GroupType.Collected)
                     {
-                        case GroupType.Collected:
-                            string err = null!;
-                            foreach (string id in kv.Value.AsTomlArray)
+                        foreach (string id in kv.Value.AsTomlArray)
+                        {
+                            if (ModsShowInfo.ContainsKey(id))
                             {
-                                if (allModShowInfo.ContainsKey(id))
+                                ModCollectedChange(id, true);
+                            }
+                            else
+                            {
+                                err ??= "并未找到以下已收藏的ModId\n";
+                                err += $"    {id}\n";
+                            }
+                        }
+                        if (err is not null)
+                            errList.Add(err);
+                    }
+                    else if (kv.Key == "UserModsData")
+                    {
+                        foreach (var dic in kv.Value.AsTomlArray)
+                        {
+                            var id = dic["Id"].AsString;
+                            if (ModsShowInfo.ContainsKey(id))
+                            {
+                                var info = ModsShowInfo[id];
+                                info.ImagePath = dic["ImagePath"];
+                                info.UserDescription = dic["UserDescription"];
+                            }
+                            else
+                            {
+                                err ??= "并未找到以下包含自定义数据的ModId\n";
+                                err += $"    {id}\n";
+                            }
+                        }
+                        if (err is not null)
+                            errList.Add(err);
+                    }
+                    else
+                    {
+                        string group = kv.Key;
+                        if (!userGroups.ContainsKey(group))
+                        {
+                            AddUserGroup(kv.Value["Icon"], kv.Key);
+                            foreach (string id in kv.Value["Mods"].AsTomlArray)
+                            {
+                                if (ModsShowInfo.ContainsKey(id))
                                 {
-                                    ModCollectedChange(id, true);
+                                    if (userGroups[group].Add(id))
+                                        allShowModInfoAtGroup[group].Add(ModsShowInfo[id]);
+                                    else
+                                    {
+                                        err ??= "";
+                                        err += $"模组{id}已存在";
+                                    }
                                 }
                                 else
                                 {
-                                    err ??= "并未找到以下已收藏的ModId\n";
+                                    err ??= $"并未用户分组 {group} 找到以下ModId\n";
                                     err += $"    {id}\n";
                                 }
                             }
-                            if (err is not null)
-                                errList.Add(err);
-                            break;
-                        case "UserModsData":
-                            string err1 = null!;
-                            foreach (var dic in kv.Value.AsTomlArray)
-                            {
-                                var id = dic["Id"].AsString;
-                                if (allModShowInfo.ContainsKey(id))
-                                {
-                                    var info = allModShowInfo[id];
-                                    info.ImagePath = dic["ImagePath"];
-                                    info.UserDescription = dic["UserDescription"];
-                                }
-                                else
-                                {
-                                    err1 ??= "并未找到以下包含自定义数据的ModId\n";
-                                    err1 += $"    {id}\n";
-                                }
-                            }
-                            if (err1 is not null)
-                                errList.Add(err1);
-                            break;
-                        default:
-                            string err2 = null!;
-                            string group = kv.Key;
-                            if (!allUserGroup.ContainsKey(group))
-                            {
-                                AddUserGroup(kv.Value["Icon"], kv.Key);
-                                foreach (string id in kv.Value["Mods"].AsTomlArray)
-                                {
-                                    if (allModShowInfo.ContainsKey(id))
-                                    {
-                                        allUserGroup[group].Add(id);
-                                        allShowModInfoAtGroup[group].Add(allModShowInfo[id]);
-                                    }
-                                    else
-                                    {
-                                        err2 ??= $"并未用户分组 {group} 找到以下ModId\n";
-                                        err2 += $"    {id}\n";
-                                    }
-                                }
-                            }
-                            else
-                                err2 ??= $"用户分组 {group} 已存在";
-                            if (err2 is not null)
-                                errList.Add(err2);
-                            break;
+                        }
+                        else
+                            err ??= $"用户分组 {group} 已存在";
+                        if (err is not null)
+                            errList.Add(err);
                     }
                 }
                 if (errList.Count > 0)
@@ -370,7 +197,7 @@ namespace StarsectorTools.Pages
             }
             catch (Exception)
             {
-                MessageBox.Show("文件载入错误", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("用户数据文件载入错误", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             SetAllSizeInListBoxItem();
         }
@@ -379,30 +206,68 @@ namespace StarsectorTools.Pages
             foreach (ListBoxItem item in ListBox_ModsGroupMenu.Items)
             {
                 if (item.Content is string str)
-                    allListBoxItemsFromGroup.Add(item.Tag.ToString()!, item);
+                    listBoxItemsFromGroups.Add(item.Tag.ToString()!, item);
                 else if (item.Content is Expander expander && expander.Content is ListBox listBox)
                     foreach (ListBoxItem item1 in listBox.Items)
-                        allListBoxItemsFromGroup.Add(item1.Tag.ToString()!, item1);
+                        listBoxItemsFromGroups.Add(item1.Tag.ToString()!, item1);
             }
         }
         void InitializeDataGridItemsSource()
         {
+            Dictionary<string, HashSet<string>> modsIdFromGroups = new()
+            {
+                {GroupType.Libraries,new() },
+                {GroupType.Megamods,new() },
+                {GroupType.FactionMods,new() },
+                {GroupType.ContentExpansions,new() },
+                {GroupType.UtilityMods,new() },
+                {GroupType.MiscellaneousMods,new() },
+                {GroupType.BeautifyMods,new() },
+                {GroupType.Unknown,new() },
+            };
+            if (!File.Exists(modGroupPath))
+            {
+                using StreamReader sr = new(Application.GetResourceStream(modGroupUri).Stream);
+                File.WriteAllText(modGroupPath, sr.ReadToEnd());
+            }
+            try
+            {
+                using TomlTable toml = TOML.Parse(modGroupPath);
+                foreach (var kv in toml)
+                    foreach (string id in kv.Value.AsTomlArray)
+                        modsIdFromGroups[kv.Key].Add(id);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("???", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             foreach (var kv in allModsInfo)
             {
                 ModInfo info = kv.Value;
                 ModShowInfo showInfo = GetModShowInfo(info);
                 showInfo.ContextMenu = CreateContextMenu(showInfo);
+                showInfo.Group = CheckGroup(showInfo.Id!);
                 allShowModInfoAtGroup[GroupType.All].Add(showInfo);
+                if (showInfo.Group!.Length == 0)
+                    showInfo.Group = GroupType.Unknown;
                 if (showInfo.Enabled is true)
                     allShowModInfoAtGroup[GroupType.Enabled].Add(showInfo);
                 else
                     allShowModInfoAtGroup[GroupType.Disable].Add(showInfo);
                 allShowModInfoAtGroup[showInfo.Group!].Add(showInfo);
-                allModShowInfo.Add(info.Id!, showInfo);
+                ModsShowInfo.Add(info.Id!, showInfo);
             }
             ShowGroupChange(GroupType.All);
             ListBox_ModsGroupMenu.SelectedIndex = 0;
             CheckEnabledModsDependencies();
+            string CheckGroup(string id)
+            {
+                foreach (var group in modsIdFromGroups)
+                    if (group.Value.Contains(id))
+                       return  group.Key;
+                return GroupType.Unknown;
+            }
         }
         void ShowGroupChange(string group)
         {
@@ -431,21 +296,14 @@ namespace StarsectorTools.Pages
                 UserDescription = "",
                 Utility = info.Utility,
                 UtilityStyle = info.Utility is true ? labelStyle.IsUtility : labelStyle.NotUtility,
-                Group = CheckGroup(info.Id!),
+                Group = "",
             };
             return showInfo;
         }
         void SetAllSizeInListBoxItem()
         {
-            foreach (var item in allListBoxItemsFromGroup.Values)
+            foreach (var item in listBoxItemsFromGroups.Values)
                 item.Content = $"{item.Content.ToString()!.Split(" ")[0]} ({allShowModInfoAtGroup[item.Tag.ToString()!].Count})"; ;
-        }
-        string CheckGroup(string id)
-        {
-            foreach (var group in allModsGroupId)
-                if (group.Value.Contains(id))
-                    return group.Key;
-            return GroupType.Unknown;
         }
         bool CheckEnabled(string id)
         {
@@ -457,10 +315,8 @@ namespace StarsectorTools.Pages
         }
         void RefreshShowModsItemContextMenu()
         {
-            foreach (var info in allModShowInfo.Values)
-            {
+            foreach (var info in ModsShowInfo.Values)
                 info.ContextMenu = CreateContextMenu(info);
-            }
         }
         ContextMenu CreateContextMenu(ModShowInfo info)
         {
@@ -480,13 +336,13 @@ namespace StarsectorTools.Pages
                 System.Diagnostics.Process.Start("Explorer.exe", allModsInfo[info.Id!].Path);
             };
             menu.Items.Add(item);
-            if (allUserGroup.Count > 0)
+            if (userGroups.Count > 0)
             {
                 item = new();
                 item.Header = "添加至用户分组";
-                foreach (var group in allUserGroup.Keys)
+                foreach (var group in userGroups.Keys)
                 {
-                    if (!allUserGroup[group].Contains(info.Id!))
+                    if (!userGroups[group].Contains(info.Id!))
                     {
                         MenuItem groupItem = new();
                         groupItem.Header = group;
@@ -500,7 +356,7 @@ namespace StarsectorTools.Pages
                 if (item.Items.Count > 0)
                     menu.Items.Add(item);
             }
-            var haveModGroup = allUserGroup.Where(g => g.Value.Contains(info.Id!));
+            var haveModGroup = userGroups.Where(g => g.Value.Contains(info.Id!));
             if (haveModGroup.Count() > 0)
             {
                 item = new();
@@ -535,16 +391,16 @@ namespace StarsectorTools.Pages
         }
         void ModUserGroupChange(string group, string id, bool status)
         {
-            ModShowInfo info = allModShowInfo[id];
+            ModShowInfo info = ModsShowInfo[id];
             if (status)
             {
-                if (allUserGroup[group].Add(id))
-                    allShowModInfoAtGroup[group].Add(allModShowInfo[id]);
+                if (userGroups[group].Add(id))
+                    allShowModInfoAtGroup[group].Add(ModsShowInfo[id]);
             }
             else
             {
-                allUserGroup[group].Remove(id);
-                allShowModInfoAtGroup[group].Remove(allModShowInfo[id]);
+                userGroups[group].Remove(id);
+                allShowModInfoAtGroup[group].Remove(ModsShowInfo[id]);
             }
             info.ContextMenu = CreateContextMenu(info);
         }
@@ -565,7 +421,7 @@ namespace StarsectorTools.Pages
         }
         void ModEnabledChange(string id, bool? enabled = null)
         {
-            ModShowInfo info = allModShowInfo[id];
+            ModShowInfo info = ModsShowInfo[id];
             info.Enabled = enabled is null ? !info.Enabled : enabled;
             info.EnabledStyle = info.Enabled is true ? buttonStyle.Enabled : buttonStyle.Disable;
             info.ContextMenu = CreateContextMenu(info);
@@ -616,7 +472,7 @@ namespace StarsectorTools.Pages
         }
         void ModCollectedChange(string id, bool? collected = null)
         {
-            ModShowInfo info = allModShowInfo[id];
+            ModShowInfo info = ModsShowInfo[id];
             info.Collected = collected is null ? !info.Collected : collected;
             info.CollectedStyle = info.Collected is true ? buttonStyle.Collected : buttonStyle.Uncollected;
             info.ContextMenu = CreateContextMenu(info);
@@ -633,35 +489,6 @@ namespace StarsectorTools.Pages
                 collectedModsId.Remove(info.Id!);
                 allShowModInfoAtGroup[GroupType.Collected].Remove(info);
             }
-        }
-        void SearchMods()
-        {
-            if (TextBox_ModsSearch.Text.Length > 0 && TextBox_ModsSearch.Text is string text)
-            {
-                ObservableCollection<ModShowInfo> showModInfos = new();
-                switch (((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!)
-                {
-                    case "Name":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.Name!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                    case "Id":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.Id!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                    case "Author":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.Author!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                    case "UserDescription":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.UserDescription!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                }
-                DataGrid_ModsShowList.ItemsSource = showModInfos;
-            }
-            else
-                DataGrid_ModsShowList.ItemsSource = allShowModInfoAtGroup[nowGroup];
         }
         void SeveAllData()
         {
@@ -683,7 +510,7 @@ namespace StarsectorTools.Pages
                 { GroupType.Collected, new TomlArray() },
                 { "UserModsData", new TomlArray() }
             };
-            foreach (var info in allModShowInfo.Values)
+            foreach (var info in ModsShowInfo.Values)
             {
                 if (info.Collected is true)
                     toml[GroupType.Collected].Add(info.Id!);
@@ -697,11 +524,11 @@ namespace StarsectorTools.Pages
                     });
                 }
             }
-            foreach (var kv in allUserGroup)
+            foreach (var kv in userGroups)
             {
                 toml.Add(kv.Key, new TomlTable()
                 {
-                    ["Icon"] = ListBoxItemHelper.GetIcon(allListBoxItemsFromGroup[kv.Key]).ToString()!,
+                    ["Icon"] = ListBoxItemHelper.GetIcon(listBoxItemsFromGroups[kv.Key]).ToString()!,
                     ["Mods"] = new TomlArray(),
                 });
                 foreach (var id in kv.Value)
@@ -740,7 +567,7 @@ namespace StarsectorTools.Pages
         void SetModInfo(string id)
         {
             ModInfo info = allModsInfo[id];
-            if (allModShowInfo[info.Id!].ImagePath is string imagePath && File.Exists(imagePath))
+            if (ModsShowInfo[info.Id!].ImagePath is string imagePath && File.Exists(imagePath))
                 Image_ModImage.Source = new BitmapImage(new(imagePath));
             Label_ModName.Content = info.Name;
             Label_ModId.Content = info.Id;
@@ -749,9 +576,14 @@ namespace StarsectorTools.Pages
             Button_ModPath.Content = info.Path;
             TextBlock_ModAuthor.Text = info.Author;
             if (info.Dependencies is List<ModInfo> list)
+            {
+                GroupBox_ModDependencies.Visibility = Visibility.Visible;
                 TextBlock_ModDependencies.Text = string.Join("\n", list.Select(i => $"{"名称:"} {i.Name} {"ID:"} {i.Id} " + (i.Version is not null ? $"{"版本"} {i.Version}" : ""))!);
+            }
+            else
+                GroupBox_ModDependencies.Visibility = Visibility.Collapsed;
             TextBlock_ModDescription.Text = info.Description;
-            TextBox_UserDescription.Text = allModShowInfo[info.Id!].UserDescription!;
+            TextBox_UserDescription.Text = ModsShowInfo[info.Id!].UserDescription!;
         }
     }
 }

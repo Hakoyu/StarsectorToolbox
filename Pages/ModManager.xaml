@@ -58,13 +58,12 @@
         <GroupBox Header="模组管理器" Style="{StaticResource GroupBox_Style}" Padding="5,5,0,5">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="26*"/>
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="546*"/>
+                    <ColumnDefinition Width="127*"/>
+                    <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="Grid_GroupMenu" HorizontalAlignment="Left" SizeChanged="Grid_GroupMenu_SizeChanged" Width="120" >
-                    <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" Background="#4CEAEAEA"
-                 pu:IconHelper.Margin="5,0,15,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" >
+                    <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" Background="#4CEAEAEA"  pu:IconHelper.Margin="5,0,15,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" >
                         <ListBoxItem pu:ListBoxItemHelper.Icon="0" Content="全部模组 " Height="30" ToolTip="All" Tag="All"/>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="启用状态分组">
@@ -89,7 +88,7 @@
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander IsExpanded="True" IsTabStop="True" Header="用户分组" FontFamily="Consolas">
+                            <Expander IsExpanded="True" IsTabStop="True" Header="用户分组">
                                 <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
                                     <ListBoxItem pu:ListBoxItemHelper.Icon="❤" Content="已收藏模组 " ToolTip="Collected" Tag="Collected"/>
                                 </ListBox>
@@ -97,7 +96,7 @@
                         </ListBoxItem>
                     </ListBox>
                     <Button x:Name="Button_GroupMenu" Content="📘" VerticalAlignment="Top" Height="30" Background="#4CEAEAEA" FontSize="16" HorizontalContentAlignment="Left" Click="Button_GroupMenu_Click"/>
-                    <Button x:Name="Button_AddGroup" Content="添加用户分组" Width="120" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left"
+                    <Button x:Name="Button_AddGroup" Content="添加用户分组" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left"
                             pu:ButtonHelper.Icon="➕" pu:IconHelper.Margin="5,0,10,0" Click="Button_AddGroup_Click"/>
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,0,0" Grid.ColumnSpan="2" >
@@ -134,45 +133,52 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Icon" IsReadOnly ="True">
+                            <DataGridTemplateColumn Header="Icon" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Source="{Binding Image}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name" IsReadOnly ="True" CanUserSort="True" SortMemberPath="Name">
+                            <DataGridTemplateColumn Header="Name" IsReadOnly="True" CanUserSort="True" SortMemberPath="Name">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Name}" ToolTip="{Binding Name}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,5,0,5" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Author" IsReadOnly ="True" Width="100" CanUserSort="True" SortMemberPath="Author">
+                            <DataGridTemplateColumn Header="Author" IsReadOnly="True" Width="100" CanUserSort="True" SortMemberPath="Author">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Author}" ToolTip="{Binding Author}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,5,0,5" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Version" IsReadOnly ="True">
+                            <DataGridTemplateColumn Header="Version" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Version}" ToolTip="{Binding Version}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,5,0,5" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="GameVersion" IsReadOnly ="True" CanUserSort="True" SortMemberPath="GameVersion">
+                            <DataGridTemplateColumn Header="GameVersion" IsReadOnly="True" CanUserSort="True" SortMemberPath="GameVersion">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding GameVersion}" ToolTip="{Binding GameVersion}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,5,0,5" Style="{Binding GameVersionStyle}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Utility" IsReadOnly ="True" CanUserSort="True" SortMemberPath="Utility">
+                            <DataGridTemplateColumn Header="Utility" IsReadOnly="True" CanUserSort="True" SortMemberPath="Utility">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,5,0,5" Style="{Binding UtilityStyle}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="UserDescription" IsReadOnly="True" CanUserSort="True" SortMemberPath="UserDescription">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding UserDescription}" ToolTip="{Binding UserDescription}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -195,12 +201,13 @@
                     </ComboBox>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <Button x:Name="Button_ImportUserGroup" Content="导入用户分组" Margin="10,0,10,200" Height="30" VerticalAlignment="Bottom" Click="Button_ImportUserGroup_Click"/>
-                    <Button x:Name="Button_ExportUserGroup" Content="导出用户分组" Margin="10,0,10,165" VerticalAlignment="Bottom" Height="30" Click="Button_ExportUserGroup_Click"/>
+                    <Button x:Name="Button_ImportUserGroup" Content="导入用户分组" Margin="10,0,10,235" Click="Button_ImportUserGroup_Click" Height="30" VerticalAlignment="Bottom"/>
+                    <Button x:Name="Button_ExportUserGroup" Content="导出用户分组" Margin="10,0,10,200" Click="Button_ExportUserGroup_Click" VerticalAlignment="Bottom" Height="30"/>
                     <Button x:Name="Button_ImportEnabledList" Content="导入启用列表" Margin="10,0,10,120" Click="Button_ImportEnabledList_Click" VerticalAlignment="Bottom" Height="30"/>
                     <Button x:Name="Button_ExportList" Content="导出启用列表" Margin="10,0,10,85" Click="Button_ExportEnabledList_Click" Height="30" VerticalAlignment="Bottom"/>
                     <Button x:Name="Button_Save" Content="保存配置" Margin="10,0,10,40" Click="Button_Save_Click" VerticalAlignment="Bottom" Height="30"/>
                     <Button x:Name="Button_GameStart" Content="启动游戏" Margin="10,0,10,5" Height="30" VerticalAlignment="Bottom" Click="Button_GameStart_Click"/>
+                    <Button x:Name="Button_ImportEnabledList_Copy" Content="从存档导入列表" Margin="10,0,10,155" Click="Button_ImportEnabledList_Click" Height="30" VerticalAlignment="Bottom"/>
                 </Grid>
                 <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="Gray" Visibility="Hidden">
                     <ScrollViewer>
@@ -249,7 +256,7 @@
                                 </Label>
                             </StackPanel>
                             <Grid Margin="0,0,0,5">
-                                <Button x:Name="Button_ModPath" Click="Button_ModPath_Click" Height="30" Padding="0,0,0,0"
+                                <Button x:Name="Button_ModPath" Click="Button_ModPath_Click" Height="30" Padding="5,0,0,0"
                                         ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" HorizontalContentAlignment="Left" >
                                     <Button.ContextMenu>
                                         <ContextMenu>
@@ -267,7 +274,7 @@
                                     </TextBlock.ContextMenu>
                                 </TextBlock>
                             </GroupBox>
-                            <GroupBox Header="依赖模组" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
+                            <GroupBox x:Name="GroupBox_ModDependencies" Header="依赖模组" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
                                 <TextBlock x:Name="TextBlock_ModDependencies" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}">
                                     <TextBlock.ContextMenu>
                                         <ContextMenu>
@@ -286,7 +293,7 @@
                                 </TextBlock>
                             </GroupBox>
                             <GroupBox Header="自定义描述" Style="{StaticResource GroupBox_Style}">
-                                <TextBox x:Name="TextBox_UserDescription" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" KeyDown="TextBox_UserDescription_KeyDown" LostFocus="TextBox_UserDescription_LostFocus" GotFocus="TextBox_UserDescription_GotFocus" />
+                                <TextBox x:Name="TextBox_UserDescription" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" KeyDown="TextBox_UserDescription_KeyDown" LostFocus="TextBox_UserDescription_LostFocus"/>
                             </GroupBox>
                         </StackPanel>
                     </ScrollViewer>
