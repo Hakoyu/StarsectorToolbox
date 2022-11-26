@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HKW.WindowAccent;
+using StarsectorTools.Pages;
 
 namespace StarsectorTools.Windows
 {
@@ -33,7 +34,7 @@ namespace StarsectorTools.Windows
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-            menuList.Add("ModManager", new Pages.Page_ModManager());
+            menuList.Add("ModManager", new Pages.ModManager());
             ListBox_Menu.SelectedIndex = 0;
         }
         //窗体移动
@@ -91,15 +92,22 @@ namespace StarsectorTools.Windows
             Frame_MainFrame.Content = settingMenu;
             ListBox_Menu.SelectedIndex = -1;
         }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            Keyboard.ClearFocus();
-        }
-
         private void Grid_Menu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Frame_MainFrame.Margin = new Thickness() { Left = Grid_Menu.ActualWidth, Top = 0, Right = 0, Bottom = 0 };
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled= true;
+            Keyboard.ClearFocus();
+            // 将事件焦点转移到parent
+            //FrameworkElement parent = (FrameworkElement)Parent;
+            //while (parent != null && ((IInputElement)parent).Focusable)
+            //    parent = (FrameworkElement)parent.Parent;
+            DependencyObject scope = FocusManager.GetFocusScope(this);
+            FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
+            ((ModManager)menuList["ModManager"]).CloseModInfo();
         }
     }
 }

@@ -27,11 +27,11 @@ using Panuon.WPF.UI;
 namespace StarsectorTools.Pages
 {
     /// <summary>
-    /// Page_ModManager.xaml 的交互逻辑
+    /// ModManager.xaml 的交互逻辑
     /// </summary>
-    public partial class Page_ModManager : Page
+    public partial class ModManager : Page
     {
-        public Page_ModManager()
+        public ModManager()
         {
             InitializeComponent();
             InitializeData();
@@ -161,19 +161,29 @@ namespace StarsectorTools.Pages
                 }
                 nowGroup = item.Tag.ToString()!;
                 DataGrid_ModsShowList.ItemsSource = allShowModInfoAtGroup[nowGroup];
-                CloseModInfo();
+                //CloseModInfo();
             }
         }
-
         private void DataGridItem_GotFocus(object sender, RoutedEventArgs e)
         {
-            ShowModInfo((DataGridRow)sender);
+            if (sender is DataGridRow row)
+                ModInfoShowChange(row.Tag.ToString()!);
+            //ShowModInfo(row.Tag.ToString()!);
+        }
+
+        private void DataGridItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (sender is DataGridRow row)
+                ShowModInfo(row.Tag.ToString()!);
+            //ModInfoShowChange(row.Tag.ToString()!);
         }
         private void DataGridItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // 连续点击无效,需要 e.Handled = true
             e.Handled = true;
-            ShowModInfo((DataGridRow)sender);
+            if (sender is DataGridRow row)
+                ModInfoShowChange(row.Tag.ToString()!);
+            //ShowModInfo(row.Tag.ToString()!);
         }
 
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
@@ -200,7 +210,7 @@ namespace StarsectorTools.Pages
             {
                 string id = info.Id!;
                 string err = null!;
-                foreach (var dependencie in allShowModInfo[id].Dependencies!.Split(" , "))
+                foreach (var dependencie in allModShowInfo[id].Dependencies!.Split(" , "))
                 {
                     if (allModsInfo.ContainsKey(dependencie))
                         ModEnabledChange(dependencie, true);
@@ -252,8 +262,7 @@ namespace StarsectorTools.Pages
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
-                allShowModInfo[item.Id!].UserDescription = new(TextBox_UserDescription.Text);
-            TextBox_UserDescription.Text = "";
+                allModShowInfo[item.Id!].UserDescription = new(TextBox_UserDescription.Text);
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -336,6 +345,55 @@ namespace StarsectorTools.Pages
             item.Content = $"{name} ";
             item.ToolTip = name;
             item.Tag = name;
+        }
+
+        private void Button_GameStart_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(Global.gameExePath))
+            {
+                Process process = new();
+                process.StartInfo.FileName = "cmd";
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.RedirectStandardInput = true;
+                if (process.Start())
+                {
+                    process.StandardInput.WriteLine($"cd /d {Global.gamePath}");
+                    process.StandardInput.WriteLine($"starsector.exe");
+                    process.Close();
+                }
+            }
+            else
+            {
+                MessageBox.Show($"启动错误\n{Global.gameExePath}不存在");
+            }
+        }
+
+        //private void DataGrid_ModsShowList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (sender is DataGrid grid && grid.SelectedItems != null)
+        //    {
+        //        if (grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) is DataGridRow row)
+        //        {
+        //            row.IsSelected = false;
+        //            CloseModInfo();
+        //        }
+        //    }
+        //}
+        private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && grid.SelectedItems != null)
+            {
+                if (grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) is DataGridRow row)
+                {
+                    row.IsSelected = false;
+                    CloseModInfo();
+                }
+            }
+        }
+
+        private void TextBox_UserDescription_GotFocus(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
