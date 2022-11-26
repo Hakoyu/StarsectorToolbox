@@ -304,8 +304,8 @@ namespace StarsectorTools.Pages
                         var temp = allUserGroup[name];
                         allUserGroup.Remove(name);
                         allUserGroup.Add(_name, temp);
-                        allGroupListBoxItems.Remove(name);
-                        allGroupListBoxItems.Add(_name, item);
+                        allListBoxItemsFromGroup.Remove(name);
+                        allListBoxItemsFromGroup.Add(_name, item);
                         var _temp = allShowModInfoAtGroup[name];
                         allShowModInfoAtGroup.Remove(name);
                         allShowModInfoAtGroup.Add(_name, _temp);
@@ -327,7 +327,7 @@ namespace StarsectorTools.Pages
                 var _name = _itme.Content.ToString()!.Split(" ")[0];
                 ListBox_UserGroup.Items.Remove(_itme);
                 allUserGroup.Remove(_name);
-                allGroupListBoxItems.Remove(_name);
+                allListBoxItemsFromGroup.Remove(_name);
                 allShowModInfoAtGroup.Remove(_name);
             };
             contextMenu.Items.Add(menuItem);
@@ -335,7 +335,7 @@ namespace StarsectorTools.Pages
             ListBoxItemHelper.SetIcon(item, icon);
             ListBox_UserGroup.Items.Add(item);
             allUserGroup.Add(name, new());
-            allGroupListBoxItems.Add(name, item);
+            allListBoxItemsFromGroup.Add(name, item);
             allShowModInfoAtGroup.Add(name, new());
             SetAllSizeInListBoxItem();
             RefreshShowModsItemContextMenu();

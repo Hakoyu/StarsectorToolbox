@@ -89,7 +89,7 @@
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander IsExpanded="True" IsTabStop="True" Header="用户分组">
+                            <Expander IsExpanded="True" IsTabStop="True" Header="用户分组" FontFamily="Consolas">
                                 <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
                                     <ListBoxItem pu:ListBoxItemHelper.Icon="❤" Content="已收藏模组 " ToolTip="Collected" Tag="Collected"/>
                                 </ListBox>

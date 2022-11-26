@@ -30,7 +30,7 @@ namespace StarsectorTools.Pages
         HashSet<string> enabledModsId = new();
         HashSet<string> collectedModsId = new();
         Dictionary<string, HashSet<string>> allModsGroupId = new();
-        Dictionary<string, ListBoxItem> allGroupListBoxItems = new();
+        Dictionary<string, ListBoxItem> allListBoxItemsFromGroup = new();
         Dictionary<string, ModShowInfo> allModShowInfo = new();
 
         bool groupMenuOpen = false;
@@ -341,8 +341,8 @@ namespace StarsectorTools.Pages
                             string group = kv.Key;
                             if (!allUserGroup.ContainsKey(group))
                             {
-                                AddUserGroup("", kv.Key);
-                                foreach (string id in kv.Value.AsTomlArray)
+                                AddUserGroup(kv.Value["Icon"], kv.Key);
+                                foreach (string id in kv.Value["Mods"].AsTomlArray)
                                 {
                                     if (allModShowInfo.ContainsKey(id))
                                     {
@@ -379,10 +379,10 @@ namespace StarsectorTools.Pages
             foreach (ListBoxItem item in ListBox_ModsGroupMenu.Items)
             {
                 if (item.Content is string str)
-                    allGroupListBoxItems.Add(item.Tag.ToString()!, item);
+                    allListBoxItemsFromGroup.Add(item.Tag.ToString()!, item);
                 else if (item.Content is Expander expander && expander.Content is ListBox listBox)
                     foreach (ListBoxItem item1 in listBox.Items)
-                        allGroupListBoxItems.Add(item1.Tag.ToString()!, item1);
+                        allListBoxItemsFromGroup.Add(item1.Tag.ToString()!, item1);
             }
         }
         void InitializeDataGridItemsSource()
@@ -437,7 +437,7 @@ namespace StarsectorTools.Pages
         }
         void SetAllSizeInListBoxItem()
         {
-            foreach (var item in allGroupListBoxItems.Values)
+            foreach (var item in allListBoxItemsFromGroup.Values)
                 item.Content = $"{item.Content.ToString()!.Split(" ")[0]} ({allShowModInfoAtGroup[item.Tag.ToString()!].Count})"; ;
         }
         string CheckGroup(string id)
@@ -699,11 +699,13 @@ namespace StarsectorTools.Pages
             }
             foreach (var kv in allUserGroup)
             {
-                toml.Add(kv.Key, new TomlArray());
-                foreach (var id in kv.Value)
+                toml.Add(kv.Key, new TomlTable()
                 {
-                    toml[kv.Key].Add(id);
-                }
+                    ["Icon"] = ListBoxItemHelper.GetIcon(allListBoxItemsFromGroup[kv.Key]).ToString()!,
+                    ["Mods"] = new TomlArray(),
+                });
+                foreach (var id in kv.Value)
+                    toml[kv.Key]["Mods"].Add(id);
             }
             toml.SaveTo(path);
         }
