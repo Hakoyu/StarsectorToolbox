@@ -266,16 +266,12 @@ namespace StarsectorTools.Pages
                 {
                     AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
                     window.Close();
-                    ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
                 }
                 else
                     MessageBox.Show("创建失败,名字为空或者已存在相同名字的分组");
             };
-            window.Button_Cancel.Click += (o, e) =>
-            {
-                ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
-                window.Close();
-            };
+            window.Button_Cancel.Click += (o, e) => window.Close();
+            window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
         }
         void AddUserGroup(string icon, string name)
         {
@@ -306,16 +302,12 @@ namespace StarsectorTools.Pages
                         allShowModInfoAtGroup.Add(_name, _temp);
                         SetListBoxItemData(item, _name);
                         window.Close();
-                        ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
                     }
                     else
                         MessageBox.Show("命名失败,名字为空或者已存在相同名字的分组");
                 };
-                window.Button_Cancel.Click += (o, e) =>
-                {
-                    ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
-                    window.Close();
-                };
+                window.Button_Cancel.Click += (o, e) => window.Close();
+                window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
             };
             contextMenu.Items.Add(menuItem);
             menuItem = new();
