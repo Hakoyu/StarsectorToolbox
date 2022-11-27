@@ -44,7 +44,7 @@ namespace StarsectorTools.Pages
         string nowGroup = ModGroupType.All;
         HashSet<string> enabledModsId = new();
         HashSet<string> collectedModsId = new();
-        Dictionary<string, ModInfo> modsInfo = new();
+        Dictionary<string, ModInfo> allModsInfo = new();
         Dictionary<string, ListBoxItem> listBoxItemsFromGroups = new();
         Dictionary<string, ModShowInfo> modsShowInfo = new();
         Dictionary<string, HashSet<string>> userGroups = new();
@@ -288,7 +288,7 @@ namespace StarsectorTools.Pages
                 foreach (var mod in enabledModsJsonArray)
                 {
                     var key = mod!.ToString();
-                    if (modsInfo.ContainsKey(key))
+                    if (allModsInfo.ContainsKey(key))
                     {
                         ModEnabledChange(key, true);
                     }
@@ -415,7 +415,7 @@ namespace StarsectorTools.Pages
                 string err = null!;
                 foreach (var dependencie in modsShowInfo[id].Dependencies!.Split(" , "))
                 {
-                    if (modsInfo.ContainsKey(dependencie))
+                    if (allModsInfo.ContainsKey(dependencie))
                         ModEnabledChange(dependencie, true);
                     else
                     {
@@ -623,7 +623,7 @@ namespace StarsectorTools.Pages
                     ClearEnabledMod();
                     foreach (string id in list)
                     {
-                        if (modsInfo.ContainsKey(id))
+                        if (allModsInfo.ContainsKey(id))
                             ModEnabledChange(id, true);
                         else
                         {
@@ -698,25 +698,26 @@ namespace StarsectorTools.Pages
             if (filesInfo.Length > 0 && filesInfo.First().FullName is string jsonPath)
             {
                 var modInfo = GetModInfo(jsonPath);
-                if (modsInfo.ContainsKey(modInfo.Id!))
+                if (allModsInfo.ContainsKey(modInfo.Id!))
                 {
-                    var originalModInfo = modsInfo[modInfo.Id!];
+                    var originalModInfo = allModsInfo[modInfo.Id!];
                     if (MessageBox.Show($"已存在相同的模组 是否覆盖?\n原始版本:{originalModInfo.Version}\n新增版本:{modInfo.Version}", "已存在相同模组", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         Directory.Delete(originalModInfo.Path, true);
                         CopyDirectory(Path.GetDirectoryName(jsonPath)!, Global.gameModsPath);
-                        modsInfo.Remove(modInfo.Id!);
-                        modsInfo.Add(modInfo.Id!, modInfo);
-                        var originalModShowInfo = modsShowInfo[modInfo.Id!];
+                        allModsInfo.Remove(modInfo.Id!);
+                        allModsInfo.Add(modInfo.Id!, modInfo);
                         Dispatcher.BeginInvoke(() =>
                         {
-                            var modShowInfo = GetModShowInfo(modInfo);
-                            modsShowInfo.Remove(originalModShowInfo.Id!);
-                            modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
-                            modsShowInfoFromGroup[ModGroupType.All].Remove(originalModShowInfo);
-                            modsShowInfoFromGroup[originalModShowInfo.Group!].Remove(originalModShowInfo);
-                            modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
-                            modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
+                            //var modShowInfo = GetModShowInfo(modInfo);
+                            RemoveModShowInfo(modInfo.Id!);
+                            AddModShowInfo(GetModShowInfo(modInfo));
+                            //modsShowInfo.Remove(originalModShowInfo.Id!);
+                            //modsShowInfoFromGroup[ModGroupType.All].Remove(originalModShowInfo);
+                            //modsShowInfoFromGroup[originalModShowInfo.Group!].Remove(originalModShowInfo);
+                            //modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
+                            //modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
+                            //modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
                         });
                     }
                 }
@@ -724,10 +725,11 @@ namespace StarsectorTools.Pages
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
-                        var modShowInfo = GetModShowInfo(modInfo);
-                        modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
-                        modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
-                        modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
+                        AddModShowInfo(GetModShowInfo(modInfo));
+                        //var modShowInfo = GetModShowInfo(modInfo);
+                        //modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
+                        //modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
+                        //modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
                     });
                 }
                 Dispatcher.BeginInvoke(() => DataGrid_ModsShowList.ItemsSource = modsShowInfoFromGroup[nowGroup]);
@@ -737,6 +739,20 @@ namespace StarsectorTools.Pages
                 MessageBox.Show($"压缩文件未包含模组信息\n{filePath}");
             }
             Directory.Delete(tempPath, true);
+        }
+        ModShowInfo RemoveModShowInfo(string id)
+        {
+            var modShowInfo = modsShowInfo[id];
+            modsShowInfo.Remove(modShowInfo.Id!);
+            modsShowInfoFromGroup[ModGroupType.All].Remove(modShowInfo);
+            modsShowInfoFromGroup[modShowInfo.Group!].Remove(modShowInfo);
+            return modShowInfo;
+        }
+        void AddModShowInfo(ModShowInfo modShowInfo)
+        {
+            modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
+            modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
+            modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
         }
         private void CopyDirectory(string sourcePath, string destPath)
         {

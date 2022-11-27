@@ -43,7 +43,7 @@ namespace StarsectorTools.Pages
                 try
                 {
                     ModInfo modInfo = GetModInfo($"{dir.FullName}\\mod_info.json");
-                    modsInfo.Add(modInfo.Id!, modInfo);
+                    allModsInfo.Add(modInfo.Id!, modInfo);
                     //string datas = File.ReadAllText();
                     //datas = Regex.Replace(datas, @"(#|//)[\S ]*", "");
                     //datas = Regex.Replace(datas, @",(?=[\r\n \t]*[\]\}])|(?<=[\}\]]),[ \t]*\r?\Z", "");
@@ -52,7 +52,7 @@ namespace StarsectorTools.Pages
                     //foreach (var data in jsonData.AsObject())
                     //    modInfo.SetData(data);
                     //modInfo.Path = dir.FullName;
-                    //modsInfo.Add(modInfo.Id!, modInfo);
+                    //allModsInfo.Add(modInfo.Id!, modInfo);
                 }
                 catch
                 {
@@ -93,7 +93,7 @@ namespace StarsectorTools.Pages
                     foreach (var mod in enabledModsJsonArray)
                     {
                         var id = mod!.GetValue<string>();
-                        if (modsInfo.ContainsKey(id))
+                        if (allModsInfo.ContainsKey(id))
                         {
                             if (!enabledModsId.Add(id))
                             {
@@ -257,17 +257,18 @@ namespace StarsectorTools.Pages
         {
 
 
-            foreach (var kv in modsInfo)
+            foreach (var kv in allModsInfo)
             {
                 ModInfo info = kv.Value;
                 ModShowInfo showInfo = GetModShowInfo(info);
-                modsShowInfo.Add(info.Id!, showInfo);
-                modsShowInfoFromGroup[ModGroupType.All].Add(showInfo);
+                AddModShowInfo(showInfo);
+                //modsShowInfo.Add(info.Id!, showInfo);
+                //modsShowInfoFromGroup[ModGroupType.All].Add(showInfo);
+                //modsShowInfoFromGroup[showInfo.Group!].Add(showInfo);
                 if (showInfo.Enabled is true)
                     modsShowInfoFromGroup[ModGroupType.Enabled].Add(showInfo);
                 else
                     modsShowInfoFromGroup[ModGroupType.Disable].Add(showInfo);
-                modsShowInfoFromGroup[showInfo.Group!].Add(showInfo);
             }
             ShowGroupChange(ModGroupType.All);
             ListBox_ModsGroupMenu.SelectedIndex = 0;
@@ -338,7 +339,7 @@ namespace StarsectorTools.Pages
             item.Header = "打开模组文件夹";
             item.Click += (o, e) =>
             {
-                System.Diagnostics.Process.Start("Explorer.exe", modsInfo[info.Id!].Path);
+                System.Diagnostics.Process.Start("Explorer.exe", allModsInfo[info.Id!].Path);
             };
             menu.Items.Add(item);
             if (userGroups.Count > 0)
@@ -581,7 +582,7 @@ namespace StarsectorTools.Pages
         }
         void SetModInfo(string id)
         {
-            ModInfo info = modsInfo[id];
+            ModInfo info = allModsInfo[id];
             if (modsShowInfo[info.Id!].ImagePath is string imagePath && File.Exists(imagePath))
                 Image_ModImage.Source = new BitmapImage(new(imagePath));
             Label_ModName.Content = info.Name;
