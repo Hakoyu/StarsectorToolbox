@@ -255,8 +255,6 @@ namespace StarsectorTools.Pages
         }
         void InitializeDataGridItemsSource()
         {
-
-
             foreach (var kv in allModsInfo)
             {
                 ModInfo info = kv.Value;
@@ -428,9 +426,7 @@ namespace StarsectorTools.Pages
         void ClearEnabledMod()
         {
             foreach (var info in modsShowInfoFromGroup[ModGroupType.Enabled])
-            {
                 modsShowInfoFromGroup[ModGroupType.Disable].Add(info);
-            }
             modsShowInfoFromGroup[ModGroupType.Enabled].Clear();
             enabledModsId.Clear();
         }
