@@ -207,7 +207,7 @@
                     <Button x:Name="Button_ExportList" Content="导出启用列表" Margin="10,0,10,85" Click="Button_ExportEnabledList_Click" Height="30" VerticalAlignment="Bottom"/>
                     <Button x:Name="Button_Save" Content="保存配置" Margin="10,0,10,40" Click="Button_Save_Click" VerticalAlignment="Bottom" Height="30"/>
                     <Button x:Name="Button_GameStart" Content="启动游戏" Margin="10,0,10,5" Height="30" VerticalAlignment="Bottom" Click="Button_GameStart_Click"/>
-                    <Button x:Name="Button_ImportEnabledList_Copy" Content="从存档导入列表" Margin="10,0,10,155" Click="Button_ImportEnabledList_Click" Height="30" VerticalAlignment="Bottom"/>
+                    <Button x:Name="Button_ImportEnabledListFromSave" Content="从存档导入列表" Margin="10,0,10,155" Height="30" VerticalAlignment="Bottom" Click="Button_ImportEnabledListFromSave_Click"/>
                 </Grid>
                 <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="Gray" Visibility="Hidden">
                     <ScrollViewer>

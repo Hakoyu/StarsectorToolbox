@@ -50,7 +50,7 @@ namespace StarsectorTools.Pages
                     foreach (var data in jsonData.AsObject())
                         modInfo.SetData(data);
                     modInfo.Path = dir.FullName;
-                    allModsInfo.Add(modInfo.Id!, modInfo);
+                    modsInfo.Add(modInfo.Id!, modInfo);
                 }
                 catch
                 {
@@ -79,7 +79,7 @@ namespace StarsectorTools.Pages
                     foreach (var mod in enabledModsJsonArray)
                     {
                         var id = mod!.GetValue<string>();
-                        if (allModsInfo.ContainsKey(id))
+                        if (modsInfo.ContainsKey(id))
                         {
                             if (!enabledModsId.Add(id))
                             {
@@ -122,11 +122,11 @@ namespace StarsectorTools.Pages
             {
                 foreach (var kv in toml)
                 {
-                    if (kv.Key == GroupType.Collected)
+                    if (kv.Key == ModGroupType.Collected)
                     {
                         foreach (string id in kv.Value.AsTomlArray)
                         {
-                            if (ModsShowInfo.ContainsKey(id))
+                            if (modsShowInfo.ContainsKey(id))
                             {
                                 ModCollectedChange(id, true);
                             }
@@ -144,9 +144,9 @@ namespace StarsectorTools.Pages
                         foreach (var dic in kv.Value.AsTomlArray)
                         {
                             var id = dic["Id"].AsString;
-                            if (ModsShowInfo.ContainsKey(id))
+                            if (modsShowInfo.ContainsKey(id))
                             {
-                                var info = ModsShowInfo[id];
+                                var info = modsShowInfo[id];
                                 info.ImagePath = dic["ImagePath"];
                                 info.UserDescription = dic["UserDescription"];
                             }
@@ -167,10 +167,10 @@ namespace StarsectorTools.Pages
                             AddUserGroup(kv.Value["Icon"], kv.Key);
                             foreach (string id in kv.Value["Mods"].AsTomlArray)
                             {
-                                if (ModsShowInfo.ContainsKey(id))
+                                if (modsShowInfo.ContainsKey(id))
                                 {
                                     if (userGroups[group].Add(id))
-                                        allShowModInfoAtGroup[group].Add(ModsShowInfo[id]);
+                                        modShowInfoFromGroup[group].Add(modsShowInfo[id]);
                                     else
                                     {
                                         err ??= "";
@@ -216,14 +216,14 @@ namespace StarsectorTools.Pages
         {
             Dictionary<string, HashSet<string>> modsIdFromGroups = new()
             {
-                {GroupType.Libraries,new() },
-                {GroupType.Megamods,new() },
-                {GroupType.FactionMods,new() },
-                {GroupType.ContentExpansions,new() },
-                {GroupType.UtilityMods,new() },
-                {GroupType.MiscellaneousMods,new() },
-                {GroupType.BeautifyMods,new() },
-                {GroupType.Unknown,new() },
+                {ModGroupType.Libraries,new() },
+                {ModGroupType.Megamods,new() },
+                {ModGroupType.FactionMods,new() },
+                {ModGroupType.ContentExpansions,new() },
+                {ModGroupType.UtilityMods,new() },
+                {ModGroupType.MiscellaneousMods,new() },
+                {ModGroupType.BeautifyMods,new() },
+                {ModGroupType.Unknown,new() },
             };
             if (!File.Exists(modGroupPath))
             {
@@ -242,36 +242,36 @@ namespace StarsectorTools.Pages
                 MessageBox.Show("???", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            foreach (var kv in allModsInfo)
+            foreach (var kv in modsInfo)
             {
                 ModInfo info = kv.Value;
                 ModShowInfo showInfo = GetModShowInfo(info);
                 showInfo.ContextMenu = CreateContextMenu(showInfo);
                 showInfo.Group = CheckGroup(showInfo.Id!);
-                allShowModInfoAtGroup[GroupType.All].Add(showInfo);
+                modShowInfoFromGroup[ModGroupType.All].Add(showInfo);
                 if (showInfo.Group!.Length == 0)
-                    showInfo.Group = GroupType.Unknown;
+                    showInfo.Group = ModGroupType.Unknown;
                 if (showInfo.Enabled is true)
-                    allShowModInfoAtGroup[GroupType.Enabled].Add(showInfo);
+                    modShowInfoFromGroup[ModGroupType.Enabled].Add(showInfo);
                 else
-                    allShowModInfoAtGroup[GroupType.Disable].Add(showInfo);
-                allShowModInfoAtGroup[showInfo.Group!].Add(showInfo);
-                ModsShowInfo.Add(info.Id!, showInfo);
+                    modShowInfoFromGroup[ModGroupType.Disable].Add(showInfo);
+                modShowInfoFromGroup[showInfo.Group!].Add(showInfo);
+                modsShowInfo.Add(info.Id!, showInfo);
             }
-            ShowGroupChange(GroupType.All);
+            ShowGroupChange(ModGroupType.All);
             ListBox_ModsGroupMenu.SelectedIndex = 0;
             CheckEnabledModsDependencies();
             string CheckGroup(string id)
             {
                 foreach (var group in modsIdFromGroups)
                     if (group.Value.Contains(id))
-                       return  group.Key;
-                return GroupType.Unknown;
+                        return group.Key;
+                return ModGroupType.Unknown;
             }
         }
         void ShowGroupChange(string group)
         {
-            DataGrid_ModsShowList.ItemsSource = allShowModInfoAtGroup[group];
+            DataGrid_ModsShowList.ItemsSource = modShowInfoFromGroup[group];
         }
         ModShowInfo GetModShowInfo(ModInfo info)
         {
@@ -303,7 +303,7 @@ namespace StarsectorTools.Pages
         void SetAllSizeInListBoxItem()
         {
             foreach (var item in listBoxItemsFromGroups.Values)
-                item.Content = $"{item.Content.ToString()!.Split(" ")[0]} ({allShowModInfoAtGroup[item.Tag.ToString()!].Count})"; ;
+                item.Content = $"{item.Content.ToString()!.Split(" ")[0]} ({modShowInfoFromGroup[item.Tag.ToString()!].Count})"; ;
         }
         bool CheckEnabled(string id)
         {
@@ -315,7 +315,7 @@ namespace StarsectorTools.Pages
         }
         void RefreshShowModsItemContextMenu()
         {
-            foreach (var info in ModsShowInfo.Values)
+            foreach (var info in modsShowInfo.Values)
                 info.ContextMenu = CreateContextMenu(info);
         }
         ContextMenu CreateContextMenu(ModShowInfo info)
@@ -333,7 +333,7 @@ namespace StarsectorTools.Pages
             item.Header = "打开模组文件夹";
             item.Click += (o, e) =>
             {
-                System.Diagnostics.Process.Start("Explorer.exe", allModsInfo[info.Id!].Path);
+                System.Diagnostics.Process.Start("Explorer.exe", modsInfo[info.Id!].Path);
             };
             menu.Items.Add(item);
             if (userGroups.Count > 0)
@@ -391,16 +391,16 @@ namespace StarsectorTools.Pages
         }
         void ModUserGroupChange(string group, string id, bool status)
         {
-            ModShowInfo info = ModsShowInfo[id];
+            ModShowInfo info = modsShowInfo[id];
             if (status)
             {
                 if (userGroups[group].Add(id))
-                    allShowModInfoAtGroup[group].Add(ModsShowInfo[id]);
+                    modShowInfoFromGroup[group].Add(modsShowInfo[id]);
             }
             else
             {
                 userGroups[group].Remove(id);
-                allShowModInfoAtGroup[group].Remove(ModsShowInfo[id]);
+                modShowInfoFromGroup[group].Remove(modsShowInfo[id]);
             }
             info.ContextMenu = CreateContextMenu(info);
         }
@@ -419,9 +419,18 @@ namespace StarsectorTools.Pages
                 CloseModInfo();
             CheckEnabledModsDependencies();
         }
+        void ClearEnabledMod()
+        {
+            foreach (var info in modShowInfoFromGroup[ModGroupType.Enabled])
+            {
+                modShowInfoFromGroup[ModGroupType.Disable].Add(info);
+            }
+            modShowInfoFromGroup[ModGroupType.Enabled].Clear();
+            enabledModsId.Clear();
+        }
         void ModEnabledChange(string id, bool? enabled = null)
         {
-            ModShowInfo info = ModsShowInfo[id];
+            ModShowInfo info = modsShowInfo[id];
             info.Enabled = enabled is null ? !info.Enabled : enabled;
             info.EnabledStyle = info.Enabled is true ? buttonStyle.Enabled : buttonStyle.Disable;
             info.ContextMenu = CreateContextMenu(info);
@@ -429,22 +438,22 @@ namespace StarsectorTools.Pages
             {
                 if (enabledModsId.Add(info.Id!))
                 {
-                    allShowModInfoAtGroup[GroupType.Disable].Remove(info);
-                    allShowModInfoAtGroup[GroupType.Enabled].Add(info);
+                    modShowInfoFromGroup[ModGroupType.Disable].Remove(info);
+                    modShowInfoFromGroup[ModGroupType.Enabled].Add(info);
                 }
             }
             else
             {
                 if (enabledModsId.Remove(info.Id!))
                 {
-                    allShowModInfoAtGroup[GroupType.Enabled].Remove(info);
-                    allShowModInfoAtGroup[GroupType.Disable].Add(info);
+                    modShowInfoFromGroup[ModGroupType.Enabled].Remove(info);
+                    modShowInfoFromGroup[ModGroupType.Disable].Add(info);
                 }
             }
         }
         void CheckEnabledModsDependencies()
         {
-            foreach (var info in allShowModInfoAtGroup[GroupType.Enabled])
+            foreach (var info in modShowInfoFromGroup[ModGroupType.Enabled])
             {
                 if (info.DependenciesList != null)
                 {
@@ -472,7 +481,7 @@ namespace StarsectorTools.Pages
         }
         void ModCollectedChange(string id, bool? collected = null)
         {
-            ModShowInfo info = ModsShowInfo[id];
+            ModShowInfo info = modsShowInfo[id];
             info.Collected = collected is null ? !info.Collected : collected;
             info.CollectedStyle = info.Collected is true ? buttonStyle.Collected : buttonStyle.Uncollected;
             info.ContextMenu = CreateContextMenu(info);
@@ -481,13 +490,13 @@ namespace StarsectorTools.Pages
                 if (!CheckCollected(info.Id!))
                 {
                     collectedModsId.Add(info.Id!);
-                    allShowModInfoAtGroup[GroupType.Collected].Add(info);
+                    modShowInfoFromGroup[ModGroupType.Collected].Add(info);
                 }
             }
             else
             {
                 collectedModsId.Remove(info.Id!);
-                allShowModInfoAtGroup[GroupType.Collected].Remove(info);
+                modShowInfoFromGroup[ModGroupType.Collected].Remove(info);
             }
         }
         void SeveAllData()
@@ -507,13 +516,13 @@ namespace StarsectorTools.Pages
         {
             TomlTable toml = new()
             {
-                { GroupType.Collected, new TomlArray() },
+                { ModGroupType.Collected, new TomlArray() },
                 { "UserModsData", new TomlArray() }
             };
-            foreach (var info in ModsShowInfo.Values)
+            foreach (var info in modsShowInfo.Values)
             {
                 if (info.Collected is true)
-                    toml[GroupType.Collected].Add(info.Id!);
+                    toml[ModGroupType.Collected].Add(info.Id!);
                 if (info.ImagePath!.Length > 0 || info.UserDescription!.Length > 0)
                 {
                     toml["UserModsData"].Add(new TomlTable()
@@ -563,11 +572,12 @@ namespace StarsectorTools.Pages
             showModInfo = false;
             nowSelectedMod = null;
             TextBox_UserDescription.Text = "";
+            
         }
         void SetModInfo(string id)
         {
-            ModInfo info = allModsInfo[id];
-            if (ModsShowInfo[info.Id!].ImagePath is string imagePath && File.Exists(imagePath))
+            ModInfo info = modsInfo[id];
+            if (modsShowInfo[info.Id!].ImagePath is string imagePath && File.Exists(imagePath))
                 Image_ModImage.Source = new BitmapImage(new(imagePath));
             Label_ModName.Content = info.Name;
             Label_ModId.Content = info.Id;
@@ -583,7 +593,7 @@ namespace StarsectorTools.Pages
             else
                 GroupBox_ModDependencies.Visibility = Visibility.Collapsed;
             TextBlock_ModDescription.Text = info.Description;
-            TextBox_UserDescription.Text = ModsShowInfo[info.Id!].UserDescription!;
+            TextBox_UserDescription.Text = modsShowInfo[info.Id!].UserDescription!;
         }
     }
 }

@@ -24,6 +24,7 @@ using StarsectorTools.Lib;
 using StarsectorTools.Windows;
 using Panuon.WPF.UI;
 using System.ComponentModel;
+using System.Xml.Linq;
 
 namespace StarsectorTools.Pages
 {
@@ -38,29 +39,29 @@ namespace StarsectorTools.Pages
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
-        string nowGroup = GroupType.All;
+        string nowGroup = ModGroupType.All;
         HashSet<string> enabledModsId = new();
         HashSet<string> collectedModsId = new();
-        Dictionary<string, ModInfo> allModsInfo = new();
+        Dictionary<string, ModInfo> modsInfo = new();
         Dictionary<string, ListBoxItem> listBoxItemsFromGroups = new();
-        Dictionary<string, ModShowInfo> ModsShowInfo = new();
+        Dictionary<string, ModShowInfo> modsShowInfo = new();
         Dictionary<string, HashSet<string>> userGroups = new();
-        Dictionary<string, ObservableCollection<ModShowInfo>> allShowModInfoAtGroup = new()
+        Dictionary<string, ObservableCollection<ModShowInfo>> modShowInfoFromGroup = new()
         {
-            {GroupType.All,new() },
-            {GroupType.Enabled,new() },
-            {GroupType.Disable,new() },
-            {GroupType.Libraries,new() },
-            {GroupType.Megamods,new() },
-            {GroupType.FactionMods,new() },
-            {GroupType.ContentExpansions,new() },
-            {GroupType.UtilityMods,new() },
-            {GroupType.MiscellaneousMods,new() },
-            {GroupType.BeautifyMods,new() },
-            {GroupType.Unknown,new() },
-            {GroupType.Collected,new() },
+            {ModGroupType.All,new() },
+            {ModGroupType.Enabled,new() },
+            {ModGroupType.Disable,new() },
+            {ModGroupType.Libraries,new() },
+            {ModGroupType.Megamods,new() },
+            {ModGroupType.FactionMods,new() },
+            {ModGroupType.ContentExpansions,new() },
+            {ModGroupType.UtilityMods,new() },
+            {ModGroupType.MiscellaneousMods,new() },
+            {ModGroupType.BeautifyMods,new() },
+            {ModGroupType.Unknown,new() },
+            {ModGroupType.Collected,new() },
         };
-        static class GroupType
+        static class ModGroupType
         {
             /// <summary>全部模组</summary>
             public const string All = "All";
@@ -128,7 +129,7 @@ namespace StarsectorTools.Pages
                 set
                 {
                     utilityStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(UtilityStyle)));
+                    //PropertyChanged?.Invoke(this, new(nameof(UtilityStyle)));
                 }
             }
             public bool? Enabled { get; set; }
@@ -231,26 +232,26 @@ namespace StarsectorTools.Pages
                 switch (((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!)
                 {
                     case "Name":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.Name!.Contains(text)))
+                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.Name!.Contains(text)))
                             showModInfos.Add(info);
                         break;
                     case "Id":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.Id!.Contains(text)))
+                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.Id!.Contains(text)))
                             showModInfos.Add(info);
                         break;
                     case "Author":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.Author!.Contains(text)))
+                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.Author!.Contains(text)))
                             showModInfos.Add(info);
                         break;
                     case "UserDescription":
-                        foreach (var info in allShowModInfoAtGroup[nowGroup].Where(i => i.UserDescription!.Contains(text)))
+                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.UserDescription!.Contains(text)))
                             showModInfos.Add(info);
                         break;
                 }
-                Dispatcher.BeginInvoke(() => DataGrid_ModsShowList.ItemsSource = showModInfos);
+                DataGrid_ModsShowList.ItemsSource = showModInfos;
             }
             else
-                DataGrid_ModsShowList.ItemsSource = allShowModInfoAtGroup[nowGroup];
+                DataGrid_ModsShowList.ItemsSource = modShowInfoFromGroup[nowGroup];
             GC.Collect();
         }
 
@@ -276,7 +277,7 @@ namespace StarsectorTools.Pages
                 foreach (var mod in enabledModsJsonArray)
                 {
                     var key = mod!.ToString();
-                    if (allModsInfo.ContainsKey(key))
+                    if (modsInfo.ContainsKey(key))
                     {
                         ModEnabledChange(key, true);
                     }
@@ -352,7 +353,8 @@ namespace StarsectorTools.Pages
                     ListBox_GroupType.SelectedIndex = -1;
                 }
                 nowGroup = item.Tag.ToString()!;
-                DataGrid_ModsShowList.ItemsSource = allShowModInfoAtGroup[nowGroup];
+                ClearDataGridSelected();
+                DataGrid_ModsShowList.ItemsSource = modShowInfoFromGroup[nowGroup];
                 CloseModInfo();
                 GC.Collect();
             }
@@ -361,14 +363,12 @@ namespace StarsectorTools.Pages
         {
             if (sender is DataGridRow row)
                 ModInfoShowChange(row.Tag.ToString()!);
-            //ShowModInfo(row.Tag.ToString()!);
         }
 
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
                 ShowModInfo(row.Tag.ToString()!);
-            //ModInfoShowChange(row.Tag.ToString()!);
         }
         private void DataGridItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -376,7 +376,6 @@ namespace StarsectorTools.Pages
             e.Handled = true;
             if (sender is DataGridRow row)
                 ModInfoShowChange(row.Tag.ToString()!);
-            //ShowModInfo(row.Tag.ToString()!);
         }
 
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
@@ -403,9 +402,9 @@ namespace StarsectorTools.Pages
             {
                 string id = info.Id!;
                 string err = null!;
-                foreach (var dependencie in ModsShowInfo[id].Dependencies!.Split(" , "))
+                foreach (var dependencie in modsShowInfo[id].Dependencies!.Split(" , "))
                 {
-                    if (allModsInfo.ContainsKey(dependencie))
+                    if (modsInfo.ContainsKey(dependencie))
                         ModEnabledChange(dependencie, true);
                     else
                     {
@@ -455,7 +454,7 @@ namespace StarsectorTools.Pages
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
-                ModsShowInfo[item.Id!].UserDescription = new(TextBox_UserDescription.Text);
+                modsShowInfo[item.Id!].UserDescription = new(TextBox_UserDescription.Text);
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -507,9 +506,9 @@ namespace StarsectorTools.Pages
                         listBoxItemsFromGroups.Remove(name);
                         listBoxItemsFromGroups.Add(_name, item);
 
-                        var _temp = allShowModInfoAtGroup[name];
-                        allShowModInfoAtGroup.Remove(name);
-                        allShowModInfoAtGroup.Add(_name, _temp);
+                        var _temp = modShowInfoFromGroup[name];
+                        modShowInfoFromGroup.Remove(name);
+                        modShowInfoFromGroup.Add(_name, _temp);
 
                         SetListBoxItemData(item, _name);
                         window.Close();
@@ -530,7 +529,7 @@ namespace StarsectorTools.Pages
                 ListBox_UserGroup.Items.Remove(_itme);
                 userGroups.Remove(_name);
                 listBoxItemsFromGroups.Remove(_name);
-                allShowModInfoAtGroup.Remove(_name);
+                modShowInfoFromGroup.Remove(_name);
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
@@ -538,7 +537,7 @@ namespace StarsectorTools.Pages
             ListBox_UserGroup.Items.Add(item);
             userGroups.Add(name, new());
             listBoxItemsFromGroups.Add(name, item);
-            allShowModInfoAtGroup.Add(name, new());
+            modShowInfoFromGroup.Add(name, new());
             SetAllSizeInListBoxItem();
             RefreshShowModsItemContextMenu();
         }
@@ -571,13 +570,61 @@ namespace StarsectorTools.Pages
         }
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && grid.SelectedItems.Count == 1)
+            if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
             {
-                if (grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) is DataGridRow row)
-                {
+                ClearDataGridSelected();
+                CloseModInfo();
+            }
+        }
+        void ClearDataGridSelected()
+        {
+            while (DataGrid_ModsShowList.SelectedItems.Count > 0)
+            {
+                if (DataGrid_ModsShowList.ItemContainerGenerator.ContainerFromItem(DataGrid_ModsShowList.SelectedItems[0]) is DataGridRow row)
                     row.IsSelected = false;
-                    CloseModInfo();
+            }
+        }
+
+        private void Button_ImportEnabledListFromSave_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Title = "从游戏存档导入启动列表",
+                Filter = "Xml File|*.xml"
+            };
+            if (openFileDialog.ShowDialog().GetValueOrDefault())
+            {
+                string? err = null;
+                string filePath = $"{string.Join("\\", openFileDialog.FileName.Split("\\")[..^1])}\\descriptor.xml";
+                if (File.Exists(filePath))
+                {
+                    IEnumerable<string> list = null!;
+                    try
+                    {
+                        XElement xes = XElement.Load(filePath);
+                        list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"存档文件错误\n{ex}");
+                        return;
+                    }
+                    ClearEnabledMod();
+                    foreach (string id in list)
+                    {
+                        if (modsInfo.ContainsKey(id))
+                            ModEnabledChange(id, true);
+                        else
+                        {
+                            err ??= "存档中的以下模组不存在\n";
+                            err += $"{id}\n";
+                        }
+                    }
                 }
+                else
+                    MessageBox.Show($"存档文件不存在\n位置:{filePath}");
+                if (err != null)
+                    MessageBox.Show(err);
             }
         }
     }
