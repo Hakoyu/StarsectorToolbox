@@ -18,13 +18,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+//using System.Windows.Shapes;
 using StarsectorTools.Langs.MessageBox;
 using StarsectorTools.Lib;
 using StarsectorTools.Windows;
 using Panuon.WPF.UI;
 using System.ComponentModel;
 using System.Xml.Linq;
+using Aspose.Zip;
+using Aspose.Zip.SevenZip;
 
 namespace StarsectorTools.Pages
 {
@@ -46,7 +48,18 @@ namespace StarsectorTools.Pages
         Dictionary<string, ListBoxItem> listBoxItemsFromGroups = new();
         Dictionary<string, ModShowInfo> modsShowInfo = new();
         Dictionary<string, HashSet<string>> userGroups = new();
-        Dictionary<string, ObservableCollection<ModShowInfo>> modShowInfoFromGroup = new()
+        Dictionary<string, HashSet<string>> modsIdFromGroups = new()
+        {
+            {ModGroupType.Libraries,new() },
+            {ModGroupType.Megamods,new() },
+            {ModGroupType.FactionMods,new() },
+            {ModGroupType.ContentExpansions,new() },
+            {ModGroupType.UtilityMods,new() },
+            {ModGroupType.MiscellaneousMods,new() },
+            {ModGroupType.BeautifyMods,new() },
+            {ModGroupType.Unknown,new() },
+        };
+        Dictionary<string, ObservableCollection<ModShowInfo>> modsShowInfoFromGroup = new()
         {
             {ModGroupType.All,new() },
             {ModGroupType.Enabled,new() },
@@ -122,16 +135,7 @@ namespace StarsectorTools.Pages
                 }
             }
             public bool? Utility { get; set; }
-            private Style? utilityStyle = null;
-            public Style? UtilityStyle
-            {
-                get { return utilityStyle; }
-                set
-                {
-                    utilityStyle = value;
-                    //PropertyChanged?.Invoke(this, new(nameof(UtilityStyle)));
-                }
-            }
+            public Style? UtilityStyle { get; set; }
             public bool? Enabled { get; set; }
             public string? ImagePath { get; set; }
             public string? Group { get; set; }
@@ -203,9 +207,10 @@ namespace StarsectorTools.Pages
         {
             InitializeComponent();
             InitializeData();
-            GetAllMods();
+            GetAllModsInfo();
             GetEnabledMods();
             GetAllListBoxItem();
+            GetAllGroup();
             InitializeDataGridItemsSource();
             CheckUserGroup();
             SetAllSizeInListBoxItem();
@@ -224,35 +229,41 @@ namespace StarsectorTools.Pages
             Clipboard.SetDataObject(((TextBlock)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Text);
         }
 
-        private void TextBox_ModsSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TextBox_ModsSearch.Text.Length > 0 && TextBox_ModsSearch.Text is string text)
-            {
-                ObservableCollection<ModShowInfo> showModInfos = new();
-                switch (((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!)
-                {
-                    case "Name":
-                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.Name!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                    case "Id":
-                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.Id!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                    case "Author":
-                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.Author!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                    case "UserDescription":
-                        foreach (var info in modShowInfoFromGroup[nowGroup].Where(i => i.UserDescription!.Contains(text)))
-                            showModInfos.Add(info);
-                        break;
-                }
-                DataGrid_ModsShowList.ItemsSource = showModInfos;
-            }
-            else
-                DataGrid_ModsShowList.ItemsSource = modShowInfoFromGroup[nowGroup];
+            SearchMods(TextBox_SearchMods.Text);
             GC.Collect();
+        }
+        void SearchMods(string text)
+        {
+            if (text.Length > 0)
+                DataGrid_ModsShowList.ItemsSource = GetSearchModsShowInfo(text);
+            else
+                DataGrid_ModsShowList.ItemsSource = modsShowInfoFromGroup[nowGroup];
+        }
+        ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text)
+        {
+            ObservableCollection<ModShowInfo> showModsInfo = new();
+            switch (((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!)
+            {
+                case "Name":
+                    foreach (var info in modsShowInfoFromGroup[nowGroup].Where(i => i.Name!.Contains(text, StringComparison.OrdinalIgnoreCase)))
+                        showModsInfo.Add(info);
+                    break;
+                case "Id":
+                    foreach (var info in modsShowInfoFromGroup[nowGroup].Where(i => i.Id!.Contains(text, StringComparison.OrdinalIgnoreCase)))
+                        showModsInfo.Add(info);
+                    break;
+                case "Author":
+                    foreach (var info in modsShowInfoFromGroup[nowGroup].Where(i => i.Author!.Contains(text, StringComparison.OrdinalIgnoreCase)))
+                        showModsInfo.Add(info);
+                    break;
+                case "UserDescription":
+                    foreach (var info in modsShowInfoFromGroup[nowGroup].Where(i => i.UserDescription!.Contains(text, StringComparison.OrdinalIgnoreCase)))
+                        showModsInfo.Add(info);
+                    break;
+            }
+            return showModsInfo;
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
@@ -354,7 +365,7 @@ namespace StarsectorTools.Pages
                 }
                 nowGroup = item.Tag.ToString()!;
                 ClearDataGridSelected();
-                DataGrid_ModsShowList.ItemsSource = modShowInfoFromGroup[nowGroup];
+                SearchMods(TextBox_SearchMods.Text);
                 CloseModInfo();
                 GC.Collect();
             }
@@ -506,9 +517,9 @@ namespace StarsectorTools.Pages
                         listBoxItemsFromGroups.Remove(name);
                         listBoxItemsFromGroups.Add(_name, item);
 
-                        var _temp = modShowInfoFromGroup[name];
-                        modShowInfoFromGroup.Remove(name);
-                        modShowInfoFromGroup.Add(_name, _temp);
+                        var _temp = modsShowInfoFromGroup[name];
+                        modsShowInfoFromGroup.Remove(name);
+                        modsShowInfoFromGroup.Add(_name, _temp);
 
                         SetListBoxItemData(item, _name);
                         window.Close();
@@ -529,7 +540,7 @@ namespace StarsectorTools.Pages
                 ListBox_UserGroup.Items.Remove(_itme);
                 userGroups.Remove(_name);
                 listBoxItemsFromGroups.Remove(_name);
-                modShowInfoFromGroup.Remove(_name);
+                modsShowInfoFromGroup.Remove(_name);
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
@@ -537,7 +548,7 @@ namespace StarsectorTools.Pages
             ListBox_UserGroup.Items.Add(item);
             userGroups.Add(name, new());
             listBoxItemsFromGroups.Add(name, item);
-            modShowInfoFromGroup.Add(name, new());
+            modsShowInfoFromGroup.Add(name, new());
             SetAllSizeInListBoxItem();
             RefreshShowModsItemContextMenu();
         }
@@ -625,6 +636,119 @@ namespace StarsectorTools.Pages
                     MessageBox.Show($"存档文件不存在\n位置:{filePath}");
                 if (err != null)
                     MessageBox.Show(err);
+            }
+        }
+
+        private void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetData(DataFormats.FileDrop) is Array array)
+            {
+                new Task(() =>
+                {
+                    foreach (string path in array)
+                    {
+                        if (File.Exists(path))
+                            DropFile(path);
+                        else
+                            MessageBox.Show($"无法导入文件夹\n{path}");
+                    }
+                    GC.Collect();
+                }).Start();
+            }
+        }
+        void DropFile(string filePath)
+        {
+            string fileName = Global.GetFileName(filePath)!;
+            string tempPath = $"{AppDomain.CurrentDomain.BaseDirectory}temp";
+            var head = "";
+            using StreamReader sr = new(filePath);
+            {
+                head = $"{sr.Read()}{sr.Read()}";
+            }
+            try
+            {
+                if (head == "8297" || head == "8075")
+                {
+                    using (var archive = new Archive(filePath, new() { Encoding = Encoding.UTF8 }))
+                    {
+                        archive.ExtractToDirectory(tempPath);
+                    }
+                }
+                else if (head == "55122")
+                {
+                    using (var archive = new SevenZipArchive(filePath))
+                    {
+                        archive.ExtractToDirectory(tempPath);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"此文件不是压缩文件\n{filePath}");
+                    return;
+                }
+            }
+            catch
+            {
+                MessageBox.Show($"文件出错\n{filePath}");
+                Directory.Delete(tempPath);
+                return;
+            }
+            DirectoryInfo dirs = new(tempPath);
+            var filesInfo = dirs.GetFiles("mod_info.json", SearchOption.AllDirectories);
+            if (filesInfo.Length > 0 && filesInfo.First().FullName is string jsonPath)
+            {
+                var modInfo = GetModInfo(jsonPath);
+                if (modsInfo.ContainsKey(modInfo.Id!))
+                {
+                    var originalModInfo = modsInfo[modInfo.Id!];
+                    if (MessageBox.Show($"已存在相同的模组 是否覆盖?\n原始版本:{originalModInfo.Version}\n新增版本:{modInfo.Version}", "已存在相同模组", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        Directory.Delete(originalModInfo.Path, true);
+                        CopyDirectory(Path.GetDirectoryName(jsonPath)!, Global.gameModsPath);
+                        modsInfo.Remove(modInfo.Id!);
+                        modsInfo.Add(modInfo.Id!, modInfo);
+                        var originalModShowInfo = modsShowInfo[modInfo.Id!];
+                        Dispatcher.BeginInvoke(() =>
+                        {
+                            var modShowInfo = GetModShowInfo(modInfo);
+                            modsShowInfo.Remove(originalModShowInfo.Id!);
+                            modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
+                            modsShowInfoFromGroup[ModGroupType.All].Remove(originalModShowInfo);
+                            modsShowInfoFromGroup[originalModShowInfo.Group!].Remove(originalModShowInfo);
+                            modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
+                            modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
+                        });
+                    }
+                }
+                else
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        var modShowInfo = GetModShowInfo(modInfo);
+                        modsShowInfo.Add(modShowInfo.Id!, modShowInfo);
+                        modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
+                        modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
+                    });
+                }
+                Dispatcher.BeginInvoke(() => DataGrid_ModsShowList.ItemsSource = modsShowInfoFromGroup[nowGroup]);
+            }
+            else
+            {
+                MessageBox.Show($"压缩文件未包含模组信息\n{filePath}");
+            }
+            Directory.Delete(tempPath, true);
+        }
+        private void CopyDirectory(string sourcePath, string destPath)
+        {
+            string floderName = Path.GetFileName(sourcePath);
+            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(destPath, floderName));
+            string[] files = Directory.GetFileSystemEntries(sourcePath);
+            foreach (string file in files)
+            {
+                if (Directory.Exists(file))
+                    CopyDirectory(file, di.FullName);
+                else
+                    File.Copy(file, Path.Combine(di.FullName, Path.GetFileName(file)), true);
             }
         }
     }

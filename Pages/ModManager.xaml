@@ -100,7 +100,7 @@
                             pu:ButtonHelper.Icon="➕" pu:IconHelper.Margin="5,0,10,0" Click="Button_AddGroup_Click"/>
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,0,0" Grid.ColumnSpan="2" >
-                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,0,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" Background="#4CFFFFFF" pu:DataGridHelper.CellSelectedBackground="Green" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus">
+                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,0,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" Background="#4CFFFFFF" pu:DataGridHelper.CellSelectedBackground="Green" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Tag" Value="{Binding Id}"/>
@@ -192,7 +192,7 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
-                    <TextBox x:Name="TextBox_ModsSearch" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,120,0" TextChanged="TextBox_ModsSearch_TextChanged"/>
+                    <TextBox x:Name="TextBox_SearchMods" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,120,0" TextChanged="TextBox_SearchMods_TextChanged"/>
                     <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="120">
                         <ComboBoxItem Content="Name" Tag="Name"/>
                         <ComboBoxItem Content="Id" Tag="Id"/>

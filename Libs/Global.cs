@@ -31,6 +31,30 @@ namespace StarsectorTools.Lib
             enabledModsJsonPath = $"{gameModsPath}\\enabled_mods.json";
             gameVersion = JsonNode.Parse(File.ReadAllText($"{path}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
         }
+        public static string? GetFileName(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return null!;
+            FileInfo fileInfo = new(filePath);
+            if (fileInfo.Name.Split(".") is string[] array)
+                return string.Join("", array[..^1]);
+            return null;
+        }
+        public static string? GetDirectory(string filePath)
+        {
+            if (!File.Exists(filePath))
+                return null!;
+            FileInfo fileInfo = new(filePath);
+            return fileInfo.DirectoryName;
+        }
+        public static string? GetParentDirectory(string dir)
+        {
+            if (!Directory.Exists(dir))
+                return null;
+            if (Directory.GetParent(dir) is DirectoryInfo directoryInfo)
+                return directoryInfo.FullName;
+            return null;
+        }
         public static int MemorySizeParse(int size)
         {
             if (size < 1024)
@@ -83,7 +107,7 @@ namespace StarsectorTools.Lib
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
-            SetGamePath(string.Join("\\", openFileDialog.FileName.Split("\\")[..^1]));
+            SetGamePath(GetDirectory(openFileDialog.FileName)!);
             return TestGamePath();
         }
     }
