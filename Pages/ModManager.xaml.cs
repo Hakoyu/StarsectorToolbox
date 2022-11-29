@@ -521,8 +521,11 @@ namespace StarsectorTools.Pages
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
+                STLog.Instance.WriteLine(this, $"确认拖入文件 数量: {array.Length}");
+                new Task(() => MessageBox.Show($"正在加载文件 数量:{array.Length}")).Start();
                 new Task(() =>
                 {
+                    Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = false);
                     foreach (string path in array)
                     {
                         if (File.Exists(path))
@@ -531,6 +534,7 @@ namespace StarsectorTools.Pages
                             MessageBox.Show($"无法导入文件夹\n{path}");
                     }
                     GC.Collect();
+                    Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = true);
                 }).Start();
             }
         }

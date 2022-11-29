@@ -493,6 +493,7 @@ namespace StarsectorTools.Pages
                 {
                     modsShowInfoFromGroup[ModGroupType.Enabled].Remove(info);
                     modsShowInfoFromGroup[ModGroupType.Disable].Add(info);
+                    info.RowDetailsHight = 0;
                 }
             }
             STLog.Instance.WriteLine(this, $"{id} 启用状态修改为 {info.Collected}", STLogLevel.DEBUG);
