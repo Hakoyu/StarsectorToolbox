@@ -18,11 +18,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 using StarsectorTools.Langs.MessageBox;
 using StarsectorTools.Lib;
 using StarsectorTools.Windows;
 using Panuon.WPF.UI;
+using System.ComponentModel;
+using System.Xml.Linq;
+using Aspose.Zip;
+using Aspose.Zip.SevenZip;
 
 namespace StarsectorTools.Pages
 {
@@ -31,17 +34,187 @@ namespace StarsectorTools.Pages
     /// </summary>
     public partial class ModManager : Page
     {
+        const string modGroupPath = @"ModGroup.toml";
+        readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
+        const string userGroupPath = @"UserGroup.toml";
+        bool groupMenuOpen = false;
+        bool showModInfo = false;
+        string? nowSelectedMod = null;
+        string nowGroup = ModGroupType.All;
+        HashSet<string> enabledModsId = new();
+        HashSet<string> collectedModsId = new();
+        Dictionary<string, ModInfo> allModsInfo = new();
+        Dictionary<string, ListBoxItem> listBoxItemsFromGroups = new();
+        Dictionary<string, ModShowInfo> modsShowInfo = new();
+        Dictionary<string, HashSet<string>> userGroups = new();
+        Dictionary<string, HashSet<string>> modsIdFromGroups = new()
+        {
+            {ModGroupType.Libraries,new() },
+            {ModGroupType.Megamods,new() },
+            {ModGroupType.FactionMods,new() },
+            {ModGroupType.ContentExpansions,new() },
+            {ModGroupType.UtilityMods,new() },
+            {ModGroupType.MiscellaneousMods,new() },
+            {ModGroupType.BeautifyMods,new() },
+            {ModGroupType.Unknown,new() },
+        };
+        Dictionary<string, ObservableCollection<ModShowInfo>> modsShowInfoFromGroup = new()
+        {
+            {ModGroupType.All,new() },
+            {ModGroupType.Enabled,new() },
+            {ModGroupType.Disable,new() },
+            {ModGroupType.Libraries,new() },
+            {ModGroupType.Megamods,new() },
+            {ModGroupType.FactionMods,new() },
+            {ModGroupType.ContentExpansions,new() },
+            {ModGroupType.UtilityMods,new() },
+            {ModGroupType.MiscellaneousMods,new() },
+            {ModGroupType.BeautifyMods,new() },
+            {ModGroupType.Unknown,new() },
+            {ModGroupType.Collected,new() },
+        };
+        static class ModGroupType
+        {
+            /// <summary>全部模组</summary>
+            public const string All = "All";
+            /// <summary>已启用模组</summary>
+            public const string Enabled = "Enabled";
+            /// <summary>未启用模组</summary>
+            public const string Disable = "Disable";
+            /// <summary>前置模组</summary>
+            public const string Libraries = "Libraries";
+            /// <summary>大型模组</summary>
+            public const string Megamods = "Megamods";
+            /// <summary>派系模组</summary>
+            public const string FactionMods = "FactionMods";
+            /// <summary>内容模组</summary>
+            public const string ContentExpansions = "ContentExpansions";
+            /// <summary>功能模组</summary>
+            public const string UtilityMods = "UtilityMods";
+            /// <summary>闲杂模组</summary>
+            public const string MiscellaneousMods = "MiscellaneousMods";
+            /// <summary>美化模组</summary>
+            public const string BeautifyMods = "BeautifyMods";
+            /// <summary>全部模组</summary>
+            public const string Unknown = "Unknown";
+            /// <summary>已收藏模组</summary>
+            public const string Collected = "Collected";
+        };
+        class ButtonStyle
+        {
+            public Style Enabled = null!;
+            public Style Disable = null!;
+            public Style Collected = null!;
+            public Style Uncollected = null!;
+        }
+        readonly ButtonStyle buttonStyle = new();
+        class LabelStyle
+        {
+            public Style VersionNormal = null!;
+            public Style VersionWarn = null!;
+            public Style IsUtility = null!;
+            public Style NotUtility = null!;
+        }
+        readonly LabelStyle labelStyle = new();
+        public class ModShowInfo : INotifyPropertyChanged
+        {
+            public string Id { get; set; } = null!;
+            public string Name { get; set; } = null!;
+            public string Author { get; set; } = null!;
+            public string Version { get; set; } = null!;
+            public string GameVersion { get; set; } = null!;
+            private Style? gameVersionStyle = null;
+            public Style? GameVersionStyle
+            {
+                get { return gameVersionStyle; }
+                set
+                {
+                    gameVersionStyle = value;
+                    PropertyChanged?.Invoke(this, new(nameof(GameVersionStyle)));
+                }
+            }
+            public bool? Utility { get; set; }
+            public Style? UtilityStyle { get; set; }
+            public bool? Enabled { get; set; }
+            public string? ImagePath { get; set; }
+            public string? Group { get; set; }
+            private string? dependencies { get; set; }
+            public string? Dependencies
+            {
+                get { return dependencies; }
+                set
+                {
+                    dependencies = value;
+                    PropertyChanged?.Invoke(this, new(nameof(Dependencies)));
+                }
+            }
+            public List<string>? DependenciesList { get; set; }
+            private double rowDetailsHight { get; set; }
+            public double RowDetailsHight
+            {
+                get { return rowDetailsHight; }
+                set
+                {
+                    rowDetailsHight = value;
+                    PropertyChanged?.Invoke(this, new(nameof(RowDetailsHight)));
+                }
+            }
+            private string? userDescription { get; set; }
+            public string? UserDescription
+            {
+                get { return userDescription; }
+                set
+                {
+                    userDescription = value;
+                    PropertyChanged?.Invoke(this, new(nameof(UserDescription)));
+                }
+            }
+            private Style? enabledStyle = null;
+            public Style? EnabledStyle
+            {
+                get { return enabledStyle; }
+                set
+                {
+                    enabledStyle = value;
+                    PropertyChanged?.Invoke(this, new(nameof(EnabledStyle)));
+                }
+            }
+            public bool? Collected { get; set; }
+            private Style? collectedStyle = null;
+            public Style? CollectedStyle
+            {
+                get { return collectedStyle; }
+                set
+                {
+                    collectedStyle = value;
+                    PropertyChanged?.Invoke(this, new(nameof(CollectedStyle)));
+                }
+            }
+            private ContextMenu? contextMenu = null;
+            public ContextMenu? ContextMenu
+            {
+                get { return contextMenu; }
+                set
+                {
+                    contextMenu = value;
+                    PropertyChanged?.Invoke(this, new(nameof(ContextMenu)));
+                }
+            }
+            public event PropertyChangedEventHandler? PropertyChanged;
+        }
         public ModManager()
         {
             InitializeComponent();
             InitializeData();
-            GetAllMods();
-            GetAllModGroup();
-            GetEnabledMods();
-            GetAllListBoxItem();
+            GetAllModsInfo();
+            CheckEnabledMods();
+            GetAllListBoxItems();
+            GetAllGroup();
             InitializeDataGridItemsSource();
             CheckUserGroup();
-            SetAllSizeInListBoxItem();
+            RefreshModsShowInfoContextMenu();
+            RefreAllSizeOfListBoxItems();
+            STLog.Instance.WriteLine("初始化完成");
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -57,9 +230,9 @@ namespace StarsectorTools.Pages
             Clipboard.SetDataObject(((TextBlock)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Text);
         }
 
-        private void TextBox_ModsSearch_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SearchMods();
+            SearchMods(TextBox_SearchMods.Text);
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
@@ -76,26 +249,7 @@ namespace StarsectorTools.Pages
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
-                enabledModsId.Clear();
-                string datas = File.ReadAllText(openFileDialog.FileName);
-                string nope = null!;
-                JsonNode enabledModsJson = JsonNode.Parse(datas)!;
-                JsonArray enabledModsJsonArray = enabledModsJson["enabledMods"]!.AsArray();
-                foreach (var mod in enabledModsJsonArray)
-                {
-                    var key = mod!.ToString();
-                    if (allModsInfo.ContainsKey(key))
-                    {
-                        ModEnabledChange(key, true);
-                    }
-                    else
-                    {
-                        nope ??= "并未找到导入列表中的以下模组:\n";
-                        nope += $"{key}\n";
-                    }
-                }
-                if (nope != null)
-                    MessageBox.Show(nope, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                GetEnabledMods(openFileDialog.FileName);
             }
         }
 
@@ -125,10 +279,11 @@ namespace StarsectorTools.Pages
                 Grid_GroupMenu.Width = double.NaN;
             }
             groupMenuOpen = !groupMenuOpen;
+            STLog.Instance.WriteLine($"分组菜单展开状态修改为 {groupMenuOpen}");
         }
         private void Grid_GroupMenu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Grid_DataGrid.Margin = new Thickness() { Left = Grid_GroupMenu.ActualWidth, Top = 0, Right = 0, Bottom = 0 };
+            Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, 0, 0);
         }
 
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -160,22 +315,22 @@ namespace StarsectorTools.Pages
                     ListBox_GroupType.SelectedIndex = -1;
                 }
                 nowGroup = item.Tag.ToString()!;
-                DataGrid_ModsShowList.ItemsSource = allShowModInfoAtGroup[nowGroup];
-                //CloseModInfo();
+                ClearDataGridSelected();
+                SearchMods(TextBox_SearchMods.Text);
+                CloseModInfo();
+                GC.Collect();
             }
         }
         private void DataGridItem_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (sender is DataGridRow row)
-                ModInfoShowChange(row.Tag.ToString()!);
-            //ShowModInfo(row.Tag.ToString()!);
+            //if (sender is DataGridRow row)
+            //    ModInfoShowChange(row.Tag.ToString()!);
         }
 
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
                 ShowModInfo(row.Tag.ToString()!);
-            //ModInfoShowChange(row.Tag.ToString()!);
         }
         private void DataGridItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -183,7 +338,6 @@ namespace StarsectorTools.Pages
             e.Handled = true;
             if (sender is DataGridRow row)
                 ModInfoShowChange(row.Tag.ToString()!);
-            //ShowModInfo(row.Tag.ToString()!);
         }
 
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
@@ -208,9 +362,9 @@ namespace StarsectorTools.Pages
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo info)
             {
-                string id = info.Id!;
+                string id = info.Id;
                 string err = null!;
-                foreach (var dependencie in allModShowInfo[id].Dependencies!.Split(" , "))
+                foreach (var dependencie in modsShowInfo[id].Dependencies!.Split(" , "))
                 {
                     if (allModsInfo.ContainsKey(dependencie))
                         ModEnabledChange(dependencie, true);
@@ -223,7 +377,7 @@ namespace StarsectorTools.Pages
                 if (err != null)
                     MessageBox.Show(err);
                 CheckEnabledModsDependencies();
-                SetAllSizeInListBoxItem();
+                RefreAllSizeOfListBoxItems();
             }
         }
 
@@ -236,7 +390,8 @@ namespace StarsectorTools.Pages
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
-                GetAllUserGroup(openFileDialog.FileName);
+                GetUserGroup(openFileDialog.FileName);
+                RefreAllSizeOfListBoxItems();
             }
         }
 
@@ -262,7 +417,7 @@ namespace StarsectorTools.Pages
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
-                allModShowInfo[item.Id!].UserDescription = new(TextBox_UserDescription.Text);
+                modsShowInfo[item.Id].UserDescription = new(TextBox_UserDescription.Text);
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -271,10 +426,17 @@ namespace StarsectorTools.Pages
             window.Show();
             window.Button_OK.Click += (o, e) =>
             {
-                if (window.TextBox_Name.Text.Length > 0 && !allUserGroup.ContainsKey(window.TextBox_Name.Text))
+                string name = window.TextBox_Name.Text;
+                if (name.Length > 0 && !userGroups.ContainsKey(name))
                 {
-                    AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
-                    window.Close();
+                    if (name == "Collected" || name == "UserModsData")
+                        MessageBox.Show("不能命名为Collected或UserModsData");
+                    else
+                    {
+                        AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
+                        RefreAllSizeOfListBoxItems();
+                        window.Close();
+                    }
                 }
                 else
                     MessageBox.Show("创建失败,名字为空或者已存在相同名字的分组");
@@ -282,74 +444,10 @@ namespace StarsectorTools.Pages
             window.Button_Cancel.Click += (o, e) => window.Close();
             window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
         }
-        void AddUserGroup(string icon, string name)
-        {
-            ListBoxItem item = new();
-            SetListBoxItemData(item, name);
-            ContextMenu contextMenu = new();
-            MenuItem menuItem = new();
-            menuItem.Header = "重命名分组";
-            menuItem.Click += (o, e) =>
-            {
-                Window_AddGroup window = new();
-                ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
-                window.Show();
-                window.Button_OK.Click += (o, e) =>
-                {
-                    string _icon = window.TextBox_Icon.Text;
-                    string _name = window.TextBox_Name.Text;
-                    if (_name.Length > 0 && !allUserGroup.ContainsKey(_name))
-                    {
-                        ListBoxItemHelper.SetIcon(item, window.TextBox_Icon.Text);
-                        var temp = allUserGroup[name];
-                        allUserGroup.Remove(name);
-                        allUserGroup.Add(_name, temp);
-                        allGroupListBoxItems.Remove(name);
-                        allGroupListBoxItems.Add(_name, item);
-                        var _temp = allShowModInfoAtGroup[name];
-                        allShowModInfoAtGroup.Remove(name);
-                        allShowModInfoAtGroup.Add(_name, _temp);
-                        SetListBoxItemData(item, _name);
-                        window.Close();
-                    }
-                    else
-                        MessageBox.Show("命名失败,名字为空或者已存在相同名字的分组");
-                };
-                window.Button_Cancel.Click += (o, e) => window.Close();
-                window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
-            };
-            contextMenu.Items.Add(menuItem);
-            menuItem = new();
-            menuItem.Header = "删除分组";
-            menuItem.Click += (o, e) =>
-            {
-                var _itme = (ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)o));
-                var _name = _itme.Content.ToString()!.Split(" ")[0];
-                ListBox_UserGroup.Items.Remove(_itme);
-                allUserGroup.Remove(_name);
-                allGroupListBoxItems.Remove(_name);
-                allShowModInfoAtGroup.Remove(_name);
-            };
-            contextMenu.Items.Add(menuItem);
-            item.ContextMenu = contextMenu;
-            ListBoxItemHelper.SetIcon(item, icon);
-            ListBox_UserGroup.Items.Add(item);
-            allUserGroup.Add(name, new());
-            allGroupListBoxItems.Add(name, item);
-            allShowModInfoAtGroup.Add(name, new());
-            SetAllSizeInListBoxItem();
-            RefreshShowModsItemContextMenu();
-        }
-        void SetListBoxItemData(ListBoxItem item, string name)
-        {
-            item.Content = $"{name} ";
-            item.ToolTip = name;
-            item.Tag = name;
-        }
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(Global.gameExePath))
+            if (File.Exists(ST.gameExePath))
             {
                 Process process = new();
                 process.StartInfo.FileName = "cmd";
@@ -357,43 +455,93 @@ namespace StarsectorTools.Pages
                 process.StartInfo.RedirectStandardInput = true;
                 if (process.Start())
                 {
-                    process.StandardInput.WriteLine($"cd /d {Global.gamePath}");
+                    process.StandardInput.WriteLine($"cd /d {ST.gamePath}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
                 }
             }
             else
             {
-                MessageBox.Show($"启动错误\n{Global.gameExePath}不存在");
+                MessageBox.Show($"启动错误\n{ST.gameExePath}不存在");
             }
         }
-
-        //private void DataGrid_ModsShowList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (sender is DataGrid grid && grid.SelectedItems != null)
-        //    {
-        //        if (grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) is DataGridRow row)
-        //        {
-        //            row.IsSelected = false;
-        //            CloseModInfo();
-        //        }
-        //    }
-        //}
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && grid.SelectedItems != null)
+            if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
             {
-                if (grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) is DataGridRow row)
-                {
-                    row.IsSelected = false;
-                    CloseModInfo();
-                }
+                ClearDataGridSelected();
+                //CloseModInfo();
             }
         }
 
-        private void TextBox_UserDescription_GotFocus(object sender, RoutedEventArgs e)
+        private void Button_ImportEnabledListFromSave_Click(object sender, RoutedEventArgs e)
         {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Title = "从游戏存档导入启动列表",
+                Filter = "Xml File|*.xml"
+            };
+            if (openFileDialog.ShowDialog().GetValueOrDefault())
+            {
+                string? err = null;
+                string filePath = $"{string.Join("\\", openFileDialog.FileName.Split("\\")[..^1])}\\descriptor.xml";
+                if (File.Exists(filePath))
+                {
+                    IEnumerable<string> list = null!;
+                    try
+                    {
+                        XElement xes = XElement.Load(filePath);
+                        list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"存档文件错误\n{ex}");
+                        return;
+                    }
+                    ClearEnabledMod();
+                    foreach (string id in list)
+                    {
+                        if (allModsInfo.ContainsKey(id))
+                            ModEnabledChange(id, true);
+                        else
+                        {
+                            err ??= "存档中的以下模组不存在\n";
+                            err += $"{id}\n";
+                        }
+                    }
+                }
+                else
+                    MessageBox.Show($"存档文件不存在\n位置:{filePath}");
+                if (err != null)
+                    MessageBox.Show(err);
+            }
+        }
 
+        private void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetData(DataFormats.FileDrop) is Array array)
+            {
+                STLog.Instance.WriteLine($"确认拖入文件 数量: {array.Length}");
+                new Task(() => MessageBox.Show($"正在加载文件 数量:{array.Length}")).Start();
+                new Task(() =>
+                {
+                    Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = false);
+                    foreach (string path in array)
+                    {
+                        if (File.Exists(path))
+                            DropFile(path);
+                        else
+                            MessageBox.Show($"无法导入文件夹\n{path}");
+                    }
+                    GC.Collect();
+                    Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = true);
+                }).Start();
+            }
+        }
+
+        private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SearchMods(TextBox_SearchMods.Text);
         }
     }
 }

@@ -20,15 +20,15 @@ using StarsectorTools.Lib;
 namespace StarsectorTools.Pages
 {
     /// <summary>
-    /// Page_Settings.xaml 的交互逻辑
+    /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Page_Settings : Page
+    public partial class Settings : Page
     {
-        public Page_Settings()
+        public Settings()
         {
             InitializeComponent();
-            Global.totalMemory = Management.GetMemoryMetricsNow().Total;
-            Label_GamePath.Content = Global.gamePath;
+            ST.totalMemory = Management.GetMemoryMetricsNow().Total;
+            Label_GamePath.Content = ST.gamePath;
             GetVmparamsData();
             GetGameKey();
         }
@@ -37,11 +37,11 @@ namespace StarsectorTools.Pages
         {
             do
             {
-                Global.GetGamePath();
-                if (!Global.TestGamePath())
+                ST.GetGamePath();
+                if (!ST.TestGamePath())
                     MessageBox.Show("游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK);
-            } while (!Global.TestGamePath());
-            Label_GamePath.Content = Global.gamePath;
+            } while (!ST.TestGamePath());
+            Label_GamePath.Content = ST.gamePath;
         }
         private void TextBox_SetMemory_KeyDown(object sender, KeyEventArgs e)
         {
@@ -51,7 +51,7 @@ namespace StarsectorTools.Pages
         private void TextBox_SetMemory_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
-            textBox.Text = Global.MemorySizeParse(int.Parse(textBox.Text)).ToString();
+            textBox.Text = ST.MemorySizeParse(int.Parse(textBox.Text)).ToString();
         }
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
 

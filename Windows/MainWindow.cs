@@ -19,32 +19,32 @@ namespace StarsectorTools.Windows
         {
             try
             {
-                if (Global.CreateConfigFile())
+                if (ST.CreateConfigFile())
                 {
-                    using TomlTable toml = TOML.Parse(Global.configPath);
+                    using TomlTable toml = TOML.Parse(ST.configPath);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
-                    Global.SetGamePath(toml["GamePath"].AsString);
-                    if (!Global.TestGamePath())
+                    ST.SetGamePath(toml["GamePath"].AsString);
+                    if (!ST.TestGamePath())
                     {
-                        if (!(MessageBox.Show(this, "游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && Global.GetGamePath()))
+                        if (!(MessageBox.Show(this, "游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                         {
                             MessageBox.Show(this, "未确认游戏本体路径,软件即将退出", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
                             Application.Current.Shutdown();
                         }
-                        toml["GamePath"] = Global.gamePath;
+                        toml["GamePath"] = ST.gamePath;
                     }
-                    toml.SaveTo(Global.configPath);
+                    toml.SaveTo(ST.configPath);
                 }
                 else
                 {
-                    using TomlTable toml = TOML.Parse(Global.configPath);
-                    if (!(MessageBox.Show(this, "第一次启动软件\n请选择游戏本体", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && Global.GetGamePath()))
+                    using TomlTable toml = TOML.Parse(ST.configPath);
+                    if (!(MessageBox.Show(this, "第一次启动软件\n请选择游戏本体", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                     {
                         MessageBox.Show(this, "未确认游戏本体路径,软件即将退出", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
                         Application.Current.Shutdown();
                     }
-                    toml["GamePath"] = Global.gamePath;
-                    toml.SaveTo(Global.configPath);
+                    toml["GamePath"] = ST.gamePath;
+                    toml.SaveTo(ST.configPath);
                 }
             }
             catch
