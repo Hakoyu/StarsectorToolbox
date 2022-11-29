@@ -136,7 +136,7 @@
                             <DataGridTemplateColumn Header="Icon" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Image Source="{Binding Image}" />
+                                        <Image Source="{Binding ImagePath}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -193,7 +193,7 @@
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
                     <TextBox x:Name="TextBox_SearchMods" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,120,0" TextChanged="TextBox_SearchMods_TextChanged"/>
-                    <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="120">
+                    <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="120" SelectionChanged="ComboBox_SearchType_SelectionChanged">
                         <ComboBoxItem Content="Name" Tag="Name"/>
                         <ComboBoxItem Content="Id" Tag="Id"/>
                         <ComboBoxItem Content="Author" Tag="Author"/>

@@ -534,6 +534,10 @@ namespace StarsectorTools.Pages
                 }).Start();
             }
         }
-        
+
+        private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SearchMods(TextBox_SearchMods.Text);
+        }
     }
 }

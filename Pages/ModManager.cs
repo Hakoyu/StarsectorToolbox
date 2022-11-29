@@ -323,7 +323,7 @@ namespace StarsectorTools.Pages
                 RowDetailsHight = 0,
                 Dependencies = "",
                 DependenciesList = info.Dependencies is not null ? info.Dependencies.Select(i => i.Id).ToList() : null!,
-                ImagePath = "",
+                ImagePath = File.Exists($"{info.Path}\\icon.ico") ? $"{info.Path}\\icon.ico" : "",
                 UserDescription = "",
                 Utility = info.Utility,
                 UtilityStyle = info.Utility is true ? labelStyle.IsUtility : labelStyle.NotUtility,
@@ -631,8 +631,10 @@ namespace StarsectorTools.Pages
         void SetModInfo(string id)
         {
             ModInfo info = allModsInfo[id];
-            if (modsShowInfo[info.Id].ImagePath is string imagePath && File.Exists(imagePath))
+            if (modsShowInfo[info.Id].ImagePath is string imagePath && imagePath.Length > 0)
                 Image_ModImage.Source = new BitmapImage(new(imagePath));
+            else
+                Image_ModImage.Source = null;
             Label_ModName.Content = info.Name;
             Label_ModId.Content = info.Id;
             Label_ModVersion.Content = info.Version;
