@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -11,6 +13,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Aspose.Zip;
+using Aspose.Zip.SevenZip;
+using Microsoft.VisualBasic.FileIO;
 
 namespace StarsectorTools.Lib
 {
@@ -34,19 +39,30 @@ namespace StarsectorTools.Lib
                 return lazy.Value;
             }
         }
-        public void WriteLine(Window window, string message, STLogLevel logLevel = STLogLevel.INFO)
+        public static string GetClassNameAndMethodName()
         {
-            if (logLevel >= LogLevel)
-            {
-                sw.WriteLine($"[{window.ToString().Replace("StarsectorTools.", "")}] {logLevel} {message}");
-                sw.Flush();
-            }
+            StackTrace stackTrace = new();
+            StackFrame frame = stackTrace.GetFrame(2)!;
+            MethodBase method = frame.GetMethod()!;
+            return $"{method.ReflectedType!.Name!}.{method.Name!}";
         }
-        public void WriteLine(Page page, string message, STLogLevel logLevel = STLogLevel.INFO)
+        public static string GetClassName()
         {
+            StackTrace stackTrace = new();
+            StackFrame frame = stackTrace.GetFrame(2)!;
+            MethodBase method = frame.GetMethod()!;
+            return method.ReflectedType!.Name!;
+        }
+        public void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
+        {
+            string name;
+            if (LogLevel == STLogLevel.DEBUG)
+                name = GetClassNameAndMethodName();
+            else
+                name = GetClassName();
             if (logLevel >= LogLevel)
             {
-                sw.WriteLine($"[{page.ToString()!.Replace("StarsectorTools.", "")}] {logLevel} {message}");
+                sw.WriteLine($"[{name}] {logLevel} {message}");
                 sw.Flush();
             }
         }
@@ -75,43 +91,58 @@ namespace StarsectorTools.Lib
             enabledModsJsonPath = $"{gameModsPath}\\enabled_mods.json";
             gameVersion = JsonNode.Parse(File.ReadAllText($"{path}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
         }
-        public static void CopyDirectory(string sourcePath, string destPath)
+        public static bool CopyDirectory(string sourcePath, string destPath)
         {
-            string floderName = Path.GetFileName(sourcePath);
-            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(destPath, floderName));
-            string[] files = Directory.GetFileSystemEntries(sourcePath);
-            foreach (string file in files)
+            try
             {
-                if (Directory.Exists(file))
-                    CopyDirectory(file, di.FullName);
-                else
-                    File.Copy(file, Path.Combine(di.FullName, Path.GetFileName(file)), true);
+                string floderName = Path.GetFileName(sourcePath);
+                DirectoryInfo di = Directory.CreateDirectory(Path.Combine(destPath, floderName));
+                string[] files = Directory.GetFileSystemEntries(sourcePath);
+                foreach (string file in files)
+                {
+                    if (Directory.Exists(file))
+                        CopyDirectory(file, di.FullName);
+                    else
+                        File.Copy(file, Path.Combine(di.FullName, Path.GetFileName(file)), true);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                return false;
             }
         }
-        //public static string? GetFileName(string filePath)
-        //{
-        //    if (!File.Exists(filePath))
-        //        return null!;
-        //    FileInfo fileInfo = new(filePath);
-        //    if (fileInfo.Name.Split(".") is string[] array)
-        //        return string.Join("", array[..^1]);
-        //    return null;
-        //}
-        //public static string? GetDirectory(string filePath)
-        //{
-        //    if (!File.Exists(filePath))
-        //        return null!;
-        //    FileInfo fileInfo = new(filePath);
-        //    return fileInfo.DirectoryName;
-        //}
-        //public static string? GetParentDirectory(string dir)
-        //{
-        //    if (!Directory.Exists(dir))
-        //        return null;
-        //    if (Directory.GetParent(dir) is DirectoryInfo directoryInfo)
-        //        return directoryInfo.FullName;
-        //    return null;
-        //}
+        public static bool DeleteFileToRecycleBin(string filePath)
+        {
+            try
+            {
+                if (char.IsLower(filePath.First()))
+                    filePath = char.ToLower(filePath.First()) + filePath[1..];
+                FileSystem.DeleteFile(filePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                return false;
+            }
+        }
+        public static bool DeleteDirectoryToRecycleBin(string dirPath)
+        {
+            try
+            {
+                if (char.IsLower(dirPath.First()))
+                    dirPath = char.ToLower(dirPath.First()) + dirPath[1..];
+                FileSystem.DeleteDirectory(dirPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                return false;
+            }
+        }
         public static int MemorySizeParse(int size)
         {
             if (size < 1024)
@@ -166,6 +197,43 @@ namespace StarsectorTools.Lib
                 return false;
             SetGamePath(Path.GetDirectoryName(openFileDialog.FileName)!);
             return TestGamePath();
+        }
+        public static bool ZipFile(string sourceDirName, string destDirName)
+        {
+            var head = "";
+            using StreamReader sr = new(sourceDirName);
+            {
+                head = $"{sr.Read()}{sr.Read()}";
+            }
+            try
+            {
+                if (head == "8297" || head == "8075")
+                {
+                    using (var archive = new Archive(sourceDirName, new() { Encoding = Encoding.UTF8 }))
+                    {
+                        archive.ExtractToDirectory(destDirName);
+                    }
+                }
+                else if (head == "55122")
+                {
+                    using (var archive = new SevenZipArchive(sourceDirName))
+                    {
+                        archive.ExtractToDirectory(destDirName);
+                    }
+                }
+                else
+                {
+                    //STLog.Instance.WriteLine(this, $"此文件不是压缩文件 位置: {sourceDirName}");
+                    return false;
+                }
+                return true;
+            }
+            catch
+            {
+                //STLog.Instance.WriteLine(nameof(ZipFile), $"文件错误 位置:{sourceDirName}");
+                Directory.Delete(destDirName);
+                return false;
+            }
         }
     }
     public class ModInfo

@@ -32,9 +32,9 @@ namespace StarsectorTools.Windows
         public MainWindow()
         {
             InitializeComponent();
-            STLog.Instance.LogLevel = STLogLevel.DEBUG;
-            //STLog.Instance.LogLevel = STLogLevel.INFO;
-            STLog.Instance.WriteLine(this, "初始化完成");
+            //STLog.Instance.LogLevel = STLogLevel.DEBUG;
+            STLog.Instance.LogLevel = STLogLevel.INFO;
+            STLog.Instance.WriteLine("初始化完成");
             SetConfig();
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
@@ -125,7 +125,7 @@ namespace StarsectorTools.Windows
 
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
-            STLog.Instance.WriteLine(this, $"显示菜单 {Frame_MainFrame.Content}");
+            STLog.Instance.WriteLine($"显示菜单 {Frame_MainFrame.Content}");
         }
     }
 }

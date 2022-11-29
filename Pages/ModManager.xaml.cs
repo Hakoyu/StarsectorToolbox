@@ -214,7 +214,7 @@ namespace StarsectorTools.Pages
             CheckUserGroup();
             RefreshModsShowInfoContextMenu();
             RefreAllSizeOfListBoxItems();
-            STLog.Instance.WriteLine(this, "初始化完成");
+            STLog.Instance.WriteLine("初始化完成");
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -279,7 +279,7 @@ namespace StarsectorTools.Pages
                 Grid_GroupMenu.Width = double.NaN;
             }
             groupMenuOpen = !groupMenuOpen;
-            STLog.Instance.WriteLine(this, $"分组菜单展开状态修改为 {groupMenuOpen}");
+            STLog.Instance.WriteLine($"分组菜单展开状态修改为 {groupMenuOpen}");
         }
         private void Grid_GroupMenu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -521,7 +521,7 @@ namespace StarsectorTools.Pages
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
-                STLog.Instance.WriteLine(this, $"确认拖入文件 数量: {array.Length}");
+                STLog.Instance.WriteLine($"确认拖入文件 数量: {array.Length}");
                 new Task(() => MessageBox.Show($"正在加载文件 数量:{array.Length}")).Start();
                 new Task(() =>
                 {
