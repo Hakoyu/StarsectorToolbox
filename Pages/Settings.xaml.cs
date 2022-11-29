@@ -30,6 +30,7 @@ namespace StarsectorTools.Pages
             ST.totalMemory = Management.GetMemoryMetricsNow().Total;
             Label_GamePath.Content = ST.gamePath;
             GetVmparamsData();
+            GetGameKey();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -59,5 +60,10 @@ namespace StarsectorTools.Pages
             SetVmparamsData();
         }
 
+        private void Button_DuplicateKey_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(gameKey);
+            MessageBox.Show("已成功将游戏序列码复制进剪切板。");
+        }
     }
 }
