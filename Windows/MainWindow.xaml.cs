@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using HKW.WindowAccent;
+using StarsectorTools.Lib;
 using StarsectorTools.Pages;
 
 namespace StarsectorTools.Windows
@@ -27,16 +28,19 @@ namespace StarsectorTools.Windows
     {
         bool menuOpen = false;
         Dictionary<string, Page> menuList = new();
-        Pages.Page_Settings settingMenu = null!;
+        Settings settingMenu = null!;
         public MainWindow()
         {
             InitializeComponent();
+            STLog.Instance.LogLevel = STLogLevel.DEBUG;
+            //STLog.Instance.LogLevel = STLogLevel.INFO;
+            STLog.Instance.WriteLine(this, "初始化完成");
             SetConfig();
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-            menuList.Add("ModManager", new Pages.ModManager());
+            menuList.Add("ModManager", new ModManager());
             ListBox_Menu.SelectedIndex = 0;
 
             //DirectoryInfo dirs = new(AppDomain.CurrentDomain.BaseDirectory);
@@ -106,20 +110,22 @@ namespace StarsectorTools.Windows
         }
         private void Grid_Menu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Frame_MainFrame.Margin = new Thickness() { Left = Grid_Menu.ActualWidth, Top = 0, Right = 0, Bottom = 0 };
+            Frame_MainFrame.Margin = new Thickness(Grid_Menu.ActualWidth,0,0,0);
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
             Keyboard.ClearFocus();
-            // 将事件焦点转移到parent
-            //FrameworkElement parent = (FrameworkElement)Parent;
-            //while (parent != null && ((IInputElement)parent).Focusable)
-            //    parent = (FrameworkElement)parent.Parent;
+            // 将事件焦点转移到this
             DependencyObject scope = FocusManager.GetFocusScope(this);
             FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
             ((ModManager)menuList["ModManager"]).CloseModInfo();
+        }
+
+        private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
+        {
+            STLog.Instance.WriteLine(this, $"显示菜单 {Frame_MainFrame.Content}");
         }
     }
 }

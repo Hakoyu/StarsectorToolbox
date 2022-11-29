@@ -45,7 +45,7 @@
                 <Button x:Name="Button_SettingsMenu" Content="⚙" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="30" Width="30" Background="#4CEAEAEA" Click="Button_SettingsMenu_Click" FontSize="16"/>
                 <Label Content="{x:Static I18n:MainWindow_I18n.Settings}" Margin="30,0,0,0" VerticalAlignment="Bottom" Background="#4CEAEAEA" Height="30"/>
             </Grid>
-            <Frame x:Name="Frame_MainFrame" NavigationUIVisibility="Hidden" Margin="30,0,0,0" />
+            <Frame x:Name="Frame_MainFrame" NavigationUIVisibility="Hidden" Margin="30,0,0,0" ContentRendered="Frame_MainFrame_ContentRendered" />
         </Grid>
     </Grid>
 </Window>

@@ -34,7 +34,7 @@
             <Setter Property="ToolTip" Value="false"/>
         </Style>
         <Style x:Key="VersionNormalStyle" TargetType="Label">
-            <Setter Property="Background" Value="WhiteSmoke"/>
+            <Setter Property="Background" Value="Azure"/>
             <Setter Property="Content" Value="版本兼容"/>
             <Setter Property="ToolTip" Value="false"/>
         </Style>
@@ -64,33 +64,33 @@
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="Grid_GroupMenu" HorizontalAlignment="Left" SizeChanged="Grid_GroupMenu_SizeChanged" Width="120" >
                     <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" Background="#4CEAEAEA"  pu:IconHelper.Margin="5,0,15,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" >
-                        <ListBoxItem pu:ListBoxItemHelper.Icon="0" Content="全部模组 " Height="30" ToolTip="All" Tag="All"/>
+                        <ListBoxItem pu:ListBoxItemHelper.Icon="0" Content="全部模组" Height="30" ToolTip="全部模组" Tag="All"/>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="启用状态分组">
                                 <ListBox x:Name="ListBox_EnableStatus" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="已启用模组 " ToolTip="Enabled" Tag="Enabled"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="未启用模组 " ToolTip="Disable" Tag="Disable"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="已启用模组" ToolTip="已启用模组" Tag="Enabled"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="未启用模组" ToolTip="未启用模组" Tag="Disable"/>
                                 </ListBox>
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsTabStop="True" Header="模组类型分组">
                                 <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="前置模组 " ToolTip="Libraries" Tag="Libraries"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="大型模组 " ToolTip="Megamods" Tag="Megamods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="3" Content="派系模组 " ToolTip="FactionMods" Tag="FactionMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="内容模组 " ToolTip="ContentExpansions" Tag="ContentExpansions"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="功能模组 " ToolTip="UtilityMods" Tag="UtilityMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="6" Content="闲杂模组 " ToolTip="MiscellaneousMods" Tag="MiscellaneousMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="7" Content="美化模组 " ToolTip="BeautifyMods" Tag="BeautifyMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="8" Content="未分类模组 " ToolTip="Unknown" Tag="Unknown"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="前置模组" ToolTip="前置模组" Tag="Libraries"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="大型模组" ToolTip="大型模组" Tag="Megamods"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="3" Content="派系模组" ToolTip="派系模组" Tag="FactionMods"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="内容模组" ToolTip="内容模组" Tag="ContentExpansions"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="功能模组" ToolTip="功能模组" Tag="UtilityMods"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="6" Content="闲杂模组" ToolTip="闲杂模组" Tag="MiscellaneousMods"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="7" Content="美化模组" ToolTip="美化模组" Tag="BeautifyMods"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="8" Content="未分类模组" ToolTip="未分类模组" Tag="Unknown"/>
                                 </ListBox>
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="用户分组">
                                 <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="❤" Content="已收藏模组 " ToolTip="Collected" Tag="Collected"/>
+                                    <ListBoxItem pu:ListBoxItemHelper.Icon="❤" Content="已收藏模组" ToolTip="已收藏模组" Tag="Collected"/>
                                 </ListBox>
                             </Expander>
                         </ListBoxItem>
@@ -100,7 +100,7 @@
                             pu:ButtonHelper.Icon="➕" pu:IconHelper.Margin="5,0,10,0" Click="Button_AddGroup_Click"/>
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,0,0" Grid.ColumnSpan="2" >
-                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,0,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" Background="#4CFFFFFF" pu:DataGridHelper.CellSelectedBackground="Green" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop">
+                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,0,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" Background="#4CFFFFFF" pu:DataGridHelper.CellSelectedBackground="Green" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" EnableColumnVirtualization="True" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.CanContentScroll="True">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Tag" Value="{Binding Id}"/>

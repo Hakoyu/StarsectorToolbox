@@ -9,7 +9,7 @@ using StarsectorTools.Lib;
 
 namespace StarsectorTools.Pages
 {
-    public partial class Page_Settings
+    public partial class Settings
     {
         struct VmparamsData
         {
@@ -19,13 +19,13 @@ namespace StarsectorTools.Pages
         VmparamsData vmparamsData = new();
         void GetVmparamsData()
         {
-            vmparamsData.data = File.ReadAllText($"{Global.gamePath}\\vmparams");
+            vmparamsData.data = File.ReadAllText($"{ST.gamePath}\\vmparams");
             vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+", RegexOptions.IgnoreCase).Value;
             TextBox_MaxMemory.Text = TextBox_MinMemory.Text = vmparamsData.xmsx;
         }
         void SetVmparamsData()
         {
-            File.WriteAllText($"{Global.gamePath}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_MinMemory.Text}m", RegexOptions.IgnoreCase));
+            File.WriteAllText($"{ST.gamePath}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_MinMemory.Text}m", RegexOptions.IgnoreCase));
         }
     }
 }

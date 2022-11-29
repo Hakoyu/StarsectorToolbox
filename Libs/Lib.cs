@@ -6,18 +6,62 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Shapes;
 
 namespace StarsectorTools.Lib
 {
-    public static class Global
+    public enum STLogLevel
+    {
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR
+    }
+    public sealed class STLog
+    {
+        public const string logPath = @"StarsectorTools.log";
+        private static readonly Lazy<STLog> lazy = new(new STLog());
+        public STLogLevel LogLevel = STLogLevel.INFO;
+        private StreamWriter sw = new(logPath);
+        public static STLog Instance
+        {
+            get
+            {
+                return lazy.Value;
+            }
+        }
+        public void WriteLine(Window window, string message, STLogLevel logLevel = STLogLevel.INFO)
+        {
+            if (logLevel >= LogLevel)
+            {
+                sw.WriteLine($"[{window.ToString().Replace("StarsectorTools.", "")}] {logLevel} {message}");
+                sw.Flush();
+            }
+        }
+        public void WriteLine(Page page, string message, STLogLevel logLevel = STLogLevel.INFO)
+        {
+            if (logLevel >= LogLevel)
+            {
+                sw.WriteLine($"[{page.ToString()!.Replace("StarsectorTools.", "")}] {logLevel} {message}");
+                sw.Flush();
+            }
+        }
+        public void Close()
+        {
+            sw?.Close();
+        }
+    }
+
+    public static class ST
     {
         public static int totalMemory = 0;
         public const string configPath = @"Config.toml";
         public readonly static Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
+        public const string logPath = @"StarsectorTools.toml";
         public static string gamePath = null!;
         public static string gameExePath = null!;
         public static string gameModsPath = null!;
@@ -31,30 +75,43 @@ namespace StarsectorTools.Lib
             enabledModsJsonPath = $"{gameModsPath}\\enabled_mods.json";
             gameVersion = JsonNode.Parse(File.ReadAllText($"{path}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
         }
-        public static string? GetFileName(string filePath)
+        public static void CopyDirectory(string sourcePath, string destPath)
         {
-            if (!File.Exists(filePath))
-                return null!;
-            FileInfo fileInfo = new(filePath);
-            if (fileInfo.Name.Split(".") is string[] array)
-                return string.Join("", array[..^1]);
-            return null;
+            string floderName = Path.GetFileName(sourcePath);
+            DirectoryInfo di = Directory.CreateDirectory(Path.Combine(destPath, floderName));
+            string[] files = Directory.GetFileSystemEntries(sourcePath);
+            foreach (string file in files)
+            {
+                if (Directory.Exists(file))
+                    CopyDirectory(file, di.FullName);
+                else
+                    File.Copy(file, Path.Combine(di.FullName, Path.GetFileName(file)), true);
+            }
         }
-        public static string? GetDirectory(string filePath)
-        {
-            if (!File.Exists(filePath))
-                return null!;
-            FileInfo fileInfo = new(filePath);
-            return fileInfo.DirectoryName;
-        }
-        public static string? GetParentDirectory(string dir)
-        {
-            if (!Directory.Exists(dir))
-                return null;
-            if (Directory.GetParent(dir) is DirectoryInfo directoryInfo)
-                return directoryInfo.FullName;
-            return null;
-        }
+        //public static string? GetFileName(string filePath)
+        //{
+        //    if (!File.Exists(filePath))
+        //        return null!;
+        //    FileInfo fileInfo = new(filePath);
+        //    if (fileInfo.Name.Split(".") is string[] array)
+        //        return string.Join("", array[..^1]);
+        //    return null;
+        //}
+        //public static string? GetDirectory(string filePath)
+        //{
+        //    if (!File.Exists(filePath))
+        //        return null!;
+        //    FileInfo fileInfo = new(filePath);
+        //    return fileInfo.DirectoryName;
+        //}
+        //public static string? GetParentDirectory(string dir)
+        //{
+        //    if (!Directory.Exists(dir))
+        //        return null;
+        //    if (Directory.GetParent(dir) is DirectoryInfo directoryInfo)
+        //        return directoryInfo.FullName;
+        //    return null;
+        //}
         public static int MemorySizeParse(int size)
         {
             if (size < 1024)
@@ -107,22 +164,21 @@ namespace StarsectorTools.Lib
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
-            SetGamePath(GetDirectory(openFileDialog.FileName)!);
+            SetGamePath(Path.GetDirectoryName(openFileDialog.FileName)!);
             return TestGamePath();
         }
     }
     public class ModInfo
     {
-        public string? Id;
-        public string? Name;
-        public string? Author;
-        public string? Version;
-        public bool? Utility;
-        public string? Description;
-        public string? GameVersion;
-        public string? ModPlugin;
-        public List<ModInfo>? Dependencies;
-        public Dictionary<string, string>? Other;
+        public string Id { get; private set; } = null!;
+        public string Name { get; private set; } = null!;
+        public string Author { get; private set; } = null!;
+        public string Version { get; private set; } = null!;
+        public bool Utility { get; private set; } = false;
+        public string Description { get; private set; } = null!;
+        public string GameVersion { get; private set; } = null!;
+        public string ModPlugin { get; private set; } = null!;
+        public List<ModInfo>? Dependencies { get; private set; }
         public string Path = null!;
         public void SetData(KeyValuePair<string, JsonNode?> kv) => SetData(kv.Key, kv.Value!);
         public void SetData(string key, JsonNode value)
@@ -165,11 +221,6 @@ namespace StarsectorTools.Lib
                             modInfo.SetData(info);
                         Dependencies.Add(modInfo);
                     }
-                    break;
-                default:
-                    Other ??= new();
-                    if (!Other.TryAdd(key, value.ToString()))
-                        Other[key] += value.ToString();
                     break;
             }
         }
