@@ -34,9 +34,10 @@ namespace StarsectorTools.Pages
     /// </summary>
     public partial class ModManager : Page
     {
-        const string modGroupPath = @"ModGroup.toml";
+        const string modGroupFile = @"ModGroup.toml";
+        const string modBackUpDirectory = @"ModsBackUp";
         readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
-        const string userGroupPath = @"UserGroup.toml";
+        const string userGroupFile = @"UserGroup.toml";
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
@@ -522,19 +523,41 @@ namespace StarsectorTools.Pages
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
                 STLog.Instance.WriteLine($"确认拖入文件 数量: {array.Length}");
-                new Task(() => MessageBox.Show($"正在加载文件 数量:{array.Length}")).Start();
+                Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = false);
                 new Task(() =>
                 {
-                    Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = false);
+                    int total = array.Length;
+                    int completed = 0;
+                    Archiveing window = null!;
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        window = new Archiveing();
+                        window.Label_Total.Content = total;
+                        window.Label_Completed.Content = completed;
+                        window.Label_Incomplete.Content = total;
+                        window.Show();
+                    });
                     foreach (string path in array)
                     {
                         if (File.Exists(path))
+                        {
+                            Dispatcher.BeginInvoke(() => window.Label_Progress.Content = path);
                             DropFile(path);
+                            Dispatcher.BeginInvoke(() =>
+                            {
+                                window.Label_Completed.Content = ++completed;
+                                window.Label_Incomplete.Content = total - completed;
+                            });
+                        }
                         else
                             MessageBox.Show($"无法导入文件夹\n{path}");
                     }
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        window.Close();
+                        ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
+                    });
                     GC.Collect();
-                    Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = true);
                 }).Start();
             }
         }

@@ -23,6 +23,7 @@ using Aspose.Zip;
 using Aspose.Zip.SevenZip;
 using StarsectorTools.Windows;
 using System.Windows.Threading;
+using Aspose.Zip.Rar;
 
 namespace StarsectorTools.Pages
 {
@@ -134,14 +135,14 @@ namespace StarsectorTools.Pages
         }
         void CheckUserGroup()
         {
-            if (!File.Exists(userGroupPath))
+            if (!File.Exists(userGroupFile))
             {
-                File.Create(userGroupPath).Close();
-                STLog.Instance.WriteLine($"创建用户分组数据 位置: {userGroupPath}");
+                File.Create(userGroupFile).Close();
+                STLog.Instance.WriteLine($"创建用户分组数据 位置: {userGroupFile}");
             }
             else
             {
-                GetUserGroup(userGroupPath);
+                GetUserGroup(userGroupFile);
             }
         }
         void GetUserGroup(string path)
@@ -254,14 +255,14 @@ namespace StarsectorTools.Pages
 
         void GetAllGroup()
         {
-            if (!File.Exists(modGroupPath))
+            if (!File.Exists(modGroupFile))
             {
                 using StreamReader sr = new(Application.GetResourceStream(modGroupUri).Stream);
-                File.WriteAllText(modGroupPath, sr.ReadToEnd());
+                File.WriteAllText(modGroupFile, sr.ReadToEnd());
             }
             try
             {
-                using TomlTable toml = TOML.Parse(modGroupPath);
+                using TomlTable toml = TOML.Parse(modGroupFile);
                 foreach (var kv in toml)
                     foreach (string id in kv.Value.AsTomlArray)
                         modsIdFromGroups[kv.Key].Add(id);
@@ -269,7 +270,7 @@ namespace StarsectorTools.Pages
             catch (Exception)
             {
                 MessageBox.Show("获取默认分组失败", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
-                STLog.Instance.WriteLine($"获取默认分组失败 位置: {modGroupPath}");
+                STLog.Instance.WriteLine($"获取默认分组失败 位置: {modGroupFile}");
             }
         }
         string CheckGroup(string id)
@@ -553,7 +554,7 @@ namespace StarsectorTools.Pages
         void SeveAllData()
         {
             SaveEnabledMods(ST.enabledModsJsonPath);
-            SaveUserGroup(userGroupPath);
+            SaveUserGroup(userGroupFile);
         }
         void SaveEnabledMods(string path)
         {
@@ -655,7 +656,6 @@ namespace StarsectorTools.Pages
         }
         void DropFile(string filePath)
         {
-            string fileName = Path.GetFileName(filePath)!;
             string tempPath = $"{AppDomain.CurrentDomain.BaseDirectory}temp";
             var head = "";
             using StreamReader sr = new(filePath);
@@ -664,9 +664,17 @@ namespace StarsectorTools.Pages
             }
             try
             {
-                if (head == "8297" || head == "8075")
+
+                if (head == "8075")
                 {
                     using (var archive = new Archive(filePath, new() { Encoding = Encoding.UTF8 }))
+                    {
+                        archive.ExtractToDirectory(tempPath);
+                    }
+                }
+                else if (head == "8297")
+                {
+                    using (var archive = new RarArchive(filePath))
                     {
                         archive.ExtractToDirectory(tempPath);
                     }
@@ -689,7 +697,8 @@ namespace StarsectorTools.Pages
             {
                 STLog.Instance.WriteLine($"文件错误 位置:{filePath}");
                 MessageBox.Show($"文件错误\n 位置:{filePath}");
-                Directory.Delete(tempPath);
+                if (Directory.Exists(tempPath))
+                    Directory.Delete(tempPath);
                 return;
             }
             DirectoryInfo dirs = new(tempPath);
@@ -700,8 +709,9 @@ namespace StarsectorTools.Pages
                 if (allModsInfo.ContainsKey(modInfo.Id))
                 {
                     var originalModInfo = allModsInfo[modInfo.Id];
-                    if (MessageBox.Show($"已存在相同的模组 是否覆盖?\n原始版本:{originalModInfo.Version}\n新增版本:{modInfo.Version}", "已存在相同模组", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (MessageBox.Show($"{modInfo.Id} 已存在 是否覆盖?\n原始版本:{originalModInfo.Version}\n新增版本:{modInfo.Version}", "已存在相同模组", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
+                        ST.CopyDirectory(originalModInfo.Path, modBackUpDirectory);
                         Directory.Delete(originalModInfo.Path, true);
                         ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsPath);
                         allModsInfo.Remove(modInfo.Id);
