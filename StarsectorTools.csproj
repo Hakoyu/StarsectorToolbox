@@ -19,9 +19,6 @@
   <ItemGroup>
     <None Remove="Resources\Config.toml" />
     <None Remove="Resources\ModGroup.toml" />
-    <None Remove="Windows\ui_border2_n.png" />
-    <None Remove="Windows\标题栏按钮.png" />
-    <None Remove="Windows\窗口外观.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,9 +33,6 @@
 
   <ItemGroup>
     <Resource Include="Resources\Config.toml" />
-    <Resource Include="Windows\ui_border2_n.png" />
-    <Resource Include="Windows\标题栏按钮.png" />
-    <Resource Include="Windows\窗口外观.png" />
   </ItemGroup>
 
   <ItemGroup>

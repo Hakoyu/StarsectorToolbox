@@ -69,9 +69,15 @@ namespace StarsectorTools.Windows
         {
             //检测当前窗口状态
             if (WindowState == WindowState.Normal)
+            {
                 WindowState = WindowState.Maximized;
+                Button_TitleMax.Content = "🔳";
+            }
             else
+            {
                 WindowState = WindowState.Normal;
+                Button_TitleMax.Content = "🔲";
+            }
         }
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
@@ -83,12 +89,12 @@ namespace StarsectorTools.Windows
         {
             if (menuOpen)
             {
-                Button_MainMenu.Content = "📘";
+                Button_MainMenuIcon.Text = "📘";
                 Grid_Menu.Width = 30;
             }
             else
             {
-                Button_MainMenu.Content = "📖";
+                Button_MainMenuIcon.Text = "📖";
                 Grid_Menu.Width = double.NaN;
             }
             menuOpen = !menuOpen;

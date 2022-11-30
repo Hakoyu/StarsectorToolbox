@@ -10,7 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlsStyle.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/ThemeResources/WhiteStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/ThemeResources/BlackStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

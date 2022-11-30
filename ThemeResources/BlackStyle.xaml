@@ -1,8 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="GroupBox_Style" TargetType="GroupBox" BasedOn="{StaticResource GroupBox_Style}">
-        <Setter Property="Background" Value="#33000000" />
-        <Setter Property="BorderBrush" Value="#6600008B" />
-        <Setter Property="Foreground" Value="#FFFFFFFF" />
-    </Style>
+    <SolidColorBrush x:Key="ColorBG" Color="#FF1E1E1E"/>
+    <SolidColorBrush x:Key="ColorBB" Color="#FF303030"/>
+    <SolidColorBrush x:Key="ColorFG" Color="Azure"/>
+    <SolidColorBrush x:Key="ColorDeep" Color="#33000000"/>
+    <SolidColorBrush x:Key="ColorLight" Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="ColorSelected" Color="#3301FFFF"/>
+    <SolidColorBrush x:Key="ColorLightYellow" Color="#33FFFF10"/>
+    <SolidColorBrush x:Key="ColorLightRed" Color="#33FF0000"/>
+    <SolidColorBrush x:Key="ColorLightBlue" Color="#4C0000FF"/>
 </ResourceDictionary>

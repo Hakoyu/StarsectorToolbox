@@ -767,6 +767,8 @@ namespace StarsectorTools.Pages
         void AddUserGroup(string icon, string name)
         {
             ListBoxItem item = new();
+            // 调用全局资源需要写全
+            item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
             SetListBoxItemData(item, name);
             ContextMenu contextMenu = new();
             MenuItem menuItem = new();

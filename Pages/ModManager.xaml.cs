@@ -271,12 +271,12 @@ namespace StarsectorTools.Pages
         {
             if (groupMenuOpen)
             {
-                Button_GroupMenu.Content = "📘";
+                Button_GroupMenuIcon.Text = "📘";
                 Grid_GroupMenu.Width = 30;
             }
             else
             {
-                Button_GroupMenu.Content = "📖";
+                Button_GroupMenuIcon.Text = "📖";
                 Grid_GroupMenu.Width = double.NaN;
             }
             groupMenuOpen = !groupMenuOpen;
@@ -339,6 +339,22 @@ namespace StarsectorTools.Pages
             e.Handled = true;
             if (sender is DataGridRow row)
                 ModInfoShowChange(row.Tag.ToString()!);
+        }
+        private void DataGridItem_MouseMove(object sender, MouseEventArgs e)
+        {
+            // 连续点击无效,需要 e.Handled = true
+            //e.Handled = true;
+            if (sender is DataGridRow row)
+                row.Background = (Brush)Application.Current.Resources["ColorLight"];
+                //ModInfoShowChange(row.Tag.ToString()!);
+        }
+        private void DataGridItem_MouseLeave(object sender, MouseEventArgs e)
+        {
+            // 连续点击无效,需要 e.Handled = true
+            //e.Handled = true;
+            if (sender is DataGridRow row)
+                row.Background = (Brush)Application.Current.Resources["ColorBG"];
+            //ModInfoShowChange(row.Tag.ToString()!);
         }
 
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
