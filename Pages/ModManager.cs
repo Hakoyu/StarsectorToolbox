@@ -773,7 +773,7 @@ namespace StarsectorTools.Pages
             menuItem.Header = "重命名分组";
             menuItem.Click += (o, e) =>
             {
-                Window_AddGroup window = new();
+                AddUserGroup window = new();
                 ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
                 window.Show();
                 window.Button_OK.Click += (o, e) =>
@@ -819,7 +819,8 @@ namespace StarsectorTools.Pages
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{name} 分组添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
             item.ContextMenu = contextMenu;
-            ListBoxItemHelper.SetIcon(item, icon);
+            //ListBoxItemHelper.SetIcon(item, icon);
+            ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
             ListBox_UserGroup.Items.Add(item);
             userGroups.Add(name, new());
             listBoxItemsFromGroups.Add(name, item);
@@ -830,7 +831,7 @@ namespace StarsectorTools.Pages
         }
         void SetListBoxItemData(ListBoxItem item, string name)
         {
-            item.Content = name;
+            item.Content = new Emoji.Wpf.TextBlock() { Text = name };
             item.ToolTip = name;
             item.Tag = name;
         }

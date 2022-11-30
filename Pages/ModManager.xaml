@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+      xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
       xmlns:local="clr-namespace:StarsectorTools.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -53,6 +54,7 @@
             <Setter Property="Content" Value="❎"/>
             <Setter Property="ToolTip" Value="不是功能性模组 不可以中途移除"/>
         </Style>
+        <emoji:TextBlock x:Key="CollectedEmoji" Text="🌟" FontSize="16"/>
     </Page.Resources>
     <Grid>
         <GroupBox Header="模组管理器" Style="{StaticResource GroupBox_Style}" Padding="5,5,0,5">
@@ -63,34 +65,82 @@
                     <ColumnDefinition Width="120"/>
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="Grid_GroupMenu" HorizontalAlignment="Left" SizeChanged="Grid_GroupMenu_SizeChanged" Width="120" >
-                    <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" Background="#4CEAEAEA"  pu:IconHelper.Margin="5,0,15,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" >
-                        <ListBoxItem pu:ListBoxItemHelper.Icon="0" Content="全部模组" Height="30" ToolTip="全部模组" Tag="All"/>
+                    <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" Background="#4CEAEAEA"  pu:IconHelper.Margin="0,0,10,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" >
+                        <ListBoxItem Content="全部模组" Height="30" ToolTip="全部模组" Tag="All">
+                            <pu:ListBoxItemHelper.Icon>
+                                <emoji:TextBlock Text="🅰"/>
+                            </pu:ListBoxItemHelper.Icon>
+                        </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="启用状态分组">
                                 <ListBox x:Name="ListBox_EnableStatus" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="已启用模组" ToolTip="已启用模组" Tag="Enabled"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="未启用模组" ToolTip="未启用模组" Tag="Disable"/>
+                                    <ListBoxItem Content="已启用模组" ToolTip="已启用模组" Tag="Enabled">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="✅"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="未启用模组" ToolTip="未启用模组" Tag="Disable">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="❎"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
                                 </ListBox>
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsTabStop="True" Header="模组类型分组">
                                 <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="1" Content="前置模组" ToolTip="前置模组" Tag="Libraries"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="2" Content="大型模组" ToolTip="大型模组" Tag="Megamods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="3" Content="派系模组" ToolTip="派系模组" Tag="FactionMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="内容模组" ToolTip="内容模组" Tag="ContentExpansions"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="5" Content="功能模组" ToolTip="功能模组" Tag="UtilityMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="6" Content="闲杂模组" ToolTip="闲杂模组" Tag="MiscellaneousMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="7" Content="美化模组" ToolTip="美化模组" Tag="BeautifyMods"/>
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="8" Content="未分类模组" ToolTip="未分类模组" Tag="Unknown"/>
+                                    <ListBoxItem Content="前置模组" ToolTip="前置模组" Tag="Libraries">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🔝"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="大型模组" ToolTip="大型模组" Tag="Megamods">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="☢"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="派系模组" ToolTip="派系模组" Tag="FactionMods">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🏁"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="内容模组" ToolTip="内容模组" Tag="ContentExpansions">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🆙"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="功能模组" ToolTip="功能模组" Tag="UtilityMods">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🛠"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="闲杂模组" ToolTip="闲杂模组" Tag="MiscellaneousMods">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🛄"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="美化模组" ToolTip="美化模组" Tag="BeautifyMods">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="✨"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
+                                    <ListBoxItem Content="未分类模组" ToolTip="未分类模组" Tag="Unknown">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🆓"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
                                 </ListBox>
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="用户分组">
                                 <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
-                                    <ListBoxItem pu:ListBoxItemHelper.Icon="❤" Content="已收藏模组" ToolTip="已收藏模组" Tag="Collected"/>
+                                    <ListBoxItem x:Name="ListBoxItem_Collected" Content="已收藏模组" ToolTip="已收藏模组" Tag="Collected">
+                                        <pu:ListBoxItemHelper.Icon>
+                                            <emoji:TextBlock Text="🌟"/>
+                                        </pu:ListBoxItemHelper.Icon>
+                                    </ListBoxItem>
                                 </ListBox>
                             </Expander>
                         </ListBoxItem>
@@ -119,7 +169,7 @@
                         </DataGrid.CellStyle>
                         -->
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn CanUserSort="True" Header="❤" SortMemberPath="Collected">
+                            <DataGridTemplateColumn CanUserSort="True" Header="{StaticResource CollectedEmoji}" SortMemberPath="Collected">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button x:Name="Button_Collected" Style="{Binding CollectedStyle}" Margin="0,5,0,5" Click="Button_Collected_Click" Tag="{Binding Id}"/>

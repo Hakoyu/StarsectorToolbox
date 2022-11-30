@@ -11,15 +11,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Panuon.WPF.UI;
 
 namespace StarsectorTools.Windows
 {
     /// <summary>
-    /// Window_AddGroup.xaml 的交互逻辑
+    /// AddUserGroup.xaml 的交互逻辑
     /// </summary>
-    public partial class Window_AddGroup : Window
+    public partial class AddUserGroup : Window
     {
-        public Window_AddGroup()
+        public AddUserGroup()
         {
             InitializeComponent();
         }

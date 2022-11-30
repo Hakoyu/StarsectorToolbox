@@ -422,7 +422,7 @@ namespace StarsectorTools.Pages
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
-            Window_AddGroup window = new();
+            AddUserGroup window = new();
             ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
             window.Show();
             window.Button_OK.Click += (o, e) =>

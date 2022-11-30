@@ -39,7 +39,7 @@ namespace StarsectorTools.Windows
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
-            WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
+            //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             menuList.Add("ModManager", new ModManager());
             ListBox_Menu.SelectedIndex = 0;
 
