@@ -469,10 +469,7 @@ namespace StarsectorTools.Pages
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
-            {
                 ClearDataGridSelected();
-                //CloseModInfo();
-            }
         }
 
         private void Button_ImportEnabledListFromSave_Click(object sender, RoutedEventArgs e)
@@ -535,13 +532,16 @@ namespace StarsectorTools.Pages
                         window.Label_Total.Content = total;
                         window.Label_Completed.Content = completed;
                         window.Label_Incomplete.Content = total;
-                        window.Show();
                     });
                     foreach (string path in array)
                     {
                         if (File.Exists(path))
                         {
-                            Dispatcher.BeginInvoke(() => window.Label_Progress.Content = path);
+                            Dispatcher.BeginInvoke(() =>
+                            {
+                                window.Label_Progress.Content = path;
+                                window.Show();
+                            });
                             DropFile(path);
                             Dispatcher.BeginInvoke(() =>
                             {
@@ -550,7 +550,7 @@ namespace StarsectorTools.Pages
                             });
                         }
                         else
-                            MessageBox.Show($"无法导入文件夹\n{path}");
+                            MessageBox.Show($"无法导入文件夹\n 位置: {path}");
                     }
                     Dispatcher.BeginInvoke(() =>
                     {

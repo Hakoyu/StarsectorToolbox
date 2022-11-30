@@ -688,8 +688,8 @@ namespace StarsectorTools.Pages
                 }
                 else
                 {
-                    STLog.Instance.WriteLine($"此文件不是压缩文件 位置: {filePath}");
-                    MessageBox.Show($"此文件不是压缩文件\n 位置: {filePath}");
+                    STLog.Instance.WriteLine($"不支持的文件 位置: {filePath}");
+                    MessageBox.Show($"不支持的文件\n 位置: {filePath}");
                     return;
                 }
             }
