@@ -55,13 +55,13 @@ namespace StarsectorTools.Lib
         }
         public void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
         {
-            string name;
-            if (LogLevel == STLogLevel.DEBUG)
-                name = GetClassNameAndMethodName();
-            else
-                name = GetClassName();
             if (logLevel >= LogLevel)
             {
+                string name;
+                if (LogLevel == STLogLevel.DEBUG)
+                    name = GetClassNameAndMethodName();
+                else
+                    name = GetClassName();
                 sw.WriteLine($"[{name}] {logLevel} {message}");
                 sw.Flush();
             }
@@ -78,18 +78,36 @@ namespace StarsectorTools.Lib
         public const string configPath = @"Config.toml";
         public readonly static Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
         public const string logPath = @"StarsectorTools.toml";
-        public static string gamePath = null!;
-        public static string gameExePath = null!;
-        public static string gameModsPath = null!;
-        public static string gameVersion = null!;
-        public static string enabledModsJsonPath = null!;
+        public static string gamePath { get; private set; } = null!;
+        public static string gameExePath { get; private set; } = null!;
+        public static string gameModsPath { get; private set; } = null!;
+        public static string gameVersion { get; private set; } = null!;
+        public static string gameSavePath { get; private set; } = null!;
+        public static string enabledModsJsonPath { get; private set; } = null!;
         public static void SetGamePath(string path)
         {
-            gamePath = path;
             gameExePath = $"{path}\\starsector.exe";
-            gameModsPath = $"{path}\\mods";
-            enabledModsJsonPath = $"{gameModsPath}\\enabled_mods.json";
-            gameVersion = JsonNode.Parse(File.ReadAllText($"{path}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+            if (File.Exists(gameExePath))
+            {
+                gamePath = path;
+                gameModsPath = $"{path}\\mods";
+                gameSavePath = $"{path}\\saves";
+                enabledModsJsonPath = $"{gameModsPath}\\enabled_mods.json";
+                try
+                {
+                    gameVersion = JsonNode.Parse(File.ReadAllText($"{path}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+                }
+                catch (Exception ex)
+                {
+                    STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                }
+            }
+            else
+            {
+                gameExePath = null!;
+                STLog.Instance.WriteLine($"游戏目录设置错误 位置: {path}", STLogLevel.ERROR);
+                MessageBox.Show($"游戏目录设置错误\n位置: {path}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         public static bool CopyDirectory(string sourcePath, string destPath)
         {

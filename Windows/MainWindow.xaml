@@ -39,7 +39,7 @@
         </Grid>
         <Grid Margin="0,30,0,0">
             <Grid x:Name="Grid_Menu" HorizontalAlignment="Left" SizeChanged="Grid_Menu_SizeChanged" Width="30">
-                <ListBox x:Name="ListBox_Menu" Margin="0,0,0,30" HorizontalAlignment="Left" FontSize="16" SelectionChanged="ListBox_Menu_SelectionChanged" Style="{StaticResource ListBox_Style}">
+                <ListBox x:Name="ListBox_Menu" Margin="0,0,0,60" HorizontalAlignment="Center" FontSize="16" SelectionChanged="ListBox_Menu_SelectionChanged" Style="{StaticResource ListBox_Style}">
                     <ListBoxItem Content="ModManager" Style="{StaticResource ListBoxItem_Style}" BorderBrush="#FFA42C2C" >
                         <pu:ListBoxItemHelper.Icon>
                             <emoji:TextBlock Text="🌐" FontSize="16"/>
@@ -49,6 +49,11 @@
                 <Button x:Name="Button_SettingsMenu" Content="设置" VerticalAlignment="Bottom" Height="30" Click="Button_SettingsMenu_Click" FontSize="16" Style="{StaticResource Button_Style}" Margin="0,0,0,0" HorizontalContentAlignment="Left" >
                     <pu:ButtonHelper.Icon>
                         <emoji:TextBlock Text="⚙" FontSize="16"/>
+                    </pu:ButtonHelper.Icon>
+                </Button>
+                <Button Content="信息" Margin="0,0,0,30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" FontSize="16" Height="30" VerticalAlignment="Bottom">
+                    <pu:ButtonHelper.Icon>
+                        <emoji:TextBlock Text="ℹ" FontSize="16"/>
                     </pu:ButtonHelper.Icon>
                 </Button>
             </Grid>

@@ -40,6 +40,10 @@
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="pu:IconHelper.Margin" Value="4,-2,5,0"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside"/>
+    </Style>
+    <Style x:Key="ScrollBar_Style" TargetType="ScrollBar" BasedOn="{StaticResource {x:Type ScrollBar}}">
+        <Setter Property="Width" Value="5"/>
     </Style>
     <Style x:Key="ListBoxItem_Style" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
         <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
@@ -75,6 +79,7 @@
         <Setter Property="Background" Value="{DynamicResource ColorBB}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ColorBB}"/>
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
+        <Setter Property="pu:ExpanderHelper.HeaderHeight" Value="30"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
     <Style x:Key="DataGrid_Style" TargetType="DataGrid" BasedOn="{StaticResource {x:Type DataGrid}}">

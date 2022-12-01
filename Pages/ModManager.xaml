@@ -59,11 +59,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="546*"/>
                     <ColumnDefinition Width="127*"/>
-                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="125"/>
                 </Grid.ColumnDefinitions>
                 <Grid x:Name="Grid_GroupMenu" HorizontalAlignment="Left" SizeChanged="Grid_GroupMenu_SizeChanged" Width="120" >
-                    <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" pu:IconHelper.Margin="0,0,10,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}">
-                        <ListBoxItem Content="全部模组" Height="30" ToolTip="全部模组" Tag="All" Style="{StaticResource ListBoxItem_Style}" >
+                    <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" pu:IconHelper.Margin="0,0,10,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" >
+                        <ListBoxItem Content="全部模组" Height="30" ToolTip="全部模组" Tag="All" Style="{StaticResource ListBoxItem_Style}">
                             <pu:ListBoxItemHelper.Icon>
                                 <emoji:TextBlock Text="🅰"/>
                             </pu:ListBoxItemHelper.Icon>
@@ -147,15 +147,14 @@
                             <emoji:TextBlock x:Name="Button_GroupMenuIcon" Text="📘"/>
                         </pu:ButtonHelper.Icon>
                     </Button>
-                    <Button x:Name="Button_AddGroup" Content="添加用户分组" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" pu:IconHelper.Margin="5,0,10,0" Click="Button_AddGroup_Click"/>
+                    <Button x:Name="Button_AddGroup" Content="添加用户分组" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" Click="Button_AddGroup_Click"/>
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,0,0" Grid.ColumnSpan="2" >
-                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,0,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" EnableColumnVirtualization="True" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.CanContentScroll="True" Style="{StaticResource DataGrid_Style}">
+                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" EnableColumnVirtualization="True" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.CanContentScroll="True" Style="{StaticResource DataGrid_Style}">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Tag" Value="{Binding Id}"/>
                                 <Setter Property="ContextMenu" Value="{Binding ContextMenu}"/>
-                                <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus"/>
                                 <EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown"/>
                                 <EventSetter Event="Selected" Handler="DataGridItem_Selected"/>
                                 <EventSetter Event="MouseMove" Handler="DataGridItem_MouseMove"/>
@@ -176,14 +175,14 @@
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="Button_Collected" Style="{Binding CollectedStyle}" Margin="0,5,0,5" Click="Button_Collected_Click" Tag="{Binding Id}"/>
+                                        <Button x:Name="Button_Collected" Style="{Binding CollectedStyle}" Margin="0,5,0,5" Click="Button_Collected_Click" Tag="{Binding Id}" Padding="5,0,5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn CanUserSort="True" Header="Enabled" SortMemberPath="Enabled">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="Button_Enabled" Style="{Binding EnabledStyle}" Margin="0,5,0,5" Click="Button_Enabled_Click" Tag="{Binding Id}"/>
+                                        <Button x:Name="Button_Enabled" Style="{Binding EnabledStyle}" Margin="0,5,0,5" Click="Button_Enabled_Click" Tag="{Binding Id}" Padding="5,0,5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -197,21 +196,21 @@
                             <DataGridTemplateColumn Header="Name" IsReadOnly="True" CanUserSort="True" SortMemberPath="Name">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Name}" ToolTip="{Binding Name}" Margin="0,5,0,5" Style="{StaticResource Label_Style}"/>
+                                        <Label Content="{Binding Name}" ToolTip="{Binding Name}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Author" IsReadOnly="True" Width="100" CanUserSort="True" SortMemberPath="Author">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Author}" ToolTip="{Binding Author}" Margin="0,5,0,5" Style="{StaticResource Label_Style}"/>
+                                        <Label Content="{Binding Author}" ToolTip="{Binding Author}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Version" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Version}" ToolTip="{Binding Version}" Margin="0,5,0,5" Style="{StaticResource Label_Style}"/>
+                                        <Label Content="{Binding Version}" ToolTip="{Binding Version}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -232,7 +231,7 @@
                             <DataGridTemplateColumn Header="UserDescription" IsReadOnly="True" CanUserSort="True" SortMemberPath="UserDescription">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding UserDescription}" ToolTip="{Binding UserDescription}" Margin="0,5,0,5" Style="{StaticResource Label_Style}"/>
+                                        <Label Content="{Binding UserDescription}" ToolTip="{Binding UserDescription}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -240,14 +239,14 @@
                         <DataGrid.RowDetailsTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="{Binding RowDetailsHight}" >
-                                    <Button x:Name="Button_EnableDependencies" Content="启用以下前置模组:" Click="Button_EnableDependencies_Click" Style="{StaticResource Button_Style}"/>
-                                    <Label Content="{Binding Dependencies}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}" HorizontalContentAlignment="Left"/>
+                                    <Button x:Name="Button_EnableDependencies" Content="启用以下前置模组:" Click="Button_EnableDependencies_Click" Style="{StaticResource Button_Style}" Padding="5,0,5,0"/>
+                                    <Label Content="{Binding Dependencies}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}" HorizontalContentAlignment="Left" Background="{x:Null}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
                     <TextBox x:Name="TextBox_SearchMods" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,120,0" TextChanged="TextBox_SearchMods_TextChanged" Style="{StaticResource TextBox_Style}"/>
-                    <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="120" SelectionChanged="ComboBox_SearchType_SelectionChanged" Style="{StaticResource ComboBox_Style}">
+                    <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="115" SelectionChanged="ComboBox_SearchType_SelectionChanged" Style="{StaticResource ComboBox_Style}" Margin="0,0,5,0">
                         <ComboBoxItem Content="Name" Tag="Name" Style="{StaticResource ComboBoxItem_Style}"/>
                         <ComboBoxItem Content="Id" Tag="Id" Style="{StaticResource ComboBoxItem_Style}"/>
                         <ComboBoxItem Content="Author" Tag="Author" Style="{StaticResource ComboBoxItem_Style}"/>
@@ -255,13 +254,38 @@
                     </ComboBox>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <Button x:Name="Button_ImportUserGroup" Content="导入用户分组" Margin="10,0,10,235" Click="Button_ImportUserGroup_Click" Height="30" VerticalAlignment="Bottom" Style="{StaticResource Button_Style}"/>
-                    <Button x:Name="Button_ExportUserGroup" Content="导出用户分组" Margin="10,0,10,200" Click="Button_ExportUserGroup_Click" VerticalAlignment="Bottom" Height="30" Style="{StaticResource Button_Style}"/>
-                    <Button x:Name="Button_ImportEnabledList" Content="导入启用列表" Margin="10,0,10,120" Click="Button_ImportEnabledList_Click" VerticalAlignment="Bottom" Height="30" Style="{StaticResource Button_Style}"/>
-                    <Button x:Name="Button_ExportList" Content="导出启用列表" Margin="10,0,10,85" Click="Button_ExportEnabledList_Click" Height="30" VerticalAlignment="Bottom" Style="{StaticResource Button_Style}"/>
-                    <Button x:Name="Button_Save" Content="保存配置" Margin="10,0,10,40" Click="Button_Save_Click" VerticalAlignment="Bottom" Height="30" Style="{StaticResource Button_Style}"/>
-                    <Button x:Name="Button_GameStart" Content="启动游戏" Margin="10,0,10,5" Height="30" VerticalAlignment="Bottom" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}"/>
-                    <Button x:Name="Button_ImportEnabledListFromSave" Content="从存档导入列表" Margin="10,0,10,155" Height="30" VerticalAlignment="Bottom" Click="Button_ImportEnabledListFromSave_Click" Style="{StaticResource Button_Style}"/>
+                    <ScrollViewer Margin="0,0,0,80" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Width="120">
+                            <Expander Header="打开文件夹" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <Button x:Name="Button_OpenModDirectorie" Content="打开模组文件夹" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenModDirectorie_Click" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_OpenBackupDirectorie" Content="打开备份文件夹" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenBackupDirectorie_Click"/>
+                                    <Button x:Name="Button_OpenSaveDirectorie" Content="打开游戏存档" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenSaveDirectorie_Click"/>
+                                </StackPanel>
+                            </Expander>
+                            <Expander Header="用户分组" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <Button x:Name="Button_ImportUserGroup" Content="导入用户分组" Click="Button_ImportUserGroup_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_ExportUserGroup" Content="导出用户分组" Click="Button_ExportUserGroup_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                </StackPanel>
+                            </Expander>
+                            <Expander Header="启用列表" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <Button x:Name="Button_ImportEnabledList" Content="导入启用列表" Margin="0,0,0,5" Click="Button_ImportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                    <Button x:Name="Button_ExportList" Content="导出启用列表" Margin="0,0,0,5" Click="Button_ExportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                    <Button x:Name="Button_ImportEnabledListFromSave" Content="从存档导入列表" Margin="0,0,0,5" Click="Button_ImportEnabledListFromSave_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </Expander>
+                            <Expander Header="其他功能" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <Button Content="随机启用模组" Margin="0,5,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Button x:Name="Button_Save" Content="保存配置" Margin="5,0,5,40" Click="Button_Save_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                    <Button x:Name="Button_GameStart" Content="启动游戏" Margin="5,0,5,5" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+
                 </Grid>
                 <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBB}" Visibility="Hidden">
                     <ScrollViewer>

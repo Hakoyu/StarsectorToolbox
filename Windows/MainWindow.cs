@@ -29,7 +29,8 @@ namespace StarsectorTools.Windows
                         if (!(MessageBox.Show(this, "游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                         {
                             MessageBox.Show(this, "未确认游戏本体路径,软件即将退出", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
-                            Application.Current.Shutdown();
+                            toml.Close();
+                            Close();
                         }
                         toml["GamePath"] = ST.gamePath;
                     }
@@ -41,7 +42,8 @@ namespace StarsectorTools.Windows
                     if (!(MessageBox.Show(this, "第一次启动软件\n请选择游戏本体", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                     {
                         MessageBox.Show(this, "未确认游戏本体路径,软件即将退出", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
-                        Application.Current.Shutdown();
+                        toml.Close();
+                        Close();
                     }
                     toml["GamePath"] = ST.gamePath;
                     toml.SaveTo(ST.configPath);

@@ -14,10 +14,7 @@
             <RowDefinition Height="225"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <GroupBox Header="游戏信息" Background="#4CFFFFFF" BorderBrush="#4CD5DFE5" 
-                  Style="{StaticResource GroupBox_Style}"
-                  pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-                  >
+        <GroupBox Header="游戏信息" Style="{StaticResource GroupBox_Style}" pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"/>
@@ -31,7 +28,7 @@
 
                 <Label x:Name="Label_GamePath" Content="" Margin="100,0,100,162" Background="#4CEAEAEA" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
                 <Label Content="游戏目录" HorizontalAlignment="Left" Width="100" Background="#66EAEAEA" Grid.RowSpan="2" Margin="0,0,0,162"/>
-                <Button Content="设置目录" Background="#66EAEAEA" Grid.Column="2" Click="Button_Click" HorizontalAlignment="Left" Width="100" Grid.RowSpan="2" Margin="298,0,0,162"/>
+                <Button Content="设置目录" Background="#66EAEAEA" Grid.Column="2" Click="Button_Click" HorizontalAlignment="Right" Width="100"/>
                 <GroupBox Header="内存设置" Background="#4CFFFFFF" BorderBrush="#4CD5DFE5" 
                   Style="{StaticResource GroupBox_Style}"
                   pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" 

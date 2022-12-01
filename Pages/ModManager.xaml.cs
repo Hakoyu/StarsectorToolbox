@@ -35,7 +35,7 @@ namespace StarsectorTools.Pages
     public partial class ModManager : Page
     {
         const string modGroupFile = @"ModGroup.toml";
-        const string modBackUpDirectory = @"ModsBackUp";
+        const string modBackupDirectory = @"ModsBackUp";
         readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
         const string userGroupFile = @"UserGroup.toml";
         bool groupMenuOpen = false;
@@ -230,7 +230,6 @@ namespace StarsectorTools.Pages
         {
             Clipboard.SetDataObject(((TextBlock)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Text);
         }
-
         private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e)
         {
             SearchMods(TextBox_SearchMods.Text);
@@ -273,11 +272,13 @@ namespace StarsectorTools.Pages
             {
                 Button_GroupMenuIcon.Text = "📘";
                 Grid_GroupMenu.Width = 30;
+                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Hidden);
             }
             else
             {
                 Button_GroupMenuIcon.Text = "📖";
                 Grid_GroupMenu.Width = double.NaN;
+                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Auto);
             }
             groupMenuOpen = !groupMenuOpen;
             STLog.Instance.WriteLine($"分组菜单展开状态修改为 {groupMenuOpen}");
@@ -322,12 +323,6 @@ namespace StarsectorTools.Pages
                 GC.Collect();
             }
         }
-        private void DataGridItem_GotFocus(object sender, RoutedEventArgs e)
-        {
-            //if (sender is DataGridRow row)
-            //    ModInfoShowChange(row.Tag.ToString()!);
-        }
-
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
@@ -346,7 +341,7 @@ namespace StarsectorTools.Pages
             //e.Handled = true;
             if (sender is DataGridRow row)
                 row.Background = (Brush)Application.Current.Resources["ColorLight"];
-                //ModInfoShowChange(row.Tag.ToString()!);
+            //ModInfoShowChange(row.Tag.ToString()!);
         }
         private void DataGridItem_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -434,7 +429,7 @@ namespace StarsectorTools.Pages
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
-                modsShowInfo[item.Id].UserDescription = new(TextBox_UserDescription.Text);
+                modsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -479,7 +474,8 @@ namespace StarsectorTools.Pages
             }
             else
             {
-                MessageBox.Show($"启动错误\n{ST.gameExePath}不存在");
+                STLog.Instance.WriteLine($"启动错误\n 位置: {ST.gameExePath}", STLogLevel.WARN);
+                MessageBox.Show($"启动错误\n 位置: {ST.gameExePath}");
             }
         }
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
@@ -509,7 +505,8 @@ namespace StarsectorTools.Pages
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"存档文件错误\n{ex}");
+                        STLog.Instance.WriteLine($"存档文件错误 位置: {filePath}\n{ex}", STLogLevel.WARN);
+                        MessageBox.Show($"存档文件错误\n位置: {filePath}\n{ex}");
                         return;
                     }
                     ClearEnabledMod();
@@ -519,13 +516,17 @@ namespace StarsectorTools.Pages
                             ModEnabledChange(id, true);
                         else
                         {
-                            err ??= "存档中的以下模组不存在\n";
+                            STLog.Instance.WriteLine($"存档中启用的模组不存在 ID: {id}", STLogLevel.WARN);
+                            err ??= "存档中启用的以下模组不存在\n";
                             err += $"{id}\n";
                         }
                     }
                 }
                 else
-                    MessageBox.Show($"存档文件不存在\n位置:{filePath}");
+                {
+                    STLog.Instance.WriteLine($"存档文件不存在 位置: {filePath}", STLogLevel.WARN);
+                    MessageBox.Show($"存档文件不存在\n位置: {filePath}");
+                }
                 if (err != null)
                     MessageBox.Show(err);
             }
@@ -566,7 +567,10 @@ namespace StarsectorTools.Pages
                             });
                         }
                         else
+                        {
+                            STLog.Instance.WriteLine($"无法导入文件夹 位置: {path}", STLogLevel.WARN);
                             MessageBox.Show($"无法导入文件夹\n 位置: {path}");
+                        }
                     }
                     Dispatcher.BeginInvoke(() =>
                     {
@@ -581,6 +585,39 @@ namespace StarsectorTools.Pages
         private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SearchMods(TextBox_SearchMods.Text);
+        }
+
+        private void Button_OpenModDirectorie_Click(object sender, RoutedEventArgs e)
+        {
+            if (Directory.Exists(ST.gameModsPath))
+                Process.Start("Explorer.exe", ST.gameModsPath);
+            else
+            {
+                STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameModsPath}", STLogLevel.WARN);
+                MessageBox.Show($"文件夹不存在\n 位置: {ST.gameModsPath}");
+            }
+        }
+
+        private void Button_OpenBackupDirectorie_Click(object sender, RoutedEventArgs e)
+        {
+            if (Directory.Exists(modBackupDirectory))
+                Process.Start("Explorer.exe", modBackupDirectory);
+            else
+            {
+                STLog.Instance.WriteLine($"文件夹不存在 位置: {modBackupDirectory}", STLogLevel.WARN);
+                MessageBox.Show($"文件夹不存在\n 位置: {modBackupDirectory}");
+            }
+        }
+
+        private void Button_OpenSaveDirectorie_Click(object sender, RoutedEventArgs e)
+        {
+            if (Directory.Exists(ST.gameSavePath))
+                Process.Start("Explorer.exe", ST.gameSavePath);
+            else
+            {
+                STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameSavePath}", STLogLevel.WARN);
+                MessageBox.Show($"文件夹不存在\n 位置: {ST.gameSavePath}");
+            }
         }
     }
 }

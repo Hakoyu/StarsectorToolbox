@@ -10,14 +10,14 @@
         Title="设置用户分组信息" Height="270" Width="400" WindowStyle="None" Background="#4CFFFFFF" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <GroupBox Header="设置用户分组信息"  Style="{StaticResource GroupBox_Style}">
         <StackPanel Margin="10,10,10,10">
-            <Label Content="Icon:" Height="30" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="TextBox_Icon" Height="30" Margin="0,0,0,5"/>
-            <Label Content="Name:" Height="30" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalContentAlignment="Center"/>
-            <TextBox x:Name="TextBox_Name" Height="30" Margin="0,0,0,5"/>
+            <Label Content="Icon:" Height="30" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalContentAlignment="Center" Style="{StaticResource Label_Style}"/>
+            <TextBox x:Name="TextBox_Icon" Height="30" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
+            <Label Content="Name:" Height="30" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalContentAlignment="Center" Style="{StaticResource Label_Style}"/>
+            <TextBox x:Name="TextBox_Name" Height="30" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
             <Grid Margin="0,0,0,5">
                 <StackPanel Orientation="Horizontal" >
-                    <Label Content="Preview:" HorizontalAlignment="Left" Height="30" VerticalContentAlignment="Center" Margin="0,0,10,0"/>
-                    <Label x:Name="Label_Preview" pu:IconHelper.Margin="5,0,10,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" Background="White">
+                    <Label Content="Preview:" HorizontalAlignment="Left" Height="30" VerticalContentAlignment="Center" Margin="0,0,10,0" Style="{StaticResource Label_Style}"/>
+                    <Label x:Name="Label_Preview" pu:IconHelper.Margin="5,0,10,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorLight}">
                         <pu:LabelHelper.Icon>
                             <emoji:TextBlock Text="{Binding ElementName=TextBox_Icon,Path=Text}"/>
                         </pu:LabelHelper.Icon>
@@ -28,8 +28,8 @@
                 </StackPanel>
             </Grid>
             <Grid>
-                <Button x:Name="Button_Cancel" Content="取消" Height="30" HorizontalAlignment="Left" Margin="0,10,0,0" Width="100" />
-                <Button x:Name="Button_OK" Content="确定" Height="30" HorizontalAlignment="Right" Margin="0,10,0,0" Width="100" />
+                <Button x:Name="Button_Cancel" Content="取消" Height="30" HorizontalAlignment="Left" Margin="0,10,0,0" Width="100" Style="{StaticResource Button_Style}"/>
+                <Button x:Name="Button_OK" Content="确定" Height="30" HorizontalAlignment="Right" Margin="0,10,0,0" Width="100" Style="{StaticResource Button_Style}"/>
             </Grid>
         </StackPanel>
     </GroupBox>

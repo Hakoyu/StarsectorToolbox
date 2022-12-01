@@ -711,7 +711,7 @@ namespace StarsectorTools.Pages
                     var originalModInfo = allModsInfo[modInfo.Id];
                     if (MessageBox.Show($"{modInfo.Id} 已存在 是否覆盖?\n原始版本:{originalModInfo.Version}\n新增版本:{modInfo.Version}", "已存在相同模组", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
-                        ST.CopyDirectory(originalModInfo.Path, modBackUpDirectory);
+                        ST.CopyDirectory(originalModInfo.Path, modBackupDirectory);
                         Directory.Delete(originalModInfo.Path, true);
                         ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsPath);
                         allModsInfo.Remove(modInfo.Id);

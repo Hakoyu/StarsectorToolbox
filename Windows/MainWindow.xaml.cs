@@ -91,11 +91,13 @@ namespace StarsectorTools.Windows
             {
                 Button_MainMenuIcon.Text = "📘";
                 Grid_Menu.Width = 30;
+                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_Menu, ScrollBarVisibility.Hidden);
             }
             else
             {
                 Button_MainMenuIcon.Text = "📖";
                 Grid_Menu.Width = double.NaN;
+                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_Menu, ScrollBarVisibility.Auto);
             }
             menuOpen = !menuOpen;
         }
