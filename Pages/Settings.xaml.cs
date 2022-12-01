@@ -48,12 +48,12 @@ namespace StarsectorTools.Pages
             if (e.Key == Key.Enter)
                 Keyboard.ClearFocus();
         }
+        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
         private void TextBox_SetMemory_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
             textBox.Text = ST.MemorySizeParse(int.Parse(textBox.Text)).ToString();
         }
-        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
 
         private void Button_SetMemory_Click(object sender, RoutedEventArgs e)
         {

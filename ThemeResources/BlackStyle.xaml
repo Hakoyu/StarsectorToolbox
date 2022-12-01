@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="ColorBG" Color="#FF1E1E1E"/>
     <SolidColorBrush x:Key="ColorBB" Color="#FF303030"/>
+    <SolidColorBrush x:Key="ColorBB1" Color="#FF484848"/>
     <SolidColorBrush x:Key="ColorFG" Color="Azure"/>
     <SolidColorBrush x:Key="ColorDeep" Color="#33000000"/>
     <SolidColorBrush x:Key="ColorLight" Color="#33FFFFFF"/>

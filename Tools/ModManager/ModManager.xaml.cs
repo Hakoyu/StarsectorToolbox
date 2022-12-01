@@ -24,8 +24,7 @@ using StarsectorTools.Windows;
 using Panuon.WPF.UI;
 using System.ComponentModel;
 using System.Xml.Linq;
-using Aspose.Zip;
-using Aspose.Zip.SevenZip;
+using StarsectorTools.Tools.ModManager;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -41,13 +40,14 @@ namespace StarsectorTools.Tools.ModManager
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
+        ListBoxItem? nowSelectedListBoxItem = null;
         string nowGroup = ModGroupType.All;
         HashSet<string> enabledModsId = new();
         HashSet<string> collectedModsId = new();
         Dictionary<string, ModInfo> allModsInfo = new();
-        Dictionary<string, ListBoxItem> listBoxItemsFromGroups = new();
-        Dictionary<string, ModShowInfo> modsShowInfo = new();
-        Dictionary<string, HashSet<string>> userGroups = new();
+        Dictionary<string, ListBoxItem> allListBoxItemsFromGroups = new();
+        Dictionary<string, ModShowInfo> allModsShowInfo = new();
+        Dictionary<string, HashSet<string>> allUserGroups = new();
         Dictionary<string, HashSet<string>> modsIdFromGroups = new()
         {
             {ModGroupType.Libraries,new() },
@@ -287,7 +287,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, 0, 0);
         }
-
+        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
@@ -316,12 +316,22 @@ namespace StarsectorTools.Tools.ModManager
                     ListBox_EnableStatus.SelectedIndex = -1;
                     ListBox_GroupType.SelectedIndex = -1;
                 }
+                nowSelectedListBoxItem = item;
+                if (allUserGroups.ContainsKey(item.ToolTip.ToString()!))
+                    Expander_RandomEnabled.Visibility = Visibility.Visible;
+                else
+                    Expander_RandomEnabled.Visibility = Visibility.Collapsed;
+
                 nowGroup = item.Tag.ToString()!;
                 ClearDataGridSelected();
                 SearchMods(TextBox_SearchMods.Text);
                 CloseModInfo();
                 GC.Collect();
             }
+        }
+        void SetRandomSize()
+        {
+
         }
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
@@ -376,7 +386,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 string id = info.Id;
                 string err = null!;
-                foreach (var dependencie in modsShowInfo[id].Dependencies!.Split(" , "))
+                foreach (var dependencie in allModsShowInfo[id].Dependencies!.Split(" , "))
                 {
                     if (allModsInfo.ContainsKey(dependencie))
                         ModEnabledChange(dependencie, true);
@@ -429,7 +439,7 @@ namespace StarsectorTools.Tools.ModManager
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
-                modsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
+                allModsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -439,13 +449,14 @@ namespace StarsectorTools.Tools.ModManager
             window.Button_OK.Click += (o, e) =>
             {
                 string name = window.TextBox_Name.Text;
-                if (name.Length > 0 && !userGroups.ContainsKey(name))
+                if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == "Collected" || name == "UserModsData")
                         MessageBox.Show("不能命名为Collected或UserModsData");
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
+                        RefreshModsShowInfoContextMenu();
                         RefreAllSizeOfListBoxItems();
                         window.Close();
                     }
@@ -501,7 +512,7 @@ namespace StarsectorTools.Tools.ModManager
                     try
                     {
                         XElement xes = XElement.Load(filePath);
-                        list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
+                        list = xes.Descendants("spec").Where(x => x.Element("group") != null).Select(x => (string)x.Element("group")!);
                     }
                     catch (Exception ex)
                     {
@@ -617,6 +628,52 @@ namespace StarsectorTools.Tools.ModManager
             {
                 STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameSavePath}", STLogLevel.WARN);
                 MessageBox.Show($"文件夹不存在\n 位置: {ST.gameSavePath}");
+            }
+        }
+
+        private void Button_RandomMods_Click(object sender, RoutedEventArgs e)
+        {
+            if (allUserGroups.Count == 0)
+            {
+                MessageBox.Show($"用户分组不存在 无法随机");
+                return;
+            }
+            if (TextBox_MinRandomSize.Text.Length == 0 || TextBox_MaxRandomSize.Text.Length == 0)
+            {
+                MessageBox.Show($"最小随机数与最大随机数不能为空");
+                return;
+            }
+            if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
+            {
+                string group = item.ToolTip.ToString()!;
+                int minSize = int.Parse(TextBox_MinRandomSize.Text);
+                int maxSize = int.Parse(TextBox_MaxRandomSize.Text);
+                int count = allUserGroups[group].Count;
+                if (minSize < 0)
+                {
+                    MessageBox.Show($"最小随机数不能小于 0");
+                    return;
+                }
+                else if (maxSize > count)
+                {
+                    MessageBox.Show($"最大随机数不能大于组内模组总数");
+                    return;
+                }
+                else if (minSize > maxSize)
+                {
+                    MessageBox.Show($"最小随机数不能大于最大随机数");
+                    return;
+                }
+                foreach (var info in allUserGroups[group])
+                    ModEnabledChange(info, false);
+                int needSize = new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(minSize, maxSize + 1);
+                HashSet<int> set = new();
+                while (set.Count < needSize)
+                    set.Add(new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(0, count));
+                foreach (int i in set)
+                    ModEnabledChange(allUserGroups[group].ElementAt(i));
+                CheckEnabledModsDependencies();
+                RefreAllSizeOfListBoxItems();
             }
         }
     }

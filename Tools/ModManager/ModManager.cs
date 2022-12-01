@@ -24,6 +24,7 @@ using Aspose.Zip.SevenZip;
 using StarsectorTools.Windows;
 using System.Windows.Threading;
 using Aspose.Zip.Rar;
+using System.Windows.Media;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -159,7 +160,7 @@ namespace StarsectorTools.Tools.ModManager
                     {
                         foreach (string id in kv.Value.AsTomlArray)
                         {
-                            if (modsShowInfo.ContainsKey(id))
+                            if (allModsShowInfo.ContainsKey(id))
                             {
                                 ModCollectedChange(id, true);
                             }
@@ -178,9 +179,9 @@ namespace StarsectorTools.Tools.ModManager
                         foreach (var dic in kv.Value.AsTomlArray)
                         {
                             var id = dic["Id"].AsString;
-                            if (modsShowInfo.ContainsKey(id))
+                            if (allModsShowInfo.ContainsKey(id))
                             {
-                                var info = modsShowInfo[id];
+                                var info = allModsShowInfo[id];
                                 info.ImagePath = dic["ImagePath"];
                                 info.UserDescription = dic["UserDescription"];
                             }
@@ -197,15 +198,15 @@ namespace StarsectorTools.Tools.ModManager
                     else
                     {
                         string group = kv.Key;
-                        if (!userGroups.ContainsKey(group))
+                        if (!allUserGroups.ContainsKey(group))
                         {
                             AddUserGroup(kv.Value["Icon"], group);
                             foreach (string id in kv.Value["Mods"].AsTomlArray)
                             {
-                                if (modsShowInfo.ContainsKey(id))
+                                if (allModsShowInfo.ContainsKey(id))
                                 {
-                                    if (userGroups[group].Add(id))
-                                        modsShowInfoFromGroup[group].Add(modsShowInfo[id]);
+                                    if (allUserGroups[group].Add(id))
+                                        modsShowInfoFromGroup[group].Add(allModsShowInfo[id]);
                                     else
                                     {
                                         STLog.Instance.WriteLine($"用户分组中已存在 {id}");
@@ -246,10 +247,10 @@ namespace StarsectorTools.Tools.ModManager
             foreach (ListBoxItem item in ListBox_ModsGroupMenu.Items)
             {
                 if (item.Content is string str)
-                    listBoxItemsFromGroups.Add(item.Tag.ToString()!, item);
+                    allListBoxItemsFromGroups.Add(item.Tag.ToString()!, item);
                 else if (item.Content is Expander expander && expander.Content is ListBox listBox)
                     foreach (ListBoxItem item1 in listBox.Items)
-                        listBoxItemsFromGroups.Add(item1.Tag.ToString()!, item1);
+                        allListBoxItemsFromGroups.Add(item1.Tag.ToString()!, item1);
             }
         }
 
@@ -335,7 +336,7 @@ namespace StarsectorTools.Tools.ModManager
         }
         void RefreAllSizeOfListBoxItems()
         {
-            foreach (var item in listBoxItemsFromGroups.Values)
+            foreach (var item in allListBoxItemsFromGroups.Values)
             {
                 item.Content = $"{item.ToolTip} ({modsShowInfoFromGroup[item.Tag.ToString()!].Count})";
                 STLog.Instance.WriteLine($"组数量显示 {item.Content}", STLogLevel.DEBUG);
@@ -352,74 +353,83 @@ namespace StarsectorTools.Tools.ModManager
         }
         void RefreshModsShowInfoContextMenu()
         {
-            foreach (var info in modsShowInfo.Values)
+            foreach (var info in allModsShowInfo.Values)
                 info.ContextMenu = CreateContextMenu(info);
-            STLog.Instance.WriteLine($"右键菜单创建成功 数量: {modsShowInfo.Values.Count}");
+            STLog.Instance.WriteLine($"右键菜单创建成功 数量: {allModsShowInfo.Values.Count}");
         }
         ContextMenu CreateContextMenu(ModShowInfo info)
         {
-            ContextMenu menu = new();
-            MenuItem item = new();
-            item.Header = info.Enabled is true ? "禁用所选模组" : "启用所选模组";
-            item.Click += (o, e) => SelectedModsEnabledChange(info.Enabled is not true);
-            menu.Items.Add(item);
-            STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {item.Header}", STLogLevel.DEBUG);
-            item = new();
-            item.Header = info.Collected is true ? "取消收藏所选模组" : "收藏所选模组";
-            item.Click += (o, e) => SelectedModsCollectedChange(info.Collected is not true);
-            menu.Items.Add(item);
-            STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {item.Header}", STLogLevel.DEBUG);
-            item = new();
-            item.Header = "打开模组文件夹";
-            item.Click += (o, e) =>
+            ContextMenu contextMenu = new();
+            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+            MenuItem menuItem = new();
+            menuItem.Header = info.Enabled is true ? "禁用所选模组" : "启用所选模组";
+            menuItem.Click += (o, e) => SelectedModsEnabledChange(info.Enabled is not true);
+            contextMenu.Items.Add(menuItem);
+            STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
+
+            menuItem = new();
+            menuItem.Header = info.Collected is true ? "取消收藏所选模组" : "收藏所选模组";
+            menuItem.Click += (o, e) => SelectedModsCollectedChange(info.Collected is not true);
+            contextMenu.Items.Add(menuItem);
+            STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
+
+            menuItem = new();
+            menuItem.Header = "打开模组文件夹";
+            menuItem.Click += (o, e) =>
             {
                 STLog.Instance.WriteLine($"打开模组文件夹 位置: {allModsInfo[info.Id].Path}");
                 System.Diagnostics.Process.Start("Explorer.exe", allModsInfo[info.Id].Path);
             };
-            menu.Items.Add(item);
-            STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {item.Header}", STLogLevel.DEBUG);
-            if (userGroups.Count > 0)
+            contextMenu.Items.Add(menuItem);
+            STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
+            if (allUserGroups.Count > 0)
             {
-                item = new();
-                item.Header = "添加至用户分组";
-                foreach (var group in userGroups.Keys)
+                menuItem = new();
+                menuItem.Header = "添加至用户分组";
+                foreach (var group in allUserGroups.Keys)
                 {
-                    if (!userGroups[group].Contains(info.Id))
+                    if (!allUserGroups[group].Contains(info.Id))
                     {
                         MenuItem groupItem = new();
                         groupItem.Header = group;
+                        groupItem.Background = (Brush)Application.Current.Resources["ColorBB"];
+                        // 此语句无法获取色彩透明度 原因未知
+                        MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorBB1"]);
                         groupItem.Click += (o, e) =>
                         {
                             SelectedModsUserGroupChange(group, true);
                         };
-                        item.Items.Add(groupItem);
+                        menuItem.Items.Add(groupItem);
                     }
                 }
-                if (item.Items.Count > 0)
+                if (menuItem.Items.Count > 0)
                 {
-                    menu.Items.Add(item);
-                    STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {item.Header}", STLogLevel.DEBUG);
+                    contextMenu.Items.Add(menuItem);
+                    STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
                 }
             }
-            var haveModGroup = userGroups.Where(g => g.Value.Contains(info.Id));
+            var haveModGroup = allUserGroups.Where(g => g.Value.Contains(info.Id));
             if (haveModGroup.Count() > 0)
             {
-                item = new();
-                item.Header = "从用户分组中删除";
+                menuItem = new();
+                menuItem.Header = "从用户分组中删除";
                 foreach (var group in haveModGroup)
                 {
                     MenuItem groupItem = new();
                     groupItem.Header = group.Key;
+                    groupItem.Background = (Brush)Application.Current.Resources["ColorBB"];
+                    // 此语句无法获取色彩透明度 原因未知
+                    MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorBB1"]);
                     groupItem.Click += (o, e) =>
                     {
                         SelectedModsUserGroupChange(group.Key, false);
                     };
-                    item.Items.Add(groupItem);
+                    menuItem.Items.Add(groupItem);
                 }
-                menu.Items.Add(item);
-                STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {item.Header}", STLogLevel.DEBUG);
+                contextMenu.Items.Add(menuItem);
+                STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
             }
-            return menu;
+            return contextMenu;
         }
         void SelectedModsUserGroupChange(string group, bool status)
         {
@@ -437,16 +447,16 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ModUserGroupChange(string group, string id, bool status)
         {
-            ModShowInfo info = modsShowInfo[id];
+            ModShowInfo info = allModsShowInfo[id];
             if (status)
             {
-                if (userGroups[group].Add(id))
-                    modsShowInfoFromGroup[group].Add(modsShowInfo[id]);
+                if (allUserGroups[group].Add(id))
+                    modsShowInfoFromGroup[group].Add(allModsShowInfo[id]);
             }
             else
             {
-                userGroups[group].Remove(id);
-                modsShowInfoFromGroup[group].Remove(modsShowInfo[id]);
+                allUserGroups[group].Remove(id);
+                modsShowInfoFromGroup[group].Remove(allModsShowInfo[id]);
             }
             info.ContextMenu = CreateContextMenu(info);
             STLog.Instance.WriteLine($"{id} 在用户分组 {group} 状态修改为 {status}", STLogLevel.DEBUG);
@@ -476,7 +486,7 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ModEnabledChange(string id, bool? enabled = null)
         {
-            ModShowInfo info = modsShowInfo[id];
+            ModShowInfo info = allModsShowInfo[id];
             info.Enabled = enabled is null ? !info.Enabled : enabled;
             info.EnabledStyle = info.Enabled is true ? buttonStyle.Enabled : buttonStyle.Disable;
             info.ContextMenu = CreateContextMenu(info);
@@ -532,7 +542,7 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ModCollectedChange(string id, bool? collected = null)
         {
-            ModShowInfo info = modsShowInfo[id];
+            ModShowInfo info = allModsShowInfo[id];
             info.Collected = collected is null ? !info.Collected : collected;
             info.CollectedStyle = info.Collected is true ? buttonStyle.Collected : buttonStyle.Uncollected;
             info.ContextMenu = CreateContextMenu(info);
@@ -574,7 +584,7 @@ namespace StarsectorTools.Tools.ModManager
                 { ModGroupType.Collected, new TomlArray() },
                 { "UserModsData", new TomlArray() }
             };
-            foreach (var info in modsShowInfo.Values)
+            foreach (var info in allModsShowInfo.Values)
             {
                 if (info.Collected is true)
                     toml[ModGroupType.Collected].Add(info.Id);
@@ -588,11 +598,11 @@ namespace StarsectorTools.Tools.ModManager
                     });
                 }
             }
-            foreach (var kv in userGroups)
+            foreach (var kv in allUserGroups)
             {
                 toml.Add(kv.Key, new TomlTable()
                 {
-                    ["Icon"] = ListBoxItemHelper.GetIcon(listBoxItemsFromGroups[kv.Key]).ToString()!,
+                    ["Icon"] = ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[kv.Key]).ToString()!,
                     ["Mods"] = new TomlArray(),
                 });
                 foreach (var id in kv.Value)
@@ -633,7 +643,7 @@ namespace StarsectorTools.Tools.ModManager
         void SetModInfo(string id)
         {
             ModInfo info = allModsInfo[id];
-            if (modsShowInfo[info.Id].ImagePath is string imagePath && imagePath.Length > 0)
+            if (allModsShowInfo[info.Id].ImagePath is string imagePath && imagePath.Length > 0)
                 Image_ModImage.Source = new BitmapImage(new(imagePath));
             else
                 Image_ModImage.Source = null;
@@ -651,7 +661,7 @@ namespace StarsectorTools.Tools.ModManager
             else
                 GroupBox_ModDependencies.Visibility = Visibility.Collapsed;
             TextBlock_ModDescription.Text = info.Description;
-            TextBox_UserDescription.Text = modsShowInfo[info.Id].UserDescription!;
+            TextBox_UserDescription.Text = allModsShowInfo[info.Id].UserDescription!;
             STLog.Instance.WriteLine($"显示详情 {id}", STLogLevel.DEBUG);
         }
         void DropFile(string filePath)
@@ -741,8 +751,8 @@ namespace StarsectorTools.Tools.ModManager
         }
         ModShowInfo RemoveModShowInfo(string id)
         {
-            var modShowInfo = modsShowInfo[id];
-            modsShowInfo.Remove(modShowInfo.Id);
+            var modShowInfo = allModsShowInfo[id];
+            allModsShowInfo.Remove(modShowInfo.Id);
             modsShowInfoFromGroup[ModGroupType.All].Remove(modShowInfo);
             modsShowInfoFromGroup[modShowInfo.Group!].Remove(modShowInfo);
             STLog.Instance.WriteLine($"删除模组 {modShowInfo.Id} {modShowInfo.Version}", STLogLevel.DEBUG);
@@ -750,7 +760,7 @@ namespace StarsectorTools.Tools.ModManager
         }
         void AddModShowInfo(ModShowInfo modShowInfo)
         {
-            modsShowInfo.Add(modShowInfo.Id, modShowInfo);
+            allModsShowInfo.Add(modShowInfo.Id, modShowInfo);
             modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
             modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
             STLog.Instance.WriteLine($"添加模组 {modShowInfo.Id} {modShowInfo.Version}", STLogLevel.DEBUG);
@@ -771,6 +781,7 @@ namespace StarsectorTools.Tools.ModManager
             item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
             SetListBoxItemData(item, name);
             ContextMenu contextMenu = new();
+            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             MenuItem menuItem = new();
             menuItem.Header = "重命名分组";
             menuItem.Click += (o, e) =>
@@ -782,15 +793,15 @@ namespace StarsectorTools.Tools.ModManager
                 {
                     string _icon = window.TextBox_Icon.Text;
                     string _name = window.TextBox_Name.Text;
-                    if (_name.Length > 0 && !userGroups.ContainsKey(_name))
+                    if (_name.Length > 0 && !allUserGroups.ContainsKey(_name))
                     {
                         ListBoxItemHelper.SetIcon(item, window.TextBox_Icon.Text);
-                        var temp = userGroups[name];
-                        userGroups.Remove(name);
-                        userGroups.Add(_name, temp);
+                        var temp = allUserGroups[name];
+                        allUserGroups.Remove(name);
+                        allUserGroups.Add(_name, temp);
 
-                        listBoxItemsFromGroups.Remove(name);
-                        listBoxItemsFromGroups.Add(_name, item);
+                        allListBoxItemsFromGroups.Remove(name);
+                        allListBoxItemsFromGroups.Add(_name, item);
 
                         var _temp = modsShowInfoFromGroup[name];
                         modsShowInfoFromGroup.Remove(name);
@@ -798,6 +809,8 @@ namespace StarsectorTools.Tools.ModManager
 
                         SetListBoxItemData(item, _name);
                         window.Close();
+                        RefreAllSizeOfListBoxItems();
+                        RefreshModsShowInfoContextMenu();
                     }
                     else
                         MessageBox.Show("命名失败,名字为空或者已存在相同名字的分组");
@@ -807,6 +820,7 @@ namespace StarsectorTools.Tools.ModManager
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{name} 分组添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
+
             menuItem = new();
             menuItem.Header = "删除分组";
             menuItem.Click += (o, e) =>
@@ -814,22 +828,21 @@ namespace StarsectorTools.Tools.ModManager
                 var _itme = (ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)o));
                 var _name = _itme.Content.ToString()!.Split(" ")[0];
                 ListBox_UserGroup.Items.Remove(_itme);
-                userGroups.Remove(_name);
-                listBoxItemsFromGroups.Remove(_name);
+                allUserGroups.Remove(_name);
+                allListBoxItemsFromGroups.Remove(_name);
                 modsShowInfoFromGroup.Remove(_name);
+                RefreshModsShowInfoContextMenu();
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{name} 分组添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
             item.ContextMenu = contextMenu;
-            //ListBoxItemHelper.SetIcon(item, icon);
+            //ListBoxItemHelper.SetIcon(menuItem, icon);
             ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
             ListBox_UserGroup.Items.Add(item);
-            userGroups.Add(name, new());
-            listBoxItemsFromGroups.Add(name, item);
+            allUserGroups.Add(name, new());
+            allListBoxItemsFromGroups.Add(name, item);
             modsShowInfoFromGroup.Add(name, new());
             STLog.Instance.WriteLine($"添加用户分组 {icon} {name}");
-            //RefreAllSizeOfListBoxItems();
-            //RefreshModsShowInfoContextMenu();
         }
         void SetListBoxItemData(ListBoxItem item, string name)
         {

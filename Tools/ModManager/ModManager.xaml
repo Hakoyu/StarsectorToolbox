@@ -271,21 +271,24 @@
                             </Expander>
                             <Expander Header="启用列表" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
+                                    <Button x:Name="Button_ImportEnabledListFromSave" Content="从存档导入列表" Margin="0,0,0,5" Click="Button_ImportEnabledListFromSave_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
                                     <Button x:Name="Button_ImportEnabledList" Content="导入启用列表" Margin="0,0,0,5" Click="Button_ImportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
                                     <Button x:Name="Button_ExportList" Content="导出启用列表" Margin="0,0,0,5" Click="Button_ExportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
-                                    <Button x:Name="Button_ImportEnabledListFromSave" Content="从存档导入列表" Margin="0,0,0,5" Click="Button_ImportEnabledListFromSave_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="其他功能" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                            <Expander x:Name="Expander_RandomEnabled" Header="随机启用" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Button Content="随机启用模组" Margin="0,5,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                    <Label Content="最小随机数量" Style="{StaticResource Label_Style}" Height="30"/>
+                                    <TextBox x:Name="TextBox_MinRandomSize" Style="{StaticResource TextBox_Style}" Height="30" Margin="0,0,0,5" PreviewTextInput="TextBox_NumberInput" InputMethod.IsInputMethodEnabled="False"/>
+                                    <Label Content="最大随机数量" Style="{StaticResource Label_Style}" Height="30"/>
+                                    <TextBox x:Name="TextBox_MaxRandomSize" Style="{StaticResource TextBox_Style}" Height="30" Margin="0,0,0,5" PreviewTextInput="TextBox_NumberInput" InputMethod.IsInputMethodEnabled="False"/>
+                                    <Button x:Name="Button_RandomMods" Content="随机启用模组" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_RandomMods_Click"/>
                                 </StackPanel>
                             </Expander>
                         </StackPanel>
                     </ScrollViewer>
                     <Button x:Name="Button_Save" Content="保存配置" Margin="5,0,5,40" Click="Button_Save_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
                     <Button x:Name="Button_GameStart" Content="启动游戏" Margin="5,0,5,5" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
-
                 </Grid>
                 <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBB}" Visibility="Hidden">
                     <ScrollViewer>
@@ -297,8 +300,8 @@
                                 <Label Content="名称:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
                                 <Label x:Name="Label_ModName" Content="Name" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
                                     <Label.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </Label.ContextMenu>
                                 </Label>
@@ -307,8 +310,8 @@
                                 <Label Content="Id:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
                                 <Label x:Name="Label_ModId" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
                                     <Label.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </Label.ContextMenu>
                                 </Label>
@@ -317,8 +320,8 @@
                                 <Label Content="模组版本:" Height="30" Margin="0,0,5,0" Style="{StaticResource Label_Style}" HorizontalContentAlignment="Left"/>
                                 <Label x:Name="Label_ModVersion" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
                                     <Label.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </Label.ContextMenu>
                                 </Label>
@@ -327,8 +330,8 @@
                                 <Label Content="支持的游戏版本:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
                                 <Label x:Name="Label_GameVersion" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
                                     <Label.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </Label.ContextMenu>
                                 </Label>
@@ -337,35 +340,35 @@
                                 <Button x:Name="Button_ModPath" Click="Button_ModPath_Click" Height="30" Padding="5,0,0,0"
                                         ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}">
                                     <Button.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="Button_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="Button_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </Button.ContextMenu>
                                 </Button>
                             </Grid>
                             <GroupBox Header="作者" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
-                                <TextBlock x:Name="TextBlock_ModAuthor" TextWrapping="Wrap" Text="TextBlock894165486816816165165416168168716816871645" VerticalAlignment="Top" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" >
+                                <TextBlock x:Name="TextBlock_ModAuthor" TextWrapping="Wrap" Text="TextBlock894165486816816165165416168168716816871645" VerticalAlignment="Top" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
                                     <TextBlock.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </TextBlock.ContextMenu>
                                 </TextBlock>
                             </GroupBox>
                             <GroupBox x:Name="GroupBox_ModDependencies" Header="依赖模组" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
-                                <TextBlock x:Name="TextBlock_ModDependencies" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}">
+                                <TextBlock x:Name="TextBlock_ModDependencies" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
                                     <TextBlock.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </TextBlock.ContextMenu>
                                 </TextBlock>
                             </GroupBox>
                             <GroupBox Header="描述" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
-                                <TextBlock x:Name="TextBlock_ModDescription" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}">
+                                <TextBlock x:Name="TextBlock_ModDescription" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
                                     <TextBlock.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click" />
+                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click"/>
                                         </ContextMenu>
                                     </TextBlock.ContextMenu>
                                 </TextBlock>
