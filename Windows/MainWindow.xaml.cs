@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using HKW.WindowAccent;
 using StarsectorTools.Lib;
 using StarsectorTools.Pages;
+using StarsectorTools.Tools.ModManager;
 
 namespace StarsectorTools.Windows
 {

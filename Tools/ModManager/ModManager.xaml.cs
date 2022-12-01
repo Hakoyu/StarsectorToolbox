@@ -27,7 +27,7 @@ using System.Xml.Linq;
 using Aspose.Zip;
 using Aspose.Zip.SevenZip;
 
-namespace StarsectorTools.Pages
+namespace StarsectorTools.Tools.ModManager
 {
     /// <summary>
     /// ModManager.xaml 的交互逻辑
@@ -542,10 +542,10 @@ namespace StarsectorTools.Pages
                 {
                     int total = array.Length;
                     int completed = 0;
-                    Archiveing window = null!;
+                    ModArchiveing window = null!;
                     Dispatcher.BeginInvoke(() =>
                     {
-                        window = new Archiveing();
+                        window = new ModArchiveing();
                         window.Label_Total.Content = total;
                         window.Label_Completed.Content = completed;
                         window.Label_Incomplete.Content = total;

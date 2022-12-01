@@ -25,7 +25,7 @@ using StarsectorTools.Windows;
 using System.Windows.Threading;
 using Aspose.Zip.Rar;
 
-namespace StarsectorTools.Pages
+namespace StarsectorTools.Tools.ModManager
 {
     public partial class ModManager
     {

@@ -11,16 +11,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Panuon.WPF.UI;
 
-namespace StarsectorTools.Windows
+namespace StarsectorTools.Tools.ModManager
 {
     /// <summary>
-    /// AddUserGroup.xaml 的交互逻辑
+    /// ModArchiveing.xaml 的交互逻辑
     /// </summary>
-    public partial class AddUserGroup : Window
+    public partial class ModArchiveing : Window
     {
-        public AddUserGroup()
+        public ModArchiveing()
         {
             InitializeComponent();
         }
