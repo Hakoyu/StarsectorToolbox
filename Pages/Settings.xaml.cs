@@ -28,12 +28,13 @@ namespace StarsectorTools.Pages
         {
             InitializeComponent();
             ST.totalMemory = Management.GetMemoryMetricsNow().Total;
-            Label_GamePath.Content = ST.gamePath;
+            TextBlock_GamePath.Text = ST.gamePath;
+            TextBlock_GameVersion.Text = ST.gameVersion;
             GetVmparamsData();
             GetGameKey();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_SetGamePath_Click(object sender, RoutedEventArgs e)
         {
             do
             {
@@ -41,7 +42,7 @@ namespace StarsectorTools.Pages
                 if (!ST.TestGamePath())
                     MessageBox.Show("游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK);
             } while (!ST.TestGamePath());
-            Label_GamePath.Content = ST.gamePath;
+            TextBlock_GamePath.Text = ST.gamePath;
         }
         private void TextBox_SetMemory_KeyDown(object sender, KeyEventArgs e)
         {
@@ -51,8 +52,8 @@ namespace StarsectorTools.Pages
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
         private void TextBox_SetMemory_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox textBox = (TextBox)sender;
-            textBox.Text = ST.MemorySizeParse(int.Parse(textBox.Text)).ToString();
+            if (sender is TextBox textBox)
+                textBox.Text = ST.MemorySizeParse(int.Parse(textBox.Text)).ToString();
         }
 
         private void Button_SetMemory_Click(object sender, RoutedEventArgs e)

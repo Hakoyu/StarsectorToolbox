@@ -19,12 +19,12 @@
             </Grid.ColumnDefinitions>
             <ProgressBar x:Name="ProgressBar_Progress"  Value="48" Grid.ColumnSpan="2" Grid.Row="1" Margin="0,40,0,40" Background="{DynamicResource ColorLight}" Foreground="{DynamicResource ColorLightBlue}" pu:ProgressBarHelper.ShadowColor="Aqua" SmallChange="50" IsIndeterminate="True"/>
             <Label x:Name="Label_Progress" Height="55" VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" Background="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource Label_Style}"/>
-            <Label Content="文件总数:" Width="80" HorizontalAlignment="Left" Style="{StaticResource Label_Style}"/>
-            <Label x:Name="Label_Total" Margin="85,0,5,0" Style="{StaticResource Label_Style}"/>
-            <Label Content="已完成:" Margin="5,0,184,0" Grid.Column="1" Style="{StaticResource Label_Style}"/>
-            <Label x:Name="Label_Incomplete" Grid.Column="1" Style="{StaticResource Label_Style}" Margin="189,0,0,0"/>
-            <Label Content="未完成:" Margin="134,0,0,0" Grid.Column="1" Style="{StaticResource Label_Style}" HorizontalAlignment="Left" Width="50"/>
-            <Label x:Name="Label_Completed" Margin="60,0,129,0" Grid.Column="1" Style="{StaticResource Label_Style}"/>
+            <Label Content="文件总数:" Width="80" HorizontalAlignment="Left" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+            <Label x:Name="Label_Total" Margin="85,0,5,0" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+            <Label Content="已完成:" Margin="5,0,184,0" Grid.Column="1" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+            <Label x:Name="Label_Incomplete" Grid.Column="1" Style="{StaticResource Label_Style}" Margin="189,0,0,0" Background="{x:Null}"/>
+            <Label Content="未完成:" Margin="134,0,0,0" Grid.Column="1" Style="{StaticResource Label_Style}" HorizontalAlignment="Left" Width="50" Background="{x:Null}"/>
+            <Label x:Name="Label_Completed" Margin="60,0,129,0" Grid.Column="1" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
         </Grid>
     </GroupBox>
 </Window>

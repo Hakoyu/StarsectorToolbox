@@ -40,40 +40,17 @@ namespace StarsectorTools.Tools.ModManager
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
-        ListBoxItem? nowSelectedListBoxItem = null;
         string nowGroup = ModGroupType.All;
+        Thread remindSaveThread = null!;
+        ListBoxItem? nowSelectedListBoxItem = null;
         HashSet<string> enabledModsId = new();
         HashSet<string> collectedModsId = new();
         Dictionary<string, ModInfo> allModsInfo = new();
         Dictionary<string, ListBoxItem> allListBoxItemsFromGroups = new();
         Dictionary<string, ModShowInfo> allModsShowInfo = new();
         Dictionary<string, HashSet<string>> allUserGroups = new();
-        Dictionary<string, HashSet<string>> modsIdFromGroups = new()
-        {
-            {ModGroupType.Libraries,new() },
-            {ModGroupType.Megamods,new() },
-            {ModGroupType.FactionMods,new() },
-            {ModGroupType.ContentExpansions,new() },
-            {ModGroupType.UtilityMods,new() },
-            {ModGroupType.MiscellaneousMods,new() },
-            {ModGroupType.BeautifyMods,new() },
-            {ModGroupType.Unknown,new() },
-        };
-        Dictionary<string, ObservableCollection<ModShowInfo>> modsShowInfoFromGroup = new()
-        {
-            {ModGroupType.All,new() },
-            {ModGroupType.Enabled,new() },
-            {ModGroupType.Disable,new() },
-            {ModGroupType.Libraries,new() },
-            {ModGroupType.Megamods,new() },
-            {ModGroupType.FactionMods,new() },
-            {ModGroupType.ContentExpansions,new() },
-            {ModGroupType.UtilityMods,new() },
-            {ModGroupType.MiscellaneousMods,new() },
-            {ModGroupType.BeautifyMods,new() },
-            {ModGroupType.Unknown,new() },
-            {ModGroupType.Collected,new() },
-        };
+        Dictionary<string, HashSet<string>> modsIdFromGroups = new();
+        Dictionary<string, ObservableCollection<ModShowInfo>> modsShowInfoFromGroup = new();
         static class ModGroupType
         {
             /// <summary>全部模组</summary>
@@ -111,8 +88,8 @@ namespace StarsectorTools.Tools.ModManager
         readonly ButtonStyle buttonStyle = new();
         class LabelStyle
         {
-            public Style VersionNormal = null!;
-            public Style VersionWarn = null!;
+            public Style GameVersionNormal = null!;
+            public Style GameVersionWarn = null!;
             public Style IsUtility = null!;
             public Style NotUtility = null!;
         }
@@ -124,16 +101,7 @@ namespace StarsectorTools.Tools.ModManager
             public string Author { get; set; } = null!;
             public string Version { get; set; } = null!;
             public string GameVersion { get; set; } = null!;
-            private Style? gameVersionStyle = null;
-            public Style? GameVersionStyle
-            {
-                get { return gameVersionStyle; }
-                set
-                {
-                    gameVersionStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(GameVersionStyle)));
-                }
-            }
+            public Style? GameVersionStyle { get; set; }
             public bool? Utility { get; set; }
             public Style? UtilityStyle { get; set; }
             public bool? Enabled { get; set; }
@@ -207,14 +175,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             InitializeComponent();
             InitializeData();
-            GetAllModsInfo();
-            CheckEnabledMods();
-            GetAllListBoxItems();
-            GetAllGroup();
-            InitializeDataGridItemsSource();
-            CheckUserGroup();
-            RefreshModsShowInfoContextMenu();
-            RefreAllSizeOfListBoxItems();
+            RefreshList();
             STLog.Instance.WriteLine("初始化完成");
         }
 
@@ -237,7 +198,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
-            SeveAllData();
+            SaveAllData();
+            ResetRemindSaveThread();
         }
 
         private void Button_ImportEnabledList_Click(object sender, RoutedEventArgs e)
@@ -329,10 +291,6 @@ namespace StarsectorTools.Tools.ModManager
                 GC.Collect();
             }
         }
-        void SetRandomSize()
-        {
-
-        }
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
@@ -365,13 +323,13 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                SelectedModsEnabledChange(!bool.Parse(button.ToolTip.ToString()!));
+                SelectedModsEnabledChange(!bool.Parse(button.Tag.ToString()!));
         }
 
         private void Button_Collected_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                SelectedModsCollectedChange(!bool.Parse(button.ToolTip.ToString()!));
+                SelectedModsCollectedChange(!bool.Parse(button.Tag.ToString()!));
         }
 
         private void Button_ModPath_Click(object sender, RoutedEventArgs e)
@@ -400,6 +358,7 @@ namespace StarsectorTools.Tools.ModManager
                     MessageBox.Show(err);
                 CheckEnabledModsDependencies();
                 RefreAllSizeOfListBoxItems();
+                StartRemindSaveThread();
             }
         }
 
@@ -481,6 +440,8 @@ namespace StarsectorTools.Tools.ModManager
                     process.StandardInput.WriteLine($"cd /d {ST.gamePath}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
+                    SaveAllData();
+                    ResetRemindSaveThread();
                 }
             }
             else
@@ -674,6 +635,25 @@ namespace StarsectorTools.Tools.ModManager
                     ModEnabledChange(allUserGroups[group].ElementAt(i));
                 CheckEnabledModsDependencies();
                 RefreAllSizeOfListBoxItems();
+            }
+        }
+
+        private void Button_RefreshList_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshList();
+            STLog.Instance.WriteLine("刷新完成");
+        }
+
+        private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (!e.Handled)
+            {
+                e.Handled = true;
+                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                eventArg.RoutedEvent = MouseWheelEvent;
+                eventArg.Source = sender;
+                if (sender is Control control && control.Parent is UIElement ui)
+                    ui.RaiseEvent(eventArg);
             }
         }
     }

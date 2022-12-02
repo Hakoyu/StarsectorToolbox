@@ -13,9 +13,11 @@
         <Setter Property="pu:GroupBoxHelper.HeaderHorizontalContentAlignment" Value="Center"/>
         <Setter Property="pu:GroupBoxHelper.HeaderPadding" Value="0"/>
         <Setter Property="pu:GroupBoxHelper.HeaderFontWeight" Value="Bold"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="Label_Style" TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
-        <Setter Property="Background" Value="{DynamicResource ColorBG}"/>
+        <Setter Property="Background" Value="{DynamicResource ColorBB}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ColorBB}"/>
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -23,11 +25,15 @@
         <Setter Property="Padding" Value="5"/>
         <Setter Property="pu:IconHelper.FontSize" Value="16"/>
         <Setter Property="pu:IconHelper.Margin" Value="4,-2,10,0"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="TextBlock_Style" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
         <Setter Property="Background" Value="{DynamicResource ColorBG}"/>
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="Padding" Value="5"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="Button_Style" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
@@ -38,6 +44,8 @@
         <Setter Property="Padding" Value="0"/>
         <Setter Property="pu:IconHelper.FontSize" Value="16"/>
         <Setter Property="pu:IconHelper.Margin" Value="4,-2,5,0"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="ListBox_Style" TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
         <Setter Property="Background" Value="{DynamicResource ColorBB}"/>
@@ -46,9 +54,8 @@
         <Setter Property="pu:IconHelper.Margin" Value="4,-2,5,0"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside"/>
-    </Style>
-    <Style x:Key="ScrollBar_Style" TargetType="ScrollBar" BasedOn="{StaticResource {x:Type ScrollBar}}">
-        <Setter Property="Width" Value="5"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="ListBoxItem_Style" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
         <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
@@ -61,6 +68,8 @@
         <Setter Property="pu:ListBoxItemHelper.HoverBackground" Value="{DynamicResource ColorLight}"/>
         <Setter Property="pu:ListBoxItemHelper.HoverShadowColor" Value="Aqua"/>
         <Setter Property="pu:ListBoxItemHelper.SelectedBackground" Value="{DynamicResource ColorSelected}"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="ComboBox_Style" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="Background" Value="{DynamicResource ColorBB}"/>
@@ -68,6 +77,8 @@
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="pu:IconHelper.Margin" Value="4,-2,5,0"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="ComboBoxItem_Style" TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
         <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
@@ -79,6 +90,8 @@
         <Setter Property="pu:IconHelper.FontSize" Value="16"/>
         <Setter Property="pu:ComboBoxItemHelper.HoverBackground" Value="{DynamicResource ColorLight}"/>
         <Setter Property="pu:ComboBoxItemHelper.SelectedBackground" Value="{DynamicResource ColorSelected}"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="Expander_Style" TargetType="Expander" BasedOn="{StaticResource {x:Type Expander}}">
         <Setter Property="Background" Value="{DynamicResource ColorBB}"/>
@@ -87,6 +100,8 @@
         <Setter Property="pu:ExpanderHelper.HeaderHeight" Value="30"/>
         <Setter Property="pu:ExpanderHelper.HeaderFontWeight" Value="Light"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="DataGrid_Style" TargetType="DataGrid" BasedOn="{StaticResource {x:Type DataGrid}}">
         <Setter Property="Background" Value="{DynamicResource ColorBG}"/>
@@ -98,12 +113,14 @@
         <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside" />
         <Setter Property="pu:DataGridHelper.ColumnHeaderFontSize" Value="16"/>
         <Setter Property="pu:DataGridHelper.ColumnHeaderSeparatorVisibility" Value="Collapsed" />
-        <Setter Property="pu:DataGridHelper.ColumnHeaderBackground" Value="{DynamicResource ColorBG}"/>
+        <Setter Property="pu:DataGridHelper.ColumnHeaderBackground" Value="{DynamicResource ColorBB}"/>
         <Setter Property="pu:DataGridHelper.ColumnHeaderForeground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="pu:DataGridHelper.ColumnHeaderHoverBackground" Value="{DynamicResource ColorLight}"/>
         <Setter Property="pu:DataGridHelper.ColumnHeaderClickBackground" Value="{DynamicResource ColorSelected}"/>
         <!--<Setter Property="pu:DataGridHelper.CellHoverBackground" Value="{DynamicResource ColorLight}"/>-->
         <Setter Property="pu:DataGridHelper.CellSelectedBackground" Value="{DynamicResource ColorSelected}"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="TextBox_Style" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
@@ -113,6 +130,8 @@
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="pu:IconHelper.Margin" Value="4,-2,5,0"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="ContextMenu_Style" TargetType="ContextMenu" BasedOn="{StaticResource {x:Type ContextMenu}}">
         <Setter Property="Background" Value="{DynamicResource ColorBB}"/>
@@ -120,12 +139,15 @@
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="pu:ContextMenuHelper.ItemsHoverBackground" Value="{DynamicResource ColorLight}"/>
         <Setter Property="pu:ContextMenuHelper.ItemsCheckedBackground" Value="{DynamicResource ColorLightBlue}"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="Window_Style" TargetType="Window" BasedOn="{StaticResource {x:Type Window}}">
         <Setter Property="Background" Value="{DynamicResource ColorBG}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ColorBB}"/>
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBB}"/>
+        <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}"/>
     </Style>
     <Style x:Key="Grid_Style" TargetType="Grid">
         <Setter Property="Background" Value="{DynamicResource ColorBG}"/>

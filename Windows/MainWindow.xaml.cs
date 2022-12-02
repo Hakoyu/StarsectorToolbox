@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -84,6 +85,7 @@ namespace StarsectorTools.Windows
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
             Close();
+            Process.GetCurrentProcess().Kill();
         }
 
         private void Button_MainMenu_Click(object sender, RoutedEventArgs e)

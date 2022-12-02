@@ -25,10 +25,9 @@
                     <RowDefinition Height="30*"/>
                     <RowDefinition Height="163*"/>
                 </Grid.RowDefinitions>
-
-                <Label x:Name="Label_GamePath" Content="" Margin="100,0,100,162" Background="#4CEAEAEA" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-                <Label Content="游戏目录" HorizontalAlignment="Left" Width="100" Background="#66EAEAEA" Grid.RowSpan="2" Margin="0,0,0,162"/>
-                <Button Content="设置目录" Background="#66EAEAEA" Grid.Column="2" Click="Button_Click" HorizontalAlignment="Right" Width="100"/>
+                <Label Content="游戏目录:" HorizontalAlignment="Left" Width="100" Grid.RowSpan="2" Margin="0,0,0,162" Style="{StaticResource Label_Style}" Grid.Column="1" Background="{DynamicResource ColorBB}"/>
+                <TextBlock x:Name="TextBlock_GamePath" Margin="100,0,100,162" Grid.ColumnSpan="2" Grid.RowSpan="2" Style="{StaticResource TextBlock_Style}" Grid.Column="1"/>
+                <Button x:Name="Button_SetGamePath" Content="设置目录" Grid.Column="2" Click="Button_SetGamePath_Click" HorizontalAlignment="Right" Width="100" Style="{StaticResource Button_Style}"/>
                 <GroupBox Header="内存设置" Background="#4CFFFFFF" BorderBrush="#4CD5DFE5" 
                   Style="{StaticResource GroupBox_Style}"
                   pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" 
@@ -73,6 +72,8 @@
                         <Button x:Name="Button_DuplicateKey" IsEnabled="False" Grid.Column="1" Content="复制到剪切板" Background="#66EAEAEA" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="40" Width="98" Click="Button_DuplicateKey_Click"/>
                     </Grid>
                 </GroupBox>
+                <Label Content="游戏版本:" HorizontalAlignment="Left" Width="100" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorBB}"/>
+                <TextBlock x:Name="TextBlock_GameVersion" Margin="100,0,0,0" Style="{StaticResource TextBlock_Style}"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="软件设置" Background="#4CFFFFFF" BorderBrush="#4CD5DFE5" 

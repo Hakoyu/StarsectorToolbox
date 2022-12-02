@@ -25,6 +25,7 @@ using StarsectorTools.Windows;
 using System.Windows.Threading;
 using Aspose.Zip.Rar;
 using System.Windows.Media;
+using System.Runtime.CompilerServices;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -36,10 +37,58 @@ namespace StarsectorTools.Tools.ModManager
             buttonStyle.Disable = (Style)Resources["DisableStyle"];
             buttonStyle.Collected = (Style)Resources["CollectedStyle"];
             buttonStyle.Uncollected = (Style)Resources["UncollectedStyle"];
-            labelStyle.VersionNormal = (Style)Resources["VersionNormalStyle"];
-            labelStyle.VersionWarn = (Style)Resources["VersionWarnStyle"];
+            labelStyle.GameVersionNormal = (Style)Resources["GameVersionNormalStyle"];
+            labelStyle.GameVersionWarn = (Style)Resources["GameVersionWarnStyle"];
             labelStyle.IsUtility = (Style)Resources["IsUtilityStyle"];
             labelStyle.NotUtility = (Style)Resources["NotUtilityStyle"];
+            remindSaveThread = new(RemindSave);
+        }
+
+        void RefreshList()
+        {
+            enabledModsId = new();
+            collectedModsId = new();
+            allModsInfo = new();
+            allListBoxItemsFromGroups = new();
+            allModsShowInfo = new();
+            allUserGroups = new();
+            modsIdFromGroups = new()
+            {
+                {ModGroupType.Libraries,new() },
+                {ModGroupType.Megamods,new() },
+                {ModGroupType.FactionMods,new() },
+                {ModGroupType.ContentExpansions,new() },
+                {ModGroupType.UtilityMods,new() },
+                {ModGroupType.MiscellaneousMods,new() },
+                {ModGroupType.BeautifyMods,new() },
+                {ModGroupType.Unknown,new() },
+            };
+            modsShowInfoFromGroup = new()
+            {
+                {ModGroupType.All,new() },
+                {ModGroupType.Enabled,new() },
+                {ModGroupType.Disable,new() },
+                {ModGroupType.Libraries,new() },
+                {ModGroupType.Megamods,new() },
+                {ModGroupType.FactionMods,new() },
+                {ModGroupType.ContentExpansions,new() },
+                {ModGroupType.UtilityMods,new() },
+                {ModGroupType.MiscellaneousMods,new() },
+                {ModGroupType.BeautifyMods,new() },
+                {ModGroupType.Unknown,new() },
+                {ModGroupType.Collected,new() },
+            };
+            while (ListBox_UserGroup.Items.Count > 1)
+                ListBox_UserGroup.Items.RemoveAt(1);
+            GetAllModsInfo();
+            CheckEnabledMods();
+            GetAllListBoxItems();
+            GetAllGroup();
+            InitializeDataGridItemsSource();
+            CheckUserGroup();
+            RefreshModsShowInfoContextMenu();
+            RefreAllSizeOfListBoxItems();
+            GC.Collect();
         }
         void GetAllModsInfo()
         {
@@ -182,7 +231,6 @@ namespace StarsectorTools.Tools.ModManager
                             if (allModsShowInfo.ContainsKey(id))
                             {
                                 var info = allModsShowInfo[id];
-                                info.ImagePath = dic["ImagePath"];
                                 info.UserDescription = dic["UserDescription"];
                             }
                             else
@@ -321,7 +369,7 @@ namespace StarsectorTools.Tools.ModManager
                 Author = info.Author,
                 Version = info.Version,
                 GameVersion = info.GameVersion,
-                GameVersionStyle = info.GameVersion == ST.gameVersion ? labelStyle.VersionNormal : labelStyle.VersionWarn,
+                GameVersionStyle = info.GameVersion == ST.gameVersion ? labelStyle.GameVersionNormal : labelStyle.GameVersionWarn,
                 RowDetailsHight = 0,
                 Dependencies = "",
                 DependenciesList = info.Dependencies is not null ? info.Dependencies.Select(i => i.Id).ToList() : null!,
@@ -382,6 +430,21 @@ namespace StarsectorTools.Tools.ModManager
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
+
+            menuItem = new();
+            menuItem.Header = "删除模组";
+            menuItem.Click += (o, e) =>
+            {
+                string path = allModsInfo[info.Id].Path;
+                if (MessageBox.Show($"确实删除模组?\nID: {info.Id}\n位置: {path}\n", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    RemoveModShowInfo(info.Id);
+                    ST.DeleteDirectoryToRecycleBin(path);
+                    StartRemindSaveThread();
+                }
+            };
+            contextMenu.Items.Add(menuItem);
+
             if (allUserGroups.Count > 0)
             {
                 menuItem = new();
@@ -444,6 +507,7 @@ namespace StarsectorTools.Tools.ModManager
             RefreAllSizeOfListBoxItems();
             if (conut != DataGrid_ModsShowList.SelectedItems.Count)
                 CloseModInfo();
+            StartRemindSaveThread();
         }
         void ModUserGroupChange(string group, string id, bool status)
         {
@@ -475,6 +539,7 @@ namespace StarsectorTools.Tools.ModManager
             if (conut != DataGrid_ModsShowList.SelectedItems.Count)
                 CloseModInfo();
             CheckEnabledModsDependencies();
+            StartRemindSaveThread();
         }
         void ClearEnabledMod()
         {
@@ -537,6 +602,7 @@ namespace StarsectorTools.Tools.ModManager
                     i++;
             }
             RefreAllSizeOfListBoxItems();
+            StartRemindSaveThread();
             if (conut != DataGrid_ModsShowList.SelectedItems.Count)
                 CloseModInfo();
         }
@@ -561,7 +627,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             STLog.Instance.WriteLine($"{id} 收藏状态修改为 {info.Collected}", STLogLevel.DEBUG);
         }
-        void SeveAllData()
+        void SaveAllData()
         {
             SaveEnabledMods(ST.enabledModsJsonPath);
             SaveUserGroup(userGroupFile);
@@ -588,12 +654,11 @@ namespace StarsectorTools.Tools.ModManager
             {
                 if (info.Collected is true)
                     toml[ModGroupType.Collected].Add(info.Id);
-                if (info.ImagePath!.Length > 0 || info.UserDescription!.Length > 0)
+                if (info.UserDescription!.Length > 0)
                 {
                     toml["UserModsData"].Add(new TomlTable()
                     {
                         ["Id"] = info.Id,
-                        ["ImagePath"] = info.ImagePath!.Length > 0 ? info.ImagePath : "",
                         ["UserDescription"] = info.UserDescription!.Length > 0 ? info.UserDescription : "",
                     });
                 }
@@ -602,7 +667,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 toml.Add(kv.Key, new TomlTable()
                 {
-                    ["Icon"] = ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[kv.Key]).ToString()!,
+                    ["Icon"] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[kv.Key])).Text,
                     ["Mods"] = new TomlArray(),
                 });
                 foreach (var id in kv.Value)
@@ -730,6 +795,7 @@ namespace StarsectorTools.Tools.ModManager
                         {
                             RemoveModShowInfo(modInfo.Id);
                             AddModShowInfo(GetModShowInfo(modInfo));
+                            StartRemindSaveThread();
                         });
                         STLog.Instance.WriteLine($"覆盖模组 {modInfo.Id} {originalModInfo.Version} => {modInfo.Version}");
                     }
@@ -739,6 +805,7 @@ namespace StarsectorTools.Tools.ModManager
                     Dispatcher.BeginInvoke(() =>
                     {
                         AddModShowInfo(GetModShowInfo(modInfo));
+                        StartRemindSaveThread();
                     });
                 }
             }
@@ -776,10 +843,10 @@ namespace StarsectorTools.Tools.ModManager
         }
         void AddUserGroup(string icon, string name)
         {
-            ListBoxItem item = new();
+            ListBoxItem listBoxItem = new();
             // 调用全局资源需要写全
-            item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
-            SetListBoxItemData(item, name);
+            listBoxItem.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
+            SetListBoxItemData(listBoxItem, name);
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             MenuItem menuItem = new();
@@ -795,22 +862,23 @@ namespace StarsectorTools.Tools.ModManager
                     string _name = window.TextBox_Name.Text;
                     if (_name.Length > 0 && !allUserGroups.ContainsKey(_name))
                     {
-                        ListBoxItemHelper.SetIcon(item, window.TextBox_Icon.Text);
+                        ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = _icon });
                         var temp = allUserGroups[name];
                         allUserGroups.Remove(name);
                         allUserGroups.Add(_name, temp);
 
                         allListBoxItemsFromGroups.Remove(name);
-                        allListBoxItemsFromGroups.Add(_name, item);
+                        allListBoxItemsFromGroups.Add(_name, listBoxItem);
 
                         var _temp = modsShowInfoFromGroup[name];
                         modsShowInfoFromGroup.Remove(name);
                         modsShowInfoFromGroup.Add(_name, _temp);
 
-                        SetListBoxItemData(item, _name);
+                        SetListBoxItemData(listBoxItem, _name);
                         window.Close();
                         RefreAllSizeOfListBoxItems();
                         RefreshModsShowInfoContextMenu();
+                        StartRemindSaveThread();
                     }
                     else
                         MessageBox.Show("命名失败,名字为空或者已存在相同名字的分组");
@@ -832,15 +900,16 @@ namespace StarsectorTools.Tools.ModManager
                 allListBoxItemsFromGroups.Remove(_name);
                 modsShowInfoFromGroup.Remove(_name);
                 RefreshModsShowInfoContextMenu();
+                StartRemindSaveThread();
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{name} 分组添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
-            item.ContextMenu = contextMenu;
+            listBoxItem.ContextMenu = contextMenu;
             //ListBoxItemHelper.SetIcon(menuItem, icon);
-            ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
-            ListBox_UserGroup.Items.Add(item);
+            ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = icon });
+            ListBox_UserGroup.Items.Add(listBoxItem);
             allUserGroups.Add(name, new());
-            allListBoxItemsFromGroups.Add(name, item);
+            allListBoxItemsFromGroups.Add(name, listBoxItem);
             modsShowInfoFromGroup.Add(name, new());
             STLog.Instance.WriteLine($"添加用户分组 {icon} {name}");
         }
@@ -878,6 +947,32 @@ namespace StarsectorTools.Tools.ModManager
                 _ => throw new NotImplementedException()
             });
             return showModsInfo;
+        }
+        void Close()
+        {
+            ResetRemindSaveThread();
+        }
+        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
+        void RemindSave()
+        {
+            while (remindSaveThread.ThreadState != ThreadState.Unstarted)
+            {
+                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorLightRed"]);
+                Thread.Sleep(1000);
+                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorLight"]);
+                Thread.Sleep(1000);
+            }
+        }
+        void StartRemindSaveThread()
+        {
+            if (remindSaveThread.ThreadState == ThreadState.Unstarted)
+                remindSaveThread.Start();
+        }
+        void ResetRemindSaveThread()
+        {
+            if (remindSaveThread.ThreadState != ThreadState.Unstarted)
+                remindSaveThread.Join(1);
+            remindSaveThread = new(RemindSave);
         }
     }
 }

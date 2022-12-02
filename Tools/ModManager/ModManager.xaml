@@ -17,30 +17,34 @@
         <Style x:Key="EnabledStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorSelected}"/>
             <Setter Property="Content" Value="已启用"/>
-            <Setter Property="ToolTip" Value="true"/>
+            <Setter Property="ToolTip" Value="已启用"/>
+            <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="DisableStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLightRed}"/>
             <Setter Property="Content" Value="未启用"/>
-            <Setter Property="ToolTip" Value="false"/>
+            <Setter Property="ToolTip" Value="未启用"/>
+            <Setter Property="Tag" Value="false"/>
         </Style>
         <Style x:Key="CollectedStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLightYellow}"/>
             <Setter Property="Content" Value="已收藏"/>
-            <Setter Property="ToolTip" Value="true"/>
+            <Setter Property="ToolTip" Value="已收藏"/>
+            <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="UncollectedStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
             <Setter Property="Content" Value="未收藏"/>
-            <Setter Property="ToolTip" Value="false"/>
+            <Setter Property="ToolTip" Value="未收藏"/>
+            <Setter Property="Tag" Value="false"/>
         </Style>
-        <Style x:Key="VersionNormalStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
+        <Style x:Key="GameVersionNormalStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
-            <Setter Property="ToolTip" Value="版本兼容"/>
+            <Setter Property="ToolTip" Value="模组支持的版本与游戏版本一致"/>
         </Style>
-        <Style x:Key="VersionWarnStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
+        <Style x:Key="GameVersionWarnStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLightYellow}"/>
-            <Setter Property="ToolTip" Value="false"/>
+            <Setter Property="ToolTip" Value="模组支持的版本与游戏版本不一致 可能会出现兼容性问题"/>
         </Style>
         <Style x:Key="IsUtilityStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLightBlue}"/>
@@ -70,7 +74,7 @@
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="启用状态分组" Style="{StaticResource Expander_Style}">
-                                <ListBox x:Name="ListBox_EnableStatus" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
+                                <ListBox x:Name="ListBox_EnableStatus" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="已启用模组" ToolTip="已启用模组" Tag="Enabled" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="✅"/>
@@ -86,7 +90,7 @@
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsTabStop="True" Header="模组类型分组" Style="{StaticResource Expander_Style}">
-                                <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
+                                <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="前置模组" ToolTip="前置模组" Tag="Libraries" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🔝"/>
@@ -132,7 +136,7 @@
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander IsExpanded="True" IsTabStop="True" Header="用户分组" Style="{StaticResource Expander_Style}">
-                                <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged">
+                                <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="已收藏模组" ToolTip="已收藏模组" Tag="Collected" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🌟"/>
@@ -171,64 +175,88 @@
                         <DataGrid.Columns>
                             <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Collected">
                                 <DataGridTemplateColumn.Header>
-                                    <emoji:TextBlock Text="🌟" FontSize="20" />
+                                    <emoji:TextBlock Text="🌟" FontSize="20" ToolTip="显示模组的收藏状态" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="Button_Collected" Style="{Binding CollectedStyle}" Margin="0,5,0,5" Click="Button_Collected_Click" Tag="{Binding Id}" Padding="5,0,5,0"/>
+                                        <Button x:Name="Button_Collected" Style="{Binding CollectedStyle}" Margin="0,5,0,5" Click="Button_Collected_Click" Padding="5,0,5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn CanUserSort="True" Header="Enabled" SortMemberPath="Enabled">
+                            <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Enabled">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="Enabled" ToolTip="显示模组的启用状态" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button x:Name="Button_Enabled" Style="{Binding EnabledStyle}" Margin="0,5,0,5" Click="Button_Enabled_Click" Tag="{Binding Id}" Padding="5,0,5,0"/>
+                                        <Button x:Name="Button_Enabled" Style="{Binding EnabledStyle}" Margin="0,5,0,5" Click="Button_Enabled_Click" Padding="5,0,5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Icon" IsReadOnly="True">
+                            <DataGridTemplateColumn IsReadOnly="True">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="Icon" ToolTip="显示模组图标" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Source="{Binding ImagePath}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name" IsReadOnly="True" CanUserSort="True" SortMemberPath="Name">
+                            <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="Name">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="Name" ToolTip="显示模组名称" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Name}" ToolTip="{Binding Name}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Author" IsReadOnly="True" Width="100" CanUserSort="True" SortMemberPath="Author">
+                            <DataGridTemplateColumn IsReadOnly="True" Width="100" CanUserSort="True" SortMemberPath="Author">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="Author" ToolTip="显示模组作者" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Author}" ToolTip="{Binding Author}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Version" IsReadOnly="True">
+                            <DataGridTemplateColumn IsReadOnly="True">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="Version" ToolTip="显示模组版本" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding Version}" ToolTip="{Binding Version}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="GameVersion" IsReadOnly="True" CanUserSort="True" SortMemberPath="GameVersion">
+                            <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="GameVersion">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="GameVersion" ToolTip="显示模组支持的游戏版本" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding GameVersion}" ToolTip="{Binding GameVersion}" Margin="0,5,0,5" Style="{Binding GameVersionStyle}"/>
+                                        <Label Content="{Binding GameVersion}" Margin="0,5,0,5" Style="{Binding GameVersionStyle}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Utility" IsReadOnly="True" CanUserSort="True" SortMemberPath="Utility">
+                            <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="Utility">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="Utility" ToolTip="显示模组是否为功能性模组" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Margin="0,5,0,5" Style="{Binding UtilityStyle}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="UserDescription" IsReadOnly="True" CanUserSort="True" SortMemberPath="UserDescription">
+                            <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="UserDescription">
+                                <DataGridTemplateColumn.Header>
+                                    <Label Content="UserDescription" ToolTip="显示用户描述" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Label Content="{Binding UserDescription}" ToolTip="{Binding UserDescription}" Margin="0,5,0,5" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
@@ -254,7 +282,12 @@
                     </ComboBox>
                 </Grid>
                 <Grid Grid.Column="2">
-                    <ScrollViewer Margin="0,0,0,80" VerticalScrollBarVisibility="Auto">
+                    <Button x:Name="Button_RefreshList" Content="刷新列表" Margin="5,0,5,0" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Top" Click="Button_RefreshList_Click">
+                        <pu:ButtonHelper.Icon>
+                            <emoji:TextBlock Text="🔄"/>
+                        </pu:ButtonHelper.Icon>
+                    </Button>
+                    <ScrollViewer Margin="0,35,0,80" VerticalScrollBarVisibility="Auto">
                         <StackPanel Width="120">
                             <Expander Header="打开文件夹" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
@@ -287,8 +320,16 @@
                             </Expander>
                         </StackPanel>
                     </ScrollViewer>
-                    <Button x:Name="Button_Save" Content="保存配置" Margin="5,0,5,40" Click="Button_Save_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
-                    <Button x:Name="Button_GameStart" Content="启动游戏" Margin="5,0,5,5" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                    <Button x:Name="Button_Save" Content="保存配置" Margin="5,0,5,40" Click="Button_Save_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom">
+                        <pu:ButtonHelper.Icon>
+                            <emoji:TextBlock Text="💾"/>
+                        </pu:ButtonHelper.Icon>
+                    </Button>
+                    <Button x:Name="Button_GameStart" Content="启动游戏" Margin="5,0,5,5" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom">
+                        <pu:ButtonHelper.Icon>
+                            <emoji:TextBlock Text="▶"/>
+                        </pu:ButtonHelper.Icon>
+                    </Button>
                 </Grid>
                 <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBB}" Visibility="Hidden">
                     <ScrollViewer>
@@ -297,8 +338,8 @@
                                 <Image x:Name="Image_ModImage" MaxHeight="100" />
                             </Grid>
                             <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <Label Content="名称:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
-                                <Label x:Name="Label_ModName" Content="Name" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
+                                <Label Content="Id:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
+                                <Label x:Name="Label_ModId" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
                                     <Label.ContextMenu>
                                         <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                             <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
@@ -307,8 +348,8 @@
                                 </Label>
                             </StackPanel>
                             <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <Label Content="Id:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
-                                <Label x:Name="Label_ModId" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
+                                <Label Content="名称:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
+                                <Label x:Name="Label_ModName" Content="Name" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
                                     <Label.ContextMenu>
                                         <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                             <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>

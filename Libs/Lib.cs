@@ -278,7 +278,7 @@ namespace StarsectorTools.Lib
                     Name = value.GetValue<string>();
                     break;
                 case "author":
-                    Author = value.GetValue<string>();
+                    Author = value.GetValue<string>().Trim();
                     break;
                 case "version":
                     if (value is JsonValue)
