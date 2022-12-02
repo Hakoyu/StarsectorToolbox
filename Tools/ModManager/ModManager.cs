@@ -440,6 +440,7 @@ namespace StarsectorTools.Tools.ModManager
                 {
                     RemoveModShowInfo(info.Id);
                     ST.DeleteDirectoryToRecycleBin(path);
+                    RefreAllSizeOfListBoxItems();
                     StartRemindSaveThread();
                 }
             };
