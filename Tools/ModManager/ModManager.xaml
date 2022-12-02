@@ -154,7 +154,7 @@
                     <Button x:Name="Button_AddGroup" Content="添加用户分组" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" Click="Button_AddGroup_Click"/>
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,0,0" Grid.ColumnSpan="2" >
-                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" EnableColumnVirtualization="True" VirtualizingPanel.IsContainerVirtualizable="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" ScrollViewer.CanContentScroll="True" Style="{StaticResource DataGrid_Style}">
+                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" Style="{StaticResource DataGrid_Style}">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Tag" Value="{Binding Id}"/>
