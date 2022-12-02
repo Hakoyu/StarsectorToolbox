@@ -857,7 +857,7 @@ namespace StarsectorTools.Tools.ModManager
                 AddUserGroup window = new();
                 ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
                 window.TextBox_Icon.Text = icon;
-                window.TextBox_Icon.Text = name;
+                window.TextBox_Name.Text = name;
                 window.Show();
                 window.Button_OK.Click += (o, e) =>
                 {
