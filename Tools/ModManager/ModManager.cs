@@ -904,6 +904,7 @@ namespace StarsectorTools.Tools.ModManager
                 modsShowInfoFromGroup.Remove(_name);
                 RefreshModsShowInfoContextMenu();
                 StartRemindSaveThread();
+                ShowGroupChange(ModGroupType.All);
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{name} 分组添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
