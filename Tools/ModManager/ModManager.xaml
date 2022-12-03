@@ -289,10 +289,10 @@
                     </Button>
                     <ScrollViewer Margin="0,35,0,80" VerticalScrollBarVisibility="Auto">
                         <StackPanel Width="120">
-                            <Expander Header="打开文件夹" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                            <Expander Header="打开目录" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Button x:Name="Button_OpenModDirectorie" Content="打开模组文件夹" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenModDirectorie_Click" Margin="0,0,0,5"/>
-                                    <Button x:Name="Button_OpenBackupDirectorie" Content="打开备份文件夹" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenBackupDirectorie_Click"/>
+                                    <Button x:Name="Button_OpenModDirectorie" Content="打开模组目录" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenModDirectorie_Click" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_OpenBackupDirectorie" Content="打开备份目录" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenBackupDirectorie_Click"/>
                                     <Button x:Name="Button_OpenSaveDirectorie" Content="打开游戏存档" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenSaveDirectorie_Click"/>
                                 </StackPanel>
                             </Expander>
