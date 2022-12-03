@@ -59,7 +59,7 @@
                                 <Button x:Name="Button_OpenMissionsLoadoutsDirectory" Content="打开战役配装文件夹" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_OpenMissionsLoadoutsDirectory_Click"/>
                             </StackPanel>
                         </Expander>
-                        <Expander x:Name="Expander_Save" Header="存档优化" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
+                        <Expander x:Name="Expander_Save" Header="存档清理" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
                             <StackPanel Background="{DynamicResource ColorBB}">
                                 <Label Content="保留存档数:" Style="{StaticResource Label_Style}"  Margin="0,0,0,5"/>
                                 <TextBox x:Name="TextBox_ReservedSaveSize" Text="5" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
