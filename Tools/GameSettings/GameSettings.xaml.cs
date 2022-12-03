@@ -110,6 +110,7 @@ namespace StarsectorTools.Tools.GameSettings
             {
                 ST.DeleteFileToRecycleBin(path);
                 File.Create(path).Close();
+                MessageBox.Show($"Log文件清理完成");
             }
             else
                 MessageBox.Show($"Log文件不存在\n位置:{path}");
@@ -138,6 +139,7 @@ namespace StarsectorTools.Tools.GameSettings
                     STLog.Instance.WriteLine($"文件夹不存在 位置: {item.ToolTip}");
                     MessageBox.Show($"战役配装文件不存在\n位置: {item.ToolTip}");
                 }
+                MessageBox.Show($"战役配装清理完成");
             }
         }
 
@@ -154,6 +156,7 @@ namespace StarsectorTools.Tools.GameSettings
             int count = list.Count() - int.Parse(TextBox_ReservedSaveSize.Text);
             for (int i = 0; i < count; i++)
                 ST.DeleteDirectoryToRecycleBin(list.ElementAt(i).Key);
+            MessageBox.Show($"存档清理完成");
         }
 
         private void Button_OpenMissionsLoadoutsDirectory_Click(object sender, RoutedEventArgs e)
@@ -177,6 +180,12 @@ namespace StarsectorTools.Tools.GameSettings
                 STLog.Instance.WriteLine($"战役配装文件夹不存在 位置: {ST.gameSavePath}");
                 MessageBox.Show($"战役配装文件不存在\n位置: {ST.gameSavePath}");
             }
+        }
+
+        private void Button_OpenGamePath_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            if (Directory.Exists(ST.gamePath))
+                ST.OpenFile(ST.gamePath);
         }
     }
 }

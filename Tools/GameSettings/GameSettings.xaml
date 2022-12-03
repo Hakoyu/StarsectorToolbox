@@ -20,8 +20,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Content="游戏目录:" HorizontalAlignment="Left" Width="100" Style="{StaticResource Label_Style}" Grid.Column="1"/>
-                <Label x:Name="Label_GamePath" Margin="100,0,90,0" Grid.ColumnSpan="2" Style="{StaticResource Label_Style}" Grid.Column="1" HorizontalContentAlignment="Left" Background="{DynamicResource ColorDeep2}"/>
-                <Button x:Name="Button_SetGamePath" Content="设置目录" Grid.Column="1" Click="Button_SetGamePath_Click" HorizontalAlignment="Right" Width="90" Style="{StaticResource Button_Style}"/>
+                <Label x:Name="Label_GamePath" Margin="100,0,165,0" Style="{StaticResource Label_Style}" Grid.Column="1" HorizontalContentAlignment="Left" Background="{DynamicResource ColorDeep2}"/>
+                <Button x:Name="Button_SetGamePath" Content="设置目录" Grid.Column="1" Click="Button_SetGamePath_Click" Style="{StaticResource Button_Style}" Margin="0,0,85,0" HorizontalAlignment="Right" Width="80"/>
                 <GroupBox Header="内存设置" Style="{StaticResource GroupBox_Style}"
                     pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" Margin="0,5,0,0" Grid.Column="1" Height="65" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" 
                   >
@@ -61,14 +61,15 @@
                         </Expander>
                         <Expander x:Name="Expander_Save" Header="存档清理" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
                             <StackPanel Background="{DynamicResource ColorBB}">
-                                <Label Content="保留存档数:" Style="{StaticResource Label_Style}"  Margin="0,0,0,5"/>
-                                <TextBox x:Name="TextBox_ReservedSaveSize" Text="5" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
+                                <Label Content="保留最近存档数:" Style="{StaticResource Label_Style}"  Margin="0,0,0,5"/>
+                                <TextBox x:Name="TextBox_ReservedSaveSize" Text="5" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}" PreviewTextInput="TextBox_NumberInput" InputMethod.IsInputMethodEnabled="False"/>
                                 <Button x:Name="Button_ClearSave" Content="清理存档" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearSave_Click"/>
                                 <Button x:Name="Button_OpenSaveDirectory" Content="打开存档文件夹" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_OpenSaveDirectory_Click"/>
                             </StackPanel>
                         </Expander>
                     </StackPanel>
                 </ScrollViewer>
+                <Button x:Name="Button_OpenGamePath_Copy" Content="打开目录" Grid.Column="1" Style="{StaticResource Button_Style}" HorizontalAlignment="Right" Width="80" Click="Button_OpenGamePath_Copy_Click"/>
             </Grid>
         </GroupBox>
     </Grid>
