@@ -305,19 +305,13 @@ namespace StarsectorTools.Tools.ModManager
         }
         private void DataGridItem_MouseMove(object sender, MouseEventArgs e)
         {
-            // 连续点击无效,需要 e.Handled = true
-            //e.Handled = true;
             if (sender is DataGridRow row)
-                row.Background = (Brush)Application.Current.Resources["ColorLight"];
-            //ModInfoShowChange(row.Tag.ToString()!);
+                row.Background = (Brush)Application.Current.Resources["ColorLight2"];
         }
         private void DataGridItem_MouseLeave(object sender, MouseEventArgs e)
         {
-            // 连续点击无效,需要 e.Handled = true
-            //e.Handled = true;
             if (sender is DataGridRow row)
                 row.Background = (Brush)Application.Current.Resources["ColorBG"];
-            //ModInfoShowChange(row.Tag.ToString()!);
         }
 
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
@@ -335,7 +329,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_ModPath_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                Process.Start("Explorer.exe", button.Content.ToString()!);
+                ST.OpenFile(button.Content.ToString()!);
         }
 
         private void Button_EnableDependencies_Click(object sender, RoutedEventArgs e)
@@ -562,7 +556,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_OpenModDirectorie_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameModsPath))
-                Process.Start("Explorer.exe", ST.gameModsPath);
+                ST.OpenFile(ST.gameModsPath);
             else
             {
                 STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameModsPath}", STLogLevel.WARN);
@@ -573,7 +567,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_OpenBackupDirectorie_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(modBackupDirectory))
-                Process.Start("Explorer.exe", modBackupDirectory);
+                ST.OpenFile(modBackupDirectory);
             else
             {
                 STLog.Instance.WriteLine($"文件夹不存在 位置: {modBackupDirectory}", STLogLevel.WARN);
@@ -584,7 +578,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_OpenSaveDirectorie_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameSavePath))
-                Process.Start("Explorer.exe", ST.gameSavePath);
+                ST.OpenFile(ST.gameSavePath);
             else
             {
                 STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameSavePath}", STLogLevel.WARN);

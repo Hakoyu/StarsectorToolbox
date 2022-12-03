@@ -23,7 +23,7 @@
         </Style>
     </Window.Resources>
     <Grid Style="{StaticResource WindowMainPanelStyle}">
-        <Grid x:Name="Grid_TitleBar" VerticalAlignment="Top" MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown" Background="{DynamicResource ColorBB}">
+        <Grid x:Name="Grid_TitleBar" VerticalAlignment="Top" MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown" Background="{DynamicResource ColorLight2}">
             <Grid HorizontalAlignment="Center">
                 <Image x:Name="Image_Title" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20" Source="/Resources/recycling.ico" Margin="5,5,0,0"/>
                 <Label x:Name="Label_Title" Content="{x:Static I18n:MainWindow_I18n.StarsectorTools}" Style="{StaticResource Label_Style}" Padding="0" Background="{x:Null}" HorizontalAlignment="Center" Margin="30,0,0,0" FontSize="20" FontWeight="Bold" />
@@ -40,9 +40,14 @@
         <Grid Margin="0,30,0,0">
             <Grid x:Name="Grid_Menu" HorizontalAlignment="Left" SizeChanged="Grid_Menu_SizeChanged" Width="30">
                 <ListBox x:Name="ListBox_Menu" Margin="0,0,0,60" HorizontalAlignment="Center" FontSize="16" SelectionChanged="ListBox_Menu_SelectionChanged" Style="{StaticResource ListBox_Style}">
-                    <ListBoxItem Content="ModManager" Style="{StaticResource ListBoxItem_Style}" BorderBrush="#FFA42C2C" >
+                    <ListBoxItem Content="ModManager" Style="{StaticResource ListBoxItem_Style}">
                         <pu:ListBoxItemHelper.Icon>
                             <emoji:TextBlock Text="🌐" FontSize="16"/>
+                        </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem Content="GameSettings" Style="{StaticResource ListBoxItem_Style}">
+                        <pu:ListBoxItemHelper.Icon>
+                            <emoji:TextBlock Text="⚙" FontSize="16"/>
                         </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                 </ListBox>

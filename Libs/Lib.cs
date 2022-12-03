@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Aspose.Zip;
+using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
 using Microsoft.VisualBasic.FileIO;
 
@@ -216,40 +217,57 @@ namespace StarsectorTools.Lib
             SetGamePath(Path.GetDirectoryName(openFileDialog.FileName)!);
             return TestGamePath();
         }
-        public static bool ZipFile(string sourceDirName, string destDirName)
+        public static bool OpenFile(string path)
         {
-            var head = "";
-            using StreamReader sr = new(sourceDirName);
+            if (File.Exists(path) || Directory.Exists(path))
             {
-                head = $"{sr.Read()}{sr.Read()}";
+                Process.Start(new ProcessStartInfo() { FileName = path, UseShellExecute = true });
+                return true;
             }
+            return false;
+        }
+        public static bool UnZipFile(string sourceFileName, string destDirName)
+        {
+            if (!File.Exists(sourceFileName))
+                return false;
+            using StreamReader sr = new(sourceFileName);
+            string head = $"{sr.Read()}{sr.Read()}";
+            sr.Close();
             try
             {
-                if (head == "8297" || head == "8075")
+                if (head == "8075")
                 {
-                    using (var archive = new Archive(sourceDirName, new() { Encoding = Encoding.UTF8 }))
+                    using (var archive = new Archive(sourceFileName, new() { Encoding = Encoding.UTF8 }))
+                    {
+                        archive.ExtractToDirectory(destDirName);
+                    }
+                }
+                else if (head == "8297")
+                {
+                    using (var archive = new RarArchive(sourceFileName))
                     {
                         archive.ExtractToDirectory(destDirName);
                     }
                 }
                 else if (head == "55122")
                 {
-                    using (var archive = new SevenZipArchive(sourceDirName))
+                    using (var archive = new SevenZipArchive(sourceFileName))
                     {
                         archive.ExtractToDirectory(destDirName);
                     }
                 }
                 else
                 {
-                    //STLog.Instance.WriteLine(this, $"此文件不是压缩文件 位置: {sourceDirName}");
+                    STLog.Instance.WriteLine($"不支持的文件 位置: {sourceFileName}");
                     return false;
                 }
                 return true;
             }
             catch
             {
-                //STLog.Instance.WriteLine(nameof(ZipFile), $"文件错误 位置:{sourceDirName}");
-                Directory.Delete(destDirName);
+                STLog.Instance.WriteLine($"文件错误 位置:{sourceFileName}");
+                if (Directory.Exists(destDirName))
+                    Directory.Delete(destDirName);
                 return false;
             }
         }

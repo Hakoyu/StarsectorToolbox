@@ -17,22 +17,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Config.toml" />
-    <None Remove="Resources\ModGroup.toml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Resources\ModGroup.toml" />
+    <Resource Include="Resources\Config.toml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspose.Zip" Version="22.11.0" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
     <PackageReference Include="Panuon.WPF.UI" Version="1.1.6.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\Config.toml" />
   </ItemGroup>
 
   <ItemGroup>

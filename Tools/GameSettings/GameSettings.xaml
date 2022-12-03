@@ -1,0 +1,75 @@
+﻿<Page x:Class="StarsectorTools.Tools.GameSettings.GameSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+      xmlns:local="clr-namespace:StarsectorTools.Tools.GameSettings"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="GameSettings">
+    <Grid>
+        <GroupBox Header="游戏设置" Style="{StaticResource GroupBox_Style}" pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="游戏目录:" HorizontalAlignment="Left" Width="100" Style="{StaticResource Label_Style}" Grid.Column="1"/>
+                <Label x:Name="Label_GamePath" Margin="100,0,90,0" Grid.ColumnSpan="2" Style="{StaticResource Label_Style}" Grid.Column="1" HorizontalContentAlignment="Left" Background="{DynamicResource ColorDeep2}"/>
+                <Button x:Name="Button_SetGamePath" Content="设置目录" Grid.Column="1" Click="Button_SetGamePath_Click" HorizontalAlignment="Right" Width="90" Style="{StaticResource Button_Style}"/>
+                <GroupBox Header="内存设置" Style="{StaticResource GroupBox_Style}"
+                    pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" Margin="0,5,0,0" Grid.Column="1" Height="65" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" 
+                  >
+                    <Grid>
+                        <TextBox x:Name="TextBox_Memory" PreviewTextInput="TextBox_NumberInput" KeyDown="TextBox_SetMemory_KeyDown" LostKeyboardFocus="TextBox_SetMemory_LostKeyboardFocus" Padding="5,0,0,0" InputMethod.IsInputMethodEnabled="False" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource TextBox_Style}"/>
+                        <Label Content="MB" Background="#4CEAEAEA" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="100,0,108,0" Width="30" VerticalAlignment="Top" Height="30" Style="{StaticResource Label_Style}"/>
+                        <Button x:Name="Button_SetMemory" Content="应用" Background="#66EAEAEA" Margin="0,0,50,0" Click="Button_SetMemory_Click" Width="45" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource Button_Style}"/>
+                        <Button x:Name="Button_Help" Content="帮助" Background="#66EAEAEA" Width="45" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Style="{StaticResource Button_Style}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="游戏序列码"  Style="{StaticResource GroupBox_Style}"
+                    pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" Margin="0,75,0,0" Grid.Column="1" Height="100" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left">
+                    <Grid>
+                        <Label x:Name="Label_GameKey" Padding="0" Margin="0,1,0,0" Height="30" VerticalAlignment="Top" Style="{StaticResource Label_Style}" FontSize="16" FontWeight="Bold"/>
+                        <Button x:Name="Button_CopyKey" IsEnabled="False" Content="复制" Click="Button_CopyKey_Click" Height="30" VerticalAlignment="Bottom" Margin="0,0,10,0" HorizontalAlignment="Right" Width="80" Style="{StaticResource Button_Style}"/>
+                        <Button x:Name="Button_ShowKey" IsEnabled="False" Content="显示" Height="30" VerticalAlignment="Bottom" Margin="10,0,0,0" HorizontalAlignment="Left" Width="80" Click="Button_ShowKey_Click" Style="{StaticResource Button_Style}"/>
+                    </Grid>
+                </GroupBox>
+                <Label Content="游戏版本:" HorizontalAlignment="Left" Width="100" Style="{StaticResource Label_Style}" />
+                <Label x:Name="Label_GameVersion" Margin="100,0,0,0" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorDeep2}" HorizontalContentAlignment="Left"/>
+                <ScrollViewer Grid.Column="0" Grid.Row="1" >
+                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="5">
+                        <Expander Header="Log清理" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
+                            <StackPanel>
+                                <Button x:Name="Button_OpenLogFile" Content="打开Log文件" Style="{StaticResource Button_Style}"  Margin="0,0,0,5" Click="Button_OpenLogFile_Click"/>
+                                <Button x:Name="Button_ClearLogFile" Content="清理Log文件" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearLogFile_Click"/>
+                            </StackPanel>
+                        </Expander>
+                        <Expander Header="战役配装清理" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
+                            <StackPanel>
+                                <ComboBox x:Name="ComboBox_MissionsLoadouts" Style="{StaticResource ComboBox_Style}" SelectedIndex="0" Margin="0,0,0,5">
+                                    <ComboBoxItem Content="All" ToolTip="All" Style="{StaticResource ComboBoxItem_Style}"/>
+                                </ComboBox>
+                                <Button x:Name="Button_ClearMissionsLoadouts" Content="清理战役配装" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearMissionsLoadouts_Click"/>
+                                <Button x:Name="Button_OpenMissionsLoadoutsDirectory" Content="打开战役配装文件夹" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_OpenMissionsLoadoutsDirectory_Click"/>
+                            </StackPanel>
+                        </Expander>
+                        <Expander x:Name="Expander_Save" Header="存档优化" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
+                            <StackPanel Background="{DynamicResource ColorBB}">
+                                <Label Content="保留存档数:" Style="{StaticResource Label_Style}"  Margin="0,0,0,5"/>
+                                <TextBox x:Name="TextBox_ReservedSaveSize" Text="5" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
+                                <Button x:Name="Button_ClearSave" Content="清理存档" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearSave_Click"/>
+                                <Button x:Name="Button_OpenSaveDirectory" Content="打开存档文件夹" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_OpenSaveDirectory_Click"/>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Page>

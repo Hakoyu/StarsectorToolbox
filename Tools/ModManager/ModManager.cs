@@ -426,7 +426,7 @@ namespace StarsectorTools.Tools.ModManager
             menuItem.Click += (o, e) =>
             {
                 STLog.Instance.WriteLine($"打开模组文件夹 位置: {allModsInfo[info.Id].Path}");
-                System.Diagnostics.Process.Start("Explorer.exe", allModsInfo[info.Id].Path);
+                ST.OpenFile(allModsInfo[info.Id].Path);
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{info.Id} 添加右键菜单 {menuItem.Header}", STLogLevel.DEBUG);
@@ -481,9 +481,9 @@ namespace StarsectorTools.Tools.ModManager
                 {
                     MenuItem groupItem = new();
                     groupItem.Header = group.Key;
-                    groupItem.Background = (Brush)Application.Current.Resources["ColorBB"];
+                    groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
                     // 此语句无法获取色彩透明度 原因未知
-                    MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorBB1"]);
+                    MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorBB"]);
                     groupItem.Click += (o, e) =>
                     {
                         SelectedModsUserGroupChange(group.Key, false);
@@ -952,18 +952,14 @@ namespace StarsectorTools.Tools.ModManager
             });
             return showModsInfo;
         }
-        void Close()
-        {
-            ResetRemindSaveThread();
-        }
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         void RemindSave()
         {
             while (remindSaveThread.ThreadState != ThreadState.Unstarted)
             {
-                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorLightRed"]);
+                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorAqua0"]);
                 Thread.Sleep(1000);
-                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorLight"]);
+                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorLight2"]);
                 Thread.Sleep(1000);
             }
         }

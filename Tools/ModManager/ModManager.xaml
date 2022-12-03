@@ -15,44 +15,44 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         <Style x:Key="EnabledStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorSelected}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorBlue2}"/>
             <Setter Property="Content" Value="已启用"/>
             <Setter Property="ToolTip" Value="已启用"/>
             <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="DisableStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLightRed}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorRed2}"/>
             <Setter Property="Content" Value="未启用"/>
             <Setter Property="ToolTip" Value="未启用"/>
             <Setter Property="Tag" Value="false"/>
         </Style>
         <Style x:Key="CollectedStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLightYellow}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorYellow2}"/>
             <Setter Property="Content" Value="已收藏"/>
             <Setter Property="ToolTip" Value="已收藏"/>
             <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="UncollectedStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
             <Setter Property="Content" Value="未收藏"/>
             <Setter Property="ToolTip" Value="未收藏"/>
             <Setter Property="Tag" Value="false"/>
         </Style>
         <Style x:Key="GameVersionNormalStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
             <Setter Property="ToolTip" Value="模组支持的版本与游戏版本一致"/>
         </Style>
         <Style x:Key="GameVersionWarnStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLightYellow}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorYellow2}"/>
             <Setter Property="ToolTip" Value="模组支持的版本与游戏版本不一致 可能会出现兼容性问题"/>
         </Style>
         <Style x:Key="IsUtilityStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLightBlue}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorBlue2}"/>
             <Setter Property="Content" Value="✅"/>
             <Setter Property="ToolTip" Value="是功能性模组 可以中途移除"/>
         </Style>
         <Style x:Key="NotUtilityStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
-            <Setter Property="Background" Value="{DynamicResource ColorLight}"/>
+            <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
             <Setter Property="Content" Value="❎"/>
             <Setter Property="ToolTip" Value="不是功能性模组 不可以中途移除"/>
         </Style>
@@ -73,7 +73,7 @@
                             </pu:ListBoxItemHelper.Icon>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander IsExpanded="True" IsTabStop="True" Header="启用状态分组" Style="{StaticResource Expander_Style}">
+                            <Expander IsExpanded="True" Header="启用状态分组" Style="{StaticResource Expander_Style}" Padding="0">
                                 <ListBox x:Name="ListBox_EnableStatus" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="已启用模组" ToolTip="已启用模组" Tag="Enabled" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
@@ -89,7 +89,7 @@
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander IsTabStop="True" Header="模组类型分组" Style="{StaticResource Expander_Style}">
+                            <Expander Header="模组类型分组" Style="{StaticResource Expander_Style}" Padding="0">
                                 <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="前置模组" ToolTip="前置模组" Tag="Libraries" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
@@ -135,7 +135,7 @@
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander IsExpanded="True" IsTabStop="True" Header="用户分组" Style="{StaticResource Expander_Style}">
+                            <Expander IsExpanded="True" Header="用户分组" Style="{StaticResource Expander_Style}" Padding="0">
                                 <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="已收藏模组" ToolTip="已收藏模组" Tag="Collected" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
@@ -331,7 +331,7 @@
                         </pu:ButtonHelper.Icon>
                     </Button>
                 </Grid>
-                <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBB}" Visibility="Hidden">
+                <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBG}" Visibility="Hidden">
                     <ScrollViewer>
                         <StackPanel>
                             <Grid Margin="0,0,0,5">

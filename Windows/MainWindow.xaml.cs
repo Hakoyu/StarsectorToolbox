@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using HKW.WindowAccent;
 using StarsectorTools.Lib;
 using StarsectorTools.Pages;
+using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 
 namespace StarsectorTools.Windows
@@ -43,6 +44,7 @@ namespace StarsectorTools.Windows
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             menuList.Add("ModManager", new ModManager());
+            menuList.Add("GameSettings", new GameSettings());
             ListBox_Menu.SelectedIndex = 0;
 
             //DirectoryInfo dirs = new(AppDomain.CurrentDomain.BaseDirectory);
@@ -107,7 +109,7 @@ namespace StarsectorTools.Windows
 
         private void ListBox_Menu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ListBox_Menu.SelectedIndex == 0)
+            if (ListBox_Menu.SelectedIndex >= 0)
             {
                 Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Content.ToString()!];
             }

@@ -13,9 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using HKW.Management;
-using StarsectorTools.Langs.MessageBox;
-using StarsectorTools.Lib;
+
 
 namespace StarsectorTools.Pages
 {
@@ -27,44 +25,6 @@ namespace StarsectorTools.Pages
         public Settings()
         {
             InitializeComponent();
-            ST.totalMemory = Management.GetMemoryMetricsNow().Total;
-            TextBlock_GamePath.Text = ST.gamePath;
-            TextBlock_GameVersion.Text = ST.gameVersion;
-            GetVmparamsData();
-            GetGameKey();
-        }
-
-        private void Button_SetGamePath_Click(object sender, RoutedEventArgs e)
-        {
-            do
-            {
-                ST.GetGamePath();
-                if (!ST.TestGamePath())
-                    MessageBox.Show("游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK);
-            } while (!ST.TestGamePath());
-            TextBlock_GamePath.Text = ST.gamePath;
-        }
-        private void TextBox_SetMemory_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Keyboard.ClearFocus();
-        }
-        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
-        private void TextBox_SetMemory_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            if (sender is TextBox textBox)
-                textBox.Text = ST.MemorySizeParse(int.Parse(textBox.Text)).ToString();
-        }
-
-        private void Button_SetMemory_Click(object sender, RoutedEventArgs e)
-        {
-            SetVmparamsData();
-        }
-
-        private void Button_DuplicateKey_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(gameKey);
-            MessageBox.Show("已成功将游戏序列码复制进剪切板。");
         }
     }
 }
