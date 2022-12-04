@@ -25,6 +25,7 @@
     <PackageReference Include="Aspose.Zip" Version="22.11.0" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
     <PackageReference Include="Panuon.WPF.UI" Version="1.1.6.5" />
+    <PackageReference Include="SharpCompress" Version="0.32.2" />
   </ItemGroup>
 
   <ItemGroup>

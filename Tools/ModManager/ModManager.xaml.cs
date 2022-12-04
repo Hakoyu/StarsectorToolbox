@@ -34,7 +34,8 @@ namespace StarsectorTools.Tools.ModManager
     public partial class ModManager : Page
     {
         const string modGroupFile = @"ModGroup.toml";
-        const string modBackupDirectory = @"ModsBackUp";
+        const string modBackupDirectory = @"BackUp\Mods";
+        const string backupDirectory = @"BackUp";
         readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
         const string userGroupFile = @"UserGroup.toml";
         bool groupMenuOpen = false;
@@ -43,8 +44,8 @@ namespace StarsectorTools.Tools.ModManager
         string nowGroup = ModGroupType.All;
         Thread remindSaveThread = null!;
         ListBoxItem? nowSelectedListBoxItem = null;
-        HashSet<string> enabledModsId = new();
-        HashSet<string> collectedModsId = new();
+        HashSet<string> allEnabledModsId = new();
+        HashSet<string> allCollectedModsId = new();
         Dictionary<string, ModInfo> allModsInfo = new();
         Dictionary<string, ListBoxItem> allListBoxItemsFromGroups = new();
         Dictionary<string, ModShowInfo> allModsShowInfo = new();
@@ -206,12 +207,13 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = "导入已启用模组列表",
+                Title = "导入启用模组列表",
                 Filter = "Json File|*.json"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
-                GetEnabledMods(openFileDialog.FileName);
+                GetEnabledMods(openFileDialog.FileName, true);
+                RefreshAllSizeOfListBoxItems();
             }
         }
 
@@ -219,7 +221,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = "导出已启用模组列表",
+                Title = "导出启用模组列表",
                 Filter = "Json File|*.json"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
@@ -301,7 +303,7 @@ namespace StarsectorTools.Tools.ModManager
             // 连续点击无效,需要 e.Handled = true
             e.Handled = true;
             if (sender is DataGridRow row)
-                ModInfoShowChange(row.Tag.ToString()!);
+                ChangeModInfoShow(row.Tag.ToString()!);
         }
         private void DataGridItem_MouseMove(object sender, MouseEventArgs e)
         {
@@ -317,13 +319,13 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                SelectedModsEnabledChange(!bool.Parse(button.Tag.ToString()!));
+                ChangeSelectedModsEnabled(!bool.Parse(button.Tag.ToString()!));
         }
 
         private void Button_Collected_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                SelectedModsCollectedChange(!bool.Parse(button.Tag.ToString()!));
+                ChangeSelectedModsCollected(!bool.Parse(button.Tag.ToString()!));
         }
 
         private void Button_ModPath_Click(object sender, RoutedEventArgs e)
@@ -341,7 +343,7 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (var dependencie in allModsShowInfo[id].Dependencies!.Split(" , "))
                 {
                     if (allModsInfo.ContainsKey(dependencie))
-                        ModEnabledChange(dependencie, true);
+                        ChangeModEnabled(dependencie, true);
                     else
                     {
                         err ??= "作为前置的以下模组不存在\n";
@@ -351,7 +353,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (err != null)
                     MessageBox.Show(err);
                 CheckEnabledModsDependencies();
-                RefreAllSizeOfListBoxItems();
+                RefreshAllSizeOfListBoxItems();
                 StartRemindSaveThread();
             }
         }
@@ -366,7 +368,8 @@ namespace StarsectorTools.Tools.ModManager
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
                 GetUserGroup(openFileDialog.FileName);
-                RefreAllSizeOfListBoxItems();
+                RefreshModsContextMenu();
+                RefreshAllSizeOfListBoxItems();
             }
         }
 
@@ -392,7 +395,10 @@ namespace StarsectorTools.Tools.ModManager
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
+            {
                 allModsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
+                StartRemindSaveThread();
+            }
         }
         private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -409,8 +415,8 @@ namespace StarsectorTools.Tools.ModManager
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
-                        RefreshModsShowInfoContextMenu();
-                        RefreAllSizeOfListBoxItems();
+                        RefreshModsContextMenu();
+                        RefreshAllSizeOfListBoxItems();
                         window.Close();
                     }
                 }
@@ -467,7 +473,7 @@ namespace StarsectorTools.Tools.ModManager
                     try
                     {
                         XElement xes = XElement.Load(filePath);
-                        list = xes.Descendants("spec").Where(x => x.Element("group") != null).Select(x => (string)x.Element("group")!);
+                        list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
                     }
                     catch (Exception ex)
                     {
@@ -475,11 +481,15 @@ namespace StarsectorTools.Tools.ModManager
                         MessageBox.Show($"存档文件错误\n位置: {filePath}\n{ex}");
                         return;
                     }
-                    ClearEnabledMod();
+                    var result = MessageBox.Show("选择导入模式\nYes:替换 No:合并 Cancel:取消导入", "选择导入模式", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.Yes)
+                        ClearAllEnabledMods();
+                    else if (result == MessageBoxResult.Cancel)
+                        return;
                     foreach (string id in list)
                     {
                         if (allModsInfo.ContainsKey(id))
-                            ModEnabledChange(id, true);
+                            ChangeModEnabled(id, true);
                         else
                         {
                             STLog.Instance.WriteLine($"存档中启用的模组不存在 ID: {id}", STLogLevel.WARN);
@@ -566,12 +576,12 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenBackupDirectorie_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(modBackupDirectory))
-                ST.OpenFile(modBackupDirectory);
+            if (Directory.Exists(backupDirectory))
+                ST.OpenFile(backupDirectory);
             else
             {
-                STLog.Instance.WriteLine($"文件夹不存在 位置: {modBackupDirectory}", STLogLevel.WARN);
-                MessageBox.Show($"文件夹不存在\n 位置: {modBackupDirectory}");
+                STLog.Instance.WriteLine($"文件夹不存在 位置: {backupDirectory}", STLogLevel.WARN);
+                MessageBox.Show($"文件夹不存在\n 位置: {backupDirectory}");
             }
         }
 
@@ -620,15 +630,15 @@ namespace StarsectorTools.Tools.ModManager
                     return;
                 }
                 foreach (var info in allUserGroups[group])
-                    ModEnabledChange(info, false);
+                    ChangeModEnabled(info, false);
                 int needSize = new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(minSize, maxSize + 1);
                 HashSet<int> set = new();
                 while (set.Count < needSize)
                     set.Add(new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(0, count));
                 foreach (int i in set)
-                    ModEnabledChange(allUserGroups[group].ElementAt(i));
+                    ChangeModEnabled(allUserGroups[group].ElementAt(i));
                 CheckEnabledModsDependencies();
-                RefreAllSizeOfListBoxItems();
+                RefreshAllSizeOfListBoxItems();
             }
         }
 

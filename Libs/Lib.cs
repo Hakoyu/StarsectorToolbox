@@ -17,6 +17,9 @@ using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
 using Microsoft.VisualBasic.FileIO;
+using SharpCompress.Archives;
+using SharpCompress.Archives.Zip;
+using SharpCompress.Common;
 
 namespace StarsectorTools.Lib
 {
@@ -226,13 +229,38 @@ namespace StarsectorTools.Lib
             }
             return false;
         }
-        public static bool UnZipFile(string sourceFileName, string destDirName)
+        public static bool ArchiveDirToDir(string sourceDirName, string destDirName, string? archiveName = null)
+        {
+            if (!Directory.Exists(sourceDirName))
+                return false;
+            try
+            {
+                using (var archive = ZipArchive.Create())
+                {
+                    archive.AddAllFromDirectory(sourceDirName);
+                    if (archiveName is null)
+                        archive.SaveTo($"{destDirName}\\{Path.GetFileName(sourceDirName)}.zip", CompressionType.Deflate);
+                    else
+                        archive.SaveTo($"{destDirName}\\{archiveName}.zip", CompressionType.Deflate);
+                }
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"压缩文件错误 位置:{sourceDirName}", STLogLevel.WARN);
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
+                return false;
+            }
+            return true;
+        }
+        public static bool UnArchiveFileToDir(string sourceFileName, string destDirName)
         {
             if (!File.Exists(sourceFileName))
                 return false;
             using StreamReader sr = new(sourceFileName);
             string head = $"{sr.Read()}{sr.Read()}";
             sr.Close();
+            if (!Directory.Exists(destDirName))
+                Directory.CreateDirectory(destDirName);
             try
             {
                 if (head == "8075")
@@ -261,15 +289,16 @@ namespace StarsectorTools.Lib
                     STLog.Instance.WriteLine($"不支持的文件 位置: {sourceFileName}");
                     return false;
                 }
-                return true;
             }
-            catch
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"文件错误 位置:{sourceFileName}");
+                STLog.Instance.WriteLine($"文件错误 位置:{sourceFileName}", STLogLevel.WARN);
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
                 if (Directory.Exists(destDirName))
                     Directory.Delete(destDirName);
                 return false;
             }
+            return true;
         }
     }
     public class ModInfo
