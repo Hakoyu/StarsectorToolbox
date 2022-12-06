@@ -29,15 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Langs\MessageBox\MessageBoxCaption_I18n.Designer.cs">
+    <Compile Update="Langs\Libs\Libs_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>MessageBoxCaption_I18n.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Langs\MessageBox\MessageBoxText_I18n.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MessageBoxText_I18n.resx</DependentUpon>
+      <DependentUpon>Libs_I18n.resx</DependentUpon>
     </Compile>
     <Compile Update="Langs\Tools\GameSettings\GameSettings_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -57,13 +52,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Langs\MessageBox\MessageBoxCaption_I18n.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MessageBoxCaption_I18n.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Langs\MessageBox\MessageBoxText_I18n.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>MessageBoxText_I18n.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Langs\Libs\Libs_I18n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Libs_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Tools\GameSettings\GameSettings_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
