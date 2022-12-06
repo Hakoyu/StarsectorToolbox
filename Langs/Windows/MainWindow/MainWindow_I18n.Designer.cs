@@ -61,11 +61,66 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 第一次启动软件
+        ///请选择游戏启动程序 的本地化字符串。
+        /// </summary>
+        public static string FirstStart {
+            get {
+                return ResourceManager.GetString("FirstStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未确认游戏启动程序, 请重新选择 的本地化字符串。
+        /// </summary>
+        public static string GameNotFound_SelectAgain {
+            get {
+                return ResourceManager.GetString("GameNotFound_SelectAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未确认游戏启动程序, 软件即将退出 的本地化字符串。
+        /// </summary>
+        public static string GameNotFound_SoftwareExit {
+            get {
+                return ResourceManager.GetString("GameNotFound_SoftwareExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 初始化完成 的本地化字符串。
+        /// </summary>
+        public static string InitializationCompleted {
+            get {
+                return ResourceManager.GetString("InitializationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置文件错误,将恢复为默认设置 的本地化字符串。
+        /// </summary>
+        public static string SettingFileError {
+            get {
+                return ResourceManager.GetString("SettingFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 设置 的本地化字符串。
         /// </summary>
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 显示页面 的本地化字符串。
+        /// </summary>
+        public static string ShowPage {
+            get {
+                return ResourceManager.GetString("ShowPage", resourceCulture);
             }
         }
         

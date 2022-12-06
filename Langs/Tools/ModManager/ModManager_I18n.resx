@@ -1,0 +1,508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ModAddSuccess" xml:space="preserve">
+    <value>模组添加成功</value>
+  </data>
+  <data name="ModAddFailed" xml:space="preserve">
+    <value>模组添加失败</value>
+  </data>
+  <data name="ModAddSize" xml:space="preserve">
+    <value>模组添加 成功数量: {0} 失败数量: {1}</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="EnabledModsFile" xml:space="preserve">
+    <value>已启用模组文件</value>
+  </data>
+  <data name="NotExist" xml:space="preserve">
+    <value>不存在</value>
+  </data>
+  <data name="CreateFile" xml:space="preserve">
+    <value>创建文件</value>
+  </data>
+  <data name="SelectImportMode" xml:space="preserve">
+    <value>选择导入模式
+是:替换 否:合并 取消:取消</value>
+  </data>
+  <data name="LoadEnabledModsFile" xml:space="preserve">
+    <value>加载已启用模组文件</value>
+  </data>
+  <data name="EnableMod" xml:space="preserve">
+    <value>启用模组</value>
+  </data>
+  <data name="NotFoundMod" xml:space="preserve">
+    <value>未在游戏的模组文件夹中找到模组</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="LoadError" xml:space="preserve">
+    <value>加载失败</value>
+  </data>
+  <data name="LoadUserData" xml:space="preserve">
+    <value>加载用户数据</value>
+  </data>
+  <data name="LoadCollectedList" xml:space="preserve">
+    <value>加载收藏列表</value>
+  </data>
+  <data name="LoadUserCustomData" xml:space="preserve">
+    <value>加载用户自定义数据</value>
+  </data>
+  <data name="LoadUserGroup" xml:space="preserve">
+    <value>加载用户分组</value>
+  </data>
+  <data name="AlreadyExistUserGroup" xml:space="preserve">
+    <value>已存在相同名称的用户分组</value>
+  </data>
+  <data name="UserDataLoadError" xml:space="preserve">
+    <value>用户数据加载错误</value>
+  </data>
+  <data name="ModGroupFailedToGet" xml:space="preserve">
+    <value>模组分组获取失败</value>
+  </data>
+  <data name="ModShowInfoSetSuccess" xml:space="preserve">
+    <value>模组显示信息设置成功</value>
+  </data>
+  <data name="ShowGroup" xml:space="preserve">
+    <value>显示分组</value>
+  </data>
+  <data name="ClassifyTo" xml:space="preserve">
+    <value>分类至</value>
+  </data>
+  <data name="GroupContainsModCount" xml:space="preserve">
+    <value>分组 {0} 含有模组 {1} 个</value>
+  </data>
+  <data name="GroupCountRefreshComplete" xml:space="preserve">
+    <value>分组显示数量刷新完成</value>
+  </data>
+  <data name="ContextMenuRefreshComplete" xml:space="preserve">
+    <value>右键菜单刷新完成</value>
+  </data>
+  <data name="AddContextMenu" xml:space="preserve">
+    <value>添加右键菜单</value>
+  </data>
+  <data name="EnabledSelectedMods" xml:space="preserve">
+    <value>启用所选模组</value>
+  </data>
+  <data name="DisableSelectedMods" xml:space="preserve">
+    <value>禁用所选模组</value>
+  </data>
+  <data name="AddMenuItem" xml:space="preserve">
+    <value>添加菜单项</value>
+  </data>
+  <data name="CollectionSelectedMods" xml:space="preserve">
+    <value>收藏所选模组</value>
+  </data>
+  <data name="CancelCollectionSelectedMods" xml:space="preserve">
+    <value>取消收藏所选模组</value>
+  </data>
+  <data name="DeleteMod" xml:space="preserve">
+    <value>删除模组</value>
+  </data>
+  <data name="ConfirmDeleteMod" xml:space="preserve">
+    <value>确认删除模组</value>
+  </data>
+  <data name="AddModToUserGroup" xml:space="preserve">
+    <value>添加模组至用户分组</value>
+  </data>
+  <data name="RemoveFromUserGroup" xml:space="preserve">
+    <value>从用户分组中删除</value>
+  </data>
+  <data name="ChangeModUserGroup" xml:space="preserve">
+    <value>模组 {0} 在用户分组 {1} 的状态修改为 {2}</value>
+  </data>
+  <data name="DisableAllEnabledMods" xml:space="preserve">
+    <value>禁用所有已启用模组</value>
+  </data>
+  <data name="ModEnabledStatus" xml:space="preserve">
+    <value>启用状态修改为</value>
+  </data>
+  <data name="NotEnableDependencies" xml:space="preserve">
+    <value>未启用前置</value>
+  </data>
+  <data name="ModCollectedStatus" xml:space="preserve">
+    <value>收藏状态修改为</value>
+  </data>
+  <data name="SaveEnabledListSuccess" xml:space="preserve">
+    <value>保存启用列表成功</value>
+  </data>
+  <data name="SaveUserGroupSuccess" xml:space="preserve">
+    <value>保存用户分组成功</value>
+  </data>
+  <data name="CloseDetails" xml:space="preserve">
+    <value>关闭详情</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>名称</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本</value>
+  </data>
+  <data name="ShowDetails" xml:space="preserve">
+    <value>显示详情</value>
+  </data>
+  <data name="UnzipError" xml:space="preserve">
+    <value>解压错误</value>
+  </data>
+  <data name="SameModAlreadyExists" xml:space="preserve">
+    <value>已存在相同模组 是否覆盖?
+原始版本: {0}
+新增版本: {1}</value>
+  </data>
+  <data name="ReplaceMod" xml:space="preserve">
+    <value>替换模组</value>
+  </data>
+  <data name="ZipFileError" xml:space="preserve">
+    <value>压缩文件错误</value>
+  </data>
+  <data name="AddMod" xml:space="preserve">
+    <value>添加模组</value>
+  </data>
+  <data name="RemoveMod" xml:space="preserve">
+    <value>删除模组</value>
+  </data>
+  <data name="ReplaceGroupName" xml:space="preserve">
+    <value>重命名分组</value>
+  </data>
+  <data name="AddUserGroup" xml:space="preserve">
+    <value>添加用户分组</value>
+  </data>
+  <data name="AddUserNamingFailed" xml:space="preserve">
+    <value>命名失败,名字为空或者已存在相同名字的分组</value>
+  </data>
+  <data name="UserGroupCannotNamed" xml:space="preserve">
+    <value>不能命名为 {0} 或 {1}</value>
+  </data>
+  <data name="RemoveUserGroup" xml:space="preserve">
+    <value>删除用户分组</value>
+  </data>
+  <data name="SearchMod" xml:space="preserve">
+    <value>搜索模组</value>
+  </data>
+  <data name="InitialisationComplete" xml:space="preserve">
+    <value>初始化完成</value>
+  </data>
+  <data name="ImportEnabledModsListFromFile" xml:space="preserve">
+    <value>从文件导入已启用模组列表</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="ExportEnabledModsListToFile" xml:space="preserve">
+    <value>导出已启用模组列表至文件</value>
+  </data>
+  <data name="NotFoundDependencies" xml:space="preserve">
+    <value>未在游戏的模组文件夹中找到前置模组</value>
+  </data>
+  <data name="ImportUserDataFile" xml:space="preserve">
+    <value>导入用户数据文件</value>
+  </data>
+  <data name="ExportUserDataFile" xml:space="preserve">
+    <value>导出用户数据文件</value>
+  </data>
+  <data name="NotFoundFile" xml:space="preserve">
+    <value>未找到文件</value>
+  </data>
+  <data name="ImportEnabledModsListFromSave" xml:space="preserve">
+    <value>从游戏存档中导入已启用模组</value>
+  </data>
+  <data name="FileError" xml:space="preserve">
+    <value>文件错误</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>文件不存在</value>
+  </data>
+  <data name="ConfirmDragFiles" xml:space="preserve">
+    <value>确认倒拖入文件</value>
+  </data>
+  <data name="FolderNotExist" xml:space="preserve">
+    <value>文件夹不存在</value>
+  </data>
+  <data name="RandomNumberCannotNull" xml:space="preserve">
+    <value>最小随机数与最大随机数不能为空</value>
+  </data>
+  <data name="RandomNumberCannotLess0" xml:space="preserve">
+    <value>最小随机数不能小于 0</value>
+  </data>
+  <data name="RandomNumberCannotGreaterTotal" xml:space="preserve">
+    <value>最大随机数不能大于用户分组所含模组总数</value>
+  </data>
+  <data name="MinRandomNumberCannotGreaterMaxRandomNumber" xml:space="preserve">
+    <value>最小随机数不能大于最大随机数</value>
+  </data>
+  <data name="RefreshComplete" xml:space="preserve">
+    <value>刷新完成</value>
+  </data>
+  <data name="AllMods" xml:space="preserve">
+    <value>全部模组</value>
+  </data>
+  <data name="EnabledMod" xml:space="preserve">
+    <value>启用的模组</value>
+  </data>
+  <data name="DisabledMod" xml:space="preserve">
+    <value>禁用的模组</value>
+  </data>
+  <data name="GroupedByModType" xml:space="preserve">
+    <value>模组类型分组</value>
+  </data>
+  <data name="Libraries" xml:space="preserve">
+    <value>前置模组</value>
+  </data>
+  <data name="MegaMods" xml:space="preserve">
+    <value>大型模组</value>
+  </data>
+  <data name="FactionMods" xml:space="preserve">
+    <value>派系模组</value>
+  </data>
+  <data name="ContentExpansions" xml:space="preserve">
+    <value>内容拓展</value>
+  </data>
+  <data name="UtilityMods" xml:space="preserve">
+    <value>功能模组</value>
+  </data>
+  <data name="MiscellaneousMods" xml:space="preserve">
+    <value>闲杂模组</value>
+  </data>
+  <data name="BeautifyMods" xml:space="preserve">
+    <value>美化模组</value>
+  </data>
+  <data name="UnknownMods" xml:space="preserve">
+    <value>未分类模组</value>
+  </data>
+  <data name="UserGroup" xml:space="preserve">
+    <value>用户分组</value>
+  </data>
+  <data name="CollectedMods" xml:space="preserve">
+    <value>已收藏模组</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="UserDescription" xml:space="preserve">
+    <value>用户描述</value>
+  </data>
+  <data name="ShowModCollectionStatus" xml:space="preserve">
+    <value>显示模组的收藏状态</value>
+  </data>
+  <data name="ShowModEnableStatus" xml:space="preserve">
+    <value>显示模组的启用状态</value>
+  </data>
+  <data name="EnabledStatus" xml:space="preserve">
+    <value>启用状态</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>图标</value>
+  </data>
+  <data name="ShowModIcon" xml:space="preserve">
+    <value>显示模组图标</value>
+  </data>
+  <data name="ShowModName" xml:space="preserve">
+    <value>显示模组名称</value>
+  </data>
+  <data name="ShowModAuthor" xml:space="preserve">
+    <value>显示模组作者</value>
+  </data>
+  <data name="ShowModVersion" xml:space="preserve">
+    <value>显示模组版本</value>
+  </data>
+  <data name="GameVersion" xml:space="preserve">
+    <value>游戏版本</value>
+  </data>
+  <data name="ShowGameVersion" xml:space="preserve">
+    <value>显示模组支持的游戏版本</value>
+  </data>
+  <data name="Utility" xml:space="preserve">
+    <value>功能性模组</value>
+  </data>
+  <data name="ShowUtility" xml:space="preserve">
+    <value>显示是否为功能性模组</value>
+  </data>
+  <data name="ShowUserDescription" xml:space="preserve">
+    <value>显示用户描述</value>
+  </data>
+  <data name="EnableDependencies" xml:space="preserve">
+    <value>启用前置</value>
+  </data>
+  <data name="RefreshList" xml:space="preserve">
+    <value>刷新列表</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>打开目录</value>
+  </data>
+  <data name="OpenModsDirectory" xml:space="preserve">
+    <value>打开模组目录</value>
+  </data>
+  <data name="OpenModDirectory" xml:space="preserve">
+    <value>打开模组目录</value>
+  </data>
+  <data name="OpenBackupDirectory" xml:space="preserve">
+    <value>打开备份模组</value>
+  </data>
+  <data name="OpenSaveDirectory" xml:space="preserve">
+    <value>打开存档目录</value>
+  </data>
+  <data name="ManipulateUserData" xml:space="preserve">
+    <value>操作用户数据</value>
+  </data>
+  <data name="ManipulateEnabledList" xml:space="preserve">
+    <value>操作启用列表</value>
+  </data>
+  <data name="RandomEnableMods" xml:space="preserve">
+    <value>随机启用模组</value>
+  </data>
+  <data name="MinRandomNumber" xml:space="preserve">
+    <value>最小随机数量</value>
+  </data>
+  <data name="MaxRandomNumber" xml:space="preserve">
+    <value>最大随机数量</value>
+  </data>
+  <data name="SaveConfig" xml:space="preserve">
+    <value>保存配置</value>
+  </data>
+  <data name="StartGame" xml:space="preserve">
+    <value>启动游戏</value>
+  </data>
+  <data name="ModInfo" xml:space="preserve">
+    <value>模组信息</value>
+  </data>
+  <data name="CopyInfo" xml:space="preserve">
+    <value>复制信息</value>
+  </data>
+  <data name="Dependencies" xml:space="preserve">
+    <value>依赖模组</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="Collecte" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="NotCollected" xml:space="preserve">
+    <value>未收藏</value>
+  </data>
+  <data name="SupportedVersionSameAsGameVersion" xml:space="preserve">
+    <value>模组支持的版本与游戏版本一致</value>
+  </data>
+  <data name="SupportedVersionNotSameAsGameVersion" xml:space="preserve">
+    <value>模组支持的版本与游戏版本不一致
+可能会出现问题</value>
+  </data>
+  <data name="IsUtilityMod" xml:space="preserve">
+    <value>是功能性模组
+可以中途移除</value>
+  </data>
+  <data name="NotUtilityMod" xml:space="preserve">
+    <value>不是功能性模组
+不可以中途移除</value>
+  </data>
+  <data name="ModManager" xml:space="preserve">
+    <value>模组管理器</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>禁用</value>
+  </data>
+  <data name="CancelCollection" xml:space="preserve">
+    <value>取消收藏</value>
+  </data>
+</root>

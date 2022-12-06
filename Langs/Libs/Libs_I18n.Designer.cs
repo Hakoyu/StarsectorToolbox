@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.MessageBox {
+namespace StarsectorTools.Langs.Libs {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace StarsectorTools.Langs.MessageBox {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class MessageBoxText_I18n {
+    public class Libs_I18n {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal MessageBoxText_I18n() {
+        internal Libs_I18n() {
         }
         
         /// <summary>
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.MessageBox.MessageBoxText_I18n", typeof(MessageBoxText_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Libs.Libs_I18n", typeof(Libs_I18n).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace StarsectorTools.Langs.MessageBox {
         ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,11 +61,56 @@ namespace StarsectorTools.Langs.MessageBox {
         }
         
         /// <summary>
-        ///   查找类似 确认退出? 的本地化字符串。
+        ///   查找类似 文件 的本地化字符串。
         /// </summary>
-        internal static string ConfirmExit {
+        public static string File {
             get {
-                return ResourceManager.GetString("ConfirmExit", resourceCulture);
+                return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 游戏目录错误 的本地化字符串。
+        /// </summary>
+        public static string GameDirectoryError {
+            get {
+                return ResourceManager.GetString("GameDirectoryError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最大不能超过本机物理内存 的本地化字符串。
+        /// </summary>
+        public static string MaxMemory {
+            get {
+                return ResourceManager.GetString("MaxMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最小内存为 的本地化字符串。
+        /// </summary>
+        public static string MinMemory {
+            get {
+                return ResourceManager.GetString("MinMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 位置 的本地化字符串。
+        /// </summary>
+        public static string Path {
+            get {
+                return ResourceManager.GetString("Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 压缩文件错误 的本地化字符串。
+        /// </summary>
+        public static string ZipFileError {
+            get {
+                return ResourceManager.GetString("ZipFileError", resourceCulture);
             }
         }
     }

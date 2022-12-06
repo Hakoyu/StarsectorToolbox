@@ -25,19 +25,49 @@ using Panuon.WPF.UI;
 using System.ComponentModel;
 using System.Xml.Linq;
 using StarsectorTools.Tools.ModManager;
+using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager
 {
+    public static class ModGroupType
+    {
+        /// <summary>全部模组</summary>
+        public const string All = nameof(All);
+        /// <summary>已启用模组</summary>
+        public const string Enabled = nameof(Enabled);
+        /// <summary>未启用模组</summary>
+        public const string Disabled = nameof(Disabled);
+        /// <summary>前置模组</summary>
+        public const string Libraries = nameof(Libraries);
+        /// <summary>大型模组</summary>
+        public const string MegaMods = nameof(MegaMods);
+        /// <summary>派系模组</summary>
+        public const string FactionMods = nameof(FactionMods);
+        /// <summary>内容模组</summary>
+        public const string ContentExpansions = nameof(ContentExpansions);
+        /// <summary>功能模组</summary>
+        public const string UtilityMods = nameof(UtilityMods);
+        /// <summary>闲杂模组</summary>
+        public const string MiscellaneousMods = nameof(MiscellaneousMods);
+        /// <summary>美化模组</summary>
+        public const string BeautifyMods = nameof(BeautifyMods);
+        /// <summary>全部模组</summary>
+        public const string UnknownMods = nameof(UnknownMods);
+        /// <summary>已收藏模组</summary>
+        public const string Collected = nameof(Collected);
+    }
     /// <summary>
     /// ModManager.xaml 的交互逻辑
     /// </summary>
     public partial class ModManager : Page
     {
-        const string modGroupFile = @"ModGroup.toml";
+        const string modGroupFile = "ModGroup.toml";
         const string modBackupDirectory = @"BackUp\Mods";
-        const string backupDirectory = @"BackUp";
+        const string backupDirectory = "Backup";
         readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
-        const string userGroupFile = @"UserGroup.toml";
+        const string userGroupFile = "UserData.toml";
+        const string collected = "Collecte";
+        const string userCustomData = "UserCustomData";
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
@@ -52,39 +82,13 @@ namespace StarsectorTools.Tools.ModManager
         Dictionary<string, HashSet<string>> allUserGroups = new();
         Dictionary<string, HashSet<string>> modsIdFromGroups = new();
         Dictionary<string, ObservableCollection<ModShowInfo>> modsShowInfoFromGroup = new();
-        static class ModGroupType
-        {
-            /// <summary>全部模组</summary>
-            public const string All = "All";
-            /// <summary>已启用模组</summary>
-            public const string Enabled = "Enabled";
-            /// <summary>未启用模组</summary>
-            public const string Disable = "Disable";
-            /// <summary>前置模组</summary>
-            public const string Libraries = "Libraries";
-            /// <summary>大型模组</summary>
-            public const string Megamods = "Megamods";
-            /// <summary>派系模组</summary>
-            public const string FactionMods = "FactionMods";
-            /// <summary>内容模组</summary>
-            public const string ContentExpansions = "ContentExpansions";
-            /// <summary>功能模组</summary>
-            public const string UtilityMods = "UtilityMods";
-            /// <summary>闲杂模组</summary>
-            public const string MiscellaneousMods = "MiscellaneousMods";
-            /// <summary>美化模组</summary>
-            public const string BeautifyMods = "BeautifyMods";
-            /// <summary>全部模组</summary>
-            public const string Unknown = "Unknown";
-            /// <summary>已收藏模组</summary>
-            public const string Collected = "Collected";
-        };
+
         class ButtonStyle
         {
             public Style Enabled = null!;
             public Style Disable = null!;
-            public Style Collected = null!;
-            public Style Uncollected = null!;
+            public Style Collecte = null!;
+            public Style CancelCollection = null!;
         }
         readonly ButtonStyle buttonStyle = new();
         class LabelStyle
@@ -177,7 +181,7 @@ namespace StarsectorTools.Tools.ModManager
             InitializeComponent();
             InitializeData();
             RefreshList();
-            STLog.Instance.WriteLine("初始化完成");
+            STLog.Instance.WriteLine(I18n.InitialisationComplete);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -207,13 +211,13 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = "导入启用模组列表",
-                Filter = "Json File|*.json"
+                Title = I18n.ImportEnabledModsListFromFile,
+                Filter = $"Json {I18n.File}|*.json"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
                 GetEnabledMods(openFileDialog.FileName, true);
-                RefreshAllSizeOfListBoxItems();
+                RefreshCountOfListBoxItems();
             }
         }
 
@@ -221,8 +225,8 @@ namespace StarsectorTools.Tools.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = "导出启用模组列表",
-                Filter = "Json File|*.json"
+                Title = I18n.ExportEnabledModsListToFile,
+                Filter = $"Json {I18n.File}|*.json"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -245,11 +249,10 @@ namespace StarsectorTools.Tools.ModManager
                 ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Auto);
             }
             groupMenuOpen = !groupMenuOpen;
-            STLog.Instance.WriteLine($"分组菜单展开状态修改为 {groupMenuOpen}");
         }
         private void Grid_GroupMenu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, 0, 0);
+            Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
         }
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -258,34 +261,24 @@ namespace StarsectorTools.Tools.ModManager
             {
                 if (listBox.Name == ListBox_ModsGroupMenu.Name)
                 {
-                    ListBox_EnableStatus.SelectedIndex = -1;
-                    ListBox_GroupType.SelectedIndex = -1;
-                    ListBox_UserGroup.SelectedIndex = -1;
-                }
-                else if (listBox.Name == ListBox_EnableStatus.Name)
-                {
-                    ListBox_ModsGroupMenu.SelectedIndex = -1;
                     ListBox_GroupType.SelectedIndex = -1;
                     ListBox_UserGroup.SelectedIndex = -1;
                 }
                 else if (listBox.Name == ListBox_GroupType.Name)
                 {
                     ListBox_ModsGroupMenu.SelectedIndex = -1;
-                    ListBox_EnableStatus.SelectedIndex = -1;
                     ListBox_UserGroup.SelectedIndex = -1;
                 }
                 else if (listBox.Name == ListBox_UserGroup.Name)
                 {
                     ListBox_ModsGroupMenu.SelectedIndex = -1;
-                    ListBox_EnableStatus.SelectedIndex = -1;
                     ListBox_GroupType.SelectedIndex = -1;
                 }
                 nowSelectedListBoxItem = item;
                 if (allUserGroups.ContainsKey(item.ToolTip.ToString()!))
-                    Expander_RandomEnabled.Visibility = Visibility.Visible;
+                    Expander_RandomEnable.Visibility = Visibility.Visible;
                 else
-                    Expander_RandomEnabled.Visibility = Visibility.Collapsed;
-
+                    Expander_RandomEnable.Visibility = Visibility.Collapsed;
                 nowGroup = item.Tag.ToString()!;
                 ClearDataGridSelected();
                 SearchMods(TextBox_SearchMods.Text);
@@ -346,39 +339,39 @@ namespace StarsectorTools.Tools.ModManager
                         ChangeModEnabled(dependencie, true);
                     else
                     {
-                        err ??= "作为前置的以下模组不存在\n";
+                        err ??= $"{I18n.NotFoundDependencies}\n";
                         err += $"{dependencie}\n";
                     }
                 }
                 if (err != null)
                     MessageBox.Show(err);
                 CheckEnabledModsDependencies();
-                RefreshAllSizeOfListBoxItems();
+                RefreshCountOfListBoxItems();
                 StartRemindSaveThread();
             }
         }
 
-        private void Button_ImportUserGroup_Click(object sender, RoutedEventArgs e)
+        private void Button_ImportUserData_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = "导入用户分组",
-                Filter = "Toml File|*.toml"
+                Title = I18n.ImportUserDataFile,
+                Filter = $"Toml {I18n.File}|*.toml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
                 GetUserGroup(openFileDialog.FileName);
                 RefreshModsContextMenu();
-                RefreshAllSizeOfListBoxItems();
+                RefreshCountOfListBoxItems();
             }
         }
 
-        private void Button_ExportUserGroup_Click(object sender, RoutedEventArgs e)
+        private void Button_ExportUserData_Click(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = "导出用户列表",
-                Filter = "Toml File|*.toml"
+                Title = I18n.ExportUserDataFile,
+                Filter = $"Toml {I18n.File}|*.toml"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -400,7 +393,7 @@ namespace StarsectorTools.Tools.ModManager
                 StartRemindSaveThread();
             }
         }
-        private void Button_AddGroup_Click(object sender, RoutedEventArgs e)
+        private void Button_AddUserGroup_Click(object sender, RoutedEventArgs e)
         {
             AddUserGroup window = new();
             ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
@@ -410,18 +403,18 @@ namespace StarsectorTools.Tools.ModManager
                 string name = window.TextBox_Name.Text;
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
-                    if (name == "Collected" || name == "UserModsData")
-                        MessageBox.Show("不能命名为Collected或UserModsData");
+                    if (name == ModGroupType.Collected || name == userCustomData)
+                        MessageBox.Show(ST.I18nParseKey(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData));
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
                         RefreshModsContextMenu();
-                        RefreshAllSizeOfListBoxItems();
+                        RefreshCountOfListBoxItems();
                         window.Close();
                     }
                 }
                 else
-                    MessageBox.Show("创建失败,名字为空或者已存在相同名字的分组");
+                    MessageBox.Show(I18n.AddUserNamingFailed);
             };
             window.Button_Cancel.Click += (o, e) => window.Close();
             window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
@@ -446,8 +439,8 @@ namespace StarsectorTools.Tools.ModManager
             }
             else
             {
-                STLog.Instance.WriteLine($"启动错误\n 位置: {ST.gameExePath}", STLogLevel.WARN);
-                MessageBox.Show($"启动错误\n 位置: {ST.gameExePath}");
+                STLog.Instance.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExePath}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExePath}");
             }
         }
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
@@ -460,8 +453,8 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = "从游戏存档导入启动列表",
-                Filter = "Xml File|*.xml"
+                Title = I18n.ImportEnabledModsListFromSave,
+                Filter = $"Xml {I18n.File}|*.xml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -477,11 +470,11 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     catch (Exception ex)
                     {
-                        STLog.Instance.WriteLine($"存档文件错误 位置: {filePath}\n{ex}", STLogLevel.WARN);
-                        MessageBox.Show($"存档文件错误\n位置: {filePath}\n{ex}");
+                        STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n{ex}", STLogLevel.WARN);
+                        MessageBox.Show($"{I18n.FileError}\n{I18n.Path}: {filePath}\n{ex}");
                         return;
                     }
-                    var result = MessageBox.Show("选择导入模式\nYes:替换 No:合并 Cancel:取消导入", "选择导入模式", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                    var result = MessageBox.Show(I18n.SelectImportMode, "", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
                         ClearAllEnabledMods();
                     else if (result == MessageBoxResult.Cancel)
@@ -492,16 +485,16 @@ namespace StarsectorTools.Tools.ModManager
                             ChangeModEnabled(id, true);
                         else
                         {
-                            STLog.Instance.WriteLine($"存档中启用的模组不存在 ID: {id}", STLogLevel.WARN);
-                            err ??= "存档中启用的以下模组不存在\n";
+                            STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
+                            err ??= $"{I18n.NotFoundMod}\n";
                             err += $"{id}\n";
                         }
                     }
                 }
                 else
                 {
-                    STLog.Instance.WriteLine($"存档文件不存在 位置: {filePath}", STLogLevel.WARN);
-                    MessageBox.Show($"存档文件不存在\n位置: {filePath}");
+                    STLog.Instance.WriteLine($"{I18n.FileNotExist} {I18n.Path}: {filePath}", STLogLevel.WARN);
+                    MessageBox.Show($"{I18n.FileNotExist}\n{I18n.Path}: {filePath}");
                 }
                 if (err != null)
                     MessageBox.Show(err);
@@ -512,7 +505,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
-                STLog.Instance.WriteLine($"确认拖入文件 数量: {array.Length}");
+                STLog.Instance.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
                 Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = false);
                 new Task(() =>
                 {
@@ -544,8 +537,8 @@ namespace StarsectorTools.Tools.ModManager
                         }
                         else
                         {
-                            STLog.Instance.WriteLine($"无法导入文件夹 位置: {path}", STLogLevel.WARN);
-                            MessageBox.Show($"无法导入文件夹\n 位置: {path}");
+                            STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {path}", STLogLevel.WARN);
+                            MessageBox.Show($"{I18n.FileError}\n{I18n.Path}: {path}");
                         }
                     }
                     Dispatcher.BeginInvoke(() =>
@@ -563,49 +556,44 @@ namespace StarsectorTools.Tools.ModManager
             SearchMods(TextBox_SearchMods.Text);
         }
 
-        private void Button_OpenModDirectorie_Click(object sender, RoutedEventArgs e)
+        private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameModsPath))
                 ST.OpenFile(ST.gameModsPath);
             else
             {
-                STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameModsPath}", STLogLevel.WARN);
-                MessageBox.Show($"文件夹不存在\n 位置: {ST.gameModsPath}");
+                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameModsPath}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameModsPath}");
             }
         }
 
-        private void Button_OpenBackupDirectorie_Click(object sender, RoutedEventArgs e)
+        private void Button_OpenBackupDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(backupDirectory))
                 ST.OpenFile(backupDirectory);
             else
             {
-                STLog.Instance.WriteLine($"文件夹不存在 位置: {backupDirectory}", STLogLevel.WARN);
-                MessageBox.Show($"文件夹不存在\n 位置: {backupDirectory}");
+                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {backupDirectory}");
             }
         }
 
-        private void Button_OpenSaveDirectorie_Click(object sender, RoutedEventArgs e)
+        private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameSavePath))
                 ST.OpenFile(ST.gameSavePath);
             else
             {
-                STLog.Instance.WriteLine($"文件夹不存在 位置: {ST.gameSavePath}", STLogLevel.WARN);
-                MessageBox.Show($"文件夹不存在\n 位置: {ST.gameSavePath}");
+                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameSavePath}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameSavePath}");
             }
         }
 
         private void Button_RandomMods_Click(object sender, RoutedEventArgs e)
         {
-            if (allUserGroups.Count == 0)
-            {
-                MessageBox.Show($"用户分组不存在 无法随机");
-                return;
-            }
             if (TextBox_MinRandomSize.Text.Length == 0 || TextBox_MaxRandomSize.Text.Length == 0)
             {
-                MessageBox.Show($"最小随机数与最大随机数不能为空");
+                MessageBox.Show(I18n.RandomNumberCannotNull, "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
@@ -616,17 +604,17 @@ namespace StarsectorTools.Tools.ModManager
                 int count = allUserGroups[group].Count;
                 if (minSize < 0)
                 {
-                    MessageBox.Show($"最小随机数不能小于 0");
+                    MessageBox.Show(I18n.RandomNumberCannotLess0, "", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
                 else if (maxSize > count)
                 {
-                    MessageBox.Show($"最大随机数不能大于组内模组总数");
+                    MessageBox.Show(I18n.RandomNumberCannotGreaterTotal);
                     return;
                 }
                 else if (minSize > maxSize)
                 {
-                    MessageBox.Show($"最小随机数不能大于最大随机数");
+                    MessageBox.Show(I18n.MinRandomNumberCannotGreaterMaxRandomNumber);
                     return;
                 }
                 foreach (var info in allUserGroups[group])
@@ -638,14 +626,14 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (int i in set)
                     ChangeModEnabled(allUserGroups[group].ElementAt(i));
                 CheckEnabledModsDependencies();
-                RefreshAllSizeOfListBoxItems();
+                RefreshCountOfListBoxItems();
             }
         }
 
         private void Button_RefreshList_Click(object sender, RoutedEventArgs e)
         {
             RefreshList();
-            STLog.Instance.WriteLine("刷新完成");
+            STLog.Instance.WriteLine(I18n.RefreshComplete);
         }
 
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -659,6 +647,11 @@ namespace StarsectorTools.Tools.ModManager
                 if (sender is Control control && control.Parent is UIElement ui)
                     ui.RaiseEvent(eventArg);
             }
+        }
+
+        private void Grid_RightSide_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
         }
     }
 }

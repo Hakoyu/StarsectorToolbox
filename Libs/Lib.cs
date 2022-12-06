@@ -20,6 +20,7 @@ using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
+using I18n = StarsectorTools.Langs.Libs.Libs_I18n;
 
 namespace StarsectorTools.Lib
 {
@@ -109,8 +110,19 @@ namespace StarsectorTools.Lib
             else
             {
                 gameExePath = null!;
-                STLog.Instance.WriteLine($"游戏目录设置错误 位置: {path}", STLogLevel.ERROR);
-                MessageBox.Show($"游戏目录设置错误\n位置: {path}", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {path}", STLogLevel.ERROR);
+                MessageBox.Show($"{I18n.GameDirectoryError}\n{I18n.Path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        public static string I18nParseKey(string str, params object[] keys)
+        {
+            try
+            {
+                return string.Format(str, keys);
+            }
+            catch
+            {
+                return str;
             }
         }
         public static bool CopyDirectory(string sourcePath, string destPath)
@@ -150,7 +162,7 @@ namespace StarsectorTools.Lib
                 return false;
             }
         }
-        public static bool DeleteDirectoryToRecycleBin(string dirPath)
+        public static bool DeleteDirToRecycleBin(string dirPath)
         {
             try
             {
@@ -169,22 +181,13 @@ namespace StarsectorTools.Lib
         {
             if (size < 1024)
             {
-                MessageBox.Show("最小内存为 1024");
+                MessageBox.Show($"{I18n.MinMemory} 1024");
                 size = 1024;
             }
             else if (size > totalMemory)
             {
-                MessageBox.Show("最大不能超过本机物理内存");
+                MessageBox.Show(I18n.MaxMemory);
                 size = totalMemory;
-            }
-            return size;
-        }
-        public static int IntervalTimeParse(int size)
-        {
-            if (size.ToString().Length != 2)
-            {
-                size = 10;
-                MessageBox.Show("The value range is 10~99");
             }
             return size;
         }
@@ -212,7 +215,7 @@ namespace StarsectorTools.Lib
             {
                 //文件选择类型
                 //格式:文件描述|*.文件后缀(;*.文件后缀(适用于多个文件类型))|文件描述|*.文件后缀
-                Filter = "Exe File|*.exe"
+                Filter = $"Exe {I18n.File}|starsector.exe"
             };
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
@@ -246,7 +249,7 @@ namespace StarsectorTools.Lib
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"压缩文件错误 位置:{sourceDirName}", STLogLevel.WARN);
+                STLog.Instance.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirName}", STLogLevel.WARN);
                 STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
                 return false;
             }
@@ -285,14 +288,11 @@ namespace StarsectorTools.Lib
                     }
                 }
                 else
-                {
-                    STLog.Instance.WriteLine($"不支持的文件 位置: {sourceFileName}");
-                    return false;
-                }
+                    throw new Exception();
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"文件错误 位置:{sourceFileName}", STLogLevel.WARN);
+                STLog.Instance.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", STLogLevel.WARN);
                 STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
                 if (Directory.Exists(destDirName))
                     Directory.Delete(destDirName);

@@ -14,11 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using HKW.Management;
-using StarsectorTools.Langs.MessageBox;
 using StarsectorTools.Lib;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.IO;
+using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings
 {
@@ -36,6 +36,7 @@ namespace StarsectorTools.Tools.GameSettings
         string gameKey = "";
         string hideGameKey = "";
         bool showKey = false;
+        string gameLogPath = @$"{ST.gamePath}\starsector-core\starsector.log";
         public GameSettings()
         {
             InitializeComponent();
@@ -53,7 +54,7 @@ namespace StarsectorTools.Tools.GameSettings
             {
                 ST.GetGamePath();
                 if (!ST.TestGamePath())
-                    MessageBox.Show("游戏本体路径出错\n请重新选择", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK);
+                    MessageBox.Show(I18n.GameNotFound_SelectAgain, "", MessageBoxButton.OK, MessageBoxImage.Warning);
             } while (!ST.TestGamePath());
             Label_GamePath.Content = ST.gamePath;
         }
@@ -77,7 +78,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_CopyKey_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(gameKey);
-            MessageBox.Show("已成功将游戏序列码复制进剪切板。");
+            MessageBox.Show(I18n.ReplicationSuccess, "", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void Button_ShowKey_Click(object sender, RoutedEventArgs e)
@@ -96,24 +97,29 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenLogFile_Click(object sender, RoutedEventArgs e)
         {
-            string path = @$"{ST.gamePath}\starsector-core\starsector.log";
-            if (File.Exists(path))
-                ST.OpenFile(path);
+            if (File.Exists(gameLogPath))
+                ST.OpenFile(gameLogPath);
             else
-                MessageBox.Show($"Log文件不存在\n位置:{path}");
+            {
+                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogPath}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogPath}");
+            }
         }
 
         private void Button_ClearLogFile_Click(object sender, RoutedEventArgs e)
         {
-            string path = @$"{ST.gamePath}\starsector-core\starsector.log";
-            if (File.Exists(path))
+            if (File.Exists(gameLogPath))
             {
-                ST.DeleteFileToRecycleBin(path);
-                File.Create(path).Close();
-                MessageBox.Show($"Log文件清理完成");
+                ST.DeleteFileToRecycleBin(gameLogPath);
+                File.Create(gameLogPath).Close();
+                STLog.Instance.WriteLine(I18n.LogFileCleanCompleted);
+                MessageBox.Show(I18n.LogFileCleanCompleted);
             }
             else
-                MessageBox.Show($"Log文件不存在\n位置:{path}");
+            {
+                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogPath}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogPath}");
+            }
         }
 
         private void Button_ClearMissionsLoadouts_Click(object sender, RoutedEventArgs e)
@@ -126,20 +132,22 @@ namespace StarsectorTools.Tools.GameSettings
                     if (item.Content.ToString() == "All")
                     {
                         if (Directory.Exists(dirParh))
-                            ST.DeleteDirectoryToRecycleBin(dirParh);
+                            ST.DeleteDirToRecycleBin(dirParh);
                     }
                     else
                     {
-                        ST.DeleteDirectoryToRecycleBin($"{item.ToolTip}");
+                        ST.DeleteDirToRecycleBin($"{item.ToolTip}");
                         ComboBox_MissionsLoadouts.Items.Remove(item);
                     }
                 }
                 catch
                 {
-                    STLog.Instance.WriteLine($"文件夹不存在 位置: {item.ToolTip}");
-                    MessageBox.Show($"战役配装文件不存在\n位置: {item.ToolTip}");
+                    STLog.Instance.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {item.ToolTip}");
+                    MessageBox.Show($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {item.ToolTip}");
+                    return;
                 }
-                MessageBox.Show($"战役配装清理完成");
+                STLog.Instance.WriteLine(I18n.MissionsLoadoutsClearCompleted);
+                MessageBox.Show(I18n.MissionsLoadoutsClearCompleted);
             }
         }
 
@@ -155,8 +163,9 @@ namespace StarsectorTools.Tools.GameSettings
             var list = dirsPath.OrderBy(kv => kv.Value);
             int count = list.Count() - int.Parse(TextBox_ReservedSaveSize.Text);
             for (int i = 0; i < count; i++)
-                ST.DeleteDirectoryToRecycleBin(list.ElementAt(i).Key);
-            MessageBox.Show($"存档清理完成");
+                ST.DeleteDirToRecycleBin(list.ElementAt(i).Key);
+            STLog.Instance.WriteLine(I18n.SaveCleanCompleted);
+            MessageBox.Show(I18n.SaveCleanCompleted);
         }
 
         private void Button_OpenMissionsLoadoutsDirectory_Click(object sender, RoutedEventArgs e)
@@ -166,8 +175,8 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.OpenFile(dirParh);
             else
             {
-                STLog.Instance.WriteLine($"战役配装文件夹不存在 位置: {dirParh}");
-                MessageBox.Show($"战役配装文件不存在\n位置: {dirParh}");
+                STLog.Instance.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {dirParh}");
+                MessageBox.Show($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {dirParh}");
             }
         }
 
@@ -177,8 +186,8 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.OpenFile(ST.gameSavePath);
             else
             {
-                STLog.Instance.WriteLine($"战役配装文件夹不存在 位置: {ST.gameSavePath}");
-                MessageBox.Show($"战役配装文件不存在\n位置: {ST.gameSavePath}");
+                STLog.Instance.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSavePath}");
+                MessageBox.Show($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.gameSavePath}");
             }
         }
 

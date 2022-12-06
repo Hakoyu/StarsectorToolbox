@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using HKW.Management;
-using StarsectorTools.Langs.MessageBox;
 using StarsectorTools.Lib;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings
 {

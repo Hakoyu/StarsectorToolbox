@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
       xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-      xmlns:local="clr-namespace:StarsectorTools.Pages"
+      xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
+      xmlns:local="clr-namespace:StarsectorTools.Tools.ModManager"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ModManager" FontSize="16">
@@ -14,119 +15,108 @@
             <Setter Property="TextAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        <Style x:Key="EnabledStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
+        <Style x:Key="EnableStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorAqua2}"/>
-            <Setter Property="Content" Value="已启用"/>
-            <Setter Property="ToolTip" Value="已启用"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Disable}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Disable}"/>
             <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="DisableStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorRed2}"/>
-            <Setter Property="Content" Value="未启用"/>
-            <Setter Property="ToolTip" Value="未启用"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Enable}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Enable}"/>
             <Setter Property="Tag" Value="false"/>
         </Style>
-        <Style x:Key="CollectedStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
+        <Style x:Key="CollecteStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorYellow2}"/>
-            <Setter Property="Content" Value="已收藏"/>
-            <Setter Property="ToolTip" Value="已收藏"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.CancelCollection}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.CancelCollection}"/>
             <Setter Property="Tag" Value="true"/>
         </Style>
-        <Style x:Key="UncollectedStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
+        <Style x:Key="CancelCollectionStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
-            <Setter Property="Content" Value="未收藏"/>
-            <Setter Property="ToolTip" Value="未收藏"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Collecte}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Collecte}"/>
             <Setter Property="Tag" Value="false"/>
         </Style>
         <Style x:Key="GameVersionNormalStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
-            <Setter Property="ToolTip" Value="模组支持的版本与游戏版本一致"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.SupportedVersionSameAsGameVersion}"/>
         </Style>
         <Style x:Key="GameVersionWarnStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorYellow2}"/>
-            <Setter Property="ToolTip" Value="模组支持的版本与游戏版本不一致 可能会出现兼容性问题"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.SupportedVersionNotSameAsGameVersion}"/>
         </Style>
         <Style x:Key="IsUtilityStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorBlue2}"/>
             <Setter Property="Content" Value="✅"/>
-            <Setter Property="ToolTip" Value="是功能性模组 可以中途移除"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.IsUtilityMod}"/>
         </Style>
         <Style x:Key="NotUtilityStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
             <Setter Property="Content" Value="❎"/>
-            <Setter Property="ToolTip" Value="不是功能性模组 不可以中途移除"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.NotUtilityMod}"/>
         </Style>
     </Page.Resources>
     <Grid>
-        <GroupBox Header="模组管理器" Style="{StaticResource GroupBox_Style}">
+        <GroupBox Header="{x:Static I18n:ModManager_I18n.ModManager}" Style="{StaticResource GroupBox_Style}">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="546*"/>
-                    <ColumnDefinition Width="127*"/>
-                    <ColumnDefinition Width="125"/>
-                </Grid.ColumnDefinitions>
                 <Grid x:Name="Grid_GroupMenu" HorizontalAlignment="Left" SizeChanged="Grid_GroupMenu_SizeChanged" Width="120" >
                     <ListBox x:Name="ListBox_ModsGroupMenu" Margin="0,30,0,30" BorderThickness="0" pu:IconHelper.Margin="0,0,10,0" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" >
-                        <ListBoxItem Content="全部模组" Height="30" ToolTip="全部模组" Tag="All" Style="{StaticResource ListBoxItem_Style}">
+                        <ListBoxItem Content="{x:Static I18n:ModManager_I18n.AllMods}" Height="30" ToolTip="{x:Static I18n:ModManager_I18n.AllMods}" Tag="{x:Static local:ModGroupType.All}" Style="{StaticResource ListBoxItem_Style}">
                             <pu:ListBoxItemHelper.Icon>
                                 <emoji:TextBlock Text="🅰"/>
                             </pu:ListBoxItemHelper.Icon>
                         </ListBoxItem>
-                        <ListBoxItem Padding="0">
-                            <Expander IsExpanded="True" Header="启用状态分组" Style="{StaticResource Expander_Style}" Padding="0">
-                                <ListBox x:Name="ListBox_EnableStatus" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
-                                    <ListBoxItem Content="已启用模组" ToolTip="已启用模组" Tag="Enabled" Style="{StaticResource ListBoxItem_Style}">
-                                        <pu:ListBoxItemHelper.Icon>
-                                            <emoji:TextBlock Text="✅"/>
-                                        </pu:ListBoxItemHelper.Icon>
-                                    </ListBoxItem>
-                                    <ListBoxItem Content="未启用模组" ToolTip="未启用模组" Tag="Disable" Style="{StaticResource ListBoxItem_Style}">
-                                        <pu:ListBoxItemHelper.Icon>
-                                            <emoji:TextBlock Text="❎"/>
-                                        </pu:ListBoxItemHelper.Icon>
-                                    </ListBoxItem>
-                                </ListBox>
-                            </Expander>
+                        <ListBoxItem Content="{x:Static I18n:ModManager_I18n.EnabledMod}" ToolTip="{x:Static I18n:ModManager_I18n.EnabledMod}" Tag="{x:Static local:ModGroupType.Enabled}" Style="{StaticResource ListBoxItem_Style}">
+                            <pu:ListBoxItemHelper.Icon>
+                                <emoji:TextBlock Text="✅"/>
+                            </pu:ListBoxItemHelper.Icon>
+                        </ListBoxItem>
+                        <ListBoxItem Content="{x:Static I18n:ModManager_I18n.DisabledMod}" ToolTip="{x:Static I18n:ModManager_I18n.DisabledMod}" Tag="{x:Static local:ModGroupType.Disabled}" Style="{StaticResource ListBoxItem_Style}">
+                            <pu:ListBoxItemHelper.Icon>
+                                <emoji:TextBlock Text="❎"/>
+                            </pu:ListBoxItemHelper.Icon>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander Header="模组类型分组" Style="{StaticResource Expander_Style}" Padding="0">
+                            <Expander Header="{x:Static I18n:ModManager_I18n.GroupedByModType}" Style="{StaticResource Expander_Style}" Padding="0">
                                 <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
-                                    <ListBoxItem Content="前置模组" ToolTip="前置模组" Tag="Libraries" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.Libraries}" ToolTip="{x:Static I18n:ModManager_I18n.Libraries}" Tag="{x:Static local:ModGroupType.Libraries}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🔝"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="大型模组" ToolTip="大型模组" Tag="Megamods" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.MegaMods}" ToolTip="{x:Static I18n:ModManager_I18n.MegaMods}" Tag="{x:Static local:ModGroupType.MegaMods}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="☢"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="派系模组" ToolTip="派系模组" Tag="FactionMods" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.FactionMods}" ToolTip="{x:Static I18n:ModManager_I18n.FactionMods}" Tag="{x:Static local:ModGroupType.FactionMods}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🏁"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="内容模组" ToolTip="内容模组" Tag="ContentExpansions" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.ContentExpansions}" ToolTip="{x:Static I18n:ModManager_I18n.ContentExpansions}" Tag="{x:Static local:ModGroupType.ContentExpansions}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🆙"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="功能模组" ToolTip="功能模组" Tag="UtilityMods" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.UtilityMods}" ToolTip="{x:Static I18n:ModManager_I18n.UtilityMods}" Tag="{x:Static local:ModGroupType.UtilityMods}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🛠"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="闲杂模组" ToolTip="闲杂模组" Tag="MiscellaneousMods" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.MiscellaneousMods}" ToolTip="{x:Static I18n:ModManager_I18n.MiscellaneousMods}" Tag="{x:Static local:ModGroupType.MiscellaneousMods}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🛄"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="美化模组" ToolTip="美化模组" Tag="BeautifyMods" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.BeautifyMods}" ToolTip="{x:Static I18n:ModManager_I18n.BeautifyMods}" Tag="{x:Static local:ModGroupType.BeautifyMods}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="✨"/>
                                         </pu:ListBoxItemHelper.Icon>
                                     </ListBoxItem>
-                                    <ListBoxItem Content="未分类模组" ToolTip="未分类模组" Tag="Unknown" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.UnknownMods}" ToolTip="{x:Static I18n:ModManager_I18n.UnknownMods}" Tag="{x:Static local:ModGroupType.UnknownMods}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🆓"/>
                                         </pu:ListBoxItemHelper.Icon>
@@ -135,9 +125,9 @@
                             </Expander>
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
-                            <Expander IsExpanded="True" Header="用户分组" Style="{StaticResource Expander_Style}" Padding="0">
+                            <Expander IsExpanded="True" Header="{x:Static I18n:ModManager_I18n.UserGroup}" Style="{StaticResource Expander_Style}" Padding="0">
                                 <ListBox x:Name="ListBox_UserGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
-                                    <ListBoxItem Content="已收藏模组" ToolTip="已收藏模组" Tag="Collected" Style="{StaticResource ListBoxItem_Style}">
+                                    <ListBoxItem Content="{x:Static I18n:ModManager_I18n.CollectedMods}" ToolTip="{x:Static I18n:ModManager_I18n.CollectedMods}" Tag="{x:Static local:ModGroupType.Collected}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🌟"/>
                                         </pu:ListBoxItemHelper.Icon>
@@ -151,10 +141,10 @@
                             <emoji:TextBlock x:Name="Button_GroupMenuIcon" Text="📘"/>
                         </pu:ButtonHelper.Icon>
                     </Button>
-                    <Button x:Name="Button_AddGroup" Content="添加用户分组" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" Click="Button_AddGroup_Click"/>
+                    <Button x:Name="Button_AddUserGroup" Content="{x:Static I18n:ModManager_I18n.AddUserGroup}" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" Click="Button_AddUserGroup_Click"/>
                 </Grid>
-                <Grid x:Name="Grid_DataGrid" Margin="125,0,0,0" Grid.ColumnSpan="2" >
-                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False"   CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" Style="{StaticResource DataGrid_Style}">
+                <Grid x:Name="Grid_DataGrid" Margin="125,0,120,0" >
+                    <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False" CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" Style="{StaticResource DataGrid_Style}">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Tag" Value="{Binding Id}"/>
@@ -175,7 +165,7 @@
                         <DataGrid.Columns>
                             <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Collected">
                                 <DataGridTemplateColumn.Header>
-                                    <emoji:TextBlock Text="🌟" FontSize="20" ToolTip="显示模组的收藏状态" Background="{x:Null}"/>
+                                    <emoji:TextBlock Text="🌟" FontSize="20" ToolTip="{x:Static I18n:ModManager_I18n.ShowModCollectionStatus}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -185,7 +175,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Enabled">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="Enabled" ToolTip="显示模组的启用状态" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.EnabledStatus}" ToolTip="{x:Static I18n:ModManager_I18n.ShowModEnableStatus}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -195,7 +185,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="Icon" ToolTip="显示模组图标" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Icon}" ToolTip="{x:Static I18n:ModManager_I18n.ShowModIcon}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -205,7 +195,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="Name">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="Name" ToolTip="显示模组名称" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Name}" ToolTip="{x:Static I18n:ModManager_I18n.ShowModName}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -215,7 +205,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True" Width="100" CanUserSort="True" SortMemberPath="Author">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="Author" ToolTip="显示模组作者" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Author}" ToolTip="{x:Static I18n:ModManager_I18n.ShowModAuthor}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -225,7 +215,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="Version" ToolTip="显示模组版本" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Version}" ToolTip="{x:Static I18n:ModManager_I18n.ShowModVersion}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -235,7 +225,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="GameVersion">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="GameVersion" ToolTip="显示模组支持的游戏版本" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.GameVersion}" ToolTip="{x:Static I18n:ModManager_I18n.ShowGameVersion}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -245,7 +235,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="Utility">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="Utility" ToolTip="显示模组是否为功能性模组" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Utility}" ToolTip="{x:Static I18n:ModManager_I18n.ShowUtility}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -255,7 +245,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn IsReadOnly="True" CanUserSort="True" SortMemberPath="UserDescription">
                                 <DataGridTemplateColumn.Header>
-                                    <Label Content="UserDescription" ToolTip="显示用户描述" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.UserDescription}" ToolTip="{x:Static I18n:ModManager_I18n.ShowUserDescription}" Style="{StaticResource Label_Style}" Background="{x:Null}"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -267,7 +257,7 @@
                         <DataGrid.RowDetailsTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Height="{Binding RowDetailsHight}" >
-                                    <Button x:Name="Button_EnableDependencies" Content="启用以下前置模组:" Click="Button_EnableDependencies_Click" Style="{StaticResource Button_Style}" Padding="5,0,5,0"/>
+                                    <Button x:Name="Button_EnableDependencies" Content="{x:Static I18n:ModManager_I18n.EnableDependencies}" Click="Button_EnableDependencies_Click" Style="{StaticResource Button_Style}" Padding="5,0,5,0"/>
                                     <Label Content="{Binding Dependencies}" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}" HorizontalContentAlignment="Left" Background="{x:Null}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -275,151 +265,159 @@
                     </DataGrid>
                     <TextBox x:Name="TextBox_SearchMods" TextWrapping="Wrap" VerticalAlignment="Top" Height="30" Margin="0,0,120,0" TextChanged="TextBox_SearchMods_TextChanged" Style="{StaticResource TextBox_Style}"/>
                     <ComboBox x:Name="ComboBox_SearchType" VerticalAlignment="Top" Height="30" SelectedIndex="0" HorizontalAlignment="Right" Width="115" SelectionChanged="ComboBox_SearchType_SelectionChanged" Style="{StaticResource ComboBox_Style}" Margin="0,0,5,0">
-                        <ComboBoxItem Content="Name" Tag="Name" Style="{StaticResource ComboBoxItem_Style}"/>
-                        <ComboBoxItem Content="Id" Tag="Id" Style="{StaticResource ComboBoxItem_Style}"/>
-                        <ComboBoxItem Content="Author" Tag="Author" Style="{StaticResource ComboBoxItem_Style}"/>
-                        <ComboBoxItem Content="UserDescription" Tag="UserDescription" Style="{StaticResource ComboBoxItem_Style}"/>
+                        <ComboBoxItem Content="{x:Static I18n:ModManager_I18n.Name}" Tag="Name" Style="{StaticResource ComboBoxItem_Style}"/>
+                        <ComboBoxItem Content="ID" Tag="Id" Style="{StaticResource ComboBoxItem_Style}"/>
+                        <ComboBoxItem Content="{x:Static I18n:ModManager_I18n.Author}" Tag="Author" Style="{StaticResource ComboBoxItem_Style}"/>
+                        <ComboBoxItem Content="{x:Static I18n:ModManager_I18n.UserDescription}" Tag="UserDescription" Style="{StaticResource ComboBoxItem_Style}"/>
                     </ComboBox>
                 </Grid>
-                <Grid Grid.Column="2">
-                    <Button x:Name="Button_RefreshList" Content="刷新列表" Margin="5,0,5,0" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Top" Click="Button_RefreshList_Click">
+                <Grid x:Name="Grid_RightSide" HorizontalAlignment="Right" SizeChanged="Grid_RightSide_SizeChanged" MinWidth="120">
+                    <Button x:Name="Button_RefreshList" Content="{x:Static I18n:ModManager_I18n.RefreshList}" Margin="5,0,5,0" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Top" Click="Button_RefreshList_Click">
                         <pu:ButtonHelper.Icon>
                             <emoji:TextBlock Text="🔄"/>
                         </pu:ButtonHelper.Icon>
                     </Button>
                     <ScrollViewer Margin="0,35,0,80" VerticalScrollBarVisibility="Auto">
-                        <StackPanel Width="120">
-                            <Expander Header="打开目录" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                        <StackPanel>
+                            <Expander Header="{x:Static I18n:ModManager_I18n.OpenDirectory}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Button x:Name="Button_OpenModDirectorie" Content="打开模组目录" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenModDirectorie_Click" Margin="0,0,0,5"/>
-                                    <Button x:Name="Button_OpenBackupDirectorie" Content="打开备份目录" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenBackupDirectorie_Click"/>
-                                    <Button x:Name="Button_OpenSaveDirectorie" Content="打开存档目录" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenSaveDirectorie_Click"/>
+                                    <Button x:Name="Button_OpenModDirectory" Content="{x:Static I18n:ModManager_I18n.OpenModsDirectory}" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenModDirectory_Click" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_OpenBackupDirectory" Content="{x:Static I18n:ModManager_I18n.OpenBackupDirectory}" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenBackupDirectory_Click"/>
+                                    <Button x:Name="Button_OpenSaveDirectory" Content="{x:Static I18n:ModManager_I18n.OpenSaveDirectory}" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenSaveDirectory_Click"/>
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="用户分组" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                            <Expander Header="{x:Static I18n:ModManager_I18n.ManipulateUserData}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Button x:Name="Button_ImportUserGroup" Content="导入用户分组" Click="Button_ImportUserGroup_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
-                                    <Button x:Name="Button_ExportUserGroup" Content="导出用户分组" Click="Button_ExportUserGroup_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_ImportUserData" Content="{x:Static I18n:ModManager_I18n.ImportUserDataFile}" Click="Button_ImportUserData_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_ExportUserData" Content="{x:Static I18n:ModManager_I18n.ExportUserDataFile}" Click="Button_ExportUserData_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="启用列表" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                            <Expander Header="{x:Static I18n:ModManager_I18n.ManipulateEnabledList}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Button x:Name="Button_ImportEnabledListFromSave" Content="从存档导入列表" Margin="0,0,0,5" Click="Button_ImportEnabledListFromSave_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
-                                    <Button x:Name="Button_ImportEnabledList" Content="导入启用列表" Margin="0,0,0,5" Click="Button_ImportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
-                                    <Button x:Name="Button_ExportList" Content="导出启用列表" Margin="0,0,0,5" Click="Button_ExportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                    <Button x:Name="Button_ImportEnabledListFromSave" Content="{x:Static I18n:ModManager_I18n.ImportEnabledModsListFromSave}" Margin="0,0,0,5" Click="Button_ImportEnabledListFromSave_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                    <Button x:Name="Button_ImportEnabledList" Content="{x:Static I18n:ModManager_I18n.ImportEnabledModsListFromFile}" Margin="0,0,0,5" Click="Button_ImportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
+                                    <Button x:Name="Button_ExportList" Content="{x:Static I18n:ModManager_I18n.ExportEnabledModsListToFile}" Margin="0,0,0,5" Click="Button_ExportEnabledList_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom"/>
                                 </StackPanel>
                             </Expander>
-                            <Expander x:Name="Expander_RandomEnabled" Header="随机启用" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                            <Expander x:Name="Expander_RandomEnable" Header="{x:Static I18n:ModManager_I18n.RandomEnableMods}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Label Content="最小随机数量" Style="{StaticResource Label_Style}" Height="30"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.MinRandomNumber}" Style="{StaticResource Label_Style}" Height="30"/>
                                     <TextBox x:Name="TextBox_MinRandomSize" Style="{StaticResource TextBox_Style}" Height="30" Margin="0,0,0,5" PreviewTextInput="TextBox_NumberInput" InputMethod.IsInputMethodEnabled="False"/>
-                                    <Label Content="最大随机数量" Style="{StaticResource Label_Style}" Height="30"/>
+                                    <Label Content="{x:Static I18n:ModManager_I18n.MaxRandomNumber}" Style="{StaticResource Label_Style}" Height="30"/>
                                     <TextBox x:Name="TextBox_MaxRandomSize" Style="{StaticResource TextBox_Style}" Height="30" Margin="0,0,0,5" PreviewTextInput="TextBox_NumberInput" InputMethod.IsInputMethodEnabled="False"/>
-                                    <Button x:Name="Button_RandomMods" Content="随机启用模组" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_RandomMods_Click"/>
+                                    <Button x:Name="Button_RandomMods" Content="{x:Static I18n:ModManager_I18n.RandomEnableMods}" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_RandomMods_Click"/>
                                 </StackPanel>
                             </Expander>
                         </StackPanel>
                     </ScrollViewer>
-                    <Button x:Name="Button_Save" Content="保存配置" Margin="5,0,5,40" Click="Button_Save_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom">
+                    <Button x:Name="Button_Save" Content="{x:Static I18n:ModManager_I18n.SaveConfig}" Margin="5,0,5,40" Click="Button_Save_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom">
                         <pu:ButtonHelper.Icon>
                             <emoji:TextBlock Text="💾"/>
                         </pu:ButtonHelper.Icon>
                     </Button>
-                    <Button x:Name="Button_GameStart" Content="启动游戏" Margin="5,0,5,5" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom">
+                    <Button x:Name="Button_GameStart" Content="{x:Static I18n:ModManager_I18n.StartGame}" Margin="5,0,5,5" Click="Button_GameStart_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom">
                         <pu:ButtonHelper.Icon>
                             <emoji:TextBlock Text="▶"/>
                         </pu:ButtonHelper.Icon>
                     </Button>
                 </Grid>
-                <GroupBox x:Name="GroupBox_ModInfo" Grid.Column="1" Grid.ColumnSpan="2" Header="模组信息" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBG}" Visibility="Hidden">
-                    <ScrollViewer>
-                        <StackPanel>
-                            <Grid Margin="0,0,0,5">
-                                <Image x:Name="Image_ModImage" MaxHeight="100" />
-                            </Grid>
-                            <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <Label Content="Id:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
-                                <Label x:Name="Label_ModId" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
-                                    <Label.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </Label.ContextMenu>
-                                </Label>
+                <Grid x:Name="Grid_ModInfo" Width="360" HorizontalAlignment="Right" Visibility="Hidden">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="25*" MinWidth="200"/>
+                    </Grid.ColumnDefinitions>
+                    <GridSplitter Width="5" Foreground="{x:Null}" Background="{DynamicResource ColorFG}" Margin="0,0,-1,0" />
+                    <GroupBox x:Name="GroupBox_ModInfo" Header="{x:Static I18n:ModManager_I18n.ModInfo}" Style="{StaticResource GroupBox_Style}" Background="{DynamicResource ColorBG}" Grid.Column="1" >
+                        <ScrollViewer>
+                            <StackPanel>
+                                <Grid Margin="0,0,0,5">
+                                    <Image x:Name="Image_ModImage" MaxHeight="100" />
+                                </Grid>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <Label Content="ID:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
+                                    <Label x:Name="Label_ModId" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
+                                        <Label.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="Lable_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </Label.ContextMenu>
+                                    </Label>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <!--TODO 需要解决冒号问题-->
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Name}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
+                                    <Label x:Name="Label_ModName" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
+                                        <Label.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="Lable_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </Label.ContextMenu>
+                                    </Label>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                                    <Label Content="{x:Static I18n:ModManager_I18n.Version}" Height="30" Margin="0,0,5,0" Style="{StaticResource Label_Style}" HorizontalContentAlignment="Left"/>
+                                    <Label x:Name="Label_ModVersion" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
+                                        <Label.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="Lable_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </Label.ContextMenu>
+                                    </Label>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal" Cursor="">
+                                    <Label Content="{x:Static I18n:ModManager_I18n.GameVersion}" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
+                                    <Label x:Name="Label_GameVersion" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
+                                        <Label.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="Lable_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </Label.ContextMenu>
+                                    </Label>
+                                </StackPanel>
+                                <Grid Margin="0,0,0,5">
+                                    <Button x:Name="Button_ModPath" Click="Button_ModPath_Click" Height="30" Padding="5,0,0,0"
+                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" Cursor="Hand">
+                                        <Button.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="Button_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                    </Button>
+                                </Grid>
+                                <GroupBox Header="{x:Static I18n:ModManager_I18n.Author}" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
+                                    <TextBlock x:Name="TextBlock_ModAuthor" TextWrapping="Wrap" VerticalAlignment="Top" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="TextBlock_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </GroupBox>
+                                <GroupBox x:Name="GroupBox_ModDependencies" Header="{x:Static I18n:ModManager_I18n.Dependencies}" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
+                                    <TextBlock x:Name="TextBlock_ModDependencies" TextWrapping="Wrap" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="TextBlock_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </GroupBox>
+                                <GroupBox Header="{x:Static I18n:ModManager_I18n.Description}" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
+                                    <TextBlock x:Name="TextBlock_ModDescription" TextWrapping="Wrap" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                                                <MenuItem Header="{x:Static I18n:ModManager_I18n.CopyInfo}" Click="TextBlock_CopyInfo_Click"/>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </GroupBox>
+                                <GroupBox Header="{x:Static I18n:ModManager_I18n.UserDescription}" Style="{StaticResource GroupBox_Style}">
+                                    <TextBox x:Name="TextBox_UserDescription" TextWrapping="Wrap" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" KeyDown="TextBox_UserDescription_KeyDown" LostFocus="TextBox_UserDescription_LostFocus" Style="{StaticResource TextBox_Style}"/>
+                                </GroupBox>
                             </StackPanel>
-                            <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <Label Content="名称:" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
-                                <Label x:Name="Label_ModName" Content="Name" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
-                                    <Label.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </Label.ContextMenu>
-                                </Label>
-                            </StackPanel>
-                            <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <Label Content="模组版本:" Height="30" Margin="0,0,5,0" Style="{StaticResource Label_Style}" HorizontalContentAlignment="Left"/>
-                                <Label x:Name="Label_ModVersion" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
-                                    <Label.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </Label.ContextMenu>
-                                </Label>
-                            </StackPanel>
-                            <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
-                                <Label Content="支持的游戏版本:" Height="30" HorizontalContentAlignment="Left" Margin="0,0,5,0" Style="{StaticResource Label_Style}"/>
-                                <Label x:Name="Label_GameVersion" Content="Id" Height="30" HorizontalContentAlignment="Left" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" Style="{StaticResource Label_Style}">
-                                    <Label.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="Lable_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </Label.ContextMenu>
-                                </Label>
-                            </StackPanel>
-                            <Grid Margin="0,0,0,5">
-                                <Button x:Name="Button_ModPath" Click="Button_ModPath_Click" Height="30" Padding="5,0,0,0"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Content}" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}">
-                                    <Button.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="Button_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </Button.ContextMenu>
-                                </Button>
-                            </Grid>
-                            <GroupBox Header="作者" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
-                                <TextBlock x:Name="TextBlock_ModAuthor" TextWrapping="Wrap" Text="TextBlock894165486816816165165416168168716816871645" VerticalAlignment="Top" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
-                                    <TextBlock.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </TextBlock.ContextMenu>
-                                </TextBlock>
-                            </GroupBox>
-                            <GroupBox x:Name="GroupBox_ModDependencies" Header="依赖模组" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
-                                <TextBlock x:Name="TextBlock_ModDependencies" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
-                                    <TextBlock.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </TextBlock.ContextMenu>
-                                </TextBlock>
-                            </GroupBox>
-                            <GroupBox Header="描述" Style="{StaticResource GroupBox_Style}" Margin="0,0,0,5">
-                                <TextBlock x:Name="TextBlock_ModDescription" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" Style="{StaticResource TextBlock_Style}">
-                                    <TextBlock.ContextMenu>
-                                        <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                                            <MenuItem Header="复制信息" Click="TextBlock_CopyInfo_Click"/>
-                                        </ContextMenu>
-                                    </TextBlock.ContextMenu>
-                                </TextBlock>
-                            </GroupBox>
-                            <GroupBox Header="自定义描述" Style="{StaticResource GroupBox_Style}">
-                                <TextBox x:Name="TextBox_UserDescription" TextWrapping="Wrap" Text="TextBlock" ToolTip="{Binding RelativeSource={RelativeSource Mode=Self},Path=Text}" KeyDown="TextBox_UserDescription_KeyDown" LostFocus="TextBox_UserDescription_LostFocus" Style="{StaticResource TextBox_Style}"/>
-                            </GroupBox>
-                        </StackPanel>
-                    </ScrollViewer>
-                </GroupBox>
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
             </Grid>
         </GroupBox>
     </Grid>

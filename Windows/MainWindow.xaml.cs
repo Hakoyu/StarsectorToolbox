@@ -21,6 +21,7 @@ using StarsectorTools.Lib;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
+using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows
 {
@@ -37,8 +38,9 @@ namespace StarsectorTools.Windows
             InitializeComponent();
             //STLog.Instance.LogLevel = STLogLevel.DEBUG;
             STLog.Instance.LogLevel = STLogLevel.INFO;
-            STLog.Instance.WriteLine("初始化完成");
+            STLog.Instance.WriteLine(I18n.InitializationCompleted);
             SetConfig();
+            Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
@@ -86,6 +88,7 @@ namespace StarsectorTools.Windows
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
+            STLog.Instance.Close();
             Close();
             Process.GetCurrentProcess().Kill();
         }
@@ -138,7 +141,7 @@ namespace StarsectorTools.Windows
 
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
-            STLog.Instance.WriteLine($"显示菜单 {Frame_MainFrame.Content}");
+            STLog.Instance.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
         }
     }
 }

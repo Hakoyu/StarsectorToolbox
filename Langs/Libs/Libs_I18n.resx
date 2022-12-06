@@ -97,7 +97,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConfirmExit" xml:space="preserve">
-    <value>Confirm exit?</value>
+  <data name="Path" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="GameDirectoryError" xml:space="preserve">
+    <value>游戏目录错误</value>
+  </data>
+  <data name="MinMemory" xml:space="preserve">
+    <value>最小内存为</value>
+  </data>
+  <data name="MaxMemory" xml:space="preserve">
+    <value>最大不能超过本机物理内存</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="ZipFileError" xml:space="preserve">
+    <value>压缩文件错误</value>
   </data>
 </root>

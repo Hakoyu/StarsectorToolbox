@@ -103,4 +103,23 @@
   <data name="Settings" xml:space="preserve">
     <value>设置</value>
   </data>
+  <data name="FirstStart" xml:space="preserve">
+    <value>第一次启动软件
+请选择游戏启动程序</value>
+  </data>
+  <data name="GameNotFound_SoftwareExit" xml:space="preserve">
+    <value>未确认游戏启动程序, 软件即将退出</value>
+  </data>
+  <data name="GameNotFound_SelectAgain" xml:space="preserve">
+    <value>未确认游戏启动程序, 请重新选择</value>
+  </data>
+  <data name="SettingFileError" xml:space="preserve">
+    <value>设置文件错误,将恢复为默认设置</value>
+  </data>
+  <data name="InitializationCompleted" xml:space="preserve">
+    <value>初始化完成</value>
+  </data>
+  <data name="ShowPage" xml:space="preserve">
+    <value>显示页面</value>
+  </data>
 </root>

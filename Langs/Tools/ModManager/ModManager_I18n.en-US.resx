@@ -1,0 +1,508 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ModAddSuccess" xml:space="preserve">
+    <value>Mod add success</value>
+  </data>
+  <data name="ModAddFailed" xml:space="preserve">
+    <value>Mod add failed</value>
+  </data>
+  <data name="ModAddSize" xml:space="preserve">
+    <value>Mod add Success size: {0} Failed size: {1}</value>
+  </data>
+  <data name="Path" xml:space="preserve">
+    <value>Path</value>
+  </data>
+  <data name="EnabledModsFile" xml:space="preserve">
+    <value>Enabled mods file</value>
+  </data>
+  <data name="NotExist" xml:space="preserve">
+    <value>Not exist</value>
+  </data>
+  <data name="CreateFile" xml:space="preserve">
+    <value>Create file</value>
+  </data>
+  <data name="SelectImportMode" xml:space="preserve">
+    <value>Select import mode
+Yes:Replace No:Merge Cancel:Cancel</value>
+  </data>
+  <data name="LoadEnabledModsFile" xml:space="preserve">
+    <value>Loading enabled mods file</value>
+  </data>
+  <data name="EnableMod" xml:space="preserve">
+    <value>Enable mod</value>
+  </data>
+  <data name="NotFoundMod" xml:space="preserve">
+    <value>Not found in the game mods folder</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="LoadError" xml:space="preserve">
+    <value>Loading error</value>
+  </data>
+  <data name="LoadUserData" xml:space="preserve">
+    <value>Loading user data</value>
+  </data>
+  <data name="LoadCollectedList" xml:space="preserve">
+    <value>Loading collected list</value>
+  </data>
+  <data name="LoadUserCustomData" xml:space="preserve">
+    <value>Loading user custom data</value>
+  </data>
+  <data name="LoadUserGroup" xml:space="preserve">
+    <value>Loading user group</value>
+  </data>
+  <data name="AlreadyExistUserGroup" xml:space="preserve">
+    <value>User groups already exist with the same name</value>
+  </data>
+  <data name="UserDataLoadError" xml:space="preserve">
+    <value>User data loading error</value>
+  </data>
+  <data name="ModGroupFailedToGet" xml:space="preserve">
+    <value>ModGroup failed to get</value>
+  </data>
+  <data name="ShowGroup" xml:space="preserve">
+    <value>Show group</value>
+  </data>
+  <data name="ModShowInfoSetSuccess" xml:space="preserve">
+    <value>ModShowInfo set success</value>
+  </data>
+  <data name="ClassifyTo" xml:space="preserve">
+    <value>Classify to</value>
+  </data>
+  <data name="GroupContainsModCount" xml:space="preserve">
+    <value>Group {0} contains mod count {1}</value>
+  </data>
+  <data name="GroupCountRefreshComplete" xml:space="preserve">
+    <value>Group count display refresh complete</value>
+  </data>
+  <data name="ContextMenuRefreshComplete" xml:space="preserve">
+    <value>Context menu refresh complete</value>
+  </data>
+  <data name="AddContextMenu" xml:space="preserve">
+    <value>Add context menu</value>
+  </data>
+  <data name="EnabledSelectedMods" xml:space="preserve">
+    <value>Enabled selected mods</value>
+  </data>
+  <data name="DisableSelectedMods" xml:space="preserve">
+    <value>Disable selected mods</value>
+  </data>
+  <data name="AddMenuItem" xml:space="preserve">
+    <value>Add menu item</value>
+  </data>
+  <data name="CollectionSelectedMods" xml:space="preserve">
+    <value>Collection selected mods</value>
+  </data>
+  <data name="CancelCollectionSelectedMods" xml:space="preserve">
+    <value>Cancel collection selected mods</value>
+  </data>
+  <data name="DeleteMod" xml:space="preserve">
+    <value>Delete mod</value>
+  </data>
+  <data name="ConfirmDeleteMod" xml:space="preserve">
+    <value>Confirm delete mod</value>
+  </data>
+  <data name="AddModToUserGroup" xml:space="preserve">
+    <value>Add mod to user group</value>
+  </data>
+  <data name="RemoveFromUserGroup" xml:space="preserve">
+    <value>Remove from user group</value>
+  </data>
+  <data name="ChangeModUserGroup" xml:space="preserve">
+    <value>The status of mod {0} in user group {1} is change to {2}</value>
+  </data>
+  <data name="DisableAllEnabledMods" xml:space="preserve">
+    <value>Disable all enabled mods</value>
+  </data>
+  <data name="ModEnabledStatus" xml:space="preserve">
+    <value>Mod enabled status to</value>
+  </data>
+  <data name="NotEnableDependencies" xml:space="preserve">
+    <value>Not enable dependencies</value>
+  </data>
+  <data name="ModCollectedStatus" xml:space="preserve">
+    <value>Mod collected status to</value>
+  </data>
+  <data name="SaveEnabledListSuccess" xml:space="preserve">
+    <value>Save enabled list success</value>
+  </data>
+  <data name="SaveUserGroupSuccess" xml:space="preserve">
+    <value>Save user group success</value>
+  </data>
+  <data name="CloseDetails" xml:space="preserve">
+    <value>Close details</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="ShowDetails" xml:space="preserve">
+    <value>Show details</value>
+  </data>
+  <data name="UnzipError" xml:space="preserve">
+    <value>Unzip error</value>
+  </data>
+  <data name="ReplaceMod" xml:space="preserve">
+    <value>Replace mod</value>
+  </data>
+  <data name="SameModAlreadyExists" xml:space="preserve">
+    <value>Does the same mod already exist, replace it?
+Original Version: {0}
+New Version: {1}</value>
+  </data>
+  <data name="ZipFileError" xml:space="preserve">
+    <value>Zip file error</value>
+  </data>
+  <data name="AddMod" xml:space="preserve">
+    <value>Add mod</value>
+  </data>
+  <data name="RemoveMod" xml:space="preserve">
+    <value>Remove mod</value>
+  </data>
+  <data name="ReplaceGroupName" xml:space="preserve">
+    <value>Replace group name</value>
+  </data>
+  <data name="AddUserGroup" xml:space="preserve">
+    <value>Add user group</value>
+  </data>
+  <data name="AddUserNamingFailed" xml:space="preserve">
+    <value>Naming failure, name is empty or group with same name already exists</value>
+  </data>
+  <data name="UserGroupCannotNamed" xml:space="preserve">
+    <value>Cannot be named {0} or {1}</value>
+  </data>
+  <data name="RemoveUserGroup" xml:space="preserve">
+    <value>Remove user group</value>
+  </data>
+  <data name="SearchMod" xml:space="preserve">
+    <value>Search mod</value>
+  </data>
+  <data name="InitialisationComplete" xml:space="preserve">
+    <value>Initialisation complete</value>
+  </data>
+  <data name="ImportEnabledModsListFromFile" xml:space="preserve">
+    <value>Import from file</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="ExportEnabledModsListToFile" xml:space="preserve">
+    <value>Export to file</value>
+  </data>
+  <data name="NotFoundDependencies" xml:space="preserve">
+    <value>Not found dependencies in the game mods folder</value>
+  </data>
+  <data name="ImportUserDataFile" xml:space="preserve">
+    <value>Import user data file</value>
+  </data>
+  <data name="ExportUserDataFile" xml:space="preserve">
+    <value>Export user data file</value>
+  </data>
+  <data name="NotFoundFile" xml:space="preserve">
+    <value>Not found file</value>
+  </data>
+  <data name="ImportEnabledModsListFromSave" xml:space="preserve">
+    <value>Import from game save</value>
+  </data>
+  <data name="FileError" xml:space="preserve">
+    <value>File error</value>
+  </data>
+  <data name="FileNotExist" xml:space="preserve">
+    <value>File not exits</value>
+  </data>
+  <data name="ConfirmDragFiles" xml:space="preserve">
+    <value>Confirm dragging in the files</value>
+  </data>
+  <data name="FolderNotExist" xml:space="preserve">
+    <value>Folder not exist</value>
+  </data>
+  <data name="RandomNumberCannotNull" xml:space="preserve">
+    <value>Minimum random number and maximum random number cannot be null</value>
+  </data>
+  <data name="RandomNumberCannotLess0" xml:space="preserve">
+    <value>The min random number cannot be less than 0</value>
+  </data>
+  <data name="RandomNumberCannotGreaterTotal" xml:space="preserve">
+    <value>The max random number cannot be greater than the total number of mod contained in the user group</value>
+  </data>
+  <data name="MinRandomNumberCannotGreaterMaxRandomNumber" xml:space="preserve">
+    <value>The min random number cannot be greater than the max random number</value>
+  </data>
+  <data name="RefreshComplete" xml:space="preserve">
+    <value>Refresh complete</value>
+  </data>
+  <data name="AllMods" xml:space="preserve">
+    <value>All mods</value>
+  </data>
+  <data name="EnabledMod" xml:space="preserve">
+    <value>Enabled mod</value>
+  </data>
+  <data name="DisabledMod" xml:space="preserve">
+    <value>Disabled mod</value>
+  </data>
+  <data name="GroupedByModType" xml:space="preserve">
+    <value>Grouped by mod type</value>
+  </data>
+  <data name="Libraries" xml:space="preserve">
+    <value>Libraries</value>
+  </data>
+  <data name="MegaMods" xml:space="preserve">
+    <value>Mega Mods</value>
+  </data>
+  <data name="FactionMods" xml:space="preserve">
+    <value>Faction Mods</value>
+  </data>
+  <data name="ContentExpansions" xml:space="preserve">
+    <value>Content Expansions</value>
+  </data>
+  <data name="UtilityMods" xml:space="preserve">
+    <value>Utility Mods</value>
+  </data>
+  <data name="MiscellaneousMods" xml:space="preserve">
+    <value>Miscellaneous Mods</value>
+  </data>
+  <data name="BeautifyMods" xml:space="preserve">
+    <value>Beautify Mods</value>
+  </data>
+  <data name="UnknownMods" xml:space="preserve">
+    <value>Unknown Mods</value>
+  </data>
+  <data name="UserGroup" xml:space="preserve">
+    <value>User group</value>
+  </data>
+  <data name="CollectedMods" xml:space="preserve">
+    <value>Collected Mods</value>
+  </data>
+  <data name="Author" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="UserDescription" xml:space="preserve">
+    <value>User description</value>
+  </data>
+  <data name="ShowModCollectionStatus" xml:space="preserve">
+    <value>Show mod collection status</value>
+  </data>
+  <data name="ShowModEnableStatus" xml:space="preserve">
+    <value>Show mod enable status</value>
+  </data>
+  <data name="EnabledStatus" xml:space="preserve">
+    <value>Enabled status</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="ShowModIcon" xml:space="preserve">
+    <value>Show mod icon</value>
+  </data>
+  <data name="ShowModName" xml:space="preserve">
+    <value>Show mod name</value>
+  </data>
+  <data name="ShowModAuthor" xml:space="preserve">
+    <value>Show mod author</value>
+  </data>
+  <data name="ShowModVersion" xml:space="preserve">
+    <value>Show mod version</value>
+  </data>
+  <data name="GameVersion" xml:space="preserve">
+    <value>Game versions</value>
+  </data>
+  <data name="ShowGameVersion" xml:space="preserve">
+    <value>Show mod supported game versions</value>
+  </data>
+  <data name="Utility" xml:space="preserve">
+    <value>Utility</value>
+  </data>
+  <data name="ShowUtility" xml:space="preserve">
+    <value>Show if utility mod</value>
+  </data>
+  <data name="ShowUserDescription" xml:space="preserve">
+    <value>Show user description</value>
+  </data>
+  <data name="EnableDependencies" xml:space="preserve">
+    <value>Enable dependencies</value>
+  </data>
+  <data name="RefreshList" xml:space="preserve">
+    <value>Refresh list</value>
+  </data>
+  <data name="OpenDirectory" xml:space="preserve">
+    <value>Open directory</value>
+  </data>
+  <data name="OpenModsDirectory" xml:space="preserve">
+    <value>Open mods directory</value>
+  </data>
+  <data name="OpenModDirectory" xml:space="preserve">
+    <value>Open mod directory</value>
+  </data>
+  <data name="OpenBackupDirectory" xml:space="preserve">
+    <value>Open backup directory</value>
+  </data>
+  <data name="OpenSaveDirectory" xml:space="preserve">
+    <value>Open save directory</value>
+  </data>
+  <data name="ManipulateUserData" xml:space="preserve">
+    <value>Manipulate user data</value>
+  </data>
+  <data name="ManipulateEnabledList" xml:space="preserve">
+    <value>Manipula enabled list</value>
+  </data>
+  <data name="RandomEnableMods" xml:space="preserve">
+    <value>Random enable mods</value>
+  </data>
+  <data name="MinRandomNumber" xml:space="preserve">
+    <value>Min random number</value>
+  </data>
+  <data name="MaxRandomNumber" xml:space="preserve">
+    <value>Max random number</value>
+  </data>
+  <data name="SaveConfig" xml:space="preserve">
+    <value>Save config</value>
+  </data>
+  <data name="StartGame" xml:space="preserve">
+    <value>Start game</value>
+  </data>
+  <data name="ModInfo" xml:space="preserve">
+    <value>Mod info</value>
+  </data>
+  <data name="CopyInfo" xml:space="preserve">
+    <value>Copy info</value>
+  </data>
+  <data name="Dependencies" xml:space="preserve">
+    <value>Dependencies</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="Collecte" xml:space="preserve">
+    <value>Collecte</value>
+  </data>
+  <data name="NotCollected" xml:space="preserve">
+    <value>Not collected</value>
+  </data>
+  <data name="SupportedVersionSameAsGameVersion" xml:space="preserve">
+    <value>The supported version is the same as the game version</value>
+  </data>
+  <data name="SupportedVersionNotSameAsGameVersion" xml:space="preserve">
+    <value>The supported version is not the same as the game version
+Problems may arise</value>
+  </data>
+  <data name="IsUtilityMod" xml:space="preserve">
+    <value>Is utility mod
+Can be removed midway</value>
+  </data>
+  <data name="NotUtilityMod" xml:space="preserve">
+    <value>Is not utility mod
+Cannot be removed midway</value>
+  </data>
+  <data name="ModManager" xml:space="preserve">
+    <value>ModManager</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="CancelCollection" xml:space="preserve">
+    <value>Cancel collection</value>
+  </data>
+</root>

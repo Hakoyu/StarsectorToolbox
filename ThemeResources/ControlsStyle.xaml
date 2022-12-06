@@ -160,7 +160,7 @@
         <Setter Property="pu:ShadowHelper.ShadowDepth" Value="3"/>
         <Setter Property="pu:ContextMenuHelper.ShadowColor" Value="{DynamicResource ColorAqua}"/>
         <Setter Property="pu:ContextMenuHelper.ItemsWidth" Value="NaN"/>
-        <Setter Property="pu:ContextMenuHelper.ItemsIconWidth" Value="0"/>
+        <!--<Setter Property="pu:ContextMenuHelper.ItemsIconWidth" Value="0"/>-->
         <Setter Property="pu:ContextMenuHelper.ItemsHoverBackground" Value="{DynamicResource ColorLight2}"/>
         <Setter Property="pu:ContextMenuHelper.ItemsCheckedBackground" Value="{DynamicResource ColorLightBlue2}"/>
         <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBG}"/>

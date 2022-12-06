@@ -1,7 +1,7 @@
 # 前置模组
 "Libraries" = ["lw_lazylib", "MagicLib", "shaderLib"]
 # 大型模组
-"Megamods" = ["nexerelin", "IndEvo"]
+"MegaMods" = ["nexerelin", "IndEvo"]
 # 内容模组
 "ContentExpansions" = [
     "BSC",
