@@ -197,6 +197,8 @@ namespace StarsectorTools.Lib
         }
         public static void CreateConfigFile()
         {
+            if (File.Exists(configPath))
+                File.Delete(configPath);
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
             string str = sr.ReadToEnd();
             File.WriteAllText(configPath, str);

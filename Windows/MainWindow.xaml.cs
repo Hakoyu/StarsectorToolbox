@@ -42,7 +42,11 @@ namespace StarsectorTools.Windows
             //STLog.Instance.LogLevel = STLogLevel.DEBUG;
             STLog.Instance.LogLevel = STLogLevel.INFO;
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
-            SetConfig();
+            if (!SetConfig())
+            {
+                Close();
+                return;
+            }
             ChangeLanguage();
             //亚克力背景
             //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
@@ -112,7 +116,7 @@ namespace StarsectorTools.Windows
         {
             if (ListBox_Menu.SelectedIndex >= 0)
             {
-                Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Content.ToString()!];
+                Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Tag.ToString()!];
             }
         }
 
@@ -134,7 +138,7 @@ namespace StarsectorTools.Windows
             // 将事件焦点转移到this
             DependencyObject scope = FocusManager.GetFocusScope(this);
             FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
-            ((ModManager)menuList["ModManager"]).CloseModInfo();
+            ((ModManager)menuList[nameof(ModManager)]).CloseModInfo();
         }
 
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)

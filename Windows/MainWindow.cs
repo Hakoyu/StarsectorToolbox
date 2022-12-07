@@ -14,12 +14,13 @@ using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using Panuon.WPF.UI;
+using System.Reflection;
 
 namespace StarsectorTools.Windows
 {
     public partial class MainWindow
     {
-        void SetConfig()
+        bool SetConfig()
         {
             try
             {
@@ -34,7 +35,7 @@ namespace StarsectorTools.Windows
                         {
                             MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
                             toml.Close();
-                            Close();
+                            return false;
                         }
                         toml["Game"]["GamePath"] = ST.gamePath;
                     }
@@ -42,14 +43,13 @@ namespace StarsectorTools.Windows
                 }
                 else
                 {
-                    ST.CreateConfigFile();
-                    using TomlTable toml = TOML.Parse(ST.configPath);
                     if (!(MessageBox.Show(this, I18n.FirstStart, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                     {
                         MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
-                        toml.Close();
-                        Close();
+                        return false;
                     }
+                    ST.CreateConfigFile();
+                    using TomlTable toml = TOML.Parse(ST.configPath);
                     toml["Game"]["GamePath"] = ST.gamePath;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.configPath);
@@ -59,12 +59,14 @@ namespace StarsectorTools.Windows
             {
                 ConfigLoadError();
             }
+            return true;
         }
         void ConfigLoadError()
         {
             SetBlurEffect();
             MessageBox.Show(I18n.ConfigFileError, "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            SetConfig();
+            ST.CreateConfigFile();
+            //SetConfig();
             RemoveBlurEffect();
         }
         private void SetBlurEffect()
@@ -85,24 +87,29 @@ namespace StarsectorTools.Windows
         public void RefreshMenuList()
         {
             ClearMenu();
-            AddMemu("🌐", I18n.ModManager, new ModManager());
-            AddMemu("⚙", I18n.GameSettings, new GameSettings());
+            AddMemu("🌐", I18n.ModManager, nameof(ModManager), new ModManager());
+            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), new GameSettings());
 
             STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
         }
         void ClearMenu()
         {
+            foreach (Page page in menuList.Values)
+                if (page.GetType().GetMethod("Close") is MethodInfo info)
+                    _ = info.Invoke(page, null)!;
             menuList.Clear();
             ListBox_Menu.Items.Clear();
         }
-        void AddMemu(string icon, string name, Page page)
+        void AddMemu(string icon, string name, string tag, Page page)
         {
             var item = new ListBoxItem();
             item.Content = name;
+            item.ToolTip = name;
+            item.Tag = tag;
             item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
             ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
             ListBox_Menu.Items.Add(item);
-            menuList.Add(name, page);
+            menuList.Add(tag, page);
             STLog.Instance.WriteLine($"{I18n.AddMenu} {Icon} {name} {page}");
         }
     }

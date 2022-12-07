@@ -194,7 +194,7 @@ namespace HKW.TomlParse
         public bool MultilineTrimFirstLine { get; set; }
         public bool PreferLiteral { get; set; }
 
-        public string Value { get; set; } = null!;
+        public string Value { get; set; } = "";
 
         public override string ToString() => Value;
 

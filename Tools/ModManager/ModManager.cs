@@ -30,6 +30,10 @@ namespace StarsectorTools.Tools.ModManager
 {
     public partial class ModManager
     {
+        public void Close()
+        {
+            ResetRemindSaveThread();
+        }
         void InitializeData()
         {
             buttonStyle.Enabled = (Style)Resources["EnableStyle"];
