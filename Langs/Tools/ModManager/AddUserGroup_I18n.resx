@@ -97,44 +97,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="StarsectorTools" xml:space="preserve">
-    <value>StarsectorTools</value>
+  <data name="SetUserGroupInfo" xml:space="preserve">
+    <value>设置用户分组信息</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Icon" xml:space="preserve">
+    <value>图标</value>
   </data>
-  <data name="FirstStart" xml:space="preserve">
-    <value>Start the software for the first time
-Please select the game launcher</value>
+  <data name="Name" xml:space="preserve">
+    <value>名称</value>
   </data>
-  <data name="GameNotFound_SoftwareExit" xml:space="preserve">
-    <value>Game launcher not found, software is about to exit</value>
+  <data name="Preview" xml:space="preserve">
+    <value>预览</value>
   </data>
-  <data name="GameNotFound_SelectAgain" xml:space="preserve">
-    <value>Game launcher not found, please select again</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
   </data>
-  <data name="ConfigFileError" xml:space="preserve">
-    <value>Config file error, will restore the default</value>
-  </data>
-  <data name="InitializationCompleted" xml:space="preserve">
-    <value>Initialization completed</value>
-  </data>
-  <data name="ShowPage" xml:space="preserve">
-    <value>Show page</value>
-  </data>
-  <data name="MenuListRefreshComplete" xml:space="preserve">
-    <value>Menu list refresh complete</value>
-  </data>
-  <data name="AddMenu" xml:space="preserve">
-    <value>Add menu</value>
-  </data>
-  <data name="ModManager" xml:space="preserve">
-    <value>ModManager</value>
-  </data>
-  <data name="GameSettings" xml:space="preserve">
-    <value>GameSettings</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
+  <data name="Yes" xml:space="preserve">
+    <value>确定</value>
   </data>
 </root>

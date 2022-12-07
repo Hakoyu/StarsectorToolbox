@@ -34,10 +34,25 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Libs_I18n.resx</DependentUpon>
     </Compile>
+    <Compile Update="Langs\Pages\Settings_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings_I18n.resx</DependentUpon>
+    </Compile>
     <Compile Update="Langs\Tools\GameSettings\GameSettings_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GameSettings_I18n.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Langs\Tools\ModManager\AddUserGroup_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AddUserGroup_I18n.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Langs\Tools\ModManager\ModArchiveing_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModArchiveing_I18n.resx</DependentUpon>
     </Compile>
     <Compile Update="Langs\Tools\ModManager\ModManager_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -56,9 +71,21 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Libs_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Pages\Settings_I18n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Settings_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Langs\Tools\GameSettings\GameSettings_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GameSettings_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Tools\ModManager\AddUserGroup_I18n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AddUserGroup_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Tools\ModManager\ModArchiveing_I18n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModArchiveing_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Tools\ModManager\ModManager_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -68,10 +95,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MainWindow_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Langs\Pages\" />
   </ItemGroup>
 
 </Project>

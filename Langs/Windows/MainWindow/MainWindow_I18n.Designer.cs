@@ -61,6 +61,24 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 添加菜单 的本地化字符串。
+        /// </summary>
+        public static string AddMenu {
+            get {
+                return ResourceManager.GetString("AddMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置文件错误,将恢复为默认设置 的本地化字符串。
+        /// </summary>
+        public static string ConfigFileError {
+            get {
+                return ResourceManager.GetString("ConfigFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 第一次启动软件
         ///请选择游戏启动程序 的本地化字符串。
         /// </summary>
@@ -89,6 +107,24 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 游戏设置 的本地化字符串。
+        /// </summary>
+        public static string GameSettings {
+            get {
+                return ResourceManager.GetString("GameSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 信息 的本地化字符串。
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 初始化完成 的本地化字符串。
         /// </summary>
         public static string InitializationCompleted {
@@ -98,11 +134,20 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 设置文件错误,将恢复为默认设置 的本地化字符串。
+        ///   查找类似 菜单列表刷新完成 的本地化字符串。
         /// </summary>
-        public static string SettingFileError {
+        public static string MenuListRefreshComplete {
             get {
-                return ResourceManager.GetString("SettingFileError", resourceCulture);
+                return ResourceManager.GetString("MenuListRefreshComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 模组管理器 的本地化字符串。
+        /// </summary>
+        public static string ModManager {
+            get {
+                return ResourceManager.GetString("ModManager", resourceCulture);
             }
         }
         

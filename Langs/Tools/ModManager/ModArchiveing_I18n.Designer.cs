@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Libs {
+namespace StarsectorTools.Langs.Tools.ModManager {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace StarsectorTools.Langs.Libs {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Libs_I18n {
+    public class ModArchiveing_I18n {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Libs_I18n() {
+        internal ModArchiveing_I18n() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Libs {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Libs.Libs_I18n", typeof(Libs_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Tools.ModManager.ModArchiveing_I18n", typeof(ModArchiveing_I18n).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,65 +61,38 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
-        ///   查找类似 设置文件创建成功 的本地化字符串。
+        ///   查找类似 已完成 的本地化字符串。
         /// </summary>
-        public static string ConfigFileCreatedSuccess {
+        public static string Completed {
             get {
-                return ResourceManager.GetString("ConfigFileCreatedSuccess", resourceCulture);
+                return ResourceManager.GetString("Completed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 文件 的本地化字符串。
+        ///   查找类似 未完成 的本地化字符串。
         /// </summary>
-        public static string File {
+        public static string Incomplete {
             get {
-                return ResourceManager.GetString("File", resourceCulture);
+                return ResourceManager.GetString("Incomplete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 游戏目录错误 的本地化字符串。
+        ///   查找类似 文件总数 的本地化字符串。
         /// </summary>
-        public static string GameDirectoryError {
+        public static string TotalFileNumber {
             get {
-                return ResourceManager.GetString("GameDirectoryError", resourceCulture);
+                return ResourceManager.GetString("TotalFileNumber", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 最大不能超过本机物理内存 的本地化字符串。
+        ///   查找类似 正在解压 的本地化字符串。
         /// </summary>
-        public static string MaxMemory {
+        public static string UnzipNow {
             get {
-                return ResourceManager.GetString("MaxMemory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 最小内存为 的本地化字符串。
-        /// </summary>
-        public static string MinMemory {
-            get {
-                return ResourceManager.GetString("MinMemory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 位置 的本地化字符串。
-        /// </summary>
-        public static string Path {
-            get {
-                return ResourceManager.GetString("Path", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 压缩文件错误 的本地化字符串。
-        /// </summary>
-        public static string ZipFileError {
-            get {
-                return ResourceManager.GetString("ZipFileError", resourceCulture);
+                return ResourceManager.GetString("UnzipNow", resourceCulture);
             }
         }
     }

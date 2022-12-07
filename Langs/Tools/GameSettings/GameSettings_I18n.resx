@@ -133,7 +133,7 @@
   <data name="GameDirectory" xml:space="preserve">
     <value>游戏目录</value>
   </data>
-  <data name="SetDirectory" xml:space="preserve">
+  <data name="SetGameDirectory" xml:space="preserve">
     <value>设置目录</value>
   </data>
   <data name="SetMemory" xml:space="preserve">
@@ -189,5 +189,8 @@
   </data>
   <data name="OpenSaveFolder" xml:space="preserve">
     <value>打开存档文件夹</value>
+  </data>
+  <data name="OpenGameDirectory" xml:space="preserve">
+    <value>打开目录</value>
   </data>
 </root>

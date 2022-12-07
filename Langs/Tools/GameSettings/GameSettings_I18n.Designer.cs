@@ -223,6 +223,15 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 打开目录 的本地化字符串。
+        /// </summary>
+        public static string OpenGameDirectory {
+            get {
+                return ResourceManager.GetString("OpenGameDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 打开Log文件 的本地化字符串。
         /// </summary>
         public static string OpenLogFile {
@@ -306,9 +315,9 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         /// <summary>
         ///   查找类似 设置目录 的本地化字符串。
         /// </summary>
-        public static string SetDirectory {
+        public static string SetGameDirectory {
             get {
-                return ResourceManager.GetString("SetDirectory", resourceCulture);
+                return ResourceManager.GetString("SetGameDirectory", resourceCulture);
             }
         }
         

@@ -18,7 +18,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using StarsectorTools.Langs.MessageBox;
 using StarsectorTools.Lib;
 using StarsectorTools.Windows;
 using Panuon.WPF.UI;
@@ -398,7 +397,7 @@ namespace StarsectorTools.Tools.ModManager
             AddUserGroup window = new();
             ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
             window.Show();
-            window.Button_OK.Click += (o, e) =>
+            window.Button_Yes.Click += (o, e) =>
             {
                 string name = window.TextBox_Name.Text;
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))

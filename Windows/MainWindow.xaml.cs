@@ -36,19 +36,17 @@ namespace StarsectorTools.Windows
         public MainWindow()
         {
             InitializeComponent();
+            //限制最大化区域,不然会盖住任务栏
+            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             //STLog.Instance.LogLevel = STLogLevel.DEBUG;
             STLog.Instance.LogLevel = STLogLevel.INFO;
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
             SetConfig();
-            Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-            //限制最大化区域,不然会盖住任务栏
-            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            ChangeLanguage();
+            //亚克力背景
             //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-            menuList.Add("ModManager", new ModManager());
-            menuList.Add("GameSettings", new GameSettings());
             ListBox_Menu.SelectedIndex = 0;
-
             //DirectoryInfo dirs = new(AppDomain.CurrentDomain.BaseDirectory);
             //foreach (FileInfo file in dirs.GetFiles())
             //{
@@ -118,7 +116,7 @@ namespace StarsectorTools.Windows
             }
         }
 
-        private void Button_SettingsMenu_Click(object sender, RoutedEventArgs e)
+        private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
             settingMenu ??= new();
             Frame_MainFrame.Content = settingMenu;

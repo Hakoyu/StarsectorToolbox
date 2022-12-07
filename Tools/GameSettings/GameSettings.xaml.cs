@@ -48,14 +48,14 @@ namespace StarsectorTools.Tools.GameSettings
             GetMissionsLoadouts();
         }
 
-        private void Button_SetGamePath_Click(object sender, RoutedEventArgs e)
+        private void Button_SetGameDirectory_Click(object sender, RoutedEventArgs e)
         {
             do
             {
                 ST.GetGamePath();
-                if (!ST.TestGamePath())
+                if (!ST.CheckGamePath())
                     MessageBox.Show(I18n.GameNotFound_SelectAgain, "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            } while (!ST.TestGamePath());
+            } while (!ST.CheckGamePath());
             Label_GamePath.Content = ST.gamePath;
         }
         private void TextBox_SetMemory_KeyDown(object sender, KeyEventArgs e)
@@ -191,7 +191,7 @@ namespace StarsectorTools.Tools.GameSettings
             }
         }
 
-        private void Button_OpenGamePath_Copy_Click(object sender, RoutedEventArgs e)
+        private void Button_OpenGameDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gamePath))
                 ST.OpenFile(ST.gamePath);

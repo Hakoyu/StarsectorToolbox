@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+        xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
         xmlns:local="clr-namespace:StarsectorTools.Windows"
         mc:Ignorable="d"
-        Title="Archiveing" Height="200" Width="500" WindowStyle="None" ResizeMode="NoResize" Style="{StaticResource Window_Style}" WindowStartupLocation="CenterScreen">
-    <GroupBox Style="{StaticResource GroupBox_Style}" Header="解压进行中" Padding="10">
+        Title="ModArchiveing" Height="200" Width="500" WindowStyle="None" ResizeMode="NoResize" Style="{StaticResource Window_Style}" WindowStartupLocation="CenterScreen">
+    <GroupBox Style="{StaticResource GroupBox_Style}" Header="{x:Static I18n:ModArchiveing_I18n.UnzipNow}" Padding="10">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40*"/>
@@ -19,12 +20,12 @@
             </Grid.ColumnDefinitions>
             <ProgressBar x:Name="ProgressBar_Progress"  Value="48" Grid.ColumnSpan="2" Grid.Row="1" Margin="0,40,0,40" Background="{DynamicResource ColorAqua3}" Foreground="{DynamicResource ColorBlue3}" pu:ProgressBarHelper.ShadowColor="Aqua" SmallChange="50" IsIndeterminate="True"/>
             <Label x:Name="Label_Progress" Height="55" VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" Background="{x:Null}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Style="{StaticResource Label_Style}"/>
-            <Label Content="文件总数:" Width="80" HorizontalAlignment="Left" Style="{StaticResource Label_Style}" />
+            <Label Content="{x:Static I18n:ModArchiveing_I18n.TotalFileNumber}" Width="80" HorizontalAlignment="Left" Style="{StaticResource Label_Style}" />
             <Label x:Name="Label_Total" Margin="80,0,5,0" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorLight1}"/>
-            <Label Content="已完成:" Margin="5,0,184,0" Grid.Column="1" Style="{StaticResource Label_Style}" />
+            <Label Content="{x:Static I18n:ModArchiveing_I18n.Completed}" Margin="5,0,0,0" Grid.Column="1" Style="{StaticResource Label_Style}" Width="60" HorizontalAlignment="Left" />
             <Label x:Name="Label_Incomplete" Grid.Column="1" Style="{StaticResource Label_Style}" Margin="184,0,0,0" Background="{DynamicResource ColorLight1}"/>
-            <Label Content="未完成:" Margin="134,0,0,0" Grid.Column="1" Style="{StaticResource Label_Style}" HorizontalAlignment="Left" Width="50"/>
-            <Label x:Name="Label_Completed" Margin="55,0,129,0" Grid.Column="1" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorLight1}"/>
+            <Label Content="{x:Static I18n:ModArchiveing_I18n.Incomplete}" Margin="0,0,55,0" Grid.Column="1" Style="{StaticResource Label_Style}" HorizontalAlignment="Right" Width="60"/>
+            <Label x:Name="Label_Completed" Margin="65,0,119,0" Grid.Column="1" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorLight1}"/>
         </Grid>
     </GroupBox>
 </Window>

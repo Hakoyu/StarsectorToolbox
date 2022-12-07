@@ -7,10 +7,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using HKW.TomlParse;
 using StarsectorTools.Lib;
-using StarsectorTools.Langs.MessageBox;
+using StarsectorTools.Tools.GameSettings;
+using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using Panuon.WPF.UI;
 
 namespace StarsectorTools.Windows
 {
@@ -20,33 +23,35 @@ namespace StarsectorTools.Windows
         {
             try
             {
-                if (ST.CreateConfigFile())
+                if (ST.CheckConfigFile())
                 {
                     using TomlTable toml = TOML.Parse(ST.configPath);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
-                    ST.SetGamePath(toml["GamePath"].AsString);
-                    if (!ST.TestGamePath())
+                    ST.SetGamePath(toml["Game"]["GamePath"].AsString);
+                    if (!ST.CheckGamePath())
                     {
-                        if (!(MessageBox.Show(this, I18n.GameNotFound_SelectAgain, MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
+                        if (!(MessageBox.Show(this, I18n.GameNotFound_SelectAgain, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                         {
-                            MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
                             toml.Close();
                             Close();
                         }
-                        toml["GamePath"] = ST.gamePath;
+                        toml["Game"]["GamePath"] = ST.gamePath;
                     }
                     toml.SaveTo(ST.configPath);
                 }
                 else
                 {
+                    ST.CreateConfigFile();
                     using TomlTable toml = TOML.Parse(ST.configPath);
-                    if (!(MessageBox.Show(this, $"{I18n.FirstStart}(starsector.exe)", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
+                    if (!(MessageBox.Show(this, I18n.FirstStart, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
                     {
-                        MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
                         toml.Close();
                         Close();
                     }
-                    toml["GamePath"] = ST.gamePath;
+                    toml["Game"]["GamePath"] = ST.gamePath;
+                    toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.configPath);
                 }
             }
@@ -58,7 +63,7 @@ namespace StarsectorTools.Windows
         void ConfigLoadError()
         {
             SetBlurEffect();
-            MessageBox.Show(I18n.SettingFileError, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK);
+            MessageBox.Show(I18n.ConfigFileError, "", MessageBoxButton.OK, MessageBoxImage.Warning);
             SetConfig();
             RemoveBlurEffect();
         }
@@ -69,6 +74,36 @@ namespace StarsectorTools.Windows
         private void RemoveBlurEffect()
         {
             Effect = null;
+        }
+        public void ChangeLanguage()
+        {
+            Label_Title.Content = I18n.StarsectorTools;
+            Button_Settings.Content = I18n.Settings;
+            Button_Info.Content = I18n.Info;
+            RefreshMenuList();
+        }
+        public void RefreshMenuList()
+        {
+            ClearMenu();
+            AddMemu("🌐", I18n.ModManager, new ModManager());
+            AddMemu("⚙", I18n.GameSettings, new GameSettings());
+
+            STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
+        }
+        void ClearMenu()
+        {
+            menuList.Clear();
+            ListBox_Menu.Items.Clear();
+        }
+        void AddMemu(string icon, string name, Page page)
+        {
+            var item = new ListBoxItem();
+            item.Content = name;
+            item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
+            ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
+            ListBox_Menu.Items.Add(item);
+            menuList.Add(name, page);
+            STLog.Instance.WriteLine($"{I18n.AddMenu} {Icon} {name} {page}");
         }
     }
 }

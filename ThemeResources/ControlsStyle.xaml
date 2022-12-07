@@ -44,7 +44,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}"/>
         <Setter Property="Foreground" Value="{DynamicResource ColorFG}"/>
         <Setter Property="Height" Value="30"/>
-        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Padding" Value="5,3,5,3"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="pu:IconHelper.FontSize" Value="16"/>

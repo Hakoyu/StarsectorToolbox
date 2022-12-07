@@ -97,44 +97,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="StarsectorTools" xml:space="preserve">
-    <value>StarsectorTools</value>
-  </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>设置</value>
   </data>
-  <data name="FirstStart" xml:space="preserve">
-    <value>Start the software for the first time
-Please select the game launcher</value>
-  </data>
-  <data name="GameNotFound_SoftwareExit" xml:space="preserve">
-    <value>Game launcher not found, software is about to exit</value>
-  </data>
-  <data name="GameNotFound_SelectAgain" xml:space="preserve">
-    <value>Game launcher not found, please select again</value>
+  <data name="OpenLogFile" xml:space="preserve">
+    <value>打开Log文件</value>
   </data>
   <data name="ConfigFileError" xml:space="preserve">
-    <value>Config file error, will restore the default</value>
-  </data>
-  <data name="InitializationCompleted" xml:space="preserve">
-    <value>Initialization completed</value>
-  </data>
-  <data name="ShowPage" xml:space="preserve">
-    <value>Show page</value>
-  </data>
-  <data name="MenuListRefreshComplete" xml:space="preserve">
-    <value>Menu list refresh complete</value>
-  </data>
-  <data name="AddMenu" xml:space="preserve">
-    <value>Add menu</value>
-  </data>
-  <data name="ModManager" xml:space="preserve">
-    <value>ModManager</value>
-  </data>
-  <data name="GameSettings" xml:space="preserve">
-    <value>GameSettings</value>
-  </data>
-  <data name="Info" xml:space="preserve">
-    <value>Info</value>
+    <value>设置文件错误</value>
   </data>
 </root>

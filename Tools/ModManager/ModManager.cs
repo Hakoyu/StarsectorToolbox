@@ -12,7 +12,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using StarsectorTools.Lib;
 using System.ComponentModel;
-using StarsectorTools.Langs.MessageBox;
 using Panuon.WPF.UI;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
@@ -113,7 +112,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
             }
             if (err != null)
-                MessageBox.Show(err, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Error);
             STLog.Instance.WriteLine(ST.I18nParseKey(I18n.ModAddSize, allModsInfo.Count, size));
         }
 
@@ -134,7 +133,7 @@ namespace StarsectorTools.Tools.ModManager
             if (!File.Exists(ST.enabledModsJsonPath))
             {
                 STLog.Instance.WriteLine($"{I18n.EnabledModsFile} {I18n.NotExist} {I18n.Path}: {ST.enabledModsJsonPath}", STLogLevel.WARN);
-                if (MessageBox.Show($"{I18n.EnabledModsFile} {I18n.NotExist}\n{I18n.Path}: {ST.enabledModsJsonPath}\n{I18n.CreateFile}?", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                if (MessageBox.Show($"{I18n.EnabledModsFile} {I18n.NotExist}\n{I18n.Path}: {ST.enabledModsJsonPath}\n{I18n.CreateFile}?", "", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
                 {
                     STLog.Instance.WriteLine($"{I18n.CreateFile} {I18n.Path}: {ST.enabledModsJsonPath}");
                     SaveEnabledMods(ST.enabledModsJsonPath);
@@ -181,12 +180,12 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     STLog.Instance.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
                     if (err != null)
-                        MessageBox.Show(err, MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 catch
                 {
                     STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {path}");
-                    MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {path}", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -208,7 +207,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (!toml.Any(kv => kv.Key == ModGroupType.Collected))
                 {
                     STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {path}");
-                    MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {path}", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 foreach (var kv in toml)
@@ -286,13 +285,13 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 if (errList.Count > 0)
                 {
-                    MessageBox.Show(string.Join("\n", errList), MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(string.Join("\n", errList), "", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception)
             {
                 STLog.Instance.WriteLine($"{I18n.UserDataLoadError} {I18n.Path}: {path}");
-                MessageBox.Show($"{I18n.UserDataLoadError}\n{I18n.Path}: {path}", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{I18n.UserDataLoadError}\n{I18n.Path}: {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         void GetAllListBoxItems()
@@ -325,7 +324,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 STLog.Instance.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modGroupFile}", STLogLevel.WARN);
                 STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
-                MessageBox.Show($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modGroupFile}", MessageBoxCaption_I18n.Warn, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modGroupFile}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         string CheckGroup(string id)
@@ -444,7 +443,7 @@ namespace StarsectorTools.Tools.ModManager
             menuItem.Click += (o, e) =>
             {
                 string path = allModsInfo[info.Id].Path;
-                if (MessageBox.Show($"{I18n.ConfirmDeleteMod}?\nID: {info.Id}\n{I18n.Path}: {path}\n", MessageBoxCaption_I18n.Warn, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                if (MessageBox.Show($"{I18n.ConfirmDeleteMod}?\nID: {info.Id}\n{I18n.Path}: {path}\n", "", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
                     RemoveModShowInfo(info.Id);
                     ST.DeleteDirToRecycleBin(path);
@@ -832,7 +831,7 @@ namespace StarsectorTools.Tools.ModManager
                 window.TextBox_Icon.Text = icon;
                 window.TextBox_Name.Text = name;
                 window.Show();
-                window.Button_OK.Click += (o, e) =>
+                window.Button_Yes.Click += (o, e) =>
                 {
                     string _icon = window.TextBox_Icon.Text;
                     string _name = window.TextBox_Name.Text;

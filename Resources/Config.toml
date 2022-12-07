@@ -1,3 +1,4 @@
-﻿GamePath = ""
+﻿[Game]
+GamePath = ""
 [Extras]
 Lang = "zh-CN"

@@ -136,12 +136,12 @@
                             </Expander>
                         </ListBoxItem>
                     </ListBox>
-                    <Button x:Name="Button_GroupMenu" VerticalAlignment="Top" Height="30" FontSize="16" HorizontalContentAlignment="Left" Click="Button_GroupMenu_Click" Style="{StaticResource Button_Style}">
+                    <Button x:Name="Button_GroupMenu" VerticalAlignment="Top" Height="30" FontSize="16" HorizontalContentAlignment="Left" Click="Button_GroupMenu_Click" Style="{StaticResource Button_Style}" Padding="0">
                         <pu:ButtonHelper.Icon>
                             <emoji:TextBlock x:Name="Button_GroupMenuIcon" Text="📘"/>
                         </pu:ButtonHelper.Icon>
                     </Button>
-                    <Button x:Name="Button_AddUserGroup" Content="{x:Static I18n:ModManager_I18n.AddUserGroup}" Padding="0,0,0,0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" Click="Button_AddUserGroup_Click"/>
+                    <Button x:Name="Button_AddUserGroup" Content="{x:Static I18n:ModManager_I18n.AddUserGroup}" Padding="0" VerticalAlignment="Bottom" Height="30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" pu:ButtonHelper.Icon="➕" Click="Button_AddUserGroup_Click" />
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,120,0" >
                     <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False" CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" Style="{StaticResource DataGrid_Style}">

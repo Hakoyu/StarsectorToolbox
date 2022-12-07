@@ -133,7 +133,7 @@
   <data name="GameDirectory" xml:space="preserve">
     <value>Game directory</value>
   </data>
-  <data name="SetDirectory" xml:space="preserve">
+  <data name="SetGameDirectory" xml:space="preserve">
     <value>Set directory</value>
   </data>
   <data name="SetMemory" xml:space="preserve">
@@ -189,5 +189,8 @@
   </data>
   <data name="OpenSaveFolder" xml:space="preserve">
     <value>Open save folder</value>
+  </data>
+  <data name="OpenGameDirectory" xml:space="preserve">
+    <value>Open directory</value>
   </data>
 </root>

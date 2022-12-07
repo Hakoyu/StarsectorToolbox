@@ -31,7 +31,7 @@
             <Button x:Name="Button_TitleMin" Content="➖" HorizontalAlignment="Right" Style="{StaticResource Button_Style}" Width="40" Height="30" Margin="0,0,80,0" Click="Button_TitleMin_Click" FontSize="16" pu:ButtonHelper.HoverBackground="Aqua" pu:ButtonHelper.ClickBackground="LightBlue"/>
             <Button x:Name="Button_TitleMax" Content="🔲" HorizontalAlignment="Right" Style="{StaticResource Button_Style}" Width="40" Height="30" Margin="0,0,40,0" Click="Button_TitleMax_Click" FontSize="16" pu:ButtonHelper.HoverBackground="Aqua" pu:ButtonHelper.ClickBackground="LightBlue"/>
             <Button x:Name="Button_TitleClose" Content="❌" Style="{StaticResource Button_Style}" HorizontalAlignment="Right" Width="40" Height="30" Click="Button_TitleClose_Click" FontSize="16" pu:ButtonHelper.HoverBackground="Red" pu:ButtonHelper.ClickBackground="IndianRed"/>
-            <Button x:Name="Button_MainMenu" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Click="Button_MainMenu_Click" FontSize="16" Style="{StaticResource Button_Style}">
+            <Button x:Name="Button_MainMenu" HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="30" Click="Button_MainMenu_Click" FontSize="16" Style="{StaticResource Button_Style}" Padding="0">
                 <pu:ButtonHelper.Icon>
                     <emoji:TextBlock x:Name="Button_MainMenuIcon" Text="📘" FontSize="16"/>
                 </pu:ButtonHelper.Icon>
@@ -39,24 +39,13 @@
         </Grid>
         <Grid Margin="0,30,0,0">
             <Grid x:Name="Grid_Menu" HorizontalAlignment="Left" SizeChanged="Grid_Menu_SizeChanged" Width="30">
-                <ListBox x:Name="ListBox_Menu" Margin="0,0,0,60" HorizontalAlignment="Center" FontSize="16" SelectionChanged="ListBox_Menu_SelectionChanged" Style="{StaticResource ListBox_Style}">
-                    <ListBoxItem Content="ModManager" Style="{StaticResource ListBoxItem_Style}">
-                        <pu:ListBoxItemHelper.Icon>
-                            <emoji:TextBlock Text="🌐" FontSize="16"/>
-                        </pu:ListBoxItemHelper.Icon>
-                    </ListBoxItem>
-                    <ListBoxItem Content="GameSettings" Style="{StaticResource ListBoxItem_Style}">
-                        <pu:ListBoxItemHelper.Icon>
-                            <emoji:TextBlock Text="⚙" FontSize="16"/>
-                        </pu:ListBoxItemHelper.Icon>
-                    </ListBoxItem>
-                </ListBox>
-                <Button x:Name="Button_SettingsMenu" Content="设置" VerticalAlignment="Bottom" Height="30" Click="Button_SettingsMenu_Click" FontSize="16" Style="{StaticResource Button_Style}" Margin="0,0,0,0" HorizontalContentAlignment="Left" >
+                <ListBox x:Name="ListBox_Menu" Margin="0,0,0,60" HorizontalAlignment="Center" FontSize="16" SelectionChanged="ListBox_Menu_SelectionChanged" Style="{StaticResource ListBox_Style}"/>
+                <Button x:Name="Button_Settings" Content="{x:Static I18n:MainWindow_I18n.Settings}" VerticalAlignment="Bottom" Height="30" Click="Button_Settings_Click" FontSize="16" Style="{StaticResource Button_Style}" Margin="0,0,0,0" HorizontalContentAlignment="Left" Padding="0">
                     <pu:ButtonHelper.Icon>
                         <emoji:TextBlock Text="⚙" FontSize="16"/>
                     </pu:ButtonHelper.Icon>
                 </Button>
-                <Button Content="信息" Margin="0,0,0,30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" FontSize="16" Height="30" VerticalAlignment="Bottom">
+                <Button x:Name="Button_Info" Content="{x:Static I18n:MainWindow_I18n.Info}" Margin="0,0,0,30" HorizontalContentAlignment="Left" Style="{StaticResource Button_Style}" FontSize="16" Height="30" VerticalAlignment="Bottom" Padding="0">
                     <pu:ButtonHelper.Icon>
                         <emoji:TextBlock Text="ℹ" FontSize="16"/>
                     </pu:ButtonHelper.Icon>

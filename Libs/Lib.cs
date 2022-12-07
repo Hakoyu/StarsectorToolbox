@@ -82,7 +82,7 @@ namespace StarsectorTools.Lib
         public static int totalMemory = 0;
         public const string configPath = @"Config.toml";
         public readonly static Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
-        public const string logPath = @"StarsectorTools.toml";
+        public const string logPath = @"StarsectorTools.log";
         public static string gamePath { get; private set; } = null!;
         public static string gameExePath { get; private set; } = null!;
         public static string gameModsPath { get; private set; } = null!;
@@ -191,22 +191,21 @@ namespace StarsectorTools.Lib
             }
             return size;
         }
-        /// <summary>
-        /// 判断配置文件是否存在
-        /// </summary>
-        /// <returns>存在返回true,不存在则新建配置文件并返回false</returns>
-        public static bool CreateConfigFile()
+        public static bool CheckConfigFile()
         {
-            if (File.Exists(configPath))
-                return true;
-            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
-            string config = sr.ReadToEnd();
-            File.WriteAllText(configPath, config);
-            return false;
+            return File.Exists(configPath);
         }
-        public static bool TestGamePath()
+        public static void CreateConfigFile()
         {
-            return File.Exists($"{gamePath}\\starsector.exe");
+            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
+            string str = sr.ReadToEnd();
+            File.WriteAllText(configPath, str);
+            sr.Close();
+            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {configPath}");
+        }
+        public static bool CheckGamePath()
+        {
+            return File.Exists(gameExePath);
         }
         public static bool GetGamePath()
         {
@@ -221,7 +220,7 @@ namespace StarsectorTools.Lib
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
             SetGamePath(Path.GetDirectoryName(openFileDialog.FileName)!);
-            return TestGamePath();
+            return CheckGamePath();
         }
         public static bool OpenFile(string path)
         {
