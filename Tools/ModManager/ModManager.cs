@@ -195,12 +195,62 @@ namespace StarsectorTools.Tools.ModManager
         }
         void CheckUserGroup()
         {
-            if (!File.Exists(userGroupFile))
-                SaveUserGroup(userGroupFile);
+            if (!File.Exists(userDataPath))
+                SaveUserData(userDataPath);
             else
-                GetUserGroup(userGroupFile);
+                GetUserData(userDataPath);
+            if (!File.Exists(userGroupPath))
+                SaveUserGroup(userGroupPath);
+            else
+                GetUserGroup(userGroupPath);
         }
         void GetUserGroup(string path)
+        {
+            STLog.Instance.WriteLine($"{I18n.LoadUserGroup} {I18n.Path}: {path}");
+            try
+            {
+                string err = null!;
+                using TomlTable toml = TOML.Parse(path);
+                foreach (var kv in toml)
+                {
+                    string group = kv.Key;
+                    STLog.Instance.WriteLine($"{I18n.LoadUserGroup} {group}");
+                    if (!allUserGroups.ContainsKey(group))
+                    {
+                        AddUserGroup(kv.Value["Icon"], group);
+                        foreach (string id in kv.Value["Mods"].AsTomlArray)
+                        {
+                            if (allModsShowInfo.ContainsKey(id))
+                            {
+                                if (allUserGroups[group].Add(id))
+                                    modsShowInfoFromGroup[group].Add(allModsShowInfo[id]);
+                            }
+                            else
+                            {
+                                STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
+                                err ??= $"{I18n.NotFoundMod}\n";
+                                err += $"{id}\n";
+                            }
+                        }
+                        STLog.Instance.WriteLine($"{I18n.UserGroupAddSuccess} {group}");
+                    }
+                    else
+                    {
+                        STLog.Instance.WriteLine($"{I18n.AlreadyExistUserGroup} {group}");
+                        err ??= $"{I18n.AlreadyExistUserGroup} {group}";
+                    }
+                }
+                if (err is not null)
+                    MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.FileError} {path}", STLogLevel.ERROR);
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                MessageBox.Show($"{I18n.FileError} {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        void GetUserData(string path)
         {
             STLog.Instance.WriteLine($"{I18n.LoadUserData} {I18n.Path}: {path}");
             string err = null!;
@@ -256,41 +306,9 @@ namespace StarsectorTools.Tools.ModManager
                         if (err is not null)
                             errList.Add(err);
                     }
-                    else
-                    {
-                        string group = kv.Key;
-                        STLog.Instance.WriteLine($"{I18n.LoadUserGroup} {group}");
-                        if (!allUserGroups.ContainsKey(group))
-                        {
-                            AddUserGroup(kv.Value["Icon"], group);
-                            foreach (string id in kv.Value["Mods"].AsTomlArray)
-                            {
-                                if (allModsShowInfo.ContainsKey(id))
-                                {
-                                    if (allUserGroups[group].Add(id))
-                                        modsShowInfoFromGroup[group].Add(allModsShowInfo[id]);
-                                }
-                                else
-                                {
-                                    STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
-                                    err ??= $"{I18n.NotFoundMod}\n";
-                                    err += $"{id}\n";
-                                }
-                            }
-                        }
-                        else
-                        {
-                            STLog.Instance.WriteLine($"{I18n.AlreadyExistUserGroup} {group}");
-                            err ??= $"{I18n.AlreadyExistUserGroup} {group}";
-                        }
-                        if (err is not null)
-                            errList.Add(err);
-                    }
                 }
                 if (errList.Count > 0)
-                {
                     MessageBox.Show(string.Join("\n", errList), "", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
             catch (Exception)
             {
@@ -640,7 +658,8 @@ namespace StarsectorTools.Tools.ModManager
         void SaveAllData()
         {
             SaveEnabledMods(ST.enabledModsJsonPath);
-            SaveUserGroup(userGroupFile);
+            SaveUserData(userDataPath);
+            SaveUserGroup(userGroupPath);
         }
         void SaveEnabledMods(string path)
         {
@@ -653,9 +672,9 @@ namespace StarsectorTools.Tools.ModManager
             File.WriteAllText(path, keyValues.ToJsonString(new() { WriteIndented = true }));
             STLog.Instance.WriteLine($"{I18n.SaveEnabledListSuccess} {I18n.Path}: {path}");
         }
-        void SaveUserGroup(string path)
+        void SaveUserData(string path)
         {
-            TomlTable toml = new()
+            using TomlTable toml = new()
             {
                 { ModGroupType.Collected, new TomlArray() },
                 { "UserCustomData", new TomlArray() }
@@ -673,15 +692,35 @@ namespace StarsectorTools.Tools.ModManager
                     });
                 }
             }
-            foreach (var kv in allUserGroups)
+            toml.SaveTo(path);
+            STLog.Instance.WriteLine($"{I18n.SaveUserDataSuccess} {I18n.Path}: {path}");
+        }
+        void SaveUserGroup(string path, string tag = "All")
+        {
+            TomlTable toml = new();
+            if (tag == "All")
             {
-                toml.Add(kv.Key, new TomlTable()
+                foreach (var kv in allUserGroups)
                 {
-                    ["Icon"] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[kv.Key])).Text,
+                    toml.Add(kv.Key, new TomlTable()
+                    {
+                        ["Icon"] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[kv.Key])).Text,
+                        ["Mods"] = new TomlArray(),
+                    });
+                    foreach (var id in kv.Value)
+                        toml[kv.Key]["Mods"].Add(id);
+                }
+            }
+            else
+            {
+                var mods = allUserGroups[tag];
+                toml.Add(tag, new TomlTable()
+                {
+                    ["Icon"] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[tag])).Text,
                     ["Mods"] = new TomlArray(),
                 });
-                foreach (var id in kv.Value)
-                    toml[kv.Key]["Mods"].Add(id);
+                foreach (var id in mods)
+                    toml[tag]["Mods"].Add(id);
             }
             toml.SaveTo(path);
             STLog.Instance.WriteLine($"{I18n.SaveUserGroupSuccess} {I18n.Path}: {path}");
@@ -878,15 +917,25 @@ namespace StarsectorTools.Tools.ModManager
             menuItem.Click += (o, e) =>
             {
                 var _itme = (ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)o));
-                var _name = _itme.Content.ToString()!.Split(" ")[0];
+                var _name = _itme.ToolTip.ToString()!;
+                if (nowSelectedListBoxItem == _itme)
+                    ListBox_ModsGroupMenu.SelectedIndex = 0;
                 ListBox_UserGroup.Items.Remove(_itme);
                 allUserGroups.Remove(_name);
                 allListBoxItemsFromGroups.Remove(_name);
                 modsShowInfoFromGroup.Remove(_name);
                 RefreshModsContextMenu();
                 StartRemindSaveThread();
-                ListBox_ModsGroupMenu.SelectedIndex = 0;
                 Expander_RandomEnable.Visibility = Visibility.Collapsed;
+                for (int i = 0; i < ComboBox_ExportUserGroup.Items.Count; i++)
+                {
+                    if (ComboBox_ExportUserGroup.Items.GetItemAt(i) is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString()! == _name)
+                    {
+                        ComboBox_ExportUserGroup.Items.RemoveAt(i);
+                        ComboBox_ExportUserGroup.SelectedIndex = 0;
+                    }
+
+                }
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -897,6 +946,7 @@ namespace StarsectorTools.Tools.ModManager
             allUserGroups.Add(name, new());
             allListBoxItemsFromGroups.Add(name, listBoxItem);
             modsShowInfoFromGroup.Add(name, new());
+            ComboBox_ExportUserGroup.Items.Add(new ComboBoxItem() { Content = name, Tag = name, Style = (Style)Application.Current.Resources["ComboBoxItem_Style"] });
             STLog.Instance.WriteLine($"{I18n.AddUserGroup} {icon} {name}");
         }
         void SetListBoxItemData(ListBoxItem item, string name)

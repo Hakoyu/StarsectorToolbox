@@ -60,12 +60,12 @@ namespace HKW.TomlParse
         public virtual string Comment { get; set; } = null!;
         public virtual int CollapseLevel { get; set; }
 
-        public virtual int AsInteger => AsTomlInteger;
-        public virtual double AsFloat => AsTomlFloat;
-        public virtual string AsString => AsTomlString;
-        public virtual bool AsBoolean => AsTomlBoolean;
-        public virtual DateTime AsDateTime => AsTomlDateTime;
-        public virtual DateTimeOffset AsDateTimeOffset => AsTomlDateTimeOffset;
+        public virtual int? AsInteger => AsTomlInteger;
+        public virtual double? AsFloat => AsTomlFloat;
+        public virtual string? AsString => AsTomlString;
+        public virtual bool? AsBoolean => AsTomlBoolean;
+        public virtual DateTime? AsDateTime => AsTomlDateTime;
+        public virtual DateTimeOffset? AsDateTimeOffset => AsTomlDateTimeOffset;
         public virtual List<TomlNode> AsList => AsTomlArray.RawArray;
         public virtual Dictionary<string, TomlNode> AsDictionary => AsTomlTable.RawTable;
 
@@ -167,21 +167,21 @@ namespace HKW.TomlParse
 
         #region TOML to native type cast
 
-        public static implicit operator string(TomlNode value) => value.ToString()!;
+        public static implicit operator string?(TomlNode value) => value?.ToString()!;
 
-        public static implicit operator int(TomlNode value) => (int)value.AsTomlInteger.Value;
+        public static implicit operator int?(TomlNode value) => (int?)value?.AsTomlInteger.Value;
 
-        public static implicit operator long(TomlNode value) => value.AsTomlInteger.Value;
+        public static implicit operator long?(TomlNode value) => value?.AsTomlInteger.Value;
 
-        public static implicit operator float(TomlNode value) => (float)value.AsTomlFloat.Value;
+        public static implicit operator float?(TomlNode value) => (float?)value?.AsTomlFloat.Value;
 
-        public static implicit operator double(TomlNode value) => value.AsTomlFloat.Value;
+        public static implicit operator double?(TomlNode value) => value?.AsTomlFloat.Value;
 
-        public static implicit operator bool(TomlNode value) => value.AsTomlBoolean.Value;
+        public static implicit operator bool?(TomlNode value) => value?.AsTomlBoolean.Value;
 
-        public static implicit operator DateTime(TomlNode value) => value.AsTomlDateTimeLocal.Value;
+        public static implicit operator DateTime?(TomlNode value) => value?.AsTomlDateTimeLocal.Value;
 
-        public static implicit operator DateTimeOffset(TomlNode value) => value.AsTomlDateTimeOffset.Value;
+        public static implicit operator DateTimeOffset?(TomlNode value) => value?.AsTomlDateTimeOffset.Value;
 
         #endregion
     }

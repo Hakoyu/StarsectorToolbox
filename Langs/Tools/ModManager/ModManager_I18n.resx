@@ -281,28 +281,28 @@
     <value>初始化完成</value>
   </data>
   <data name="ImportEnabledModsListFromFile" xml:space="preserve">
-    <value>从文件导入已启用模组列表</value>
+    <value>从文件导入</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>文件</value>
   </data>
   <data name="ExportEnabledModsListToFile" xml:space="preserve">
-    <value>导出已启用模组列表至文件</value>
+    <value>导出至文件</value>
   </data>
   <data name="NotFoundDependencies" xml:space="preserve">
     <value>未在游戏的模组文件夹中找到前置模组</value>
   </data>
-  <data name="ImportUserDataFile" xml:space="preserve">
-    <value>导入用户数据文件</value>
+  <data name="ImportUserData" xml:space="preserve">
+    <value>导入用户数据</value>
   </data>
-  <data name="ExportUserDataFile" xml:space="preserve">
-    <value>导出用户数据文件</value>
+  <data name="ExportUserData" xml:space="preserve">
+    <value>导出用户数据</value>
   </data>
   <data name="NotFoundFile" xml:space="preserve">
     <value>未找到文件</value>
   </data>
   <data name="ImportEnabledModsListFromSave" xml:space="preserve">
-    <value>从游戏存档中导入已启用模组</value>
+    <value>从游戏存档导入</value>
   </data>
   <data name="FileError" xml:space="preserve">
     <value>文件错误</value>
@@ -504,5 +504,26 @@
   </data>
   <data name="CancelCollection" xml:space="preserve">
     <value>取消收藏</value>
+  </data>
+  <data name="ImportUserGroup" xml:space="preserve">
+    <value>导入用户分组</value>
+  </data>
+  <data name="ExportUserGroup" xml:space="preserve">
+    <value>导出用户分组</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="UserGroupAddSuccess" xml:space="preserve">
+    <value>用户分组添加成功</value>
+  </data>
+  <data name="SaveUserDataSuccess" xml:space="preserve">
+    <value>保存用户数据成功</value>
+  </data>
+  <data name="ManipulateUserGroup" xml:space="preserve">
+    <value>操作用户分组</value>
+  </data>
+  <data name="ManipulateUserDataToolTip" xml:space="preserve">
+    <value>包含收藏列表和用户描述</value>
   </data>
 </root>

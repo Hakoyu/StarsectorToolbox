@@ -292,11 +292,11 @@ New Version: {1}</value>
   <data name="NotFoundDependencies" xml:space="preserve">
     <value>Not found dependencies in the game mods folder</value>
   </data>
-  <data name="ImportUserDataFile" xml:space="preserve">
-    <value>Import user data file</value>
+  <data name="ImportUserData" xml:space="preserve">
+    <value>Import user data</value>
   </data>
-  <data name="ExportUserDataFile" xml:space="preserve">
-    <value>Export user data file</value>
+  <data name="ExportUserData" xml:space="preserve">
+    <value>Export user data</value>
   </data>
   <data name="NotFoundFile" xml:space="preserve">
     <value>Not found file</value>
@@ -504,5 +504,26 @@ Cannot be removed midway</value>
   </data>
   <data name="CancelCollection" xml:space="preserve">
     <value>Cancel collection</value>
+  </data>
+  <data name="ImportUserGroup" xml:space="preserve">
+    <value>Import user group</value>
+  </data>
+  <data name="ExportUserGroup" xml:space="preserve">
+    <value>Export user group</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="UserGroupAddSuccess" xml:space="preserve">
+    <value>User group added success</value>
+  </data>
+  <data name="SaveUserDataSuccess" xml:space="preserve">
+    <value>Save user data success</value>
+  </data>
+  <data name="ManipulateUserGroup" xml:space="preserve">
+    <value>Manipulate user group</value>
+  </data>
+  <data name="ManipulateUserDataToolTip" xml:space="preserve">
+    <value>Includes collection list and user description</value>
   </data>
 </root>

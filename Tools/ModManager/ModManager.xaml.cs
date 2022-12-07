@@ -25,6 +25,7 @@ using System.ComponentModel;
 using System.Xml.Linq;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
+using HKW.TomlParse;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -64,8 +65,8 @@ namespace StarsectorTools.Tools.ModManager
         const string modBackupDirectory = @"BackUp\Mods";
         const string backupDirectory = "Backup";
         readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
-        const string userGroupFile = "UserData.toml";
-        const string collected = "Collecte";
+        const string userDataPath = "UserData.toml";
+        const string userGroupPath = "UserGroup.toml";
         const string userCustomData = "UserCustomData";
         bool groupMenuOpen = false;
         bool showModInfo = false;
@@ -354,12 +355,12 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportUserDataFile,
+                Title = I18n.ImportUserData,
                 Filter = $"Toml {I18n.File}|*.toml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
-                GetUserGroup(openFileDialog.FileName);
+                GetUserData(openFileDialog.FileName);
                 RefreshModsContextMenu();
                 RefreshCountOfListBoxItems();
             }
@@ -369,12 +370,12 @@ namespace StarsectorTools.Tools.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = I18n.ExportUserDataFile,
+                Title = I18n.ExportUserData,
                 Filter = $"Toml {I18n.File}|*.toml"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
-                SaveUserGroup(saveFileDialog.FileName);
+                SaveUserData(saveFileDialog.FileName);
             }
         }
 
@@ -651,6 +652,35 @@ namespace StarsectorTools.Tools.ModManager
         private void Grid_RightSide_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
+        }
+
+        private void Button_ImportUserGroup_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Title = I18n.ImportUserGroup,
+                Filter = $"Toml {I18n.File}|*.toml"
+            };
+            if (openFileDialog.ShowDialog().GetValueOrDefault())
+            {
+                GetUserGroup(openFileDialog.FileName);
+                RefreshModsContextMenu();
+                RefreshCountOfListBoxItems();
+                StartRemindSaveThread();
+            }
+        }
+
+        private void Button_ExportUserGroup_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
+            {
+                Title = I18n.ExportUserGroup,
+                Filter = $"Toml {I18n.File}|*.toml"
+            };
+            if (saveFileDialog.ShowDialog().GetValueOrDefault())
+            {
+                SaveUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
+            }
         }
     }
 }

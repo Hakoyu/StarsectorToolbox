@@ -286,10 +286,19 @@
                                     <Button x:Name="Button_OpenSaveDirectory" Content="{x:Static I18n:ModManager_I18n.OpenSaveDirectory}" Margin="0,0,0,5" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Click="Button_OpenSaveDirectory_Click"/>
                                 </StackPanel>
                             </Expander>
-                            <Expander Header="{x:Static I18n:ModManager_I18n.ManipulateUserData}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                            <Expander Header="{x:Static I18n:ModManager_I18n.ManipulateUserData}" ToolTip="{x:Static I18n:ModManager_I18n.ManipulateUserDataToolTip}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <Button x:Name="Button_ImportUserData" Content="{x:Static I18n:ModManager_I18n.ImportUserDataFile}" Click="Button_ImportUserData_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
-                                    <Button x:Name="Button_ExportUserData" Content="{x:Static I18n:ModManager_I18n.ExportUserDataFile}" Click="Button_ExportUserData_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_ImportUserData" Content="{x:Static I18n:ModManager_I18n.ImportUserData}" Click="Button_ImportUserData_Click" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                    <Button x:Name="Button_ExportUserData" Content="{x:Static I18n:ModManager_I18n.ExportUserData}" Click="Button_ExportUserData_Click"  Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5"/>
+                                </StackPanel>
+                            </Expander>
+                            <Expander Header="{x:Static I18n:ModManager_I18n.ManipulateUserGroup}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">
+                                <StackPanel>
+                                    <Button x:Name="Button_ImportUserGroup" Content="{x:Static I18n:ModManager_I18n.ImportUserGroup}" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5" Click="Button_ImportUserGroup_Click"/>
+                                    <ComboBox x:Name="ComboBox_ExportUserGroup" VerticalAlignment="Top" Height="30" SelectedIndex="0" Style="{StaticResource ComboBox_Style}" Margin="0,0,0,5" Width="100">
+                                        <ComboBoxItem Content="{x:Static I18n:ModManager_I18n.All}" Tag="All" Style="{StaticResource ComboBoxItem_Style}"/>
+                                    </ComboBox>
+                                    <Button x:Name="Button_ExportUserGroup" Content="{x:Static I18n:ModManager_I18n.ExportUserGroup}" Style="{StaticResource Button_Style}" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,5" Click="Button_ExportUserGroup_Click"/>
                                 </StackPanel>
                             </Expander>
                             <Expander Header="{x:Static I18n:ModManager_I18n.ManipulateEnabledList}" Style="{StaticResource Expander_Style}" Padding="5,0,5,0" Margin="0,0,0,10">

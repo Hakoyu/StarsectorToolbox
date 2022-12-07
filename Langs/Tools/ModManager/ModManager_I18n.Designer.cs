@@ -115,6 +115,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 全部 的本地化字符串。
+        /// </summary>
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 全部模组 的本地化字符串。
         /// </summary>
         public static string AllMods {
@@ -403,7 +412,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 导出已启用模组列表至文件 的本地化字符串。
+        ///   查找类似 导出至文件 的本地化字符串。
         /// </summary>
         public static string ExportEnabledModsListToFile {
             get {
@@ -412,11 +421,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 导出用户数据文件 的本地化字符串。
+        ///   查找类似 导出用户数据 的本地化字符串。
         /// </summary>
-        public static string ExportUserDataFile {
+        public static string ExportUserData {
             get {
-                return ResourceManager.GetString("ExportUserDataFile", resourceCulture);
+                return ResourceManager.GetString("ExportUserData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导出用户分组 的本地化字符串。
+        /// </summary>
+        public static string ExportUserGroup {
+            get {
+                return ResourceManager.GetString("ExportUserGroup", resourceCulture);
             }
         }
         
@@ -511,7 +529,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 从文件导入已启用模组列表 的本地化字符串。
+        ///   查找类似 从文件导入 的本地化字符串。
         /// </summary>
         public static string ImportEnabledModsListFromFile {
             get {
@@ -520,7 +538,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 从游戏存档中导入已启用模组 的本地化字符串。
+        ///   查找类似 从游戏存档导入 的本地化字符串。
         /// </summary>
         public static string ImportEnabledModsListFromSave {
             get {
@@ -529,11 +547,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 导入用户数据文件 的本地化字符串。
+        ///   查找类似 导入用户数据 的本地化字符串。
         /// </summary>
-        public static string ImportUserDataFile {
+        public static string ImportUserData {
             get {
-                return ResourceManager.GetString("ImportUserDataFile", resourceCulture);
+                return ResourceManager.GetString("ImportUserData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 导入用户分组 的本地化字符串。
+        /// </summary>
+        public static string ImportUserGroup {
+            get {
+                return ResourceManager.GetString("ImportUserGroup", resourceCulture);
             }
         }
         
@@ -634,6 +661,24 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string ManipulateUserData {
             get {
                 return ResourceManager.GetString("ManipulateUserData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 包含收藏列表和用户描述 的本地化字符串。
+        /// </summary>
+        public static string ManipulateUserDataToolTip {
+            get {
+                return ResourceManager.GetString("ManipulateUserDataToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 操作用户分组 的本地化字符串。
+        /// </summary>
+        public static string ManipulateUserGroup {
+            get {
+                return ResourceManager.GetString("ManipulateUserGroup", resourceCulture);
             }
         }
         
@@ -1019,6 +1064,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 保存用户数据成功 的本地化字符串。
+        /// </summary>
+        public static string SaveUserDataSuccess {
+            get {
+                return ResourceManager.GetString("SaveUserDataSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 保存用户分组成功 的本地化字符串。
         /// </summary>
         public static string SaveUserGroupSuccess {
@@ -1224,6 +1278,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string UserGroup {
             get {
                 return ResourceManager.GetString("UserGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 用户分组添加成功 的本地化字符串。
+        /// </summary>
+        public static string UserGroupAddSuccess {
+            get {
+                return ResourceManager.GetString("UserGroupAddSuccess", resourceCulture);
             }
         }
         
