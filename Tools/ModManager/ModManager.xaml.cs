@@ -81,7 +81,7 @@ namespace StarsectorTools.Tools.ModManager
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
-        string nowGroup = string.Empty;
+        string nowGroupName = string.Empty;
         Thread remindSaveThread = null!;
         ListBoxItem? nowSelectedListBoxItem = null;
         HashSet<string> allEnabledModsId = new();
@@ -291,7 +291,7 @@ namespace StarsectorTools.Tools.ModManager
                         Expander_RandomEnable.Visibility = Visibility.Visible;
                     else
                         Expander_RandomEnable.Visibility = Visibility.Collapsed;
-                    nowGroup = item.Tag.ToString()!;
+                    nowGroupName = item.Tag.ToString()!;
                     SearchMods(TextBox_SearchMods.Text);
                     ClearDataGridSelected();
                     CloseModInfo();

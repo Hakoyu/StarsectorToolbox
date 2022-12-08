@@ -976,7 +976,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             else
             {
-                ChangeShowGroup(nowGroup);
+                ChangeShowGroup(nowGroupName);
                 GC.Collect();
             }
         }
@@ -987,10 +987,10 @@ namespace StarsectorTools.Tools.ModManager
             showModsInfo = new(
             type switch
             {
-                strName => modsShowInfoFromGroup[nowGroup].Where(i => i.Name!.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strId => modsShowInfoFromGroup[nowGroup].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strAuthor => modsShowInfoFromGroup[nowGroup].Where(i => i.Author!.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strUserDescription => modsShowInfoFromGroup[nowGroup].Where(i => i.UserDescription!.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strName => modsShowInfoFromGroup[nowGroupName].Where(i => i.Name!.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strId => modsShowInfoFromGroup[nowGroupName].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strAuthor => modsShowInfoFromGroup[nowGroupName].Where(i => i.Author!.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strUserDescription => modsShowInfoFromGroup[nowGroupName].Where(i => i.UserDescription!.Contains(text, StringComparison.OrdinalIgnoreCase)),
                 _ => throw new NotImplementedException()
             });
             return showModsInfo;
