@@ -68,6 +68,16 @@ namespace StarsectorTools.Tools.ModManager
         const string userDataPath = "UserData.toml";
         const string userGroupPath = "UserGroup.toml";
         const string userCustomData = "UserCustomData";
+        const string enabledMods = "enabledMods";
+        const string modInfoJson = "mod_info.json";
+        const string strAll = "All";
+        const string strId = "Id";
+        const string strIcon = "Icon";
+        const string strMods = "Mods";
+        const string strUserCustomData = "UserCustomData";
+        const string strUserDescription = "UserDescription";
+        const string strName = "Name";
+        const string strAuthor = "Author";
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
