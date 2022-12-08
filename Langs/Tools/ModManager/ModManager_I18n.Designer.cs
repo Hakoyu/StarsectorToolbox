@@ -1017,20 +1017,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 重命名分组 的本地化字符串。
-        /// </summary>
-        public static string ReplaceGroupName {
-            get {
-                return ResourceManager.GetString("ReplaceGroupName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 替换模组 的本地化字符串。
         /// </summary>
         public static string ReplaceMod {
             get {
                 return ResourceManager.GetString("ReplaceMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 重命名用户分组 的本地化字符串。
+        /// </summary>
+        public static string ReplaceUserGroupName {
+            get {
+                return ResourceManager.GetString("ReplaceUserGroupName", resourceCulture);
             }
         }
         

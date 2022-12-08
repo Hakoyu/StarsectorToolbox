@@ -863,48 +863,10 @@ namespace StarsectorTools.Tools.ModManager
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             MenuItem menuItem = new();
-            menuItem.Header = I18n.ReplaceGroupName;
+            menuItem.Header = I18n.ReplaceUserGroupName;
             menuItem.Click += (o, e) =>
             {
-                AddUserGroup window = new();
-                ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
-                window.TextBox_Icon.Text = icon;
-                window.TextBox_Name.Text = name;
-                window.Show();
-                window.Button_Yes.Click += (o, e) =>
-                {
-                    string _icon = window.TextBox_Icon.Text;
-                    string _name = window.TextBox_Name.Text;
-                    if (_name == ModGroupType.Collected || _name == userCustomData)
-                    {
-                        MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData), "", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        return;
-                    }
-                    if (_name.Length > 0 && !allUserGroups.ContainsKey(_name))
-                    {
-                        ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = _icon });
-                        var temp = allUserGroups[name];
-                        allUserGroups.Remove(name);
-                        allUserGroups.Add(_name, temp);
-
-                        allListBoxItemsFromGroups.Remove(name);
-                        allListBoxItemsFromGroups.Add(_name, listBoxItem);
-
-                        var _temp = modsShowInfoFromGroup[name];
-                        modsShowInfoFromGroup.Remove(name);
-                        modsShowInfoFromGroup.Add(_name, _temp);
-
-                        window.Close();
-                        SetListBoxItemData(listBoxItem, _name);
-                        RefreshCountOfListBoxItems();
-                        RefreshModsContextMenu();
-                        StartRemindSaveThread();
-                    }
-                    else
-                        MessageBox.Show(I18n.AddUserNamingFailed);
-                };
-                window.Button_Cancel.Click += (o, e) => window.Close();
-                window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
+                ReplaceUserGroupName((ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)o)));
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -913,31 +875,12 @@ namespace StarsectorTools.Tools.ModManager
             menuItem.Header = I18n.RemoveUserGroup;
             menuItem.Click += (o, e) =>
             {
-                var _itme = (ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)o));
-                var _name = _itme.ToolTip.ToString()!;
-                if (nowSelectedListBoxItem == _itme)
-                    ListBox_ModsGroupMenu.SelectedIndex = 0;
-                ListBox_UserGroup.Items.Remove(_itme);
-                allUserGroups.Remove(_name);
-                allListBoxItemsFromGroups.Remove(_name);
-                modsShowInfoFromGroup.Remove(_name);
-                RefreshModsContextMenu();
-                StartRemindSaveThread();
-                Expander_RandomEnable.Visibility = Visibility.Collapsed;
-                for (int i = 0; i < ComboBox_ExportUserGroup.Items.Count; i++)
-                {
-                    if (ComboBox_ExportUserGroup.Items.GetItemAt(i) is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString()! == _name)
-                    {
-                        ComboBox_ExportUserGroup.Items.RemoveAt(i);
-                        ComboBox_ExportUserGroup.SelectedIndex = 0;
-                    }
-
-                }
+                RemoveUserGroup((ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)o)));
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
+
             listBoxItem.ContextMenu = contextMenu;
-            //ListBoxItemHelper.SetIcon(menuItem, icon);
             ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = icon });
             ListBox_UserGroup.Items.Add(listBoxItem);
             allUserGroups.Add(name, new());
@@ -946,9 +889,78 @@ namespace StarsectorTools.Tools.ModManager
             ComboBox_ExportUserGroup.Items.Add(new ComboBoxItem() { Content = name, Tag = name, Style = (Style)Application.Current.Resources["ComboBoxItem_Style"] });
             STLog.Instance.WriteLine($"{I18n.AddUserGroup} {icon} {name}");
         }
+
+        void RemoveUserGroup(ListBoxItem listBoxItem)
+        {
+            var name = listBoxItem.ToolTip.ToString()!;
+            if (nowSelectedListBoxItem == listBoxItem)
+                ListBox_ModsGroupMenu.SelectedIndex = 0;
+            ListBox_UserGroup.Items.Remove(listBoxItem);
+            allUserGroups.Remove(name);
+            allListBoxItemsFromGroups.Remove(name);
+            modsShowInfoFromGroup.Remove(name);
+            RefreshModsContextMenu();
+            StartRemindSaveThread();
+            Expander_RandomEnable.Visibility = Visibility.Collapsed;
+            for (int i = 0; i < ComboBox_ExportUserGroup.Items.Count; i++)
+            {
+                if (ComboBox_ExportUserGroup.Items.GetItemAt(i) is ComboBoxItem comboBoxItem && comboBoxItem.Content.ToString()! == name)
+                {
+                    ComboBox_ExportUserGroup.Items.RemoveAt(i);
+                    ComboBox_ExportUserGroup.SelectedIndex = 0;
+                }
+            }
+            GC.Collect();
+        }
+
+        void ReplaceUserGroupName(ListBoxItem listBoxItem)
+        {
+            string icon = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(listBoxItem)).Text;
+            string name = listBoxItem.ToolTip.ToString()!;
+            AddUserGroup window = new();
+            ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
+            window.TextBox_Icon.Text = icon;
+            window.TextBox_Name.Text = name;
+            window.Show();
+            window.Button_Yes.Click += (o, e) =>
+            {
+                string _icon = window.TextBox_Icon.Text;
+                string _name = window.TextBox_Name.Text;
+                if (_name == ModGroupType.Collected || _name == userCustomData)
+                {
+                    MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                if (name == _name || !allUserGroups.ContainsKey(_name))
+                {
+                    ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = _icon });
+                    var temp = allUserGroups[name];
+                    allUserGroups.Remove(name);
+                    allUserGroups.Add(_name, temp);
+
+                    allListBoxItemsFromGroups.Remove(name);
+                    allListBoxItemsFromGroups.Add(_name, listBoxItem);
+
+                    var _temp = modsShowInfoFromGroup[name];
+                    modsShowInfoFromGroup.Remove(name);
+                    modsShowInfoFromGroup.Add(_name, _temp);
+
+                    window.Close();
+                    SetListBoxItemData(listBoxItem, _name);
+                    RefreshCountOfListBoxItems();
+                    RefreshModsContextMenu();
+                    StartRemindSaveThread();
+                }
+                else
+                    MessageBox.Show(I18n.AddUserNamingFailed);
+            };
+            window.Button_Cancel.Click += (o, e) => window.Close();
+            window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
+            GC.Collect();
+        }
         void SetListBoxItemData(ListBoxItem item, string name)
         {
-            item.Content = new Emoji.Wpf.TextBlock() { Text = name };
+            item.Content = name;
             item.ToolTip = name;
             item.Tag = name;
         }
