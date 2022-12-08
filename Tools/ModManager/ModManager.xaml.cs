@@ -81,7 +81,7 @@ namespace StarsectorTools.Tools.ModManager
         bool groupMenuOpen = false;
         bool showModInfo = false;
         string? nowSelectedMod = null;
-        string nowGroup = ModGroupType.All;
+        string nowGroup = string.Empty;
         Thread remindSaveThread = null!;
         ListBoxItem? nowSelectedListBoxItem = null;
         HashSet<string> allEnabledModsId = new();
@@ -271,10 +271,10 @@ namespace StarsectorTools.Tools.ModManager
             {
                 if (listBox.Name == ListBox_ModsGroupMenu.Name)
                 {
-                    ListBox_GroupType.SelectedIndex = -1;
+                    ListBox_ModTypeGroup.SelectedIndex = -1;
                     ListBox_UserGroup.SelectedIndex = -1;
                 }
-                else if (listBox.Name == ListBox_GroupType.Name)
+                else if (listBox.Name == ListBox_ModTypeGroup.Name)
                 {
                     ListBox_ModsGroupMenu.SelectedIndex = -1;
                     ListBox_UserGroup.SelectedIndex = -1;
@@ -282,18 +282,21 @@ namespace StarsectorTools.Tools.ModManager
                 else if (listBox.Name == ListBox_UserGroup.Name)
                 {
                     ListBox_ModsGroupMenu.SelectedIndex = -1;
-                    ListBox_GroupType.SelectedIndex = -1;
+                    ListBox_ModTypeGroup.SelectedIndex = -1;
                 }
-                nowSelectedListBoxItem = item;
-                if (allUserGroups.ContainsKey(item.ToolTip.ToString()!))
-                    Expander_RandomEnable.Visibility = Visibility.Visible;
-                else
-                    Expander_RandomEnable.Visibility = Visibility.Collapsed;
-                nowGroup = item.Tag.ToString()!;
-                ClearDataGridSelected();
-                SearchMods(TextBox_SearchMods.Text);
-                CloseModInfo();
-                GC.Collect();
+                if (item != nowSelectedListBoxItem)
+                {
+                    nowSelectedListBoxItem = item;
+                    if (allUserGroups.ContainsKey(item.ToolTip.ToString()!))
+                        Expander_RandomEnable.Visibility = Visibility.Visible;
+                    else
+                        Expander_RandomEnable.Visibility = Visibility.Collapsed;
+                    nowGroup = item.Tag.ToString()!;
+                    SearchMods(TextBox_SearchMods.Text);
+                    ClearDataGridSelected();
+                    CloseModInfo();
+                    GC.Collect();
+                }
             }
         }
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)

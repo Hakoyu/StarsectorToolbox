@@ -80,7 +80,7 @@
                         </ListBoxItem>
                         <ListBoxItem Padding="0">
                             <Expander Header="{x:Static I18n:ModManager_I18n.GroupedByModType}" Style="{StaticResource Expander_Style}" Padding="0">
-                                <ListBox x:Name="ListBox_GroupType" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
+                                <ListBox x:Name="ListBox_ModTypeGroup" pu:IconHelper.Margin="0,0,10,0" HorizontalContentAlignment="Stretch" Style="{StaticResource ListBox_Style}" SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged" PreviewMouseWheel="ListBox_PreviewMouseWheel">
                                     <ListBoxItem Content="{x:Static I18n:ModManager_I18n.Libraries}" ToolTip="{x:Static I18n:ModManager_I18n.Libraries}" Tag="{x:Static local:ModGroupType.Libraries}" Style="{StaticResource ListBoxItem_Style}">
                                         <pu:ListBoxItemHelper.Icon>
                                             <emoji:TextBlock Text="🔝"/>
