@@ -6,6 +6,7 @@
       xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
       xmlns:local="clr-namespace:StarsectorTools.Pages"
       xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
+      xmlns:Libs="clr-namespace:StarsectorTools.Libs"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Setting">
@@ -29,6 +30,13 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="1" Margin="5,0,5,0" VerticalAlignment="Center" Orientation="Horizontal">
                         <Button x:Name="Button_OpenLogFile" Content="{x:Static I18n:Settings_I18n.OpenLogFile}" Style="{StaticResource Button_Style}" HorizontalAlignment="Left" Margin="0,0,5,0" Click="Button_OpenLogFile_Click"/>
+                        <Label x:Name="Label_LogLevel" Content="{x:Static I18n:Settings_I18n.LogLevel}" Style="{StaticResource Label_Style}"/>
+                        <ComboBox x:Name="ComboBox_LogLevel" Style="{StaticResource ComboBox_Style}" Margin="0,0,5,0" SelectionChanged="ComboBox_LogLevel_SelectionChanged">
+                            <ComboBoxItem Content="{x:Static Libs:STLogLevel.DEBUG}" ToolTip="{x:Static Libs:STLogLevel.DEBUG}" Style="{StaticResource ComboBoxItem_Style}" />
+                            <ComboBoxItem Content="{x:Static Libs:STLogLevel.INFO}" ToolTip="{x:Static Libs:STLogLevel.INFO}" Style="{StaticResource ComboBoxItem_Style}"/>
+                            <ComboBoxItem Content="{x:Static Libs:STLogLevel.WARN}" ToolTip="{x:Static Libs:STLogLevel.WARN}" Style="{StaticResource ComboBoxItem_Style}"/>
+                        </ComboBox>
+                        <Label x:Name="Label_Language" Content="{x:Static I18n:Settings_I18n.Language}" Style="{StaticResource Label_Style}"/>
                         <ComboBox x:Name="ComboBox_Language" Style="{StaticResource ComboBox_Style}" Margin="0,0,5,0" SelectionChanged="ComboBox_Language_SelectionChanged">
                             <ComboBoxItem Content="简体中文" ToolTip="zh-CN" Style="{StaticResource ComboBoxItem_Style}" />
                             <ComboBoxItem Content="English" ToolTip="en-US" Style="{StaticResource ComboBoxItem_Style}"/>

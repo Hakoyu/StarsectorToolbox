@@ -18,7 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using StarsectorTools.Lib;
+using StarsectorTools.Libs;
 using StarsectorTools.Windows;
 using Panuon.WPF.UI;
 using System.ComponentModel;
@@ -404,7 +404,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == ModGroupType.Collected || name == userCustomData)
-                        MessageBox.Show(ST.I18nParseKey(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData));
+                        MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData));
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
@@ -553,7 +553,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SearchMods(TextBox_SearchMods.Text);
+            if (TextBox_SearchMods.Text.Length > 0)
+                SearchMods(TextBox_SearchMods.Text);
         }
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)

@@ -106,4 +106,25 @@
   <data name="ConfigFileError" xml:space="preserve">
     <value>设置文件错误</value>
   </data>
+  <data name="LogLevel_DEBUG" xml:space="preserve">
+    <value>调试</value>
+  </data>
+  <data name="LogLevel_INFO" xml:space="preserve">
+    <value>标准</value>
+  </data>
+  <data name="LogLevel_WARN" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="LogLevel" xml:space="preserve">
+    <value>Log输出级别:</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言:</value>
+  </data>
+  <data name="LanguageSwitch" xml:space="preserve">
+    <value>语言切换为</value>
+  </data>
+  <data name="LogLevelSwitch" xml:space="preserve">
+    <value>Log输出级别切换为</value>
+  </data>
 </root>

@@ -493,29 +493,29 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 分组 {0} 含有模组 {1} 个 的本地化字符串。
+        ///   查找类似 模组类型分组 的本地化字符串。
         /// </summary>
-        public static string GroupContainsModCount {
+        public static string GroupedByModType {
             get {
-                return ResourceManager.GetString("GroupContainsModCount", resourceCulture);
+                return ResourceManager.GetString("GroupedByModType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 分组数量刷新完成 的本地化字符串。
+        /// </summary>
+        public static string GroupModCountRefresh {
+            get {
+                return ResourceManager.GetString("GroupModCountRefresh", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 分组显示数量刷新完成 的本地化字符串。
         /// </summary>
-        public static string GroupCountRefreshComplete {
+        public static string GroupModCountRefreshComplete {
             get {
-                return ResourceManager.GetString("GroupCountRefreshComplete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 模组类型分组 的本地化字符串。
-        /// </summary>
-        public static string GroupedByModType {
-            get {
-                return ResourceManager.GetString("GroupedByModType", resourceCulture);
+                return ResourceManager.GetString("GroupModCountRefreshComplete", resourceCulture);
             }
         }
         

@@ -193,4 +193,7 @@
   <data name="OpenGameDirectory" xml:space="preserve">
     <value>打开目录</value>
   </data>
+  <data name="VmparamsMemorySet" xml:space="preserve">
+    <value>vmparams 内存设置为</value>
+  </data>
 </root>

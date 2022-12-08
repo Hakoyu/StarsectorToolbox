@@ -126,4 +126,25 @@
   <data name="ConfigFileError" xml:space="preserve">
     <value>Config file error</value>
   </data>
+  <data name="LogLevel_DEBUG" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="LogLevel_INFO" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="LogLevel_WARN" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="LogLevel" xml:space="preserve">
+    <value>LogLevel:</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="LanguageSwitch" xml:space="preserve">
+    <value>Language switch to</value>
+  </data>
+  <data name="LogLevelSwitch" xml:space="preserve">
+    <value>Log level switch to</value>
+  </data>
 </root>

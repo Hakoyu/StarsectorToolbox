@@ -22,7 +22,7 @@ using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using I18n = StarsectorTools.Langs.Libs.Libs_I18n;
 
-namespace StarsectorTools.Lib
+namespace StarsectorTools.Libs
 {
     public enum STLogLevel
     {
@@ -43,6 +43,17 @@ namespace StarsectorTools.Lib
             {
                 return lazy.Value;
             }
+        }
+        public static STLogLevel Str2STLogLevel(string str)
+        {
+            return str switch
+            {
+                nameof(STLogLevel.DEBUG) => STLogLevel.DEBUG,
+                nameof(STLogLevel.INFO) => STLogLevel.INFO,
+                nameof(STLogLevel.WARN) => STLogLevel.WARN,
+                nameof(STLogLevel.ERROR) => STLogLevel.ERROR,
+                _ => STLogLevel.INFO
+            };
         }
         public static string GetClassNameAndMethodName()
         {
@@ -69,6 +80,30 @@ namespace StarsectorTools.Lib
                     name = GetClassName();
                 sw.WriteLine($"[{name}] {logLevel} {message}");
                 sw.Flush();
+            }
+        }
+        public void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] keys)
+        {
+            if (logLevel >= LogLevel)
+            {
+                string name;
+                if (LogLevel == STLogLevel.DEBUG)
+                    name = GetClassNameAndMethodName();
+                else
+                    name = GetClassName();
+                sw.WriteLine($"[{name}] {logLevel} {ParseKey(message, keys)}");
+                sw.Flush();
+            }
+        }
+        private string ParseKey(string str, params object[] keys)
+        {
+            try
+            {
+                return string.Format(str, keys);
+            }
+            catch
+            {
+                return str;
             }
         }
         public void Close()
@@ -112,17 +147,6 @@ namespace StarsectorTools.Lib
                 gameExePath = null!;
                 STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {path}", STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.GameDirectoryError}\n{I18n.Path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        public static string I18nParseKey(string str, params object[] keys)
-        {
-            try
-            {
-                return string.Format(str, keys);
-            }
-            catch
-            {
-                return str;
             }
         }
         public static bool CopyDirectory(string sourcePath, string destPath)

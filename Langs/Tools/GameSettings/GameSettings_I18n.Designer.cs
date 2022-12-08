@@ -347,5 +347,14 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
                 return ResourceManager.GetString("Used", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 vmparams 内存设置为 的本地化字符串。
+        /// </summary>
+        public static string VmparamsMemorySet {
+            get {
+                return ResourceManager.GetString("VmparamsMemorySet", resourceCulture);
+            }
+        }
     }
 }

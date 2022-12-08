@@ -193,4 +193,7 @@
   <data name="OpenGameDirectory" xml:space="preserve">
     <value>Open directory</value>
   </data>
+  <data name="VmparamsMemorySet" xml:space="preserve">
+    <value>vmparams memory set to</value>
+  </data>
 </root>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using HKW.TomlParse;
-using StarsectorTools.Lib;
+using StarsectorTools.Libs;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
@@ -28,7 +28,8 @@ namespace StarsectorTools.Windows
                 {
                     using TomlTable toml = TOML.Parse(ST.configPath);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
-                    ST.SetGamePath(toml["Game"]["GamePath"].AsString);
+                    STLog.Instance.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
+                    ST.SetGamePath(toml["Game"]["GamePath"].AsString!);
                     if (!ST.CheckGamePath())
                     {
                         if (!(MessageBox.Show(this, I18n.GameNotFound_SelectAgain, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
@@ -110,7 +111,7 @@ namespace StarsectorTools.Windows
             ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
             ListBox_Menu.Items.Add(item);
             menuList.Add(tag, page);
-            STLog.Instance.WriteLine($"{I18n.AddMenu} {Icon} {name} {page}");
+            STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name} {page}");
         }
     }
 }

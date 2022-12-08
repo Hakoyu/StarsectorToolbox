@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using HKW.Management;
-using StarsectorTools.Lib;
+using StarsectorTools.Libs;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.IO;

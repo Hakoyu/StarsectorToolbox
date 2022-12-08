@@ -167,10 +167,10 @@
   <data name="ClassifyTo" xml:space="preserve">
     <value>分类至</value>
   </data>
-  <data name="GroupContainsModCount" xml:space="preserve">
-    <value>分组 {0} 含有模组 {1} 个</value>
+  <data name="GroupModCountRefresh" xml:space="preserve">
+    <value>分组数量刷新完成</value>
   </data>
-  <data name="GroupCountRefreshComplete" xml:space="preserve">
+  <data name="GroupModCountRefreshComplete" xml:space="preserve">
     <value>分组显示数量刷新完成</value>
   </data>
   <data name="ContextMenuRefreshComplete" xml:space="preserve">

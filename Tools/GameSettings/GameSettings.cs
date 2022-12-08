@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using HKW.Management;
-using StarsectorTools.Lib;
+using StarsectorTools.Libs;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Windows;
@@ -25,6 +25,7 @@ namespace StarsectorTools.Tools.GameSettings
         void SetVmparamsData()
         {
             File.WriteAllText($"{ST.gamePath}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_Memory.Text}m", RegexOptions.IgnoreCase));
+            STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {TextBox_Memory.Text}m");
         }
         void GetGameKey()
         {

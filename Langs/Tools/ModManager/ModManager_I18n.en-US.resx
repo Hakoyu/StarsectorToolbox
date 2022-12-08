@@ -167,10 +167,10 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="ClassifyTo" xml:space="preserve">
     <value>Classify to</value>
   </data>
-  <data name="GroupContainsModCount" xml:space="preserve">
-    <value>Group {0} contains mod count {1}</value>
+  <data name="GroupModCountRefresh" xml:space="preserve">
+    <value>Group contains mod count refresh</value>
   </data>
-  <data name="GroupCountRefreshComplete" xml:space="preserve">
+  <data name="GroupModCountRefreshComplete" xml:space="preserve">
     <value>Group count display refresh complete</value>
   </data>
   <data name="ContextMenuRefreshComplete" xml:space="preserve">

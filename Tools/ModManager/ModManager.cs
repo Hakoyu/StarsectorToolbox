@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using StarsectorTools.Lib;
+using StarsectorTools.Libs;
 using System.ComponentModel;
 using Panuon.WPF.UI;
 using System.Windows.Data;
@@ -117,7 +117,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             if (err != null)
                 MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Error);
-            STLog.Instance.WriteLine(ST.I18nParseKey(I18n.ModAddSize, allModsInfo.Count, size));
+            STLog.Instance.WriteLine(I18n.ModAddSize, STLogLevel.INFO, allModsInfo.Count, size);
         }
 
         static ModInfo GetModInfo(string jsonPath)
@@ -206,7 +206,6 @@ namespace StarsectorTools.Tools.ModManager
         }
         void GetUserGroup(string path)
         {
-            STLog.Instance.WriteLine($"{I18n.LoadUserGroup} {I18n.Path}: {path}");
             try
             {
                 string err = null!;
@@ -214,10 +213,9 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (var kv in toml)
                 {
                     string group = kv.Key;
-                    STLog.Instance.WriteLine($"{I18n.LoadUserGroup} {group}");
                     if (!allUserGroups.ContainsKey(group))
                     {
-                        AddUserGroup(kv.Value["Icon"], group);
+                        AddUserGroup(kv.Value["Icon"]!, group);
                         foreach (string id in kv.Value["Mods"].AsTomlArray)
                         {
                             if (allModsShowInfo.ContainsKey(id))
@@ -232,7 +230,6 @@ namespace StarsectorTools.Tools.ModManager
                                 err += $"{id}\n";
                             }
                         }
-                        STLog.Instance.WriteLine($"{I18n.UserGroupAddSuccess} {group}");
                     }
                     else
                     {
@@ -415,9 +412,9 @@ namespace StarsectorTools.Tools.ModManager
             {
                 int size = modsShowInfoFromGroup[item.Tag.ToString()!].Count;
                 item.Content = $"{item.ToolTip} ({size})";
-                STLog.Instance.WriteLine(ST.I18nParseKey(I18n.GroupContainsModCount, item.Content, size), STLogLevel.DEBUG);
+                STLog.Instance.WriteLine($"{I18n.GroupModCountRefresh} {item.Content}", STLogLevel.DEBUG);
             }
-            STLog.Instance.WriteLine($"{I18n.GroupCountRefreshComplete}");
+            STLog.Instance.WriteLine(I18n.GroupModCountRefreshComplete);
         }
         bool CheckEnabled(string id)
         {
@@ -553,7 +550,7 @@ namespace StarsectorTools.Tools.ModManager
                 modsShowInfoFromGroup[group].Remove(allModsShowInfo[id]);
             }
             info.ContextMenu = CreateContextMenu(info);
-            STLog.Instance.WriteLine(ST.I18nParseKey(I18n.ChangeModUserGroup, id, group, status), STLogLevel.DEBUG);
+            STLog.Instance.WriteLine(I18n.ChangeModUserGroup, STLogLevel.DEBUG, id, group, status);
         }
         void ChangeSelectedModsEnabled(bool? enabled = null)
         {
@@ -794,7 +791,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];
-                    if (MessageBox.Show($"{newModInfo.Id}\n{ST.I18nParseKey(I18n.SameModAlreadyExists, originalModInfo.Version, newModInfo.Version)}", "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (MessageBox.Show($"{newModInfo.Id}\n{string.Format(I18n.SameModAlreadyExists, originalModInfo.Version, newModInfo.Version)}", "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         ST.CopyDirectory(originalModInfo.Path, $"{modBackupDirectory}\\Temp");
                         new Task(() =>
@@ -880,7 +877,7 @@ namespace StarsectorTools.Tools.ModManager
                     string _name = window.TextBox_Name.Text;
                     if (_name == ModGroupType.Collected || _name == userCustomData)
                     {
-                        MessageBox.Show(ST.I18nParseKey(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData), "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData), "", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                     if (_name.Length > 0 && !allUserGroups.ContainsKey(_name))

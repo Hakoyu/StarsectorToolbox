@@ -70,6 +70,69 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
+        ///   查找类似 语言: 的本地化字符串。
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 语言切换为 的本地化字符串。
+        /// </summary>
+        public static string LanguageSwitch {
+            get {
+                return ResourceManager.GetString("LanguageSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Log输出级别: 的本地化字符串。
+        /// </summary>
+        public static string LogLevel {
+            get {
+                return ResourceManager.GetString("LogLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 调试 的本地化字符串。
+        /// </summary>
+        public static string LogLevel_DEBUG {
+            get {
+                return ResourceManager.GetString("LogLevel_DEBUG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 标准 的本地化字符串。
+        /// </summary>
+        public static string LogLevel_INFO {
+            get {
+                return ResourceManager.GetString("LogLevel_INFO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 警告 的本地化字符串。
+        /// </summary>
+        public static string LogLevel_WARN {
+            get {
+                return ResourceManager.GetString("LogLevel_WARN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Log输出级别切换为 的本地化字符串。
+        /// </summary>
+        public static string LogLevelSwitch {
+            get {
+                return ResourceManager.GetString("LogLevelSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 打开Log文件 的本地化字符串。
         /// </summary>
         public static string OpenLogFile {
