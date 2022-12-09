@@ -472,11 +472,11 @@
   <data name="Description" xml:space="preserve">
     <value>描述</value>
   </data>
-  <data name="Enable" xml:space="preserve">
-    <value>启用</value>
+  <data name="Enabled" xml:space="preserve">
+    <value>已启用</value>
   </data>
-  <data name="Collecte" xml:space="preserve">
-    <value>收藏</value>
+  <data name="UnCollected" xml:space="preserve">
+    <value>未收藏</value>
   </data>
   <data name="NotCollected" xml:space="preserve">
     <value>未收藏</value>
@@ -499,11 +499,11 @@
   <data name="ModManager" xml:space="preserve">
     <value>模组管理器</value>
   </data>
-  <data name="Disable" xml:space="preserve">
-    <value>禁用</value>
+  <data name="Disabled" xml:space="preserve">
+    <value>已禁用</value>
   </data>
-  <data name="CancelCollection" xml:space="preserve">
-    <value>取消收藏</value>
+  <data name="Collected" xml:space="preserve">
+    <value>已收藏</value>
   </data>
   <data name="ImportUserGroup" xml:space="preserve">
     <value>导入用户分组</value>

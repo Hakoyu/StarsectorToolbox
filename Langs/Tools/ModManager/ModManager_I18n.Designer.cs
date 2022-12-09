@@ -160,15 +160,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 取消收藏 的本地化字符串。
-        /// </summary>
-        public static string CancelCollection {
-            get {
-                return ResourceManager.GetString("CancelCollection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 取消收藏所选模组 的本地化字符串。
         /// </summary>
         public static string CancelCollectionSelectedMods {
@@ -205,11 +196,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 收藏 的本地化字符串。
+        ///   查找类似 已收藏 的本地化字符串。
         /// </summary>
-        public static string Collecte {
+        public static string Collected {
             get {
-                return ResourceManager.GetString("Collecte", resourceCulture);
+                return ResourceManager.GetString("Collected", resourceCulture);
             }
         }
         
@@ -313,20 +304,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 禁用 的本地化字符串。
-        /// </summary>
-        public static string Disable {
-            get {
-                return ResourceManager.GetString("Disable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 禁用所有已启用模组 的本地化字符串。
         /// </summary>
         public static string DisableAllEnabledMods {
             get {
                 return ResourceManager.GetString("DisableAllEnabledMods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已禁用 的本地化字符串。
+        /// </summary>
+        public static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
             }
         }
         
@@ -349,11 +340,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 启用 的本地化字符串。
+        ///   查找类似 已启用 的本地化字符串。
         /// </summary>
-        public static string Enable {
+        public static string Enabled {
             get {
-                return ResourceManager.GetString("Enable", resourceCulture);
+                return ResourceManager.GetString("Enabled", resourceCulture);
             }
         }
         
@@ -1233,6 +1224,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string SupportedVersionSameAsGameVersion {
             get {
                 return ResourceManager.GetString("SupportedVersionSameAsGameVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未收藏 的本地化字符串。
+        /// </summary>
+        public static string UnCollected {
+            get {
+                return ResourceManager.GetString("UnCollected", resourceCulture);
             }
         }
         

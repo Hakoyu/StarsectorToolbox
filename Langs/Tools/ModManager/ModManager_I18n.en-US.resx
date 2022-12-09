@@ -472,11 +472,11 @@ New Version: {1}</value>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
-  <data name="Enable" xml:space="preserve">
-    <value>Enable</value>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
   </data>
-  <data name="Collecte" xml:space="preserve">
-    <value>Collecte</value>
+  <data name="UnCollected" xml:space="preserve">
+    <value>UnCollected</value>
   </data>
   <data name="NotCollected" xml:space="preserve">
     <value>Not collected</value>
@@ -499,11 +499,11 @@ Cannot be removed midway</value>
   <data name="ModManager" xml:space="preserve">
     <value>ModManager</value>
   </data>
-  <data name="Disable" xml:space="preserve">
-    <value>Disable</value>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
   </data>
-  <data name="CancelCollection" xml:space="preserve">
-    <value>Cancel collection</value>
+  <data name="Collected" xml:space="preserve">
+    <value>Collected</value>
   </data>
   <data name="ImportUserGroup" xml:space="preserve">
     <value>Import user group</value>

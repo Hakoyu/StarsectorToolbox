@@ -17,26 +17,26 @@
         </Style>
         <Style x:Key="EnableStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorAqua2}"/>
-            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Disable}"/>
-            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Disable}"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Enabled}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Enabled}"/>
             <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="DisableStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorRed2}"/>
-            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Enable}"/>
-            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Enable}"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Disabled}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Disabled}"/>
             <Setter Property="Tag" Value="false"/>
         </Style>
         <Style x:Key="CollecteStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorYellow2}"/>
-            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.CancelCollection}"/>
-            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.CancelCollection}"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Collected}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Collected}"/>
             <Setter Property="Tag" Value="true"/>
         </Style>
         <Style x:Key="CancelCollectionStyle" TargetType="Button" BasedOn="{StaticResource Button_Style}">
             <Setter Property="Background" Value="{DynamicResource ColorLight1}"/>
-            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.Collecte}"/>
-            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.Collecte}"/>
+            <Setter Property="Content" Value="{x:Static I18n:ModManager_I18n.UnCollected}"/>
+            <Setter Property="ToolTip" Value="{x:Static I18n:ModManager_I18n.UnCollected}"/>
             <Setter Property="Tag" Value="false"/>
         </Style>
         <Style x:Key="GameVersionNormalStyle" TargetType="Label" BasedOn="{StaticResource Label_Style}">

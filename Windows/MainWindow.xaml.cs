@@ -51,6 +51,11 @@ namespace StarsectorTools.Windows
             //亚克力背景
             //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             ListBox_Menu.SelectedIndex = 0;
+            Grid_TitleBar.Background = SystemParameters.WindowGlassBrush;
+            var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
+            if (ST.IsLightColor(color))
+                Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
+
             //DirectoryInfo dirs = new(AppDomain.CurrentDomain.BaseDirectory);
             //foreach (FileInfo file in dirs.GetFiles())
             //{
