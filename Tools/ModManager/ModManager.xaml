@@ -145,6 +145,9 @@
                 </Grid>
                 <Grid x:Name="Grid_DataGrid" Margin="125,0,120,0" >
                     <DataGrid x:Name="DataGrid_ModsShowList" Margin="0,30,5,0" AutoGenerateColumns="False" CanUserAddRows="False" RowHeight="50" GridLinesVisibility="Horizontal" pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center" d:ItemsSource="{d:SampleData ItemCount=5}" RowDetailsVisibilityMode="Visible" LostFocus="DataGrid_ModsShowList_LostFocus" AllowDrop="True" Drop="DataGrid_ModsShowList_Drop" Style="{StaticResource DataGrid_Style}">
+                        <DataGrid.InputBindings>
+                            <KeyBinding Gesture="Delete" Command="ApplicationCommands.NotACommand"/>
+                        </DataGrid.InputBindings>
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Tag" Value="{Binding Id}"/>
