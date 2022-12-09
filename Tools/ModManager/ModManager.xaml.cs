@@ -299,6 +299,15 @@ namespace StarsectorTools.Tools.ModManager
                 }
             }
         }
+        private void DataGrid_ModsShowList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            if(sender is DataGrid dataGrid)
+            {
+                CloseModInfo();
+                ClearDataGridSelected();
+            }
+        }
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
