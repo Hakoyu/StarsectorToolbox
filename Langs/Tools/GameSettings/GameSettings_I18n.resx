@@ -196,4 +196,7 @@
   <data name="VmparamsMemorySet" xml:space="preserve">
     <value>vmparams 内存设置为</value>
   </data>
+  <data name="VmparamsMemorySetSuccess" xml:space="preserve">
+    <value>vmparams 内存设置设置成功</value>
+  </data>
 </root>

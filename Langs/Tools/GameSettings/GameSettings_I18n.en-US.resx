@@ -196,4 +196,7 @@
   <data name="VmparamsMemorySet" xml:space="preserve">
     <value>vmparams memory set to</value>
   </data>
+  <data name="VmparamsMemorySetSuccess" xml:space="preserve">
+    <value>vmparams memory set success</value>
+  </data>
 </root>

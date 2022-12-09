@@ -23,5 +23,5 @@
     <SolidColorBrush x:Key="ColorYellow1" Color="#19FFFF10"/>
     <SolidColorBrush x:Key="ColorYellow2" Color="#33FFFF10"/>
     <SolidColorBrush x:Key="ColorYellow3" Color="#4CFFFF10"/>
-    <Color x:Key="ColorAqua" A="33" B="255" G="255" />
+    <Color x:Key="ColorAqua" R="1" G="255" B="255" />
 </ResourceDictionary>

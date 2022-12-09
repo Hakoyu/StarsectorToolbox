@@ -26,6 +26,7 @@ namespace StarsectorTools.Tools.GameSettings
         {
             File.WriteAllText($"{ST.gamePath}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_Memory.Text}m", RegexOptions.IgnoreCase));
             STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {TextBox_Memory.Text}m");
+            MessageBox.Show(I18n.VmparamsMemorySetSuccess);
         }
         void GetGameKey()
         {
