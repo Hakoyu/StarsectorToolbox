@@ -1,31 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using System.Xml.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using StarsectorTools.Libs;
 using StarsectorTools.Windows;
-using Panuon.WPF.UI;
-using System.ComponentModel;
-using System.Xml.Linq;
-using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
-using HKW.TomlParse;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -33,182 +25,187 @@ namespace StarsectorTools.Tools.ModManager
     {
         /// <summary>全部模组</summary>
         public const string All = nameof(All);
+
         /// <summary>已启用模组</summary>
         public const string Enabled = nameof(Enabled);
+
         /// <summary>未启用模组</summary>
         public const string Disabled = nameof(Disabled);
+
         /// <summary>前置模组</summary>
         public const string Libraries = nameof(Libraries);
+
         /// <summary>大型模组</summary>
         public const string MegaMods = nameof(MegaMods);
+
         /// <summary>派系模组</summary>
         public const string FactionMods = nameof(FactionMods);
+
         /// <summary>内容模组</summary>
         public const string ContentExpansions = nameof(ContentExpansions);
+
         /// <summary>功能模组</summary>
         public const string UtilityMods = nameof(UtilityMods);
+
         /// <summary>闲杂模组</summary>
         public const string MiscellaneousMods = nameof(MiscellaneousMods);
+
         /// <summary>美化模组</summary>
         public const string BeautifyMods = nameof(BeautifyMods);
+
         /// <summary>全部模组</summary>
         public const string UnknownMods = nameof(UnknownMods);
+
         /// <summary>已收藏模组</summary>
         public const string Collected = nameof(Collected);
     }
+
     /// <summary>
     /// ModManager.xaml 的交互逻辑
     /// </summary>
     public partial class ModManager : Page
     {
-        const string modGroupFile = "ModGroup.toml";
-        const string modBackupDirectory = @"BackUp\Mods";
-        const string backupDirectory = "Backup";
-        readonly static Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
-        const string userDataPath = "UserData.toml";
-        const string userGroupPath = "UserGroup.toml";
-        const string userCustomData = "UserCustomData";
-        const string enabledMods = "enabledMods";
-        const string modInfoJson = "mod_info.json";
-        const string strAll = "All";
-        const string strId = "Id";
-        const string strIcon = "Icon";
-        const string strMods = "Mods";
-        const string strUserCustomData = "UserCustomData";
-        const string strUserDescription = "UserDescription";
-        const string strName = "Name";
-        const string strAuthor = "Author";
-        bool groupMenuOpen = false;
-        bool showModInfo = false;
-        string? nowSelectedMod = null;
-        string nowGroupName = string.Empty;
-        Thread remindSaveThread = null!;
-        ListBoxItem? nowSelectedListBoxItem = null;
-        HashSet<string> allEnabledModsId = new();
-        HashSet<string> allCollectedModsId = new();
-        Dictionary<string, ModInfo> allModsInfo = new();
-        Dictionary<string, ListBoxItem> allListBoxItemsFromGroups = new();
-        Dictionary<string, ModShowInfo> allModsShowInfo = new();
-        Dictionary<string, HashSet<string>> allUserGroups = new();
-        Dictionary<string, HashSet<string>> modsIdFromGroups = new();
-        Dictionary<string, ObservableCollection<ModShowInfo>> modsShowInfoFromGroup = new();
-
-        class ButtonStyle
+        private const string modGroupFile = "ModGroup.toml";
+        private const string modBackupDirectory = @"BackUp\Mods";
+        private const string backupDirectory = "Backup";
+        private const string userDataPath = "UserData.toml";
+        private const string userGroupPath = "UserGroup.toml";
+        private const string userCustomData = "UserCustomData";
+        private const string enabledMods = "enabledMods";
+        private const string modInfoJson = "mod_info.json";
+        private const string strAll = "All";
+        private const string strId = "Id";
+        private const string strIcon = "Icon";
+        private const string strMods = "Mods";
+        private const string strUserCustomData = "UserCustomData";
+        private const string strUserDescription = "UserDescription";
+        private const string strName = "Name";
+        private const string strAuthor = "Author";
+        /// <summary>记录了模组类型的嵌入资源链接</summary>
+        private static readonly Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
+        /// <summary>模组分组列表的展开状态</summary>
+        private bool isGroupMenuOpen = false;
+        /// <summary>模组详情的展开状态</summary>
+        private bool isShowModInfo = false;
+        /// <summary>当前选择的模组ID</summary>
+        private string? nowSelectedModId = null;
+        /// <summary>当前选择的分组名称</summary>
+        private string nowGroupName = string.Empty;
+        /// <summary>提醒保存配置的动画线程</summary>
+        private Thread remindSaveThread = null!;
+        /// <summary>当前选择的列表项</summary>
+        private ListBoxItem? nowSelectedListBoxItem = null;
+        /// <summary>已启用的模组ID</summary>
+        private HashSet<string> allEnabledModsId = new();
+        /// <summary>已收藏的模组ID</summary>
+        private HashSet<string> allCollectedModsId = new();
+        /// <summary>
+        /// <para>全部模组信息</para>
+        /// <para>Key: 模组ID</para>
+        /// <para>Value: 模组信息</para>
+        /// </summary>
+        private Dictionary<string, ModInfo> allModsInfo = new();
+        /// <summary>
+        /// <para>全部分组列表项</para>
+        /// <para>Key: 列表项Tag或ModGroupType</para>
+        /// <para>Value: 列表项</para>
+        /// </summary>
+        private Dictionary<string, ListBoxItem> allListBoxItem = new();
+        /// <summary>
+        /// <para>全部模组显示信息</para>
+        /// <para>Key: 模组ID</para>
+        /// <para>Value: 模组显示信息</para>
+        /// </summary>
+        private Dictionary<string, ModShowInfo> allModShowInfo = new();
+        /// <summary>
+        /// <para>全部模组类型分组</para>
+        /// <para>Key: 分组名称</para>
+        /// <para>Value: 包含的模组</para>
+        /// </summary>
+        private Dictionary<string, HashSet<string>> allModTypeGroup = new();
+        /// <summary>
+        /// <para>全部用户分组</para>
+        /// <para>Key: 分组名称</para>
+        /// <para>Value: 包含的模组</para>
+        /// </summary>
+        private Dictionary<string, HashSet<string>> allUserGroup = new();
+        /// <summary>
+        /// <para>全部分组包含的模组显示信息列表</para>
+        /// <para><see langword="key"/>: 分组名称</para>
+        /// <para><see langword="value"/>: 包含的模组显示信息列表</para>
+        /// </summary>
+        private Dictionary<string, ObservableCollection<ModShowInfo>> allUserGroupInfo = new();
+        /// <summary>模组显示信息</summary>
+        public partial class ModShowInfo : ObservableObject
         {
-            public Style Enabled = null!;
-            public Style Disable = null!;
-            public Style Collecte = null!;
-            public Style CancelCollection = null!;
-        }
-        readonly ButtonStyle buttonStyle = new();
-        class LabelStyle
-        {
-            public Style GameVersionNormal = null!;
-            public Style GameVersionWarn = null!;
-            public Style IsUtility = null!;
-            public Style NotUtility = null!;
-        }
-        readonly LabelStyle labelStyle = new();
-        public class ModShowInfo : INotifyPropertyChanged
-        {
+            /// <summary>ID</summary>
             public string Id { get; set; } = null!;
+            /// <summary>名称</summary>
             public string Name { get; set; } = null!;
+            /// <summary>作者</summary>
             public string Author { get; set; } = null!;
+            /// <summary>是否启用</summary>
+            [ObservableProperty]
+            public bool isEnabled = false;
+            /// <summary>收藏状态</summary>
+            [ObservableProperty]
+            public bool isCollected = false;
+            /// <summary>模组版本</summary>
             public string Version { get; set; } = null!;
+            /// <summary>模组支持的游戏版本</summary>
             public string GameVersion { get; set; } = null!;
-            public Style? GameVersionStyle { get; set; }
-            public bool? Utility { get; set; }
-            public Style? UtilityStyle { get; set; }
-            public bool? Enabled { get; set; }
-            public string? ImagePath { get; set; }
-            public string? Group { get; set; }
-            private string? dependencies { get; set; }
-            public string? Dependencies
-            {
-                get { return dependencies; }
-                set
-                {
-                    dependencies = value;
-                    PropertyChanged?.Invoke(this, new(nameof(Dependencies)));
-                }
-            }
-            public List<string>? DependenciesList { get; set; }
-            private double rowDetailsHight { get; set; }
-            public double RowDetailsHight
-            {
-                get { return rowDetailsHight; }
-                set
-                {
-                    rowDetailsHight = value;
-                    PropertyChanged?.Invoke(this, new(nameof(RowDetailsHight)));
-                }
-            }
-            private string? userDescription { get; set; }
-            public string? UserDescription
-            {
-                get { return userDescription; }
-                set
-                {
-                    userDescription = value;
-                    PropertyChanged?.Invoke(this, new(nameof(UserDescription)));
-                }
-            }
-            private Style? enabledStyle = null;
-            public Style? EnabledStyle
-            {
-                get { return enabledStyle; }
-                set
-                {
-                    enabledStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(EnabledStyle)));
-                }
-            }
-            public bool? Collected { get; set; }
-            private Style? collectedStyle = null;
-            public Style? CollectedStyle
-            {
-                get { return collectedStyle; }
-                set
-                {
-                    collectedStyle = value;
-                    PropertyChanged?.Invoke(this, new(nameof(CollectedStyle)));
-                }
-            }
-            private ContextMenu? contextMenu = null;
-            public ContextMenu? ContextMenu
-            {
-                get { return contextMenu; }
-                set
-                {
-                    contextMenu = value;
-                    PropertyChanged?.Invoke(this, new(nameof(ContextMenu)));
-                }
-            }
-            public event PropertyChangedEventHandler? PropertyChanged;
+            /// <summary>模组支持的游戏版本是否与当前游戏版本一至</summary>
+            public bool IsSameToGameVersion { get; set; } = false;
+            /// <summary>是否为功能性模组</summary>
+            public bool IsUtility { get; set; } = false;
+            /// <summary>图标路径</summary>
+            public string IconPath { get; set; } = string.Empty;
+            /// <summary>所在的类型分组</summary>
+            public string? TypeGroup { get; set; }
+            /// <summary>前置模组</summary>
+            [ObservableProperty]
+            public string? dependencies;
+            /// <summary>前置模组列表</summary>
+            public List<string>? DependenciesList;
+            /// <summary>显示启用前置按钮的行高</summary>
+            [ObservableProperty]
+            private double rowDetailsHight;
+            /// <summary>用户描述</summary>
+            [ObservableProperty]
+            private string userDescription = string.Empty;
+            /// <summary>右键菜单</summary>
+            [ObservableProperty]
+            public ContextMenu contextMenu = null!;
         }
+        private ViewModel viewModel;
         public ModManager()
         {
             InitializeComponent();
             InitializeData();
             RefreshList();
             STLog.Instance.WriteLine(I18n.InitialisationComplete);
+            DataContext = viewModel = new(allModShowInfo.Values);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetDataObject(((Label)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Content.ToString());
         }
+
         private void Button_CopyInfo_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetDataObject(((Button)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Content.ToString());
         }
+
         private void TextBlock_CopyInfo_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetDataObject(((TextBlock)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Text);
         }
+
         private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e)
         {
-            SearchMods(TextBox_SearchMods.Text);
+            //CollectionViewSource.GetDefaultView(DataGrid_ModsShowList.ItemsSource).Refresh();
+            //SearchMods(TextBox_SearchMods.Text);
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
@@ -246,7 +243,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_GroupMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (groupMenuOpen)
+            if (isGroupMenuOpen)
             {
                 Button_GroupMenuIcon.Text = "📘";
                 Grid_GroupMenu.Width = 30;
@@ -258,13 +255,16 @@ namespace StarsectorTools.Tools.ModManager
                 Grid_GroupMenu.Width = double.NaN;
                 ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Auto);
             }
-            groupMenuOpen = !groupMenuOpen;
+            isGroupMenuOpen = !isGroupMenuOpen;
         }
+
         private void Grid_GroupMenu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
         }
+
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
+
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
@@ -287,32 +287,35 @@ namespace StarsectorTools.Tools.ModManager
                 if (item != nowSelectedListBoxItem)
                 {
                     nowSelectedListBoxItem = item;
-                    if (allUserGroups.ContainsKey(item.ToolTip.ToString()!))
+                    if (allUserGroup.ContainsKey(item.ToolTip.ToString()!))
                         Expander_RandomEnable.Visibility = Visibility.Visible;
                     else
                         Expander_RandomEnable.Visibility = Visibility.Collapsed;
                     nowGroupName = item.Tag.ToString()!;
-                    SearchMods(TextBox_SearchMods.Text);
+                    ChangeShowGroup(nowGroupName);
                     ClearDataGridSelected();
                     CloseModInfo();
                     GC.Collect();
                 }
             }
         }
+
         private void DataGrid_ModsShowList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-            if(sender is DataGrid dataGrid)
+            if (sender is DataGrid dataGrid)
             {
                 CloseModInfo();
                 ClearDataGridSelected();
             }
         }
+
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
                 ShowModInfo(row.Tag.ToString()!);
         }
+
         private void DataGridItem_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // 连续点击无效,需要 e.Handled = true
@@ -320,11 +323,13 @@ namespace StarsectorTools.Tools.ModManager
             if (sender is DataGridRow row)
                 ChangeModInfoShow(row.Tag.ToString()!);
         }
+
         private void DataGridItem_MouseMove(object sender, MouseEventArgs e)
         {
             if (sender is DataGridRow row)
                 row.Background = (Brush)Application.Current.Resources["ColorLight2"];
         }
+
         private void DataGridItem_MouseLeave(object sender, MouseEventArgs e)
         {
             if (sender is DataGridRow row)
@@ -355,7 +360,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 string id = info.Id;
                 string err = null!;
-                foreach (var dependencie in allModsShowInfo[id].Dependencies!.Split(" , "))
+                foreach (var dependencie in allModShowInfo[id].Dependencies!.Split(" , "))
                 {
                     if (allModsInfo.ContainsKey(dependencie))
                         ChangeModEnabled(dependencie, true);
@@ -411,10 +416,11 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
             {
-                allModsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
+                allModShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
                 StartRemindSaveThread();
             }
         }
+
         private void Button_AddUserGroup_Click(object sender, RoutedEventArgs e)
         {
             AddUserGroup window = new();
@@ -423,7 +429,7 @@ namespace StarsectorTools.Tools.ModManager
             window.Button_Yes.Click += (o, e) =>
             {
                 string name = window.TextBox_Name.Text;
-                if (name.Length > 0 && !allUserGroups.ContainsKey(name))
+                if (name.Length > 0 && !allUserGroup.ContainsKey(name))
                 {
                     if (name == ModGroupType.Collected || name == userCustomData)
                         MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData));
@@ -465,6 +471,7 @@ namespace StarsectorTools.Tools.ModManager
                 MessageBox.Show($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExePath}");
             }
         }
+
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
@@ -575,8 +582,12 @@ namespace StarsectorTools.Tools.ModManager
 
         private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (TextBox_SearchMods.Text.Length > 0)
-                SearchMods(TextBox_SearchMods.Text);
+            if (sender is not ComboBox comboBox || comboBox.SelectedItem is not ComboBoxItem item || viewModel is null)
+                return;
+            viewModel.filterType = item.Tag.ToString()!;
+            if (string.IsNullOrEmpty(viewModel.FilterText))
+                return;
+            viewModel.CollectionView?.Refresh();
         }
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
@@ -619,12 +630,12 @@ namespace StarsectorTools.Tools.ModManager
                 MessageBox.Show(I18n.RandomNumberCannotNull, "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
+            if (nowSelectedListBoxItem is ListBoxItem item && allUserGroup.ContainsKey(item.ToolTip.ToString()!))
             {
                 string group = item.ToolTip.ToString()!;
                 int minSize = int.Parse(TextBox_MinRandomSize.Text);
                 int maxSize = int.Parse(TextBox_MaxRandomSize.Text);
-                int count = allUserGroups[group].Count;
+                int count = allUserGroup[group].Count;
                 if (minSize < 0)
                 {
                     MessageBox.Show(I18n.RandomNumberCannotLess0, "", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -640,14 +651,14 @@ namespace StarsectorTools.Tools.ModManager
                     MessageBox.Show(I18n.MinRandomNumberCannotGreaterMaxRandomNumber);
                     return;
                 }
-                foreach (var info in allUserGroups[group])
+                foreach (var info in allUserGroup[group])
                     ChangeModEnabled(info, false);
                 int needSize = new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(minSize, maxSize + 1);
                 HashSet<int> set = new();
                 while (set.Count < needSize)
                     set.Add(new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(0, count));
                 foreach (int i in set)
-                    ChangeModEnabled(allUserGroups[group].ElementAt(i));
+                    ChangeModEnabled(allUserGroup[group].ElementAt(i));
                 CheckEnabledModsDependencies();
                 RefreshCountOfListBoxItems();
             }
@@ -703,6 +714,39 @@ namespace StarsectorTools.Tools.ModManager
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
                 SaveUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
+            }
+        }
+
+        public partial class ViewModel : ObservableObject
+        {
+            [ObservableProperty]
+            ICollectionView? collectionView;
+            [ObservableProperty]
+            string? filterText;
+            public string filterType = strName;
+            partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
+            public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
+            {
+                ChangeCollectionView(modShowInfos);
+            }
+            public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
+            {
+                CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
+                CollectionView.Filter = (o) =>
+                {
+                    if (string.IsNullOrEmpty(filterText))
+                        return true;
+                    if (o is not ModShowInfo info)
+                        return true;
+                    return filterType switch
+                    {
+                        strName => info.Name.Contains(filterText),
+                        strId => info.Id.Contains(filterText),
+                        strAuthor => info.Author.Contains(filterText),
+                        strUserDescription => info.UserDescription.Contains(filterText),
+                        _ => throw new NotImplementedException()
+                    };
+                };
             }
         }
     }

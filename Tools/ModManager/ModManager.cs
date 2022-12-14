@@ -30,20 +30,26 @@ namespace StarsectorTools.Tools.ModManager
 {
     public partial class ModManager
     {
+        /// <summary>
+        /// 关闭
+        /// </summary>
         public void Close()
         {
             ResetRemindSaveThread();
         }
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
         void InitializeData()
         {
-            buttonStyle.Enabled = (Style)Resources["EnableStyle"];
-            buttonStyle.Disable = (Style)Resources["DisableStyle"];
-            buttonStyle.Collecte = (Style)Resources["CollecteStyle"];
-            buttonStyle.CancelCollection = (Style)Resources["CancelCollectionStyle"];
-            labelStyle.GameVersionNormal = (Style)Resources["GameVersionNormalStyle"];
-            labelStyle.GameVersionWarn = (Style)Resources["GameVersionWarnStyle"];
-            labelStyle.IsUtility = (Style)Resources["IsUtilityStyle"];
-            labelStyle.NotUtility = (Style)Resources["NotUtilityStyle"];
+            //buttonStyle.Enabled = (Style)Resources["EnableStyle"];
+            //buttonStyle.Disabled = (Style)Resources["DisableStyle"];
+            //buttonStyle.Collected = (Style)Resources["CollecteStyle"];
+            //buttonStyle.UnCollected = (Style)Resources["CancelCollectionStyle"];
+            //textBlockStyle.GameVersionNormal = (Style)Resources["GameVersionNormalStyle"];
+            //textBlockStyle.GameVersionWarn = (Style)Resources["GameVersionWarnStyle"];
+            //textBlockStyle.IsUtility = (Style)Resources["IsUtilityStyle"];
+            //textBlockStyle.NotUtility = (Style)Resources["NotUtilityStyle"];
             remindSaveThread = new(RemindSave);
         }
 
@@ -52,10 +58,10 @@ namespace StarsectorTools.Tools.ModManager
             allEnabledModsId = new();
             allCollectedModsId = new();
             allModsInfo = new();
-            allListBoxItemsFromGroups = new();
-            allModsShowInfo = new();
-            allUserGroups = new();
-            modsIdFromGroups = new()
+            allListBoxItem = new();
+            allModShowInfo = new();
+            allUserGroup = new();
+            allModTypeGroup = new()
             {
                 {ModGroupType.Libraries,new() },
                 {ModGroupType.MegaMods,new() },
@@ -66,7 +72,7 @@ namespace StarsectorTools.Tools.ModManager
                 {ModGroupType.BeautifyMods,new() },
                 {ModGroupType.UnknownMods,new() },
             };
-            modsShowInfoFromGroup = new()
+            allUserGroupInfo = new()
             {
                 {ModGroupType.All,new() },
                 {ModGroupType.Enabled,new() },
@@ -157,42 +163,42 @@ namespace StarsectorTools.Tools.ModManager
         void GetEnabledMods(string path, bool importMode = false)
         {
             string datas = File.ReadAllText(path);
-            if (datas.Length > 0)
+            if (datas.Length == 0)
+                return;
+            try
             {
-                try
+                string err = null!;
+                JsonNode enabledModsJson = JsonNode.Parse(datas)!;
+                if (enabledModsJson.AsObject().Count != 1 || enabledModsJson.AsObject().ElementAt(0).Key != enabledMods)
+                    throw new();
+                if (importMode)
+                    ImportMode();
+                JsonArray enabledModsJsonArray = enabledModsJson[enabledMods]!.AsArray();
+                STLog.Instance.WriteLine($"{I18n.LoadEnabledModsFile} {I18n.Path}: {path}");
+                foreach (var mod in enabledModsJsonArray)
                 {
-                    string err = null!;
-                    JsonNode enabledModsJson = JsonNode.Parse(datas)!;
-                    if (enabledModsJson.AsObject().Count != 1 || enabledModsJson.AsObject().ElementAt(0).Key != enabledMods)
-                        throw new();
-                    if (importMode)
-                        ImportMode();
-                    JsonArray enabledModsJsonArray = enabledModsJson[enabledMods]!.AsArray();
-                    STLog.Instance.WriteLine($"{I18n.LoadEnabledModsFile} {I18n.Path}: {path}");
-                    foreach (var mod in enabledModsJsonArray)
+                    var id = mod!.GetValue<string>();
+                    if (allModsInfo.ContainsKey(id))
                     {
-                        var id = mod!.GetValue<string>();
-                        if (allModsInfo.ContainsKey(id))
-                        {
-                            STLog.Instance.WriteLine($"{I18n.EnableMod} {id}", STLogLevel.DEBUG);
-                            ChangeModEnabled(id, true);
-                        }
-                        else
-                        {
-                            STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
-                            err ??= $"{I18n.NotFoundMod}:\n";
-                            err += $"{id}\n";
-                        }
+                        STLog.Instance.WriteLine($"{I18n.EnableMod} {id}", STLogLevel.DEBUG);
+                        ChangeModEnabled(id, true);
                     }
-                    STLog.Instance.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
-                    if (err != null)
-                        MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                    else
+                    {
+                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
+                        err ??= $"{I18n.NotFoundMod}:\n";
+                        err += $"{id}\n";
+                    }
                 }
-                catch
-                {
-                    STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {path}");
-                    MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                STLog.Instance.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
+                if (err != null)
+                    MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {path}", STLogLevel.ERROR);
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         void CheckUserGroup()
@@ -215,15 +221,15 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (var kv in toml)
                 {
                     string group = kv.Key;
-                    if (!allUserGroups.ContainsKey(group))
+                    if (!allUserGroup.ContainsKey(group))
                     {
                         AddUserGroup(kv.Value[strIcon]!, group);
                         foreach (string id in kv.Value[strMods].AsTomlArray)
                         {
-                            if (allModsShowInfo.ContainsKey(id))
+                            if (allModShowInfo.ContainsKey(id))
                             {
-                                if (allUserGroups[group].Add(id))
-                                    modsShowInfoFromGroup[group].Add(allModsShowInfo[id]);
+                                if (allUserGroup[group].Add(id))
+                                    allUserGroupInfo[group].Add(allModShowInfo[id]);
                             }
                             else
                             {
@@ -270,7 +276,7 @@ namespace StarsectorTools.Tools.ModManager
                         STLog.Instance.WriteLine($"{I18n.LoadCollectedList}");
                         foreach (string id in kv.Value.AsTomlArray)
                         {
-                            if (allModsShowInfo.ContainsKey(id))
+                            if (allModShowInfo.ContainsKey(id))
                             {
                                 ChangeModCollected(id, true);
                             }
@@ -290,9 +296,9 @@ namespace StarsectorTools.Tools.ModManager
                         foreach (var dic in kv.Value.AsTomlArray)
                         {
                             var id = dic[strId].AsString;
-                            if (allModsShowInfo.ContainsKey(id))
+                            if (allModShowInfo.ContainsKey(id))
                             {
-                                var info = allModsShowInfo[id];
+                                var info = allModShowInfo[id];
                                 info.UserDescription = dic[strUserDescription];
                             }
                             else
@@ -309,9 +315,10 @@ namespace StarsectorTools.Tools.ModManager
                 if (errList.Count > 0)
                     MessageBox.Show(string.Join("\n", errList), "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.UserDataLoadError} {I18n.Path}: {path}");
+                STLog.Instance.WriteLine($"{I18n.UserDataLoadError} {I18n.Path}: {path}", STLogLevel.ERROR);
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.UserDataLoadError}\n{I18n.Path}: {path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -320,10 +327,10 @@ namespace StarsectorTools.Tools.ModManager
             foreach (ListBoxItem item in ListBox_ModsGroupMenu.Items)
             {
                 if (item.Content is string str)
-                    allListBoxItemsFromGroups.Add(item.Tag.ToString()!, item);
+                    allListBoxItem.Add(item.Tag.ToString()!, item);
                 else if (item.Content is Expander expander && expander.Content is ListBox listBox)
                     foreach (ListBoxItem item1 in listBox.Items)
-                        allListBoxItemsFromGroups.Add(item1.Tag.ToString()!, item1);
+                        allListBoxItem.Add(item1.Tag.ToString()!, item1);
             }
         }
 
@@ -339,18 +346,18 @@ namespace StarsectorTools.Tools.ModManager
                 using TomlTable toml = TOML.Parse(modGroupFile);
                 foreach (var kv in toml)
                     foreach (string id in kv.Value.AsTomlArray)
-                        modsIdFromGroups[kv.Key].Add(id);
+                        allModTypeGroup[kv.Key].Add(id);
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modGroupFile}", STLogLevel.WARN);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
+                STLog.Instance.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modGroupFile}", STLogLevel.ERROR);
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modGroupFile}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         string CheckGroup(string id)
         {
-            foreach (var group in modsIdFromGroups)
+            foreach (var group in allModTypeGroup)
                 if (group.Value.Contains(id))
                     return group.Key;
             return ModGroupType.UnknownMods;
@@ -362,10 +369,10 @@ namespace StarsectorTools.Tools.ModManager
                 ModInfo info = kv.Value;
                 ModShowInfo showInfo = GetModShowInfo(info);
                 AddModShowInfo(showInfo);
-                if (showInfo.Enabled is true)
-                    modsShowInfoFromGroup[ModGroupType.Enabled].Add(showInfo);
+                if (showInfo.IsEnabled is true)
+                    allUserGroupInfo[ModGroupType.Enabled].Add(showInfo);
                 else
-                    modsShowInfoFromGroup[ModGroupType.Disabled].Add(showInfo);
+                    allUserGroupInfo[ModGroupType.Disabled].Add(showInfo);
             }
             STLog.Instance.WriteLine($"{I18n.ModShowInfoSetSuccess} {I18n.Size}: {allModsInfo.Count}");
             ListBox_ModsGroupMenu.SelectedIndex = 0;
@@ -373,12 +380,8 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ChangeShowGroup(string group)
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Background, () => DataGrid_ModsShowList.ItemsSource = modsShowInfoFromGroup[group]);
+            viewModel?.ChangeCollectionView(allUserGroupInfo[group]);
             STLog.Instance.WriteLine($"{I18n.ShowGroup} {group}");
-        }
-        void ChangeShowGroup(ObservableCollection<ModShowInfo> modsShowInfo)
-        {
-            Dispatcher.BeginInvoke(DispatcherPriority.Background, () => DataGrid_ModsShowList.ItemsSource = modsShowInfo);
         }
         ModShowInfo GetModShowInfo(ModInfo info)
         {
@@ -386,33 +389,30 @@ namespace StarsectorTools.Tools.ModManager
             bool isEnabled = CheckEnabled(info.Id);
             ModShowInfo showInfo = new()
             {
-                Collected = isCollected,
-                CollectedStyle = isCollected is true ? buttonStyle.Collecte : buttonStyle.CancelCollection,
-                Enabled = isEnabled,
-                EnabledStyle = isEnabled is true ? buttonStyle.Enabled : buttonStyle.Disable,
+                IsCollected = isCollected,
+                IsEnabled = isEnabled,
                 Name = info.Name,
                 Id = info.Id,
                 Author = info.Author,
                 Version = info.Version,
                 GameVersion = info.GameVersion,
-                GameVersionStyle = info.GameVersion == ST.gameVersion ? labelStyle.GameVersionNormal : labelStyle.GameVersionWarn,
+                IsSameToGameVersion = info.GameVersion == ST.gameVersion,
                 RowDetailsHight = 0,
                 Dependencies = "",
                 DependenciesList = info.Dependencies is not null ? info.Dependencies.Select(i => i.Id).ToList() : null!,
-                ImagePath = File.Exists($"{info.Path}\\icon.ico") ? $"{info.Path}\\icon.ico" : null!,
+                IconPath = File.Exists($"{info.Path}\\icon.ico") ? $"{info.Path}\\icon.ico" : null!,
                 UserDescription = "",
-                Utility = info.Utility,
-                UtilityStyle = info.Utility is true ? labelStyle.IsUtility : labelStyle.NotUtility,
-                Group = CheckGroup(info.Id),
+                IsUtility = info.Utility,
+                TypeGroup = CheckGroup(info.Id),
             };
-            STLog.Instance.WriteLine($"{info.Id} {I18n.ClassifyTo} {showInfo.Group}", STLogLevel.DEBUG);
+            STLog.Instance.WriteLine($"{info.Id} {I18n.ClassifyTo} {showInfo.TypeGroup}", STLogLevel.DEBUG);
             return showInfo;
         }
         void RefreshCountOfListBoxItems()
         {
-            foreach (var item in allListBoxItemsFromGroups.Values)
+            foreach (var item in allListBoxItem.Values)
             {
-                int size = modsShowInfoFromGroup[item.Tag.ToString()!].Count;
+                int size = allUserGroupInfo[item.Tag.ToString()!].Count;
                 item.Content = $"{item.ToolTip} ({size})";
                 STLog.Instance.WriteLine($"{I18n.GroupModCountRefresh} {item.Content}", STLogLevel.DEBUG);
             }
@@ -428,9 +428,9 @@ namespace StarsectorTools.Tools.ModManager
         }
         void RefreshModsContextMenu()
         {
-            foreach (var info in allModsShowInfo.Values)
+            foreach (var info in allModShowInfo.Values)
                 info.ContextMenu = CreateContextMenu(info);
-            STLog.Instance.WriteLine($"{I18n.ContextMenuRefreshComplete} {I18n.Size}: {allModsShowInfo.Values.Count}");
+            STLog.Instance.WriteLine($"{I18n.ContextMenuRefreshComplete} {I18n.Size}: {allModShowInfo.Values.Count}");
         }
         ContextMenu CreateContextMenu(ModShowInfo info)
         {
@@ -438,14 +438,14 @@ namespace StarsectorTools.Tools.ModManager
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             MenuItem menuItem = new();
-            menuItem.Header = info.Enabled is true ? I18n.DisableSelectedMods : I18n.EnabledSelectedMods;
-            menuItem.Click += (o, e) => ChangeSelectedModsEnabled(info.Enabled is not true);
+            menuItem.Header = info.IsEnabled is true ? I18n.DisableSelectedMods : I18n.EnabledSelectedMods;
+            menuItem.Click += (o, e) => ChangeSelectedModsEnabled(info.IsEnabled is not true);
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
 
             menuItem = new();
-            menuItem.Header = info.Collected is true ? I18n.CancelCollectionSelectedMods : I18n.CollectionSelectedMods;
-            menuItem.Click += (o, e) => ChangeSelectedModsCollected(info.Collected is not true);
+            menuItem.Header = info.IsCollected is true ? I18n.CancelCollectionSelectedMods : I18n.CollectionSelectedMods;
+            menuItem.Click += (o, e) => ChangeSelectedModsCollected(info.IsCollected is not true);
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
 
@@ -474,13 +474,13 @@ namespace StarsectorTools.Tools.ModManager
             };
             contextMenu.Items.Add(menuItem);
 
-            if (allUserGroups.Count > 0)
+            if (allUserGroup.Count > 0)
             {
                 menuItem = new();
                 menuItem.Header = I18n.AddModToUserGroup;
-                foreach (var group in allUserGroups.Keys)
+                foreach (var group in allUserGroup.Keys)
                 {
-                    if (!allUserGroups[group].Contains(info.Id))
+                    if (!allUserGroup[group].Contains(info.Id))
                     {
                         MenuItem groupItem = new();
                         groupItem.Header = group;
@@ -500,7 +500,7 @@ namespace StarsectorTools.Tools.ModManager
                     STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
                 }
             }
-            var haveModGroup = allUserGroups.Where(g => g.Value.Contains(info.Id));
+            var haveModGroup = allUserGroup.Where(g => g.Value.Contains(info.Id));
             if (haveModGroup.Count() > 0)
             {
                 menuItem = new();
@@ -540,16 +540,16 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ChangeModUserGroup(string group, string id, bool status)
         {
-            ModShowInfo info = allModsShowInfo[id];
+            ModShowInfo info = allModShowInfo[id];
             if (status)
             {
-                if (allUserGroups[group].Add(id))
-                    modsShowInfoFromGroup[group].Add(allModsShowInfo[id]);
+                if (allUserGroup[group].Add(id))
+                    allUserGroupInfo[group].Add(allModShowInfo[id]);
             }
             else
             {
-                allUserGroups[group].Remove(id);
-                modsShowInfoFromGroup[group].Remove(allModsShowInfo[id]);
+                allUserGroup[group].Remove(id);
+                allUserGroupInfo[group].Remove(allModShowInfo[id]);
             }
             info.ContextMenu = CreateContextMenu(info);
             STLog.Instance.WriteLine(I18n.ChangeModUserGroup, STLogLevel.DEBUG, id, group, status);
@@ -578,32 +578,31 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ChangeModEnabled(string id, bool? enabled = null)
         {
-            ModShowInfo info = allModsShowInfo[id];
-            info.Enabled = enabled is null ? !info.Enabled : enabled;
-            info.EnabledStyle = info.Enabled is true ? buttonStyle.Enabled : buttonStyle.Disable;
+            ModShowInfo info = allModShowInfo[id];
+            info.IsEnabled = (bool)(enabled is null ? !info.IsEnabled : enabled);
             info.ContextMenu = CreateContextMenu(info);
-            if (info.Enabled is true)
+            if (info.IsEnabled is true)
             {
                 if (allEnabledModsId.Add(info.Id))
                 {
-                    modsShowInfoFromGroup[ModGroupType.Enabled].Add(info);
-                    modsShowInfoFromGroup[ModGroupType.Disabled].Remove(info);
+                    allUserGroupInfo[ModGroupType.Enabled].Add(info);
+                    allUserGroupInfo[ModGroupType.Disabled].Remove(info);
                 }
             }
             else
             {
                 if (allEnabledModsId.Remove(info.Id))
                 {
-                    modsShowInfoFromGroup[ModGroupType.Enabled].Remove(info);
-                    modsShowInfoFromGroup[ModGroupType.Disabled].Add(info);
+                    allUserGroupInfo[ModGroupType.Enabled].Remove(info);
+                    allUserGroupInfo[ModGroupType.Disabled].Add(info);
                     info.RowDetailsHight = 0;
                 }
             }
-            STLog.Instance.WriteLine($"{id} {I18n.ModEnabledStatus} {info.Enabled}", STLogLevel.DEBUG);
+            STLog.Instance.WriteLine($"{id} {I18n.ModEnabledStatus} {info.IsEnabled}", STLogLevel.DEBUG);
         }
         void CheckEnabledModsDependencies()
         {
-            foreach (var info in modsShowInfoFromGroup[ModGroupType.Enabled])
+            foreach (var info in allUserGroupInfo[ModGroupType.Enabled])
             {
                 if (info.DependenciesList != null)
                 {
@@ -635,24 +634,23 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ChangeModCollected(string id, bool? collected = null)
         {
-            ModShowInfo info = allModsShowInfo[id];
-            info.Collected = collected is null ? !info.Collected : collected;
-            info.CollectedStyle = info.Collected is true ? buttonStyle.Collecte : buttonStyle.CancelCollection;
+            ModShowInfo info = allModShowInfo[id];
+            info.IsCollected = (bool)(collected is null ? !info.IsCollected : collected);
             info.ContextMenu = CreateContextMenu(info);
-            if (info.Collected is true)
+            if (info.IsCollected is true)
             {
                 if (!CheckCollected(info.Id))
                 {
                     allCollectedModsId.Add(info.Id);
-                    modsShowInfoFromGroup[ModGroupType.Collected].Add(info);
+                    allUserGroupInfo[ModGroupType.Collected].Add(info);
                 }
             }
             else
             {
                 allCollectedModsId.Remove(info.Id);
-                modsShowInfoFromGroup[ModGroupType.Collected].Remove(info);
+                allUserGroupInfo[ModGroupType.Collected].Remove(info);
             }
-            STLog.Instance.WriteLine($"{id} {I18n.ModCollectedStatus} {info.Collected}", STLogLevel.DEBUG);
+            STLog.Instance.WriteLine($"{id} {I18n.ModCollectedStatus} {info.IsCollected}", STLogLevel.DEBUG);
         }
         void SaveAllData()
         {
@@ -678,9 +676,9 @@ namespace StarsectorTools.Tools.ModManager
                 { ModGroupType.Collected, new TomlArray() },
                 { strUserCustomData, new TomlArray() }
             };
-            foreach (var info in allModsShowInfo.Values)
+            foreach (var info in allModShowInfo.Values)
             {
-                if (info.Collected is true)
+                if (info.IsCollected is true)
                     toml[ModGroupType.Collected].Add(info.Id);
                 if (info.UserDescription!.Length > 0)
                 {
@@ -699,11 +697,11 @@ namespace StarsectorTools.Tools.ModManager
             TomlTable toml = new();
             if (tag == strAll)
             {
-                foreach (var kv in allUserGroups)
+                foreach (var kv in allUserGroup)
                 {
                     toml.Add(kv.Key, new TomlTable()
                     {
-                        [strIcon] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[kv.Key])).Text,
+                        [strIcon] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItem[kv.Key])).Text,
                         [strMods] = new TomlArray(),
                     });
                     foreach (var id in kv.Value)
@@ -712,10 +710,10 @@ namespace StarsectorTools.Tools.ModManager
             }
             else
             {
-                var mods = allUserGroups[tag];
+                var mods = allUserGroup[tag];
                 toml.Add(tag, new TomlTable()
                 {
-                    [strIcon] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItemsFromGroups[tag])).Text,
+                    [strIcon] = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(allListBoxItem[tag])).Text,
                     [strMods] = new TomlArray(),
                 });
                 foreach (var id in mods)
@@ -726,9 +724,9 @@ namespace StarsectorTools.Tools.ModManager
         }
         void ChangeModInfoShow(string id)
         {
-            if (showModInfo)
+            if (isShowModInfo)
             {
-                if (nowSelectedMod != id)
+                if (nowSelectedModId != id)
                     SetModInfo(id);
                 else
                     CloseModInfo();
@@ -741,22 +739,22 @@ namespace StarsectorTools.Tools.ModManager
         public void ShowModInfo(string id)
         {
             Grid_ModInfo.Visibility = Visibility.Visible;
-            showModInfo = true;
-            nowSelectedMod = id;
+            isShowModInfo = true;
+            nowSelectedModId = id;
             SetModInfo(id);
         }
         public void CloseModInfo()
         {
             Grid_ModInfo.Visibility = Visibility.Hidden;
-            showModInfo = false;
-            nowSelectedMod = null;
+            isShowModInfo = false;
+            nowSelectedModId = null;
             TextBox_UserDescription.Text = "";
-            STLog.Instance.WriteLine($"{I18n.CloseDetails} {nowSelectedMod}", STLogLevel.DEBUG);
+            STLog.Instance.WriteLine($"{I18n.CloseDetails} {nowSelectedModId}", STLogLevel.DEBUG);
         }
         void SetModInfo(string id)
         {
             ModInfo info = allModsInfo[id];
-            if (allModsShowInfo[info.Id].ImagePath is string imagePath && imagePath.Length > 0)
+            if (allModShowInfo[info.Id].IconPath is string imagePath && imagePath.Length > 0)
                 Image_ModImage.Source = new BitmapImage(new(imagePath));
             else
                 Image_ModImage.Source = null;
@@ -774,7 +772,7 @@ namespace StarsectorTools.Tools.ModManager
             else
                 GroupBox_ModDependencies.Visibility = Visibility.Collapsed;
             TextBlock_ModDescription.Text = info.Description;
-            TextBox_UserDescription.Text = allModsShowInfo[info.Id].UserDescription!;
+            TextBox_UserDescription.Text = allModShowInfo[info.Id].UserDescription!;
             STLog.Instance.WriteLine($"{I18n.ShowDetails} {id}", STLogLevel.DEBUG);
         }
         void DropFile(string filePath)
@@ -834,18 +832,18 @@ namespace StarsectorTools.Tools.ModManager
         }
         ModShowInfo RemoveModShowInfo(string id)
         {
-            var modShowInfo = allModsShowInfo[id];
-            allModsShowInfo.Remove(modShowInfo.Id);
-            modsShowInfoFromGroup[ModGroupType.All].Remove(modShowInfo);
-            modsShowInfoFromGroup[modShowInfo.Group!].Remove(modShowInfo);
+            var modShowInfo = allModShowInfo[id];
+            allModShowInfo.Remove(modShowInfo.Id);
+            allUserGroupInfo[ModGroupType.All].Remove(modShowInfo);
+            allUserGroupInfo[modShowInfo.TypeGroup!].Remove(modShowInfo);
             STLog.Instance.WriteLine($"{I18n.RemoveMod} {modShowInfo.Id} {modShowInfo.Version}", STLogLevel.DEBUG);
             return modShowInfo;
         }
         void AddModShowInfo(ModShowInfo modShowInfo)
         {
-            allModsShowInfo.Add(modShowInfo.Id, modShowInfo);
-            modsShowInfoFromGroup[ModGroupType.All].Add(modShowInfo);
-            modsShowInfoFromGroup[modShowInfo.Group!].Add(modShowInfo);
+            allModShowInfo.Add(modShowInfo.Id, modShowInfo);
+            allUserGroupInfo[ModGroupType.All].Add(modShowInfo);
+            allUserGroupInfo[modShowInfo.TypeGroup!].Add(modShowInfo);
             STLog.Instance.WriteLine($"{I18n.AddMod} {modShowInfo.Id} {modShowInfo.Version}", STLogLevel.DEBUG);
         }
         void ClearDataGridSelected()
@@ -885,9 +883,9 @@ namespace StarsectorTools.Tools.ModManager
             listBoxItem.ContextMenu = contextMenu;
             ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = icon });
             ListBox_UserGroup.Items.Add(listBoxItem);
-            allUserGroups.Add(name, new());
-            allListBoxItemsFromGroups.Add(name, listBoxItem);
-            modsShowInfoFromGroup.Add(name, new());
+            allUserGroup.Add(name, new());
+            allListBoxItem.Add(name, listBoxItem);
+            allUserGroupInfo.Add(name, new());
             ComboBox_ExportUserGroup.Items.Add(new ComboBoxItem() { Content = name, Tag = name, Style = (Style)Application.Current.Resources["ComboBoxItem_Style"] });
             STLog.Instance.WriteLine($"{I18n.AddUserGroup} {icon} {name}");
         }
@@ -898,9 +896,9 @@ namespace StarsectorTools.Tools.ModManager
             if (nowSelectedListBoxItem == listBoxItem)
                 ListBox_ModsGroupMenu.SelectedIndex = 0;
             ListBox_UserGroup.Items.Remove(listBoxItem);
-            allUserGroups.Remove(name);
-            allListBoxItemsFromGroups.Remove(name);
-            modsShowInfoFromGroup.Remove(name);
+            allUserGroup.Remove(name);
+            allListBoxItem.Remove(name);
+            allUserGroupInfo.Remove(name);
             RefreshModsContextMenu();
             StartRemindSaveThread();
             Expander_RandomEnable.Visibility = Visibility.Collapsed;
@@ -933,19 +931,19 @@ namespace StarsectorTools.Tools.ModManager
                     MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData), "", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-                if (name == _name || !allUserGroups.ContainsKey(_name))
+                if (name == _name || !allUserGroup.ContainsKey(_name))
                 {
                     ListBoxItemHelper.SetIcon(listBoxItem, new Emoji.Wpf.TextBlock() { Text = _icon });
-                    var temp = allUserGroups[name];
-                    allUserGroups.Remove(name);
-                    allUserGroups.Add(_name, temp);
+                    var temp = allUserGroup[name];
+                    allUserGroup.Remove(name);
+                    allUserGroup.Add(_name, temp);
 
-                    allListBoxItemsFromGroups.Remove(name);
-                    allListBoxItemsFromGroups.Add(_name, listBoxItem);
+                    allListBoxItem.Remove(name);
+                    allListBoxItem.Add(_name, listBoxItem);
 
-                    var _temp = modsShowInfoFromGroup[name];
-                    modsShowInfoFromGroup.Remove(name);
-                    modsShowInfoFromGroup.Add(_name, _temp);
+                    var _temp = allUserGroupInfo[name];
+                    allUserGroupInfo.Remove(name);
+                    allUserGroupInfo.Add(_name, _temp);
 
                     window.Close();
                     SetListBoxItemData(listBoxItem, _name);
@@ -966,31 +964,31 @@ namespace StarsectorTools.Tools.ModManager
             item.ToolTip = name;
             item.Tag = name;
         }
-        void SearchMods(string text)
-        {
-            var type = ((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!;
-            if (text.Length > 0)
-            {
-                ChangeShowGroup(GetSearchModsShowInfo(text, type));
-                STLog.Instance.WriteLine($"{I18n.SearchMod} {text}", STLogLevel.DEBUG);
-            }
-            else
-            {
-                ChangeShowGroup(nowGroupName);
-                GC.Collect();
-            }
-        }
+        //void SearchMods(string text)
+        //{
+        //    var type = ((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!;
+        //    if (text.Length > 0)
+        //    {
+        //        ChangeShowGroup(GetSearchModsShowInfo(text, type));
+        //        STLog.Instance.WriteLine($"{I18n.SearchMod} {text}", STLogLevel.DEBUG);
+        //    }
+        //    else
+        //    {
+        //        ChangeShowGroup(nowGroupName);
+        //        GC.Collect();
+        //    }
+        //}
 
         ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type)
         {
-            ObservableCollection<ModShowInfo> showModsInfo = null!;
+            ObservableCollection<ModShowInfo> showModsInfo;
             showModsInfo = new(
             type switch
             {
-                strName => modsShowInfoFromGroup[nowGroupName].Where(i => i.Name!.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strId => modsShowInfoFromGroup[nowGroupName].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strAuthor => modsShowInfoFromGroup[nowGroupName].Where(i => i.Author!.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strUserDescription => modsShowInfoFromGroup[nowGroupName].Where(i => i.UserDescription!.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strName => allUserGroupInfo[nowGroupName].Where(i => i.Name!.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strId => allUserGroupInfo[nowGroupName].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strAuthor => allUserGroupInfo[nowGroupName].Where(i => i.Author!.Contains(text, StringComparison.OrdinalIgnoreCase)),
+                strUserDescription => allUserGroupInfo[nowGroupName].Where(i => i.UserDescription!.Contains(text, StringComparison.OrdinalIgnoreCase)),
                 _ => throw new NotImplementedException()
             });
             return showModsInfo;

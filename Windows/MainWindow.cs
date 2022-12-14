@@ -67,7 +67,6 @@ namespace StarsectorTools.Windows
             SetBlurEffect();
             MessageBox.Show(I18n.ConfigFileError, "", MessageBoxButton.OK, MessageBoxImage.Warning);
             ST.CreateConfigFile();
-            //SetConfig();
             RemoveBlurEffect();
         }
         private void SetBlurEffect()

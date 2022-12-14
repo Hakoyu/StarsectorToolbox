@@ -33,6 +33,7 @@ namespace StarsectorTools.Windows
         bool menuOpen = false;
         Dictionary<string, Page> menuList = new();
         Settings settingMenu = null!;
+
         public MainWindow()
         {
             InitializeComponent();
