@@ -293,6 +293,7 @@
                                 <Setter Property="ContextMenu" Value="{Binding ContextMenu}" />
                                 <EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
                                 <EventSetter Event="Selected" Handler="DataGridItem_Selected" />
+                                <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />
                                 <EventSetter Event="MouseMove" Handler="DataGridItem_MouseMove" />
                                 <EventSetter Event="MouseLeave" Handler="DataGridItem_MouseLeave" />
                             </Style>
@@ -417,9 +418,13 @@
                             </DataGridTextColumn>
                             <DataGridTextColumn
                                 Binding="{Binding UserDescription}"
-                                ElementStyle="{StaticResource CenterAlignmentStyle}"
                                 IsReadOnly="True"
                                 SortMemberPath="UserDescription">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style BasedOn="{StaticResource CenterAlignmentStyle}" TargetType="TextBlock">
+                                        <Setter Property="ToolTip" Value="{x:Null}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
                                 <DataGridTextColumn.Header>
                                     <Label
                                         Background="{x:Null}"
@@ -456,7 +461,6 @@
                         VerticalAlignment="Top"
                         Style="{StaticResource TextBox_Style}"
                         Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
-                        TextChanged="TextBox_SearchMods_TextChanged"
                         TextWrapping="Wrap" />
                     <ComboBox
                         x:Name="ComboBox_SearchType"

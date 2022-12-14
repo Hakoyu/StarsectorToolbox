@@ -202,12 +202,6 @@ namespace StarsectorTools.Tools.ModManager
             Clipboard.SetDataObject(((TextBlock)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)sender))).Text);
         }
 
-        private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //CollectionViewSource.GetDefaultView(DataGrid_ModsShowList.ItemsSource).Refresh();
-            //SearchMods(TextBox_SearchMods.Text);
-        }
-
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
             SaveAllData();
@@ -311,6 +305,11 @@ namespace StarsectorTools.Tools.ModManager
         }
 
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
+        {
+            if (sender is DataGridRow row)
+                ShowModInfo(row.Tag.ToString()!);
+        }
+        private void DataGridItem_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
                 ShowModInfo(row.Tag.ToString()!);
@@ -740,10 +739,10 @@ namespace StarsectorTools.Tools.ModManager
                         return true;
                     return filterType switch
                     {
-                        strName => info.Name.Contains(filterText),
-                        strId => info.Id.Contains(filterText),
-                        strAuthor => info.Author.Contains(filterText),
-                        strUserDescription => info.UserDescription.Contains(filterText),
+                        strName => info.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        strId => info.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        strAuthor => info.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        strUserDescription => info.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
                         _ => throw new NotImplementedException()
                     };
                 };

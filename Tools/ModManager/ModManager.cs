@@ -738,6 +738,8 @@ namespace StarsectorTools.Tools.ModManager
         }
         public void ShowModInfo(string id)
         {
+            if (nowSelectedModId == id)
+                return;
             Grid_ModInfo.Visibility = Visibility.Visible;
             isShowModInfo = true;
             nowSelectedModId = id;

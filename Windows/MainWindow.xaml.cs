@@ -137,16 +137,6 @@ namespace StarsectorTools.Windows
             Frame_MainFrame.Margin = new Thickness(Grid_Menu.ActualWidth,0,0,0);
         }
 
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-            Keyboard.ClearFocus();
-            // 将事件焦点转移到this
-            DependencyObject scope = FocusManager.GetFocusScope(this);
-            FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
-            ((ModManager)menuList[nameof(ModManager)]).CloseModInfo();
-        }
-
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
             STLog.Instance.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
