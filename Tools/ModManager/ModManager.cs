@@ -42,17 +42,8 @@ namespace StarsectorTools.Tools.ModManager
         /// </summary>
         void InitializeData()
         {
-            //buttonStyle.Enabled = (Style)Resources["EnableStyle"];
-            //buttonStyle.Disabled = (Style)Resources["DisableStyle"];
-            //buttonStyle.Collected = (Style)Resources["CollecteStyle"];
-            //buttonStyle.UnCollected = (Style)Resources["CancelCollectionStyle"];
-            //textBlockStyle.GameVersionNormal = (Style)Resources["GameVersionNormalStyle"];
-            //textBlockStyle.GameVersionWarn = (Style)Resources["GameVersionWarnStyle"];
-            //textBlockStyle.IsUtility = (Style)Resources["IsUtilityStyle"];
-            //textBlockStyle.NotUtility = (Style)Resources["NotUtilityStyle"];
             remindSaveThread = new(RemindSave);
         }
-
         void RefreshList()
         {
             allEnabledModsId = new();
@@ -398,11 +389,9 @@ namespace StarsectorTools.Tools.ModManager
                 GameVersion = info.GameVersion,
                 IsSameToGameVersion = info.GameVersion == ST.gameVersion,
                 RowDetailsHight = 0,
-                Dependencies = "",
                 DependenciesList = info.Dependencies is not null ? info.Dependencies.Select(i => i.Id).ToList() : null!,
                 IconPath = File.Exists($"{info.Path}\\icon.ico") ? $"{info.Path}\\icon.ico" : null!,
-                UserDescription = "",
-                IsUtility = info.Utility,
+                IsUtility = info.IsUtility,
                 TypeGroup = CheckGroup(info.Id),
             };
             STLog.Instance.WriteLine($"{info.Id} {I18n.ClassifyTo} {showInfo.TypeGroup}", STLogLevel.DEBUG);
@@ -837,7 +826,7 @@ namespace StarsectorTools.Tools.ModManager
             var modShowInfo = allModShowInfo[id];
             allModShowInfo.Remove(modShowInfo.Id);
             allUserGroupInfo[ModGroupType.All].Remove(modShowInfo);
-            allUserGroupInfo[modShowInfo.TypeGroup!].Remove(modShowInfo);
+            allUserGroupInfo[modShowInfo.TypeGroup].Remove(modShowInfo);
             STLog.Instance.WriteLine($"{I18n.RemoveMod} {modShowInfo.Id} {modShowInfo.Version}", STLogLevel.DEBUG);
             return modShowInfo;
         }
@@ -845,7 +834,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             allModShowInfo.Add(modShowInfo.Id, modShowInfo);
             allUserGroupInfo[ModGroupType.All].Add(modShowInfo);
-            allUserGroupInfo[modShowInfo.TypeGroup!].Add(modShowInfo);
+            allUserGroupInfo[modShowInfo.TypeGroup].Add(modShowInfo);
             STLog.Instance.WriteLine($"{I18n.AddMod} {modShowInfo.Id} {modShowInfo.Version}", STLogLevel.DEBUG);
         }
         void ClearDataGridSelected()
@@ -966,20 +955,6 @@ namespace StarsectorTools.Tools.ModManager
             item.ToolTip = name;
             item.Tag = name;
         }
-        //void SearchMods(string text)
-        //{
-        //    var type = ((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!;
-        //    if (text.Length > 0)
-        //    {
-        //        ChangeShowGroup(GetSearchModsShowInfo(text, type));
-        //        STLog.Instance.WriteLine($"{I18n.SearchMod} {text}", STLogLevel.DEBUG);
-        //    }
-        //    else
-        //    {
-        //        ChangeShowGroup(nowGroupName);
-        //        GC.Collect();
-        //    }
-        //}
 
         ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type)
         {

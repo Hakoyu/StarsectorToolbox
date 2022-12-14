@@ -134,7 +134,7 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="key"/>: 分组名称</para>
         /// <para><see langword="value"/>: 包含的模组显示信息列表</para>
         /// </summary>
-        private Dictionary<string, ObservableCollection<ModShowInfo>> allUserGroupInfo = new();
+        private Dictionary<string, HashSet<ModShowInfo>> allUserGroupInfo = new();
         /// <summary>模组显示信息</summary>
         public partial class ModShowInfo : ObservableObject
         {
@@ -161,7 +161,7 @@ namespace StarsectorTools.Tools.ModManager
             /// <summary>图标路径</summary>
             public string IconPath { get; set; } = string.Empty;
             /// <summary>所在的类型分组</summary>
-            public string? TypeGroup { get; set; }
+            public string TypeGroup { get; set; } = ModGroupType.UnknownMods;
             /// <summary>前置模组</summary>
             [ObservableProperty]
             public string? dependencies;
@@ -178,6 +178,38 @@ namespace StarsectorTools.Tools.ModManager
             public ContextMenu contextMenu = null!;
         }
         private ViewModel viewModel;
+        public partial class ViewModel : ObservableObject
+        {
+            [ObservableProperty]
+            ICollectionView? collectionView;
+            [ObservableProperty]
+            string? filterText;
+            public string filterType = strName;
+            partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
+            public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
+            {
+                ChangeCollectionView(modShowInfos);
+            }
+            public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
+            {
+                CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
+                CollectionView.Filter = (o) =>
+                {
+                    if (string.IsNullOrEmpty(filterText))
+                        return true;
+                    if (o is not ModShowInfo info)
+                        return true;
+                    return filterType switch
+                    {
+                        strName => info.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        strId => info.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        strAuthor => info.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        strUserDescription => info.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+                        _ => throw new NotImplementedException()
+                    };
+                };
+            }
+        }
         public ModManager()
         {
             InitializeComponent();
@@ -713,39 +745,6 @@ namespace StarsectorTools.Tools.ModManager
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
                 SaveUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
-            }
-        }
-
-        public partial class ViewModel : ObservableObject
-        {
-            [ObservableProperty]
-            ICollectionView? collectionView;
-            [ObservableProperty]
-            string? filterText;
-            public string filterType = strName;
-            partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
-            public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
-            {
-                ChangeCollectionView(modShowInfos);
-            }
-            public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
-            {
-                CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
-                CollectionView.Filter = (o) =>
-                {
-                    if (string.IsNullOrEmpty(filterText))
-                        return true;
-                    if (o is not ModShowInfo info)
-                        return true;
-                    return filterType switch
-                    {
-                        strName => info.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        strId => info.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        strAuthor => info.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        strUserDescription => info.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        _ => throw new NotImplementedException()
-                    };
-                };
             }
         }
     }

@@ -58,16 +58,12 @@ namespace StarsectorTools.Windows
             }
             catch
             {
-                ConfigLoadError();
+                SetBlurEffect();
+                MessageBox.Show(I18n.ConfigFileError, "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ST.CreateConfigFile();
+                RemoveBlurEffect();
             }
             return true;
-        }
-        void ConfigLoadError()
-        {
-            SetBlurEffect();
-            MessageBox.Show(I18n.ConfigFileError, "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            ST.CreateConfigFile();
-            RemoveBlurEffect();
         }
         private void SetBlurEffect()
         {

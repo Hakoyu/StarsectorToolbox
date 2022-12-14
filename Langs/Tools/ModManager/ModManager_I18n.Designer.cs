@@ -1304,7 +1304,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// </summary>
         public static string Utility {
             get {
-                return ResourceManager.GetString("Utility", resourceCulture);
+                return ResourceManager.GetString("IsUtility", resourceCulture);
             }
         }
         

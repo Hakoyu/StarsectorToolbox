@@ -449,7 +449,7 @@
                                         Background="{x:Null}"
                                         Content="{Binding Dependencies}"
                                         Style="{StaticResource Label_Style}"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
@@ -738,7 +738,7 @@
                                         Height="30"
                                         HorizontalContentAlignment="Left"
                                         Style="{StaticResource Label_Style}"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                                         <Label.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -760,7 +760,7 @@
                                         HorizontalContentAlignment="Center"
                                         VerticalContentAlignment="Center"
                                         Style="{StaticResource Label_Style}"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                                         <Label.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -780,7 +780,7 @@
                                         Height="30"
                                         HorizontalContentAlignment="Left"
                                         Style="{StaticResource Label_Style}"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                                         <Label.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -803,7 +803,7 @@
                                         Height="30"
                                         HorizontalContentAlignment="Left"
                                         Style="{StaticResource Label_Style}"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                                         <Label.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -820,7 +820,7 @@
                                         Click="Button_ModPath_Click"
                                         Cursor="Hand"
                                         Style="{StaticResource Button_Style}"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}">
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                                         <Button.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="Button_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -837,7 +837,7 @@
                                         VerticalAlignment="Top"
                                         Style="{StaticResource TextBlock_Style}"
                                         TextWrapping="Wrap"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}">
+                                        ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
                                         <TextBlock.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -854,7 +854,7 @@
                                         x:Name="TextBlock_ModDependencies"
                                         Style="{StaticResource TextBlock_Style}"
                                         TextWrapping="Wrap"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}">
+                                        ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
                                         <TextBlock.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -870,7 +870,7 @@
                                         x:Name="TextBlock_ModDescription"
                                         Style="{StaticResource TextBlock_Style}"
                                         TextWrapping="Wrap"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}">
+                                        ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
                                         <TextBlock.ContextMenu>
                                             <ContextMenu Style="{StaticResource ContextMenu_Style}">
                                                 <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManager_I18n.CopyInfo}" />
@@ -885,7 +885,7 @@
                                         LostFocus="TextBox_UserDescription_LostFocus"
                                         Style="{StaticResource TextBox_Style}"
                                         TextWrapping="Wrap"
-                                        ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}" />
+                                        ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                                 </GroupBox>
                             </StackPanel>
                         </ScrollViewer>
