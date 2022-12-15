@@ -145,10 +145,10 @@ namespace StarsectorTools.Tools.ModManager
             public string Author { get; set; } = null!;
             /// <summary>是否启用</summary>
             [ObservableProperty]
-            public bool isEnabled = false;
+            private bool isEnabled = false;
             /// <summary>收藏状态</summary>
             [ObservableProperty]
-            public bool isCollected = false;
+            private bool isCollected = false;
             /// <summary>模组版本</summary>
             public string Version { get; set; } = null!;
             /// <summary>模组支持的游戏版本</summary>
@@ -163,18 +163,18 @@ namespace StarsectorTools.Tools.ModManager
             public string TypeGroup { get; set; } = ModGroupType.UnknownMods;
             /// <summary>前置模组</summary>
             [ObservableProperty]
-            public string? dependencies;
+            private string? dependencies;
             /// <summary>前置模组列表</summary>
             public List<string>? DependenciesList;
             /// <summary>显示启用前置按钮的行高</summary>
             [ObservableProperty]
-            public bool missDependencies;
+            private bool missDependencies;
             /// <summary>用户描述</summary>
             [ObservableProperty]
-            public string userDescription = string.Empty;
+            private string userDescription = string.Empty;
             /// <summary>右键菜单</summary>
             [ObservableProperty]
-            public ContextMenu contextMenu = null!;
+            private ContextMenu contextMenu = null!;
         }
         //private ViewModel viewModel;
         //public partial class ViewModel : ObservableObject

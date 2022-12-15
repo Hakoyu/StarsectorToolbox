@@ -976,9 +976,9 @@ namespace StarsectorTools.Tools.ModManager
         {
             while (remindSaveThread.ThreadState != ThreadState.Unstarted)
             {
-                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorAqua0"]);
+                Dispatcher.BeginInvoke(() => Button_Save.Tag = true);
                 Thread.Sleep(1000);
-                Dispatcher.BeginInvoke(() => Button_Save.Background = (Brush)Application.Current.Resources["ColorLight3"]);
+                Dispatcher.BeginInvoke(() => Button_Save.Tag = false);
                 Thread.Sleep(1000);
             }
         }

@@ -93,6 +93,17 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style
+            x:Key="RemindStyle"
+            BasedOn="{StaticResource Button_Style}"
+            TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource ColorLight3}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ColorAqua0}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <Grid>
         <GroupBox Header="{x:Static I18n:ModManager_I18n.ModManager}" Style="{StaticResource GroupBox_Style}">
@@ -470,7 +481,8 @@
                         Margin="0,0,120,0"
                         VerticalAlignment="Top"
                         Style="{StaticResource TextBox_Style}"
-                        TextWrapping="Wrap" TextChanged="TextBox_SearchMods_TextChanged" />
+                        TextChanged="TextBox_SearchMods_TextChanged"
+                        TextWrapping="Wrap" />
                     <ComboBox
                         x:Name="ComboBox_SearchType"
                         Width="115"
@@ -692,7 +704,8 @@
                         VerticalAlignment="Bottom"
                         Click="Button_Save_Click"
                         Content="{x:Static I18n:ModManager_I18n.SaveConfig}"
-                        Style="{StaticResource Button_Style}">
+                        Style="{StaticResource RemindStyle}"
+                        Tag="False">
                         <pu:ButtonHelper.Icon>
                             <emoji:TextBlock Text="💾" />
                         </pu:ButtonHelper.Icon>
