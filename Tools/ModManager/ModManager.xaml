@@ -85,6 +85,14 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="MissDependenciesStyle" TargetType="StackPanel">
+            <Setter Property="Height" Value="30" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MissDependencies}" Value="false">
+                    <Setter Property="Height" Value="0" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Page.Resources>
     <Grid>
         <GroupBox Header="{x:Static I18n:ModManager_I18n.ModManager}" Style="{StaticResource GroupBox_Style}">
@@ -278,12 +286,13 @@
                         CanUserAddRows="False"
                         Drop="DataGrid_ModsShowList_Drop"
                         GridLinesVisibility="Horizontal"
-                        ItemsSource="{Binding CollectionView}"
                         LostFocus="DataGrid_ModsShowList_LostFocus"
                         MouseLeftButtonDown="DataGrid_ModsShowList_MouseLeftButtonDown"
                         RowDetailsVisibilityMode="Visible"
                         RowHeight="50"
-                        Style="{StaticResource DataGrid_Style}">
+                        Style="{StaticResource DataGrid_Style}"
+                        VirtualizingStackPanel.IsVirtualizing="True"
+                        VirtualizingStackPanel.VirtualizationMode="Recycling">
                         <DataGrid.InputBindings>
                             <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
                         </DataGrid.InputBindings>
@@ -314,7 +323,7 @@
                                             Margin="0,5,0,5"
                                             Padding="5,0,5,0"
                                             Click="Button_Collected_Click"
-                                            Style="{DynamicResource CollectedStyle}" />
+                                            Style="{StaticResource CollectedStyle}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -333,7 +342,7 @@
                                             Margin="0,5,0,5"
                                             Padding="5,0,5,0"
                                             Click="Button_Enabled_Click"
-                                            Style="{DynamicResource EnabledStyle}" />
+                                            Style="{StaticResource EnabledStyle}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -436,14 +445,15 @@
                         </DataGrid.Columns>
                         <DataGrid.RowDetailsTemplate>
                             <DataTemplate>
-                                <StackPanel Height="{Binding RowDetailsHight}" Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Style="{StaticResource MissDependenciesStyle}">
                                     <Button
                                         x:Name="Button_EnableDependencies"
                                         Margin="10,0,0,0"
                                         Padding="5,0,5,0"
                                         Click="Button_EnableDependencies_Click"
                                         Content="{x:Static I18n:ModManager_I18n.EnableDependencies}"
-                                        Style="{StaticResource Button_Style}" />
+                                        Style="{StaticResource Button_Style}"
+                                        ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                                     <Label
                                         HorizontalContentAlignment="Left"
                                         Background="{x:Null}"
@@ -460,8 +470,7 @@
                         Margin="0,0,120,0"
                         VerticalAlignment="Top"
                         Style="{StaticResource TextBox_Style}"
-                        Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
-                        TextWrapping="Wrap" />
+                        TextWrapping="Wrap" TextChanged="TextBox_SearchMods_TextChanged" />
                     <ComboBox
                         x:Name="ComboBox_SearchType"
                         Width="115"

@@ -66,13 +66,12 @@ namespace StarsectorTools.Tools.ModManager
     public partial class ModManager : Page
     {
         private const string modGroupFile = "ModGroup.toml";
-        private const string modBackupDirectory = @"BackUp\Mods";
-        private const string backupDirectory = "Backup";
-        private const string userDataPath = "UserData.toml";
-        private const string userGroupPath = "UserGroup.toml";
-        private const string userCustomData = "UserCustomData";
-        private const string enabledMods = "enabledMods";
+        private const string userDataFile = "UserData.toml";
+        private const string userGroupFile = "UserGroup.toml";
         private const string modInfoJson = "mod_info.json";
+        private const string backupModsDirectory = "BackUp\\Mods";
+        private const string backupDirectory = "Backup";
+        private const string strEnabledMods = "enabledMods";
         private const string strAll = "All";
         private const string strId = "Id";
         private const string strIcon = "Icon";
@@ -94,7 +93,7 @@ namespace StarsectorTools.Tools.ModManager
         /// <summary>提醒保存配置的动画线程</summary>
         private Thread remindSaveThread = null!;
         /// <summary>当前选择的列表项</summary>
-        private ListBoxItem? nowSelectedListBoxItem = null;
+        private ListBoxItem nowSelectedListBoxItem = null!;
         /// <summary>已启用的模组ID</summary>
         private HashSet<string> allEnabledModsId = new();
         /// <summary>已收藏的模组ID</summary>
@@ -134,7 +133,7 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="key"/>: 分组名称</para>
         /// <para><see langword="value"/>: 包含的模组显示信息列表</para>
         /// </summary>
-        private Dictionary<string, HashSet<ModShowInfo>> allUserGroupInfo = new();
+        private Dictionary<string, ObservableCollection<ModShowInfo>> allUserGroupInfo = new();
         /// <summary>模组显示信息</summary>
         public partial class ModShowInfo : ObservableObject
         {
@@ -169,54 +168,54 @@ namespace StarsectorTools.Tools.ModManager
             public List<string>? DependenciesList;
             /// <summary>显示启用前置按钮的行高</summary>
             [ObservableProperty]
-            private double rowDetailsHight;
+            public bool missDependencies;
             /// <summary>用户描述</summary>
             [ObservableProperty]
-            private string userDescription = string.Empty;
+            public string userDescription = string.Empty;
             /// <summary>右键菜单</summary>
             [ObservableProperty]
             public ContextMenu contextMenu = null!;
         }
-        private ViewModel viewModel;
-        public partial class ViewModel : ObservableObject
-        {
-            [ObservableProperty]
-            ICollectionView? collectionView;
-            [ObservableProperty]
-            string? filterText;
-            public string filterType = strName;
-            partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
-            public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
-            {
-                ChangeCollectionView(modShowInfos);
-            }
-            public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
-            {
-                CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
-                CollectionView.Filter = (o) =>
-                {
-                    if (string.IsNullOrEmpty(filterText))
-                        return true;
-                    if (o is not ModShowInfo info)
-                        return true;
-                    return filterType switch
-                    {
-                        strName => info.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        strId => info.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        strAuthor => info.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        strUserDescription => info.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-                        _ => throw new NotImplementedException()
-                    };
-                };
-            }
-        }
+        //private ViewModel viewModel;
+        //public partial class ViewModel : ObservableObject
+        //{
+        //    [ObservableProperty]
+        //    ICollectionView? collectionView;
+        //    [ObservableProperty]
+        //    string? filterText;
+        //    public string filterType = strName;
+        //    partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
+        //    public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
+        //    {
+        //        ChangeCollectionView(modShowInfos);
+        //    }
+        //    public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
+        //    {
+        //        CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
+        //        CollectionView.Filter = (o) =>
+        //        {
+        //            if (string.IsNullOrEmpty(filterText))
+        //                return true;
+        //            if (o is not ModShowInfo info)
+        //                return true;
+        //            return filterType switch
+        //            {
+        //                strName => info.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strId => info.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strAuthor => info.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strUserDescription => info.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                _ => throw new NotImplementedException()
+        //            };
+        //        };
+        //    }
+        //}
         public ModManager()
         {
             InitializeComponent();
             InitializeData();
             RefreshList();
             STLog.Instance.WriteLine(I18n.InitialisationComplete);
-            DataContext = viewModel = new(allModShowInfo.Values);
+            //DataContext = viewModel = new(allModShowInfo.Values);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -290,7 +289,7 @@ namespace StarsectorTools.Tools.ModManager
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
-
+        private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e) => SearchMods(TextBox_SearchMods.Text);
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
@@ -318,7 +317,8 @@ namespace StarsectorTools.Tools.ModManager
                     else
                         Expander_RandomEnable.Visibility = Visibility.Collapsed;
                     nowGroupName = item.Tag.ToString()!;
-                    ChangeShowGroup(nowGroupName);
+                    SearchMods(TextBox_SearchMods.Text);
+                    //ChangeShowGroup(nowGroupName);
                     ClearDataGridSelected();
                     CloseModInfo();
                     GC.Collect();
@@ -462,8 +462,8 @@ namespace StarsectorTools.Tools.ModManager
                 string name = window.TextBox_Name.Text;
                 if (name.Length > 0 && !allUserGroup.ContainsKey(name))
                 {
-                    if (name == ModGroupType.Collected || name == userCustomData)
-                        MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, userCustomData));
+                    if (name == ModGroupType.Collected || name == strUserCustomData)
+                        MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, strUserCustomData));
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
@@ -613,12 +613,13 @@ namespace StarsectorTools.Tools.ModManager
 
         private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is not ComboBox comboBox || comboBox.SelectedItem is not ComboBoxItem item || viewModel is null)
-                return;
-            viewModel.filterType = item.Tag.ToString()!;
-            if (string.IsNullOrEmpty(viewModel.FilterText))
-                return;
-            viewModel.CollectionView?.Refresh();
+            if (TextBox_SearchMods.Text.Length > 0)
+                SearchMods(TextBox_SearchMods.Text);
+            //GetSearchModsShowInfo();
+            //viewModel.filterType = item.Tag.ToString()!;
+            //if (string.IsNullOrEmpty(viewModel.FilterText))
+            //    return;
+            //viewModel.CollectionView?.Refresh();
         }
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
