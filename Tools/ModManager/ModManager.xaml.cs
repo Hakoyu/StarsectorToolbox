@@ -68,7 +68,7 @@ namespace StarsectorTools.Tools.ModManager
         private const string modGroupFile = "ModGroup.toml";
         private const string userDataFile = "UserData.toml";
         private const string userGroupFile = "UserGroup.toml";
-        private const string modInfoJson = "mod_info.json";
+        private const string modInfoJsonFile = "mod_info.json";
         private const string backupModsDirectory = "BackUp\\Mods";
         private const string backupDirectory = "Backup";
         private const string strEnabledMods = "enabledMods";
@@ -100,40 +100,40 @@ namespace StarsectorTools.Tools.ModManager
         private HashSet<string> allCollectedModsId = new();
         /// <summary>
         /// <para>全部模组信息</para>
-        /// <para>Key: 模组ID</para>
-        /// <para>Value: 模组信息</para>
+        /// <para><see langword="Key"/>: 模组ID</para>
+        /// <para><see langword="Value"/>: 模组信息</para>
         /// </summary>
         private Dictionary<string, ModInfo> allModsInfo = new();
         /// <summary>
         /// <para>全部分组列表项</para>
-        /// <para>Key: 列表项Tag或ModGroupType</para>
-        /// <para>Value: 列表项</para>
+        /// <para><see langword="Key"/>: 列表项Tag或ModGroupType</para>
+        /// <para><see langword="Value"/>: 列表项</para>
         /// </summary>
-        private Dictionary<string, ListBoxItem> allListBoxItem = new();
+        private Dictionary<string, ListBoxItem> allListBoxItems = new();
         /// <summary>
         /// <para>全部模组显示信息</para>
-        /// <para>Key: 模组ID</para>
-        /// <para>Value: 模组显示信息</para>
+        /// <para><see langword="Key"/>: 模组ID</para>
+        /// <para><see langword="Value"/>: 模组显示信息</para>
         /// </summary>
-        private Dictionary<string, ModShowInfo> allModShowInfo = new();
+        private Dictionary<string, ModShowInfo> allModsShowInfo = new();
         /// <summary>
-        /// <para>全部模组类型分组</para>
-        /// <para>Key: 分组名称</para>
-        /// <para>Value: 包含的模组</para>
+        /// <para>全部模组所在的类型分组</para>
+        /// <para><see langword="Key"/>: 模组ID</para>
+        /// <para><see langword="Value"/>: 所在分组</para>
         /// </summary>
-        private Dictionary<string, HashSet<string>> allModTypeGroup = new();
+        private Dictionary<string, string> allModsTypeGroup = new();
         /// <summary>
         /// <para>全部用户分组</para>
-        /// <para>Key: 分组名称</para>
-        /// <para>Value: 包含的模组</para>
+        /// <para><see langword="Key"/>: 分组名称</para>
+        /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
-        private Dictionary<string, HashSet<string>> allUserGroup = new();
+        private Dictionary<string, HashSet<string>> allUserGroups = new();
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
-        /// <para><see langword="key"/>: 分组名称</para>
-        /// <para><see langword="value"/>: 包含的模组显示信息列表</para>
+        /// <para><see langword="Key"/>: 分组名称</para>
+        /// <para><see langword="Value"/>: 包含的模组显示信息列表</para>
         /// </summary>
-        private Dictionary<string, ObservableCollection<ModShowInfo>> allUserGroupInfo = new();
+        private Dictionary<string, ObservableCollection<ModShowInfo>> allUserGroupsInfo = new();
         /// <summary>模组显示信息</summary>
         public partial class ModShowInfo : ObservableObject
         {
@@ -159,8 +159,6 @@ namespace StarsectorTools.Tools.ModManager
             public bool IsUtility { get; set; } = false;
             /// <summary>图标路径</summary>
             public string IconPath { get; set; } = string.Empty;
-            /// <summary>所在的类型分组</summary>
-            public string TypeGroup { get; set; } = ModGroupType.UnknownMods;
             /// <summary>前置模组</summary>
             [ObservableProperty]
             private string? dependencies;
@@ -215,7 +213,7 @@ namespace StarsectorTools.Tools.ModManager
             InitializeData();
             RefreshList();
             STLog.Instance.WriteLine(I18n.InitialisationComplete);
-            //DataContext = viewModel = new(allModShowInfo.Values);
+            //DataContext = viewModel = new(allModsShowInfo.Values);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -312,7 +310,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (item != nowSelectedListBoxItem)
                 {
                     nowSelectedListBoxItem = item;
-                    if (allUserGroup.ContainsKey(item.ToolTip.ToString()!))
+                    if (allUserGroups.ContainsKey(item.ToolTip.ToString()!))
                         Expander_RandomEnable.Visibility = Visibility.Visible;
                     else
                         Expander_RandomEnable.Visibility = Visibility.Collapsed;
@@ -391,7 +389,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 string id = info.Id;
                 string err = null!;
-                foreach (var dependencie in allModShowInfo[id].Dependencies!.Split(" , "))
+                foreach (var dependencie in allModsShowInfo[id].Dependencies!.Split(" , "))
                 {
                     if (allModsInfo.ContainsKey(dependencie))
                         ChangeModEnabled(dependencie, true);
@@ -447,7 +445,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
             {
-                allModShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
+                allModsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
                 StartRemindSaveThread();
             }
         }
@@ -460,7 +458,7 @@ namespace StarsectorTools.Tools.ModManager
             window.Button_Yes.Click += (o, e) =>
             {
                 string name = window.TextBox_Name.Text;
-                if (name.Length > 0 && !allUserGroup.ContainsKey(name))
+                if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == ModGroupType.Collected || name == strUserCustomData)
                         MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, strUserCustomData));
@@ -662,12 +660,12 @@ namespace StarsectorTools.Tools.ModManager
                 MessageBox.Show(I18n.RandomNumberCannotNull, "", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (nowSelectedListBoxItem is ListBoxItem item && allUserGroup.ContainsKey(item.ToolTip.ToString()!))
+            if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
             {
                 string group = item.ToolTip.ToString()!;
                 int minSize = int.Parse(TextBox_MinRandomSize.Text);
                 int maxSize = int.Parse(TextBox_MaxRandomSize.Text);
-                int count = allUserGroup[group].Count;
+                int count = allUserGroups[group].Count;
                 if (minSize < 0)
                 {
                     MessageBox.Show(I18n.RandomNumberCannotLess0, "", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -683,14 +681,14 @@ namespace StarsectorTools.Tools.ModManager
                     MessageBox.Show(I18n.MinRandomNumberCannotGreaterMaxRandomNumber);
                     return;
                 }
-                foreach (var info in allUserGroup[group])
+                foreach (var info in allUserGroups[group])
                     ChangeModEnabled(info, false);
                 int needSize = new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(minSize, maxSize + 1);
                 HashSet<int> set = new();
                 while (set.Count < needSize)
                     set.Add(new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(0, count));
                 foreach (int i in set)
-                    ChangeModEnabled(allUserGroup[group].ElementAt(i));
+                    ChangeModEnabled(allUserGroups[group].ElementAt(i));
                 CheckEnabledModsDependencies();
                 RefreshCountOfListBoxItems();
             }
