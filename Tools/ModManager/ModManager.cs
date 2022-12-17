@@ -391,7 +391,7 @@ namespace StarsectorTools.Tools.ModManager
             ContextMenu contextMenu = new();
             // 标记菜单项是否被创建
             contextMenu.Tag = false;
-            // 被点击时才加载菜单
+            // 被点击时才加载菜单,可以降低内存占用
             contextMenu.Loaded += (o, e) =>
             {
                 if (contextMenu.Tag is true)

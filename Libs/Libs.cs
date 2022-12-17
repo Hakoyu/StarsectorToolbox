@@ -459,6 +459,8 @@ namespace StarsectorTools.Libs
                             modInfo.SetData(info);
                         Dependencies.Add(modInfo);
                     }
+                    if (Dependencies.Count == 0)
+                        Dependencies = null;
                     break;
             }
         }
