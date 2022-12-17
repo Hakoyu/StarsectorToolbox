@@ -21,6 +21,7 @@ using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager
 {
+    /// <summary>模组分组类型</summary>
     public static class ModGroupType
     {
         /// <summary>全部模组</summary>

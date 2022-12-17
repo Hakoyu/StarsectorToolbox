@@ -389,93 +389,102 @@ namespace StarsectorTools.Tools.ModManager
         {
             STLog.Instance.WriteLine($"{info.Id} {I18n.AddContextMenu}", STLogLevel.DEBUG);
             ContextMenu contextMenu = new();
-            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
-            // 启用或禁用
-            MenuItem menuItem = new();
-            menuItem.Header = info.IsEnabled ? I18n.DisableSelectedMods : I18n.EnabledSelectedMods;
-            menuItem.Click += (o, e) => ChangeSelectedModsEnabled();
-            contextMenu.Items.Add(menuItem);
-            STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
-            // 收藏或取消收藏
-            menuItem = new();
-            menuItem.Header = info.IsCollected ? I18n.CancelCollectionSelectedMods : I18n.CollectionSelectedMods;
-            menuItem.Click += (o, e) => ChangeSelectedModsCollected();
-            contextMenu.Items.Add(menuItem);
-            STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
-            // 打开模组文件夹
-            menuItem = new();
-            menuItem.Header = I18n.OpenModDirectory;
-            menuItem.Click += (o, e) =>
+            // 标记菜单项是否被创建
+            contextMenu.Tag = false;
+            // 被点击时才加载菜单
+            contextMenu.Loaded += (o, e) =>
             {
-                STLog.Instance.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[info.Id].Path}");
-                ST.OpenFile(allModsInfo[info.Id].Path);
-            };
-            contextMenu.Items.Add(menuItem);
-            STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
-            // 删除模组至回收站
-            menuItem = new();
-            menuItem.Header = I18n.DeleteMod;
-            menuItem.Click += (o, e) =>
-            {
-                string path = allModsInfo[info.Id].Path;
-                if (MessageBox.Show($"{I18n.ConfirmDeleteMod}?\nID: {info.Id}\n{I18n.Path}: {path}\n", "", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-                {
-                    RemoveModShowInfo(info.Id);
-                    ST.DeleteDirToRecycleBin(path);
-                    RefreshCountOfListBoxItems();
-                    StartRemindSaveThread();
-                }
-            };
-            contextMenu.Items.Add(menuItem);
-            // 添加至用户分组
-            if (allUserGroups.Count > 0)
-            {
+                if (contextMenu.Tag is true)
+                    return;
+                contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+                // 启用或禁用
+                MenuItem menuItem = new();
+                menuItem.Header = info.IsEnabled ? I18n.DisableSelectedMods : I18n.EnabledSelectedMods;
+                menuItem.Click += (o, e) => ChangeSelectedModsEnabled();
+                contextMenu.Items.Add(menuItem);
+                STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
+                // 收藏或取消收藏
                 menuItem = new();
-                menuItem.Header = I18n.AddModToUserGroup;
-                foreach (var group in allUserGroups.Keys)
+                menuItem.Header = info.IsCollected ? I18n.CancelCollectionSelectedMods : I18n.CollectionSelectedMods;
+                menuItem.Click += (o, e) => ChangeSelectedModsCollected();
+                contextMenu.Items.Add(menuItem);
+                STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
+                // 打开模组文件夹
+                menuItem = new();
+                menuItem.Header = I18n.OpenModDirectory;
+                menuItem.Click += (o, e) =>
                 {
-                    if (!allUserGroups[group].Contains(info.Id))
+                    STLog.Instance.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[info.Id].Path}");
+                    ST.OpenFile(allModsInfo[info.Id].Path);
+                };
+                contextMenu.Items.Add(menuItem);
+                STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
+                // 删除模组至回收站
+                menuItem = new();
+                menuItem.Header = I18n.DeleteMod;
+                menuItem.Click += (o, e) =>
+                {
+                    string path = allModsInfo[info.Id].Path;
+                    if (MessageBox.Show($"{I18n.ConfirmDeleteMod}?\nID: {info.Id}\n{I18n.Path}: {path}\n", "", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        RemoveModShowInfo(info.Id);
+                        ST.DeleteDirToRecycleBin(path);
+                        RefreshCountOfListBoxItems();
+                        StartRemindSaveThread();
+                    }
+                };
+                contextMenu.Items.Add(menuItem);
+                // 添加至用户分组
+                if (allUserGroups.Count > 0)
+                {
+                    menuItem = new();
+                    menuItem.Header = I18n.AddModToUserGroup;
+                    foreach (var group in allUserGroups.Keys)
+                    {
+                        if (!allUserGroups[group].Contains(info.Id))
+                        {
+                            MenuItem groupItem = new();
+                            groupItem.Header = group;
+                            groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
+                            // 此语句无法获取色彩透明度 原因未知
+                            MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
+                            groupItem.Click += (o, e) =>
+                            {
+                                ChangeSelectedModsUserGroup(group, true);
+                            };
+                            menuItem.Items.Add(groupItem);
+                        }
+                    }
+                    if (menuItem.Items.Count > 0)
+                    {
+                        contextMenu.Items.Add(menuItem);
+                        STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
+                    }
+                }
+                // 从用户分组中删除
+                var groupWithMod = allUserGroups.Where(g => g.Value.Contains(info.Id));
+                if (groupWithMod.Count() > 0)
+                {
+                    menuItem = new();
+                    menuItem.Header = I18n.RemoveFromUserGroup;
+                    foreach (var group in groupWithMod)
                     {
                         MenuItem groupItem = new();
-                        groupItem.Header = group;
+                        groupItem.Header = group.Key;
                         groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
                         // 此语句无法获取色彩透明度 原因未知
                         MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
                         groupItem.Click += (o, e) =>
                         {
-                            ChangeSelectedModsUserGroup(group, true);
+                            ChangeSelectedModsUserGroup(group.Key, false);
                         };
                         menuItem.Items.Add(groupItem);
                     }
-                }
-                if (menuItem.Items.Count > 0)
-                {
                     contextMenu.Items.Add(menuItem);
+                    contextMenu.Tag = true;
                     STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
                 }
-            }
-            // 从用户分组中删除
-            var groupWithMod = allUserGroups.Where(g => g.Value.Contains(info.Id));
-            if (groupWithMod.Count() > 0)
-            {
-                menuItem = new();
-                menuItem.Header = I18n.RemoveFromUserGroup;
-                foreach (var group in groupWithMod)
-                {
-                    MenuItem groupItem = new();
-                    groupItem.Header = group.Key;
-                    groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
-                    // 此语句无法获取色彩透明度 原因未知
-                    MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
-                    groupItem.Click += (o, e) =>
-                    {
-                        ChangeSelectedModsUserGroup(group.Key, false);
-                    };
-                    menuItem.Items.Add(groupItem);
-                }
-                contextMenu.Items.Add(menuItem);
-                STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
-            }
+            };
             return contextMenu;
         }
         void ChangeSelectedModsUserGroup(string group, bool isInGroup)
