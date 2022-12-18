@@ -11,11 +11,12 @@
 - 优化了模组选中的方式
 - 优化了模组前置的检测方式,现在不会在 `dependencies` 为空时,详情中依旧显示前置列表了
 - 优化了 `ModShowInfo`,提高了效率
-- 优化了 `ModShowInfo` 中,`ContextMenu` 的载入方式降低了内存消耗
+- 优化了 `ModShowInfo` 中,`ContextMenu` 的载入方式,降低了内存消耗
 
 新增:
 
 - 为 `TextBox` 添加了输入占位符
+- 添加确认删除用户分组提示窗
 
 删除:
 
