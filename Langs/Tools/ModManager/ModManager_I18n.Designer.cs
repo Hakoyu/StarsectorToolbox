@@ -232,6 +232,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 确认删除用户分组吗? 的本地化字符串。
+        /// </summary>
+        public static string ConfirmDeletionUserGroup {
+            get {
+                return ResourceManager.GetString("ConfirmDeletionUserGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 确认倒拖入文件 的本地化字符串。
         /// </summary>
         public static string ConfirmDragFiles {

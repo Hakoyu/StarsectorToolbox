@@ -529,4 +529,7 @@
   <data name="IconLoadError" xml:space="preserve">
     <value>图标读取错误</value>
   </data>
+  <data name="ConfirmDeletionUserGroup" xml:space="preserve">
+    <value>确认删除用户分组吗?</value>
+  </data>
 </root>

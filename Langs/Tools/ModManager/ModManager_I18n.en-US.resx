@@ -529,4 +529,7 @@ Cannot be removed midway</value>
   <data name="IconLoadError" xml:space="preserve">
     <value>Icon loading error</value>
   </data>
+  <data name="ConfirmDeletionUserGroup" xml:space="preserve">
+    <value>Confirm deletion user group?</value>
+  </data>
 </root>

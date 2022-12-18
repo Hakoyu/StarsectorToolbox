@@ -952,6 +952,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void RemoveUserGroup(ListBoxItem listBoxItem)
         {
+            if (MessageBox.Show(I18n.ConfirmDeletionUserGroup, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                return;
             var name = listBoxItem.ToolTip.ToString()!;
             if (nowSelectedListBoxItem == listBoxItem)
                 ListBox_ModsGroupMenu.SelectedIndex = 0;
