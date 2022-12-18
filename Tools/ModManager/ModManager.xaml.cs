@@ -289,7 +289,7 @@ namespace StarsectorTools.Tools.ModManager
             Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
         }
 
-        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text, "[0-9]");
+        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
         private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e) => SearchMods(TextBox_SearchMods.Text);
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
