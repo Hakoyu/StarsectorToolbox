@@ -131,7 +131,7 @@ namespace HKW.WindowAccent
         /// <param name="argb">背景颜色(ARGB)</param>
         public static void SetWindowAccent(Window window, AccentState state, uint argb)
         {
-            window.SourceInitialized += (o, e) => EnableAccent(window, state, argb);
+            window.SourceInitialized += (s, e) => EnableAccent(window, state, argb);
         }
         /// <summary>
         /// 设置窗口强调类型
@@ -141,7 +141,7 @@ namespace HKW.WindowAccent
         /// <param name="color">背景颜色</param>
         public static void SetWindowAccent(Window window, AccentState state, Color color)
         {
-            window.SourceInitialized += (o, e) => EnableAccent(window, state, Color2Argb(color));
+            window.SourceInitialized += (s, e) => EnableAccent(window, state, Color2Argb(color));
         }
 
         static void EnableAccent(Window window, AccentState state, uint argb)

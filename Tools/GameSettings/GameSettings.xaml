@@ -1,77 +1,396 @@
-﻿<Page x:Class="StarsectorTools.Tools.GameSettings.GameSettings"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
-      xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.GameSettings"
-      xmlns:local="clr-namespace:StarsectorTools.Tools.GameSettings"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="GameSettings">
-    <Grid>
-        <GroupBox Header="{x:Static I18n:GameSettings_I18n.GameSettings}" Style="{StaticResource GroupBox_Style}" pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Label Content="{x:Static I18n:GameSettings_I18n.GameDirectory}" HorizontalAlignment="Left" Width="100" Style="{StaticResource Label_Style}" Grid.Column="1"/>
-                <Label x:Name="Label_GamePath" Margin="100,0,165,0" Style="{StaticResource Label_Style}" Grid.Column="1" HorizontalContentAlignment="Left" Background="{DynamicResource ColorDeep2}"/>
-                <Button x:Name="Button_SetGameDirectory" Content="{x:Static I18n:GameSettings_I18n.SetGameDirectory}" Grid.Column="1" Click="Button_SetGameDirectory_Click" Style="{StaticResource Button_Style}" Margin="0,0,85,0" HorizontalAlignment="Right" Width="80"/>
-                <Button x:Name="Button_OpenGameDirectory" Content="{x:Static I18n:GameSettings_I18n.OpenGameDirectory}" Grid.Column="1" Click="Button_OpenGameDirectory_Click" Style="{StaticResource Button_Style}" HorizontalAlignment="Right" Width="80"/>
-                <GroupBox Header="{x:Static I18n:GameSettings_I18n.SetMemory}" Style="{StaticResource GroupBox_Style}"
-                    pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" Margin="0,5,0,0" Grid.Column="1" Height="65" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250" 
-                  >
-                    <Grid>
-                        <TextBox x:Name="TextBox_Memory" PreviewTextInput="TextBox_NumberInput" KeyDown="TextBox_SetMemory_KeyDown" LostKeyboardFocus="TextBox_SetMemory_LostKeyboardFocus" Padding="5,0,0,0" InputMethod.IsInputMethodEnabled="False" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource TextBox_Style}"/>
-                        <Label Content="MB" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="100,0,108,0" Width="30" VerticalAlignment="Top" Height="30" Style="{StaticResource Label_Style}"/>
-                        <Button x:Name="Button_SetMemory" Content="{x:Static I18n:GameSettings_I18n.Used}" Margin="0,0,50,0" Click="Button_SetMemory_Click" Width="45" Height="30" VerticalAlignment="Top" HorizontalAlignment="Right" Style="{StaticResource Button_Style}"/>
-                        <Button x:Name="Button_Help" Content="{x:Static I18n:GameSettings_I18n.Help}" Width="45" VerticalAlignment="Top" Height="30" HorizontalAlignment="Right" Style="{StaticResource Button_Style}"/>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Header="{x:Static I18n:GameSettings_I18n.GameKey}" Style="{StaticResource GroupBox_Style}"
-                    pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Grid.Row="1" Margin="0,75,0,0" Grid.Column="1" Height="100" Width="250" VerticalAlignment="Top" HorizontalAlignment="Left">
-                    <Grid>
-                        <Label x:Name="Label_GameKey" Padding="0" Margin="0,1,0,0" Height="30" VerticalAlignment="Top" Style="{StaticResource Label_Style}" FontSize="16" FontWeight="Bold"/>
-                        <Button x:Name="Button_CopyKey" IsEnabled="False" Content="{x:Static I18n:GameSettings_I18n.Copy}" Click="Button_CopyKey_Click" Height="30" VerticalAlignment="Bottom" Margin="0,0,10,0" HorizontalAlignment="Right" Width="80" Style="{StaticResource Button_Style}"/>
-                        <Button x:Name="Button_ShowKey" IsEnabled="False" Content="{x:Static I18n:GameSettings_I18n.Show}" Height="30" VerticalAlignment="Bottom" Margin="10,0,0,0" HorizontalAlignment="Left" Width="80" Click="Button_ShowKey_Click" Style="{StaticResource Button_Style}"/>
-                    </Grid>
-                </GroupBox>
-                <Label Content="{x:Static I18n:GameSettings_I18n.GameVersion}" HorizontalAlignment="Left" Width="100" Style="{StaticResource Label_Style}" />
-                <Label x:Name="Label_GameVersion" Margin="100,0,0,0" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorDeep2}" HorizontalContentAlignment="Left"/>
-                <ScrollViewer Grid.Column="0" Grid.Row="1" >
-                    <StackPanel Grid.Column="1" Grid.Row="1" Margin="5">
-                        <Expander Header="{x:Static I18n:GameSettings_I18n.LogClear}" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
-                            <StackPanel>
-                                <Button x:Name="Button_OpenLogFile" Content="{x:Static I18n:GameSettings_I18n.OpenLogFile}" Style="{StaticResource Button_Style}"  Margin="0,0,0,5" Click="Button_OpenLogFile_Click"/>
-                                <Button x:Name="Button_ClearLogFile" Content="{x:Static I18n:GameSettings_I18n.ClearLogFiles}" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearLogFile_Click"/>
-                            </StackPanel>
-                        </Expander>
-                        <Expander Header="{x:Static I18n:GameSettings_I18n.MissionsLoadoutsClean}" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
-                            <StackPanel>
-                                <ComboBox x:Name="ComboBox_MissionsLoadouts" Style="{StaticResource ComboBox_Style}" SelectedIndex="0" Margin="0,0,0,5">
-                                    <ComboBoxItem Content="{x:Static I18n:GameSettings_I18n.All}" ToolTip="All" Style="{StaticResource ComboBoxItem_Style}"/>
-                                </ComboBox>
-                                <Button x:Name="Button_ClearMissionsLoadouts" Content="{x:Static I18n:GameSettings_I18n.ClearMissionsLoadouts}" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearMissionsLoadouts_Click"/>
-                                <Button x:Name="Button_OpenMissionsLoadoutsDirectory" Content="{x:Static I18n:GameSettings_I18n.OpenMissionsLoadoutsFolder}" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_OpenMissionsLoadoutsDirectory_Click"/>
-                            </StackPanel>
-                        </Expander>
-                        <Expander x:Name="Expander_Save" Header="{x:Static I18n:GameSettings_I18n.SaveClean}" Style="{StaticResource Expander_Style}" Margin="0,0,0,5" pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center">
-                            <StackPanel Background="{DynamicResource ColorBB}">
-                                <Label Content="{x:Static I18n:GameSettings_I18n.RetainRecentSaveCount}" Style="{StaticResource Label_Style}"  Margin="0,0,0,5"/>
-                                <TextBox x:Name="TextBox_ReservedSaveSize" Text="5" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}" PreviewTextInput="TextBox_NumberInput" InputMethod.IsInputMethodEnabled="False"/>
-                                <Button x:Name="Button_ClearSave" Content="{x:Static I18n:GameSettings_I18n.ClearSave}" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_ClearSave_Click"/>
-                                <Button x:Name="Button_OpenSaveDirectory" Content="{x:Static I18n:GameSettings_I18n.OpenSaveFolder}" Style="{StaticResource Button_Style}" Margin="0,0,0,5" Click="Button_OpenSaveDirectory_Click"/>
-                            </StackPanel>
-                        </Expander>
-                    </StackPanel>
-                </ScrollViewer>
-            </Grid>
+﻿<Page
+  x:Class="StarsectorTools.Tools.GameSettings.GameSettings"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.GameSettings"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:StarsectorTools.Tools.GameSettings"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  Title="GameSettings"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+  <Grid>
+    <GroupBox
+      pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
+      Header="{x:Static I18n:GameSettings_I18n.GameSettings}"
+      Style="{StaticResource GroupBox_Style}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="250" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="30" />
+          <RowDefinition />
+        </Grid.RowDefinitions>
+        <Label
+          Grid.Column="1"
+          Width="100"
+          HorizontalAlignment="Left"
+          Content="{x:Static I18n:GameSettings_I18n.GameDirectory}"
+          Style="{StaticResource Label_Style}" />
+        <Label
+          x:Name="Label_GamePath"
+          Grid.Column="1"
+          Margin="100,0,165,0"
+          HorizontalContentAlignment="Left"
+          Background="{DynamicResource ColorDeep2}"
+          Style="{StaticResource Label_Style}" />
+        <Button
+          x:Name="Button_SetGameDirectory"
+          Grid.Column="1"
+          Width="80"
+          Margin="0,0,85,0"
+          HorizontalAlignment="Right"
+          Click="Button_SetGameDirectory_Click"
+          Content="{x:Static I18n:GameSettings_I18n.SetGameDirectory}"
+          Style="{StaticResource Button_Style}" />
+        <Button
+          x:Name="Button_OpenGameDirectory"
+          Grid.Column="1"
+          Width="80"
+          HorizontalAlignment="Right"
+          Click="Button_OpenGameDirectory_Click"
+          Content="{x:Static I18n:GameSettings_I18n.OpenGameDirectory}"
+          Style="{StaticResource Button_Style}" />
+        <GroupBox
+          Grid.Row="1"
+          Grid.Column="1"
+          Width="250"
+          Height="65"
+          Margin="0,5,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
+          Header="{x:Static I18n:GameSettings_I18n.SetMemory}"
+          Style="{StaticResource GroupBox_Style}">
+          <Grid>
+            <TextBox
+              x:Name="TextBox_Memory"
+              Width="100"
+              Height="30"
+              Padding="5,0,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Top"
+              InputMethod.IsInputMethodEnabled="False"
+              KeyDown="TextBox_SetMemory_KeyDown"
+              LostKeyboardFocus="TextBox_SetMemory_LostKeyboardFocus"
+              PreviewTextInput="TextBox_NumberInput"
+              Style="{StaticResource TextBox_Style}" />
+            <Label
+              Width="30"
+              Height="30"
+              Margin="100,0,108,0"
+              Padding="0"
+              VerticalAlignment="Top"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              Content="MB"
+              Style="{StaticResource Label_Style}" />
+            <Button
+              x:Name="Button_SetMemory"
+              Width="45"
+              Height="30"
+              Margin="0,0,50,0"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              Click="Button_SetMemory_Click"
+              Content="{x:Static I18n:GameSettings_I18n.Used}"
+              Style="{StaticResource Button_Style}" />
+            <Button
+              x:Name="Button_Help"
+              Width="45"
+              Height="30"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              Content="{x:Static I18n:GameSettings_I18n.Help}"
+              Style="{StaticResource Button_Style}" />
+          </Grid>
         </GroupBox>
-    </Grid>
+        <GroupBox
+          Grid.Row="1"
+          Grid.Column="1"
+          Width="250"
+          Height="100"
+          Margin="0,75,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
+          Header="{x:Static I18n:GameSettings_I18n.GameKey}"
+          Style="{StaticResource GroupBox_Style}">
+          <Grid>
+            <Label
+              x:Name="Label_GameKey"
+              Height="30"
+              Padding="0"
+              VerticalAlignment="Top"
+              FontSize="16"
+              FontWeight="Bold"
+              Style="{StaticResource Label_Style}" />
+            <Button
+              x:Name="Button_CopyKey"
+              Width="80"
+              Height="30"
+              Margin="0,0,10,0"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Click="Button_CopyKey_Click"
+              Content="{x:Static I18n:GameSettings_I18n.Copy}"
+              IsEnabled="False"
+              Style="{StaticResource Button_Style}" />
+            <Button
+              x:Name="Button_ShowKey"
+              Width="80"
+              Height="30"
+              Margin="10,0,0,0"
+              HorizontalAlignment="Left"
+              VerticalAlignment="Bottom"
+              Click="Button_ShowKey_Click"
+              Content="{x:Static I18n:GameSettings_I18n.Show}"
+              IsEnabled="False"
+              Style="{StaticResource Button_Style}" />
+          </Grid>
+        </GroupBox>
+        <Label
+          Width="100"
+          HorizontalAlignment="Left"
+          Content="{x:Static I18n:GameSettings_I18n.GameVersion}"
+          Style="{StaticResource Label_Style}" />
+        <Label
+          x:Name="Label_GameVersion"
+          Margin="100,0,0,0"
+          HorizontalContentAlignment="Left"
+          Background="{DynamicResource ColorDeep2}"
+          Style="{StaticResource Label_Style}" />
+        <ScrollViewer Grid.Row="1" Grid.Column="0">
+          <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5">
+            <Expander
+              Margin="0,0,0,5"
+              pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
+              Header="{x:Static I18n:GameSettings_I18n.LogClear}"
+              Style="{StaticResource Expander_Style}">
+              <StackPanel>
+                <Button
+                  x:Name="Button_OpenLogFile"
+                  Margin="0,0,0,5"
+                  Click="Button_OpenLogFile_Click"
+                  Content="{x:Static I18n:GameSettings_I18n.OpenLogFile}"
+                  Style="{StaticResource Button_Style}" />
+                <Button
+                  x:Name="Button_ClearLogFile"
+                  Margin="0,0,0,5"
+                  Click="Button_ClearLogFile_Click"
+                  Content="{x:Static I18n:GameSettings_I18n.ClearLogFiles}"
+                  Style="{StaticResource Button_Style}" />
+              </StackPanel>
+            </Expander>
+            <Expander
+              Margin="0,0,0,5"
+              pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
+              Header="{x:Static I18n:GameSettings_I18n.MissionsLoadoutsClean}"
+              Style="{StaticResource Expander_Style}">
+              <StackPanel>
+                <ComboBox
+                  x:Name="ComboBox_MissionsLoadouts"
+                  Margin="0,0,0,5"
+                  SelectedIndex="0"
+                  Style="{StaticResource ComboBox_Style}">
+                  <ComboBoxItem
+                    Content="{x:Static I18n:GameSettings_I18n.All}"
+                    Style="{StaticResource ComboBoxItem_Style}"
+                    ToolTip="All" />
+                </ComboBox>
+                <Button
+                  x:Name="Button_ClearMissionsLoadouts"
+                  Margin="0,0,0,5"
+                  Click="Button_ClearMissionsLoadouts_Click"
+                  Content="{x:Static I18n:GameSettings_I18n.ClearMissionsLoadouts}"
+                  Style="{StaticResource Button_Style}" />
+                <Button
+                  x:Name="Button_OpenMissionsLoadoutsDirectory"
+                  Margin="0,0,0,5"
+                  Click="Button_OpenMissionsLoadoutsDirectory_Click"
+                  Content="{x:Static I18n:GameSettings_I18n.OpenMissionsLoadoutsFolder}"
+                  Style="{StaticResource Button_Style}" />
+              </StackPanel>
+            </Expander>
+            <Expander
+              x:Name="Expander_Save"
+              Margin="0,0,0,5"
+              pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
+              Header="{x:Static I18n:GameSettings_I18n.SaveClean}"
+              Style="{StaticResource Expander_Style}">
+              <StackPanel Background="{DynamicResource ColorBB}">
+                <Label
+                  Margin="0,0,0,5"
+                  Content="{x:Static I18n:GameSettings_I18n.RetainRecentSaveCount}"
+                  Style="{StaticResource Label_Style}" />
+                <Grid Margin="0,0,0,5">
+                  <TextBox
+                    x:Name="TextBox_ReservedSaveSize"
+                    InputMethod.IsInputMethodEnabled="False"
+                    PreviewTextInput="TextBox_NumberInput"
+                    Style="{StaticResource TextBox_Style}"
+                    Text="5" />
+                  <!--  TextBox输入占位符  -->
+                  <Label Background="{x:Null}" Content="{x:Static I18n:GameSettings_I18n.ClearAll}">
+                    <Label.Style>
+                      <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                          <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                              <Condition Binding="{Binding Text, ElementName=TextBox_ReservedSaveSize}" Value="" />
+                              <Condition Binding="{Binding IsFocused, ElementName=TextBox_ReservedSaveSize}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                              <Setter Property="Visibility" Value="Visible" />
+                            </MultiDataTrigger.Setters>
+                          </MultiDataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </Label.Style>
+                  </Label>
+                </Grid>
+                <Button
+                  x:Name="Button_ClearSave"
+                  Margin="0,0,0,5"
+                  Click="Button_ClearSave_Click"
+                  Content="{x:Static I18n:GameSettings_I18n.ClearSave}"
+                  Style="{StaticResource Button_Style}" />
+                <Button
+                  x:Name="Button_OpenSaveDirectory"
+                  Margin="0,0,0,5"
+                  Click="Button_OpenSaveDirectory_Click"
+                  Content="{x:Static I18n:GameSettings_I18n.OpenSaveFolder}"
+                  Style="{StaticResource Button_Style}" />
+              </StackPanel>
+            </Expander>
+            <Expander
+              x:Name="Expander_CustomResolution"
+              Margin="0,0,0,5"
+              pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
+              Header="{x:Static I18n:GameSettings_I18n.CustomResolution}"
+              Style="{StaticResource Expander_Style}">
+              <StackPanel Background="{DynamicResource ColorBB}">
+                <Grid Margin="0,0,0,5">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <TextBox
+                    x:Name="TextBox_ResolutionWidth"
+                    Margin="0,0,10,0"
+                    InputMethod.IsInputMethodEnabled="False"
+                    PreviewTextInput="TextBox_NumberInput"
+                    Style="{StaticResource TextBox_Style}"
+                    ToolTip="{x:Static I18n:GameSettings_I18n.Width}" />
+                  <!--  TextBox输入占位符  -->
+                  <Label
+                    Margin="0,0,10,0"
+                    Background="{x:Null}"
+                    Content="{x:Static I18n:GameSettings_I18n.Width}"
+                    IsEnabled="False"
+                    IsHitTestVisible="False">
+                    <Label.Style>
+                      <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                          <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                              <Condition Binding="{Binding Text, ElementName=TextBox_ResolutionWidth}" Value="" />
+                              <Condition Binding="{Binding IsFocused, ElementName=TextBox_ResolutionWidth}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                              <Setter Property="Visibility" Value="Visible" />
+                            </MultiDataTrigger.Setters>
+                          </MultiDataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </Label.Style>
+                  </Label>
+                  <Label
+                    Grid.ColumnSpan="2"
+                    Margin="100,0,100,0"
+                    Content="X"
+                    Style="{StaticResource Label_Style}" />
+                  <TextBox
+                    x:Name="TextBox_ResolutionHeight"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    InputMethod.IsInputMethodEnabled="False"
+                    PreviewTextInput="TextBox_NumberInput"
+                    Style="{StaticResource TextBox_Style}"
+                    ToolTip="{x:Static I18n:GameSettings_I18n.Height}" />
+                  <!--  TextBox输入占位符  -->
+                  <Label
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    Background="{x:Null}"
+                    Content="{x:Static I18n:GameSettings_I18n.Height}"
+                    IsEnabled="False"
+                    IsHitTestVisible="False">
+                    <Label.Style>
+                      <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                          <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                              <Condition Binding="{Binding Text, ElementName=TextBox_ResolutionHeight}" Value="" />
+                              <Condition Binding="{Binding IsFocused, ElementName=TextBox_ResolutionHeight}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                              <Setter Property="Visibility" Value="Visible" />
+                            </MultiDataTrigger.Setters>
+                          </MultiDataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </Label.Style>
+                  </Label>
+                </Grid>
+                <CheckBox
+                  x:Name="CheckBox_BorderlessWindow"
+                  Height="30"
+                  Margin="0,0,0,5"
+                  Padding="-20,0,0,0"
+                  HorizontalContentAlignment="Center"
+                  pu:CheckBoxHelper.BoxHeight="20"
+                  pu:CheckBoxHelper.BoxWidth="20"
+                  pu:CheckBoxHelper.CheckedBackground="{DynamicResource ColorAqua0}"
+                  pu:CheckBoxHelper.HoverBackground="{DynamicResource ColorLight2}"
+                  Background="{DynamicResource ColorBG}"
+                  Content="{x:Static I18n:GameSettings_I18n.BorderlessWindow}"
+                  Foreground="{DynamicResource ColorFG}" />
+                <Grid Margin="0,0,0,5">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <Button
+                    x:Name="Button_CustomResolutionReset"
+                    Margin="10,0,10,0"
+                    Click="Button_CustomResolutionReset_Click"
+                    Content="{x:Static I18n:GameSettings_I18n.Reset}"
+                    IsEnabled="False"
+                    Style="{StaticResource Button_Style}" />
+                  <Button
+                    x:Name="Button_CustomResolutionSetup"
+                    Grid.Column="1"
+                    Margin="10,0,10,0"
+                    Click="Button_CustomResolutionSetup_Click"
+                    Content="{x:Static I18n:GameSettings_I18n.Setup}"
+                    Style="{StaticResource Button_Style}" />
+                </Grid>
+              </StackPanel>
+            </Expander>
+          </StackPanel>
+        </ScrollViewer>
+      </Grid>
+    </GroupBox>
+  </Grid>
 </Page>

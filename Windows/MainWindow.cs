@@ -65,11 +65,11 @@ namespace StarsectorTools.Windows
             }
             return true;
         }
-        private void SetBlurEffect()
+        public void SetBlurEffect()
         {
             Effect = new System.Windows.Media.Effects.BlurEffect();
         }
-        private void RemoveBlurEffect()
+        public void RemoveBlurEffect()
         {
             Effect = null;
         }
@@ -90,11 +90,17 @@ namespace StarsectorTools.Windows
         }
         void ClearMenu()
         {
-            foreach (Page page in menuList.Values)
-                if (page.GetType().GetMethod("Close") is MethodInfo info)
-                    _ = info.Invoke(page, null)!;
+            foreach (var lazyPage in menuList.Values)
+                ClosePage(lazyPage.Value);
             menuList.Clear();
             ListBox_Menu.Items.Clear();
+        }
+        void ClosePage(Page page)
+        {
+            // 获取page中的Close方法并执行
+            // 用于关闭page中创建的线程
+            if (page.GetType().GetMethod("Close") is MethodInfo info)
+                _ = info.Invoke(page, null)!;
         }
         void AddMemu(string icon, string name, string tag, Page page)
         {
@@ -104,8 +110,24 @@ namespace StarsectorTools.Windows
             item.Tag = tag;
             item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
             ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
+            ContextMenu contextMenu = new();
+            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+            // 重载当前菜单
+            MenuItem menuItem = new();
+            menuItem.Header = I18n.Refresh;
+            menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄"};
+            menuItem.Click += (s, e) =>
+            {
+                Type type = menuList[tag].Value.GetType();
+                ClosePage(menuList[tag].Value);
+                menuList[tag] = new((Page)type.Assembly.CreateInstance(type.FullName!)!);
+                if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
+                    Frame_MainFrame.Content = menuList[tag].Value;
+            };
+            contextMenu.Items.Add(menuItem);
+            item.ContextMenu = contextMenu;
             ListBox_Menu.Items.Add(item);
-            menuList.Add(tag, page);
+            menuList.Add(tag, new(page));
             STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name} {page}");
         }
     }

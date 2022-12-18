@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using StarsectorTools.Libs;
@@ -132,9 +133,9 @@ namespace StarsectorTools.Tools.ModManager
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
         /// <para><see langword="Key"/>: 分组名称</para>
-        /// <para><see langword="Value"/>: 包含的模组显示信息列表</para>
+        /// <para><see langword="Value"/>: 包含的模组显示信息的列表</para>
         /// </summary>
-        private Dictionary<string, ObservableCollection<ModShowInfo>> allUserGroupsInfo = new();
+        private Dictionary<string, ObservableCollection<ModShowInfo>> allModShowInfoGroups = new();
         /// <summary>模组显示信息</summary>
         public partial class ModShowInfo : ObservableObject
         {
@@ -159,7 +160,9 @@ namespace StarsectorTools.Tools.ModManager
             /// <summary>是否为功能性模组</summary>
             public bool IsUtility { get; set; } = false;
             /// <summary>图标路径</summary>
-            public string IconPath { get; set; } = string.Empty;
+            //public string IconPath { get; set; } = string.Empty;
+            /// <summary>图标资源</summary>
+            public BitmapImage? ImageSource { get; set; } = null!;
             /// <summary>前置模组</summary>
             [ObservableProperty]
             private string? dependencies;
@@ -195,14 +198,14 @@ namespace StarsectorTools.Tools.ModManager
         //        {
         //            if (string.IsNullOrEmpty(filterText))
         //                return true;
-        //            if (o is not ModShowInfo info)
+        //            if (o is not ModShowInfo showInfo)
         //                return true;
         //            return filterType switch
         //            {
-        //                strName => info.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                strId => info.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                strAuthor => info.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                strUserDescription => info.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strName => showInfo.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strId => showInfo.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strAuthor => showInfo.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strUserDescription => showInfo.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
         //                _ => throw new NotImplementedException()
         //            };
         //        };
@@ -212,7 +215,6 @@ namespace StarsectorTools.Tools.ModManager
         {
             InitializeComponent();
             InitializeData();
-            RefreshList();
             STLog.Instance.WriteLine(I18n.InitialisationComplete);
             //DataContext = viewModel = new(allModsShowInfo.Values);
         }
@@ -287,7 +289,7 @@ namespace StarsectorTools.Tools.ModManager
             Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
         }
 
-        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
+        private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = Regex.IsMatch(e.Text, "[0-9]");
         private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e) => SearchMods(TextBox_SearchMods.Text);
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -319,7 +321,7 @@ namespace StarsectorTools.Tools.ModManager
                     SearchMods(TextBox_SearchMods.Text);
                     //ChangeShowGroup(nowGroupName);
                     ClearDataGridSelected();
-                    CloseModInfo();
+                    CloseModDetails();
                     GC.Collect();
                 }
             }
@@ -328,22 +330,21 @@ namespace StarsectorTools.Tools.ModManager
         private void DataGrid_ModsShowList_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-            if (sender is DataGrid dataGrid)
-            {
-                CloseModInfo();
-                ClearDataGridSelected();
-            }
+            CloseModDetails();
+            ClearDataGridSelected();
+            DependencyObject scope = FocusManager.GetFocusScope(this);
+            FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
         }
 
         private void DataGridItem_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
-                ShowModInfo(row.Tag.ToString()!);
+                ShowModDetails(row.Tag.ToString()!);
         }
         private void DataGridItem_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
-                ShowModInfo(row.Tag.ToString()!);
+                ShowModDetails(row.Tag.ToString()!);
         }
 
         private void DataGridItem_MouseDown(object sender, MouseButtonEventArgs e)
@@ -386,9 +387,9 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_EnableDependencies_Click(object sender, RoutedEventArgs e)
         {
-            if (DataGrid_ModsShowList.SelectedItem is ModShowInfo info)
+            if (DataGrid_ModsShowList.SelectedItem is ModShowInfo showInfo)
             {
-                string id = info.Id;
+                string id = showInfo.Id;
                 string err = null!;
                 foreach (var dependencie in allModsShowInfo[id].Dependencies!.Split(" , "))
                 {
@@ -444,9 +445,9 @@ namespace StarsectorTools.Tools.ModManager
 
         private void TextBox_UserDescription_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (DataGrid_ModsShowList.SelectedItem is ModShowInfo item)
+            if (DataGrid_ModsShowList.SelectedItem is ModShowInfo showInfo)
             {
-                allModsShowInfo[item.Id].UserDescription = TextBox_UserDescription.Text;
+                allModsShowInfo[showInfo.Id].UserDescription = TextBox_UserDescription.Text;
                 StartRemindSaveThread();
             }
         }
@@ -456,7 +457,7 @@ namespace StarsectorTools.Tools.ModManager
             AddUserGroup window = new();
             ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
             window.Show();
-            window.Button_Yes.Click += (o, e) =>
+            window.Button_Yes.Click += (s, e) =>
             {
                 string name = window.TextBox_Name.Text;
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
@@ -474,8 +475,8 @@ namespace StarsectorTools.Tools.ModManager
                 else
                     MessageBox.Show(I18n.AddUserNamingFailed);
             };
-            window.Button_Cancel.Click += (o, e) => window.Close();
-            window.Closed += (o, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
+            window.Button_Cancel.Click += (s, e) => window.Close();
+            window.Closed += (s, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
         }
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
@@ -615,7 +616,7 @@ namespace StarsectorTools.Tools.ModManager
             if (TextBox_SearchMods.Text.Length > 0)
                 SearchMods(TextBox_SearchMods.Text);
             //GetSearchModsShowInfo();
-            //viewModel.filterType = item.Tag.ToString()!;
+            //viewModel.filterType = showInfo.Tag.ToString()!;
             //if (string.IsNullOrEmpty(viewModel.FilterText))
             //    return;
             //viewModel.CollectionView?.Refresh();
@@ -695,12 +696,6 @@ namespace StarsectorTools.Tools.ModManager
             }
         }
 
-        private void Button_RefreshList_Click(object sender, RoutedEventArgs e)
-        {
-            RefreshList();
-            STLog.Instance.WriteLine(I18n.RefreshComplete);
-        }
-
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (!e.Handled)
@@ -744,7 +739,7 @@ namespace StarsectorTools.Tools.ModManager
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
-                SaveUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
+                SaveAllUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
             }
         }
     }

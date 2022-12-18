@@ -184,7 +184,7 @@ namespace StarsectorTools.Libs
             }
         }
         /// <summary>
-        /// 复制文件夹
+        /// 复制文件夹至目标文件夹
         /// </summary>
         /// <param name="sourcePath">原始路径</param>
         /// <param name="destinationPath">目标路径</param>
@@ -193,7 +193,7 @@ namespace StarsectorTools.Libs
         {
             try
             {
-                FileSystem.CopyDirectory(sourcePath, destinationPath, UIOption.OnlyErrorDialogs);
+                FileSystem.CopyDirectory(sourcePath, $"{destinationPath}\\{Path.GetFileName(sourcePath)}", UIOption.OnlyErrorDialogs);
                 return true;
             }
             catch (Exception ex)
@@ -211,8 +211,6 @@ namespace StarsectorTools.Libs
         {
             try
             {
-                if (char.IsLower(file.First()))
-                    file = char.ToLower(file.First()) + file[1..];
                 FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 return true;
             }
@@ -231,8 +229,6 @@ namespace StarsectorTools.Libs
         {
             try
             {
-                if (char.IsLower(directory.First()))
-                    directory = char.ToLower(directory.First()) + directory[1..];
                 FileSystem.DeleteDirectory(directory, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 return true;
             }

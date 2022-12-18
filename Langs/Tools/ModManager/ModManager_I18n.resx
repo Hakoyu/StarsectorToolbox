@@ -526,4 +526,7 @@
   <data name="ManipulateUserDataToolTip" xml:space="preserve">
     <value>包含收藏列表和用户描述</value>
   </data>
+  <data name="IconLoadError" xml:space="preserve">
+    <value>图标读取错误</value>
+  </data>
 </root>

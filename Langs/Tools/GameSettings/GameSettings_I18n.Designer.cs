@@ -70,6 +70,24 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 无边框窗口 的本地化字符串。
+        /// </summary>
+        public static string BorderlessWindow {
+            get {
+                return ResourceManager.GetString("BorderlessWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 清除所有 的本地化字符串。
+        /// </summary>
+        public static string ClearAll {
+            get {
+                return ResourceManager.GetString("ClearAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 清理Log文件 的本地化字符串。
         /// </summary>
         public static string ClearLogFiles {
@@ -102,6 +120,15 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static string Copy {
             get {
                 return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 自定义分辨率 的本地化字符串。
+        /// </summary>
+        public static string CustomResolution {
+            get {
+                return ResourceManager.GetString("CustomResolution", resourceCulture);
             }
         }
         
@@ -156,6 +183,15 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static string GameVersion {
             get {
                 return ResourceManager.GetString("GameVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 高 的本地化字符串。
+        /// </summary>
+        public static string Height {
+            get {
+                return ResourceManager.GetString("Height", resourceCulture);
             }
         }
         
@@ -277,6 +313,24 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 重置 的本地化字符串。
+        /// </summary>
+        public static string Reset {
+            get {
+                return ResourceManager.GetString("Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 重置成功 的本地化字符串。
+        /// </summary>
+        public static string ResetSuccessful {
+            get {
+                return ResourceManager.GetString("ResetSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 保留最近存档数 的本地化字符串。
         /// </summary>
         public static string RetainRecentSaveCount {
@@ -331,6 +385,24 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 设置 的本地化字符串。
+        /// </summary>
+        public static string Setup {
+            get {
+                return ResourceManager.GetString("Setup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置成功 的本地化字符串。
+        /// </summary>
+        public static string SetupSuccessful {
+            get {
+                return ResourceManager.GetString("SetupSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 显示 的本地化字符串。
         /// </summary>
         public static string Show {
@@ -363,6 +435,15 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static string VmparamsMemorySetSuccess {
             get {
                 return ResourceManager.GetString("VmparamsMemorySetSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 宽 的本地化字符串。
+        /// </summary>
+        public static string Width {
+            get {
+                return ResourceManager.GetString("Width", resourceCulture);
             }
         }
     }

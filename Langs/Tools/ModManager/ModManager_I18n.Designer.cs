@@ -520,6 +520,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 图标读取错误 的本地化字符串。
+        /// </summary>
+        public static string IconLoadError {
+            get {
+                return ResourceManager.GetString("IconLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 从文件导入 的本地化字符串。
         /// </summary>
         public static string ImportEnabledModsListFromFile {

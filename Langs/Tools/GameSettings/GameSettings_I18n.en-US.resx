@@ -194,9 +194,36 @@
     <value>Open directory</value>
   </data>
   <data name="VmparamsMemorySet" xml:space="preserve">
-    <value>vmparams memory set to</value>
+    <value>Vmparams memory set to</value>
   </data>
   <data name="VmparamsMemorySetSuccess" xml:space="preserve">
-    <value>vmparams memory set success</value>
+    <value>Vmparams memory set success</value>
+  </data>
+  <data name="CustomResolution" xml:space="preserve">
+    <value>Custom resolution</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="BorderlessWindow" xml:space="preserve">
+    <value>Borderless window</value>
+  </data>
+  <data name="Setup" xml:space="preserve">
+    <value>Setup</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="SetupSuccessful" xml:space="preserve">
+    <value>Setup successful</value>
+  </data>
+  <data name="ResetSuccessful" xml:space="preserve">
+    <value>Reset successful</value>
   </data>
 </root>

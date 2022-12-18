@@ -60,5 +60,29 @@ namespace StarsectorTools.Tools.GameSettings
                 });
             }
         }
+        void CheackCustomResolution()
+        {
+            try
+            {
+                string data = File.ReadAllText(gameSettingsFile);
+                bool isBorderlessWindow = bool.Parse(Regex.Match(data, @"(?<=undecoratedWindow"":)(?:false|true)").Value);
+                if (isBorderlessWindow)
+                    CheckBox_BorderlessWindow.IsChecked = true;
+                string customResolutionData = Regex.Match(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",").Value;
+                bool isEnableCustomResolution = customResolutionData.First() != '#';
+                if (isEnableCustomResolution)
+                {
+                    Button_CustomResolutionReset.IsEnabled = true;
+                    var resolution = Regex.Match(customResolutionData, @"(?<=(?:#|)""resolutionOverride"":"")[0-9]+x[0-9]+").Value.Split('x');
+                    TextBox_ResolutionWidth.Text = resolution.First();
+                    TextBox_ResolutionHeight.Text = resolution.Last();
+                }
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                MessageBox.Show(ex.Message,"",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+        }
     }
 }

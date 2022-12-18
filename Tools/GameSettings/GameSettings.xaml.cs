@@ -36,7 +36,8 @@ namespace StarsectorTools.Tools.GameSettings
         string gameKey = "";
         string hideGameKey = "";
         bool showKey = false;
-        string gameLogPath = @$"{ST.gamePath}\starsector-core\starsector.log";
+        string gameLogFile = @$"{ST.gamePath}\starsector-core\starsector.log";
+        string gameSettingsFile = $"{ST.gamePath}\\starsector-core\\data\\config\\settings.json";
         public GameSettings()
         {
             InitializeComponent();
@@ -46,6 +47,7 @@ namespace StarsectorTools.Tools.GameSettings
             GetVmparamsData();
             GetGameKey();
             GetMissionsLoadouts();
+            CheackCustomResolution();
         }
 
         private void Button_SetGameDirectory_Click(object sender, RoutedEventArgs e)
@@ -97,28 +99,28 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenLogFile_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(gameLogPath))
-                ST.OpenFile(gameLogPath);
+            if (File.Exists(gameLogFile))
+                ST.OpenFile(gameLogFile);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogPath}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogPath}");
+                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogFile}");
             }
         }
 
         private void Button_ClearLogFile_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(gameLogPath))
+            if (File.Exists(gameLogFile))
             {
-                ST.DeleteFileToRecycleBin(gameLogPath);
-                File.Create(gameLogPath).Close();
+                ST.DeleteFileToRecycleBin(gameLogFile);
+                File.Create(gameLogFile).Close();
                 STLog.Instance.WriteLine(I18n.LogFileCleanCompleted);
                 MessageBox.Show(I18n.LogFileCleanCompleted);
             }
             else
             {
-                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogPath}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogPath}");
+                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogFile}");
             }
         }
 
@@ -161,7 +163,7 @@ namespace StarsectorTools.Tools.GameSettings
                 dirsPath.Add(dir.FullName, dir.LastWriteTime);
             dirsPath.Remove($"{ST.gameSavePath}\\missions");
             var list = dirsPath.OrderBy(kv => kv.Value);
-            int count = list.Count() - int.Parse(TextBox_ReservedSaveSize.Text);
+            int count = TextBox_ReservedSaveSize.Text.Length > 0 ? list.Count() - int.Parse(TextBox_ReservedSaveSize.Text) : 0;
             for (int i = 0; i < count; i++)
                 ST.DeleteDirToRecycleBin(list.ElementAt(i).Key);
             STLog.Instance.WriteLine(I18n.SaveCleanCompleted);
@@ -195,6 +197,54 @@ namespace StarsectorTools.Tools.GameSettings
         {
             if (Directory.Exists(ST.gamePath))
                 ST.OpenFile(ST.gamePath);
+        }
+
+        private void Button_CustomResolutionReset_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string data = File.ReadAllText(gameSettingsFile);
+                // 取消无边框
+                data = Regex.Replace(data, @"(?<=undecoratedWindow"":)(?:false|true)", "false");
+                // 注释吊自定义分辨率
+                data = Regex.Replace(data, @"(?<=[ \t]+)""resolutionOverride""", @"#""resolutionOverride""");
+                File.WriteAllText(gameSettingsFile, data);
+                CheckBox_BorderlessWindow.IsChecked = false;
+                Button_CustomResolutionReset.IsEnabled = false;
+                TextBox_ResolutionWidth.Text = string.Empty;
+                TextBox_ResolutionHeight.Text = string.Empty;
+                MessageBox.Show(I18n.ResetSuccessful);
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void Button_CustomResolutionSetup_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBox_ResolutionWidth.Text.Length == 0 || TextBox_ResolutionHeight.Text.Length == 0)
+            {
+                return;
+            }
+            try
+            {
+                string data = File.ReadAllText(gameSettingsFile);
+                // 启用无边框
+                if (CheckBox_BorderlessWindow.IsChecked is true)
+                    data = Regex.Replace(data, @"(?<=undecoratedWindow"":)(?:false|true)", "true");
+                // 设置自定义分辨率
+                data = Regex.Replace(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",", @$"""resolutionOverride"":""{TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}"",");
+                File.WriteAllText(gameSettingsFile, data);
+                Button_CustomResolutionReset.IsEnabled = true;
+                MessageBox.Show(I18n.SetupSuccessful);
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

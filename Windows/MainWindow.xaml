@@ -16,7 +16,7 @@
     Style="{StaticResource Window_Style}"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
-    mc:Ignorable="d">
+    mc:Ignorable="d" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="0"
@@ -124,7 +124,7 @@
                     HorizontalAlignment="Center"
                     FontSize="16"
                     SelectionChanged="ListBox_Menu_SelectionChanged"
-                    Style="{StaticResource ListBox_Style}" />
+                    Style="{StaticResource ListBox_Style}" PreviewMouseRightButtonDown="ListBox_Menu_PreviewMouseRightButtonDown" />
                 <Button
                     x:Name="Button_Settings"
                     Height="30"

@@ -137,4 +137,7 @@
   <data name="Info" xml:space="preserve">
     <value>信息</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
 </root>

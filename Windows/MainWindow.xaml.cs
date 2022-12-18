@@ -31,7 +31,7 @@ namespace StarsectorTools.Windows
     public partial class MainWindow : Window
     {
         bool menuOpen = false;
-        Dictionary<string, Page> menuList = new();
+        Dictionary<string, Lazy<Page>> menuList = new();
         Settings settingMenu = null!;
 
         public MainWindow()
@@ -40,8 +40,6 @@ namespace StarsectorTools.Windows
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
-            //STLog.Instance.LogLevel = STLogLevel.DEBUG;
-            STLog.Instance.LogLevel = STLogLevel.INFO;
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
             if (!SetConfig())
             {
@@ -96,9 +94,9 @@ namespace StarsectorTools.Windows
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
+            ClearMenu();
             STLog.Instance.Close();
             Close();
-            Process.GetCurrentProcess().Kill();
         }
 
         private void Button_MainMenu_Click(object sender, RoutedEventArgs e)
@@ -122,7 +120,7 @@ namespace StarsectorTools.Windows
         {
             if (ListBox_Menu.SelectedIndex >= 0)
             {
-                Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Tag.ToString()!];
+                Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Tag.ToString()!].Value;
             }
         }
 
@@ -140,6 +138,19 @@ namespace StarsectorTools.Windows
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
             STLog.Instance.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
+        }
+
+        private void ListBox_Menu_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // 禁止右键项时会选中项
+            e.Handled= true;
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Keyboard.ClearFocus();
+            DependencyObject scope = FocusManager.GetFocusScope(this);
+            FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
         }
     }
 }
