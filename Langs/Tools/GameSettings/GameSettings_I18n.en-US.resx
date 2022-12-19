@@ -226,4 +226,13 @@
   <data name="ResetSuccessful" xml:space="preserve">
     <value>Reset successful</value>
   </data>
+  <data name="CustomResolutionSetupError" xml:space="preserve">
+    <value>Custom resolution setup error</value>
+  </data>
+  <data name="CustomResolutionResetError" xml:space="preserve">
+    <value>Custom resolution reset error</value>
+  </data>
+  <data name="CustomResolutionGetFailed" xml:space="preserve">
+    <value>CustomResolution get failed</value>
+  </data>
 </root>

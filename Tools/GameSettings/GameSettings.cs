@@ -1,34 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Win32;
-using HKW.Management;
-using StarsectorTools.Libs;
 using System.Text.RegularExpressions;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
+using StarsectorTools.Libs;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings
 {
     public partial class GameSettings
     {
-        void GetVmparamsData()
+        private void GetVmparamsData()
         {
-            vmparamsData.data = File.ReadAllText($"{ST.gamePath}\\vmparams");
+            vmparamsData.data = File.ReadAllText($"{ST.gameDirectory}\\vmparams");
             vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+", RegexOptions.IgnoreCase).Value;
             TextBox_Memory.Text = TextBox_Memory.Text = vmparamsData.xmsx;
         }
-        void SetVmparamsData()
+
+        private void SetVmparamsData()
         {
-            File.WriteAllText($"{ST.gamePath}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_Memory.Text}m", RegexOptions.IgnoreCase));
+            File.WriteAllText($"{ST.gameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_Memory.Text}m", RegexOptions.IgnoreCase));
             STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {TextBox_Memory.Text}m");
             MessageBox.Show(I18n.VmparamsMemorySetSuccess);
         }
-        void GetGameKey()
+
+        private void GetGameKey()
         {
             var key = Registry.CurrentUser.OpenSubKey("Software\\JavaSoft\\Prefs\\com\\fs\\starfarer");
             if (key != null)
@@ -44,9 +41,10 @@ namespace StarsectorTools.Tools.GameSettings
                 }
             }
         }
-        void GetMissionsLoadouts()
+
+        private void GetMissionsLoadouts()
         {
-            string dirParh = $"{ST.gameSavePath}\\missions";
+            string dirParh = $"{ST.gameSaveDirectory}\\missions";
             if (!Directory.Exists(dirParh))
                 return;
             DirectoryInfo dirs = new(dirParh);
@@ -60,7 +58,8 @@ namespace StarsectorTools.Tools.GameSettings
                 });
             }
         }
-        void CheackCustomResolution()
+
+        private void GetCustomResolution()
         {
             try
             {
@@ -78,10 +77,10 @@ namespace StarsectorTools.Tools.GameSettings
                     TextBox_ResolutionHeight.Text = resolution.Last();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
-                MessageBox.Show(ex.Message,"",MessageBoxButton.OK,MessageBoxImage.Error);
+                STLog.Instance.WriteLine(I18n.CustomResolutionResetError, STLogLevel.ERROR);
+                MessageBox.Show(I18n.CustomResolutionResetError, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

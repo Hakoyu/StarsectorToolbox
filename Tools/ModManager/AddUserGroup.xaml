@@ -1,37 +1,90 @@
-﻿<Window x:Class="StarsectorTools.Tools.ModManager.AddUserGroup"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
-        xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-        xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
-        xmlns:local="clr-namespace:StarsectorTools.Windows"
-        mc:Ignorable="d"
-        Title="AddUserGroup" Height="270" Width="400" WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Style="{StaticResource Window_Style}">
-    <GroupBox Header="{x:Static I18n:AddUserGroup_I18n.SetUserGroupInfo}"  Style="{StaticResource GroupBox_Style}">
-        <StackPanel Margin="10,10,10,10">
-            <Label Content="{x:Static I18n:AddUserGroup_I18n.Icon}" Height="30" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalContentAlignment="Center" Style="{StaticResource Label_Style}"/>
-            <TextBox x:Name="TextBox_Icon" Height="30" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
-            <Label Content="{x:Static I18n:AddUserGroup_I18n.Name}" Height="30" HorizontalAlignment="Left" Margin="0,0,0,5" VerticalContentAlignment="Center" Style="{StaticResource Label_Style}"/>
-            <TextBox x:Name="TextBox_Name" Height="30" Margin="0,0,0,5" Style="{StaticResource TextBox_Style}"/>
-            <Grid Margin="0,0,0,5">
-                <StackPanel Orientation="Horizontal" >
-                    <Label Content="{x:Static I18n:AddUserGroup_I18n.Preview}" HorizontalAlignment="Left" Height="30" VerticalContentAlignment="Center" Margin="0,0,10,0" Style="{StaticResource Label_Style}"/>
-                    <Label x:Name="Label_Preview" pu:IconHelper.Margin="5,0,10,0" VerticalContentAlignment="Center" HorizontalAlignment="Left" Style="{StaticResource Label_Style}" Background="{DynamicResource ColorLight}">
-                        <pu:LabelHelper.Icon>
-                            <emoji:TextBlock Text="{Binding ElementName=TextBox_Icon,Path=Text}"/>
-                        </pu:LabelHelper.Icon>
-                        <Label.Content>
-                            <emoji:TextBlock Text="{Binding ElementName=TextBox_Name,Path=Text}"/>
-                        </Label.Content>
-                    </Label>
-                </StackPanel>
-            </Grid>
-            <Grid>
-                <Button x:Name="Button_Cancel" Content="{x:Static I18n:AddUserGroup_I18n.Cancel}" Height="30" HorizontalAlignment="Left" Margin="0,10,0,0" Width="100" Style="{StaticResource Button_Style}"/>
-                <Button x:Name="Button_Yes" Content="{x:Static I18n:AddUserGroup_I18n.Yes}" Height="30" HorizontalAlignment="Right" Margin="0,10,0,0" Width="100" Style="{StaticResource Button_Style}"/>
-            </Grid>
+﻿<Window
+  x:Class="StarsectorTools.Tools.ModManager.AddUserGroup"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+  xmlns:local="clr-namespace:StarsectorTools.Windows"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  Title="AddUserGroup"
+  Width="400"
+  Height="270"
+  ResizeMode="NoResize"
+  Style="{StaticResource Window_Style}"
+  WindowStartupLocation="CenterScreen"
+  WindowStyle="None"
+  mc:Ignorable="d">
+  <GroupBox Header="{x:Static I18n:AddUserGroup_I18n.SetUserGroupInfo}" Style="{StaticResource GroupBox_Style}">
+    <StackPanel Margin="10,10,10,10">
+      <Label
+        Height="30"
+        Margin="0,0,0,5"
+        HorizontalAlignment="Left"
+        VerticalContentAlignment="Center"
+        Content="{x:Static I18n:AddUserGroup_I18n.Icon}"
+        Style="{StaticResource Label_Style}" />
+      <TextBox
+        x:Name="TextBox_Icon"
+        Height="30"
+        Margin="0,0,0,5"
+        Style="{StaticResource TextBox_Style}" />
+      <Label
+        Height="30"
+        Margin="0,0,0,5"
+        HorizontalAlignment="Left"
+        VerticalContentAlignment="Center"
+        Content="{x:Static I18n:AddUserGroup_I18n.Name}"
+        Style="{StaticResource Label_Style}" />
+      <TextBox
+        x:Name="TextBox_Name"
+        Height="30"
+        Margin="0,0,0,5"
+        Style="{StaticResource TextBox_Style}" />
+      <Grid Margin="0,0,0,5">
+        <StackPanel Orientation="Horizontal">
+          <Label
+            Height="30"
+            Margin="0,0,10,0"
+            HorizontalAlignment="Left"
+            VerticalContentAlignment="Center"
+            Content="{x:Static I18n:AddUserGroup_I18n.Preview}"
+            Style="{StaticResource Label_Style}" />
+          <Label
+            x:Name="Label_Preview"
+            HorizontalAlignment="Left"
+            VerticalContentAlignment="Center"
+            pu:IconHelper.Margin="5,0,10,0"
+            Background="{DynamicResource ColorLight}"
+            Style="{StaticResource Label_Style}">
+            <pu:LabelHelper.Icon>
+              <emoji:TextBlock Text="{Binding ElementName=TextBox_Icon, Path=Text}" />
+            </pu:LabelHelper.Icon>
+            <Label.Content>
+              <emoji:TextBlock Text="{Binding ElementName=TextBox_Name, Path=Text}" />
+            </Label.Content>
+          </Label>
         </StackPanel>
-    </GroupBox>
+      </Grid>
+      <Grid>
+        <Button
+          x:Name="Button_Cancel"
+          Width="100"
+          Height="30"
+          Margin="0,10,0,0"
+          HorizontalAlignment="Left"
+          Content="{x:Static I18n:AddUserGroup_I18n.Cancel}"
+          Style="{StaticResource Button_Style}" />
+        <Button
+          x:Name="Button_Yes"
+          Width="100"
+          Height="30"
+          Margin="0,10,0,0"
+          HorizontalAlignment="Right"
+          Content="{x:Static I18n:AddUserGroup_I18n.Yes}"
+          Style="{StaticResource Button_Style}" />
+      </Grid>
+    </StackPanel>
+  </GroupBox>
 </Window>

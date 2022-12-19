@@ -103,8 +103,8 @@
   <data name="ModAddFailed" xml:space="preserve">
     <value>模组添加失败</value>
   </data>
-  <data name="ModAddSize" xml:space="preserve">
-    <value>模组添加 成功数量: {0} 失败数量: {1}</value>
+  <data name="ModAddEnd" xml:space="preserve">
+    <value>模组添加完毕 成功数量: {0} 失败数量: {1}</value>
   </data>
   <data name="Path" xml:space="preserve">
     <value>位置</value>

@@ -74,7 +74,7 @@ namespace StarsectorTools.Tools.ModManager
         private void GetAllModsInfo()
         {
             int size = 0;
-            DirectoryInfo dirs = new(ST.gameModsPath);
+            DirectoryInfo dirs = new(ST.gameModsDirectory);
             string err = null!;
             foreach (var dir in dirs.GetDirectories())
             {
@@ -94,7 +94,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             if (err != null)
                 MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            STLog.Instance.WriteLine(I18n.ModAddSize, STLogLevel.INFO, allModsInfo.Count, size);
+            STLog.Instance.WriteLine(I18n.ModAddEnd, STLogLevel.INFO, allModsInfo.Count, size);
         }
 
         private static ModInfo GetModInfo(string jsonPath)
@@ -114,11 +114,11 @@ namespace StarsectorTools.Tools.ModManager
 
         private void CheckEnabledMods()
         {
-            if (File.Exists(ST.enabledModsJsonPath))
-                GetEnabledMods(ST.enabledModsJsonPath);
+            if (File.Exists(ST.enabledModsJsonFile))
+                GetEnabledMods(ST.enabledModsJsonFile);
             else
-                SaveEnabledMods(ST.enabledModsJsonPath);
-            STLog.Instance.WriteLine($"{I18n.CreateFile} {I18n.Path}: {ST.enabledModsJsonPath}");
+                SaveEnabledMods(ST.enabledModsJsonFile);
+            STLog.Instance.WriteLine($"{I18n.CreateFile} {I18n.Path}: {ST.enabledModsJsonFile}");
         }
 
         private void ImportMode()
@@ -164,10 +164,9 @@ namespace StarsectorTools.Tools.ModManager
                 if (err != null)
                     MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            catch (Exception ex)
+            catch
             {
                 STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {filePath}", STLogLevel.ERROR);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.LoadError}\n{I18n.Path}: {filePath}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -222,10 +221,9 @@ namespace StarsectorTools.Tools.ModManager
                 if (err is not null)
                     MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            catch (Exception ex)
+            catch
             {
                 STLog.Instance.WriteLine($"{I18n.FileError} {filePath}", STLogLevel.ERROR);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.FileError} {filePath}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -268,10 +266,9 @@ namespace StarsectorTools.Tools.ModManager
                 if (!string.IsNullOrEmpty(err))
                     MessageBox.Show(err, "", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            catch (Exception ex)
+            catch
             {
                 STLog.Instance.WriteLine($"{I18n.UserDataLoadError} {I18n.Path}: {filePath}", STLogLevel.ERROR);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.UserDataLoadError}\n{I18n.Path}: {filePath}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -299,10 +296,9 @@ namespace StarsectorTools.Tools.ModManager
                     foreach (string id in kv.Value.AsTomlArray)
                         allModsTypeGroup.Add(id, kv.Key);
             }
-            catch (Exception ex)
+            catch
             {
                 STLog.Instance.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modGroupFile}", STLogLevel.ERROR);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modGroupFile}", "", MessageBoxButton.OK, MessageBoxImage.Error);
                 CreateModGroupFile();
             }
@@ -378,10 +374,9 @@ namespace StarsectorTools.Tools.ModManager
                     bitmap.EndInit();
                     return bitmap;
                 }
-                catch (Exception ex)
+                catch
                 {
                     STLog.Instance.WriteLine($"{I18n.IconLoadError} {I18n.Path}: {filePath}", STLogLevel.ERROR);
-                    STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
                     return null;
                 }
             }
@@ -656,7 +651,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SaveAllData()
         {
-            SaveEnabledMods(ST.enabledModsJsonPath);
+            SaveEnabledMods(ST.enabledModsJsonFile);
             SaveUserData(userDataFile);
             SaveAllUserGroup(userGroupFile);
         }
@@ -810,7 +805,7 @@ namespace StarsectorTools.Tools.ModManager
                             Directory.Delete(tempDir, true);
                         }).Start();
                         Directory.Delete(originalModInfo.Path, true);
-                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsPath);
+                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsDirectory);
                         allModsInfo.Remove(newModInfo.Id);
                         allModsInfo.Add(newModInfo.Id, newModInfo);
                         Dispatcher.BeginInvoke(() =>
@@ -827,7 +822,7 @@ namespace StarsectorTools.Tools.ModManager
                 {
                     Dispatcher.BeginInvoke(() =>
                     {
-                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsPath);
+                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsDirectory);
                         AddModShowInfo(newModInfo);
                         RefreshCountOfListBoxItems();
                         StartRemindSaveThread();

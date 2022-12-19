@@ -1,26 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using HKW.WindowAccent;
 using StarsectorTools.Libs;
 using StarsectorTools.Pages;
-using StarsectorTools.Tools.GameSettings;
-using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows
@@ -30,9 +15,9 @@ namespace StarsectorTools.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool menuOpen = false;
-        Dictionary<string, Lazy<Page>> menuList = new();
-        Settings settingMenu = null!;
+        private bool menuOpen = false;
+        private Dictionary<string, Lazy<Page>> menuList = new();
+        private Settings settingMenu = null!;
 
         public MainWindow()
         {
@@ -65,17 +50,20 @@ namespace StarsectorTools.Windows
             //object obj = assembly.CreateInstance(type.FullName)!;
             //Frame_MainFrame.Content = obj;
         }
+
         //窗体移动
         private void Grid_TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
+
         //最小化
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
             //Visibility = Visibility.Hidden;
             WindowState = WindowState.Minimized;
         }
+
         //最大化
         private void Button_TitleMax_Click(object sender, RoutedEventArgs e)
         {
@@ -91,6 +79,7 @@ namespace StarsectorTools.Windows
                 Button_TitleMax.Content = "🔲";
             }
         }
+
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
@@ -130,9 +119,10 @@ namespace StarsectorTools.Windows
             Frame_MainFrame.Content = settingMenu;
             ListBox_Menu.SelectedIndex = -1;
         }
+
         private void Grid_Menu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Frame_MainFrame.Margin = new Thickness(Grid_Menu.ActualWidth,0,0,0);
+            Frame_MainFrame.Margin = new Thickness(Grid_Menu.ActualWidth, 0, 0, 0);
         }
 
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
@@ -143,7 +133,7 @@ namespace StarsectorTools.Windows
         private void ListBox_Menu_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // 禁止右键项时会选中项
-            e.Handled= true;
+            e.Handled = true;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

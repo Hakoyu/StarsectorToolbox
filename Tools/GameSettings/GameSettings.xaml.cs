@@ -1,23 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Microsoft.Win32;
 using HKW.Management;
 using StarsectorTools.Libs;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.IO;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings
@@ -27,45 +17,50 @@ namespace StarsectorTools.Tools.GameSettings
     /// </summary>
     public partial class GameSettings : Page
     {
-        struct VmparamsData
+        private struct VmparamsData
         {
             public string data;
             public string xmsx;
         }
-        VmparamsData vmparamsData = new();
-        string gameKey = "";
-        string hideGameKey = "";
-        bool showKey = false;
-        string gameLogFile = @$"{ST.gamePath}\starsector-core\starsector.log";
-        string gameSettingsFile = $"{ST.gamePath}\\starsector-core\\data\\config\\settings.json";
+
+        private VmparamsData vmparamsData = new();
+        private string gameKey = "";
+        private string hideGameKey = "";
+        private bool showKey = false;
+        private string gameLogFile = @$"{ST.gameDirectory}\starsector-core\starsector.log";
+        private string gameSettingsFile = $"{ST.gameDirectory}\\starsector-core\\data\\config\\settings.json";
+
         public GameSettings()
         {
             InitializeComponent();
             ST.totalMemory = Management.GetMemoryMetricsNow().Total;
-            Label_GamePath.Content = ST.gamePath;
+            Label_GamePath.Content = ST.gameDirectory;
             Label_GameVersion.Content = ST.gameVersion;
             GetVmparamsData();
             GetGameKey();
             GetMissionsLoadouts();
-            CheackCustomResolution();
+            GetCustomResolution();
         }
 
         private void Button_SetGameDirectory_Click(object sender, RoutedEventArgs e)
         {
             do
             {
-                ST.GetGamePath();
-                if (!ST.CheckGamePath())
+                ST.GetGameDirectory();
+                if (!ST.CheckGameDirectory())
                     MessageBox.Show(I18n.GameNotFound_SelectAgain, "", MessageBoxButton.OK, MessageBoxImage.Warning);
-            } while (!ST.CheckGamePath());
-            Label_GamePath.Content = ST.gamePath;
+            } while (!ST.CheckGameDirectory());
+            Label_GamePath.Content = ST.gameDirectory;
         }
+
         private void TextBox_SetMemory_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 Keyboard.ClearFocus();
         }
+
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
+
         private void TextBox_SetMemory_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (sender is TextBox textBox)
@@ -128,7 +123,7 @@ namespace StarsectorTools.Tools.GameSettings
         {
             if (ComboBox_MissionsLoadouts.SelectedItem is ComboBoxItem item)
             {
-                string dirParh = $"{ST.gameSavePath}\\missions";
+                string dirParh = $"{ST.gameSaveDirectory}\\missions";
                 try
                 {
                     if (item.Content.ToString() == "All")
@@ -155,13 +150,13 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_ClearSave_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(ST.gameSavePath))
+            if (!Directory.Exists(ST.gameSaveDirectory))
                 return;
-            DirectoryInfo dirs = new(ST.gameSavePath);
+            DirectoryInfo dirs = new(ST.gameSaveDirectory);
             Dictionary<string, DateTime> dirsPath = new();
             foreach (var dir in dirs.GetDirectories())
                 dirsPath.Add(dir.FullName, dir.LastWriteTime);
-            dirsPath.Remove($"{ST.gameSavePath}\\missions");
+            dirsPath.Remove($"{ST.gameSaveDirectory}\\missions");
             var list = dirsPath.OrderBy(kv => kv.Value);
             int count = TextBox_ReservedSaveSize.Text.Length > 0 ? list.Count() - int.Parse(TextBox_ReservedSaveSize.Text) : 0;
             for (int i = 0; i < count; i++)
@@ -172,7 +167,7 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenMissionsLoadoutsDirectory_Click(object sender, RoutedEventArgs e)
         {
-            string dirParh = $"{ST.gameSavePath}\\missions";
+            string dirParh = $"{ST.gameSaveDirectory}\\missions";
             if (Directory.Exists(dirParh))
                 ST.OpenFile(dirParh);
             else
@@ -184,19 +179,19 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameSavePath))
-                ST.OpenFile(ST.gameSavePath);
+            if (Directory.Exists(ST.gameSaveDirectory))
+                ST.OpenFile(ST.gameSaveDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSavePath}");
-                MessageBox.Show($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.gameSavePath}");
+                STLog.Instance.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSaveDirectory}");
+                MessageBox.Show($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}");
             }
         }
 
         private void Button_OpenGameDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gamePath))
-                ST.OpenFile(ST.gamePath);
+            if (Directory.Exists(ST.gameDirectory))
+                ST.OpenFile(ST.gameDirectory);
         }
 
         private void Button_CustomResolutionReset_Click(object sender, RoutedEventArgs e)
@@ -215,10 +210,10 @@ namespace StarsectorTools.Tools.GameSettings
                 TextBox_ResolutionHeight.Text = string.Empty;
                 MessageBox.Show(I18n.ResetSuccessful);
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
-                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                STLog.Instance.WriteLine(I18n.CustomResolutionResetError, STLogLevel.ERROR);
+                MessageBox.Show(I18n.CustomResolutionResetError, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -240,10 +235,10 @@ namespace StarsectorTools.Tools.GameSettings
                 Button_CustomResolutionReset.IsEnabled = true;
                 MessageBox.Show(I18n.SetupSuccessful);
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
-                MessageBox.Show(ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                STLog.Instance.WriteLine(I18n.CustomResolutionSetupError, STLogLevel.ERROR);
+                MessageBox.Show(I18n.CustomResolutionSetupError, "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

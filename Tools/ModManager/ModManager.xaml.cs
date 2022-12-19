@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -10,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -82,102 +80,133 @@ namespace StarsectorTools.Tools.ModManager
         private const string strUserDescription = "UserDescription";
         private const string strName = "Name";
         private const string strAuthor = "Author";
+
         /// <summary>记录了模组类型的嵌入资源链接</summary>
         private static readonly Uri modGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
+
         /// <summary>模组分组列表的展开状态</summary>
         private bool isGroupMenuOpen = false;
+
         /// <summary>模组详情的展开状态</summary>
         private bool isShowModInfo = false;
+
         /// <summary>当前选择的模组ID</summary>
         private string? nowSelectedModId = null;
+
         /// <summary>当前选择的分组名称</summary>
         private string nowGroupName = string.Empty;
+
         /// <summary>提醒保存配置的动画线程</summary>
         private Thread remindSaveThread = null!;
+
         /// <summary>当前选择的列表项</summary>
         private ListBoxItem nowSelectedListBoxItem = null!;
+
         /// <summary>已启用的模组ID</summary>
         private HashSet<string> allEnabledModsId = new();
+
         /// <summary>已收藏的模组ID</summary>
         private HashSet<string> allCollectedModsId = new();
+
         /// <summary>
         /// <para>全部模组信息</para>
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 模组信息</para>
         /// </summary>
         private Dictionary<string, ModInfo> allModsInfo = new();
+
         /// <summary>
         /// <para>全部分组列表项</para>
         /// <para><see langword="Key"/>: 列表项Tag或ModGroupType</para>
         /// <para><see langword="Value"/>: 列表项</para>
         /// </summary>
         private Dictionary<string, ListBoxItem> allListBoxItems = new();
+
         /// <summary>
         /// <para>全部模组显示信息</para>
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 模组显示信息</para>
         /// </summary>
         private Dictionary<string, ModShowInfo> allModsShowInfo = new();
+
         /// <summary>
         /// <para>全部模组所在的类型分组</para>
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 所在分组</para>
         /// </summary>
         private Dictionary<string, string> allModsTypeGroup = new();
+
         /// <summary>
         /// <para>全部用户分组</para>
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
         private Dictionary<string, HashSet<string>> allUserGroups = new();
+
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组显示信息的列表</para>
         /// </summary>
         private Dictionary<string, ObservableCollection<ModShowInfo>> allModShowInfoGroups = new();
+
         /// <summary>模组显示信息</summary>
         public partial class ModShowInfo : ObservableObject
         {
             /// <summary>ID</summary>
             public string Id { get; set; } = null!;
+
             /// <summary>名称</summary>
             public string Name { get; set; } = null!;
+
             /// <summary>作者</summary>
             public string Author { get; set; } = null!;
+
             /// <summary>是否启用</summary>
             [ObservableProperty]
             private bool isEnabled = false;
+
             /// <summary>收藏状态</summary>
             [ObservableProperty]
             private bool isCollected = false;
+
             /// <summary>模组版本</summary>
             public string Version { get; set; } = null!;
+
             /// <summary>模组支持的游戏版本</summary>
             public string GameVersion { get; set; } = null!;
+
             /// <summary>模组支持的游戏版本是否与当前游戏版本一至</summary>
             public bool IsSameToGameVersion { get; set; } = false;
+
             /// <summary>是否为功能性模组</summary>
             public bool IsUtility { get; set; } = false;
+
             /// <summary>图标路径</summary>
             //public string IconPath { get; set; } = string.Empty;
             /// <summary>图标资源</summary>
             public BitmapImage? ImageSource { get; set; } = null!;
+
             /// <summary>前置模组</summary>
             [ObservableProperty]
             private string? dependencies;
+
             /// <summary>前置模组列表</summary>
             public List<string>? DependenciesList;
+
             /// <summary>显示启用前置按钮的行高</summary>
             [ObservableProperty]
             private bool missDependencies;
+
             /// <summary>用户描述</summary>
             [ObservableProperty]
             private string userDescription = string.Empty;
+
             /// <summary>右键菜单</summary>
             [ObservableProperty]
             private ContextMenu contextMenu = null!;
         }
+
         //private ViewModel viewModel;
         //public partial class ViewModel : ObservableObject
         //{
@@ -290,7 +319,9 @@ namespace StarsectorTools.Tools.ModManager
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
+
         private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e) => SearchMods(TextBox_SearchMods.Text);
+
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
@@ -341,6 +372,7 @@ namespace StarsectorTools.Tools.ModManager
             if (sender is DataGridRow row)
                 ShowModDetails(row.Tag.ToString()!);
         }
+
         private void DataGridItem_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGridRow row)
@@ -481,7 +513,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(ST.gameExePath))
+            if (File.Exists(ST.gameExeFile))
             {
                 Process process = new();
                 process.StartInfo.FileName = "cmd";
@@ -489,7 +521,7 @@ namespace StarsectorTools.Tools.ModManager
                 process.StartInfo.RedirectStandardInput = true;
                 if (process.Start())
                 {
-                    process.StandardInput.WriteLine($"cd /d {ST.gamePath}");
+                    process.StandardInput.WriteLine($"cd /d {ST.gameDirectory}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
                     SaveAllData();
@@ -498,14 +530,14 @@ namespace StarsectorTools.Tools.ModManager
             }
             else
             {
-                STLog.Instance.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExePath}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExePath}");
+                STLog.Instance.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}");
             }
         }
 
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (sender is DataGrid grid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
+            if (sender is DataGrid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
                 ClearDataGridSelected();
         }
 
@@ -528,10 +560,10 @@ namespace StarsectorTools.Tools.ModManager
                         XElement xes = XElement.Load(filePath);
                         list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n{ex}", STLogLevel.WARN);
-                        MessageBox.Show($"{I18n.FileError}\n{I18n.Path}: {filePath}\n{ex}");
+                        STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", STLogLevel.ERROR);
+                        MessageBox.Show($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", "", MessageBoxButton.OK, MessageBoxImage.Error);
                         return;
                     }
                     var result = MessageBox.Show(I18n.SelectImportMode, "", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
@@ -624,12 +656,12 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameModsPath))
-                ST.OpenFile(ST.gameModsPath);
+            if (Directory.Exists(ST.gameModsDirectory))
+                ST.OpenFile(ST.gameModsDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameModsPath}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameModsPath}");
+                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameModsDirectory}");
             }
         }
 
@@ -646,12 +678,12 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameSavePath))
-                ST.OpenFile(ST.gameSavePath);
+            if (Directory.Exists(ST.gameSaveDirectory))
+                ST.OpenFile(ST.gameSaveDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameSavePath}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameSavePath}");
+                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
+                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}");
             }
         }
 

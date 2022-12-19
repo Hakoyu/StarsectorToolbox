@@ -226,4 +226,13 @@
   <data name="ResetSuccessful" xml:space="preserve">
     <value>重置成功</value>
   </data>
+  <data name="CustomResolutionSetupError" xml:space="preserve">
+    <value>自定义分辨率设置错误</value>
+  </data>
+  <data name="CustomResolutionResetError" xml:space="preserve">
+    <value>自定义分辨率重置错误</value>
+  </data>
+  <data name="CustomResolutionGetFailed" xml:space="preserve">
+    <value>自定义分辨率获取失败</value>
+  </data>
 </root>

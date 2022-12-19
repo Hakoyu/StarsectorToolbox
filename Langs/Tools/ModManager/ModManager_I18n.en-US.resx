@@ -103,8 +103,8 @@
   <data name="ModAddFailed" xml:space="preserve">
     <value>Mod add failed</value>
   </data>
-  <data name="ModAddSize" xml:space="preserve">
-    <value>Mod add Success size: {0} Failed size: {1}</value>
+  <data name="ModAddEnd" xml:space="preserve">
+    <value>Mod add end Success size: {0} Failed size: {1}</value>
   </data>
   <data name="Path" xml:space="preserve">
     <value>Path</value>

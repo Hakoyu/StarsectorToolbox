@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Media;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Media;
 using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
@@ -30,29 +24,38 @@ namespace StarsectorTools.Libs
     {
         /// <summary>调试</summary>
         DEBUG,
+
         /// <summary>提示</summary>
         INFO,
+
         /// <summary>警告</summary>
         WARN,
+
         /// <summary>错误</summary>
         ERROR
     }
+
     /// <summary>StarsectorTools日志</summary>
     public sealed class STLog
     {
         /// <summary>日志目录</summary>
-        public const string logPath = @"StarsectorTools.log";
+        public const string logFile = @"StarsectorTools.log";
+
         /// <summary>延迟启用</summary>
         private static readonly Lazy<STLog> lazy = new(new STLog());
+
         /// <summary>日志等级</summary>
         public STLogLevel LogLevel = STLogLevel.INFO;
+
         /// <summary>写入流</summary>
-        private StreamWriter sw = new(logPath);
+        private StreamWriter sw = new(logFile);
+
         /// <summary>单例</summary>
         public static STLog Instance
         {
             get => lazy.Value;
         }
+
         /// <summary>
         /// 字符串转换成日志等级
         /// </summary>
@@ -69,6 +72,7 @@ namespace StarsectorTools.Libs
                 _ => STLogLevel.INFO
             };
         }
+
         /// <summary>
         /// 获取所在类名和方法名
         /// </summary>
@@ -76,10 +80,11 @@ namespace StarsectorTools.Libs
         private static string GetClassNameAndMethodName()
         {
             StackTrace stackTrace = new();
-            StackFrame frame = stackTrace.GetFrame(2)!;
-            MethodBase method = frame.GetMethod()!;
+            StackFrame stackFrame = stackTrace.GetFrame(3)!;
+            MethodBase method = stackFrame.GetMethod()!;
             return $"{method.ReflectedType!.Name!}.{method.Name!}";
         }
+
         /// <summary>
         /// 获取所在类名
         /// </summary>
@@ -87,10 +92,11 @@ namespace StarsectorTools.Libs
         private static string GetClassName()
         {
             StackTrace stackTrace = new();
-            StackFrame frame = stackTrace.GetFrame(2)!;
-            MethodBase method = frame.GetMethod()!;
+            StackFrame stackFrame = stackTrace.GetFrame(3)!;
+            MethodBase method = stackFrame.GetMethod()!;
             return method.ReflectedType!.Name!;
         }
+
         /// <summary>
         /// 写入日志
         /// </summary>
@@ -98,17 +104,9 @@ namespace StarsectorTools.Libs
         /// <param name="logLevel">日志等级</param>
         public void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
         {
-            if (logLevel >= LogLevel)
-            {
-                string name;
-                if (LogLevel == STLogLevel.DEBUG)
-                    name = GetClassNameAndMethodName();
-                else
-                    name = GetClassName();
-                sw.WriteLine($"[{name}] {logLevel} {message}");
-                sw.Flush();
-            }
+            WriteLine(message, logLevel, null!);
         }
+
         /// <summary>
         /// 写入日志
         /// </summary>
@@ -120,14 +118,17 @@ namespace StarsectorTools.Libs
             if (logLevel >= LogLevel)
             {
                 string name;
-                if (LogLevel == STLogLevel.DEBUG)
+                if (logLevel == STLogLevel.DEBUG)
                     name = GetClassNameAndMethodName();
                 else
                     name = GetClassName();
                 sw.WriteLine($"[{name}] {logLevel} {ParseKey(message, keys)}");
+                if (logLevel == STLogLevel.ERROR)
+                    sw.WriteLine(string.Join("\n", new StackTrace(2).ToString().Split("\n").Where(s => s.Contains(nameof(StarsectorTools)))), STLogLevel.ERROR);
                 sw.Flush();
             }
         }
+
         private string ParseKey(string str, params object[] keys)
         {
             try
@@ -139,6 +140,7 @@ namespace StarsectorTools.Libs
                 return str;
             }
         }
+
         /// <summary>关闭</summary>
         public void Close()
         {
@@ -149,59 +151,61 @@ namespace StarsectorTools.Libs
     public static class ST
     {
         public static int totalMemory = 0;
-        public const string configPath = @"Config.toml";
-        public readonly static Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
-        public const string logPath = @"StarsectorTools.log";
-        public static string gamePath { get; private set; } = null!;
-        public static string gameExePath { get; private set; } = null!;
-        public static string gameModsPath { get; private set; } = null!;
+        public const string STConfigFile = @"Config.toml";
+        public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
+        public static string gameDirectory { get; private set; } = null!;
+        public static string gameExeFile { get; private set; } = null!;
+        public static string gameModsDirectory { get; private set; } = null!;
         public static string gameVersion { get; private set; } = null!;
-        public static string gameSavePath { get; private set; } = null!;
-        public static string enabledModsJsonPath { get; private set; } = null!;
-        public static void SetGamePath(string path)
+        public static string gameSaveDirectory { get; private set; } = null!;
+        public static string enabledModsJsonFile { get; private set; } = null!;
+
+        public static void SetGameData(string directoryName)
         {
-            gameExePath = $"{path}\\starsector.exe";
-            if (File.Exists(gameExePath))
+            gameExeFile = $"{directoryName}\\starsector.exe";
+            if (File.Exists(gameExeFile))
             {
-                gamePath = path;
-                gameModsPath = $"{path}\\mods";
-                gameSavePath = $"{path}\\saves";
-                enabledModsJsonPath = $"{gameModsPath}\\enabled_mods.json";
+                gameDirectory = directoryName;
+                gameModsDirectory = $"{directoryName}\\mods";
+                gameSaveDirectory = $"{directoryName}\\saves";
+                enabledModsJsonFile = $"{gameModsDirectory}\\enabled_mods.json";
                 try
                 {
-                    gameVersion = JsonNode.Parse(File.ReadAllText($"{path}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+                    gameVersion = JsonNode.Parse(File.ReadAllText($"{directoryName}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                    STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
                 }
             }
             else
             {
-                gameExePath = null!;
-                STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {path}", STLogLevel.ERROR);
+                gameExeFile = null!;
+                STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
                 MessageBox.Show($"{I18n.GameDirectoryError}\n{I18n.Path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         /// <summary>
         /// 复制文件夹至目标文件夹
         /// </summary>
-        /// <param name="sourcePath">原始路径</param>
-        /// <param name="destinationPath">目标路径</param>
+        /// <param name="sourceDirectoryName">原始路径</param>
+        /// <param name="destinationDirectoryName">目标路径</param>
         /// <returns>复制成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool CopyDirectory(string sourcePath, string destinationPath)
+        public static bool CopyDirectory(string sourceDirectoryName, string destinationDirectoryName)
         {
             try
             {
-                FileSystem.CopyDirectory(sourcePath, $"{destinationPath}\\{Path.GetFileName(sourcePath)}", UIOption.OnlyErrorDialogs);
+                FileSystem.CopyDirectory(sourceDirectoryName, $"{destinationDirectoryName}\\{Path.GetFileName(sourceDirectoryName)}", UIOption.OnlyErrorDialogs);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                STLog.Instance.WriteLine(I18n.LoadError, STLogLevel.ERROR);
                 return false;
             }
         }
+
         /// <summary>
         /// 删除文件至回收站
         /// </summary>
@@ -214,12 +218,13 @@ namespace StarsectorTools.Libs
                 FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                STLog.Instance.WriteLine(I18n.LoadError, STLogLevel.ERROR);
                 return false;
             }
         }
+
         /// <summary>
         /// 删除文件夹至回收站
         /// </summary>
@@ -232,12 +237,13 @@ namespace StarsectorTools.Libs
                 FileSystem.DeleteDirectory(directory, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
+                STLog.Instance.WriteLine(I18n.LoadError, STLogLevel.ERROR);
                 return false;
             }
         }
+
         public static int MemorySizeParse(int size)
         {
             if (size < 1024)
@@ -252,29 +258,34 @@ namespace StarsectorTools.Libs
             }
             return size;
         }
+
         public static bool CheckConfigFile()
         {
-            return File.Exists(configPath);
+            return File.Exists(STConfigFile);
         }
+
         public static void CreateConfigFile()
         {
-            if (File.Exists(configPath))
-                File.Delete(configPath);
+            if (File.Exists(STConfigFile))
+                File.Delete(STConfigFile);
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
             string str = sr.ReadToEnd();
-            File.WriteAllText(configPath, str);
+            File.WriteAllText(STConfigFile, str);
             sr.Close();
-            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {configPath}");
+            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {STConfigFile}");
         }
-        public static bool CheckGamePath()
+
+        public static bool CheckGameDirectory()
         {
-            return File.Exists(gameExePath);
+            return File.Exists(gameExeFile);
         }
+
         public static bool IsLightColor(Color color)
         {
             return (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255 > 0.5;
         }
-        public static bool GetGamePath()
+
+        public static bool GetGameDirectory()
         {
             //新建文件选择
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
@@ -286,11 +297,12 @@ namespace StarsectorTools.Libs
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
-            SetGamePath(Path.GetDirectoryName(openFileDialog.FileName)!);
-            return CheckGamePath();
+            SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!);
+            return CheckGameDirectory();
         }
+
         /// <summary>
-        /// 使用系统默认打开方式打开文件
+        /// 使用系统默认打开方式打开文件或文件夹
         /// </summary>
         /// <param name="path">路径</param>
         /// <returns>打开成功为<see langword="true"/>,失败为<see langword="false"/></returns>
@@ -303,45 +315,46 @@ namespace StarsectorTools.Libs
             }
             return false;
         }
+
         /// <summary>
         /// <para>压缩文件夹至Zip文件并输出到目录</para>
         /// <para>若不输入压缩文件名,则以原始目录的文件夹名称来命名</para>
         /// </summary>
-        /// <param name="sourceDirName">原始目录</param>
-        /// <param name="destDirName">输出目录</param>
+        /// <param name="sourceDirectoryName">原始目录</param>
+        /// <param name="destinationDirectoryName">输出目录</param>
         /// <param name="archiveName">压缩文件名</param>
         /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool ArchiveDirToDir(string sourceDirName, string destDirName, string? archiveName = null)
+        public static bool ArchiveDirToDir(string sourceDirectoryName, string destinationDirectoryName, string? archiveName = null)
         {
-            if (!Directory.Exists(sourceDirName))
+            if (!Directory.Exists(sourceDirectoryName))
                 return false;
             try
             {
                 using (var archive = ZipArchive.Create())
                 {
-                    archive.AddAllFromDirectory(sourceDirName);
+                    archive.AddAllFromDirectory(sourceDirectoryName);
                     if (archiveName is null)
-                        archive.SaveTo($"{destDirName}\\{Path.GetFileName(sourceDirName)}.zip", CompressionType.Deflate);
+                        archive.SaveTo($"{destinationDirectoryName}\\{Path.GetFileName(sourceDirectoryName)}.zip", CompressionType.Deflate);
                     else
-                        archive.SaveTo($"{destDirName}\\{archiveName}.zip", CompressionType.Deflate);
+                        archive.SaveTo($"{destinationDirectoryName}\\{archiveName}.zip", CompressionType.Deflate);
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                STLog.Instance.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirName}", STLogLevel.WARN);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.WARN);
+                STLog.Instance.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectoryName}", STLogLevel.WARN);
                 return false;
             }
             return true;
         }
+
         /// <summary>
         /// <para>解压压缩文件至目录</para>
         /// <para>支持: <see langword="Zip"/> <see langword="Rar"/> <see langword="7z"/></para>
         /// </summary>
         /// <param name="sourceFileName">原始文件</param>
-        /// <param name="destDirName">输出目录</param>
+        /// <param name="destinationDirectoryName">输出目录</param>
         /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool UnArchiveFileToDir(string sourceFileName, string destDirName)
+        public static bool UnArchiveFileToDir(string sourceFileName, string destinationDirectoryName)
         {
             if (!File.Exists(sourceFileName))
                 return false;
@@ -349,68 +362,78 @@ namespace StarsectorTools.Libs
             using StreamReader sr = new(sourceFileName);
             string head = $"{sr.Read()}{sr.Read()}";
             sr.Close();
-            if (!Directory.Exists(destDirName))
-                Directory.CreateDirectory(destDirName);
+            if (!Directory.Exists(destinationDirectoryName))
+                Directory.CreateDirectory(destinationDirectoryName);
             try
             {
                 if (head == "8075")//Zip文件
                 {
                     using (var archive = new Archive(sourceFileName, new() { Encoding = Encoding.UTF8 }))
                     {
-                        archive.ExtractToDirectory(destDirName);
+                        archive.ExtractToDirectory(destinationDirectoryName);
                     }
                 }
                 else if (head == "8297")//Rar文件
                 {
                     using (var archive = new RarArchive(sourceFileName))
                     {
-                        archive.ExtractToDirectory(destDirName);
+                        archive.ExtractToDirectory(destinationDirectoryName);
                     }
                 }
                 else if (head == "55122")//7z文件
                 {
                     using (var archive = new SevenZipArchive(sourceFileName))
                     {
-                        archive.ExtractToDirectory(destDirName);
+                        archive.ExtractToDirectory(destinationDirectoryName);
                     }
                 }
                 else
                     throw new Exception();
             }
-            catch (Exception ex)
+            catch
             {
                 STLog.Instance.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", STLogLevel.ERROR);
-                STLog.Instance.WriteLine(ex.Message, STLogLevel.ERROR);
-                if (Directory.Exists(destDirName))
-                    Directory.Delete(destDirName);
+                if (Directory.Exists(destinationDirectoryName))
+                    Directory.Delete(destinationDirectoryName);
                 return false;
             }
             return true;
         }
     }
+
     /// <summary>模组信息</summary>
     public class ModInfo
     {
         /// <summary>ID</summary>
         public string Id { get; private set; } = null!;
+
         /// <summary>名称</summary>
         public string Name { get; private set; } = null!;
+
         /// <summary>作者</summary>
         public string Author { get; private set; } = null!;
+
         /// <summary>版本</summary>
         public string Version { get; private set; } = null!;
+
         /// <summary>是否为功能性模组</summary>
         public bool IsUtility { get; private set; } = false;
+
         /// <summary>描述</summary>
         public string Description { get; private set; } = null!;
+
         /// <summary>支持的游戏版本</summary>
         public string GameVersion { get; private set; } = null!;
+
         /// <summary>模组信息</summary>
         public string ModPlugin { get; private set; } = null!;
+
         /// <summary>前置</summary>
         public List<ModInfo>? Dependencies { get; private set; }
+
         /// <summary>本地路径</summary>
         public string Path = null!;
+
         /// <summary>设置模组信息</summary>
         /// <param name="kv">遍历至<see cref="JsonObject"/></param>
         public void SetData(KeyValuePair<string, JsonNode?> kv) => SetData(kv.Key, kv.Value!);
@@ -422,30 +445,38 @@ namespace StarsectorTools.Libs
                 case "id":
                     Id = value.GetValue<string>();
                     break;
+
                 case "name":
                     Name = value.GetValue<string>();
                     break;
+
                 case "author":
                     Author = value.GetValue<string>().Trim();
                     break;
+
                 case "version":
                     if (value is JsonValue)
                         Version = value.GetValue<string>();
                     else
                         Version = string.Join(".", value.AsObject().Select(kv => kv.Value!.ToString()));
                     break;
+
                 case "utility":
                     IsUtility = bool.Parse(value.ToString());
                     break;
+
                 case "description":
                     Description = value.GetValue<string>();
                     break;
+
                 case "gameVersion":
                     GameVersion = value.GetValue<string>();
                     break;
+
                 case "modPlugin":
                     ModPlugin = value.GetValue<string>();
                     break;
+
                 case "dependencies":
                     Dependencies ??= new();
                     foreach (var mod in value.AsArray())

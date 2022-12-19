@@ -1,59 +1,54 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using HKW.TomlParse;
+using Panuon.WPF.UI;
 using StarsectorTools.Libs;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
-using Panuon.WPF.UI;
-using System.Reflection;
 
 namespace StarsectorTools.Windows
 {
     public partial class MainWindow
     {
-        bool SetConfig()
+        private bool SetConfig()
         {
             try
             {
                 if (ST.CheckConfigFile())
                 {
-                    using TomlTable toml = TOML.Parse(ST.configPath);
+                    using TomlTable toml = TOML.Parse(ST.STConfigFile);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     STLog.Instance.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
-                    ST.SetGamePath(toml["Game"]["GamePath"].AsString!);
-                    if (!ST.CheckGamePath())
+                    ST.SetGameData(toml["Game"]["GamePath"].AsString!);
+                    if (!ST.CheckGameDirectory())
                     {
-                        if (!(MessageBox.Show(this, I18n.GameNotFound_SelectAgain, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
+                        if (!(MessageBox.Show(this, I18n.GameNotFound_SelectAgain, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
                         {
                             MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
                             toml.Close();
                             return false;
                         }
-                        toml["Game"]["GamePath"] = ST.gamePath;
+                        toml["Game"]["GamePath"] = ST.gameDirectory;
                     }
-                    toml.SaveTo(ST.configPath);
+                    toml.SaveTo(ST.STConfigFile);
                 }
                 else
                 {
-                    if (!(MessageBox.Show(this, I18n.FirstStart, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGamePath()))
+                    if (!(MessageBox.Show(this, I18n.FirstStart, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
                     {
                         MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
                         return false;
                     }
                     ST.CreateConfigFile();
-                    using TomlTable toml = TOML.Parse(ST.configPath);
-                    toml["Game"]["GamePath"] = ST.gamePath;
+                    using TomlTable toml = TOML.Parse(ST.STConfigFile);
+                    toml["Game"]["GamePath"] = ST.gameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-                    toml.SaveTo(ST.configPath);
+                    toml.SaveTo(ST.STConfigFile);
                 }
             }
             catch
@@ -65,14 +60,17 @@ namespace StarsectorTools.Windows
             }
             return true;
         }
+
         public void SetBlurEffect()
         {
             Effect = new System.Windows.Media.Effects.BlurEffect();
         }
+
         public void RemoveBlurEffect()
         {
             Effect = null;
         }
+
         public void ChangeLanguage()
         {
             Label_Title.Content = I18n.StarsectorTools;
@@ -80,6 +78,7 @@ namespace StarsectorTools.Windows
             Button_Info.Content = I18n.Info;
             RefreshMenuList();
         }
+
         public void RefreshMenuList()
         {
             ClearMenu();
@@ -88,21 +87,24 @@ namespace StarsectorTools.Windows
 
             STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
         }
-        void ClearMenu()
+
+        private void ClearMenu()
         {
             foreach (var lazyPage in menuList.Values)
                 ClosePage(lazyPage.Value);
             menuList.Clear();
             ListBox_Menu.Items.Clear();
         }
-        void ClosePage(Page page)
+
+        private void ClosePage(Page page)
         {
             // 获取page中的Close方法并执行
             // 用于关闭page中创建的线程
             if (page.GetType().GetMethod("Close") is MethodInfo info)
                 _ = info.Invoke(page, null)!;
         }
-        void AddMemu(string icon, string name, string tag, Page page)
+
+        private void AddMemu(string icon, string name, string tag, Page page)
         {
             var item = new ListBoxItem();
             item.Content = name;
@@ -115,7 +117,7 @@ namespace StarsectorTools.Windows
             // 重载当前菜单
             MenuItem menuItem = new();
             menuItem.Header = I18n.Refresh;
-            menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄"};
+            menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
                 Type type = menuList[tag].Value.GetType();

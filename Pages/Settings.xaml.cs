@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using HKW.TomlParse;
 using StarsectorTools.Libs;
 using StarsectorTools.Windows;
@@ -27,7 +14,8 @@ namespace StarsectorTools.Pages
     /// </summary>
     public partial class Settings : Page
     {
-        bool isFirst = true;
+        private bool isFirst = true;
+
         public Settings()
         {
             InitializeComponent();
@@ -35,7 +23,8 @@ namespace StarsectorTools.Pages
             ShowCurrentLogLevel();
             isFirst = false;
         }
-        void ShowCurrentLanguage()
+
+        private void ShowCurrentLanguage()
         {
             foreach (ComboBoxItem item in ComboBox_Language.Items)
             {
@@ -47,7 +36,8 @@ namespace StarsectorTools.Pages
             }
             ComboBox_Language.SelectedIndex = 0;
         }
-        void ShowCurrentLogLevel()
+
+        private void ShowCurrentLogLevel()
         {
             foreach (ComboBoxItem item in ComboBox_LogLevel.Items)
             {
@@ -73,20 +63,22 @@ namespace StarsectorTools.Pages
                 STLog.Instance.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }
-        void ChangeLanguage()
+
+        private void ChangeLanguage()
         {
             GroupBox_Settings.Header = I18n.Settings;
             Button_OpenLogFile.Content = I18n.OpenLogFile;
             Label_LogLevel.Content = I18n.LogLevel;
             Label_Language.Content = I18n.Language;
         }
-        void SaveLanguage(CultureInfo cultureInfo)
+
+        private void SaveLanguage(CultureInfo cultureInfo)
         {
             try
             {
-                using TomlTable toml = TOML.Parse(ST.configPath);
+                using TomlTable toml = TOML.Parse(ST.STConfigFile);
                 toml["Extras"]["Lang"] = cultureInfo.Name;
-                toml.SaveTo(ST.configPath);
+                toml.SaveTo(ST.STConfigFile);
             }
             catch
             {
@@ -98,7 +90,7 @@ namespace StarsectorTools.Pages
         {
             if (sender is Button)
             {
-                ST.OpenFile(ST.logPath);
+                ST.OpenFile(STLog.logFile);
             }
         }
 
@@ -112,14 +104,15 @@ namespace StarsectorTools.Pages
                 STLog.Instance.WriteLine($"{I18n.LogLevelSwitch}: {item.ToolTip}");
             }
         }
-        void SaveLogLevel(string level)
+
+        private void SaveLogLevel(string level)
         {
             try
             {
-                STLog.Instance.LogLevel= STLog.Str2STLogLevel(level);
-                using TomlTable toml = TOML.Parse(ST.configPath);
+                STLog.Instance.LogLevel = STLog.Str2STLogLevel(level);
+                using TomlTable toml = TOML.Parse(ST.STConfigFile);
                 toml["Extras"]["LogLevel"] = level;
-                toml.SaveTo(ST.configPath);
+                toml.SaveTo(ST.STConfigFile);
             }
             catch
             {

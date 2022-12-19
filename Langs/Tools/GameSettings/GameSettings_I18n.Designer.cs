@@ -133,6 +133,33 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 自定义分辨率获取失败 的本地化字符串。
+        /// </summary>
+        public static string CustomResolutionGetFailed {
+            get {
+                return ResourceManager.GetString("CustomResolutionGetFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 自定义分辨率重置错误 的本地化字符串。
+        /// </summary>
+        public static string CustomResolutionResetError {
+            get {
+                return ResourceManager.GetString("CustomResolutionResetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 自定义分辨率设置错误 的本地化字符串。
+        /// </summary>
+        public static string CustomResolutionSetupError {
+            get {
+                return ResourceManager.GetString("CustomResolutionSetupError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件夹不存在 的本地化字符串。
         /// </summary>
         public static string FolderNotExist {

@@ -138,4 +138,7 @@
   <data name="ConfigFileCreatedSuccess" xml:space="preserve">
     <value>Config file created success</value>
   </data>
+  <data name="LoadError" xml:space="preserve">
+    <value>Load error</value>
+  </data>
 </root>

@@ -1,165 +1,167 @@
 ﻿<Window
-    x:Class="StarsectorTools.Windows.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:I18n="clr-namespace:StarsectorTools.Langs.Windows.MainWindow"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-    xmlns:local="clr-namespace:StarsectorTools"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
-    Title="StarsectorTools"
-    Width="1000"
-    Height="500"
-    Padding="5"
-    FontFamily="Consolas"
-    Style="{StaticResource Window_Style}"
-    WindowStartupLocation="CenterScreen"
-    WindowStyle="None"
-    mc:Ignorable="d" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <WindowChrome.WindowChrome>
-        <WindowChrome
-            CaptionHeight="0"
-            GlassFrameThickness="-1"
-            ResizeBorderThickness="5" />
-    </WindowChrome.WindowChrome>
-    <Window.Resources>
-        <Style x:Key="WindowMainPanelStyle" TargetType="{x:Type Panel}">
-            <Setter Property="Margin" Value="0" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
-                    <Setter Property="Margin" Value="7" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
-    <Grid Style="{StaticResource WindowMainPanelStyle}">
-        <Grid
-            x:Name="Grid_TitleBar"
-            VerticalAlignment="Top"
-            Background="{DynamicResource ColorLight2}"
-            MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown">
-            <Grid HorizontalAlignment="Center">
-                <Image
-                    x:Name="Image_Title"
-                    Width="20"
-                    Height="20"
-                    Margin="5,5,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Source="/Resources/recycling.ico" />
-                <Label
-                    x:Name="Label_Title"
-                    Margin="30,0,0,0"
-                    Padding="0"
-                    HorizontalAlignment="Center"
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:MainWindow_I18n.StarsectorTools}"
-                    FontSize="20"
-                    FontWeight="Bold"
-                    Style="{StaticResource Label_Style}" />
-            </Grid>
-            <Button
-                x:Name="Button_TitleMin"
-                Width="40"
-                Height="30"
-                Margin="0,0,80,0"
-                HorizontalAlignment="Right"
-                pu:ButtonHelper.ClickBackground="LightBlue"
-                pu:ButtonHelper.HoverBackground="Aqua"
-                Click="Button_TitleMin_Click"
-                Content="➖"
-                FontSize="16"
-                Style="{StaticResource Button_Style}" />
-            <Button
-                x:Name="Button_TitleMax"
-                Width="40"
-                Height="30"
-                Margin="0,0,40,0"
-                HorizontalAlignment="Right"
-                pu:ButtonHelper.ClickBackground="LightBlue"
-                pu:ButtonHelper.HoverBackground="Aqua"
-                Click="Button_TitleMax_Click"
-                Content="🔲"
-                FontSize="16"
-                Style="{StaticResource Button_Style}" />
-            <Button
-                x:Name="Button_TitleClose"
-                Width="40"
-                Height="30"
-                HorizontalAlignment="Right"
-                pu:ButtonHelper.ClickBackground="IndianRed"
-                pu:ButtonHelper.HoverBackground="Red"
-                Click="Button_TitleClose_Click"
-                Content="❌"
-                FontSize="16"
-                Style="{StaticResource Button_Style}" />
-            <Button
-                x:Name="Button_MainMenu"
-                Width="30"
-                Height="30"
-                Padding="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Click="Button_MainMenu_Click"
-                FontSize="16"
-                Style="{StaticResource Button_Style}">
-                <pu:ButtonHelper.Icon>
-                    <emoji:TextBlock
-                        x:Name="Button_MainMenuIcon"
-                        FontSize="16"
-                        Text="📘" />
-                </pu:ButtonHelper.Icon>
-            </Button>
-        </Grid>
-        <Grid Margin="0,30,0,0">
-            <Grid
-                x:Name="Grid_Menu"
-                Width="30"
-                HorizontalAlignment="Left"
-                SizeChanged="Grid_Menu_SizeChanged">
-                <ListBox
-                    x:Name="ListBox_Menu"
-                    Margin="0,0,0,60"
-                    HorizontalAlignment="Center"
-                    FontSize="16"
-                    SelectionChanged="ListBox_Menu_SelectionChanged"
-                    Style="{StaticResource ListBox_Style}" PreviewMouseRightButtonDown="ListBox_Menu_PreviewMouseRightButtonDown" />
-                <Button
-                    x:Name="Button_Settings"
-                    Height="30"
-                    Margin="0,0,0,0"
-                    Padding="0"
-                    VerticalAlignment="Bottom"
-                    HorizontalContentAlignment="Left"
-                    Click="Button_Settings_Click"
-                    Content="{x:Static I18n:MainWindow_I18n.Settings}"
-                    FontSize="16"
-                    Style="{StaticResource Button_Style}">
-                    <pu:ButtonHelper.Icon>
-                        <emoji:TextBlock FontSize="16" Text="⚙" />
-                    </pu:ButtonHelper.Icon>
-                </Button>
-                <Button
-                    x:Name="Button_Info"
-                    Height="30"
-                    Margin="0,0,0,30"
-                    Padding="0"
-                    VerticalAlignment="Bottom"
-                    HorizontalContentAlignment="Left"
-                    Content="{x:Static I18n:MainWindow_I18n.Info}"
-                    FontSize="16"
-                    Style="{StaticResource Button_Style}">
-                    <pu:ButtonHelper.Icon>
-                        <emoji:TextBlock FontSize="16" Text="ℹ" />
-                    </pu:ButtonHelper.Icon>
-                </Button>
-            </Grid>
-            <Frame
-                x:Name="Frame_MainFrame"
-                Margin="30,0,0,0"
-                ContentRendered="Frame_MainFrame_ContentRendered"
-                NavigationUIVisibility="Hidden" />
-        </Grid>
+  x:Class="StarsectorTools.Windows.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Windows.MainWindow"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+  xmlns:local="clr-namespace:StarsectorTools"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  Title="StarsectorTools"
+  Width="1000"
+  Height="500"
+  Padding="5"
+  FontFamily="Consolas"
+  MouseLeftButtonDown="Window_MouseLeftButtonDown"
+  Style="{StaticResource Window_Style}"
+  WindowStartupLocation="CenterScreen"
+  WindowStyle="None"
+  mc:Ignorable="d">
+  <WindowChrome.WindowChrome>
+    <WindowChrome
+      CaptionHeight="0"
+      GlassFrameThickness="-1"
+      ResizeBorderThickness="5" />
+  </WindowChrome.WindowChrome>
+  <Window.Resources>
+    <Style x:Key="WindowMainPanelStyle" TargetType="{x:Type Panel}">
+      <Setter Property="Margin" Value="0" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
+          <Setter Property="Margin" Value="7" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+  </Window.Resources>
+  <Grid Style="{StaticResource WindowMainPanelStyle}">
+    <Grid
+      x:Name="Grid_TitleBar"
+      VerticalAlignment="Top"
+      Background="{DynamicResource ColorLight2}"
+      MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown">
+      <Grid HorizontalAlignment="Center">
+        <Image
+          x:Name="Image_Title"
+          Width="20"
+          Height="20"
+          Margin="5,5,0,0"
+          HorizontalAlignment="Left"
+          VerticalAlignment="Top"
+          Source="/Resources/recycling.ico" />
+        <Label
+          x:Name="Label_Title"
+          Margin="30,0,0,0"
+          Padding="0"
+          HorizontalAlignment="Center"
+          Background="{x:Null}"
+          Content="{x:Static I18n:MainWindow_I18n.StarsectorTools}"
+          FontSize="20"
+          FontWeight="Bold"
+          Style="{StaticResource Label_Style}" />
+      </Grid>
+      <Button
+        x:Name="Button_TitleMin"
+        Width="40"
+        Height="30"
+        Margin="0,0,80,0"
+        HorizontalAlignment="Right"
+        pu:ButtonHelper.ClickBackground="LightBlue"
+        pu:ButtonHelper.HoverBackground="Aqua"
+        Click="Button_TitleMin_Click"
+        Content="➖"
+        FontSize="16"
+        Style="{StaticResource Button_Style}" />
+      <Button
+        x:Name="Button_TitleMax"
+        Width="40"
+        Height="30"
+        Margin="0,0,40,0"
+        HorizontalAlignment="Right"
+        pu:ButtonHelper.ClickBackground="LightBlue"
+        pu:ButtonHelper.HoverBackground="Aqua"
+        Click="Button_TitleMax_Click"
+        Content="🔲"
+        FontSize="16"
+        Style="{StaticResource Button_Style}" />
+      <Button
+        x:Name="Button_TitleClose"
+        Width="40"
+        Height="30"
+        HorizontalAlignment="Right"
+        pu:ButtonHelper.ClickBackground="IndianRed"
+        pu:ButtonHelper.HoverBackground="Red"
+        Click="Button_TitleClose_Click"
+        Content="❌"
+        FontSize="16"
+        Style="{StaticResource Button_Style}" />
+      <Button
+        x:Name="Button_MainMenu"
+        Width="30"
+        Height="30"
+        Padding="0"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Center"
+        Click="Button_MainMenu_Click"
+        FontSize="16"
+        Style="{StaticResource Button_Style}">
+        <pu:ButtonHelper.Icon>
+          <emoji:TextBlock
+            x:Name="Button_MainMenuIcon"
+            FontSize="16"
+            Text="📘" />
+        </pu:ButtonHelper.Icon>
+      </Button>
     </Grid>
+    <Grid Margin="0,30,0,0">
+      <Grid
+        x:Name="Grid_Menu"
+        Width="30"
+        HorizontalAlignment="Left"
+        SizeChanged="Grid_Menu_SizeChanged">
+        <ListBox
+          x:Name="ListBox_Menu"
+          Margin="0,0,0,60"
+          HorizontalAlignment="Center"
+          FontSize="16"
+          PreviewMouseRightButtonDown="ListBox_Menu_PreviewMouseRightButtonDown"
+          SelectionChanged="ListBox_Menu_SelectionChanged"
+          Style="{StaticResource ListBox_Style}" />
+        <Button
+          x:Name="Button_Settings"
+          Height="30"
+          Margin="0,0,0,0"
+          Padding="0"
+          VerticalAlignment="Bottom"
+          HorizontalContentAlignment="Left"
+          Click="Button_Settings_Click"
+          Content="{x:Static I18n:MainWindow_I18n.Settings}"
+          FontSize="16"
+          Style="{StaticResource Button_Style}">
+          <pu:ButtonHelper.Icon>
+            <emoji:TextBlock FontSize="16" Text="⚙" />
+          </pu:ButtonHelper.Icon>
+        </Button>
+        <Button
+          x:Name="Button_Info"
+          Height="30"
+          Margin="0,0,0,30"
+          Padding="0"
+          VerticalAlignment="Bottom"
+          HorizontalContentAlignment="Left"
+          Content="{x:Static I18n:MainWindow_I18n.Info}"
+          FontSize="16"
+          Style="{StaticResource Button_Style}">
+          <pu:ButtonHelper.Icon>
+            <emoji:TextBlock FontSize="16" Text="ℹ" />
+          </pu:ButtonHelper.Icon>
+        </Button>
+      </Grid>
+      <Frame
+        x:Name="Frame_MainFrame"
+        Margin="30,0,0,0"
+        ContentRendered="Frame_MainFrame_ContentRendered"
+        NavigationUIVisibility="Hidden" />
+    </Grid>
+  </Grid>
 </Window>

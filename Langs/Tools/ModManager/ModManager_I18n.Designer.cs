@@ -737,20 +737,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 模组添加完毕 成功数量: {0} 失败数量: {1} 的本地化字符串。
+        /// </summary>
+        public static string ModAddEnd {
+            get {
+                return ResourceManager.GetString("ModAddEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 模组添加失败 的本地化字符串。
         /// </summary>
         public static string ModAddFailed {
             get {
                 return ResourceManager.GetString("ModAddFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 模组添加 成功数量: {0} 失败数量: {1} 的本地化字符串。
-        /// </summary>
-        public static string ModAddSize {
-            get {
-                return ResourceManager.GetString("ModAddSize", resourceCulture);
             }
         }
         
