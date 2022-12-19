@@ -482,7 +482,8 @@
             VerticalAlignment="Top"
             Style="{StaticResource TextBox_Style}"
             TextChanged="TextBox_SearchMods_TextChanged"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap"
+            ToolTip="{x:Static I18n:ModManager_I18n.SearchMod}" />
           <!--  TextBox输入占位符  -->
           <Label
             Height="30"
