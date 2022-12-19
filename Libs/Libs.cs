@@ -123,6 +123,7 @@ namespace StarsectorTools.Libs
                 sw.Flush();
             }
         }
+
         /// <summary>
         /// 写入捕获的错误日志
         /// </summary>
@@ -154,27 +155,37 @@ namespace StarsectorTools.Libs
             sw?.Close();
         }
     }
+
     /// <summary>StarsectorTools全局工具</summary>
     public static class ST
     {
         /// <summary>StarsectorTools配置文件</summary>
         public const string configFile = @"Config.toml";
+
         /// <summary>StarsectorTools配置文件资源链接</summary>
         public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
+
         /// <summary>系统总内存</summary>
         public static int systemTotalMemory { get; private set; } = 0;
+
         /// <summary>游戏目录</summary>
         public static string gameDirectory { get; private set; } = null!;
+
         /// <summary>游戏exe文件路径</summary>
         public static string gameExeFile { get; private set; } = null!;
+
         /// <summary>游戏模组文件夹目录</summary>
         public static string gameModsDirectory { get; private set; } = null!;
+
         /// <summary>游戏版本</summary>
         public static string gameVersion { get; private set; } = null!;
+
         /// <summary>游戏保存文件夹目录</summary>
         public static string gameSaveDirectory { get; private set; } = null!;
+
         /// <summary>游戏已启用模组文件目录</summary>
         public static string enabledModsJsonFile { get; private set; } = null!;
+
         /// <summary>
         /// 设置游戏信息
         /// </summary>
@@ -204,6 +215,7 @@ namespace StarsectorTools.Libs
                 ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
             }
         }
+
         /// <summary>
         /// 获取系统内存
         /// </summary>
@@ -211,6 +223,7 @@ namespace StarsectorTools.Libs
         {
             systemTotalMemory = Management.GetMemoryMetricsNow().Total;
         }
+
         /// <summary>
         /// 复制文件夹至目标文件夹
         /// </summary>
@@ -268,6 +281,7 @@ namespace StarsectorTools.Libs
                 return false;
             }
         }
+
         /// <summary>
         /// 检查内存信息
         /// </summary>
@@ -290,6 +304,7 @@ namespace StarsectorTools.Libs
             }
             return size;
         }
+
         /// <summary>
         /// 从资源中读取默认配置文件并创建
         /// </summary>
@@ -302,6 +317,7 @@ namespace StarsectorTools.Libs
             File.WriteAllText(configFile, str);
             STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {configFile}");
         }
+
         /// <summary>
         /// 检测颜色是否为亮色调
         /// </summary>
@@ -311,6 +327,7 @@ namespace StarsectorTools.Libs
         {
             return (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255 > 0.5;
         }
+
         /// <summary>
         /// 获取游戏目录
         /// </summary>
@@ -439,6 +456,7 @@ namespace StarsectorTools.Libs
             }
             return true;
         }
+
         /// <summary>
         /// 弹出消息窗口
         /// </summary>
@@ -449,6 +467,7 @@ namespace StarsectorTools.Libs
         {
             return ShowMessageBox(message, "", image: image);
         }
+
         /// <summary>
         /// 弹出消息窗口
         /// </summary>
@@ -460,6 +479,7 @@ namespace StarsectorTools.Libs
         {
             return ShowMessageBox(message, "", button, image);
         }
+
         /// <summary>
         /// 弹出消息窗口
         /// </summary>
@@ -474,10 +494,12 @@ namespace StarsectorTools.Libs
         {
             return MessageBox.Show(message, caption, button, image, result, options);
         }
+
         /// <summary>
         /// 为主窗口设置模糊效果,用于聚焦弹窗
         /// </summary>
         public static void SetMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).SetBlurEffect();
+
         /// <summary>
         /// 取消主窗口的模糊效果
         /// </summary>

@@ -16,7 +16,6 @@ using System.Windows.Threading;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs;
-using StarsectorTools.Windows;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager
@@ -337,6 +336,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
             });
         }
+
         private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type)
         {
             return new ObservableCollection<ModShowInfo>(type switch
@@ -348,6 +348,7 @@ namespace StarsectorTools.Tools.ModManager
                 _ => throw new()
             });
         }
+
         private ModShowInfo CreateModShowInfo(ModInfo info)
         {
             return new ModShowInfo()
@@ -843,6 +844,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             Dispatcher.BeginInvoke(() => dirs.Delete(true));
         }
+
         private void RemoveMod(string id)
         {
             var modInfo = allModsInfo[id];
@@ -850,6 +852,7 @@ namespace StarsectorTools.Tools.ModManager
             RemoveModShowInfo(id);
             STLog.Instance.WriteLine($"{I18n.RemoveMod} {id} {modInfo.Version}", STLogLevel.DEBUG);
         }
+
         private void RemoveModShowInfo(string id)
         {
             var modShowInfo = allModsShowInfo[id];
@@ -882,6 +885,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
             }
         }
+
         private void AddMod(ModInfo modInfo)
         {
             allModsInfo.Add(modInfo.Id, modInfo);
@@ -1041,8 +1045,6 @@ namespace StarsectorTools.Tools.ModManager
             item.ToolTip = name;
             item.Tag = name;
         }
-
-
 
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
         private void RemindSave()

@@ -1,8 +1,9 @@
 using System;
-using System.Linq;
-using System.Diagnostics;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
+
 namespace HKW.Management
 {
     ///<summary>内存指标</summary>
@@ -10,13 +11,16 @@ namespace HKW.Management
     {
         ///<summary>内存总量</summary>
         public int Total;
+
         ///<summary>内存使用量</summary>
         public int Used;
+
         ///<summary>内存剩余量</summary>
         public int Free;
     }
+
     ///<summary>系统</summary>
-    partial class Management
+    internal partial class Management
     {
         public Management()
         {
@@ -25,13 +29,16 @@ namespace HKW.Management
             if (!GetsSystemType)
                 throw new ArgumentNullException(ToString(), "This is not Windows");
         }
+
         public void Close()
         {
             process?.Close();
             process = null!;
         }
+
         private Process process = null!;
         private bool GetsSystemType => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
         private bool WMIInitialize()
         {
             process = new();
@@ -44,6 +51,7 @@ namespace HKW.Management
                 return true;
             return false;
         }
+
         public MemoryMetrics? GetMemoryMetrics()
         {
             if (process == null)
@@ -60,6 +68,7 @@ namespace HKW.Management
             mm.Used = mm.Total - mm.Free;
             return mm;
         }
+
         public static MemoryMetrics GetMemoryMetricsNow()
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

@@ -338,6 +338,7 @@ namespace HKW.TomlParse
         public new IEnumerator<TomlNode> GetEnumerator() => values.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
         private List<TomlNode> values = new();
 
         public override bool HasValue { get; } = true;
