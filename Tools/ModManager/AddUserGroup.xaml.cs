@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Panuon.WPF.UI;
+using StarsectorTools.Libs;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -22,7 +23,9 @@ namespace StarsectorTools.Tools.ModManager
     {
         public AddUserGroup()
         {
+            ST.SetMainWindowBlurEffect();
             InitializeComponent();
+            Closed += (s, e) => ST.RemoveMainWIndowBlurEffect();
         }
     }
 }

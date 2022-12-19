@@ -18,13 +18,6 @@ namespace StarsectorTools.Tools.GameSettings
             TextBox_Memory.Text = TextBox_Memory.Text = vmparamsData.xmsx;
         }
 
-        private void SetVmparamsData()
-        {
-            File.WriteAllText($"{ST.gameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_Memory.Text}m", RegexOptions.IgnoreCase));
-            STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {TextBox_Memory.Text}m");
-            MessageBox.Show(I18n.VmparamsMemorySetSuccess);
-        }
-
         private void GetGameKey()
         {
             var key = Registry.CurrentUser.OpenSubKey("Software\\JavaSoft\\Prefs\\com\\fs\\starfarer");
@@ -64,8 +57,8 @@ namespace StarsectorTools.Tools.GameSettings
             try
             {
                 string data = File.ReadAllText(gameSettingsFile);
-                bool isBorderlessWindow = bool.Parse(Regex.Match(data, @"(?<=undecoratedWindow"":)(?:false|true)").Value);
-                if (isBorderlessWindow)
+                bool isUndecoratedWindow = bool.Parse(Regex.Match(data, @"(?<=undecoratedWindow"":)(?:false|true)").Value);
+                if (isUndecoratedWindow)
                     CheckBox_BorderlessWindow.IsChecked = true;
                 string customResolutionData = Regex.Match(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",").Value;
                 bool isEnableCustomResolution = customResolutionData.First() != '#';
@@ -79,8 +72,8 @@ namespace StarsectorTools.Tools.GameSettings
             }
             catch
             {
-                STLog.Instance.WriteLine(I18n.CustomResolutionResetError, STLogLevel.ERROR);
-                MessageBox.Show(I18n.CustomResolutionResetError, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                STLog.Instance.WriteLine(I18n.CustomResolutionGetFailed, STLogLevel.ERROR);
+                ST.ShowMessageBox(I18n.CustomResolutionGetFailed, MessageBoxImage.Error);
             }
         }
     }

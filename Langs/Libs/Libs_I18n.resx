@@ -121,4 +121,7 @@
   <data name="LoadError" xml:space="preserve">
     <value>载入错误</value>
   </data>
+  <data name="GameDirectorySetupSuccess" xml:space="preserve">
+    <value>游戏目录设置成功</value>
+  </data>
 </root>

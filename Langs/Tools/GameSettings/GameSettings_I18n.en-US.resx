@@ -235,4 +235,7 @@
   <data name="CustomResolutionGetFailed" xml:space="preserve">
     <value>CustomResolution get failed</value>
   </data>
+  <data name="WidthAndHeightCannotBeEmpty" xml:space="preserve">
+    <value>Width and height cannot be empty</value>
+  </data>
 </root>

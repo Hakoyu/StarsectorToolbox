@@ -473,5 +473,14 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
                 return ResourceManager.GetString("Width", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 宽与高不能为空 的本地化字符串。
+        /// </summary>
+        public static string WidthAndHeightCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("WidthAndHeightCannotBeEmpty", resourceCulture);
+            }
+        }
     }
 }

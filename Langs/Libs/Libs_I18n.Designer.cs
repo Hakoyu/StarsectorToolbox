@@ -88,6 +88,15 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 游戏目录设置成功 的本地化字符串。
+        /// </summary>
+        public static string GameDirectorySetupSuccess {
+            get {
+                return ResourceManager.GetString("GameDirectorySetupSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 载入错误 的本地化字符串。
         /// </summary>
         public static string LoadError {

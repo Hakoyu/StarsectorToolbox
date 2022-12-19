@@ -94,7 +94,7 @@ namespace StarsectorTools.Tools.ModManager
         private string? nowSelectedModId = null;
 
         /// <summary>当前选择的分组名称</summary>
-        private string nowGroupName = string.Empty;
+        private string nowGroupName = ModGroupType.All;
 
         /// <summary>提醒保存配置的动画线程</summary>
         private Thread remindSaveThread = null!;
@@ -320,7 +320,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
 
-        private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e) => SearchMods(TextBox_SearchMods.Text);
+        private void TextBox_SearchMods_TextChanged(object sender, TextChangedEventArgs e) => RefreshDataGrid();
 
         private void ListBox_ModsGroupMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -349,7 +349,7 @@ namespace StarsectorTools.Tools.ModManager
                     else
                         Expander_RandomEnable.Visibility = Visibility.Collapsed;
                     nowGroupName = item.Tag.ToString()!;
-                    SearchMods(TextBox_SearchMods.Text);
+                    RefreshDataGrid();
                     //ChangeShowGroup(nowGroupName);
                     ClearDataGridSelected();
                     CloseModDetails();
@@ -434,7 +434,10 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 if (err != null)
-                    MessageBox.Show(err);
+                {
+                    STLog.Instance.WriteLine(err, STLogLevel.WARN);
+                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                }
                 CheckEnabledModsDependencies();
                 RefreshCountOfListBoxItems();
                 StartRemindSaveThread();
@@ -487,15 +490,13 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_AddUserGroup_Click(object sender, RoutedEventArgs e)
         {
             AddUserGroup window = new();
-            ((MainWindow)Application.Current.MainWindow).IsEnabled = false;
-            window.Show();
             window.Button_Yes.Click += (s, e) =>
             {
                 string name = window.TextBox_Name.Text;
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == ModGroupType.Collected || name == strUserCustomData)
-                        MessageBox.Show(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, strUserCustomData));
+                        ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, strUserCustomData));
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
@@ -505,10 +506,10 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 else
-                    MessageBox.Show(I18n.AddUserNamingFailed);
+                    ST.ShowMessageBox(I18n.AddUserNamingFailed);
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
-            window.Closed += (s, e) => ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
+            window.ShowDialog();
         }
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
@@ -531,7 +532,7 @@ namespace StarsectorTools.Tools.ModManager
             else
             {
                 STLog.Instance.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}");
+                ST.ShowMessageBox($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", MessageBoxImage.Warning);
             }
         }
 
@@ -560,13 +561,13 @@ namespace StarsectorTools.Tools.ModManager
                         XElement xes = XElement.Load(filePath);
                         list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", STLogLevel.ERROR);
-                        MessageBox.Show($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                        STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", ex);
+                        ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", MessageBoxImage.Error);
                         return;
                     }
-                    var result = MessageBox.Show(I18n.SelectImportMode, "", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                    var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
                     if (result == MessageBoxResult.Yes)
                         ClearAllEnabledMods();
                     else if (result == MessageBoxResult.Cancel)
@@ -586,10 +587,13 @@ namespace StarsectorTools.Tools.ModManager
                 else
                 {
                     STLog.Instance.WriteLine($"{I18n.FileNotExist} {I18n.Path}: {filePath}", STLogLevel.WARN);
-                    MessageBox.Show($"{I18n.FileNotExist}\n{I18n.Path}: {filePath}");
+                    ST.ShowMessageBox($"{I18n.FileNotExist}\n{I18n.Path}: {filePath}");
                 }
                 if (err != null)
-                    MessageBox.Show(err);
+                {
+                    STLog.Instance.WriteLine(err, STLogLevel.WARN);
+                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                }
             }
         }
 
@@ -598,7 +602,7 @@ namespace StarsectorTools.Tools.ModManager
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
                 STLog.Instance.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
-                Dispatcher.BeginInvoke(() => ((MainWindow)Application.Current.MainWindow).IsEnabled = false);
+                Dispatcher.BeginInvoke(() => ST.SetMainWindowBlurEffect());
                 new Task(() =>
                 {
                     int total = array.Length;
@@ -618,7 +622,7 @@ namespace StarsectorTools.Tools.ModManager
                             Dispatcher.BeginInvoke(() =>
                             {
                                 window.Label_Progress.Content = path;
-                                window.Show();
+                                window.ShowDialog();
                             });
                             DropFile(path);
                             Dispatcher.BeginInvoke(() =>
@@ -630,13 +634,13 @@ namespace StarsectorTools.Tools.ModManager
                         else
                         {
                             STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {path}", STLogLevel.WARN);
-                            MessageBox.Show($"{I18n.FileError}\n{I18n.Path}: {path}");
+                            ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {path}", MessageBoxImage.Warning);
                         }
                     }
                     Dispatcher.BeginInvoke(() =>
                     {
                         window.Close();
-                        ((MainWindow)Application.Current.MainWindow).IsEnabled = true;
+                        ST.RemoveMainWIndowBlurEffect();
                     });
                     GC.Collect();
                 }).Start();
@@ -646,12 +650,7 @@ namespace StarsectorTools.Tools.ModManager
         private void ComboBox_SearchType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TextBox_SearchMods.Text.Length > 0)
-                SearchMods(TextBox_SearchMods.Text);
-            //GetSearchModsShowInfo();
-            //viewModel.filterType = showInfo.Tag.ToString()!;
-            //if (string.IsNullOrEmpty(viewModel.FilterText))
-            //    return;
-            //viewModel.CollectionView?.Refresh();
+                RefreshDataGrid();
         }
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
@@ -661,7 +660,7 @@ namespace StarsectorTools.Tools.ModManager
             else
             {
                 STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameModsDirectory}");
+                ST.ShowMessageBox($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameModsDirectory}", MessageBoxImage.Warning);
             }
         }
 
@@ -672,7 +671,7 @@ namespace StarsectorTools.Tools.ModManager
             else
             {
                 STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {backupDirectory}");
+                ST.ShowMessageBox($"{I18n.FolderNotExist}\n{I18n.Path}: {backupDirectory}", MessageBoxImage.Warning);
             }
         }
 
@@ -683,7 +682,7 @@ namespace StarsectorTools.Tools.ModManager
             else
             {
                 STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
-                MessageBox.Show($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}");
+                ST.ShowMessageBox($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
             }
         }
 
@@ -691,7 +690,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (TextBox_MinRandomSize.Text.Length == 0 || TextBox_MaxRandomSize.Text.Length == 0)
             {
-                MessageBox.Show(I18n.RandomNumberCannotNull, "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ST.ShowMessageBox(I18n.RandomNumberCannotNull, MessageBoxImage.Warning);
                 return;
             }
             if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
@@ -702,17 +701,17 @@ namespace StarsectorTools.Tools.ModManager
                 int count = allUserGroups[group].Count;
                 if (minSize < 0)
                 {
-                    MessageBox.Show(I18n.RandomNumberCannotLess0, "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(I18n.RandomNumberCannotLess0, MessageBoxImage.Warning);
                     return;
                 }
                 else if (maxSize > count)
                 {
-                    MessageBox.Show(I18n.RandomNumberCannotGreaterTotal);
+                    ST.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, MessageBoxImage.Warning);
                     return;
                 }
                 else if (minSize > maxSize)
                 {
-                    MessageBox.Show(I18n.MinRandomNumberCannotGreaterMaxRandomNumber);
+                    ST.ShowMessageBox(I18n.MinRandomNumberCannotGreaterMaxRandomNumber, MessageBoxImage.Warning);
                     return;
                 }
                 foreach (var info in allUserGroups[group])

@@ -11,15 +11,17 @@ using System.Windows.Media;
 using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
+using HKW.Management;
 using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
+using StarsectorTools.Windows;
 using I18n = StarsectorTools.Langs.Libs.Libs_I18n;
 
 namespace StarsectorTools.Libs
 {
-    /// <summary>日志等级</summary>
+    /// <summary>StarsectorTools日志等级</summary>
     public enum STLogLevel
     {
         /// <summary>调试</summary>
@@ -77,24 +79,19 @@ namespace StarsectorTools.Libs
         /// 获取所在类名和方法名
         /// </summary>
         /// <returns>类型名和方法名</returns>
-        private static string GetClassNameAndMethodName()
+        private static string? GetClassNameAndMethodName()
         {
-            StackTrace stackTrace = new();
-            StackFrame stackFrame = stackTrace.GetFrame(3)!;
-            MethodBase method = stackFrame.GetMethod()!;
-            return $"{method.ReflectedType!.Name!}.{method.Name!}";
+            MethodBase? method = new StackTrace().GetFrame(3)?.GetMethod();
+            return $"{method?.ReflectedType?.Name}.{method?.Name}";
         }
 
         /// <summary>
         /// 获取所在类名
         /// </summary>
         /// <returns></returns>
-        private static string GetClassName()
+        private static string? GetClassName()
         {
-            StackTrace stackTrace = new();
-            StackFrame stackFrame = stackTrace.GetFrame(3)!;
-            MethodBase method = stackFrame.GetMethod()!;
-            return method.ReflectedType!.Name!;
+            return new StackTrace().GetFrame(3)?.GetMethod()?.ReflectedType?.Name;
         }
 
         /// <summary>
@@ -117,16 +114,26 @@ namespace StarsectorTools.Libs
         {
             if (logLevel >= LogLevel)
             {
-                string name;
+                string? name;
                 if (logLevel == STLogLevel.DEBUG)
                     name = GetClassNameAndMethodName();
                 else
                     name = GetClassName();
                 sw.WriteLine($"[{name}] {logLevel} {ParseKey(message, keys)}");
-                if (logLevel == STLogLevel.ERROR)
-                    sw.WriteLine(string.Join("\n", new StackTrace(2).ToString().Split("\n").Where(s => s.Contains(nameof(StarsectorTools)))), STLogLevel.ERROR);
                 sw.Flush();
             }
+        }
+        /// <summary>
+        /// 写入捕获的错误日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="ex">错误</param>
+        /// <param name="keys">嵌入实例</param>
+        public void WriteLine(string message, Exception ex, params object[] keys)
+        {
+            sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {ParseKey(message, keys)}");
+            sw.WriteLine($"   at {ex.StackTrace?.Split('\\').Last()}\n{string.Join("\n", new StackTrace(2).ToString().Split("\n").Where(s => s.Contains(nameof(StarsectorTools))))}", STLogLevel.ERROR);
+            sw.Flush();
         }
 
         private string ParseKey(string str, params object[] keys)
@@ -147,19 +154,31 @@ namespace StarsectorTools.Libs
             sw?.Close();
         }
     }
-
+    /// <summary>StarsectorTools全局工具</summary>
     public static class ST
     {
-        public static int totalMemory = 0;
-        public const string STConfigFile = @"Config.toml";
+        /// <summary>StarsectorTools配置文件</summary>
+        public const string configFile = @"Config.toml";
+        /// <summary>StarsectorTools配置文件资源链接</summary>
         public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
+        /// <summary>系统总内存</summary>
+        public static int systemTotalMemory { get; private set; } = 0;
+        /// <summary>游戏目录</summary>
         public static string gameDirectory { get; private set; } = null!;
+        /// <summary>游戏exe文件路径</summary>
         public static string gameExeFile { get; private set; } = null!;
+        /// <summary>游戏模组文件夹目录</summary>
         public static string gameModsDirectory { get; private set; } = null!;
+        /// <summary>游戏版本</summary>
         public static string gameVersion { get; private set; } = null!;
+        /// <summary>游戏保存文件夹目录</summary>
         public static string gameSaveDirectory { get; private set; } = null!;
+        /// <summary>游戏已启用模组文件目录</summary>
         public static string enabledModsJsonFile { get; private set; } = null!;
-
+        /// <summary>
+        /// 设置游戏信息
+        /// </summary>
+        /// <param name="directoryName">游戏目录</param>
         public static void SetGameData(string directoryName)
         {
             gameExeFile = $"{directoryName}\\starsector.exe";
@@ -173,19 +192,25 @@ namespace StarsectorTools.Libs
                 {
                     gameVersion = JsonNode.Parse(File.ReadAllText($"{directoryName}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
                 }
-                catch
+                catch (Exception ex)
                 {
-                    STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
+                    STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
                 }
             }
             else
             {
                 gameExeFile = null!;
                 STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
-                MessageBox.Show($"{I18n.GameDirectoryError}\n{I18n.Path}", "", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
             }
         }
-
+        /// <summary>
+        /// 获取系统内存
+        /// </summary>
+        public static void GetSystemMemory()
+        {
+            systemTotalMemory = Management.GetMemoryMetricsNow().Total;
+        }
         /// <summary>
         /// 复制文件夹至目标文件夹
         /// </summary>
@@ -199,9 +224,9 @@ namespace StarsectorTools.Libs
                 FileSystem.CopyDirectory(sourceDirectoryName, $"{destinationDirectoryName}\\{Path.GetFileName(sourceDirectoryName)}", UIOption.OnlyErrorDialogs);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LoadError, STLogLevel.ERROR);
+                STLog.Instance.WriteLine(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -218,9 +243,9 @@ namespace StarsectorTools.Libs
                 FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LoadError, STLogLevel.ERROR);
+                STLog.Instance.WriteLine(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -237,54 +262,59 @@ namespace StarsectorTools.Libs
                 FileSystem.DeleteDirectory(directory, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LoadError, STLogLevel.ERROR);
+                STLog.Instance.WriteLine(I18n.LoadError, ex);
                 return false;
             }
         }
-
-        public static int MemorySizeParse(int size)
+        /// <summary>
+        /// 检查内存信息
+        /// </summary>
+        /// <param name="size">内存大小</param>
+        /// <returns>
+        /// <para>如果<see langword="size"/>小于<see langword="1024"/>则会返回<see langword="1024"/></para>
+        /// <para>如果<see langword="size"/>大于<see langword="systemTotalMemory"/>则会返回<see langword="systemTotalMemory"/></para>
+        /// </returns>
+        public static int CheckMemorySize(int size)
         {
             if (size < 1024)
             {
-                MessageBox.Show($"{I18n.MinMemory} 1024");
+                ShowMessageBox($"{I18n.MinMemory} 1024", MessageBoxImage.Warning);
                 size = 1024;
             }
-            else if (size > totalMemory)
+            else if (size > systemTotalMemory)
             {
-                MessageBox.Show(I18n.MaxMemory);
-                size = totalMemory;
+                ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", MessageBoxImage.Warning);
+                size = systemTotalMemory;
             }
             return size;
         }
-
-        public static bool CheckConfigFile()
-        {
-            return File.Exists(STConfigFile);
-        }
-
+        /// <summary>
+        /// 从资源中读取默认配置文件并创建
+        /// </summary>
         public static void CreateConfigFile()
         {
-            if (File.Exists(STConfigFile))
-                File.Delete(STConfigFile);
+            if (File.Exists(configFile))
+                File.Delete(configFile);
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
             string str = sr.ReadToEnd();
-            File.WriteAllText(STConfigFile, str);
-            sr.Close();
-            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {STConfigFile}");
+            File.WriteAllText(configFile, str);
+            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {configFile}");
         }
-
-        public static bool CheckGameDirectory()
-        {
-            return File.Exists(gameExeFile);
-        }
-
+        /// <summary>
+        /// 检测颜色是否为亮色调
+        /// </summary>
+        /// <param name="color">颜色</param>
+        /// <returns>是为<see langword="true"/>,不是为<see langword="false"/></returns>
         public static bool IsLightColor(Color color)
         {
             return (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255 > 0.5;
         }
-
+        /// <summary>
+        /// 获取游戏目录
+        /// </summary>
+        /// <returns>获取成功为<see langword="true"/>,失败为<see langword="false"/></returns>
         public static bool GetGameDirectory()
         {
             //新建文件选择
@@ -297,8 +327,18 @@ namespace StarsectorTools.Libs
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
-            SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!);
-            return CheckGameDirectory();
+            string newDirectory = Path.GetDirectoryName(openFileDialog.FileName)!;
+            if (File.Exists($"{newDirectory}\\starsector.exe"))
+            {
+                SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!);
+                STLog.Instance.WriteLine($"{I18n.GameDirectorySetupSuccess} {I18n.Path}: {newDirectory}");
+                return true;
+            }
+            else
+            {
+                STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {newDirectory}", STLogLevel.WARN);
+                return false;
+            }
         }
 
         /// <summary>
@@ -339,9 +379,9 @@ namespace StarsectorTools.Libs
                         archive.SaveTo($"{destinationDirectoryName}\\{archiveName}.zip", CompressionType.Deflate);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectoryName}", STLogLevel.WARN);
+                STLog.Instance.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectoryName}", ex);
                 return false;
             }
             return true;
@@ -388,17 +428,60 @@ namespace StarsectorTools.Libs
                     }
                 }
                 else
-                    throw new Exception();
+                    throw new();
             }
-            catch
+            catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", STLogLevel.ERROR);
+                STLog.Instance.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", ex);
                 if (Directory.Exists(destinationDirectoryName))
                     Directory.Delete(destinationDirectoryName);
                 return false;
             }
             return true;
         }
+        /// <summary>
+        /// 弹出消息窗口
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="image">显示的图标</param>
+        /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
+        public static MessageBoxResult ShowMessageBox(string message, MessageBoxImage image = MessageBoxImage.Information)
+        {
+            return ShowMessageBox(message, "", image: image);
+        }
+        /// <summary>
+        /// 弹出消息窗口
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="button">显示的按钮</param>
+        /// <param name="image">显示的图标</param>
+        /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
+        public static MessageBoxResult ShowMessageBox(string message, MessageBoxButton button, MessageBoxImage image)
+        {
+            return ShowMessageBox(message, "", button, image);
+        }
+        /// <summary>
+        /// 弹出消息窗口
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="caption">标头</param>
+        /// <param name="button">显示的按钮</param>
+        /// <param name="image">显示的图片</param>
+        /// <param name="result">默认按钮结果</param>
+        /// <param name="options">窗口设置</param>
+        /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
+        public static MessageBoxResult ShowMessageBox(string message, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None, MessageBoxResult result = MessageBoxResult.None, MessageBoxOptions options = MessageBoxOptions.ServiceNotification)
+        {
+            return MessageBox.Show(message, caption, button, image, result, options);
+        }
+        /// <summary>
+        /// 为主窗口设置模糊效果,用于聚焦弹窗
+        /// </summary>
+        public static void SetMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).SetBlurEffect();
+        /// <summary>
+        /// 取消主窗口的模糊效果
+        /// </summary>
+        public static void RemoveMainWIndowBlurEffect() => ((MainWindow)Application.Current.MainWindow).RemoveBlurEffect();
     }
 
     /// <summary>模组信息</summary>
@@ -438,7 +521,7 @@ namespace StarsectorTools.Libs
         /// <param name="kv">遍历至<see cref="JsonObject"/></param>
         public void SetData(KeyValuePair<string, JsonNode?> kv) => SetData(kv.Key, kv.Value!);
 
-        public void SetData(string key, JsonNode value)
+        private void SetData(string key, JsonNode value)
         {
             switch (key)
             {

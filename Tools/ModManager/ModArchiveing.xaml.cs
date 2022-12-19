@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using StarsectorTools.Libs;
 
 namespace StarsectorTools.Tools.ModManager
 {
@@ -9,7 +10,9 @@ namespace StarsectorTools.Tools.ModManager
     {
         public ModArchiveing()
         {
+            ST.SetMainWindowBlurEffect();
             InitializeComponent();
+            Closed += (s, e) => ST.RemoveMainWIndowBlurEffect();
         }
     }
 }

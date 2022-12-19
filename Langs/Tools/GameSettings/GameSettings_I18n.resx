@@ -235,4 +235,7 @@
   <data name="CustomResolutionGetFailed" xml:space="preserve">
     <value>自定义分辨率获取失败</value>
   </data>
+  <data name="WidthAndHeightCannotBeEmpty" xml:space="preserve">
+    <value>宽与高不能为空</value>
+  </data>
 </root>

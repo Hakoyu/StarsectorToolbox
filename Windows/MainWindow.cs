@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
@@ -19,44 +20,46 @@ namespace StarsectorTools.Windows
         {
             try
             {
-                if (ST.CheckConfigFile())
+                if (File.Exists(ST.configFile))
                 {
-                    using TomlTable toml = TOML.Parse(ST.STConfigFile);
+                    using TomlTable toml = TOML.Parse(ST.configFile);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     STLog.Instance.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
                     ST.SetGameData(toml["Game"]["GamePath"].AsString!);
-                    if (!ST.CheckGameDirectory())
+                    if (!File.Exists(ST.gameExeFile))
                     {
-                        if (!(MessageBox.Show(this, I18n.GameNotFound_SelectAgain, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
+                        if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
                         {
-                            MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                            ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxImage.Error);
                             toml.Close();
                             return false;
                         }
                         toml["Game"]["GamePath"] = ST.gameDirectory;
+                        toml.SaveTo(ST.configFile);
                     }
-                    toml.SaveTo(ST.STConfigFile);
                 }
                 else
                 {
-                    if (!(MessageBox.Show(this, I18n.FirstStart, "", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
+                    if (!(ST.ShowMessageBox(I18n.FirstStart, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
                     {
-                        MessageBox.Show(this, I18n.GameNotFound_SoftwareExit, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                        ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxImage.Error);
                         return false;
                     }
                     ST.CreateConfigFile();
-                    using TomlTable toml = TOML.Parse(ST.STConfigFile);
+                    using TomlTable toml = TOML.Parse(ST.configFile);
                     toml["Game"]["GamePath"] = ST.gameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-                    toml.SaveTo(ST.STConfigFile);
+                    toml.SaveTo(ST.configFile);
                 }
+                ST.GetSystemMemory();
             }
-            catch
+            catch (Exception ex)
             {
-                SetBlurEffect();
-                MessageBox.Show(I18n.ConfigFileError, "", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ST.SetMainWindowBlurEffect();
+                STLog.Instance.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.configFile}", ex);
+                ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.configFile}", MessageBoxImage.Error);
                 ST.CreateConfigFile();
-                RemoveBlurEffect();
+                ST.RemoveMainWIndowBlurEffect();
             }
             return true;
         }
