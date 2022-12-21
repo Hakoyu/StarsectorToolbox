@@ -38,25 +38,25 @@ namespace StarsectorTools.Tools.ModManager
             remindSaveThread = new(RemindSave);
             allEnabledModsId = new();
             allCollectedModsId = new();
-            allModsInfo = new();
+            AllModsInfo = allModsInfo = new();
             allListBoxItems = new();
             allModsShowInfo = new();
             allUserGroups = new();
             allModsTypeGroup = new();
             allModShowInfoGroups = new()
             {
-                {ModGroupType.All,new() },
-                {ModGroupType.Enabled,new() },
-                {ModGroupType.Disabled,new() },
-                {ModGroupType.Libraries,new() },
-                {ModGroupType.MegaMods,new() },
-                {ModGroupType.FactionMods,new() },
-                {ModGroupType.ContentExpansions,new() },
-                {ModGroupType.UtilityMods,new() },
-                {ModGroupType.MiscellaneousMods,new() },
-                {ModGroupType.BeautifyMods,new() },
-                {ModGroupType.UnknownMods,new() },
-                {ModGroupType.Collected,new() },
+                [ModGroupType.All] = new(),
+                [ModGroupType.Enabled] = new(),
+                [ModGroupType.Disabled] = new(),
+                [ModGroupType.Libraries] = new(),
+                [ModGroupType.MegaMods] = new(),
+                [ModGroupType.FactionMods] = new(),
+                [ModGroupType.ContentExpansions] = new(),
+                [ModGroupType.UtilityMods] = new(),
+                [ModGroupType.MiscellaneousMods] = new(),
+                [ModGroupType.BeautifyMods] = new(),
+                [ModGroupType.UnknownMods] = new(),
+                [ModGroupType.Collected] = new(),
             };
             GetAllModsInfo();
             GetAllListBoxItems();
@@ -668,7 +668,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             JsonObject keyValues = new()
             {
-                { strEnabledMods, new JsonArray() }
+                [strEnabledMods] = new JsonArray()
             };
             foreach (var mod in allEnabledModsId)
                 ((JsonArray)keyValues[strEnabledMods]!).Add(mod);
@@ -680,8 +680,8 @@ namespace StarsectorTools.Tools.ModManager
         {
             using TomlTable toml = new()
             {
-                { ModGroupType.Collected, new TomlArray() },
-                { strUserCustomData, new TomlArray() }
+                [ModGroupType.Collected] = new TomlArray(),
+                [strUserCustomData] = new TomlArray(),
             };
             foreach (var info in allModsShowInfo.Values)
             {
@@ -727,9 +727,9 @@ namespace StarsectorTools.Tools.ModManager
             }
         }
 
-        private void ChangeModInfoShow(string id)
+        private void ChangeModInfoDetails(string id)
         {
-            if (isShowModInfo)
+            if (isShowModDetails)
             {
                 if (nowSelectedModId != id)
                     SetModDetails(id);
@@ -746,16 +746,16 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (nowSelectedModId == id)
                 return;
-            Grid_ModInfo.Visibility = Visibility.Visible;
-            isShowModInfo = true;
+            Grid_ModDetails.Visibility = Visibility.Visible;
+            isShowModDetails = true;
             nowSelectedModId = id;
             SetModDetails(id);
         }
 
         private void CloseModDetails()
         {
-            Grid_ModInfo.Visibility = Visibility.Hidden;
-            isShowModInfo = false;
+            Grid_ModDetails.Visibility = Visibility.Hidden;
+            isShowModDetails = false;
             nowSelectedModId = null;
             TextBox_UserDescription.Text = "";
             STLog.Instance.WriteLine($"{I18n.CloseDetails} {nowSelectedModId}", STLogLevel.DEBUG);

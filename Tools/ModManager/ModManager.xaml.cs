@@ -87,7 +87,7 @@ namespace StarsectorTools.Tools.ModManager
         private bool isGroupMenuOpen = false;
 
         /// <summary>模组详情的展开状态</summary>
-        private bool isShowModInfo = false;
+        private bool isShowModDetails = false;
 
         /// <summary>当前选择的模组ID</summary>
         private string? nowSelectedModId = null;
@@ -113,7 +113,12 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="Value"/>: 模组信息</para>
         /// </summary>
         private Dictionary<string, ModInfo> allModsInfo = new();
-
+        /// <summary>
+        /// <para>全部模组信息</para>
+        /// <para><see langword="Key"/>: 模组ID</para>
+        /// <para><see langword="Value"/>: 模组信息</para>
+        /// </summary>
+        public static Dictionary<string, ModInfo> AllModsInfo { get; private set; } = null!;
         /// <summary>
         /// <para>全部分组列表项</para>
         /// <para><see langword="Key"/>: 列表项Tag或ModGroupType</para>
@@ -381,7 +386,7 @@ namespace StarsectorTools.Tools.ModManager
             // 连续点击无效,需要 e.Handled = true
             e.Handled = true;
             if (sender is DataGridRow row)
-                ChangeModInfoShow(row.Tag.ToString()!);
+                ChangeModInfoDetails(row.Tag.ToString()!);
         }
 
         private void DataGridItem_MouseMove(object sender, MouseEventArgs e)

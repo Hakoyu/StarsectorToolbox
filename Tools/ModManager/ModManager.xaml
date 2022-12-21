@@ -789,7 +789,7 @@
           </Button>
         </Grid>
         <Grid
-          x:Name="Grid_ModInfo"
+          x:Name="Grid_ModDetails"
           Width="360"
           HorizontalAlignment="Right"
           Visibility="Hidden">
