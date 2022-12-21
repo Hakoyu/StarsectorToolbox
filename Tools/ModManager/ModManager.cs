@@ -66,6 +66,7 @@ namespace StarsectorTools.Tools.ModManager
             CheckUserData();
             RefreshModsContextMenu();
             RefreshCountOfListBoxItems();
+            ResetRemindSaveThread();
             GC.Collect();
         }
 
