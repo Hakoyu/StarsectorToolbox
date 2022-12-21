@@ -146,6 +146,8 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (var modId in enabledModsJsonArray)
                 {
                     var id = modId!.GetValue<string>();
+                    if (string.IsNullOrEmpty(id))
+                        continue;
                     if (allModsInfo.ContainsKey(id))
                     {
                         STLog.Instance.WriteLine($"{I18n.EnableMod} {id}", STLogLevel.DEBUG);
@@ -197,6 +199,8 @@ namespace StarsectorTools.Tools.ModManager
                         AddUserGroup(kv.Value[strIcon]!, group);
                         foreach (string id in kv.Value[strMods].AsTomlArray)
                         {
+                            if (string.IsNullOrEmpty(id))
+                                continue;
                             if (allModsShowInfo.ContainsKey(id))
                             {
                                 if (allUserGroups[group].Add(id))
@@ -235,6 +239,8 @@ namespace StarsectorTools.Tools.ModManager
                 TomlTable toml = TOML.Parse(filePath);
                 foreach (string id in toml[ModGroupType.Collected].AsTomlArray)
                 {
+                    if (string.IsNullOrEmpty(id))
+                        continue;
                     if (allModsShowInfo.ContainsKey(id))
                     {
                         ChangeModCollected(id, true);
@@ -249,6 +255,8 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (var dict in toml[strUserCustomData].AsTomlArray)
                 {
                     var id = dict[strId].AsString;
+                    if (string.IsNullOrEmpty(id))
+                        continue;
                     if (allModsShowInfo.ContainsKey(id))
                     {
                         var info = allModsShowInfo[id];

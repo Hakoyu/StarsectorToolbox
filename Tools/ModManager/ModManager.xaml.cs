@@ -220,40 +220,6 @@ namespace StarsectorTools.Tools.ModManager
             [ObservableProperty]
             private ContextMenu contextMenu = null!;
         }
-
-        //private ViewModel viewModel;
-        //public partial class ViewModel : ObservableObject
-        //{
-        //    [ObservableProperty]
-        //    ICollectionView? collectionView;
-        //    [ObservableProperty]
-        //    string? filterText;
-        //    public string filterType = strName;
-        //    partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
-        //    public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
-        //    {
-        //        ChangeCollectionView(modShowInfos);
-        //    }
-        //    public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
-        //    {
-        //        CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
-        //        CollectionView.Filter = (o) =>
-        //        {
-        //            if (string.IsNullOrEmpty(filterText))
-        //                return true;
-        //            if (o is not ModShowInfo showInfo)
-        //                return true;
-        //            return filterType switch
-        //            {
-        //                strName => showInfo.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                strId => showInfo.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                strAuthor => showInfo.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                strUserDescription => showInfo.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
-        //                _ => throw new NotImplementedException()
-        //            };
-        //        };
-        //    }
-        //}
         public ModManager()
         {
             InitializeComponent();
