@@ -187,7 +187,7 @@ namespace StarsectorTools.Tools.ModManager
             try
             {
                 string err = null!;
-                using TomlTable toml = TOML.Parse(filePath);
+                TomlTable toml = TOML.Parse(filePath);
                 foreach (var kv in toml)
                 {
                     if (kv.Key == ModGroupType.Collected || kv.Key == strUserCustomData)
@@ -233,7 +233,7 @@ namespace StarsectorTools.Tools.ModManager
             string err = null!;
             try
             {
-                using TomlTable toml = TOML.Parse(filePath);
+                TomlTable toml = TOML.Parse(filePath);
                 foreach (string id in toml[ModGroupType.Collected].AsTomlArray)
                 {
                     if (allModsShowInfo.ContainsKey(id))
@@ -290,7 +290,7 @@ namespace StarsectorTools.Tools.ModManager
                 CreateModGroupFile();
             try
             {
-                using TomlTable toml = TOML.Parse(modGroupFile);
+                TomlTable toml = TOML.Parse(modGroupFile);
                 foreach (var kv in toml)
                     foreach (string id in kv.Value.AsTomlArray)
                         allModsTypeGroup.Add(id, kv.Key);
@@ -678,7 +678,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SaveUserData(string filePath)
         {
-            using TomlTable toml = new()
+            TomlTable toml = new()
             {
                 [ModGroupType.Collected] = new TomlArray(),
                 [strUserCustomData] = new TomlArray(),

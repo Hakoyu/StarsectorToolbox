@@ -449,51 +449,8 @@ namespace HKW.TomlParse
         }
     }
 
-    public class TomlTable : TomlNode, IDisposable, IEnumerable, IEnumerable<KeyValuePair<string, TomlNode>>
+    public class TomlTable : TomlNode, IEnumerable, IEnumerable<KeyValuePair<string, TomlNode>>
     {
-        private bool disposed;
-
-        /// <summary>
-        /// 为了防止忘记显式的调用Dispose方法
-        /// </summary>
-        ~TomlTable()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>执行与释放或重置非托管资源关联的应用程序定义的任务。</summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// 非必需的，只是为了更符合其他语言的规范，如C++、java
-        /// </summary>
-        public void Close()
-        {
-            Dispose();
-        }
-
-        /// <summary>
-        /// 非密封类可重写的Dispose方法，方便子类继承时可重写
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-            //清理托管资源
-            if (disposing)
-            {
-            }
-            //清理非托管资源
-            children?.Clear();
-            children = null!;
-            disposed = true;
-        }
-
         public new IEnumerator<KeyValuePair<string, TomlNode>> GetEnumerator() => children.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

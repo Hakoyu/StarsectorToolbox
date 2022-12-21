@@ -49,7 +49,7 @@ namespace StarsectorTools.Tools.GameSettings
                     break;
                 ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxImage.Warning);
             }
-            using var toml = TOML.Parse(ST.configFile);
+            var toml = TOML.Parse(ST.configFile);
             toml["Game"]["GamePath"] = ST.gameDirectory;
             toml.SaveTo(ST.configFile);
             Label_GamePath.Content = ST.gameDirectory;

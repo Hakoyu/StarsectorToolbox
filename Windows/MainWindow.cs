@@ -22,7 +22,7 @@ namespace StarsectorTools.Windows
             {
                 if (File.Exists(ST.configFile))
                 {
-                    using TomlTable toml = TOML.Parse(ST.configFile);
+                    TomlTable toml = TOML.Parse(ST.configFile);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     STLog.Instance.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
                     ST.SetGameData(toml["Game"]["GamePath"].AsString!);
@@ -31,7 +31,6 @@ namespace StarsectorTools.Windows
                         if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
                         {
                             ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxImage.Error);
-                            toml.Close();
                             return false;
                         }
                         toml["Game"]["GamePath"] = ST.gameDirectory;
@@ -46,7 +45,7 @@ namespace StarsectorTools.Windows
                         return false;
                     }
                     ST.CreateConfigFile();
-                    using TomlTable toml = TOML.Parse(ST.configFile);
+                    TomlTable toml = TOML.Parse(ST.configFile);
                     toml["Game"]["GamePath"] = ST.gameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.configFile);

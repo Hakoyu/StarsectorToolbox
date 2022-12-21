@@ -76,7 +76,7 @@ namespace StarsectorTools.Pages
         {
             try
             {
-                using TomlTable toml = TOML.Parse(ST.configFile);
+                TomlTable toml = TOML.Parse(ST.configFile);
                 toml["Extras"]["Lang"] = cultureInfo.Name;
                 toml.SaveTo(ST.configFile);
             }
@@ -110,7 +110,7 @@ namespace StarsectorTools.Pages
             try
             {
                 STLog.Instance.LogLevel = STLog.Str2STLogLevel(level);
-                using TomlTable toml = TOML.Parse(ST.configFile);
+                TomlTable toml = TOML.Parse(ST.configFile);
                 toml["Extras"]["LogLevel"] = level;
                 toml.SaveTo(ST.configFile);
             }
