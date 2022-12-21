@@ -155,7 +155,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     else
                     {
-                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
+                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
                         err ??= $"{I18n.NotFoundMod}:\n";
                         err += $"{id}\n";
                     }
@@ -208,7 +208,7 @@ namespace StarsectorTools.Tools.ModManager
                             }
                             else
                             {
-                                STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
+                                STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
                                 err ??= $"{I18n.NotFoundMod}\n";
                                 err += $"{id}\n";
                             }
@@ -247,7 +247,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     else
                     {
-                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
+                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
                         err ??= $"{I18n.NotFoundMod}\n";
                         err += $"{id}\n";
                     }
@@ -264,7 +264,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     else
                     {
-                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}");
+                        STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
                         err ??= $"{I18n.NotFoundMod}\n";
                         err += $"{id}\n";
                     }
@@ -456,6 +456,7 @@ namespace StarsectorTools.Tools.ModManager
                     string path = allModsInfo[showInfo.Id].Path;
                     if (ST.ShowMessageBox($"{I18n.ConfirmDeleteMod}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
+                        STLog.Instance.WriteLine($"{I18n.ConfirmDeleteMod}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
                         RemoveMod(showInfo.Id);
                         RefreshDataGrid();
                         CloseModDetails();
@@ -814,12 +815,9 @@ namespace StarsectorTools.Tools.ModManager
                     if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.SameModAlreadyExists, originalModInfo.Version, newModInfo.Version)}", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         ST.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
-                        new Task(() =>
-                        {
-                            string tempDirectory = $"{backupModsDirectory}\\Temp";
-                            ST.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
-                            Directory.Delete(tempDirectory, true);
-                        }).Start();
+                        string tempDirectory = $"{backupModsDirectory}\\Temp";
+                        ST.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
+                        Directory.Delete(tempDirectory, true);
                         Directory.Delete(originalModInfo.Path, true);
                         ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsDirectory);
                         Dispatcher.BeginInvoke(() =>

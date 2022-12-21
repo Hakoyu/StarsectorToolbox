@@ -580,7 +580,7 @@ namespace StarsectorTools.Tools.ModManager
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
                 STLog.Instance.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
-                Dispatcher.BeginInvoke(() => ST.SetMainWindowBlurEffect());
+                ST.SetMainWindowBlurEffect();
                 new Task(() =>
                 {
                     int total = array.Length;
@@ -694,10 +694,10 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 foreach (var info in allUserGroups[group])
                     ChangeModEnabled(info, false);
-                int needSize = new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(minSize, maxSize + 1);
+                int needSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
                 HashSet<int> set = new();
                 while (set.Count < needSize)
-                    set.Add(new Random(BitConverter.ToInt32(Guid.NewGuid().ToByteArray())).Next(0, count));
+                    set.Add(new Random(Guid.NewGuid().GetHashCode()).Next(0, count));
                 foreach (int i in set)
                     ChangeModEnabled(allUserGroups[group].ElementAt(i));
                 CheckEnabledModsDependencies();
