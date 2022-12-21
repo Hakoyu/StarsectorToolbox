@@ -118,7 +118,7 @@ namespace StarsectorTools.Windows
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重载当前菜单
             MenuItem menuItem = new();
-            menuItem.Header = I18n.Refresh;
+            menuItem.Header = I18n.RefreshPage;
             menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
@@ -127,6 +127,7 @@ namespace StarsectorTools.Windows
                 menuList[tag] = new((Page)type.Assembly.CreateInstance(type.FullName!)!);
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
                     Frame_MainFrame.Content = menuList[tag].Value;
+                STLog.Instance.WriteLine($"{I18n.RefreshPage}: {tag}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;

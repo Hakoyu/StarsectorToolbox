@@ -36,12 +36,12 @@ namespace StarsectorTools.Tools.ModManager
         private void InitializeData()
         {
             remindSaveThread = new(RemindSave);
-            allEnabledModsId = new();
-            allCollectedModsId = new();
+            AllEnabledModsId = allEnabledModsId = new();
+            AllCollectedModsId = allCollectedModsId = new();
             AllModsInfo = allModsInfo = new();
             allListBoxItems = new();
             allModsShowInfo = new();
-            allUserGroups = new();
+            AllUserGroups = allUserGroups = new();
             allModsTypeGroup = new();
             allModShowInfoGroups = new()
             {
@@ -66,7 +66,6 @@ namespace StarsectorTools.Tools.ModManager
             CheckUserData();
             RefreshModsContextMenu();
             RefreshCountOfListBoxItems();
-            ResetRemindSaveThread();
             GC.Collect();
         }
 
@@ -179,7 +178,7 @@ namespace StarsectorTools.Tools.ModManager
             if (File.Exists(userGroupFile))
                 GetUserGroup(userGroupFile);
             else
-                SaveAllUserGroup(userGroupFile);
+                SaveUserGroup(userGroupFile);
         }
 
         private void GetUserGroup(string filePath)
@@ -661,7 +660,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             SaveEnabledMods(ST.enabledModsJsonFile);
             SaveUserData(userDataFile);
-            SaveAllUserGroup(userGroupFile);
+            SaveUserGroup(userGroupFile);
         }
 
         private void SaveEnabledMods(string filePath)
@@ -700,21 +699,21 @@ namespace StarsectorTools.Tools.ModManager
             STLog.Instance.WriteLine($"{I18n.SaveUserDataSuccess} {I18n.Path}: {filePath}");
         }
 
-        private void SaveAllUserGroup(string filePath, string tag = strAll)
+        private void SaveUserGroup(string filePath, string group = strAll)
         {
             TomlTable toml = new();
-            if (tag == strAll)
+            if (group == strAll)
             {
-                foreach (var kv in allUserGroups)
-                    SaveUserGroup(kv.Key);
+                foreach (var groupData in allUserGroups)
+                    Save(groupData.Key);
             }
             else
             {
-                SaveUserGroup(tag);
+                Save(group);
             }
             toml.SaveTo(filePath);
             STLog.Instance.WriteLine($"{I18n.SaveUserGroupSuccess} {I18n.Path}: {filePath}");
-            void SaveUserGroup(string name)
+            void Save(string name)
             {
                 var mods = allUserGroups[name];
                 toml.Add(name, new TomlTable()

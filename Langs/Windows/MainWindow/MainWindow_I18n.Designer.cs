@@ -161,11 +161,11 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 刷新 的本地化字符串。
+        ///   查找类似 刷新页面 的本地化字符串。
         /// </summary>
-        public static string Refresh {
+        public static string RefreshPage {
             get {
-                return ResourceManager.GetString("Refresh", resourceCulture);
+                return ResourceManager.GetString("RefreshPage", resourceCulture);
             }
         }
         

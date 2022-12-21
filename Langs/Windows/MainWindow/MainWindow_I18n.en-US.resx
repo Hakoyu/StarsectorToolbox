@@ -137,10 +137,10 @@ Please select the game launcher</value>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Refresh</value>
-  </data>
   <data name="Path" xml:space="preserve">
     <value>Path</value>
+  </data>
+  <data name="RefreshPage" xml:space="preserve">
+    <value>Refresh page</value>
   </data>
 </root>

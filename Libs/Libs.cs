@@ -57,7 +57,7 @@ namespace StarsectorTools.Libs
         {
             get => lazy.Value;
         }
-
+        private STLog() { }
         /// <summary>
         /// 字符串转换成日志等级
         /// </summary>
@@ -133,7 +133,7 @@ namespace StarsectorTools.Libs
         public void WriteLine(string message, Exception ex, params object[] keys)
         {
             sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {ParseKey(message, keys)}");
-            sw.WriteLine($"   at {ex.StackTrace?.Split('\\').Last()}\n{string.Join("\n", new StackTrace(2).ToString().Split("\n").Where(s => s.Contains(nameof(StarsectorTools))))}", STLogLevel.ERROR);
+            sw.WriteLine($"   at {ex.StackTrace?.Split('\\').Last()}\n{string.Join("\n", new StackTrace(2).ToString().Split("\n").Where(s => s.Contains(nameof(StarsectorTools))))}");
             sw.Flush();
         }
 

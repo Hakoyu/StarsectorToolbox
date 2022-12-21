@@ -103,9 +103,13 @@ namespace StarsectorTools.Tools.ModManager
 
         /// <summary>已启用的模组ID</summary>
         private HashSet<string> allEnabledModsId = new();
+        /// <summary>已启用的模组ID</summary>
+        public static HashSet<string> AllEnabledModsId { get; private set; } = null!;
 
         /// <summary>已收藏的模组ID</summary>
         private HashSet<string> allCollectedModsId = new();
+        /// <summary>已收藏的模组ID</summary>
+        public static HashSet<string> AllCollectedModsId { get; private set; } = null!;
 
         /// <summary>
         /// <para>全部模组信息</para>
@@ -146,6 +150,12 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
         private Dictionary<string, HashSet<string>> allUserGroups = new();
+        /// <summary>
+        /// <para>全部用户分组</para>
+        /// <para><see langword="Key"/>: 分组名称</para>
+        /// <para><see langword="Value"/>: 包含的模组</para>
+        /// </summary>
+        public static Dictionary<string, HashSet<string>> AllUserGroups { get; private set; } = null!;
 
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
@@ -776,7 +786,7 @@ namespace StarsectorTools.Tools.ModManager
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
-                SaveAllUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
+                SaveUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
             }
         }
     }
