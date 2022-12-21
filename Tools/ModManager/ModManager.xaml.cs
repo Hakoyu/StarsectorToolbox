@@ -725,7 +725,11 @@ namespace StarsectorTools.Tools.ModManager
                 RefreshCountOfListBoxItems();
             }
         }
-
+        private void ListBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // 禁止右键项时会选中项
+            e.Handled = true;
+        }
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (!e.Handled)
