@@ -742,7 +742,7 @@ namespace StarsectorTools.Tools.ModManager
             }
         }
 
-        public void ShowModDetails(string id)
+        private void ShowModDetails(string id)
         {
             if (nowSelectedModId == id)
                 return;
@@ -752,7 +752,7 @@ namespace StarsectorTools.Tools.ModManager
             SetModDetails(id);
         }
 
-        public void CloseModDetails()
+        private void CloseModDetails()
         {
             Grid_ModInfo.Visibility = Visibility.Hidden;
             isShowModInfo = false;
@@ -992,7 +992,6 @@ namespace StarsectorTools.Tools.ModManager
                     ComboBox_ExportUserGroup.Items.RemoveAt(i);
                 }
             }
-            GC.Collect();
         }
 
         private void ReplaceUserGroupName(ListBoxItem listBoxItem)
@@ -1036,7 +1035,6 @@ namespace StarsectorTools.Tools.ModManager
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
-            GC.Collect();
         }
 
         private void SetListBoxItemData(ListBoxItem item, string name)

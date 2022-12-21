@@ -349,10 +349,8 @@ namespace StarsectorTools.Tools.ModManager
                         Expander_RandomEnable.Visibility = Visibility.Collapsed;
                     nowGroupName = item.Tag.ToString()!;
                     RefreshDataGrid();
-                    //ChangeShowGroup(nowGroupName);
                     ClearDataGridSelected();
                     CloseModDetails();
-                    GC.Collect();
                 }
             }
         }
