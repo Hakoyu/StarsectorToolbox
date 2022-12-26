@@ -217,8 +217,8 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     else
                     {
-                        STLog.Instance.WriteLine($"{I18n.AlreadyExistUserGroup} {group}");
-                        err ??= $"{I18n.AlreadyExistUserGroup} {group}";
+                        STLog.Instance.WriteLine($"{I18n.DuplicateUserGroupName} {group}");
+                        err ??= $"{I18n.DuplicateUserGroupName} {group}";
                     }
                 }
                 if (err is not null)
@@ -290,6 +290,7 @@ namespace StarsectorTools.Tools.ModManager
                     foreach (ListBoxItem item1 in listBox.Items)
                         allListBoxItems.Add(item1.Tag.ToString()!, item1);
             }
+            STLog.Instance.WriteLine(I18n.ListBoxItemsRetrievalCompleted);
         }
 
         private void GetAllGroup()
@@ -302,6 +303,7 @@ namespace StarsectorTools.Tools.ModManager
                 foreach (var kv in toml)
                     foreach (string id in kv.Value.AsTomlArray)
                         allModsTypeGroup.Add(id, kv.Key);
+                STLog.Instance.WriteLine(I18n.TypeGroupRetrievalCompleted);
             }
             catch (Exception ex)
             {
@@ -318,8 +320,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void InitializeDataGridItemsSource()
         {
-            foreach (var info in allModsInfo.Values)
-                AddModShowInfo(info);
+            foreach (var modInfo in allModsInfo.Values)
+                AddModShowInfo(modInfo);
             STLog.Instance.WriteLine($"{I18n.ModShowInfoSetSuccess} {I18n.Size}: {allModsInfo.Count}");
             ListBox_ModsGroupMenu.SelectedIndex = 0;
             CheckEnabledModsDependencies();
@@ -403,16 +405,16 @@ namespace StarsectorTools.Tools.ModManager
             {
                 int size = allModShowInfoGroups[item.Tag.ToString()!].Count;
                 item.Content = $"{item.ToolTip} ({size})";
-                STLog.Instance.WriteLine($"{I18n.GroupModCountRefresh} {item.Content}", STLogLevel.DEBUG);
+                STLog.Instance.WriteLine($"{I18n.ModCountInGroupRefresh} {item.Content}", STLogLevel.DEBUG);
             }
-            STLog.Instance.WriteLine(I18n.GroupModCountRefreshComplete);
+            STLog.Instance.WriteLine(I18n.ModCountInGroupRefreshCompleted);
         }
 
         private void RefreshModsContextMenu()
         {
             foreach (var showInfo in allModsShowInfo.Values)
                 showInfo.ContextMenu = CreateContextMenu(showInfo);
-            STLog.Instance.WriteLine($"{I18n.ContextMenuRefreshComplete} {I18n.Size}: {allModsShowInfo.Values.Count}");
+            STLog.Instance.WriteLine($"{I18n.ContextMenuRefreshCompleted} {I18n.Size}: {allModsShowInfo.Values.Count}");
         }
 
         private ContextMenu CreateContextMenu(ModShowInfo showInfo)
@@ -435,7 +437,7 @@ namespace StarsectorTools.Tools.ModManager
                 STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
                 // 收藏或取消收藏
                 menuItem = new();
-                menuItem.Header = showInfo.IsCollected ? I18n.CancelCollectionSelectedMods : I18n.CollectionSelectedMods;
+                menuItem.Header = showInfo.IsCollected ? I18n.UncollectSelectedMods : I18n.CollectSelectedMods;
                 menuItem.Click += (s, e) => ChangeSelectedModsCollected();
                 contextMenu.Items.Add(menuItem);
                 STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -455,9 +457,9 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Click += (s, e) =>
                 {
                     string path = allModsInfo[showInfo.Id].Path;
-                    if (ST.ShowMessageBox($"{I18n.ConfirmDeleteMod}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    if (ST.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                     {
-                        STLog.Instance.WriteLine($"{I18n.ConfirmDeleteMod}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
+                        STLog.Instance.WriteLine($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
                         RemoveMod(showInfo.Id);
                         RefreshDataGrid();
                         CloseModDetails();
@@ -551,15 +553,20 @@ namespace StarsectorTools.Tools.ModManager
             if (isInGroup)
             {
                 if (allUserGroups[group].Add(id))
+                {
                     allModShowInfoGroups[group].Add(allModsShowInfo[id]);
+                    STLog.Instance.WriteLine($"{id} {I18n.AddModToUserGroup} {group}", STLogLevel.DEBUG);
+                }
             }
             else
             {
                 if (allUserGroups[group].Remove(id))
+                {
                     allModShowInfoGroups[group].Remove(allModsShowInfo[id]);
+                    STLog.Instance.WriteLine($"{id} {I18n.RemoveFromUserGroup} {group}", STLogLevel.DEBUG);
+                }
             }
             showInfo.ContextMenu = CreateContextMenu(showInfo);
-            STLog.Instance.WriteLine(I18n.ChangeModUserGroup, STLogLevel.DEBUG, id, group, isInGroup);
         }
 
         private void ChangeSelectedModsEnabled(bool? enabled = null)
@@ -610,7 +617,7 @@ namespace StarsectorTools.Tools.ModManager
                     showInfo.MissDependencies = false;
                 }
             }
-            STLog.Instance.WriteLine($"{id} {I18n.ModEnabledStatus} {showInfo.IsEnabled}", STLogLevel.DEBUG);
+            STLog.Instance.WriteLine($"{id} {I18n.ChangeEnabledStateTo} {showInfo.IsEnabled}", STLogLevel.DEBUG);
         }
 
         private void CheckEnabledModsDependencies()
@@ -663,7 +670,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (allCollectedModsId.Remove(showInfo.Id))
                     allModShowInfoGroups[ModGroupType.Collected].Remove(showInfo);
             }
-            STLog.Instance.WriteLine($"{id} {I18n.ModCollectedStatus} {showInfo.IsCollected}", STLogLevel.DEBUG);
+            STLog.Instance.WriteLine($"{id} {I18n.ChangeCollectStateTo} {showInfo.IsCollected}", STLogLevel.DEBUG);
         }
 
         private void SaveAllData()
@@ -682,7 +689,7 @@ namespace StarsectorTools.Tools.ModManager
             foreach (var mod in allEnabledModsId)
                 ((JsonArray)keyValues[strEnabledMods]!).Add(mod);
             File.WriteAllText(filePath, keyValues.ToJsonString(new() { WriteIndented = true }));
-            STLog.Instance.WriteLine($"{I18n.SaveEnabledListSuccess} {I18n.Path}: {filePath}");
+            STLog.Instance.WriteLine($"{I18n.EnabledListSaveCompleted} {I18n.Path}: {filePath}");
         }
 
         private void SaveUserData(string filePath)
@@ -722,7 +729,7 @@ namespace StarsectorTools.Tools.ModManager
                 Save(group);
             }
             toml.SaveTo(filePath);
-            STLog.Instance.WriteLine($"{I18n.SaveUserGroupSuccess} {I18n.Path}: {filePath}");
+            STLog.Instance.WriteLine($"{I18n.UserGroupSaveCompleted} {I18n.Path}: {filePath}");
             void Save(string name)
             {
                 var mods = allUserGroups[name];
@@ -813,7 +820,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];
-                    if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.SameModAlreadyExists, originalModInfo.Version, newModInfo.Version)}", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     {
                         ST.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
                         string tempDirectory = $"{backupModsDirectory}\\Temp";
@@ -945,10 +952,10 @@ namespace StarsectorTools.Tools.ModManager
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重命名分组
             MenuItem menuItem = new();
-            menuItem.Header = I18n.ReplaceUserGroupName;
+            menuItem.Header = I18n.ReplaceUserGroup;
             menuItem.Click += (s, e) =>
             {
-                ReplaceUserGroupName((ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)s)));
+                ReplaceUserGroup((ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)s)));
             };
             contextMenu.Items.Add(menuItem);
             STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -975,7 +982,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void RemoveUserGroup(ListBoxItem listBoxItem)
         {
-            if (ST.ShowMessageBox(I18n.ConfirmDeletionUserGroup, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            if (ST.ShowMessageBox(I18n.ConfirmUserGroupDeletion, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
                 return;
             var name = listBoxItem.ToolTip.ToString()!;
             if (nowSelectedListBoxItem == listBoxItem)
@@ -1000,7 +1007,7 @@ namespace StarsectorTools.Tools.ModManager
             }
         }
 
-        private void ReplaceUserGroupName(ListBoxItem listBoxItem)
+        private void ReplaceUserGroup(ListBoxItem listBoxItem)
         {
             string icon = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(listBoxItem)).Text;
             string name = listBoxItem.ToolTip.ToString()!;
@@ -1037,7 +1044,7 @@ namespace StarsectorTools.Tools.ModManager
                     StartRemindSaveThread();
                 }
                 else
-                    ST.ShowMessageBox(I18n.AddUserNamingFailed);
+                    ST.ShowMessageBox(I18n.UserGroupNamingFailed);
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();

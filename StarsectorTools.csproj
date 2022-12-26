@@ -16,6 +16,10 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn>0068</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Resource Include="Resources\ModGroup.toml" />
     <Resource Include="Resources\Config.toml" />

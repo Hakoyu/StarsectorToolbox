@@ -329,7 +329,7 @@
                     Background="{x:Null}"
                     FontSize="20"
                     Text="🌟"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModCollectionStatus}" />
+                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModCollectState}" />
                 </DataGridTemplateColumn.Header>
                 <DataGridTemplateColumn.CellTemplate>
                   <DataTemplate>
@@ -346,9 +346,9 @@
                 <DataGridTemplateColumn.Header>
                   <Label
                     Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.EnabledStatus}"
+                    Content="{x:Static I18n:ModManager_I18n.EnabledState}"
                     Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModEnableStatus}" />
+                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModEnableState}" />
                 </DataGridTemplateColumn.Header>
                 <DataGridTemplateColumn.CellTemplate>
                   <DataTemplate>
@@ -656,7 +656,7 @@
                     Margin="0,0,0,5"
                     VerticalAlignment="Bottom"
                     Click="Button_ImportEnabledListFromSave_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportEnabledModsListFromSave}"
+                    Content="{x:Static I18n:ModManager_I18n.ImportFromSave}"
                     Style="{StaticResource Button_Style}" />
                   <Button
                     x:Name="Button_ImportEnabledList"
@@ -664,7 +664,7 @@
                     Margin="0,0,0,5"
                     VerticalAlignment="Bottom"
                     Click="Button_ImportEnabledList_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportEnabledModsListFromFile}"
+                    Content="{x:Static I18n:ModManager_I18n.ImportFromFile}"
                     Style="{StaticResource Button_Style}" />
                   <Button
                     x:Name="Button_ExportList"
@@ -672,7 +672,7 @@
                     Margin="0,0,0,5"
                     VerticalAlignment="Bottom"
                     Click="Button_ExportEnabledList_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ExportEnabledModsListToFile}"
+                    Content="{x:Static I18n:ModManager_I18n.ExportToFile}"
                     Style="{StaticResource Button_Style}" />
                 </StackPanel>
               </Expander>

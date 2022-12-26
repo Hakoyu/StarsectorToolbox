@@ -129,7 +129,7 @@
     <value>启用模组</value>
   </data>
   <data name="NotFoundMod" xml:space="preserve">
-    <value>未在游戏的模组文件夹中找到模组</value>
+    <value>未找到模组</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>数量</value>
@@ -149,7 +149,7 @@
   <data name="LoadUserGroup" xml:space="preserve">
     <value>加载用户分组</value>
   </data>
-  <data name="AlreadyExistUserGroup" xml:space="preserve">
+  <data name="DuplicateUserGroupName" xml:space="preserve">
     <value>已存在相同名称的用户分组</value>
   </data>
   <data name="UserDataLoadError" xml:space="preserve">
@@ -167,13 +167,13 @@
   <data name="ClassifyTo" xml:space="preserve">
     <value>分类至</value>
   </data>
-  <data name="GroupModCountRefresh" xml:space="preserve">
-    <value>分组数量刷新完成</value>
+  <data name="ModCountInGroupRefresh" xml:space="preserve">
+    <value>分组包含的模组数量</value>
   </data>
-  <data name="GroupModCountRefreshComplete" xml:space="preserve">
+  <data name="ModCountInGroupRefreshCompleted" xml:space="preserve">
     <value>分组显示数量刷新完成</value>
   </data>
-  <data name="ContextMenuRefreshComplete" xml:space="preserve">
+  <data name="ContextMenuRefreshCompleted" xml:space="preserve">
     <value>右键菜单刷新完成</value>
   </data>
   <data name="AddContextMenu" xml:space="preserve">
@@ -188,16 +188,16 @@
   <data name="AddMenuItem" xml:space="preserve">
     <value>添加菜单项</value>
   </data>
-  <data name="CollectionSelectedMods" xml:space="preserve">
+  <data name="CollectSelectedMods" xml:space="preserve">
     <value>收藏所选模组</value>
   </data>
-  <data name="CancelCollectionSelectedMods" xml:space="preserve">
+  <data name="UncollectSelectedMods" xml:space="preserve">
     <value>取消收藏所选模组</value>
   </data>
   <data name="DeleteMod" xml:space="preserve">
     <value>删除模组</value>
   </data>
-  <data name="ConfirmDeleteMod" xml:space="preserve">
+  <data name="ConfirmModDeletion" xml:space="preserve">
     <value>确认删除模组</value>
   </data>
   <data name="AddModToUserGroup" xml:space="preserve">
@@ -206,26 +206,26 @@
   <data name="RemoveFromUserGroup" xml:space="preserve">
     <value>从用户分组中删除</value>
   </data>
-  <data name="ChangeModUserGroup" xml:space="preserve">
-    <value>模组 {0} 在用户分组 {1} 的状态修改为 {2}</value>
+  <data name="AddToUserGroup" xml:space="preserve">
+    <value>添加至用户分组</value>
   </data>
   <data name="DisableAllEnabledMods" xml:space="preserve">
     <value>禁用所有已启用模组</value>
   </data>
-  <data name="ModEnabledStatus" xml:space="preserve">
+  <data name="ChangeEnabledStateTo" xml:space="preserve">
     <value>启用状态修改为</value>
   </data>
   <data name="NotEnableDependencies" xml:space="preserve">
     <value>未启用前置</value>
   </data>
-  <data name="ModCollectedStatus" xml:space="preserve">
+  <data name="ChangeCollectStateTo" xml:space="preserve">
     <value>收藏状态修改为</value>
   </data>
-  <data name="SaveEnabledListSuccess" xml:space="preserve">
-    <value>保存启用列表成功</value>
+  <data name="EnabledListSaveCompleted" xml:space="preserve">
+    <value>启用列表保存完毕</value>
   </data>
-  <data name="SaveUserGroupSuccess" xml:space="preserve">
-    <value>保存用户分组成功</value>
+  <data name="UserGroupSaveCompleted" xml:space="preserve">
+    <value>用户分组保存完毕</value>
   </data>
   <data name="CloseDetails" xml:space="preserve">
     <value>关闭详情</value>
@@ -242,7 +242,7 @@
   <data name="UnzipError" xml:space="preserve">
     <value>解压错误</value>
   </data>
-  <data name="SameModAlreadyExists" xml:space="preserve">
+  <data name="DuplicateModExists" xml:space="preserve">
     <value>已存在相同模组 是否覆盖?
 原始版本: {0}
 新增版本: {1}</value>
@@ -259,13 +259,13 @@
   <data name="RemoveMod" xml:space="preserve">
     <value>删除模组</value>
   </data>
-  <data name="ReplaceUserGroupName" xml:space="preserve">
+  <data name="ReplaceUserGroup" xml:space="preserve">
     <value>重命名用户分组</value>
   </data>
   <data name="AddUserGroup" xml:space="preserve">
     <value>添加用户分组</value>
   </data>
-  <data name="AddUserNamingFailed" xml:space="preserve">
+  <data name="UserGroupNamingFailed" xml:space="preserve">
     <value>命名失败,名字为空或者已存在相同名字的分组</value>
   </data>
   <data name="UserGroupCannotNamed" xml:space="preserve">
@@ -280,17 +280,17 @@
   <data name="InitialisationComplete" xml:space="preserve">
     <value>初始化完成</value>
   </data>
-  <data name="ImportEnabledModsListFromFile" xml:space="preserve">
+  <data name="ImportFromFile" xml:space="preserve">
     <value>从文件导入</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>文件</value>
   </data>
-  <data name="ExportEnabledModsListToFile" xml:space="preserve">
+  <data name="ExportToFile" xml:space="preserve">
     <value>导出至文件</value>
   </data>
   <data name="NotFoundDependencies" xml:space="preserve">
-    <value>未在游戏的模组文件夹中找到前置模组</value>
+    <value>未找到前置模组</value>
   </data>
   <data name="ImportUserData" xml:space="preserve">
     <value>导入用户数据</value>
@@ -301,7 +301,7 @@
   <data name="NotFoundFile" xml:space="preserve">
     <value>未找到文件</value>
   </data>
-  <data name="ImportEnabledModsListFromSave" xml:space="preserve">
+  <data name="ImportFromSave" xml:space="preserve">
     <value>从游戏存档导入</value>
   </data>
   <data name="FileError" xml:space="preserve">
@@ -313,8 +313,8 @@
   <data name="ConfirmDragFiles" xml:space="preserve">
     <value>确认倒拖入文件</value>
   </data>
-  <data name="FolderNotExist" xml:space="preserve">
-    <value>文件夹不存在</value>
+  <data name="DirectoryNotExist" xml:space="preserve">
+    <value>目录不存在</value>
   </data>
   <data name="RandomNumberCannotNull" xml:space="preserve">
     <value>最小随机数与最大随机数不能为空</value>
@@ -379,13 +379,13 @@
   <data name="UserDescription" xml:space="preserve">
     <value>用户描述</value>
   </data>
-  <data name="ShowModCollectionStatus" xml:space="preserve">
+  <data name="ShowModCollectState" xml:space="preserve">
     <value>显示模组的收藏状态</value>
   </data>
-  <data name="ShowModEnableStatus" xml:space="preserve">
+  <data name="ShowModEnableState" xml:space="preserve">
     <value>显示模组的启用状态</value>
   </data>
-  <data name="EnabledStatus" xml:space="preserve">
+  <data name="EnabledState" xml:space="preserve">
     <value>启用状态</value>
   </data>
   <data name="Icon" xml:space="preserve">
@@ -434,7 +434,7 @@
     <value>打开模组目录</value>
   </data>
   <data name="OpenBackupDirectory" xml:space="preserve">
-    <value>打开备份模组</value>
+    <value>打开备份目录</value>
   </data>
   <data name="OpenSaveDirectory" xml:space="preserve">
     <value>打开存档目录</value>
@@ -529,7 +529,13 @@
   <data name="IconLoadError" xml:space="preserve">
     <value>图标读取错误</value>
   </data>
-  <data name="ConfirmDeletionUserGroup" xml:space="preserve">
-    <value>确认删除用户分组吗?</value>
+  <data name="ConfirmUserGroupDeletion" xml:space="preserve">
+    <value>确认删除用户分组</value>
+  </data>
+  <data name="ListBoxItemsRetrievalCompleted" xml:space="preserve">
+    <value>模组分组列表刷新完成</value>
+  </data>
+  <data name="TypeGroupRetrievalCompleted" xml:space="preserve">
+    <value>类型分组获取完成</value>
   </data>
 </root>

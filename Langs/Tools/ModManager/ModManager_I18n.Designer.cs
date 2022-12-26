@@ -97,20 +97,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 添加至用户分组 的本地化字符串。
+        /// </summary>
+        public static string AddToUserGroup {
+            get {
+                return ResourceManager.GetString("AddToUserGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 添加用户分组 的本地化字符串。
         /// </summary>
         public static string AddUserGroup {
             get {
                 return ResourceManager.GetString("AddUserGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 命名失败,名字为空或者已存在相同名字的分组 的本地化字符串。
-        /// </summary>
-        public static string AddUserNamingFailed {
-            get {
-                return ResourceManager.GetString("AddUserNamingFailed", resourceCulture);
             }
         }
         
@@ -133,15 +133,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 已存在相同名称的用户分组 的本地化字符串。
-        /// </summary>
-        public static string AlreadyExistUserGroup {
-            get {
-                return ResourceManager.GetString("AlreadyExistUserGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 作者 的本地化字符串。
         /// </summary>
         public static string Author {
@@ -160,20 +151,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 取消收藏所选模组 的本地化字符串。
+        ///   查找类似 收藏状态修改为 的本地化字符串。
         /// </summary>
-        public static string CancelCollectionSelectedMods {
+        public static string ChangeCollectStateTo {
             get {
-                return ResourceManager.GetString("CancelCollectionSelectedMods", resourceCulture);
+                return ResourceManager.GetString("ChangeCollectStateTo", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 模组 {0} 在用户分组 {1} 的状态修改为 {2} 的本地化字符串。
+        ///   查找类似 启用状态修改为 的本地化字符串。
         /// </summary>
-        public static string ChangeModUserGroup {
+        public static string ChangeEnabledStateTo {
             get {
-                return ResourceManager.GetString("ChangeModUserGroup", resourceCulture);
+                return ResourceManager.GetString("ChangeEnabledStateTo", resourceCulture);
             }
         }
         
@@ -216,27 +207,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 收藏所选模组 的本地化字符串。
         /// </summary>
-        public static string CollectionSelectedMods {
+        public static string CollectSelectedMods {
             get {
-                return ResourceManager.GetString("CollectionSelectedMods", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 确认删除模组 的本地化字符串。
-        /// </summary>
-        public static string ConfirmDeleteMod {
-            get {
-                return ResourceManager.GetString("ConfirmDeleteMod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 确认删除用户分组吗? 的本地化字符串。
-        /// </summary>
-        public static string ConfirmDeletionUserGroup {
-            get {
-                return ResourceManager.GetString("ConfirmDeletionUserGroup", resourceCulture);
+                return ResourceManager.GetString("CollectSelectedMods", resourceCulture);
             }
         }
         
@@ -246,6 +219,24 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string ConfirmDragFiles {
             get {
                 return ResourceManager.GetString("ConfirmDragFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确认删除模组 的本地化字符串。
+        /// </summary>
+        public static string ConfirmModDeletion {
+            get {
+                return ResourceManager.GetString("ConfirmModDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确认删除用户分组 的本地化字符串。
+        /// </summary>
+        public static string ConfirmUserGroupDeletion {
+            get {
+                return ResourceManager.GetString("ConfirmUserGroupDeletion", resourceCulture);
             }
         }
         
@@ -261,9 +252,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 右键菜单刷新完成 的本地化字符串。
         /// </summary>
-        public static string ContextMenuRefreshComplete {
+        public static string ContextMenuRefreshCompleted {
             get {
-                return ResourceManager.GetString("ContextMenuRefreshComplete", resourceCulture);
+                return ResourceManager.GetString("ContextMenuRefreshCompleted", resourceCulture);
             }
         }
         
@@ -313,6 +304,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 目录不存在 的本地化字符串。
+        /// </summary>
+        public static string DirectoryNotExist {
+            get {
+                return ResourceManager.GetString("DirectoryNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 禁用所有已启用模组 的本地化字符串。
         /// </summary>
         public static string DisableAllEnabledMods {
@@ -349,6 +349,26 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 已存在相同模组 是否覆盖?
+        ///原始版本: {0}
+        ///新增版本: {1} 的本地化字符串。
+        /// </summary>
+        public static string DuplicateModExists {
+            get {
+                return ResourceManager.GetString("DuplicateModExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 已存在相同名称的用户分组 的本地化字符串。
+        /// </summary>
+        public static string DuplicateUserGroupName {
+            get {
+                return ResourceManager.GetString("DuplicateUserGroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 已启用 的本地化字符串。
         /// </summary>
         public static string Enabled {
@@ -363,6 +383,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string EnableDependencies {
             get {
                 return ResourceManager.GetString("EnableDependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 启用列表保存完毕 的本地化字符串。
+        /// </summary>
+        public static string EnabledListSaveCompleted {
+            get {
+                return ResourceManager.GetString("EnabledListSaveCompleted", resourceCulture);
             }
         }
         
@@ -396,9 +425,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 启用状态 的本地化字符串。
         /// </summary>
-        public static string EnabledStatus {
+        public static string EnabledState {
             get {
-                return ResourceManager.GetString("EnabledStatus", resourceCulture);
+                return ResourceManager.GetString("EnabledState", resourceCulture);
             }
         }
         
@@ -414,9 +443,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 导出至文件 的本地化字符串。
         /// </summary>
-        public static string ExportEnabledModsListToFile {
+        public static string ExportToFile {
             get {
-                return ResourceManager.GetString("ExportEnabledModsListToFile", resourceCulture);
+                return ResourceManager.GetString("ExportToFile", resourceCulture);
             }
         }
         
@@ -475,15 +504,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 文件夹不存在 的本地化字符串。
-        /// </summary>
-        public static string FolderNotExist {
-            get {
-                return ResourceManager.GetString("FolderNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 游戏版本 的本地化字符串。
         /// </summary>
         public static string GameVersion {
@@ -498,24 +518,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string GroupedByModType {
             get {
                 return ResourceManager.GetString("GroupedByModType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 分组数量刷新完成 的本地化字符串。
-        /// </summary>
-        public static string GroupModCountRefresh {
-            get {
-                return ResourceManager.GetString("GroupModCountRefresh", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 分组显示数量刷新完成 的本地化字符串。
-        /// </summary>
-        public static string GroupModCountRefreshComplete {
-            get {
-                return ResourceManager.GetString("GroupModCountRefreshComplete", resourceCulture);
             }
         }
         
@@ -540,18 +542,18 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 从文件导入 的本地化字符串。
         /// </summary>
-        public static string ImportEnabledModsListFromFile {
+        public static string ImportFromFile {
             get {
-                return ResourceManager.GetString("ImportEnabledModsListFromFile", resourceCulture);
+                return ResourceManager.GetString("ImportFromFile", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 从游戏存档导入 的本地化字符串。
         /// </summary>
-        public static string ImportEnabledModsListFromSave {
+        public static string ImportFromSave {
             get {
-                return ResourceManager.GetString("ImportEnabledModsListFromSave", resourceCulture);
+                return ResourceManager.GetString("ImportFromSave", resourceCulture);
             }
         }
         
@@ -598,6 +600,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string Libraries {
             get {
                 return ResourceManager.GetString("Libraries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 模组分组列表刷新完成 的本地化字符串。
+        /// </summary>
+        public static string ListBoxItemsRetrievalCompleted {
+            get {
+                return ResourceManager.GetString("ListBoxItemsRetrievalCompleted", resourceCulture);
             }
         }
         
@@ -764,20 +775,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 收藏状态修改为 的本地化字符串。
+        ///   查找类似 分组包含的模组数量 的本地化字符串。
         /// </summary>
-        public static string ModCollectedStatus {
+        public static string ModCountInGroupRefresh {
             get {
-                return ResourceManager.GetString("ModCollectedStatus", resourceCulture);
+                return ResourceManager.GetString("ModCountInGroupRefresh", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 启用状态修改为 的本地化字符串。
+        ///   查找类似 分组显示数量刷新完成 的本地化字符串。
         /// </summary>
-        public static string ModEnabledStatus {
+        public static string ModCountInGroupRefreshCompleted {
             get {
-                return ResourceManager.GetString("ModEnabledStatus", resourceCulture);
+                return ResourceManager.GetString("ModCountInGroupRefreshCompleted", resourceCulture);
             }
         }
         
@@ -854,7 +865,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 未在游戏的模组文件夹中找到前置模组 的本地化字符串。
+        ///   查找类似 未找到前置模组 的本地化字符串。
         /// </summary>
         public static string NotFoundDependencies {
             get {
@@ -872,7 +883,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 未在游戏的模组文件夹中找到模组 的本地化字符串。
+        ///   查找类似 未找到模组 的本地化字符串。
         /// </summary>
         public static string NotFoundMod {
             get {
@@ -891,7 +902,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 打开备份模组 的本地化字符串。
+        ///   查找类似 打开备份目录 的本地化字符串。
         /// </summary>
         public static string OpenBackupDirectory {
             get {
@@ -1037,20 +1048,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 重命名用户分组 的本地化字符串。
         /// </summary>
-        public static string ReplaceUserGroupName {
+        public static string ReplaceUserGroup {
             get {
-                return ResourceManager.GetString("ReplaceUserGroupName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 已存在相同模组 是否覆盖?
-        ///原始版本: {0}
-        ///新增版本: {1} 的本地化字符串。
-        /// </summary>
-        public static string SameModAlreadyExists {
-            get {
-                return ResourceManager.GetString("SameModAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("ReplaceUserGroup", resourceCulture);
             }
         }
         
@@ -1064,29 +1064,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 保存启用列表成功 的本地化字符串。
-        /// </summary>
-        public static string SaveEnabledListSuccess {
-            get {
-                return ResourceManager.GetString("SaveEnabledListSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 保存用户数据成功 的本地化字符串。
         /// </summary>
         public static string SaveUserDataSuccess {
             get {
                 return ResourceManager.GetString("SaveUserDataSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 保存用户分组成功 的本地化字符串。
-        /// </summary>
-        public static string SaveUserGroupSuccess {
-            get {
-                return ResourceManager.GetString("SaveUserGroupSuccess", resourceCulture);
             }
         }
         
@@ -1148,18 +1130,18 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 显示模组的收藏状态 的本地化字符串。
         /// </summary>
-        public static string ShowModCollectionStatus {
+        public static string ShowModCollectState {
             get {
-                return ResourceManager.GetString("ShowModCollectionStatus", resourceCulture);
+                return ResourceManager.GetString("ShowModCollectState", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 显示模组的启用状态 的本地化字符串。
         /// </summary>
-        public static string ShowModEnableStatus {
+        public static string ShowModEnableState {
             get {
-                return ResourceManager.GetString("ShowModEnableStatus", resourceCulture);
+                return ResourceManager.GetString("ShowModEnableState", resourceCulture);
             }
         }
         
@@ -1246,11 +1228,29 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 类型分组获取完成 的本地化字符串。
+        /// </summary>
+        public static string TypeGroupRetrievalCompleted {
+            get {
+                return ResourceManager.GetString("TypeGroupRetrievalCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 未收藏 的本地化字符串。
         /// </summary>
         public static string UnCollected {
             get {
                 return ResourceManager.GetString("UnCollected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 取消收藏所选模组 的本地化字符串。
+        /// </summary>
+        public static string UncollectSelectedMods {
+            get {
+                return ResourceManager.GetString("UncollectSelectedMods", resourceCulture);
             }
         }
         
@@ -1314,6 +1314,24 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string UserGroupCannotNamed {
             get {
                 return ResourceManager.GetString("UserGroupCannotNamed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 命名失败,名字为空或者已存在相同名字的分组 的本地化字符串。
+        /// </summary>
+        public static string UserGroupNamingFailed {
+            get {
+                return ResourceManager.GetString("UserGroupNamingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 用户分组保存完毕 的本地化字符串。
+        /// </summary>
+        public static string UserGroupSaveCompleted {
+            get {
+                return ResourceManager.GetString("UserGroupSaveCompleted", resourceCulture);
             }
         }
         

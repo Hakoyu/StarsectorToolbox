@@ -129,7 +129,7 @@ Yes:Replace No:Merge Cancel:Cancel</value>
     <value>Enable mod</value>
   </data>
   <data name="NotFoundMod" xml:space="preserve">
-    <value>Not found in the game mods folder</value>
+    <value>Not found mod</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
@@ -149,8 +149,8 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="LoadUserGroup" xml:space="preserve">
     <value>Loading user group</value>
   </data>
-  <data name="AlreadyExistUserGroup" xml:space="preserve">
-    <value>User groups already exist with the same name</value>
+  <data name="DuplicateUserGroupName" xml:space="preserve">
+    <value>Duplicate user group name</value>
   </data>
   <data name="UserDataLoadError" xml:space="preserve">
     <value>User data loading error</value>
@@ -167,14 +167,14 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="ClassifyTo" xml:space="preserve">
     <value>Classify to</value>
   </data>
-  <data name="GroupModCountRefresh" xml:space="preserve">
-    <value>Group contains mod count refresh</value>
+  <data name="ModCountInGroupRefresh" xml:space="preserve">
+    <value>Mod count in group refresh</value>
   </data>
-  <data name="GroupModCountRefreshComplete" xml:space="preserve">
-    <value>Group count display refresh complete</value>
+  <data name="ModCountInGroupRefreshCompleted" xml:space="preserve">
+    <value>Mod count in group refresh completed</value>
   </data>
-  <data name="ContextMenuRefreshComplete" xml:space="preserve">
-    <value>Context menu refresh complete</value>
+  <data name="ContextMenuRefreshCompleted" xml:space="preserve">
+    <value>Context menu refresh completed</value>
   </data>
   <data name="AddContextMenu" xml:space="preserve">
     <value>Add context menu</value>
@@ -188,17 +188,17 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="AddMenuItem" xml:space="preserve">
     <value>Add menu item</value>
   </data>
-  <data name="CollectionSelectedMods" xml:space="preserve">
-    <value>Collection selected mods</value>
+  <data name="CollectSelectedMods" xml:space="preserve">
+    <value>Collect selected mods</value>
   </data>
-  <data name="CancelCollectionSelectedMods" xml:space="preserve">
-    <value>Cancel collection selected mods</value>
+  <data name="UncollectSelectedMods" xml:space="preserve">
+    <value>Uncollection selected mods</value>
   </data>
   <data name="DeleteMod" xml:space="preserve">
     <value>Delete mod</value>
   </data>
-  <data name="ConfirmDeleteMod" xml:space="preserve">
-    <value>Confirm delete mod</value>
+  <data name="ConfirmModDeletion" xml:space="preserve">
+    <value>Confirm mod deletion</value>
   </data>
   <data name="AddModToUserGroup" xml:space="preserve">
     <value>Add mod to user group</value>
@@ -206,26 +206,26 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="RemoveFromUserGroup" xml:space="preserve">
     <value>Remove from user group</value>
   </data>
-  <data name="ChangeModUserGroup" xml:space="preserve">
-    <value>The status of mod {0} in user group {1} is change to {2}</value>
+  <data name="AddToUserGroup" xml:space="preserve">
+    <value>Add to user group</value>
   </data>
   <data name="DisableAllEnabledMods" xml:space="preserve">
     <value>Disable all enabled mods</value>
   </data>
-  <data name="ModEnabledStatus" xml:space="preserve">
-    <value>Mod enabled status to</value>
+  <data name="ChangeEnabledStateTo" xml:space="preserve">
+    <value>Change enabled state to</value>
   </data>
   <data name="NotEnableDependencies" xml:space="preserve">
     <value>Not enable dependencies</value>
   </data>
-  <data name="ModCollectedStatus" xml:space="preserve">
-    <value>Mod collected status to</value>
+  <data name="ChangeCollectStateTo" xml:space="preserve">
+    <value>Change collect state to</value>
   </data>
-  <data name="SaveEnabledListSuccess" xml:space="preserve">
-    <value>Save enabled list success</value>
+  <data name="EnabledListSaveCompleted" xml:space="preserve">
+    <value>Enabled list save completed</value>
   </data>
-  <data name="SaveUserGroupSuccess" xml:space="preserve">
-    <value>Save user group success</value>
+  <data name="UserGroupSaveCompleted" xml:space="preserve">
+    <value>User group save completed</value>
   </data>
   <data name="CloseDetails" xml:space="preserve">
     <value>Close details</value>
@@ -245,8 +245,8 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="ReplaceMod" xml:space="preserve">
     <value>Replace mod</value>
   </data>
-  <data name="SameModAlreadyExists" xml:space="preserve">
-    <value>Does the same mod already exist, replace it?
+  <data name="DuplicateModExists" xml:space="preserve">
+    <value>Duplicate mod exists, replace it?
 Original Version: {0}
 New Version: {1}</value>
   </data>
@@ -259,14 +259,14 @@ New Version: {1}</value>
   <data name="RemoveMod" xml:space="preserve">
     <value>Remove mod</value>
   </data>
-  <data name="ReplaceUserGroupName" xml:space="preserve">
-    <value>Replace user group name</value>
+  <data name="ReplaceUserGroup" xml:space="preserve">
+    <value>Replace user group</value>
   </data>
   <data name="AddUserGroup" xml:space="preserve">
     <value>Add user group</value>
   </data>
-  <data name="AddUserNamingFailed" xml:space="preserve">
-    <value>Naming failure, name is empty or group with same name already exists</value>
+  <data name="UserGroupNamingFailed" xml:space="preserve">
+    <value>Naming failed, name is empty or group with same name already exists</value>
   </data>
   <data name="UserGroupCannotNamed" xml:space="preserve">
     <value>Cannot be named {0} or {1}</value>
@@ -280,13 +280,13 @@ New Version: {1}</value>
   <data name="InitialisationComplete" xml:space="preserve">
     <value>Initialisation complete</value>
   </data>
-  <data name="ImportEnabledModsListFromFile" xml:space="preserve">
+  <data name="ImportFromFile" xml:space="preserve">
     <value>Import from file</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="ExportEnabledModsListToFile" xml:space="preserve">
+  <data name="ExportToFile" xml:space="preserve">
     <value>Export to file</value>
   </data>
   <data name="NotFoundDependencies" xml:space="preserve">
@@ -301,7 +301,7 @@ New Version: {1}</value>
   <data name="NotFoundFile" xml:space="preserve">
     <value>Not found file</value>
   </data>
-  <data name="ImportEnabledModsListFromSave" xml:space="preserve">
+  <data name="ImportFromSave" xml:space="preserve">
     <value>Import from game save</value>
   </data>
   <data name="FileError" xml:space="preserve">
@@ -313,8 +313,8 @@ New Version: {1}</value>
   <data name="ConfirmDragFiles" xml:space="preserve">
     <value>Confirm dragging in the files</value>
   </data>
-  <data name="FolderNotExist" xml:space="preserve">
-    <value>Folder not exist</value>
+  <data name="DirectoryNotExist" xml:space="preserve">
+    <value>Directory not exist</value>
   </data>
   <data name="RandomNumberCannotNull" xml:space="preserve">
     <value>Minimum random number and maximum random number cannot be null</value>
@@ -379,14 +379,14 @@ New Version: {1}</value>
   <data name="UserDescription" xml:space="preserve">
     <value>User description</value>
   </data>
-  <data name="ShowModCollectionStatus" xml:space="preserve">
-    <value>Show mod collection status</value>
+  <data name="ShowModCollectState" xml:space="preserve">
+    <value>Show mod collect state</value>
   </data>
-  <data name="ShowModEnableStatus" xml:space="preserve">
-    <value>Show mod enable status</value>
+  <data name="ShowModEnableState" xml:space="preserve">
+    <value>Show mod enable state</value>
   </data>
-  <data name="EnabledStatus" xml:space="preserve">
-    <value>Enabled status</value>
+  <data name="EnabledState" xml:space="preserve">
+    <value>Enabled state</value>
   </data>
   <data name="Icon" xml:space="preserve">
     <value>Icon</value>
@@ -529,7 +529,13 @@ Cannot be removed midway</value>
   <data name="IconLoadError" xml:space="preserve">
     <value>Icon loading error</value>
   </data>
-  <data name="ConfirmDeletionUserGroup" xml:space="preserve">
-    <value>Confirm deletion user group?</value>
+  <data name="ConfirmUserGroupDeletion" xml:space="preserve">
+    <value>Confirm deletion user group</value>
+  </data>
+  <data name="ListBoxItemsRetrievalCompleted" xml:space="preserve">
+    <value>Mod group list retrieval completed</value>
+  </data>
+  <data name="TypeGroupRetrievalCompleted" xml:space="preserve">
+    <value>Type group retrieval completed</value>
   </data>
 </root>

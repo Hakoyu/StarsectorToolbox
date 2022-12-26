@@ -196,8 +196,6 @@ namespace StarsectorTools.Tools.ModManager
             /// <summary>是否为功能性模组</summary>
             public bool IsUtility { get; set; } = false;
 
-            /// <summary>图标路径</summary>
-            //public string IconPath { get; set; } = string.Empty;
             /// <summary>图标资源</summary>
             public BitmapImage? ImageSource { get; set; } = null!;
 
@@ -225,7 +223,6 @@ namespace StarsectorTools.Tools.ModManager
             InitializeComponent();
             InitializeData();
             STLog.Instance.WriteLine(I18n.InitialisationComplete);
-            //DataContext = viewModel = new(allModsShowInfo.Values);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -253,7 +250,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportEnabledModsListFromFile,
+                Title = I18n.ImportFromFile,
                 Filter = $"Json {I18n.File}|*.json"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
@@ -267,7 +264,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = I18n.ExportEnabledModsListToFile,
+                Title = I18n.ExportToFile,
                 Filter = $"Json {I18n.File}|*.json"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
@@ -484,7 +481,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 else
-                    ST.ShowMessageBox(I18n.AddUserNamingFailed);
+                    ST.ShowMessageBox(I18n.UserGroupNamingFailed);
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
@@ -524,7 +521,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportEnabledModsListFromSave,
+                Title = I18n.ImportFromSave,
                 Filter = $"Xml {I18n.File}|*.xml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
@@ -637,8 +634,8 @@ namespace StarsectorTools.Tools.ModManager
                 ST.OpenFile(ST.gameModsDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameModsDirectory}", MessageBoxImage.Warning);
+                STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
+                ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {ST.gameModsDirectory}", MessageBoxImage.Warning);
             }
         }
 
@@ -648,8 +645,8 @@ namespace StarsectorTools.Tools.ModManager
                 ST.OpenFile(backupDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.FolderNotExist}\n{I18n.Path}: {backupDirectory}", MessageBoxImage.Warning);
+                STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
+                ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {backupDirectory}", MessageBoxImage.Warning);
             }
         }
 
@@ -659,8 +656,8 @@ namespace StarsectorTools.Tools.ModManager
                 ST.OpenFile(ST.gameSaveDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.FolderNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.FolderNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
+                STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
+                ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
             }
         }
 
@@ -711,15 +708,14 @@ namespace StarsectorTools.Tools.ModManager
         }
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (!e.Handled)
+            var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
             {
-                e.Handled = true;
-                var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
-                eventArg.RoutedEvent = MouseWheelEvent;
-                eventArg.Source = sender;
-                if (sender is Control control && control.Parent is UIElement ui)
-                    ui.RaiseEvent(eventArg);
-            }
+                RoutedEvent = MouseWheelEvent,
+                Source = sender,
+            };
+            if (sender is Control control && control.Parent is UIElement ui)
+                ui.RaiseEvent(eventArg);
+            e.Handled = true;
         }
 
         private void Grid_RightSide_SizeChanged(object sender, SizeChangedEventArgs e)
