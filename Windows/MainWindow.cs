@@ -84,8 +84,8 @@ namespace StarsectorTools.Windows
         public void RefreshMenuList()
         {
             ClearMenu();
-            AddMemu("🌐", I18n.ModManager, nameof(ModManager), new ModManager());
-            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), new GameSettings());
+            AddMemu("🌐", I18n.ModManager, nameof(ModManager), new(() => new ModManager()));
+            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), new(() => new GameSettings()));
 
             STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
         }
@@ -106,7 +106,7 @@ namespace StarsectorTools.Windows
                 _ = info.Invoke(page, null)!;
         }
 
-        private void AddMemu(string icon, string name, string tag, Page page)
+        private void AddMemu(string icon, string name, string tag, Lazy<Page> lazyPage)
         {
             var item = new ListBoxItem();
             item.Content = name;
@@ -124,7 +124,7 @@ namespace StarsectorTools.Windows
             {
                 Type type = menuList[tag].Value.GetType();
                 ClosePage(menuList[tag].Value);
-                menuList[tag] = new((Page)type.Assembly.CreateInstance(type.FullName!)!);
+                menuList[tag] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
                     Frame_MainFrame.Content = menuList[tag].Value;
                 STLog.Instance.WriteLine($"{I18n.RefreshPage}: {tag}");
@@ -132,8 +132,8 @@ namespace StarsectorTools.Windows
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
             ListBox_Menu.Items.Add(item);
-            menuList.Add(tag, new(page));
-            STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name} {page}");
+            menuList.Add(tag, lazyPage);
+            STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name}");
         }
     }
 }

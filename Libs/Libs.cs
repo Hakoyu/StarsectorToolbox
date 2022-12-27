@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using Aspose.Zip;
@@ -133,7 +134,7 @@ namespace StarsectorTools.Libs
         public void WriteLine(string message, Exception ex, params object[] keys)
         {
             sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {ParseKey(message, keys)}");
-            sw.WriteLine($"   at {ex.StackTrace?.Split('\\').Last()}\n{string.Join("\n", new StackTrace(2).ToString().Split("\n").Where(s => s.Contains(nameof(StarsectorTools))))}");
+            sw.WriteLine($"{Regex.Replace(ex.StackTrace!, @$"[\S]+(?={nameof(StarsectorTools)})", "")}");
             sw.Flush();
         }
 

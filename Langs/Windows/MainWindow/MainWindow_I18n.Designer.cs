@@ -134,6 +134,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 初始化错误 的本地化字符串。
+        /// </summary>
+        public static string InitializationError {
+            get {
+                return ResourceManager.GetString("InitializationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 菜单列表刷新完成 的本地化字符串。
         /// </summary>
         public static string MenuListRefreshComplete {

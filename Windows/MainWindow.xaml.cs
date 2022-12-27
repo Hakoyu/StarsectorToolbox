@@ -107,9 +107,16 @@ namespace StarsectorTools.Windows
 
         private void ListBox_Menu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ListBox_Menu.SelectedIndex >= 0)
+            if (ListBox_Menu.SelectedIndex >= 0 && ListBox_Menu.SelectedItem is ListBoxItem item)
             {
-                Frame_MainFrame.Content = menuList[((ListBoxItem)ListBox_Menu.SelectedItem).Tag.ToString()!].Value;
+                try
+                {
+                    Frame_MainFrame.Content = menuList[item.Tag.ToString()!].Value;
+                }
+                catch (Exception ex)
+                {
+                    STLog.Instance.WriteLine($"{I18n.InitializationError} {item.Tag}", ex);
+                }
             }
         }
 

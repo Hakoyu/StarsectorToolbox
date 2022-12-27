@@ -143,4 +143,7 @@ Please select the game launcher</value>
   <data name="RefreshPage" xml:space="preserve">
     <value>Refresh page</value>
   </data>
+  <data name="InitializationError" xml:space="preserve">
+    <value>Initialization error</value>
+  </data>
 </root>
