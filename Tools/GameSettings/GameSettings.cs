@@ -14,7 +14,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void GetVmparamsData()
         {
             vmparamsData.data = File.ReadAllText($"{ST.gameDirectory}\\vmparams");
-            vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+", RegexOptions.IgnoreCase).Value;
+            vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
             TextBox_Memory.Text = TextBox_Memory.Text = vmparamsData.xmsx;
         }
 
@@ -75,6 +75,20 @@ namespace StarsectorTools.Tools.GameSettings
                 STLog.Instance.WriteLine(I18n.CustomResolutionGetFailed, STLogLevel.ERROR);
                 ST.ShowMessageBox(I18n.CustomResolutionGetFailed, MessageBoxImage.Error);
             }
+        }
+        public int? CheckMemorySize(int size)
+        {
+            if (size < 1024)
+            {
+                ST.ShowMessageBox($"{I18n.MinMemory} 1024", MessageBoxImage.Warning);
+                return 1024;
+            }
+            else if (size > systemTotalMemory)
+            {
+                ST.ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", MessageBoxImage.Warning);
+                return systemTotalMemory;
+            }
+            return null;
         }
     }
 }

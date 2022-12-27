@@ -424,9 +424,9 @@ namespace StarsectorTools.Tools.ModManager
             // 标记菜单项是否被创建
             contextMenu.Tag = false;
             // 被点击时才加载菜单,可以降低内存占用
-            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             contextMenu.Loaded += (s, e) =>
             {
+                contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
                 if (contextMenu.Tag is true)
                     return;
                 // 启用或禁用
@@ -480,10 +480,10 @@ namespace StarsectorTools.Tools.ModManager
                         {
                             MenuItem groupItem = new();
                             groupItem.Header = group;
-                            //groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
+                            groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
                             // 有绑定问题,暂无解决方案
-                            groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
-                            MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
+                            //groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
+                            //MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
                             groupItem.Click += (s, e) =>
                             {
                                 ChangeSelectedModsInUserGroup(group, true);
@@ -507,11 +507,11 @@ namespace StarsectorTools.Tools.ModManager
                     {
                         MenuItem groupItem = new();
                         groupItem.Header = group.Key;
-                        //groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
+                        groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
                         // 有绑定问题,暂无解决方案
-                        groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
-                        // 此语句无法获取色彩透明度 原因未知
-                        MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
+                        //groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
+                        //// 此语句无法获取色彩透明度 原因未知
+                        //MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
                         groupItem.Click += (s, e) =>
                         {
                             ChangeSelectedModsInUserGroup(group.Key, false);

@@ -166,9 +166,6 @@ namespace StarsectorTools.Libs
         /// <summary>StarsectorTools配置文件资源链接</summary>
         public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
 
-        /// <summary>系统总内存</summary>
-        public static int systemTotalMemory { get; private set; } = 0;
-
         /// <summary>游戏目录</summary>
         public static string gameDirectory { get; private set; } = null!;
 
@@ -216,15 +213,6 @@ namespace StarsectorTools.Libs
                 ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
             }
         }
-
-        /// <summary>
-        /// 获取系统内存
-        /// </summary>
-        public static void GetSystemMemory()
-        {
-            systemTotalMemory = Management.GetMemoryMetricsNow().Total;
-        }
-
         /// <summary>
         /// 复制文件夹至目标文件夹
         /// </summary>
@@ -281,29 +269,6 @@ namespace StarsectorTools.Libs
                 STLog.Instance.WriteLine(I18n.LoadError, ex);
                 return false;
             }
-        }
-
-        /// <summary>
-        /// 检查内存信息
-        /// </summary>
-        /// <param name="size">内存大小</param>
-        /// <returns>
-        /// <para>如果<see langword="size"/>小于<see langword="1024"/>则会返回<see langword="1024"/></para>
-        /// <para>如果<see langword="size"/>大于<see langword="systemTotalMemory"/>则会返回<see langword="systemTotalMemory"/></para>
-        /// </returns>
-        public static int CheckMemorySize(int size)
-        {
-            if (size < 1024)
-            {
-                ShowMessageBox($"{I18n.MinMemory} 1024", MessageBoxImage.Warning);
-                size = 1024;
-            }
-            else if (size > systemTotalMemory)
-            {
-                ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", MessageBoxImage.Warning);
-                size = systemTotalMemory;
-            }
-            return size;
         }
 
         /// <summary>
@@ -466,7 +431,7 @@ namespace StarsectorTools.Libs
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message, MessageBoxImage image = MessageBoxImage.Information)
         {
-            return ShowMessageBox(message, "", image: image);
+            return ShowMessageBox(message, " ", image: image);
         }
 
         /// <summary>
@@ -478,7 +443,7 @@ namespace StarsectorTools.Libs
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message, MessageBoxButton button, MessageBoxImage image)
         {
-            return ShowMessageBox(message, "", button, image);
+            return ShowMessageBox(message, " ", button, image);
         }
 
         /// <summary>
@@ -491,7 +456,7 @@ namespace StarsectorTools.Libs
         /// <param name="result">默认按钮结果</param>
         /// <param name="options">窗口设置</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None, MessageBoxResult result = MessageBoxResult.None, MessageBoxOptions options = MessageBoxOptions.ServiceNotification)
+        public static MessageBoxResult ShowMessageBox(string message, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None, MessageBoxResult result = MessageBoxResult.None, MessageBoxOptions options = MessageBoxOptions.DefaultDesktopOnly)
         {
             return MessageBox.Show(message, caption, button, image, result, options);
         }

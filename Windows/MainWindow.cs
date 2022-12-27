@@ -50,7 +50,6 @@ namespace StarsectorTools.Windows
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.configFile);
                 }
-                ST.GetSystemMemory();
             }
             catch (Exception ex)
             {

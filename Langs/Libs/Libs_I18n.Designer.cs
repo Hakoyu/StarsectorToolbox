@@ -106,24 +106,6 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
-        ///   查找类似 最大不能超过本机物理内存 的本地化字符串。
-        /// </summary>
-        public static string MaxMemory {
-            get {
-                return ResourceManager.GetString("MaxMemory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 最小内存为 的本地化字符串。
-        /// </summary>
-        public static string MinMemory {
-            get {
-                return ResourceManager.GetString("MinMemory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 位置 的本地化字符串。
         /// </summary>
         public static string Path {

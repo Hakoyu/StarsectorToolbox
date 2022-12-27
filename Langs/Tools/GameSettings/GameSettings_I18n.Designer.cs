@@ -169,6 +169,15 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 格式错误 的本地化字符串。
+        /// </summary>
+        public static string FormatError {
+            get {
+                return ResourceManager.GetString("FormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏目录 的本地化字符串。
         /// </summary>
         public static string GameDirectory {
@@ -255,6 +264,24 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static string LogFilesNotExist {
             get {
                 return ResourceManager.GetString("LogFilesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最大内存不能超过 的本地化字符串。
+        /// </summary>
+        public static string MaxMemory {
+            get {
+                return ResourceManager.GetString("MaxMemory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 最小内存不能低于 的本地化字符串。
+        /// </summary>
+        public static string MinMemory {
+            get {
+                return ResourceManager.GetString("MinMemory", resourceCulture);
             }
         }
         

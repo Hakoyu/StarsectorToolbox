@@ -205,11 +205,12 @@
   </Style>
   <Style
     x:Key="MenuItem_Style"
-    BasedOn="{StaticResource {x:Type MenuItem}}"
+    BasedOn="{StaticResource {x:Static pu:ContextMenuHelper.MenuItemStyle}}"
     TargetType="MenuItem">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+    <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{DynamicResource ColorSelected}" />
   </Style>
   <Style
     x:Key="Window_Style"

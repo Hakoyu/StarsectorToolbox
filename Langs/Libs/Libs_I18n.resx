@@ -103,12 +103,6 @@
   <data name="GameDirectoryError" xml:space="preserve">
     <value>游戏目录错误</value>
   </data>
-  <data name="MinMemory" xml:space="preserve">
-    <value>最小内存为</value>
-  </data>
-  <data name="MaxMemory" xml:space="preserve">
-    <value>最大不能超过本机物理内存</value>
-  </data>
   <data name="File" xml:space="preserve">
     <value>文件</value>
   </data>

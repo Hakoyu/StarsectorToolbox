@@ -238,4 +238,13 @@
   <data name="WidthAndHeightCannotBeEmpty" xml:space="preserve">
     <value>宽与高不能为空</value>
   </data>
+  <data name="MinMemory" xml:space="preserve">
+    <value>最小内存不能低于</value>
+  </data>
+  <data name="MaxMemory" xml:space="preserve">
+    <value>最大内存不能超过</value>
+  </data>
+  <data name="FormatError" xml:space="preserve">
+    <value>格式错误</value>
+  </data>
 </root>

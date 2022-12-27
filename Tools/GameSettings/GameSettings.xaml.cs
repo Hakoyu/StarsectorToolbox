@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using HKW.Management;
 using HKW.TomlParse;
 using StarsectorTools.Libs;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
@@ -27,6 +28,7 @@ namespace StarsectorTools.Tools.GameSettings
         private string gameKey = "";
         private string hideGameKey = "";
         private bool showKey = false;
+        private int systemTotalMemory = 0;
         private string gameLogFile = @$"{ST.gameDirectory}\starsector-core\starsector.log";
         private string gameSettingsFile = $"{ST.gameDirectory}\\starsector-core\\data\\config\\settings.json";
 
@@ -35,6 +37,7 @@ namespace StarsectorTools.Tools.GameSettings
             InitializeComponent();
             Label_GamePath.Content = ST.gameDirectory;
             Label_GameVersion.Content = ST.gameVersion;
+            systemTotalMemory = Management.GetMemoryMetricsNow().Total;
             GetVmparamsData();
             GetGameKey();
             GetMissionsLoadouts();
@@ -55,24 +58,28 @@ namespace StarsectorTools.Tools.GameSettings
             Label_GamePath.Content = ST.gameDirectory;
         }
 
-        private void TextBox_SetMemory_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Keyboard.ClearFocus();
-        }
-
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
-
-        private void TextBox_SetMemory_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            if (sender is TextBox textBox)
-                textBox.Text = ST.CheckMemorySize(int.Parse(textBox.Text)).ToString();
-        }
 
         private void Button_SetMemory_Click(object sender, RoutedEventArgs e)
         {
-            File.WriteAllText($"{ST.gameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])(.+?)\b", $"{TextBox_Memory.Text}m", RegexOptions.IgnoreCase));
-            STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {TextBox_Memory.Text}m");
+            if (!Regex.IsMatch(TextBox_Memory.Text, "^[0-9]+[mg]$"))
+            {
+                ST.ShowMessageBox(I18n.FormatError, MessageBoxImage.Warning);
+                TextBox_Memory.Text = vmparamsData.xmsx;
+                return;
+            }
+            string unit = TextBox_Memory.Text.Last().ToString();
+            int memory = int.Parse(Regex.Match(TextBox_Memory.Text, "[0-9]+").Value);
+            int memoryMB = memory * (unit == "m" ? 1 : 1024);
+            if (CheckMemorySize(memoryMB) is int sizeMB)
+            {
+                int size = unit == "m" ? sizeMB : sizeMB / 1024;
+                TextBox_Memory.Text = $"{size}{unit}";
+                return;
+            }
+            vmparamsData.xmsx = $"{memory}{unit}";
+            File.WriteAllText($"{ST.gameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
+            STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {vmparamsData.xmsx}");
             ST.ShowMessageBox(I18n.VmparamsMemorySetSuccess);
         }
 
@@ -247,5 +254,6 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.ShowMessageBox(I18n.CustomResolutionSetupError, MessageBoxImage.Error);
             }
         }
+
     }
 }

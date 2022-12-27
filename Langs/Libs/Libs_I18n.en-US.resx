@@ -123,12 +123,6 @@
   <data name="GameDirectoryError" xml:space="preserve">
     <value>Game directory error</value>
   </data>
-  <data name="MinMemory" xml:space="preserve">
-    <value>Min memory is</value>
-  </data>
-  <data name="MaxMemory" xml:space="preserve">
-    <value>The maximum memory cannot exceed the physical memory of the machine</value>
-  </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>

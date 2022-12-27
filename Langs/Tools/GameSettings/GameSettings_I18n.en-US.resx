@@ -238,4 +238,13 @@
   <data name="WidthAndHeightCannotBeEmpty" xml:space="preserve">
     <value>Width and height cannot be empty</value>
   </data>
+  <data name="MinMemory" xml:space="preserve">
+    <value>Minimum memory cannot be lower than</value>
+  </data>
+  <data name="MaxMemory" xml:space="preserve">
+    <value>Maximum memory cannot exceed</value>
+  </data>
+  <data name="FormatError" xml:space="preserve">
+    <value>Format error</value>
+  </data>
 </root>
