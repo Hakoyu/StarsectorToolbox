@@ -103,8 +103,8 @@
   <data name="ModAddFailed" xml:space="preserve">
     <value>Mod add failed</value>
   </data>
-  <data name="ModAddEnd" xml:space="preserve">
-    <value>Mod add end Success size: {0} Failed size: {1}</value>
+  <data name="ModAddCompleted" xml:space="preserve">
+    <value>Mod add completed size: {0} Failed size: {1}</value>
   </data>
   <data name="Path" xml:space="preserve">
     <value>Path</value>
@@ -514,8 +514,8 @@ Cannot be removed midway</value>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="UserGroupAddSuccess" xml:space="preserve">
-    <value>User group added success</value>
+  <data name="UserGroupAddCompleted" xml:space="preserve">
+    <value>User group added completed</value>
   </data>
   <data name="SaveUserDataSuccess" xml:space="preserve">
     <value>Save user data success</value>

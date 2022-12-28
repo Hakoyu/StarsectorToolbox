@@ -750,9 +750,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 模组添加完毕 成功数量: {0} 失败数量: {1} 的本地化字符串。
         /// </summary>
-        public static string ModAddEnd {
+        public static string ModAddCompleted {
             get {
-                return ResourceManager.GetString("ModAddEnd", resourceCulture);
+                return ResourceManager.GetString("ModAddCompleted", resourceCulture);
             }
         }
         
@@ -1302,9 +1302,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 用户分组添加成功 的本地化字符串。
         /// </summary>
-        public static string UserGroupAddSuccess {
+        public static string UserGroupAddCompleted {
             get {
-                return ResourceManager.GetString("UserGroupAddSuccess", resourceCulture);
+                return ResourceManager.GetString("UserGroupAddCompleted", resourceCulture);
             }
         }
         

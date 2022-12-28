@@ -60,11 +60,10 @@ namespace StarsectorTools.Tools.ModManager
             };
             GetAllModsInfo();
             GetAllListBoxItems();
-            GetAllGroup();
-            InitializeDataGridItemsSource();
+            GetTypeGroup();
             CheckEnabledMods();
             CheckUserData();
-            RefreshModsContextMenu();
+            GetAllModsShowInfo();
             RefreshCountOfListBoxItems();
             ResetRemindSaveThread();
             GC.Collect();
@@ -91,7 +90,7 @@ namespace StarsectorTools.Tools.ModManager
                     size++;
                 }
             }
-            STLog.Instance.WriteLine(I18n.ModAddEnd, STLogLevel.INFO, allModsInfo.Count, size);
+            STLog.Instance.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, size);
             if (err != null)
                 ST.ShowMessageBox(err, MessageBoxImage.Warning);
         }
@@ -288,13 +287,13 @@ namespace StarsectorTools.Tools.ModManager
             STLog.Instance.WriteLine(I18n.ListBoxItemsRetrievalCompleted);
         }
 
-        private void GetAllGroup()
+        private void GetTypeGroup()
         {
-            if (!File.Exists(modGroupFile))
-                CreateModGroupFile();
+            if (!File.Exists(modTypeGroupFile))
+                CreateTypeModGroup();
             try
             {
-                TomlTable toml = TOML.Parse(modGroupFile);
+                TomlTable toml = TOML.Parse(modTypeGroupFile);
                 foreach (var kv in toml)
                     foreach (string id in kv.Value.AsTomlArray)
                         allModsTypeGroup.Add(id, kv.Key);
@@ -302,18 +301,18 @@ namespace StarsectorTools.Tools.ModManager
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modGroupFile}", ex);
-                ST.ShowMessageBox($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modGroupFile}", MessageBoxImage.Error);
-                CreateModGroupFile();
+                STLog.Instance.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modTypeGroupFile}", ex);
+                ST.ShowMessageBox($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modTypeGroupFile}", MessageBoxImage.Error);
+                CreateTypeModGroup();
             }
-            void CreateModGroupFile()
+            void CreateTypeModGroup()
             {
-                using StreamReader sr = new(Application.GetResourceStream(modGroupUri).Stream);
-                File.WriteAllText(modGroupFile, sr.ReadToEnd());
+                using StreamReader sr = new(Application.GetResourceStream(modTypeGroupUri).Stream);
+                File.WriteAllText(modTypeGroupFile, sr.ReadToEnd());
             }
         }
 
-        private void InitializeDataGridItemsSource()
+        private void GetAllModsShowInfo()
         {
             foreach (var modInfo in allModsInfo.Values)
                 AddModShowInfo(modInfo);

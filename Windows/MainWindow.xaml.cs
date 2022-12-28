@@ -29,7 +29,6 @@ namespace StarsectorTools.Windows
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             if (!Directory.Exists(ST.coreDirectory))
                 Directory.CreateDirectory(ST.coreDirectory);
-            STLog.Instance.WriteLine(I18n.InitializationCompleted);
             if (!SetConfig())
             {
                 Close();
@@ -53,6 +52,7 @@ namespace StarsectorTools.Windows
             //MethodInfo mi = type.GetMethod("MehtodName")!;
             //object obj = assembly.CreateInstance(type.FullName)!;
             //Frame_MainFrame.Content = obj;
+            STLog.Instance.WriteLine(I18n.InitializationCompleted);
         }
 
         //窗体移动
