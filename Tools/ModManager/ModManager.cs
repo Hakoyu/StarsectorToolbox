@@ -481,9 +481,6 @@ namespace StarsectorTools.Tools.ModManager
                             MenuItem groupItem = new();
                             groupItem.Header = group;
                             groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
-                            // 有绑定问题,暂无解决方案
-                            //groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
-                            //MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
                             groupItem.Click += (s, e) =>
                             {
                                 ChangeSelectedModsInUserGroup(group, true);
@@ -508,10 +505,6 @@ namespace StarsectorTools.Tools.ModManager
                         MenuItem groupItem = new();
                         groupItem.Header = group.Key;
                         groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
-                        // 有绑定问题,暂无解决方案
-                        //groupItem.Background = (Brush)Application.Current.Resources["ColorBG"];
-                        //// 此语句无法获取色彩透明度 原因未知
-                        //MenuItemHelper.SetHoverBackground(groupItem, (Brush)Application.Current.Resources["ColorSelected"]);
                         groupItem.Click += (s, e) =>
                         {
                             ChangeSelectedModsInUserGroup(group.Key, false);
