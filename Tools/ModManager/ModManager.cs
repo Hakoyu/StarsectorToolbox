@@ -61,9 +61,11 @@ namespace StarsectorTools.Tools.ModManager
             GetAllModsInfo();
             GetAllListBoxItems();
             GetTypeGroup();
-            CheckEnabledMods();
-            CheckUserData();
             GetAllModsShowInfo();
+            CheckEnabledMods();
+            CheckEnabledModsDependencies();
+            CheckUserData();
+            RefreshModsContextMenu();
             RefreshCountOfListBoxItems();
             ResetRemindSaveThread();
             GC.Collect();
@@ -315,10 +317,9 @@ namespace StarsectorTools.Tools.ModManager
         private void GetAllModsShowInfo()
         {
             foreach (var modInfo in allModsInfo.Values)
-                AddModShowInfo(modInfo);
+                AddModShowInfo(modInfo, false);
             STLog.Instance.WriteLine($"{I18n.ModShowInfoSetSuccess} {I18n.Size}: {allModsInfo.Count}");
             ListBox_ModsGroupMenu.SelectedIndex = 0;
-            CheckEnabledModsDependencies();
         }
 
         private void RefreshDataGrid()
@@ -894,7 +895,7 @@ namespace StarsectorTools.Tools.ModManager
             STLog.Instance.WriteLine($"{I18n.RemoveMod} {modInfo.Id} {modInfo.Version}", STLogLevel.DEBUG);
         }
 
-        private void AddModShowInfo(ModInfo modInfo)
+        private void AddModShowInfo(ModInfo modInfo, bool createContextMenu = true)
         {
             if (allModsShowInfo.ContainsKey(modInfo.Id))
                 return;
@@ -921,7 +922,8 @@ namespace StarsectorTools.Tools.ModManager
                     allModShowInfoGroups[userGroup.Key].Add(showInfo);
                 }
             }
-            showInfo.ContextMenu = CreateContextMenu(showInfo);
+            if (createContextMenu)
+                showInfo.ContextMenu = CreateContextMenu(showInfo);
             STLog.Instance.WriteLine($"{I18n.AddMod} {showInfo.Id} {showInfo.Version}", STLogLevel.DEBUG);
         }
 
