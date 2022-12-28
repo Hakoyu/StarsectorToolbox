@@ -42,7 +42,7 @@ namespace StarsectorTools.Libs
     public sealed class STLog
     {
         /// <summary>日志目录</summary>
-        public const string logFile = @"StarsectorTools.log";
+        public const string logFile = $"{ST.coreDirectory}\\StarsectorTools.log";
 
         /// <summary>延迟启用</summary>
         private static readonly Lazy<STLog> lazy = new(new STLog());
@@ -160,8 +160,9 @@ namespace StarsectorTools.Libs
     /// <summary>StarsectorTools全局工具</summary>
     public static class ST
     {
+        public const string coreDirectory = "Core";
         /// <summary>StarsectorTools配置文件</summary>
-        public const string configFile = @"Config.toml";
+        public const string configFile = $"{coreDirectory}\\Config.toml";
 
         /// <summary>StarsectorTools配置文件资源链接</summary>
         public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
@@ -183,6 +184,19 @@ namespace StarsectorTools.Libs
 
         /// <summary>游戏已启用模组文件目录</summary>
         public static string enabledModsJsonFile { get; private set; } = null!;
+        /// <summary>
+        /// 格式化Json数据,去除掉注释以及不合规的逗号
+        /// </summary>
+        /// <param name="jsonData">Json数据</param>
+        /// <returns>格式化后的数据</returns>
+        public static string JsonParse(string jsonData)
+        {
+            // 清除json中的注释
+            jsonData = Regex.Replace(jsonData, @"(#|//)[\S ]*", "");
+            // 清除json中不符合规定的逗号
+            jsonData = Regex.Replace(jsonData, @",(?=[\r\n \t]*[\]\}])|(?<=[\}\]]),[ \t]*\r?\Z", "");
+            return jsonData;
+        }
 
         /// <summary>
         /// 设置游戏信息

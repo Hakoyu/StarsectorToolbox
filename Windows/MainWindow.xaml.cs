@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -25,6 +27,8 @@ namespace StarsectorTools.Windows
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            if (!Directory.Exists(ST.coreDirectory))
+                Directory.CreateDirectory(ST.coreDirectory);
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
             if (!SetConfig())
             {

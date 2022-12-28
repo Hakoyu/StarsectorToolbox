@@ -64,12 +64,12 @@ namespace StarsectorTools.Tools.ModManager
     /// </summary>
     public partial class ModManager : Page
     {
-        private const string modGroupFile = "ModGroup.toml";
-        private const string userDataFile = "UserData.toml";
-        private const string userGroupFile = "UserGroup.toml";
-        private const string modInfoJsonFile = "mod_info.json";
-        private const string backupModsDirectory = "BackUp\\Mods";
-        private const string backupDirectory = "Backup";
+        private const string modGroupFile = $"{ST.coreDirectory}\\ModGroup.toml";
+        private const string userDataFile = $"{ST.coreDirectory}\\UserData.toml";
+        private const string userGroupFile = $"{ST.coreDirectory}\\UserGroup.toml";
+        private const string backupDirectory = $"{ST.coreDirectory}\\Backup";
+        private const string backupModsDirectory = $"{backupDirectory}\\Mods";
+        private const string modInfoFile = "mod_info.json";
         private const string strEnabledMods = "enabledMods";
         private const string strAll = "All";
         private const string strId = "Id";

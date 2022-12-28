@@ -79,7 +79,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 try
                 {
-                    ModInfo info = GetModInfo($"{dir.FullName}\\mod_info.json");
+                    ModInfo info = GetModInfo($"{dir.FullName}\\{modInfoFile}");
                     allModsInfo.Add(info.Id, info);
                     STLog.Instance.WriteLine($"{I18n.ModAddSuccess}: {info.Id}", STLogLevel.DEBUG);
                 }
@@ -99,11 +99,7 @@ namespace StarsectorTools.Tools.ModManager
         private static ModInfo GetModInfo(string jsonPath)
         {
             string datas = File.ReadAllText(jsonPath);
-            // 清除json中的注释
-            datas = Regex.Replace(datas, @"(#|//)[\S ]*", "");
-            // 清除json中不符合规定的逗号
-            datas = Regex.Replace(datas, @",(?=[\r\n \t]*[\]\}])|(?<=[\}\]]),[ \t]*\r?\Z", "");
-            JsonNode jsonData = JsonNode.Parse(datas)!;
+            JsonNode jsonData = JsonNode.Parse(ST.JsonParse(datas))!;
             ModInfo modInfo = new();
             foreach (var data in jsonData.AsObject())
                 modInfo.SetData(data);
@@ -137,7 +133,7 @@ namespace StarsectorTools.Tools.ModManager
             try
             {
                 string err = null!;
-                JsonNode enabledModsJson = JsonNode.Parse(datas)!;
+                JsonNode enabledModsJson = JsonNode.Parse(ST.JsonParse(datas))!;
                 if (enabledModsJson.AsObject().Count != 1 || enabledModsJson.AsObject().ElementAt(0).Key != strEnabledMods)
                     throw new();
                 if (importMode)
@@ -368,7 +364,7 @@ namespace StarsectorTools.Tools.ModManager
                 IsUtility = info.IsUtility,
                 Name = info.Name,
                 Id = info.Id,
-                Author = info.Author,
+                Author = info.Author.Trim(),
                 Version = info.Version,
                 GameVersion = info.GameVersion,
                 IsSameToGameVersion = info.GameVersion == ST.gameVersion,
@@ -772,17 +768,18 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SetModDetails(string id)
         {
-            ModInfo info = allModsInfo[id];
-            if (allModsShowInfo[info.Id].ImageSource != null)
-                Image_ModImage.Source = allModsShowInfo[info.Id].ImageSource;
+            var info = allModsInfo[id];
+            var showInfo = allModsShowInfo[id];
+            if (showInfo.ImageSource != null)
+                Image_ModImage.Source = showInfo.ImageSource;
             else
                 Image_ModImage.Source = null;
-            Label_ModName.Content = info.Name;
-            Label_ModId.Content = info.Id;
-            Label_ModVersion.Content = info.Version;
-            Label_GameVersion.Content = info.GameVersion;
+            Label_ModName.Content = showInfo.Name;
+            Label_ModId.Content = showInfo.Id;
+            Label_ModVersion.Content = showInfo.Version;
+            Label_GameVersion.Content = showInfo.GameVersion;
             Button_ModPath.Content = info.Path;
-            TextBlock_ModAuthor.Text = info.Author;
+            TextBlock_ModAuthor.Text = showInfo.Author;
             if (info.Dependencies is List<ModInfo> list)
             {
                 GroupBox_ModDependencies.Visibility = Visibility.Visible;
@@ -791,7 +788,7 @@ namespace StarsectorTools.Tools.ModManager
             else
                 GroupBox_ModDependencies.Visibility = Visibility.Collapsed;
             TextBlock_ModDescription.Text = info.Description;
-            TextBox_UserDescription.Text = allModsShowInfo[info.Id].UserDescription!;
+            TextBox_UserDescription.Text = showInfo.UserDescription!;
             STLog.Instance.WriteLine($"{I18n.ShowDetails} {id}", STLogLevel.DEBUG);
         }
 
@@ -804,7 +801,7 @@ namespace StarsectorTools.Tools.ModManager
                 return;
             }
             DirectoryInfo dirs = new(tempPath);
-            var filesInfo = dirs.GetFiles(modInfoJsonFile, SearchOption.AllDirectories);
+            var filesInfo = dirs.GetFiles(modInfoFile, SearchOption.AllDirectories);
             if (filesInfo.Length > 0 && filesInfo.First() is FileInfo fileInfo && fileInfo.FullName is string jsonPath)
             {
                 var newModInfo = GetModInfo(jsonPath);
