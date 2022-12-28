@@ -113,7 +113,6 @@ namespace StarsectorTools.Tools.ModManager
                 GetEnabledMods(ST.enabledModsJsonFile);
             else
                 SaveEnabledMods(ST.enabledModsJsonFile);
-            STLog.Instance.WriteLine($"{I18n.CreateFile} {I18n.Path}: {ST.enabledModsJsonFile}");
         }
 
         private void ImportMode()
