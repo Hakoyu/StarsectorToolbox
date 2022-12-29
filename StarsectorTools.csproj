@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\ModGroup.toml" />
+    <Resource Include="Resources\ModTypeGroup.toml" />
     <Resource Include="Resources\Config.toml" />
   </ItemGroup>
 

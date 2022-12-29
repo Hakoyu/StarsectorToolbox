@@ -64,7 +64,7 @@ namespace StarsectorTools.Tools.ModManager
     /// </summary>
     public partial class ModManager : Page
     {
-        private const string modTypeGroupFile = $"{ST.coreDirectory}\\ModGroup.toml";
+        private const string modTypeGroupFile = $"{ST.coreDirectory}\\ModTypeGroup.toml";
         private const string userDataFile = $"{ST.coreDirectory}\\UserData.toml";
         private const string userGroupFile = $"{ST.coreDirectory}\\UserGroup.toml";
         private const string backupDirectory = $"{ST.coreDirectory}\\Backup";
@@ -81,7 +81,7 @@ namespace StarsectorTools.Tools.ModManager
         private const string strAuthor = "Author";
 
         /// <summary>记录了模组类型的嵌入资源链接</summary>
-        private static readonly Uri modTypeGroupUri = new("/Resources/ModGroup.toml", UriKind.Relative);
+        private static readonly Uri modTypeGroupUri = new("/Resources/ModTypeGroup.toml", UriKind.Relative);
 
         /// <summary>模组分组列表的展开状态</summary>
         private bool isGroupMenuOpen = false;
