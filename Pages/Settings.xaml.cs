@@ -90,7 +90,7 @@ namespace StarsectorTools.Pages
         {
             if (sender is Button)
             {
-                ST.OpenFile(STLog.logFile);
+                ST.OpenLink(STLog.logFile);
             }
         }
 

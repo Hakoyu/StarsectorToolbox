@@ -22,6 +22,8 @@ namespace StarsectorTools.Windows
         private bool menuOpen = false;
         private Dictionary<string, Lazy<Page>> menuList = new();
         private Settings settingMenu = null!;
+        private Info infoMenu = null!;
+        private int selectedIndex = -1;
 
         public MainWindow()
         {
@@ -49,11 +51,12 @@ namespace StarsectorTools.Windows
             //foreach (FileInfo file in dirs.GetFiles())
             //{
             //}
-            //Assembly assembly = Assembly.LoadFrom(@"C:\Users\HKW\Desktop\VS\WpfLibrary1\bin\Debug\net6.0-windows\WpfLibrary1.dll");
+            //Assembly assembly = Assembly.LoadFrom(@"C:\Users\HKW\Desktop\WpfLibrary1.dll");
             //Type type = assembly.GetType("WpfLibrary1.Page1");
             //MethodInfo mi = type.GetMethod("MehtodName")!;
             //object obj = assembly.CreateInstance(type.FullName)!;
             //Frame_MainFrame.Content = obj;
+
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
             // 全局错误捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
@@ -129,11 +132,13 @@ namespace StarsectorTools.Windows
                 try
                 {
                     Frame_MainFrame.Content = menuList[item.Tag.ToString()!].Value;
+                    selectedIndex = ListBox_Menu.SelectedIndex;
                 }
                 catch (Exception ex)
                 {
                     STLog.Instance.WriteLine($"{I18n.InitializationError} {item.Tag}", ex);
                     ST.ShowMessageBox($"{I18n.InitializationError}\n{item.Tag}", MessageBoxImage.Error);
+                    ListBox_Menu.SelectedIndex = selectedIndex;
                 }
             }
         }
@@ -166,6 +171,13 @@ namespace StarsectorTools.Windows
             Keyboard.ClearFocus();
             DependencyObject scope = FocusManager.GetFocusScope(this);
             FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
+        }
+
+        private void Button_Info_Click(object sender, RoutedEventArgs e)
+        {
+            infoMenu ??= new();
+            Frame_MainFrame.Content = infoMenu;
+            ListBox_Menu.SelectedIndex = -1;
         }
     }
 }

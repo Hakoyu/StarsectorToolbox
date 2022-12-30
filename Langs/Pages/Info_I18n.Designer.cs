@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Libs {
+namespace StarsectorTools.Langs.Pages {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace StarsectorTools.Langs.Libs {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Libs_I18n {
+    public class Info_I18n {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Libs_I18n() {
+        internal Info_I18n() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Libs {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Libs.Libs_I18n", typeof(Libs_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Pages.Info_I18n", typeof(Info_I18n).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,74 +61,11 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
-        ///   查找类似 设置文件创建成功 的本地化字符串。
+        ///   查找类似 检测更新 的本地化字符串。
         /// </summary>
-        public static string ConfigFileCreatedSuccess {
+        public static string CheckUpdate {
             get {
-                return ResourceManager.GetString("ConfigFileCreatedSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 文件 的本地化字符串。
-        /// </summary>
-        public static string File {
-            get {
-                return ResourceManager.GetString("File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 游戏目录错误 的本地化字符串。
-        /// </summary>
-        public static string GameDirectoryError {
-            get {
-                return ResourceManager.GetString("GameDirectoryError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 游戏目录设置成功 的本地化字符串。
-        /// </summary>
-        public static string GameDirectorySetupSuccess {
-            get {
-                return ResourceManager.GetString("GameDirectorySetupSuccess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 链接错误 的本地化字符串。
-        /// </summary>
-        public static string LinkError {
-            get {
-                return ResourceManager.GetString("LinkError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 载入错误 的本地化字符串。
-        /// </summary>
-        public static string LoadError {
-            get {
-                return ResourceManager.GetString("LoadError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 位置 的本地化字符串。
-        /// </summary>
-        public static string Path {
-            get {
-                return ResourceManager.GetString("Path", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 压缩文件错误 的本地化字符串。
-        /// </summary>
-        public static string ZipFileError {
-            get {
-                return ResourceManager.GetString("ZipFileError", resourceCulture);
+                return ResourceManager.GetString("CheckUpdate", resourceCulture);
             }
         }
     }

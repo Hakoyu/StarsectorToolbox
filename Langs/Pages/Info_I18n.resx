@@ -97,28 +97,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Path" xml:space="preserve">
-    <value>位置</value>
-  </data>
-  <data name="GameDirectoryError" xml:space="preserve">
-    <value>游戏目录错误</value>
-  </data>
-  <data name="File" xml:space="preserve">
-    <value>文件</value>
-  </data>
-  <data name="ZipFileError" xml:space="preserve">
-    <value>压缩文件错误</value>
-  </data>
-  <data name="ConfigFileCreatedSuccess" xml:space="preserve">
-    <value>设置文件创建成功</value>
-  </data>
-  <data name="LoadError" xml:space="preserve">
-    <value>载入错误</value>
-  </data>
-  <data name="GameDirectorySetupSuccess" xml:space="preserve">
-    <value>游戏目录设置成功</value>
-  </data>
-  <data name="LinkError" xml:space="preserve">
-    <value>链接错误</value>
+  <data name="CheckUpdate" xml:space="preserve">
+    <value>检测更新</value>
   </data>
 </root>

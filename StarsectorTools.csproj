@@ -39,6 +39,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Libs_I18n.resx</DependentUpon>
     </Compile>
+    <Compile Update="Langs\Pages\Info_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Info_I18n.resx</DependentUpon>
+    </Compile>
     <Compile Update="Langs\Pages\Settings_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -75,6 +80,10 @@
     <EmbeddedResource Update="Langs\Libs\Libs_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Libs_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Pages\Info_I18n.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Info_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Pages\Settings_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

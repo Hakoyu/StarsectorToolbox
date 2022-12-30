@@ -389,7 +389,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_ModPath_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                ST.OpenFile(button.Content.ToString()!);
+                ST.OpenLink(button.Content.ToString()!);
         }
 
         private void Button_EnableDependencies_Click(object sender, RoutedEventArgs e)
@@ -631,7 +631,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameModsDirectory))
-                ST.OpenFile(ST.gameModsDirectory);
+                ST.OpenLink(ST.gameModsDirectory);
             else
             {
                 STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
@@ -642,7 +642,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_OpenBackupDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(backupDirectory))
-                ST.OpenFile(backupDirectory);
+                ST.OpenLink(backupDirectory);
             else
             {
                 STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
@@ -653,7 +653,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameSaveDirectory))
-                ST.OpenFile(ST.gameSaveDirectory);
+                ST.OpenLink(ST.gameSaveDirectory);
             else
             {
                 STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);

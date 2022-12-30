@@ -12,7 +12,6 @@ using System.Windows.Media;
 using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
-using HKW.Management;
 using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
@@ -346,18 +345,22 @@ namespace StarsectorTools.Libs
         }
 
         /// <summary>
-        /// 使用系统默认打开方式打开文件或文件夹
+        /// 使用系统默认打开方式打开链接,文件或文件夹
         /// </summary>
-        /// <param name="path">路径</param>
+        /// <param name="link">链接</param>
         /// <returns>打开成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool OpenFile(string path)
+        public static bool OpenLink(string link)
         {
-            if (File.Exists(path) || Directory.Exists(path))
+            try
             {
-                Process.Start(new ProcessStartInfo() { FileName = path, UseShellExecute = true });
+                Process.Start(new ProcessStartInfo(link) { UseShellExecute = true });
                 return true;
             }
-            return false;
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(I18n.LinkError, ex);
+                return false;
+            }
         }
 
         /// <summary>

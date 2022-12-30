@@ -446,7 +446,7 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Click += (s, e) =>
                 {
                     STLog.Instance.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[showInfo.Id].Path}");
-                    ST.OpenFile(allModsInfo[showInfo.Id].Path);
+                    ST.OpenLink(allModsInfo[showInfo.Id].Path);
                 };
                 contextMenu.Items.Add(menuItem);
                 STLog.Instance.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -908,7 +908,7 @@ namespace StarsectorTools.Tools.ModManager
             allModsShowInfo.Add(showInfo.Id, showInfo);
             allModShowInfoGroups[ModTypeGroup.All].Add(showInfo);
             // 添加至类型分组
-           allModShowInfoGroups[modInfo.Id].Add(showInfo);
+           allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
             // 添加至已启用或已禁用分组
             if (showInfo.IsEnabled)
                 allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);

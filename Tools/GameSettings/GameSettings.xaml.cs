@@ -106,7 +106,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_OpenLogFile_Click(object sender, RoutedEventArgs e)
         {
             if (File.Exists(gameLogFile))
-                ST.OpenFile(gameLogFile);
+                ST.OpenLink(gameLogFile);
             else
             {
                 STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
@@ -179,7 +179,7 @@ namespace StarsectorTools.Tools.GameSettings
         {
             string dirParh = $"{ST.gameSaveDirectory}\\missions";
             if (Directory.Exists(dirParh))
-                ST.OpenFile(dirParh);
+                ST.OpenLink(dirParh);
             else
             {
                 STLog.Instance.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {dirParh}", STLogLevel.WARN);
@@ -190,7 +190,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameSaveDirectory))
-                ST.OpenFile(ST.gameSaveDirectory);
+                ST.OpenLink(ST.gameSaveDirectory);
             else
             {
                 STLog.Instance.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
@@ -201,7 +201,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_OpenGameDirectory_Click(object sender, RoutedEventArgs e)
         {
             if (Directory.Exists(ST.gameDirectory))
-                ST.OpenFile(ST.gameDirectory);
+                ST.OpenLink(ST.gameDirectory);
         }
 
         private void Button_CustomResolutionReset_Click(object sender, RoutedEventArgs e)

@@ -2,7 +2,9 @@
   x:Class="StarsectorTools.Pages.Info"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:local="clr-namespace:StarsectorTools.Pages"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   Title="Info"
@@ -15,9 +17,52 @@
       <StackPanel HorizontalAlignment="Center">
         <Label
           Height="NaN"
+          Margin="0,0,0,5"
+          Background="{x:Null}"
           Content="Starsector Tools"
           FontSize="24"
           Style="{StaticResource Label_Style}" />
+        <StackPanel
+          Margin="0,0,0,5"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Orientation="Horizontal">
+          <Label
+            Height="NaN"
+            Background="{x:Null}"
+            Content="Version:"
+            Style="{StaticResource Label_Style}" />
+          <Label
+            Height="NaN"
+            Background="{x:Null}"
+            Content="114.514"
+            Style="{StaticResource Label_Style}" />
+          <Button
+            x:Name="Button_CheckUpdate"
+            Click="Button_CheckUpdate_ClickAsync"
+            Content="{x:Static I18n:Info_I18n.CheckUpdate}"
+            Style="{StaticResource Button_Style}" />
+          <emoji:TextBlock x:Name="TextBlock_CheckUpdateIcon"
+            VerticalAlignment="Center"
+            FontSize="16"
+            Text="✅" />
+        </StackPanel>
+        <StackPanel
+          Margin="0,0,0,5"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Orientation="Horizontal">
+          <Label
+            Height="NaN"
+            Background="{x:Null}"
+            Content="Github:"
+            Style="{StaticResource Label_Style}" />
+          <Label Background="{x:Null}" Style="{StaticResource Label_Style}">
+            <Hyperlink x:Name="Hyperlink_GitHub" Click="Hyperlink_GitHub_Click">
+              https://github.com/Hakoyu/StarsectorTools
+            </Hyperlink>
+          </Label>
+        </StackPanel>
       </StackPanel>
     </GroupBox>
   </Grid>
