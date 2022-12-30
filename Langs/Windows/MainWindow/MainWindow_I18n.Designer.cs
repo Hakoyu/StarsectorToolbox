@@ -70,6 +70,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 社区拓展 的本地化字符串。
+        /// </summary>
+        public static string CommunityExpansion {
+            get {
+                return ResourceManager.GetString("CommunityExpansion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 设置文件错误,将恢复为默认设置 的本地化字符串。
         /// </summary>
         public static string ConfigFileError {
@@ -177,6 +186,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string ModManager {
             get {
                 return ResourceManager.GetString("ModManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 官方拓展 的本地化字符串。
+        /// </summary>
+        public static string OfficialExpansion {
+            get {
+                return ResourceManager.GetString("OfficialExpansion", resourceCulture);
             }
         }
         

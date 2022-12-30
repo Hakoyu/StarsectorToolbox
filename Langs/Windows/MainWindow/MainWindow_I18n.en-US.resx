@@ -154,4 +154,10 @@ It may affect the normal operation of the software, so it is recommended to chec
   <data name="GlobalException" xml:space="preserve">
     <value>Global Exception</value>
   </data>
+  <data name="OfficialExpansion" xml:space="preserve">
+    <value>Official expansion</value>
+  </data>
+  <data name="CommunityExpansion" xml:space="preserve">
+    <value>Community Expansion</value>
+  </data>
 </root>

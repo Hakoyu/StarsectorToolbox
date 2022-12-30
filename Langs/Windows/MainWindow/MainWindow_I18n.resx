@@ -154,4 +154,10 @@
   <data name="GlobalException" xml:space="preserve">
     <value>全局异常</value>
   </data>
+  <data name="OfficialExpansion" xml:space="preserve">
+    <value>官方拓展</value>
+  </data>
+  <data name="CommunityExpansion" xml:space="preserve">
+    <value>社区拓展</value>
+  </data>
 </root>

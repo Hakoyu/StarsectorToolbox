@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.DirectoryServices;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -52,9 +53,9 @@ namespace StarsectorTools.Windows
             //{
             //}
             //Assembly assembly = Assembly.LoadFrom(@"C:\Users\HKW\Desktop\WpfLibrary1.dll");
-            //Type type = assembly.GetType("WpfLibrary1.Page1");
+            //Type type = assembly.GetType("WpfLibrary1.Page1")!;
             //MethodInfo mi = type.GetMethod("MehtodName")!;
-            //object obj = assembly.CreateInstance(type.FullName)!;
+            //object obj = assembly.CreateInstance(type.FullName!)!;
             //Frame_MainFrame.Content = obj;
 
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
@@ -160,7 +161,7 @@ namespace StarsectorTools.Windows
             STLog.Instance.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
         }
 
-        private void ListBox_Menu_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void ListBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             // 禁止右键项时会选中项
             e.Handled = true;
@@ -178,6 +179,17 @@ namespace StarsectorTools.Windows
             infoMenu ??= new();
             Frame_MainFrame.Content = infoMenu;
             ListBox_Menu.SelectedIndex = -1;
+        }
+        private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = MouseWheelEvent,
+                Source = sender,
+            };
+            if (sender is Control control && control.Parent is UIElement ui)
+                ui.RaiseEvent(eventArg);
+            e.Handled = true;
         }
     }
 }

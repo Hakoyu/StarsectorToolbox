@@ -94,7 +94,8 @@ namespace StarsectorTools.Windows
             foreach (var lazyPage in menuList.Values)
                 ClosePage(lazyPage.Value);
             menuList.Clear();
-            ListBox_Menu.Items.Clear();
+            while (ListBox_Menu.Items.Count > 2)
+                ListBox_Menu.Items.RemoveAt(0);
         }
 
         private void ClosePage(Page page)
@@ -130,7 +131,7 @@ namespace StarsectorTools.Windows
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_Menu.Items.Add(item);
+            ListBox_Menu.Items.Insert(ListBox_Menu.Items.Count - 2, item);
             menuList.Add(tag, lazyPage);
             STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name}");
         }
