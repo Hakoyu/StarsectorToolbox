@@ -20,7 +20,7 @@ using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 namespace StarsectorTools.Tools.ModManager
 {
     /// <summary>模组分组类型</summary>
-    public static class ModGroupType
+    public static class ModTypeGroup
     {
         /// <summary>全部模组</summary>
         public const string All = nameof(All);
@@ -93,7 +93,7 @@ namespace StarsectorTools.Tools.ModManager
         private string? nowSelectedModId = null;
 
         /// <summary>当前选择的分组名称</summary>
-        private string nowGroupName = ModGroupType.All;
+        private string nowGroupName = ModTypeGroup.All;
 
         /// <summary>提醒保存配置的动画线程</summary>
         private Thread remindSaveThread = null!;
@@ -470,8 +470,8 @@ namespace StarsectorTools.Tools.ModManager
                 string name = window.TextBox_Name.Text;
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
-                    if (name == ModGroupType.Collected || name == strUserCustomData)
-                        ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModGroupType.Collected, strUserCustomData));
+                    if (name == ModTypeGroup.Collected || name == strUserCustomData)
+                        ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData));
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);

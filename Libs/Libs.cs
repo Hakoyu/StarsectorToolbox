@@ -122,7 +122,7 @@ namespace StarsectorTools.Libs
                     name = GetClassNameAndMethodName();
                 else
                     name = GetClassName();
-                sw.WriteLine($"[{name}] {logLevel} {ParseKey(message, keys)}");
+                sw.WriteLine($"[{name}] {logLevel} {KeyParse(message, keys)}");
                 sw.Flush();
             }
         }
@@ -135,12 +135,12 @@ namespace StarsectorTools.Libs
         /// <param name="keys">嵌入实例</param>
         public void WriteLine(string message, Exception ex, params object[] keys)
         {
-            sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {ParseKey(message, keys)}");
-            sw.WriteLine($"{Regex.Replace(ex.StackTrace!, @$"[\S]+(?={nameof(StarsectorTools)})", "")}");
+            sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {KeyParse(message, keys)}");
+            sw.WriteLine(ExceptionParse(ex));
             sw.Flush();
         }
 
-        private string ParseKey(string str, params object[] keys)
+        private string KeyParse(string str, params object[] keys)
         {
             try
             {
@@ -151,7 +151,12 @@ namespace StarsectorTools.Libs
                 return str;
             }
         }
-
+        /// <summary>
+        /// Exception解析 用来精简错误的堆栈输出
+        /// </summary>
+        /// <param name="ex">Exception</param>
+        /// <returns></returns>
+        static public string ExceptionParse(Exception ex) => Regex.Replace(string.Join("\r\n", ex.StackTrace?.Split("\r\n").Where(s => s.Contains(nameof(StarsectorTools)))!), @$"[\S]+(?={nameof(StarsectorTools)})", "");
         /// <summary>关闭</summary>
         public void Close()
         {

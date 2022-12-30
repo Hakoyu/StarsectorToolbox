@@ -146,4 +146,7 @@ Please select the game launcher</value>
   <data name="InitializationError" xml:space="preserve">
     <value>Initialization error</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
 </root>

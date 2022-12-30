@@ -127,7 +127,7 @@
               Height="30"
               Content="{x:Static I18n:ModManager_I18n.AllMods}"
               Style="{StaticResource ListBoxItem_Style}"
-              Tag="{x:Static local:ModGroupType.All}"
+              Tag="{x:Static local:ModTypeGroup.All}"
               ToolTip="{x:Static I18n:ModManager_I18n.AllMods}">
               <pu:ListBoxItemHelper.Icon>
                 <emoji:TextBlock Text="🅰" />
@@ -136,7 +136,7 @@
             <ListBoxItem
               Content="{x:Static I18n:ModManager_I18n.EnabledMod}"
               Style="{StaticResource ListBoxItem_Style}"
-              Tag="{x:Static local:ModGroupType.Enabled}"
+              Tag="{x:Static local:ModTypeGroup.Enabled}"
               ToolTip="{x:Static I18n:ModManager_I18n.EnabledMod}">
               <pu:ListBoxItemHelper.Icon>
                 <emoji:TextBlock Text="✅" />
@@ -145,7 +145,7 @@
             <ListBoxItem
               Content="{x:Static I18n:ModManager_I18n.DisabledMod}"
               Style="{StaticResource ListBoxItem_Style}"
-              Tag="{x:Static local:ModGroupType.Disabled}"
+              Tag="{x:Static local:ModTypeGroup.Disabled}"
               ToolTip="{x:Static I18n:ModManager_I18n.DisabledMod}">
               <pu:ListBoxItemHelper.Icon>
                 <emoji:TextBlock Text="❎" />
@@ -167,7 +167,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.Libraries}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.Libraries}"
+                    Tag="{x:Static local:ModTypeGroup.Libraries}"
                     ToolTip="{x:Static I18n:ModManager_I18n.Libraries}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🔝" />
@@ -176,7 +176,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.MegaMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.MegaMods}"
+                    Tag="{x:Static local:ModTypeGroup.MegaMods}"
                     ToolTip="{x:Static I18n:ModManager_I18n.MegaMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="☢" />
@@ -185,7 +185,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.FactionMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.FactionMods}"
+                    Tag="{x:Static local:ModTypeGroup.FactionMods}"
                     ToolTip="{x:Static I18n:ModManager_I18n.FactionMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🏁" />
@@ -194,7 +194,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.ContentExpansions}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.ContentExpansions}"
+                    Tag="{x:Static local:ModTypeGroup.ContentExpansions}"
                     ToolTip="{x:Static I18n:ModManager_I18n.ContentExpansions}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🆙" />
@@ -203,7 +203,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.UtilityMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.UtilityMods}"
+                    Tag="{x:Static local:ModTypeGroup.UtilityMods}"
                     ToolTip="{x:Static I18n:ModManager_I18n.UtilityMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🛠" />
@@ -212,7 +212,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.MiscellaneousMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.MiscellaneousMods}"
+                    Tag="{x:Static local:ModTypeGroup.MiscellaneousMods}"
                     ToolTip="{x:Static I18n:ModManager_I18n.MiscellaneousMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🛄" />
@@ -221,7 +221,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.BeautifyMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.BeautifyMods}"
+                    Tag="{x:Static local:ModTypeGroup.BeautifyMods}"
                     ToolTip="{x:Static I18n:ModManager_I18n.BeautifyMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="✨" />
@@ -230,7 +230,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.UnknownMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.UnknownMods}"
+                    Tag="{x:Static local:ModTypeGroup.UnknownMods}"
                     ToolTip="{x:Static I18n:ModManager_I18n.UnknownMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🆓" />
@@ -256,7 +256,7 @@
                   <ListBoxItem
                     Content="{x:Static I18n:ModManager_I18n.CollectedMods}"
                     Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static local:ModGroupType.Collected}"
+                    Tag="{x:Static local:ModTypeGroup.Collected}"
                     ToolTip="{x:Static I18n:ModManager_I18n.CollectedMods}">
                     <pu:ListBoxItemHelper.Icon>
                       <emoji:TextBlock Text="🌟" />

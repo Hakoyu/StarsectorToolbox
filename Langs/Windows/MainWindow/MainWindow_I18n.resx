@@ -146,4 +146,7 @@
   <data name="InitializationError" xml:space="preserve">
     <value>初始化错误</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
 </root>

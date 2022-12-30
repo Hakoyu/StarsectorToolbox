@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using StarsectorTools.Libs;
 using StarsectorTools.Pages;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
@@ -53,6 +55,15 @@ namespace StarsectorTools.Windows
             //object obj = assembly.CreateInstance(type.FullName)!;
             //Frame_MainFrame.Content = obj;
             STLog.Instance.WriteLine(I18n.InitializationCompleted);
+            // 全局错误捕获
+            Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
+        }
+
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            ST.ShowMessageBox(STLog.ExceptionParse(e.Exception), MessageBoxImage.Error);
+            STLog.Instance.WriteLine(I18n.Error, e.Exception);
+            e.Handled = true;
         }
 
         //窗体移动
