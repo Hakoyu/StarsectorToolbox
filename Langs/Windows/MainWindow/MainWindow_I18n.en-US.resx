@@ -146,7 +146,12 @@ Please select the game launcher</value>
   <data name="InitializationError" xml:space="preserve">
     <value>Initialization error</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="GlobalExceptionMessage" xml:space="preserve">
+    <value>Global Exception !!! WARNING!!!
+If you see this error, it is an unexpected situation
+It may affect the normal operation of the software, so it is recommended to check the log and submit it to the issue.</value>
+  </data>
+  <data name="GlobalException" xml:space="preserve">
+    <value>Global Exception</value>
   </data>
 </root>

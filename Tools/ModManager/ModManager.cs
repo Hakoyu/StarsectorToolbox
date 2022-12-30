@@ -908,7 +908,7 @@ namespace StarsectorTools.Tools.ModManager
             allModsShowInfo.Add(showInfo.Id, showInfo);
             allModShowInfoGroups[ModTypeGroup.All].Add(showInfo);
             // 添加至类型分组
-           allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
+           allModShowInfoGroups[modInfo.Id].Add(showInfo);
             // 添加至已启用或已禁用分组
             if (showInfo.IsEnabled)
                 allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);

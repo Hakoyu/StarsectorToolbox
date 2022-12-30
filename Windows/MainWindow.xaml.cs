@@ -61,9 +61,11 @@ namespace StarsectorTools.Windows
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            ST.ShowMessageBox(STLog.ExceptionParse(e.Exception), MessageBoxImage.Error);
-            STLog.Instance.WriteLine(I18n.Error, e.Exception);
+            SetBlurEffect();
+            STLog.Instance.WriteLine(I18n.GlobalException, e.Exception);
+            ST.ShowMessageBox(I18n.GlobalExceptionMessage, MessageBoxImage.Error);
             e.Handled = true;
+            RemoveBlurEffect();
         }
 
         //窗体移动
@@ -131,6 +133,7 @@ namespace StarsectorTools.Windows
                 catch (Exception ex)
                 {
                     STLog.Instance.WriteLine($"{I18n.InitializationError} {item.Tag}", ex);
+                    ST.ShowMessageBox($"{I18n.InitializationError}\n{item.Tag}", MessageBoxImage.Error);
                 }
             }
         }

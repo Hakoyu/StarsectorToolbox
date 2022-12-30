@@ -146,7 +146,12 @@
   <data name="InitializationError" xml:space="preserve">
     <value>初始化错误</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>错误</value>
+  <data name="GlobalExceptionMessage" xml:space="preserve">
+    <value>全局异常 !!!警告!!!
+如果你看到了这个错误,说明这是意料之外的情况
+可能会影响软件的正常运行,建议查看log并提交至issue.</value>
+  </data>
+  <data name="GlobalException" xml:space="preserve">
+    <value>全局异常</value>
   </data>
 </root>

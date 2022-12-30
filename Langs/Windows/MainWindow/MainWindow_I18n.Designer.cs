@@ -79,15 +79,6 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 错误 的本地化字符串。
-        /// </summary>
-        public static string Error {
-            get {
-                return ResourceManager.GetString("Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 第一次启动软件
         ///请选择游戏启动程序 的本地化字符串。
         /// </summary>
@@ -121,6 +112,26 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string GameSettings {
             get {
                 return ResourceManager.GetString("GameSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 全局异常 的本地化字符串。
+        /// </summary>
+        public static string GlobalException {
+            get {
+                return ResourceManager.GetString("GlobalException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 全局异常 !!!警告!!!
+        ///如果你看到了这个错误,说明这是意料之外的情况
+        ///可能会影响软件的正常运行,建议查看log并提交至issue. 的本地化字符串。
+        /// </summary>
+        public static string GlobalExceptionMessage {
+            get {
+                return ResourceManager.GetString("GlobalExceptionMessage", resourceCulture);
             }
         }
         
