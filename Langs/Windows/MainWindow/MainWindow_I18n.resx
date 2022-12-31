@@ -154,10 +154,27 @@
   <data name="GlobalException" xml:space="preserve">
     <value>全局异常</value>
   </data>
-  <data name="OfficialExpansion" xml:space="preserve">
-    <value>官方拓展</value>
+  <data name="Expansion" xml:space="preserve">
+    <value>拓展</value>
   </data>
-  <data name="CommunityExpansion" xml:space="preserve">
-    <value>社区拓展</value>
+  <data name="RefreshExpansionList" xml:space="preserve">
+    <value>刷新拓展列表</value>
+  </data>
+  <data name="ModManagerToolTip" xml:space="preserve">
+    <value>用于浏览并管理游戏模组
+有启用禁用,收藏,设置用户分组等功能</value>
+  </data>
+  <data name="GameSettingsToolTip" xml:space="preserve">
+    <value>用于对游戏进行设置
+能修改游戏内存,清理存档和战役配装等</value>
+  </data>
+  <data name="ExpansionLoadError" xml:space="preserve">
+    <value>拓展加载错误</value>
+  </data>
+  <data name="AddExceptionMenu" xml:space="preserve">
+    <value>添加拓展菜单</value>
+  </data>
+  <data name="DIsplayLanguageIs" xml:space="preserve">
+    <value>显示语言为</value>
   </data>
 </root>

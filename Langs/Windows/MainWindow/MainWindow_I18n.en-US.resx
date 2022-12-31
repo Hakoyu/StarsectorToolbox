@@ -147,17 +147,34 @@ Please select the game launcher</value>
     <value>Initialization error</value>
   </data>
   <data name="GlobalExceptionMessage" xml:space="preserve">
-    <value>Global Exception !!! WARNING!!!
+    <value>Global Exception !!!WARNING!!!
 If you see this error, it is an unexpected situation
 It may affect the normal operation of the software, so it is recommended to check the log and submit it to the issue.</value>
   </data>
   <data name="GlobalException" xml:space="preserve">
     <value>Global Exception</value>
   </data>
-  <data name="OfficialExpansion" xml:space="preserve">
-    <value>Official expansion</value>
+  <data name="Expansion" xml:space="preserve">
+    <value>Expansion</value>
   </data>
-  <data name="CommunityExpansion" xml:space="preserve">
-    <value>Community Expansion</value>
+  <data name="RefreshExpansionList" xml:space="preserve">
+    <value>Refresh expansion list</value>
+  </data>
+  <data name="ModManagerToolTip" xml:space="preserve">
+    <value>For browsing and managing game mod
+There are functions to enable and disable, favorite, set user groups, etc</value>
+  </data>
+  <data name="GameSettingsToolTip" xml:space="preserve">
+    <value>For setting up the game
+Can modify the game memory, clean up archives and campaign outfits, etc</value>
+  </data>
+  <data name="ExpansionLoadError" xml:space="preserve">
+    <value>Expansion load error</value>
+  </data>
+  <data name="AddExceptionMenu" xml:space="preserve">
+    <value>Add exception menu</value>
+  </data>
+  <data name="DIsplayLanguageIs" xml:space="preserve">
+    <value>Display language is</value>
   </data>
 </root>

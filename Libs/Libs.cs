@@ -81,7 +81,6 @@ namespace StarsectorTools.Libs
         /// <returns>类型名和方法名</returns>
         private static string? GetClassNameAndMethodName()
         {
-            //MethodBase? method = new StackTrace().GetFrames().Where(i => i.GetMethod()!.Module.Assembly.GetName()!.Name!.StartsWith(nameof(StarsectorTools))).ElementAt(2).GetMethod();
             MethodBase? method = new StackTrace().GetFrame(2)?.GetMethod();
             return $"{method?.ReflectedType?.Name}.{method?.Name}";
         }
@@ -92,7 +91,6 @@ namespace StarsectorTools.Libs
         /// <returns></returns>
         private static string? GetClassName()
         {
-            //return new StackTrace().GetFrames().Where(i => i.GetMethod()!.Module.Assembly.GetName()!.Name!.StartsWith(nameof(StarsectorTools))).ElementAt(2).GetMethod()?.DeclaringType?.Name;
             return new StackTrace().GetFrame(2)?.GetMethod()?.DeclaringType?.Name;
         }
 

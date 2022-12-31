@@ -129,45 +129,26 @@
           <ListBoxItem Padding="0">
             <Expander
               Padding="0"
-              Header="{x:Static I18n:MainWindow_I18n.OfficialExpansion}"
+              Header="{x:Static I18n:MainWindow_I18n.Expansion}"
               IsExpanded="True"
               Style="{StaticResource Expander_Style}">
+              <Expander.ContextMenu>
+                <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                  <MenuItem Click="RefreshExpansionMenu_Click" Header="{x:Static I18n:MainWindow_I18n.RefreshExpansionList}">
+                    <MenuItem.Icon>
+                      <emoji:TextBlock FontSize="16" Text="🔄" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                </ContextMenu>
+              </Expander.ContextMenu>
               <ListBox
-                x:Name="ListBox_OfficialExpansion"
+                x:Name="ListBox_ExpansionMenu"
                 HorizontalContentAlignment="Stretch"
                 pu:IconHelper.Margin="0,0,10,0"
                 PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                 PreviewMouseWheel="ListBox_PreviewMouseWheel"
                 SelectionChanged="ListBox_Menu_SelectionChanged"
-                Style="{StaticResource ListBox_Style}">
-                <ListBoxItem Style="{StaticResource ListBoxItem_Style}">
-                  <pu:ListBoxItemHelper.Icon>
-                    <emoji:TextBlock Text="🌟" />
-                  </pu:ListBoxItemHelper.Icon>
-                </ListBoxItem>
-              </ListBox>
-            </Expander>
-          </ListBoxItem>
-          <ListBoxItem Padding="0">
-            <Expander
-              Padding="0"
-              Header="{x:Static I18n:MainWindow_I18n.CommunityExpansion}"
-              IsExpanded="True"
-              Style="{StaticResource Expander_Style}">
-              <ListBox
-                x:Name="ListBox_CommunityExpansion"
-                HorizontalContentAlignment="Stretch"
-                pu:IconHelper.Margin="0,0,10,0"
-                PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-                PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                SelectionChanged="ListBox_Menu_SelectionChanged"
-                Style="{StaticResource ListBox_Style}">
-                <ListBoxItem Style="{StaticResource ListBoxItem_Style}">
-                  <pu:ListBoxItemHelper.Icon>
-                    <emoji:TextBlock Text="🌟" />
-                  </pu:ListBoxItemHelper.Icon>
-                </ListBoxItem>
-              </ListBox>
+                Style="{StaticResource ListBox_Style}" />
             </Expander>
           </ListBoxItem>
         </ListBox>

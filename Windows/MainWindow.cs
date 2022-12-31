@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
@@ -16,6 +17,13 @@ namespace StarsectorTools.Windows
 {
     public partial class MainWindow
     {
+        private void InitializeDirectories()
+        {
+            if (!Directory.Exists(ST.coreDirectory))
+                Directory.CreateDirectory(ST.coreDirectory);
+            if (!Directory.Exists(expansionDirectories))
+                Directory.CreateDirectory(expansionDirectories);
+        }
         private bool SetConfig()
         {
             try
@@ -74,27 +82,28 @@ namespace StarsectorTools.Windows
 
         public void ChangeLanguage()
         {
+            STLog.Instance.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
             Label_Title.Content = I18n.StarsectorTools;
             Button_Settings.Content = I18n.Settings;
             Button_Info.Content = I18n.Info;
-            RefreshMenuList();
-        }
-
-        public void RefreshMenuList()
-        {
-            ClearMenu();
-            AddMemu("🌐", I18n.ModManager, nameof(ModManager), new(() => new ModManager()));
-            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), new(() => new GameSettings()));
-
+            RefreshMenu();
+            RefreshExpansionMenu();
             STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
         }
 
+        private void RefreshMenu()
+        {
+            ClearMenu();
+            AddMemu("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, new(() => new ModManager()));
+            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, new(() => new GameSettings()));
+
+        }
         private void ClearMenu()
         {
-            foreach (var lazyPage in menuList.Values)
+            foreach (var lazyPage in menus.Values)
                 ClosePage(lazyPage.Value);
-            menuList.Clear();
-            while (ListBox_Menu.Items.Count > 2)
+            menus.Clear();
+            while (ListBox_Menu.Items.Count > 1)
                 ListBox_Menu.Items.RemoveAt(0);
         }
 
@@ -106,13 +115,15 @@ namespace StarsectorTools.Windows
                 _ = info.Invoke(page, null)!;
         }
 
-        private void AddMemu(string icon, string name, string tag, Lazy<Page> lazyPage)
+        private void AddMemu(string icon, string name, string id, string toolTip, Lazy<Page> lazyPage)
         {
-            var item = new ListBoxItem();
-            item.Content = name;
-            item.ToolTip = name;
-            item.Tag = tag;
-            item.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
+            var item = new ListBoxItem
+            {
+                Content = name,
+                ToolTip = toolTip,
+                Tag = id,
+                Style = (Style)Application.Current.Resources["ListBoxItem_Style"]
+            };
             ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
@@ -122,18 +133,108 @@ namespace StarsectorTools.Windows
             menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
-                Type type = menuList[tag].Value.GetType();
-                ClosePage(menuList[tag].Value);
-                menuList[tag] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
+                Type type = menus[id].Value.GetType();
+                ClosePage(menus[id].Value);
+                menus[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
-                    Frame_MainFrame.Content = menuList[tag].Value;
-                STLog.Instance.WriteLine($"{I18n.RefreshPage}: {tag}");
+                    Frame_MainFrame.Content = menus[id].Value;
+                STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_Menu.Items.Insert(ListBox_Menu.Items.Count - 2, item);
-            menuList.Add(tag, lazyPage);
+            ListBox_Menu.Items.Insert(ListBox_Menu.Items.Count - 1, item);
+            menus.Add(id, lazyPage);
             STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name}");
         }
+        private void RefreshExpansionMenu()
+        {
+            ClearExpansionMenu();
+            GetAllExpansion();
+        }
+        private void ClearExpansionMenu()
+        {
+            foreach (var lazyPage in expansionMenus.Values)
+                ClosePage(lazyPage.Value);
+            expansionMenus.Clear();
+            allExceptionInfo.Clear();
+            ListBox_ExpansionMenu.Items.Clear();
+        }
+        private void GetAllExpansion()
+        {
+            string nowDir = null!;
+            string err = null!;
+            try
+            {
+                DirectoryInfo dirs = new(expansionDirectories);
+                foreach (var dir in dirs.GetDirectories())
+                {
+                    nowDir = dir.FullName;
+                    var files = dir.GetFiles(expansionInfoFile);
+                    if (files.Length == 0)
+                    {
+                        err ??= I18n.ExpansionLoadError;
+                        err += $"\n{nowDir}";
+                        STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", STLogLevel.WARN);
+                        continue;
+                    }
+                    GetExpansionMenu(dir.FullName, files.First().FullName);
+                }
+                if (err != null)
+                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", ex);
+                ST.ShowMessageBox($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", MessageBoxImage.Error);
+            }
+        }
+        private void GetExpansionMenu(string directory, string tomlFile)
+        {
+            ExpansionInfo expansionInfo = new(TOML.Parse(tomlFile));
+            allExceptionInfo.Add(expansionInfo.Id, expansionInfo);
+            AddExpansionMenu(expansionInfo.Icon,
+                             expansionInfo.Name,
+                             expansionInfo.Id,
+                             expansionInfo.Description,
+                             new(() => GetExpansionPage($"{directory}\\{expansionInfo.ExpansionFile}", expansionInfo.ExpansionId)));
+        }
+        private Page GetExpansionPage(string assemblyFile, string name)
+        {
+            Assembly assembly = Assembly.LoadFrom(assemblyFile);
+            Type type = assembly.GetType(name)!;
+            return (Page)assembly.CreateInstance(type.FullName!)!;
+        }
+        private void AddExpansionMenu(string icon, string name, string id, string toolTip, Lazy<Page> lazyPage)
+        {
+            var item = new ListBoxItem
+            {
+                Content = name,
+                ToolTip = toolTip,
+                Tag = id,
+                Style = (Style)Application.Current.Resources["ListBoxItem_Style"]
+            };
+            ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
+            ContextMenu contextMenu = new();
+            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+            // 重载当前菜单
+            MenuItem menuItem = new();
+            menuItem.Header = I18n.RefreshPage;
+            menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
+            menuItem.Click += (s, e) =>
+            {
+                Type type = expansionMenus[id].Value.GetType();
+                ClosePage(expansionMenus[id].Value);
+                expansionMenus[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
+                if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
+                    Frame_MainFrame.Content = expansionMenus[id].Value;
+                STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
+            };
+            contextMenu.Items.Add(menuItem);
+            item.ContextMenu = contextMenu;
+            ListBox_ExpansionMenu.Items.Add(item);
+            expansionMenus.Add(id, lazyPage);
+            STLog.Instance.WriteLine($"{I18n.AddExceptionMenu} {icon} {name}");
+        }
+
     }
 }

@@ -61,6 +61,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 添加拓展菜单 的本地化字符串。
+        /// </summary>
+        public static string AddExceptionMenu {
+            get {
+                return ResourceManager.GetString("AddExceptionMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 添加菜单 的本地化字符串。
         /// </summary>
         public static string AddMenu {
@@ -70,20 +79,38 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 社区拓展 的本地化字符串。
-        /// </summary>
-        public static string CommunityExpansion {
-            get {
-                return ResourceManager.GetString("CommunityExpansion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 设置文件错误,将恢复为默认设置 的本地化字符串。
         /// </summary>
         public static string ConfigFileError {
             get {
                 return ResourceManager.GetString("ConfigFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 显示语言为 的本地化字符串。
+        /// </summary>
+        public static string DIsplayLanguageIs {
+            get {
+                return ResourceManager.GetString("DIsplayLanguageIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 拓展 的本地化字符串。
+        /// </summary>
+        public static string Expansion {
+            get {
+                return ResourceManager.GetString("Expansion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 拓展加载错误 的本地化字符串。
+        /// </summary>
+        public static string ExpansionLoadError {
+            get {
+                return ResourceManager.GetString("ExpansionLoadError", resourceCulture);
             }
         }
         
@@ -121,6 +148,16 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string GameSettings {
             get {
                 return ResourceManager.GetString("GameSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 用于对游戏进行设置
+        ///能修改游戏内存,清理存档和战役配装等 的本地化字符串。
+        /// </summary>
+        public static string GameSettingsToolTip {
+            get {
+                return ResourceManager.GetString("GameSettingsToolTip", resourceCulture);
             }
         }
         
@@ -190,11 +227,12 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 官方拓展 的本地化字符串。
+        ///   查找类似 用于浏览并管理游戏模组
+        ///有启用禁用,收藏,设置用户分组等功能 的本地化字符串。
         /// </summary>
-        public static string OfficialExpansion {
+        public static string ModManagerToolTip {
             get {
-                return ResourceManager.GetString("OfficialExpansion", resourceCulture);
+                return ResourceManager.GetString("ModManagerToolTip", resourceCulture);
             }
         }
         
@@ -204,6 +242,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string Path {
             get {
                 return ResourceManager.GetString("Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 刷新拓展列表 的本地化字符串。
+        /// </summary>
+        public static string RefreshExpansionList {
+            get {
+                return ResourceManager.GetString("RefreshExpansionList", resourceCulture);
             }
         }
         
