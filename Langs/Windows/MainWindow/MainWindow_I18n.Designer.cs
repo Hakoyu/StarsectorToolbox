@@ -63,9 +63,9 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         /// <summary>
         ///   查找类似 添加拓展菜单 的本地化字符串。
         /// </summary>
-        public static string AddExceptionMenu {
+        public static string AddExpansionMenu {
             get {
-                return ResourceManager.GetString("AddExceptionMenu", resourceCulture);
+                return ResourceManager.GetString("AddExpansionMenu", resourceCulture);
             }
         }
         
@@ -102,6 +102,24 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string Expansion {
             get {
                 return ResourceManager.GetString("Expansion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ExpansionFile错误 的本地化字符串。
+        /// </summary>
+        public static string ExpansionFileError {
+            get {
+                return ResourceManager.GetString("ExpansionFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ExpansionId错误 的本地化字符串。
+        /// </summary>
+        public static string ExpansionIdError {
+            get {
+                return ResourceManager.GetString("ExpansionIdError", resourceCulture);
             }
         }
         
@@ -233,6 +251,24 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string ModManagerToolTip {
             get {
                 return ResourceManager.GetString("ModManagerToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 页面初始化错误 的本地化字符串。
+        /// </summary>
+        public static string PageInitializationError {
+            get {
+                return ResourceManager.GetString("PageInitializationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 页面不存在 的本地化字符串。
+        /// </summary>
+        public static string PageNotPresent {
+            get {
+                return ResourceManager.GetString("PageNotPresent", resourceCulture);
             }
         }
         

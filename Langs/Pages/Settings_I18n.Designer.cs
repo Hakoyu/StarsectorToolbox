@@ -61,11 +61,47 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
+        ///   查找类似 清除拓展调试目录 的本地化字符串。
+        /// </summary>
+        public static string Clear {
+            get {
+                return ResourceManager.GetString("Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 清除拓展调试目录 的本地化字符串。
+        /// </summary>
+        public static string ClearExpansionDebugPath {
+            get {
+                return ResourceManager.GetString("ClearExpansionDebugPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 设置文件错误 的本地化字符串。
         /// </summary>
         public static string ConfigFileError {
             get {
                 return ResourceManager.GetString("ConfigFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 拓展调试路径 的本地化字符串。
+        /// </summary>
+        public static string ExpansionDebugPath {
+            get {
+                return ResourceManager.GetString("ExpansionDebugPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件 的本地化字符串。
+        /// </summary>
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
             }
         }
         
@@ -88,7 +124,7 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
-        ///   查找类似 Log输出级别: 的本地化字符串。
+        ///   查找类似 日志输出级别: 的本地化字符串。
         /// </summary>
         public static string LogLevel {
             get {
@@ -124,7 +160,7 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
-        ///   查找类似 Log输出级别切换为 的本地化字符串。
+        ///   查找类似 日志输出级别切换为 的本地化字符串。
         /// </summary>
         public static string LogLevelSwitch {
             get {
@@ -133,11 +169,38 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
-        ///   查找类似 打开Log文件 的本地化字符串。
+        ///   查找类似 打开日志文件 的本地化字符串。
         /// </summary>
         public static string OpenLogFile {
             get {
                 return ResourceManager.GetString("OpenLogFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 选择调试文件 的本地化字符串。
+        /// </summary>
+        public static string SelectDebugFile {
+            get {
+                return ResourceManager.GetString("SelectDebugFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置 的本地化字符串。
+        /// </summary>
+        public static string Set {
+            get {
+                return ResourceManager.GetString("Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 设置拓展调试目录 的本地化字符串。
+        /// </summary>
+        public static string SetExpansionDebugPath {
+            get {
+                return ResourceManager.GetString("SetExpansionDebugPath", resourceCulture);
             }
         }
         

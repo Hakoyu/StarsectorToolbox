@@ -101,7 +101,7 @@
     <value>设置</value>
   </data>
   <data name="OpenLogFile" xml:space="preserve">
-    <value>打开Log文件</value>
+    <value>打开日志文件</value>
   </data>
   <data name="ConfigFileError" xml:space="preserve">
     <value>设置文件错误</value>
@@ -116,7 +116,7 @@
     <value>警告</value>
   </data>
   <data name="LogLevel" xml:space="preserve">
-    <value>Log输出级别:</value>
+    <value>日志输出级别:</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>语言:</value>
@@ -125,6 +125,27 @@
     <value>语言切换为</value>
   </data>
   <data name="LogLevelSwitch" xml:space="preserve">
-    <value>Log输出级别切换为</value>
+    <value>日志输出级别切换为</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>清除拓展调试目录</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="ExpansionDebugPath" xml:space="preserve">
+    <value>拓展调试路径</value>
+  </data>
+  <data name="SelectDebugFile" xml:space="preserve">
+    <value>选择调试文件</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="SetExpansionDebugPath" xml:space="preserve">
+    <value>设置拓展调试目录</value>
+  </data>
+  <data name="ClearExpansionDebugPath" xml:space="preserve">
+    <value>清除拓展调试目录</value>
   </data>
 </root>

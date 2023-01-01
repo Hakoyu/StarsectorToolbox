@@ -28,13 +28,14 @@ namespace StarsectorTools.Windows
         private const string strName = "Name";
         private const string strDescription = "Description";
         private bool menuOpen = false;
-        private Dictionary<string, Lazy<Page>> menus = new();
+        private Dictionary<string, Page> menus = new();
         private Dictionary<string, Lazy<Page>> expansionMenus = new();
-        private Dictionary<string, ExpansionInfo> allExceptionInfo = new();
-        private Settings settingMenu = null!;
-        private Info infoMenu = null!;
+        private Dictionary<string, ExpansionInfo> allExpansionInfo = new();
+        private Settings settingsPage = null!;
+        private Info infoPage = null!;
         private int menuSelectedIndex = -1;
         private int exceptionMenuSelectedIndex = -1;
+        private string expansionDebugPath = string.Empty;
         /// <summary>拓展信息</summary>
         class ExpansionInfo
         {
@@ -56,6 +57,7 @@ namespace StarsectorTools.Windows
             public string ExpansionId { get; private set; } = null!;
             /// <summary>拓展文件</summary>
             public string ExpansionFile { get; private set; } = null!;
+            public Type ExpansionType = null!;
             public ExpansionInfo(TomlTable table)
             {
                 foreach (var info in table)
@@ -83,18 +85,20 @@ namespace StarsectorTools.Windows
             //限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            //亚克力背景
+            //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             // 全局错误捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
             InitializeDirectories();
+            SetSettingsPage();
+            SetInfoPage();
             if (!SetConfig())
             {
                 Close();
                 return;
             }
             ChangeLanguage();
-            //亚克力背景
-            //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-            ListBox_Menu.SelectedIndex = 0;
+            ShowPage();
             Grid_TitleBar.Background = SystemParameters.WindowGlassBrush;
             var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
             if (ST.IsLightColor(color))
@@ -179,52 +183,50 @@ namespace StarsectorTools.Windows
         {
             if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
             {
-                try
+                var id = item.Tag.ToString()!;
+                if (listBox.Name == ListBox_Menu.Name)
                 {
-                    if (listBox.Name == ListBox_Menu.Name)
+                    if (!menus.ContainsKey(id))
                     {
-                        Frame_MainFrame.Content = menus[item.Tag.ToString()!].Value;
-                        menuSelectedIndex = ListBox_Menu.SelectedIndex;
-                        ListBox_ExpansionMenu.SelectedIndex = -1;
+                        STLog.Instance.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
+                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
+                        ListBox_Menu.SelectedIndex = menuSelectedIndex;
+                        return;
                     }
-                    else if (listBox.Name == ListBox_ExpansionMenu.Name)
+                    Frame_MainFrame.Content = menus[id];
+                    menuSelectedIndex = ListBox_Menu.SelectedIndex;
+                    ListBox_ExpansionMenu.SelectedIndex = -1;
+                }
+                else if (listBox.Name == ListBox_ExpansionMenu.Name)
+                {
+                    if (!expansionMenus.ContainsKey(id))
                     {
-                        Frame_MainFrame.Content = expansionMenus[item.Tag.ToString()!].Value;
+                        STLog.Instance.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
+                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
+                        ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
+                        return;
+                    }
+                    try
+                    {
+                        Frame_MainFrame.Content = expansionMenus[id].Value;
                         exceptionMenuSelectedIndex = ListBox_ExpansionMenu.SelectedIndex;
                         ListBox_Menu.SelectedIndex = -1;
                     }
-                }
-                catch (Exception ex)
-                {
-                    STLog.Instance.WriteLine($"{I18n.InitializationError} {item.Content}", ex);
-                    ST.ShowMessageBox($"{I18n.InitializationError}\n{item.Content}", MessageBoxImage.Error);
-                    if (listBox.Name == ListBox_Menu.Name)
-                        ListBox_Menu.SelectedIndex = menuSelectedIndex;
-                    else if (listBox.Name == ListBox_ExpansionMenu.Name)
+                    catch (Exception ex)
+                    {
+                        STLog.Instance.WriteLine($"{I18n.PageInitializationError} {item.Content}", ex);
+                        ST.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", MessageBoxImage.Error);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
+                    }
                 }
             }
-            //if (ListBox_Menu.SelectedIndex >= 0 && ListBox_Menu.SelectedItem is ListBoxItem item)
-            //{
-            //    try
-            //    {
-            //        Frame_MainFrame.Content = menus[item.Tag.ToString()!].Value;
-            //        menuSelectedIndex = ListBox_Menu.SelectedIndex;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        STLog.Instance.WriteLine($"{I18n.InitializationError} {item.Tag}", ex);
-            //        ST.ShowMessageBox($"{I18n.InitializationError}\n{item.Tag}", MessageBoxImage.Error);
-            //        ListBox_Menu.SelectedIndex = menuSelectedIndex;
-            //    }
-            //}
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
         {
-            settingMenu ??= new();
-            Frame_MainFrame.Content = settingMenu;
+            Frame_MainFrame.Content = settingsPage;
             ListBox_Menu.SelectedIndex = -1;
+            ListBox_ExpansionMenu.SelectedIndex = -1;
         }
 
         private void Grid_Menu_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -252,9 +254,9 @@ namespace StarsectorTools.Windows
 
         private void Button_Info_Click(object sender, RoutedEventArgs e)
         {
-            infoMenu ??= new();
-            Frame_MainFrame.Content = infoMenu;
+            Frame_MainFrame.Content = infoPage;
             ListBox_Menu.SelectedIndex = -1;
+            ListBox_ExpansionMenu.SelectedIndex = -1;
         }
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {

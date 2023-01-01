@@ -153,7 +153,11 @@ namespace StarsectorTools.Libs
         /// </summary>
         /// <param name="ex">Exception</param>
         /// <returns></returns>
-        static public string ExceptionParse(Exception ex) => Regex.Replace(string.Join("\r\n", ex.StackTrace?.Split("\r\n").Where(s => s.Contains(nameof(StarsectorTools)))!), @$"[\S]+(?={nameof(StarsectorTools)})", "");
+        static public string ExceptionParse(Exception ex)
+        {
+            var list = ex.ToString().Split("\r\n").Where(s => !s.Contains("at System.") && !s.Contains("at MS.") && !s.Contains("End of inner exception stack trace"));
+            return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?={nameof(StarsectorTools)})", "");
+        }
         /// <summary>关闭</summary>
         public void Close()
         {

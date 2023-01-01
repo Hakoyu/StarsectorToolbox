@@ -3,5 +3,5 @@ GamePath = ""
 [Extras]
 LogLevel = "INFO"
 Lang = "zh-CN"
-[Exception]
-Designation = ""
+[Expansion]
+DebugPath = ""

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -118,6 +119,38 @@ namespace StarsectorTools.Pages
             {
                 MessageBox.Show(I18n.ConfigFileError);
             }
+        }
+
+        public void SetExpansionDebugPath(string path)
+        {
+            TextBox_ExpansionDebugPath.Text = path;
+        }
+
+        private void Button_SetExpansionDebugPath_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Title = I18n.SelectDebugFile,
+                Filter = $"Toml {I18n.File}|Expansion.toml"
+            };
+            if (openFileDialog.ShowDialog().GetValueOrDefault())
+            {
+                string path = Path.GetDirectoryName(openFileDialog.FileName)!;
+                TextBox_ExpansionDebugPath.Text = path;
+                TomlTable toml = TOML.Parse(ST.configFile);
+                toml["Expansion"]["DebugPath"] = path;
+                toml.SaveTo(ST.configFile);
+                STLog.Instance.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
+            }
+        }
+
+        private void Button_ClearExpansionDebugPath_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox_ExpansionDebugPath.Text = "";
+            TomlTable toml = TOML.Parse(ST.configFile);
+            toml["Expansion"]["DebugPath"] = "";
+            toml.SaveTo(ST.configFile);
+            STLog.Instance.WriteLine(I18n.ClearExpansionDebugPath);
         }
     }
 }

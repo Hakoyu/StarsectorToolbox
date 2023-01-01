@@ -171,10 +171,22 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="ExpansionLoadError" xml:space="preserve">
     <value>Expansion load error</value>
   </data>
-  <data name="AddExceptionMenu" xml:space="preserve">
-    <value>Add exception menu</value>
+  <data name="AddExpansionMenu" xml:space="preserve">
+    <value>Add expansion menu</value>
   </data>
   <data name="DIsplayLanguageIs" xml:space="preserve">
     <value>Display language is</value>
+  </data>
+  <data name="PageNotPresent" xml:space="preserve">
+    <value>Page not present</value>
+  </data>
+  <data name="PageInitializationError" xml:space="preserve">
+    <value>Page initialization error</value>
+  </data>
+  <data name="ExpansionIdError" xml:space="preserve">
+    <value>ExpansionId Error</value>
+  </data>
+  <data name="ExpansionFileError" xml:space="preserve">
+    <value>ExpansionFile Error</value>
   </data>
 </root>

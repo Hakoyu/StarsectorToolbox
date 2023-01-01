@@ -171,10 +171,22 @@
   <data name="ExpansionLoadError" xml:space="preserve">
     <value>拓展加载错误</value>
   </data>
-  <data name="AddExceptionMenu" xml:space="preserve">
+  <data name="AddExpansionMenu" xml:space="preserve">
     <value>添加拓展菜单</value>
   </data>
   <data name="DIsplayLanguageIs" xml:space="preserve">
     <value>显示语言为</value>
+  </data>
+  <data name="PageNotPresent" xml:space="preserve">
+    <value>页面不存在</value>
+  </data>
+  <data name="PageInitializationError" xml:space="preserve">
+    <value>页面初始化错误</value>
+  </data>
+  <data name="ExpansionIdError" xml:space="preserve">
+    <value>ExpansionId错误</value>
+  </data>
+  <data name="ExpansionFileError" xml:space="preserve">
+    <value>ExpansionFile错误</value>
   </data>
 </root>

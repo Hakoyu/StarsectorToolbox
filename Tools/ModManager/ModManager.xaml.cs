@@ -221,6 +221,7 @@ namespace StarsectorTools.Tools.ModManager
         public ModManager()
         {
             InitializeComponent();
+            //throw new();
             InitializeData();
             STLog.Instance.WriteLine(I18n.InitialisationComplete);
         }

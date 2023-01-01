@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs;
+using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
@@ -23,6 +24,30 @@ namespace StarsectorTools.Windows
                 Directory.CreateDirectory(ST.coreDirectory);
             if (!Directory.Exists(expansionDirectories))
                 Directory.CreateDirectory(expansionDirectories);
+        }
+        private void SetSettingsPage()
+        {
+            try
+            {
+                settingsPage = new();
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.PageInitializationError}: {nameof(Settings)}", ex);
+                ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Settings)}", MessageBoxImage.Error);
+            }
+        }
+        private void SetInfoPage()
+        {
+            try
+            {
+                infoPage = new();
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.PageInitializationError}: {nameof(Info)}", ex);
+                ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Info)}", MessageBoxImage.Error);
+            }
         }
         private bool SetConfig()
         {
@@ -42,8 +67,16 @@ namespace StarsectorTools.Windows
                             return false;
                         }
                         toml["Game"]["GamePath"] = ST.gameDirectory;
-                        toml.SaveTo(ST.configFile);
                     }
+                    string filePath = toml["Expansion"]["DebugPath"].AsString;
+                    if (CheckExpansionInfo(filePath) is ExpansionInfo)
+                    {
+                        expansionDebugPath = filePath;
+                        settingsPage.SetExpansionDebugPath(filePath);
+                    }
+                    else
+                        toml["Game"]["GamePath"] = "";
+                    toml.SaveTo(ST.configFile);
                 }
                 else
                 {
@@ -91,17 +124,45 @@ namespace StarsectorTools.Windows
             STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
         }
 
+        private void ShowPage()
+        {
+            if (string.IsNullOrEmpty(expansionDebugPath))
+            {
+                ListBox_Menu.SelectedIndex = 0;
+                return;
+            }
+            if (CheckExpansionInfo(expansionDebugPath) is ExpansionInfo info)
+            {
+                AddMemu(info.Icon, info.Name, info.Id, info.Description, CreateMenu(info.ExpansionType));
+                ListBox_Menu.SelectedIndex = ListBox_Menu.Items.Count - 2;
+            }
+        }
+
         private void RefreshMenu()
         {
             ClearMenu();
-            AddMemu("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, new(() => new ModManager()));
-            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, new(() => new GameSettings()));
+            AddMemu("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, CreateMenu(typeof(ModManager)));
+            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, CreateMenu(typeof(GameSettings)));
 
         }
+        private Page? CreateMenu(Type type)
+        {
+            try
+            {
+                return (Page)type.Assembly.CreateInstance(type.FullName!)!;
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.PageInitializationError}: {type.Name}", ex);
+                ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.Name}", MessageBoxImage.Error);
+                return null;
+            }
+        }
+
         private void ClearMenu()
         {
-            foreach (var lazyPage in menus.Values)
-                ClosePage(lazyPage.Value);
+            foreach (var page in menus.Values)
+                ClosePage(page);
             menus.Clear();
             while (ListBox_Menu.Items.Count > 1)
                 ListBox_Menu.Items.RemoveAt(0);
@@ -115,8 +176,10 @@ namespace StarsectorTools.Windows
                 _ = info.Invoke(page, null)!;
         }
 
-        private void AddMemu(string icon, string name, string id, string toolTip, Lazy<Page> lazyPage)
+        private void AddMemu(string icon, string name, string id, string toolTip, Page? page)
         {
+            if (page is null)
+                return;
             var item = new ListBoxItem
             {
                 Content = name,
@@ -133,17 +196,18 @@ namespace StarsectorTools.Windows
             menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
-                Type type = menus[id].Value.GetType();
-                ClosePage(menus[id].Value);
-                menus[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
-                if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
-                    Frame_MainFrame.Content = menus[id].Value;
+                ClosePage(menus[id]);
+                if (CreateMenu(menus[id].GetType()) is not Page newPage)
+                    return;
+                menus[id] = newPage;
+                if (Frame_MainFrame.Content is Page oldPage && oldPage.GetType() == newPage.GetType())
+                    Frame_MainFrame.Content = menus[id];
                 STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
             ListBox_Menu.Items.Insert(ListBox_Menu.Items.Count - 1, item);
-            menus.Add(id, lazyPage);
+            menus.Add(id, page);
             STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name}");
         }
         private void RefreshExpansionMenu()
@@ -156,31 +220,21 @@ namespace StarsectorTools.Windows
             foreach (var lazyPage in expansionMenus.Values)
                 ClosePage(lazyPage.Value);
             expansionMenus.Clear();
-            allExceptionInfo.Clear();
+            allExpansionInfo.Clear();
             ListBox_ExpansionMenu.Items.Clear();
         }
         private void GetAllExpansion()
         {
             string nowDir = null!;
-            string err = null!;
             try
             {
                 DirectoryInfo dirs = new(expansionDirectories);
                 foreach (var dir in dirs.GetDirectories())
                 {
                     nowDir = dir.FullName;
-                    var files = dir.GetFiles(expansionInfoFile);
-                    if (files.Length == 0)
-                    {
-                        err ??= I18n.ExpansionLoadError;
-                        err += $"\n{nowDir}";
-                        STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", STLogLevel.WARN);
-                        continue;
-                    }
-                    GetExpansionMenu(dir.FullName, files.First().FullName);
+                    if (CheckExpansionInfo(nowDir) is ExpansionInfo expansionInfo)
+                        GetExpansionMenu(expansionInfo);
                 }
-                if (err != null)
-                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
@@ -188,21 +242,48 @@ namespace StarsectorTools.Windows
                 ST.ShowMessageBox($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", MessageBoxImage.Error);
             }
         }
-        private void GetExpansionMenu(string directory, string tomlFile)
+        private ExpansionInfo? CheckExpansionInfo(string directory)
         {
-            ExpansionInfo expansionInfo = new(TOML.Parse(tomlFile));
-            allExceptionInfo.Add(expansionInfo.Id, expansionInfo);
+            string tomlFile = $"{directory}\\{expansionInfoFile}";
+            try
+            {
+                if (!File.Exists(tomlFile))
+                {
+                    STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
+                    return null;
+                }
+                var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
+                if (!File.Exists($"{directory}\\{expansionInfo.ExpansionFile}"))
+                {
+                    STLog.Instance.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    ST.ShowMessageBox($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
+                    return null;
+                }
+                expansionInfo.ExpansionType = Assembly.LoadFrom($"{directory}\\{expansionInfo.ExpansionFile}").GetType(expansionInfo.ExpansionId)!;
+                if (expansionInfo.ExpansionType is null)
+                {
+                    STLog.Instance.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    ST.ShowMessageBox($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
+                    return null;
+                }
+                return expansionInfo;
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
+                ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Error);
+                return null;
+            }
+        }
+        private void GetExpansionMenu(ExpansionInfo expansionInfo)
+        {
+            allExpansionInfo.Add(expansionInfo.Id, expansionInfo);
             AddExpansionMenu(expansionInfo.Icon,
                              expansionInfo.Name,
                              expansionInfo.Id,
                              expansionInfo.Description,
-                             new(() => GetExpansionPage($"{directory}\\{expansionInfo.ExpansionFile}", expansionInfo.ExpansionId)));
-        }
-        private Page GetExpansionPage(string assemblyFile, string name)
-        {
-            Assembly assembly = Assembly.LoadFrom(assemblyFile);
-            Type type = assembly.GetType(name)!;
-            return (Page)assembly.CreateInstance(type.FullName!)!;
+                             new(() => (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!));
         }
         private void AddExpansionMenu(string icon, string name, string id, string toolTip, Lazy<Page> lazyPage)
         {
@@ -222,7 +303,7 @@ namespace StarsectorTools.Windows
             menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
-                Type type = expansionMenus[id].Value.GetType();
+                Type type = allExpansionInfo[id].ExpansionType;
                 ClosePage(expansionMenus[id].Value);
                 expansionMenus[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
@@ -233,8 +314,7 @@ namespace StarsectorTools.Windows
             item.ContextMenu = contextMenu;
             ListBox_ExpansionMenu.Items.Add(item);
             expansionMenus.Add(id, lazyPage);
-            STLog.Instance.WriteLine($"{I18n.AddExceptionMenu} {icon} {name}");
+            STLog.Instance.WriteLine($"{I18n.AddExpansionMenu} {icon} {name}");
         }
-
     }
 }
