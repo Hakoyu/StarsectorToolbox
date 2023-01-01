@@ -346,17 +346,15 @@ namespace StarsectorTools.Tools.ModManager
             });
         }
 
-        private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type)
-        {
-            return new ObservableCollection<ModShowInfo>(type switch
+        private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
+            new ObservableCollection<ModShowInfo>(type switch
             {
                 strName => allModShowInfoGroups[nowGroupName].Where(i => i.Name.Contains(text, StringComparison.OrdinalIgnoreCase)),
                 strId => allModShowInfoGroups[nowGroupName].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
                 strAuthor => allModShowInfoGroups[nowGroupName].Where(i => i.Author.Contains(text, StringComparison.OrdinalIgnoreCase)),
                 strUserDescription => allModShowInfoGroups[nowGroupName].Where(i => i.UserDescription.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                _ => throw new()
+                _ => null!
             });
-        }
 
         private ModShowInfo CreateModShowInfo(ModInfo info)
         {
@@ -908,7 +906,7 @@ namespace StarsectorTools.Tools.ModManager
             allModsShowInfo.Add(showInfo.Id, showInfo);
             allModShowInfoGroups[ModTypeGroup.All].Add(showInfo);
             // 添加至类型分组
-           allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
+            allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
             // 添加至已启用或已禁用分组
             if (showInfo.IsEnabled)
                 allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);
