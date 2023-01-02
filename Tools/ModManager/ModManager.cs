@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
-using StarsectorTools.Libs;
+using StarsectorTools.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager

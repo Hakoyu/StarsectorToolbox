@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
-using StarsectorTools.Libs;
+using StarsectorTools.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager

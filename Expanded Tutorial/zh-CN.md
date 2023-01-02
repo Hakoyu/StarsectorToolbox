@@ -56,7 +56,7 @@ public Page1()
 }
 ```
 
-如果你无法使用 `using StarsectorTools.Libs;`
+如果你无法使用 `using StarsectorTools.Utils;`
 那可能是引用不正确
 
 然后使用 StarsectorTools 的拓展调试功能定位拓展的路径即可载入
@@ -65,12 +65,13 @@ public Page1()
 ## 测试断点调试
 
 在`STLog`处打上断点
-在 VS2022**调试->附加到进程**中选择`StarsectorTools.exe`
-也可以通过选择窗口来指定`StarsectorTools.exe`
-完成后在 StarsectorTools 中右键拓展项,选择`刷新页面`
+在 VS2022**调试->附加到进程**中选择**StarsectorTools.exe**
+也可以通过选择窗口来指定**StarsectorTools.exe**
+完成后在 StarsectorTools 中右键拓展项,点击**刷新页面**
 如果操作正确,此时会命中断点
 
-**注意:** 如果已经加载拓展,则不要在运行时
+与正常的拓展载入不同,调试拓展会将内容载入到内存
+你可以对拓展进行修改与编译,完成后使用`刷新页面`即可
 
 ## 日志输出及弹窗使用规范
 

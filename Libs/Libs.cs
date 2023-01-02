@@ -19,7 +19,7 @@ using SharpCompress.Common;
 using StarsectorTools.Windows;
 using I18n = StarsectorTools.Langs.Libs.Libs_I18n;
 
-namespace StarsectorTools.Libs
+namespace StarsectorTools.Utils
 {
     /// <summary>StarsectorTools日志等级</summary>
     public enum STLogLevel

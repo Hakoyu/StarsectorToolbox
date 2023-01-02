@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
-using StarsectorTools.Libs;
+using StarsectorTools.Utils;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;

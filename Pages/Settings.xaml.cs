@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using HKW.TomlParse;
-using StarsectorTools.Libs;
+using StarsectorTools.Utils;
 using StarsectorTools.Windows;
 using I18n = StarsectorTools.Langs.Pages.Settings_I18n;
 
