@@ -22,6 +22,7 @@
 在 Debug 目录下(通常位于`\bin\Debug\net6.0-windows`)
 建立拓展信息文件 **Expansion.toml**
 标准格式如下
+
 ```toml
 # 拓展的ID
 Id = "testId"
@@ -43,14 +44,40 @@ ExpansionId = "WpfLibrary1.Page1"
 ExpansionFile = "WpfLibrary1.dll"
 ```
 
-## Log 输出及弹窗使用规范
+## 测试入口
+
+在 **Page1** 中写入
+
+```csharp
+public Page1()
+{
+    InitializeComponent();
+    STLog.Instance.WriteLine(GetType().ToString());
+}
+```
+
+如果你无法使用 `using StarsectorTools.Libs;`
+那可能是引用不正确
+
+然后使用 StarsectorTools 的拓展调试功能定位拓展的路径即可载入
+如果操作正确,此时 **StarsectorTools.log** 中会输出 `[Page1] INFO WpfLibrary1.Page1`
+
+## 测试断点调试
+
+在`STLog`处打上断点
+在 VS2022**调试->附加到进程**中选择`StarsectorTools.exe`
+也可以通过选择窗口来指定`StarsectorTools.exe`
+完成后在 StarsectorTools 中右键拓展项,选择`刷新页面`
+如果操作正确,此时会命中断点
+
+**注意:** 如果已经加载拓展,则不要在运行时
+
+## 日志输出及弹窗使用规范
 
 ### 标准信息使用默认输出
 
 ```csharp
-// 等价于STLog.Instance.WriteLine(message, STLogLevel.INFO);
 STLog.Instance.WriteLine(message);
-// 等价于ST.ShowMessageBox(message, MessageBoxImage.Information);
 ST.ShowMessageBox(message);
 ```
 
@@ -63,7 +90,7 @@ if(isTrue == true)
 }
 else
 {
-    ST.ShowMessageBox(message, STLogLevel.WARNING);
+    STLog.Instance.WriteLine(message, STLogLevel.WARNING);
     ST.ShowMessageBox(message, MessageBoxImage.Warning);
 }
 ```

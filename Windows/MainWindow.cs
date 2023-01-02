@@ -69,7 +69,7 @@ namespace StarsectorTools.Windows
                         toml["Game"]["GamePath"] = ST.gameDirectory;
                     }
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
-                    if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath) is ExpansionInfo)
+                    if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath, true) is ExpansionInfo)
                     {
                         expansionDebugPath = filePath;
                         settingsPage.SetExpansionDebugPath(filePath);
@@ -140,11 +140,10 @@ namespace StarsectorTools.Windows
             if (string.IsNullOrEmpty(expansionDebugPath))
             {
                 ListBox_MainMenu.SelectedIndex = 0;
-                return;
             }
-            if (CheckExpansionInfo(expansionDebugPath) is ExpansionInfo info)
+            else if (CheckExpansionInfo(expansionDebugPath, true) is ExpansionInfo info)
             {
-                AddPage(info.Icon, info.Name, info.Id, info.Description, CreatePage(info.ExpansionType));
+                AddExpansionDebugPage(info);
                 ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
             }
         }
@@ -186,11 +185,8 @@ namespace StarsectorTools.Windows
             if (page.GetType().GetMethod("Close") is MethodInfo info)
                 _ = info.Invoke(page, null)!;
         }
-
-        private void AddPage(string icon, string name, string id, string toolTip, Page? page)
+        private ListBoxItem CreateListBoxItemForPage(string icon, string name, string id, string toolTip)
         {
-            if (page is null)
-                return;
             var item = new ListBoxItem
             {
                 Content = name,
@@ -199,6 +195,14 @@ namespace StarsectorTools.Windows
                 Style = (Style)Application.Current.Resources["ListBoxItem_Style"]
             };
             ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
+            return item;
+        }
+
+        private void AddPage(string icon, string name, string id, string toolTip, Page? page)
+        {
+            if (page is null)
+                return;
+            var item = CreateListBoxItemForPage(icon, name, id, toolTip);
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重载当前菜单
@@ -221,17 +225,7 @@ namespace StarsectorTools.Windows
             pages.Add(id, page);
             STLog.Instance.WriteLine($"{I18n.AddPage} {icon} {name}");
         }
-        public void RefreshDebugExpansion()
-        {
-            if (ListBox_MainMenu.Items.Count > 3)
-                ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2);
-            expansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
-            if (CheckExpansionInfo(expansionDebugPath) is ExpansionInfo info)
-            {
-                AddPage(info.Icon, info.Name, info.Id, info.Description, CreatePage(info.ExpansionType));
-                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
-            }
-        }
+
         private void RefreshExpansionPages()
         {
             ClearExpansionPages();
@@ -252,7 +246,7 @@ namespace StarsectorTools.Windows
                 if (CheckExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
                     GetExpansionPage(expansionInfo);
         }
-        private ExpansionInfo? CheckExpansionInfo(string directory)
+        private ExpansionInfo? CheckExpansionInfo(string directory, bool loadInMemory = false)
         {
             string tomlFile = $"{directory}\\{expansionInfoFile}";
             try
@@ -264,19 +258,26 @@ namespace StarsectorTools.Windows
                     return null;
                 }
                 var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
+                var assemblyFile = $"{directory}\\{expansionInfo.ExpansionFile}";
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
                     STLog.Instance.WriteLine($"{I18n.ExtensionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExtensionAlreadyExists}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
-                if (!File.Exists($"{directory}\\{expansionInfo.ExpansionFile}"))
+                if (!File.Exists(assemblyFile))
                 {
                     STLog.Instance.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
-                expansionInfo.ExpansionType = Assembly.LoadFrom($"{directory}\\{expansionInfo.ExpansionFile}").GetType(expansionInfo.ExpansionId)!;
+                if (loadInMemory)
+                {
+                    var bytes = File.ReadAllBytes(assemblyFile);
+                    expansionInfo.ExpansionType = Assembly.Load(bytes).GetType(expansionInfo.ExpansionId)!;
+                }
+                else
+                    expansionInfo.ExpansionType = Assembly.LoadFrom(assemblyFile).GetType(expansionInfo.ExpansionId)!;
                 if (expansionInfo.ExpansionType is null)
                 {
                     STLog.Instance.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
@@ -304,14 +305,7 @@ namespace StarsectorTools.Windows
             string id = expansionInfo.Id;
             string toolTip = expansionInfo.Description;
             Lazy<Page> lazyPage = new(() => (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!);
-            var item = new ListBoxItem
-            {
-                Content = name,
-                ToolTip = toolTip,
-                Tag = id,
-                Style = (Style)Application.Current.Resources["ListBoxItem_Style"]
-            };
-            ListBoxItemHelper.SetIcon(item, new Emoji.Wpf.TextBlock() { Text = icon });
+            var item = CreateListBoxItemForPage(icon, name, id, toolTip);
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重载当前菜单
@@ -332,6 +326,45 @@ namespace StarsectorTools.Windows
             ListBox_ExpansionMenu.Items.Add(item);
             expansionPages.Add(id, lazyPage);
             STLog.Instance.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
+        }
+        public void RefreshDebugExpansion()
+        {
+            if (ListBox_MainMenu.Items.Count > 3)
+            {
+                pages.Remove(((ListBoxItem)ListBox_MainMenu.Items[^2]).Tag.ToString()!);
+                ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2);
+            }
+            expansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
+            if (CheckExpansionInfo(expansionDebugPath, true) is ExpansionInfo info)
+            {
+                AddExpansionDebugPage(info);
+                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+            }
+        }
+
+        private void AddExpansionDebugPage(ExpansionInfo expansionInfo)
+        {
+            string icon = expansionInfo.Icon;
+            string name = expansionInfo.Name;
+            string id = expansionInfo.Id;
+            string toolTip = expansionInfo.Description;
+            var item = CreateListBoxItemForPage(icon, name, id, toolTip);
+            ContextMenu contextMenu = new();
+            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+            // 重载当前菜单
+            MenuItem menuItem = new();
+            menuItem.Header = I18n.RefreshPage;
+            menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
+            menuItem.Click += (s, e) =>
+            {
+                RefreshDebugExpansion();
+            };
+            contextMenu.Items.Add(menuItem);
+            item.ContextMenu = contextMenu;
+            ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
+            Page page = (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!;
+            pages.Add(id, page);
+            STLog.Instance.WriteLine($"{I18n.RefreshPage} {icon} {name}");
         }
     }
 }
