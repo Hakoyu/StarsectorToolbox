@@ -79,6 +79,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 设置文件创建成功 的本地化字符串。
+        /// </summary>
+        public static string ConfigFileCreatedSuccess {
+            get {
+                return ResourceManager.GetString("ConfigFileCreatedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 设置文件错误,将恢复为默认设置 的本地化字符串。
         /// </summary>
         public static string ConfigFileError {

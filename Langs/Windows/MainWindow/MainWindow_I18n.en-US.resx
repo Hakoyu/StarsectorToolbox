@@ -192,4 +192,7 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="ExtensionAlreadyExists" xml:space="preserve">
     <value>Extension already exists</value>
   </data>
+  <data name="ConfigFileCreatedSuccess" xml:space="preserve">
+    <value>Config file created success</value>
+  </data>
 </root>

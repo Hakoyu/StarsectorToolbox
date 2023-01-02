@@ -69,13 +69,13 @@ namespace StarsectorTools.Windows
                         toml["Game"]["GamePath"] = ST.gameDirectory;
                     }
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
-                    if (CheckExpansionInfo(filePath) is ExpansionInfo)
+                    if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath) is ExpansionInfo)
                     {
                         expansionDebugPath = filePath;
                         settingsPage.SetExpansionDebugPath(filePath);
                     }
                     else
-                        toml["Game"]["GamePath"] = "";
+                        toml["Expansion"]["DebugPath"] = "";
                     toml.SaveTo(ST.configFile);
                 }
                 else
@@ -85,7 +85,7 @@ namespace StarsectorTools.Windows
                         ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxImage.Error);
                         return false;
                     }
-                    ST.CreateConfigFile();
+                    CreateConfigFile();
                     TomlTable toml = TOML.Parse(ST.configFile);
                     toml["Game"]["GamePath"] = ST.gameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
@@ -96,9 +96,21 @@ namespace StarsectorTools.Windows
             {
                 STLog.Instance.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.configFile}", ex);
                 ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.configFile}", MessageBoxImage.Error);
-                ST.CreateConfigFile();
+                CreateConfigFile();
             }
             return true;
+        }
+        /// <summary>
+        /// 从资源中读取默认配置文件并创建
+        /// </summary>
+        private void CreateConfigFile()
+        {
+            if (File.Exists(ST.configFile))
+                File.Delete(ST.configFile);
+            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
+            string str = sr.ReadToEnd();
+            File.WriteAllText(ST.configFile, str);
+            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {ST.configFile}");
         }
 
         public void SetBlurEffect()
@@ -121,6 +133,7 @@ namespace StarsectorTools.Windows
             RefreshExpansionPages();
             STLog.Instance.WriteLine(I18n.PageListRefreshComplete);
         }
+
 
         private void ShowPage()
         {
@@ -207,6 +220,17 @@ namespace StarsectorTools.Windows
             ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
             pages.Add(id, page);
             STLog.Instance.WriteLine($"{I18n.AddPage} {icon} {name}");
+        }
+        public void RefreshDebugExpansion()
+        {
+            if (ListBox_MainMenu.Items.Count > 3)
+                ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2);
+            expansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
+            if (CheckExpansionInfo(expansionDebugPath) is ExpansionInfo info)
+            {
+                AddPage(info.Icon, info.Name, info.Id, info.Description, CreatePage(info.ExpansionType));
+                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+            }
         }
         private void RefreshExpansionPages()
         {

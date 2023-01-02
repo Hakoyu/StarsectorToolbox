@@ -172,9 +172,6 @@ namespace StarsectorTools.Libs
         /// <summary>StarsectorTools配置文件</summary>
         public const string configFile = $"{coreDirectory}\\Config.toml";
 
-        /// <summary>StarsectorTools配置文件资源链接</summary>
-        public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
-
         /// <summary>游戏目录</summary>
         public static string gameDirectory { get; private set; } = null!;
 
@@ -291,19 +288,6 @@ namespace StarsectorTools.Libs
                 STLog.Instance.WriteLine(I18n.LoadError, ex);
                 return false;
             }
-        }
-
-        /// <summary>
-        /// 从资源中读取默认配置文件并创建
-        /// </summary>
-        public static void CreateConfigFile()
-        {
-            if (File.Exists(configFile))
-                File.Delete(configFile);
-            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
-            string str = sr.ReadToEnd();
-            File.WriteAllText(configFile, str);
-            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {configFile}");
         }
 
         /// <summary>

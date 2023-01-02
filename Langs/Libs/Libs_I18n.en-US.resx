@@ -129,9 +129,6 @@
   <data name="ZipFileError" xml:space="preserve">
     <value>Zip file error</value>
   </data>
-  <data name="ConfigFileCreatedSuccess" xml:space="preserve">
-    <value>Config file created success</value>
-  </data>
   <data name="LoadError" xml:space="preserve">
     <value>Load error</value>
   </data>

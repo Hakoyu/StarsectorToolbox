@@ -21,6 +21,8 @@ namespace StarsectorTools.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>StarsectorTools配置文件资源链接</summary>
+        public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
         /// <summary>拓展目录</summary>
         private const string expansionDirectories = "Expansion";
         /// <summary>拓展信息文件</summary>

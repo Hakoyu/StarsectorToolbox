@@ -151,4 +151,7 @@
   <data name="ExpansionDebugPathToolTip" xml:space="preserve">
     <value>用于指定拓展的路径,方便开发者调试.</value>
   </data>
+  <data name="EffectiveAfterReload" xml:space="preserve">
+    <value>重新载入后生效,需要重载吗?</value>
+  </data>
 </root>

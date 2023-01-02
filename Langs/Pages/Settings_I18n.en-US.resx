@@ -171,4 +171,7 @@
   <data name="ExpansionDebugPathToolTip" xml:space="preserve">
     <value>Used to specify the path of the extension, for developers to debug.</value>
   </data>
+  <data name="EffectiveAfterReload" xml:space="preserve">
+    <value>Effective after reload, do you need to reload?</value>
+  </data>
 </root>

@@ -192,4 +192,7 @@
   <data name="ExtensionAlreadyExists" xml:space="preserve">
     <value>拓展已存在</value>
   </data>
+  <data name="ConfigFileCreatedSuccess" xml:space="preserve">
+    <value>设置文件创建成功</value>
+  </data>
 </root>

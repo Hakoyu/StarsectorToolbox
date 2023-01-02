@@ -88,6 +88,15 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
+        ///   查找类似 重新载入后生效,需要重载吗? 的本地化字符串。
+        /// </summary>
+        public static string EffectiveAfterReload {
+            get {
+                return ResourceManager.GetString("EffectiveAfterReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 拓展调试路径 的本地化字符串。
         /// </summary>
         public static string ExpansionDebugPath {
