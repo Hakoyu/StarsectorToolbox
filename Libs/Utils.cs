@@ -17,7 +17,7 @@ using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using StarsectorTools.Windows;
-using I18n = StarsectorTools.Langs.Libs.Libs_I18n;
+using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
 namespace StarsectorTools.Utils
 {

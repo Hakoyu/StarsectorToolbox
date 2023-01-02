@@ -670,19 +670,14 @@ namespace StarsectorTools.Tools.ModManager
                 int minSize = int.Parse(TextBox_MinRandomSize.Text);
                 int maxSize = int.Parse(TextBox_MaxRandomSize.Text);
                 int count = allUserGroups[group].Count;
-                if (minSize < 0)
-                {
-                    ST.ShowMessageBox(I18n.RandomNumberCannotLess0, MessageBoxImage.Warning);
-                    return;
-                }
-                else if (maxSize > count)
+                if (maxSize > count)
                 {
                     ST.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, MessageBoxImage.Warning);
                     return;
                 }
                 else if (minSize > maxSize)
                 {
-                    ST.ShowMessageBox(I18n.MinRandomNumberCannotGreaterMaxRandomNumber, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(I18n.MinRandomNumberCannotBeGreaterMaxRandomNumber, MessageBoxImage.Warning);
                     return;
                 }
                 foreach (var info in allUserGroups[group])

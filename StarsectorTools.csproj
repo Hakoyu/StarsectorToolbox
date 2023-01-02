@@ -34,10 +34,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Langs\Libs\Libs_I18n.Designer.cs">
+    <Compile Update="Langs\Libs\Utils_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Libs_I18n.resx</DependentUpon>
+      <DependentUpon>Utils_I18n.resx</DependentUpon>
     </Compile>
     <Compile Update="Langs\Pages\Info_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -77,9 +77,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Langs\Libs\Libs_I18n.resx">
+    <EmbeddedResource Update="Langs\Libs\Utils_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Libs_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>Utils_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Pages\Info_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

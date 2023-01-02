@@ -732,9 +732,9 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         /// <summary>
         ///   查找类似 最小随机数不能大于最大随机数 的本地化字符串。
         /// </summary>
-        public static string MinRandomNumberCannotGreaterMaxRandomNumber {
+        public static string MinRandomNumberCannotBeGreaterMaxRandomNumber {
             get {
-                return ResourceManager.GetString("MinRandomNumberCannotGreaterMaxRandomNumber", resourceCulture);
+                return ResourceManager.GetString("MinRandomNumberCannotBeGreaterMaxRandomNumber", resourceCulture);
             }
         }
         
@@ -970,15 +970,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string RandomNumberCannotGreaterTotal {
             get {
                 return ResourceManager.GetString("RandomNumberCannotGreaterTotal", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 最小随机数不能小于 0 的本地化字符串。
-        /// </summary>
-        public static string RandomNumberCannotLess0 {
-            get {
-                return ResourceManager.GetString("RandomNumberCannotLess0", resourceCulture);
             }
         }
         

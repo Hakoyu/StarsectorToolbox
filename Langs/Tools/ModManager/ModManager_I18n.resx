@@ -319,13 +319,10 @@
   <data name="RandomNumberCannotNull" xml:space="preserve">
     <value>最小随机数与最大随机数不能为空</value>
   </data>
-  <data name="RandomNumberCannotLess0" xml:space="preserve">
-    <value>最小随机数不能小于 0</value>
-  </data>
   <data name="RandomNumberCannotGreaterTotal" xml:space="preserve">
     <value>最大随机数不能大于用户分组所含模组总数</value>
   </data>
-  <data name="MinRandomNumberCannotGreaterMaxRandomNumber" xml:space="preserve">
+  <data name="MinRandomNumberCannotBeGreaterMaxRandomNumber" xml:space="preserve">
     <value>最小随机数不能大于最大随机数</value>
   </data>
   <data name="RefreshComplete" xml:space="preserve">

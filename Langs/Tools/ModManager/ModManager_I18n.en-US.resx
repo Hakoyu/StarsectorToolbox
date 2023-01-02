@@ -319,13 +319,10 @@ New Version: {1}</value>
   <data name="RandomNumberCannotNull" xml:space="preserve">
     <value>Minimum random number and maximum random number cannot be null</value>
   </data>
-  <data name="RandomNumberCannotLess0" xml:space="preserve">
-    <value>The min random number cannot be less than 0</value>
-  </data>
   <data name="RandomNumberCannotGreaterTotal" xml:space="preserve">
     <value>The max random number cannot be greater than the total number of mod contained in the user group</value>
   </data>
-  <data name="MinRandomNumberCannotGreaterMaxRandomNumber" xml:space="preserve">
+  <data name="MinRandomNumberCannotBeGreaterMaxRandomNumber" xml:space="preserve">
     <value>The min random number cannot be greater than the max random number</value>
   </data>
   <data name="RefreshComplete" xml:space="preserve">

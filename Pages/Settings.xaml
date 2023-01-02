@@ -3,7 +3,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
-  xmlns:Libs="clr-namespace:StarsectorTools.Utils"
+  xmlns:Utils="clr-namespace:StarsectorTools.Utils"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
@@ -53,17 +53,17 @@
               SelectionChanged="ComboBox_LogLevel_SelectionChanged"
               Style="{StaticResource ComboBox_Style}">
               <ComboBoxItem
-                Content="{x:Static Libs:STLogLevel.DEBUG}"
+                Content="{x:Static Utils:STLogLevel.DEBUG}"
                 Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="{x:Static Libs:STLogLevel.DEBUG}" />
+                ToolTip="{x:Static Utils:STLogLevel.DEBUG}" />
               <ComboBoxItem
-                Content="{x:Static Libs:STLogLevel.INFO}"
+                Content="{x:Static Utils:STLogLevel.INFO}"
                 Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="{x:Static Libs:STLogLevel.INFO}" />
+                ToolTip="{x:Static Utils:STLogLevel.INFO}" />
               <ComboBoxItem
-                Content="{x:Static Libs:STLogLevel.WARN}"
+                Content="{x:Static Utils:STLogLevel.WARN}"
                 Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="{x:Static Libs:STLogLevel.WARN}" />
+                ToolTip="{x:Static Utils:STLogLevel.WARN}" />
             </ComboBox>
             <Label
               x:Name="Label_Language"

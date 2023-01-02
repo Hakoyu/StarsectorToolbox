@@ -490,9 +490,11 @@
             ToolTip="{x:Static I18n:ModManager_I18n.SearchMod}" />
           <!--  TextBox输入占位符  -->
           <Label
-            Height="30"
-            Margin="0,0,120,0"
-            VerticalAlignment="Top"
+            Width="{Binding Width, ElementName=TextBox_SearchMods}"
+            Height="{Binding Height, ElementName=TextBox_SearchMods}"
+            Margin="{Binding Margin, ElementName=TextBox_SearchMods}"
+            HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_SearchMods}"
+            VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_SearchMods}"
             Background="{x:Null}"
             Content="{x:Static I18n:ModManager_I18n.SearchMod}"
             FontSize="16"
@@ -692,7 +694,11 @@
                       ToolTip="{x:Static I18n:ModManager_I18n.MinRandomNumber}" />
                     <!--  TextBox输入占位符  -->
                     <Label
-                      Height="30"
+                      Width="{Binding Width, ElementName=TextBox_MinRandomSize}"
+                      Height="{Binding Height, ElementName=TextBox_MinRandomSize}"
+                      Margin="{Binding Margin, ElementName=TextBox_MinRandomSize}"
+                      HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MinRandomSize}"
+                      VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MinRandomSize}"
                       Background="{x:Null}"
                       Content="{x:Static I18n:ModManager_I18n.MinRandomNumber}"
                       IsEnabled="False"
@@ -719,14 +725,17 @@
                     <TextBox
                       x:Name="TextBox_MaxRandomSize"
                       Height="30"
-                      Margin="0,0,0,5"
                       InputMethod.IsInputMethodEnabled="False"
                       PreviewTextInput="TextBox_NumberInput"
                       Style="{StaticResource TextBox_Style}"
                       ToolTip="{x:Static I18n:ModManager_I18n.MaxRandomNumber}" />
                     <!--  TextBox输入占位符  -->
                     <Label
-                      Height="30"
+                      Width="{Binding Width, ElementName=TextBox_MaxRandomSize}"
+                      Height="{Binding Height, ElementName=TextBox_MaxRandomSize}"
+                      Margin="{Binding Margin, ElementName=TextBox_MaxRandomSize}"
+                      HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MaxRandomSize}"
+                      VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MaxRandomSize}"
                       Background="{x:Null}"
                       Content="{x:Static I18n:ModManager_I18n.MaxRandomNumber}"
                       IsEnabled="False"
@@ -755,8 +764,21 @@
                     Margin="0,0,0,5"
                     VerticalAlignment="Bottom"
                     Click="Button_RandomMods_Click"
-                    Content="{x:Static I18n:ModManager_I18n.RandomEnableMods}"
-                    Style="{StaticResource Button_Style}" />
+                    Content="{x:Static I18n:ModManager_I18n.RandomEnableMods}">
+                    <Button.Style>
+                      <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                          <DataTrigger Binding="{Binding Text, ElementName=TextBox_MaxRandomSize}" Value="">
+                            <Setter Property="IsEnabled" Value="False" />
+                          </DataTrigger>
+                          <DataTrigger Binding="{Binding Text, ElementName=TextBox_MinRandomSize}" Value="">
+                            <Setter Property="IsEnabled" Value="False" />
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </Button.Style>
+                  </Button>
                 </StackPanel>
               </Expander>
             </StackPanel>
