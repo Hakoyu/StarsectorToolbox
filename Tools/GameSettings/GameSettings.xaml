@@ -213,17 +213,14 @@
               Header="{x:Static I18n:GameSettings_I18n.SaveClean}"
               Style="{StaticResource Expander_Style}">
               <StackPanel Background="{DynamicResource ColorBB}">
-                <Label
-                  Margin="0,0,0,5"
-                  Content="{x:Static I18n:GameSettings_I18n.RetainRecentSaveCount}"
-                  Style="{StaticResource Label_Style}" />
                 <Grid Margin="0,0,0,5">
                   <TextBox
                     x:Name="TextBox_ReservedSaveSize"
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
                     Style="{StaticResource TextBox_Style}"
-                    Text="5" />
+                    Text="5"
+                    ToolTip="{x:Static I18n:GameSettings_I18n.RetainRecentSaveCount}" />
                   <!--  TextBox输入占位符  -->
                   <Label Background="{x:Null}" Content="{x:Static I18n:GameSettings_I18n.ClearAll}">
                     <Label.Style>
@@ -279,7 +276,11 @@
                     ToolTip="{x:Static I18n:GameSettings_I18n.Width}" />
                   <!--  TextBox输入占位符  -->
                   <Label
-                    Margin="0,0,10,0"
+                    Width="{Binding Width, ElementName=TextBox_ResolutionWidth}"
+                    Height="{Binding Height, ElementName=TextBox_ResolutionWidth}"
+                    Margin="{Binding Margin, ElementName=TextBox_ResolutionWidth}"
+                    HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ResolutionWidth}"
+                    VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ResolutionWidth}"
                     Background="{x:Null}"
                     Content="{x:Static I18n:GameSettings_I18n.Width}"
                     IsEnabled="False"
@@ -317,7 +318,11 @@
                   <!--  TextBox输入占位符  -->
                   <Label
                     Grid.Column="1"
-                    Margin="10,0,0,0"
+                    Width="{Binding Width, ElementName=TextBox_ResolutionHeight}"
+                    Height="{Binding Height, ElementName=TextBox_ResolutionHeight}"
+                    Margin="{Binding Margin, ElementName=TextBox_ResolutionHeight}"
+                    HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ResolutionHeight}"
+                    VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ResolutionHeight}"
                     Background="{x:Null}"
                     Content="{x:Static I18n:GameSettings_I18n.Height}"
                     IsEnabled="False"
