@@ -115,6 +115,15 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 模组信息错误 的本地化字符串。
+        /// </summary>
+        public static string ModInfoError {
+            get {
+                return ResourceManager.GetString("ModInfoError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 位置 的本地化字符串。
         /// </summary>
         public static string Path {

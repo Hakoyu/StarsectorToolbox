@@ -94,11 +94,9 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                ST.SetMainWindowBlurEffect();
                 STLog.Instance.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.configFile}", ex);
                 ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.configFile}", MessageBoxImage.Error);
                 ST.CreateConfigFile();
-                ST.RemoveMainWIndowBlurEffect();
             }
             return true;
         }
@@ -119,33 +117,33 @@ namespace StarsectorTools.Windows
             Label_Title.Content = I18n.StarsectorTools;
             Button_Settings.Content = I18n.Settings;
             Button_Info.Content = I18n.Info;
-            RefreshMenu();
-            RefreshExpansionMenu();
-            STLog.Instance.WriteLine(I18n.MenuListRefreshComplete);
+            RefreshPages();
+            RefreshExpansionPages();
+            STLog.Instance.WriteLine(I18n.PageListRefreshComplete);
         }
 
         private void ShowPage()
         {
             if (string.IsNullOrEmpty(expansionDebugPath))
             {
-                ListBox_Menu.SelectedIndex = 0;
+                ListBox_MainMenu.SelectedIndex = 0;
                 return;
             }
             if (CheckExpansionInfo(expansionDebugPath) is ExpansionInfo info)
             {
-                AddMemu(info.Icon, info.Name, info.Id, info.Description, CreateMenu(info.ExpansionType));
-                ListBox_Menu.SelectedIndex = ListBox_Menu.Items.Count - 2;
+                AddPage(info.Icon, info.Name, info.Id, info.Description, CreatePage(info.ExpansionType));
+                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
             }
         }
 
-        private void RefreshMenu()
+        private void RefreshPages()
         {
-            ClearMenu();
-            AddMemu("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, CreateMenu(typeof(ModManager)));
-            AddMemu("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, CreateMenu(typeof(GameSettings)));
+            ClearPages();
+            AddPage("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, CreatePage(typeof(ModManager)));
+            AddPage("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, CreatePage(typeof(GameSettings)));
 
         }
-        private Page? CreateMenu(Type type)
+        private Page? CreatePage(Type type)
         {
             try
             {
@@ -159,13 +157,13 @@ namespace StarsectorTools.Windows
             }
         }
 
-        private void ClearMenu()
+        private void ClearPages()
         {
-            foreach (var page in menus.Values)
+            foreach (var page in pages.Values)
                 ClosePage(page);
-            menus.Clear();
-            while (ListBox_Menu.Items.Count > 1)
-                ListBox_Menu.Items.RemoveAt(0);
+            pages.Clear();
+            while (ListBox_MainMenu.Items.Count > 1)
+                ListBox_MainMenu.Items.RemoveAt(0);
         }
 
         private void ClosePage(Page page)
@@ -176,7 +174,7 @@ namespace StarsectorTools.Windows
                 _ = info.Invoke(page, null)!;
         }
 
-        private void AddMemu(string icon, string name, string id, string toolTip, Page? page)
+        private void AddPage(string icon, string name, string id, string toolTip, Page? page)
         {
             if (page is null)
                 return;
@@ -196,51 +194,39 @@ namespace StarsectorTools.Windows
             menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
-                ClosePage(menus[id]);
-                if (CreateMenu(menus[id].GetType()) is not Page newPage)
+                ClosePage(pages[id]);
+                if (CreatePage(pages[id].GetType()) is not Page newPage)
                     return;
-                menus[id] = newPage;
+                pages[id] = newPage;
                 if (Frame_MainFrame.Content is Page oldPage && oldPage.GetType() == newPage.GetType())
-                    Frame_MainFrame.Content = menus[id];
+                    Frame_MainFrame.Content = pages[id];
                 STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_Menu.Items.Insert(ListBox_Menu.Items.Count - 1, item);
-            menus.Add(id, page);
-            STLog.Instance.WriteLine($"{I18n.AddMenu} {icon} {name}");
+            ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
+            pages.Add(id, page);
+            STLog.Instance.WriteLine($"{I18n.AddPage} {icon} {name}");
         }
-        private void RefreshExpansionMenu()
+        private void RefreshExpansionPages()
         {
-            ClearExpansionMenu();
-            GetAllExpansion();
+            ClearExpansionPages();
+            GetAllExpansions();
         }
-        private void ClearExpansionMenu()
+        private void ClearExpansionPages()
         {
-            foreach (var lazyPage in expansionMenus.Values)
+            foreach (var lazyPage in expansionPages.Values)
                 ClosePage(lazyPage.Value);
-            expansionMenus.Clear();
-            allExpansionInfo.Clear();
+            expansionPages.Clear();
+            allExpansionsInfo.Clear();
             ListBox_ExpansionMenu.Items.Clear();
         }
-        private void GetAllExpansion()
+        private void GetAllExpansions()
         {
-            string nowDir = null!;
-            try
-            {
-                DirectoryInfo dirs = new(expansionDirectories);
-                foreach (var dir in dirs.GetDirectories())
-                {
-                    nowDir = dir.FullName;
-                    if (CheckExpansionInfo(nowDir) is ExpansionInfo expansionInfo)
-                        GetExpansionMenu(expansionInfo);
-                }
-            }
-            catch (Exception ex)
-            {
-                STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", ex);
-                ST.ShowMessageBox($"{I18n.ExpansionLoadError} {I18n.Path}: {nowDir}", MessageBoxImage.Error);
-            }
+            DirectoryInfo dirs = new(expansionDirectories);
+            foreach (var dir in dirs.GetDirectories())
+                if (CheckExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
+                    GetExpansionPage(expansionInfo);
         }
         private ExpansionInfo? CheckExpansionInfo(string directory)
         {
@@ -254,6 +240,12 @@ namespace StarsectorTools.Windows
                     return null;
                 }
                 var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
+                if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
+                {
+                    STLog.Instance.WriteLine($"{I18n.ExtensionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    ST.ShowMessageBox($"{I18n.ExtensionAlreadyExists}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
+                    return null;
+                }
                 if (!File.Exists($"{directory}\\{expansionInfo.ExpansionFile}"))
                 {
                     STLog.Instance.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
@@ -276,17 +268,18 @@ namespace StarsectorTools.Windows
                 return null;
             }
         }
-        private void GetExpansionMenu(ExpansionInfo expansionInfo)
+        private void GetExpansionPage(ExpansionInfo expansionInfo)
         {
-            allExpansionInfo.Add(expansionInfo.Id, expansionInfo);
-            AddExpansionMenu(expansionInfo.Icon,
-                             expansionInfo.Name,
-                             expansionInfo.Id,
-                             expansionInfo.Description,
-                             new(() => (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!));
+            allExpansionsInfo.Add(expansionInfo.Id, expansionInfo);
+            AddExpansionPage(expansionInfo);
         }
-        private void AddExpansionMenu(string icon, string name, string id, string toolTip, Lazy<Page> lazyPage)
+        private void AddExpansionPage(ExpansionInfo expansionInfo)
         {
+            string icon = expansionInfo.Icon;
+            string name = expansionInfo.Name;
+            string id = expansionInfo.Id;
+            string toolTip = expansionInfo.Description;
+            Lazy<Page> lazyPage = new(() => (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!);
             var item = new ListBoxItem
             {
                 Content = name,
@@ -303,18 +296,18 @@ namespace StarsectorTools.Windows
             menuItem.Icon = new Emoji.Wpf.TextBlock() { Text = "🔄" };
             menuItem.Click += (s, e) =>
             {
-                Type type = allExpansionInfo[id].ExpansionType;
-                ClosePage(expansionMenus[id].Value);
-                expansionMenus[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
+                Type type = allExpansionsInfo[id].ExpansionType;
+                ClosePage(expansionPages[id].Value);
+                expansionPages[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
-                    Frame_MainFrame.Content = expansionMenus[id].Value;
+                    Frame_MainFrame.Content = expansionPages[id].Value;
                 STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
             ListBox_ExpansionMenu.Items.Add(item);
-            expansionMenus.Add(id, lazyPage);
-            STLog.Instance.WriteLine($"{I18n.AddExpansionMenu} {icon} {name}");
+            expansionPages.Add(id, lazyPage);
+            STLog.Instance.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
         }
     }
 }

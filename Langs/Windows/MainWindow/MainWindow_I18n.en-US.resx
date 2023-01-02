@@ -122,11 +122,11 @@ Please select the game launcher</value>
   <data name="ShowPage" xml:space="preserve">
     <value>Show page</value>
   </data>
-  <data name="MenuListRefreshComplete" xml:space="preserve">
-    <value>Menu list refresh complete</value>
+  <data name="PageListRefreshComplete" xml:space="preserve">
+    <value>Page list refresh complete</value>
   </data>
-  <data name="AddMenu" xml:space="preserve">
-    <value>Add menu</value>
+  <data name="AddPage" xml:space="preserve">
+    <value>Add page</value>
   </data>
   <data name="ModManager" xml:space="preserve">
     <value>ModManager</value>
@@ -171,8 +171,8 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="ExpansionLoadError" xml:space="preserve">
     <value>Expansion load error</value>
   </data>
-  <data name="AddExpansionMenu" xml:space="preserve">
-    <value>Add expansion menu</value>
+  <data name="AddExpansionPage" xml:space="preserve">
+    <value>Add expansion page</value>
   </data>
   <data name="DIsplayLanguageIs" xml:space="preserve">
     <value>Display language is</value>
@@ -188,5 +188,8 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   </data>
   <data name="ExpansionFileError" xml:space="preserve">
     <value>ExpansionFile Error</value>
+  </data>
+  <data name="ExtensionAlreadyExists" xml:space="preserve">
+    <value>Extension already exists</value>
   </data>
 </root>

@@ -122,11 +122,11 @@
   <data name="ShowPage" xml:space="preserve">
     <value>显示页面</value>
   </data>
-  <data name="MenuListRefreshComplete" xml:space="preserve">
-    <value>菜单列表刷新完成</value>
+  <data name="PageListRefreshComplete" xml:space="preserve">
+    <value>页面列表刷新完成</value>
   </data>
-  <data name="AddMenu" xml:space="preserve">
-    <value>添加菜单</value>
+  <data name="AddPage" xml:space="preserve">
+    <value>添加页面</value>
   </data>
   <data name="ModManager" xml:space="preserve">
     <value>模组管理器</value>
@@ -171,8 +171,8 @@
   <data name="ExpansionLoadError" xml:space="preserve">
     <value>拓展加载错误</value>
   </data>
-  <data name="AddExpansionMenu" xml:space="preserve">
-    <value>添加拓展菜单</value>
+  <data name="AddExpansionPage" xml:space="preserve">
+    <value>添加拓展页面</value>
   </data>
   <data name="DIsplayLanguageIs" xml:space="preserve">
     <value>显示语言为</value>
@@ -188,5 +188,8 @@
   </data>
   <data name="ExpansionFileError" xml:space="preserve">
     <value>ExpansionFile错误</value>
+  </data>
+  <data name="ExtensionAlreadyExists" xml:space="preserve">
+    <value>拓展已存在</value>
   </data>
 </root>

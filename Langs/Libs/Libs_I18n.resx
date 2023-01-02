@@ -121,4 +121,7 @@
   <data name="LinkError" xml:space="preserve">
     <value>链接错误</value>
   </data>
+  <data name="ModInfoError" xml:space="preserve">
+    <value>模组信息错误</value>
+  </data>
 </root>

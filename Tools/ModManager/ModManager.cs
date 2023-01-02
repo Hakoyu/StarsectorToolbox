@@ -100,10 +100,7 @@ namespace StarsectorTools.Tools.ModManager
         private static ModInfo GetModInfo(string jsonPath)
         {
             string datas = File.ReadAllText(jsonPath);
-            JsonNode jsonData = JsonNode.Parse(ST.JsonParse(datas))!;
-            ModInfo modInfo = new();
-            foreach (var data in jsonData.AsObject())
-                modInfo.SetData(data);
+            ModInfo modInfo = new(JsonNode.Parse(ST.JsonParse(datas))!.AsObject());
             modInfo.Path = Path.GetDirectoryName(jsonPath)!;
             return modInfo;
         }
@@ -811,7 +808,12 @@ namespace StarsectorTools.Tools.ModManager
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];
-                    if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    if (Dispatcher.Invoke(() =>
+                        {
+                            var result = ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            ST.SetMainWindowBlurEffect();
+                            return result;
+                        }) == MessageBoxResult.Yes)
                     {
                         ST.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
                         string tempDirectory = $"{backupModsDirectory}\\Temp";

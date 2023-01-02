@@ -28,9 +28,9 @@ namespace StarsectorTools.Windows
         private const string strName = "Name";
         private const string strDescription = "Description";
         private bool menuOpen = false;
-        private Dictionary<string, Page> menus = new();
-        private Dictionary<string, Lazy<Page>> expansionMenus = new();
-        private Dictionary<string, ExpansionInfo> allExpansionInfo = new();
+        private Dictionary<string, Page> pages = new();
+        private Dictionary<string, Lazy<Page>> expansionPages = new();
+        private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
         private Settings settingsPage = null!;
         private Info infoPage = null!;
         private int menuSelectedIndex = -1;
@@ -87,7 +87,7 @@ namespace StarsectorTools.Windows
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             //亚克力背景
             //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-            // 全局错误捕获
+            // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
             InitializeDirectories();
             SetSettingsPage();
@@ -157,24 +157,24 @@ namespace StarsectorTools.Windows
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
-            ClearMenu();
+            ClearPages();
             STLog.Instance.Close();
             Close();
         }
 
-        private void Button_MainMenu_Click(object sender, RoutedEventArgs e)
+        private void Button_ExpandMainMenu_Click(object sender, RoutedEventArgs e)
         {
             if (menuOpen)
             {
                 Button_MainMenuIcon.Text = "📘";
-                Grid_Menu.Width = 30;
-                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_Menu, ScrollBarVisibility.Hidden);
+                Grid_MainMenu.Width = 30;
+                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_MainMenu, ScrollBarVisibility.Hidden);
             }
             else
             {
                 Button_MainMenuIcon.Text = "📖";
-                Grid_Menu.Width = double.NaN;
-                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_Menu, ScrollBarVisibility.Auto);
+                Grid_MainMenu.Width = double.NaN;
+                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_MainMenu, ScrollBarVisibility.Auto);
             }
             menuOpen = !menuOpen;
         }
@@ -184,22 +184,22 @@ namespace StarsectorTools.Windows
             if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
             {
                 var id = item.Tag.ToString()!;
-                if (listBox.Name == ListBox_Menu.Name)
+                if (listBox.Name == ListBox_MainMenu.Name)
                 {
-                    if (!menus.ContainsKey(id))
+                    if (!pages.ContainsKey(id))
                     {
                         STLog.Instance.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
                         ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
-                        ListBox_Menu.SelectedIndex = menuSelectedIndex;
+                        ListBox_MainMenu.SelectedIndex = menuSelectedIndex;
                         return;
                     }
-                    Frame_MainFrame.Content = menus[id];
-                    menuSelectedIndex = ListBox_Menu.SelectedIndex;
+                    Frame_MainFrame.Content = pages[id];
+                    menuSelectedIndex = ListBox_MainMenu.SelectedIndex;
                     ListBox_ExpansionMenu.SelectedIndex = -1;
                 }
                 else if (listBox.Name == ListBox_ExpansionMenu.Name)
                 {
-                    if (!expansionMenus.ContainsKey(id))
+                    if (!expansionPages.ContainsKey(id))
                     {
                         STLog.Instance.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
                         ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
@@ -208,9 +208,9 @@ namespace StarsectorTools.Windows
                     }
                     try
                     {
-                        Frame_MainFrame.Content = expansionMenus[id].Value;
+                        Frame_MainFrame.Content = expansionPages[id].Value;
                         exceptionMenuSelectedIndex = ListBox_ExpansionMenu.SelectedIndex;
-                        ListBox_Menu.SelectedIndex = -1;
+                        ListBox_MainMenu.SelectedIndex = -1;
                     }
                     catch (Exception ex)
                     {
@@ -222,16 +222,16 @@ namespace StarsectorTools.Windows
             }
         }
 
-        private void Button_Settings_Click(object sender, RoutedEventArgs e)
+        private void Button_SettingsPage_Click(object sender, RoutedEventArgs e)
         {
             Frame_MainFrame.Content = settingsPage;
-            ListBox_Menu.SelectedIndex = -1;
+            ListBox_MainMenu.SelectedIndex = -1;
             ListBox_ExpansionMenu.SelectedIndex = -1;
         }
 
-        private void Grid_Menu_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Grid_MainMenu_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Frame_MainFrame.Margin = new Thickness(Grid_Menu.ActualWidth, 0, 0, 0);
+            Frame_MainFrame.Margin = new Thickness(Grid_MainMenu.ActualWidth, 0, 0, 0);
         }
 
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
@@ -252,10 +252,10 @@ namespace StarsectorTools.Windows
             FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
         }
 
-        private void Button_Info_Click(object sender, RoutedEventArgs e)
+        private void Button_InfoPage_Click(object sender, RoutedEventArgs e)
         {
             Frame_MainFrame.Content = infoPage;
-            ListBox_Menu.SelectedIndex = -1;
+            ListBox_MainMenu.SelectedIndex = -1;
             ListBox_ExpansionMenu.SelectedIndex = -1;
         }
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -271,7 +271,7 @@ namespace StarsectorTools.Windows
         }
         private void RefreshExpansionMenu_Click(object sender, RoutedEventArgs e)
         {
-            RefreshExpansionMenu();
+            RefreshExpansionPages();
         }
     }
 }

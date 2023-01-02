@@ -578,7 +578,6 @@ namespace StarsectorTools.Tools.ModManager
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
                 STLog.Instance.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
-                ST.SetMainWindowBlurEffect();
                 new Task(() =>
                 {
                     int total = array.Length;
@@ -613,11 +612,7 @@ namespace StarsectorTools.Tools.ModManager
                             ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {path}", MessageBoxImage.Warning);
                         }
                     }
-                    Dispatcher.BeginInvoke(() =>
-                    {
-                        window.Close();
-                        ST.RemoveMainWIndowBlurEffect();
-                    });
+                    Dispatcher.BeginInvoke(() => window.Close());
                     GC.Collect();
                 }).Start();
             }

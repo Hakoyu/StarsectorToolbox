@@ -128,7 +128,7 @@
     <value>日志输出级别切换为</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>清除拓展调试目录</value>
+    <value>清除</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>设置</value>
@@ -147,5 +147,8 @@
   </data>
   <data name="ClearExpansionDebugPath" xml:space="preserve">
     <value>清除拓展调试目录</value>
+  </data>
+  <data name="ExpansionDebugPathToolTip" xml:space="preserve">
+    <value>用于指定拓展的路径,方便开发者调试.</value>
   </data>
 </root>

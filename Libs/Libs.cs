@@ -484,7 +484,10 @@ namespace StarsectorTools.Libs
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None, MessageBoxResult result = MessageBoxResult.None, MessageBoxOptions options = MessageBoxOptions.DefaultDesktopOnly)
         {
-            return MessageBox.Show(message, caption, button, image, result, options);
+            SetMainWindowBlurEffect();
+            var outResult = MessageBox.Show(message, caption, button, image, result, options);
+            RemoveMainWIndowBlurEffect();
+            return outResult;
         }
 
         /// <summary>
@@ -530,59 +533,64 @@ namespace StarsectorTools.Libs
 
         /// <summary>本地路径</summary>
         public string Path = null!;
+        public ModInfo(JsonObject jsonObject)
+        {
+            try
+            {
+                foreach (var kv in jsonObject)
+                    SetData(kv);
+            }
+            catch (Exception ex)
+            {
+                STLog.Instance.WriteLine(I18n.ModInfoError, ex);
+            }
+        }
 
         /// <summary>设置模组信息</summary>
         /// <param name="kv">遍历至<see cref="JsonObject"/></param>
-        public void SetData(KeyValuePair<string, JsonNode?> kv) => SetData(kv.Key, kv.Value!);
-
-        private void SetData(string key, JsonNode value)
+        private void SetData(KeyValuePair<string, JsonNode?> kv)
         {
-            switch (key)
+            switch (kv.Key)
             {
                 case "id":
-                    Id = value.GetValue<string>();
+                    Id = kv.Value!.GetValue<string>();
                     break;
 
                 case "name":
-                    Name = value.GetValue<string>();
+                    Name = kv.Value!.GetValue<string>();
                     break;
 
                 case "author":
-                    Author = value.GetValue<string>().Trim();
+                    Author = kv.Value!.GetValue<string>().Trim();
                     break;
 
                 case "version":
-                    if (value is JsonValue)
-                        Version = value.GetValue<string>();
+                    if (kv.Value! is JsonValue)
+                        Version = kv.Value!.GetValue<string>();
                     else
-                        Version = string.Join(".", value.AsObject().Select(kv => kv.Value!.ToString()));
+                        Version = string.Join(".", kv.Value!.AsObject().Select(kv => kv.Value!.ToString()));
                     break;
 
                 case "utility":
-                    IsUtility = bool.Parse(value.ToString());
+                    IsUtility = bool.Parse(kv.Value!.ToString());
                     break;
 
                 case "description":
-                    Description = value.GetValue<string>();
+                    Description = kv.Value!.GetValue<string>();
                     break;
 
                 case "gameVersion":
-                    GameVersion = value.GetValue<string>();
+                    GameVersion = kv.Value!.GetValue<string>();
                     break;
 
                 case "modPlugin":
-                    ModPlugin = value.GetValue<string>();
+                    ModPlugin = kv.Value!.GetValue<string>();
                     break;
 
                 case "dependencies":
                     Dependencies ??= new();
-                    foreach (var mod in value.AsArray())
-                    {
-                        ModInfo modInfo = new();
-                        foreach (var info in mod!.AsObject())
-                            modInfo.SetData(info);
-                        Dependencies.Add(modInfo);
-                    }
+                    foreach (var mod in kv.Value!.AsArray())
+                        Dependencies.Add(new(mod!.AsObject()));
                     if (Dependencies.Count == 0)
                         Dependencies = null;
                     break;

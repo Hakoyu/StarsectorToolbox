@@ -141,4 +141,7 @@
   <data name="LinkError" xml:space="preserve">
     <value>Link error</value>
   </data>
+  <data name="ModInfoError" xml:space="preserve">
+    <value>Mod info error</value>
+  </data>
 </root>

@@ -101,7 +101,7 @@
         Padding="0"
         HorizontalAlignment="Left"
         VerticalAlignment="Center"
-        Click="Button_MainMenu_Click"
+        Click="Button_ExpandMainMenu_Click"
         FontSize="16"
         Style="{StaticResource Button_Style}">
         <pu:ButtonHelper.Icon>
@@ -114,19 +114,19 @@
     </Grid>
     <Grid Margin="0,30,0,0">
       <Grid
-        x:Name="Grid_Menu"
+        x:Name="Grid_MainMenu"
         Width="30"
         HorizontalAlignment="Left"
-        SizeChanged="Grid_Menu_SizeChanged">
+        SizeChanged="Grid_MainMenu_SizeChanged">
         <ListBox
-          x:Name="ListBox_Menu"
+          x:Name="ListBox_MainMenu"
           Margin="0,0,0,60"
           HorizontalContentAlignment="Stretch"
           FontSize="16"
           PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
           SelectionChanged="ListBox_Menu_SelectionChanged"
           Style="{StaticResource ListBox_Style}">
-          <ListBoxItem Padding="0">
+          <ListBoxItem x:Name="ListBoxItem_ExpansionPages" Padding="0">
             <Expander
               Padding="0"
               Header="{x:Static I18n:MainWindow_I18n.Expansion}"
@@ -159,7 +159,7 @@
           Padding="0,0,5,0"
           VerticalAlignment="Bottom"
           HorizontalContentAlignment="Left"
-          Click="Button_Settings_Click"
+          Click="Button_SettingsPage_Click"
           Content="{x:Static I18n:MainWindow_I18n.Settings}"
           FontSize="16"
           Style="{StaticResource Button_Style}">
@@ -174,7 +174,7 @@
           Padding="0,0,5,0"
           VerticalAlignment="Bottom"
           HorizontalContentAlignment="Left"
-          Click="Button_Info_Click"
+          Click="Button_InfoPage_Click"
           Content="{x:Static I18n:MainWindow_I18n.Info}"
           FontSize="16"
           Style="{StaticResource Button_Style}">

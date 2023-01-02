@@ -61,7 +61,7 @@ namespace StarsectorTools.Langs.Pages {
         }
         
         /// <summary>
-        ///   查找类似 清除拓展调试目录 的本地化字符串。
+        ///   查找类似 清除 的本地化字符串。
         /// </summary>
         public static string Clear {
             get {
@@ -93,6 +93,15 @@ namespace StarsectorTools.Langs.Pages {
         public static string ExpansionDebugPath {
             get {
                 return ResourceManager.GetString("ExpansionDebugPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 用于指定拓展的路径,方便开发者调试. 的本地化字符串。
+        /// </summary>
+        public static string ExpansionDebugPathToolTip {
+            get {
+                return ResourceManager.GetString("ExpansionDebugPathToolTip", resourceCulture);
             }
         }
         

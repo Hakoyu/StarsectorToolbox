@@ -93,7 +93,7 @@
               InputMethod.IsInputMethodEnabled="False"
               IsReadOnly="True"
               Style="{StaticResource TextBox_Style}"
-              ToolTip="{x:Static I18n:Settings_I18n.ExpansionDebugPath}" />
+              ToolTip="{x:Static I18n:Settings_I18n.ExpansionDebugPathToolTip}" />
             <!--  TextBox输入占位符  -->
             <Label
               Width="{Binding Width, ElementName=TextBox_ExpansionDebugPath}"

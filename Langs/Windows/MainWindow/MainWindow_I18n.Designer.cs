@@ -61,20 +61,20 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 添加拓展菜单 的本地化字符串。
+        ///   查找类似 添加拓展页面 的本地化字符串。
         /// </summary>
-        public static string AddExpansionMenu {
+        public static string AddExpansionPage {
             get {
-                return ResourceManager.GetString("AddExpansionMenu", resourceCulture);
+                return ResourceManager.GetString("AddExpansionPage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 添加菜单 的本地化字符串。
+        ///   查找类似 添加页面 的本地化字符串。
         /// </summary>
-        public static string AddMenu {
+        public static string AddPage {
             get {
-                return ResourceManager.GetString("AddMenu", resourceCulture);
+                return ResourceManager.GetString("AddPage", resourceCulture);
             }
         }
         
@@ -129,6 +129,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string ExpansionLoadError {
             get {
                 return ResourceManager.GetString("ExpansionLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 拓展已存在 的本地化字符串。
+        /// </summary>
+        public static string ExtensionAlreadyExists {
+            get {
+                return ResourceManager.GetString("ExtensionAlreadyExists", resourceCulture);
             }
         }
         
@@ -227,15 +236,6 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 菜单列表刷新完成 的本地化字符串。
-        /// </summary>
-        public static string MenuListRefreshComplete {
-            get {
-                return ResourceManager.GetString("MenuListRefreshComplete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 模组管理器 的本地化字符串。
         /// </summary>
         public static string ModManager {
@@ -260,6 +260,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string PageInitializationError {
             get {
                 return ResourceManager.GetString("PageInitializationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 页面列表刷新完成 的本地化字符串。
+        /// </summary>
+        public static string PageListRefreshComplete {
+            get {
+                return ResourceManager.GetString("PageListRefreshComplete", resourceCulture);
             }
         }
         

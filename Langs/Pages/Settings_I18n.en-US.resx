@@ -168,4 +168,7 @@
   <data name="ClearExpansionDebugPath" xml:space="preserve">
     <value>Clear expansion debug path</value>
   </data>
+  <data name="ExpansionDebugPathToolTip" xml:space="preserve">
+    <value>Used to specify the path of the extension, for developers to debug.</value>
+  </data>
 </root>
