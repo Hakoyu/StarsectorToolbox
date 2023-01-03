@@ -179,6 +179,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void GetUserGroup(string filePath)
         {
+            STLog.WriteLine($"{I18n.LoadUserGroup} {I18n.Path}: {filePath}");
             try
             {
                 string err = null!;
@@ -227,9 +228,9 @@ namespace StarsectorTools.Tools.ModManager
         private void GetUserData(string filePath)
         {
             STLog.WriteLine($"{I18n.LoadUserData} {I18n.Path}: {filePath}");
-            string err = null!;
             try
             {
+                string err = null!;
                 TomlTable toml = TOML.Parse(filePath);
                 foreach (string id in toml[ModTypeGroup.Collected].AsTomlArray)
                 {
@@ -344,14 +345,14 @@ namespace StarsectorTools.Tools.ModManager
         }
 
         private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
-            new ObservableCollection<ModShowInfo>(type switch
-            {
-                strName => allModShowInfoGroups[nowGroupName].Where(i => i.Name.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strId => allModShowInfoGroups[nowGroupName].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strAuthor => allModShowInfoGroups[nowGroupName].Where(i => i.Author.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                strUserDescription => allModShowInfoGroups[nowGroupName].Where(i => i.UserDescription.Contains(text, StringComparison.OrdinalIgnoreCase)),
-                _ => null!
-            });
+        new ObservableCollection<ModShowInfo>(type switch
+        {
+            strName => allModShowInfoGroups[nowGroupName].Where(i => i.Name.Contains(text, StringComparison.OrdinalIgnoreCase)),
+            strId => allModShowInfoGroups[nowGroupName].Where(i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)),
+            strAuthor => allModShowInfoGroups[nowGroupName].Where(i => i.Author.Contains(text, StringComparison.OrdinalIgnoreCase)),
+            strUserDescription => allModShowInfoGroups[nowGroupName].Where(i => i.UserDescription.Contains(text, StringComparison.OrdinalIgnoreCase)),
+            _ => null!
+        });
 
         private ModShowInfo CreateModShowInfo(ModInfo info)
         {
@@ -420,9 +421,9 @@ namespace StarsectorTools.Tools.ModManager
             // 被点击时才加载菜单,可以降低内存占用
             contextMenu.Loaded += (s, e) =>
             {
-                contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
                 if (contextMenu.Tag is true)
                     return;
+                contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
                 // 启用或禁用
                 MenuItem menuItem = new();
                 menuItem.Header = showInfo.IsEnabled ? I18n.DisableSelectedMods : I18n.EnabledSelectedMods;
@@ -808,12 +809,10 @@ namespace StarsectorTools.Tools.ModManager
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];
-                    if (Dispatcher.Invoke(() =>
-                        {
-                            var result = ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                            ST.SetMainWindowBlurEffect();
-                            return result;
-                        }) == MessageBoxResult.Yes)
+                    if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}",
+                                                                  MessageBoxButton.YesNo,
+                                                                  MessageBoxImage.Question,
+                                                                  false) == MessageBoxResult.Yes)
                     {
                         ST.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
                         string tempDirectory = $"{backupModsDirectory}\\Temp";
@@ -946,10 +945,10 @@ namespace StarsectorTools.Tools.ModManager
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重命名分组
             MenuItem menuItem = new();
-            menuItem.Header = I18n.ReplaceUserGroup;
+            menuItem.Header = I18n.RenameUserGroup;
             menuItem.Click += (s, e) =>
             {
-                ReplaceUserGroup((ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)s)));
+                RenameUserGroup((ListBoxItem)ContextMenuService.GetPlacementTarget(LogicalTreeHelper.GetParent((DependencyObject)s)));
             };
             contextMenu.Items.Add(menuItem);
             STLog.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -1001,7 +1000,7 @@ namespace StarsectorTools.Tools.ModManager
             }
         }
 
-        private void ReplaceUserGroup(ListBoxItem listBoxItem)
+        private void RenameUserGroup(ListBoxItem listBoxItem)
         {
             string icon = ((Emoji.Wpf.TextBlock)ListBoxItemHelper.GetIcon(listBoxItem)).Text;
             string name = listBoxItem.ToolTip.ToString()!;
@@ -1014,7 +1013,7 @@ namespace StarsectorTools.Tools.ModManager
                 string _name = window.TextBox_Name.Text;
                 if (_name == ModTypeGroup.Collected || _name == strUserCustomData)
                 {
-                    ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), MessageBoxImage.Warning);
+                    ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), MessageBoxImage.Warning, false);
                     return;
                 }
                 if (name == _name || !allUserGroups.ContainsKey(_name))

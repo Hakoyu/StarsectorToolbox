@@ -259,8 +259,8 @@ New Version: {1}</value>
   <data name="RemoveMod" xml:space="preserve">
     <value>Remove mod</value>
   </data>
-  <data name="ReplaceUserGroup" xml:space="preserve">
-    <value>Replace user group</value>
+  <data name="RenameUserGroup" xml:space="preserve">
+    <value>Rename user group</value>
   </data>
   <data name="AddUserGroup" xml:space="preserve">
     <value>Add user group</value>

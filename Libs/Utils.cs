@@ -449,9 +449,11 @@ namespace StarsectorTools.Utils
         /// <param name="message">消息</param>
         /// <param name="image">显示的图标</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message, MessageBoxImage image = MessageBoxImage.Information)
+        public static MessageBoxResult ShowMessageBox(string message,
+                                                      MessageBoxImage image = MessageBoxImage.Information,
+                                                      bool setBlurEffect = true)
         {
-            return ShowMessageBox(message, " ", image: image);
+            return ShowMessageBox(message, " ", image: image, setBlurEffect: setBlurEffect);
         }
 
         /// <summary>
@@ -461,9 +463,12 @@ namespace StarsectorTools.Utils
         /// <param name="button">显示的按钮</param>
         /// <param name="image">显示的图标</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message, MessageBoxButton button, MessageBoxImage image)
+        public static MessageBoxResult ShowMessageBox(string message,
+                                                      MessageBoxButton button,
+                                                      MessageBoxImage image,
+                                                      bool setBlurEffect = true)
         {
-            return ShowMessageBox(message, " ", button, image);
+            return ShowMessageBox(message, " ", button, image, setBlurEffect: setBlurEffect);
         }
 
         /// <summary>
@@ -476,12 +481,24 @@ namespace StarsectorTools.Utils
         /// <param name="result">默认按钮结果</param>
         /// <param name="options">窗口设置</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None, MessageBoxResult result = MessageBoxResult.None, MessageBoxOptions options = MessageBoxOptions.DefaultDesktopOnly)
+        public static MessageBoxResult ShowMessageBox(string message,
+                                                      string caption,
+                                                      MessageBoxButton button = MessageBoxButton.OK,
+                                                      MessageBoxImage image = MessageBoxImage.None,
+                                                      MessageBoxResult result = MessageBoxResult.None,
+                                                      bool setBlurEffect = true)
         {
-            SetMainWindowBlurEffect();
-            var outResult = MessageBox.Show(message, caption, button, image, result, options);
-            RemoveMainWIndowBlurEffect();
-            return outResult;
+            if (setBlurEffect)
+            {
+                SetMainWindowBlurEffect();
+                var outResult = MessageBox.Show(message, caption, button, image, result);
+                RemoveMainWindowBlurEffect();
+                return outResult;
+            }
+            else
+            {
+                return MessageBox.Show(message, caption, button, image, result);
+            }
         }
 
         /// <summary>
@@ -492,7 +509,7 @@ namespace StarsectorTools.Utils
         /// <summary>
         /// 取消主窗口的模糊效果
         /// </summary>
-        public static void RemoveMainWIndowBlurEffect() => ((MainWindow)Application.Current.MainWindow).RemoveBlurEffect();
+        public static void RemoveMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).RemoveBlurEffect();
     }
 
     /// <summary>模组信息</summary>

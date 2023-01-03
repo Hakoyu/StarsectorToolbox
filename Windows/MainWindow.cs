@@ -13,6 +13,8 @@ using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace StarsectorTools.Windows
 {
@@ -115,12 +117,12 @@ namespace StarsectorTools.Windows
 
         public void SetBlurEffect()
         {
-            Effect = new System.Windows.Media.Effects.BlurEffect();
+            Dispatcher.Invoke(() => Effect = new System.Windows.Media.Effects.BlurEffect());
         }
 
         public void RemoveBlurEffect()
         {
-            Effect = null;
+            Dispatcher.Invoke(() => Effect = null);
         }
 
         public void ChangeLanguage()

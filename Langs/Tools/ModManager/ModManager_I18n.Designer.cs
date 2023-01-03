@@ -1028,20 +1028,20 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 重命名用户分组 的本地化字符串。
+        /// </summary>
+        public static string RenameUserGroup {
+            get {
+                return ResourceManager.GetString("RenameUserGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 替换模组 的本地化字符串。
         /// </summary>
         public static string ReplaceMod {
             get {
                 return ResourceManager.GetString("ReplaceMod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 重命名用户分组 的本地化字符串。
-        /// </summary>
-        public static string ReplaceUserGroup {
-            get {
-                return ResourceManager.GetString("ReplaceUserGroup", resourceCulture);
             }
         }
         

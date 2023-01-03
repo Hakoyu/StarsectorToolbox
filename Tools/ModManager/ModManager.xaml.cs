@@ -206,7 +206,7 @@ namespace StarsectorTools.Tools.ModManager
             /// <summary>前置模组列表</summary>
             public List<string>? DependenciesList;
 
-            /// <summary>显示启用前置按钮的行高</summary>
+            /// <summary>展开启用前置的按钮</summary>
             [ObservableProperty]
             private bool missDependencies;
 
@@ -223,7 +223,6 @@ namespace StarsectorTools.Tools.ModManager
             InitializeComponent();
             //throw new();
             InitializeData();
-            STLog.WriteLine(I18n.InitialisationComplete);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -472,7 +471,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == ModTypeGroup.Collected || name == strUserCustomData)
-                        ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData));
+                        ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), setBlurEffect: false);
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);

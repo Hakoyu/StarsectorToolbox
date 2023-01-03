@@ -12,7 +12,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             ST.SetMainWindowBlurEffect();
             InitializeComponent();
-            Closed += (s, e) => ST.RemoveMainWIndowBlurEffect();
+            Closed += (s, e) => ST.RemoveMainWindowBlurEffect();
         }
     }
 }

@@ -259,7 +259,7 @@
   <data name="RemoveMod" xml:space="preserve">
     <value>删除模组</value>
   </data>
-  <data name="ReplaceUserGroup" xml:space="preserve">
+  <data name="RenameUserGroup" xml:space="preserve">
     <value>重命名用户分组</value>
   </data>
   <data name="AddUserGroup" xml:space="preserve">
