@@ -289,27 +289,12 @@ namespace StarsectorTools.Tools.ModManager
 
         private void GetTypeGroup()
         {
-            if (!File.Exists(modTypeGroupFile))
-                CreateTypeModGroup();
-            try
-            {
-                TomlTable toml = TOML.Parse(modTypeGroupFile);
-                foreach (var kv in toml)
-                    foreach (string id in kv.Value.AsTomlArray)
-                        allModsTypeGroup.Add(id, kv.Key);
-                STLog.WriteLine(I18n.TypeGroupRetrievalCompleted);
-            }
-            catch (Exception ex)
-            {
-                STLog.WriteLine($"{I18n.ModGroupFailedToGet} {I18n.Path}: {modTypeGroupFile}", ex);
-                ST.ShowMessageBox($"{I18n.ModGroupFailedToGet}\n{I18n.Path}: {modTypeGroupFile}", MessageBoxImage.Error);
-                CreateTypeModGroup();
-            }
-            void CreateTypeModGroup()
-            {
-                using StreamReader sr = new(Application.GetResourceStream(modTypeGroupUri).Stream);
-                File.WriteAllText(modTypeGroupFile, sr.ReadToEnd());
-            }
+            using StreamReader sr = new(Application.GetResourceStream(modTypeGroupUri).Stream);
+            TomlTable toml = TOML.Parse(sr);
+            foreach (var kv in toml)
+                foreach (string id in kv.Value.AsTomlArray)
+                    allModsTypeGroup.Add(id, kv.Key);
+            STLog.WriteLine(I18n.TypeGroupRetrievalCompleted);
         }
         private string CheckTypeGroup(string id)
         {

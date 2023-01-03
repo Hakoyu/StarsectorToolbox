@@ -102,8 +102,8 @@ namespace StarsectorTools.Utils
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="logLevel">日志等级</param>
-        /// <param name="keys">嵌入实例</param>
-        public static void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] keys)
+        /// <param name="args">插入的对象</param>
+        public static void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] args)
         {
             rwLockS.EnterWriteLock();
             try
@@ -115,7 +115,7 @@ namespace StarsectorTools.Utils
                         name = GetClassNameAndMethodName();
                     else
                         name = GetClassName();
-                    sw.WriteLine($"[{name}] {logLevel} {KeyParse(message, keys)}");
+                    sw.WriteLine($"[{name}] {logLevel} {KeyParse(message, args)}");
                     sw.Flush();
                 }
             }
@@ -130,13 +130,13 @@ namespace StarsectorTools.Utils
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="ex">错误</param>
-        /// <param name="keys">嵌入实例</param>
-        public static void WriteLine(string message, Exception ex, params object[] keys)
+        /// <param name="args">插入的对象</param>
+        public static void WriteLine(string message, Exception ex, params object[] args)
         {
             rwLockS.EnterWriteLock();
             try
             {
-                sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {KeyParse(message, keys)}");
+                sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {KeyParse(message, args)}");
                 sw.WriteLine(ExceptionParse(ex));
                 sw.Flush();
             }
@@ -146,11 +146,11 @@ namespace StarsectorTools.Utils
             }
         }
 
-        private static string KeyParse(string str, params object[] keys)
+        private static string KeyParse(string str, params object[] args)
         {
             try
             {
-                return string.Format(str, keys);
+                return string.Format(str, args);
             }
             catch
             {
@@ -158,11 +158,11 @@ namespace StarsectorTools.Utils
             }
         }
         /// <summary>
-        /// Exception解析 用来精简错误的堆栈输出
+        /// Exception解析 用来精简异常的堆栈输出
         /// </summary>
         /// <param name="ex">Exception</param>
         /// <returns></returns>
-        static public string ExceptionParse(Exception ex)
+        public static string ExceptionParse(Exception ex)
         {
             var list = ex.ToString().Split("\r\n").Where(s => !s.Contains("at System.") && !s.Contains("at MS.") && !s.Contains("End of inner exception stack trace"));
             return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?={nameof(StarsectorTools)})", "");
@@ -381,13 +381,13 @@ namespace StarsectorTools.Utils
                     else
                         archive.SaveTo($"{destinationDirectoryName}\\{archiveName}.zip", CompressionType.Deflate);
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectoryName}", ex);
                 return false;
             }
-            return true;
         }
 
         /// <summary>

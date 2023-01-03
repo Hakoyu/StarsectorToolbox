@@ -793,15 +793,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 模组分组获取失败 的本地化字符串。
-        /// </summary>
-        public static string ModGroupFailedToGet {
-            get {
-                return ResourceManager.GetString("ModGroupFailedToGet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 模组信息 的本地化字符串。
         /// </summary>
         public static string ModInfo {

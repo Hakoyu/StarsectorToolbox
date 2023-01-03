@@ -155,9 +155,6 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="UserDataLoadError" xml:space="preserve">
     <value>User data loading error</value>
   </data>
-  <data name="ModGroupFailedToGet" xml:space="preserve">
-    <value>ModGroup failed to get</value>
-  </data>
   <data name="ShowGroup" xml:space="preserve">
     <value>Show group</value>
   </data>

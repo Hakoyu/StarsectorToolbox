@@ -1856,11 +1856,18 @@ namespace HKW.TomlParse
     {
         public static bool ForceASCII { get; set; } = false;
 
-        // public static TomlTable Parse(TextReader reader)
-        // {
-        //     using var parser = new TOMLParser(reader) { ForceASCII = ForceASCII };
-        //     return parser.Parse();
-        // }
+        public static TomlTable Parse(TextReader reader)
+        {
+            try
+            {
+                using var parser = new TOMLParser(reader) { ForceASCII = ForceASCII };
+                return parser.Parse();
+            }
+            catch (TomlParseException ex)
+            {
+                throw ex;
+            }
+        }
         public static TomlTable Parse(string path)
         {
             try
@@ -1869,9 +1876,9 @@ namespace HKW.TomlParse
                 using var parser = new TOMLParser(reader) { ForceASCII = ForceASCII };
                 return parser.Parse();
             }
-            catch
+            catch (TomlParseException ex)
             {
-                throw;
+                throw ex;
             }
         }
     }
