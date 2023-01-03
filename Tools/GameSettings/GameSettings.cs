@@ -72,7 +72,7 @@ namespace StarsectorTools.Tools.GameSettings
             }
             catch
             {
-                STLog.Instance.WriteLine(I18n.CustomResolutionGetFailed, STLogLevel.ERROR);
+                STLog.WriteLine(I18n.CustomResolutionGetFailed, STLogLevel.ERROR);
                 ST.ShowMessageBox(I18n.CustomResolutionGetFailed, MessageBoxImage.Error);
             }
         }

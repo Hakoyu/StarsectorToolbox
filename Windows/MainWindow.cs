@@ -33,7 +33,7 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.PageInitializationError}: {nameof(Settings)}", ex);
+                STLog.WriteLine($"{I18n.PageInitializationError}: {nameof(Settings)}", ex);
                 ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Settings)}", MessageBoxImage.Error);
             }
         }
@@ -45,7 +45,7 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.PageInitializationError}: {nameof(Info)}", ex);
+                STLog.WriteLine($"{I18n.PageInitializationError}: {nameof(Info)}", ex);
                 ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Info)}", MessageBoxImage.Error);
             }
         }
@@ -57,7 +57,7 @@ namespace StarsectorTools.Windows
                 {
                     TomlTable toml = TOML.Parse(ST.configFile);
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
-                    STLog.Instance.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
+                    STLog.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
                     ST.SetGameData(toml["Game"]["GamePath"].AsString!);
                     if (!File.Exists(ST.gameExeFile))
                     {
@@ -94,7 +94,7 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.configFile}", ex);
+                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.configFile}", ex);
                 ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.configFile}", MessageBoxImage.Error);
                 CreateConfigFile();
             }
@@ -110,7 +110,7 @@ namespace StarsectorTools.Windows
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
             string str = sr.ReadToEnd();
             File.WriteAllText(ST.configFile, str);
-            STLog.Instance.WriteLine($"{I18n.ConfigFileCreatedSuccess} {ST.configFile}");
+            STLog.WriteLine($"{I18n.ConfigFileCreatedSuccess} {ST.configFile}");
         }
 
         public void SetBlurEffect()
@@ -125,13 +125,13 @@ namespace StarsectorTools.Windows
 
         public void ChangeLanguage()
         {
-            STLog.Instance.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
+            STLog.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
             Label_Title.Content = I18n.StarsectorTools;
             Button_Settings.Content = I18n.Settings;
             Button_Info.Content = I18n.Info;
             RefreshPages();
             RefreshExpansionPages();
-            STLog.Instance.WriteLine(I18n.PageListRefreshComplete);
+            STLog.WriteLine(I18n.PageListRefreshComplete);
         }
 
 
@@ -163,7 +163,7 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.PageInitializationError}: {type.Name}", ex);
+                STLog.WriteLine($"{I18n.PageInitializationError}: {type.Name}", ex);
                 ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.Name}", MessageBoxImage.Error);
                 return null;
             }
@@ -217,13 +217,13 @@ namespace StarsectorTools.Windows
                 pages[id] = newPage;
                 if (Frame_MainFrame.Content is Page oldPage && oldPage.GetType() == newPage.GetType())
                     Frame_MainFrame.Content = pages[id];
-                STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
+                STLog.WriteLine($"{I18n.RefreshPage}: {id}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
             ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
             pages.Add(id, page);
-            STLog.Instance.WriteLine($"{I18n.AddPage} {icon} {name}");
+            STLog.WriteLine($"{I18n.AddPage} {icon} {name}");
         }
 
         private void RefreshExpansionPages()
@@ -253,7 +253,7 @@ namespace StarsectorTools.Windows
             {
                 if (!File.Exists(tomlFile))
                 {
-                    STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    STLog.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
@@ -261,13 +261,13 @@ namespace StarsectorTools.Windows
                 var assemblyFile = $"{directory}\\{expansionInfo.ExpansionFile}";
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
-                    STLog.Instance.WriteLine($"{I18n.ExtensionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    STLog.WriteLine($"{I18n.ExtensionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExtensionAlreadyExists}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
                 if (!File.Exists(assemblyFile))
                 {
-                    STLog.Instance.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    STLog.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
@@ -280,7 +280,7 @@ namespace StarsectorTools.Windows
                     expansionInfo.ExpansionType = Assembly.LoadFrom(assemblyFile).GetType(expansionInfo.ExpansionId)!;
                 if (expansionInfo.ExpansionType is null)
                 {
-                    STLog.Instance.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    STLog.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
@@ -288,7 +288,7 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
+                STLog.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
                 ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Error);
                 return null;
             }
@@ -319,13 +319,13 @@ namespace StarsectorTools.Windows
                 expansionPages[id] = new(() => (Page)type.Assembly.CreateInstance(type.FullName!)!);
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
                     Frame_MainFrame.Content = expansionPages[id].Value;
-                STLog.Instance.WriteLine($"{I18n.RefreshPage}: {id}");
+                STLog.WriteLine($"{I18n.RefreshPage}: {id}");
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
             ListBox_ExpansionMenu.Items.Add(item);
             expansionPages.Add(id, lazyPage);
-            STLog.Instance.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
+            STLog.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
         }
         public void RefreshDebugExpansion()
         {
@@ -364,7 +364,7 @@ namespace StarsectorTools.Windows
             ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
             Page page = (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!;
             pages.Add(id, page);
-            STLog.Instance.WriteLine($"{I18n.RefreshPage} {icon} {name}");
+            STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
         }
     }
 }

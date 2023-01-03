@@ -52,7 +52,7 @@ ExpansionFile = "WpfLibrary1.dll"
 public Page1()
 {
     InitializeComponent();
-    STLog.Instance.WriteLine(GetType().ToString());
+    STLog.WriteLine(GetType().ToString());
 }
 ```
 
@@ -78,7 +78,7 @@ public Page1()
 ### 标准信息使用默认输出
 
 ```csharp
-STLog.Instance.WriteLine(message);
+STLog.WriteLine(message);
 ST.ShowMessageBox(message);
 ```
 
@@ -91,7 +91,7 @@ if(isTrue == true)
 }
 else
 {
-    STLog.Instance.WriteLine(message, STLogLevel.WARNING);
+    STLog.WriteLine(message, STLogLevel.WARNING);
     ST.ShowMessageBox(message, MessageBoxImage.Warning);
 }
 ```
@@ -105,7 +105,7 @@ try
 }
 catch (Exception ex)
 {
-    STLog.Instance.WriteLine(message, ex);
+    STLog.WriteLine(message, ex);
     ST.ShowMessageBox(message, MessageBoxImage.Error);
 }
 ```

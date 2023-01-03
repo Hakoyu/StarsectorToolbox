@@ -42,7 +42,7 @@ namespace StarsectorTools.Pages
         {
             foreach (ComboBoxItem item in ComboBox_LogLevel.Items)
             {
-                if (item.ToolTip.ToString() == STLog.Instance.LogLevel.ToString())
+                if (item.ToolTip.ToString() == STLog.LogLevel.ToString())
                 {
                     ComboBox_LogLevel.SelectedItem = item;
                     return;
@@ -61,7 +61,7 @@ namespace StarsectorTools.Pages
                 SaveLanguage(Thread.CurrentThread.CurrentUICulture);
                 ChangeLanguage();
                 ((MainWindow)Application.Current.MainWindow).ChangeLanguage();
-                STLog.Instance.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
+                STLog.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }
 
@@ -102,7 +102,7 @@ namespace StarsectorTools.Pages
             if (ComboBox_LogLevel.SelectedItem is ComboBoxItem item)
             {
                 SaveLogLevel(item.ToolTip.ToString()!);
-                STLog.Instance.WriteLine($"{I18n.LogLevelSwitch}: {item.ToolTip}");
+                STLog.WriteLine($"{I18n.LogLevelSwitch}: {item.ToolTip}");
             }
         }
 
@@ -110,7 +110,7 @@ namespace StarsectorTools.Pages
         {
             try
             {
-                STLog.Instance.LogLevel = STLog.Str2STLogLevel(level);
+                STLog.LogLevel = STLog.Str2STLogLevel(level);
                 TomlTable toml = TOML.Parse(ST.configFile);
                 toml["Extras"]["LogLevel"] = level;
                 toml.SaveTo(ST.configFile);
@@ -140,7 +140,7 @@ namespace StarsectorTools.Pages
                 TomlTable toml = TOML.Parse(ST.configFile);
                 toml["Expansion"]["DebugPath"] = path;
                 toml.SaveTo(ST.configFile);
-                STLog.Instance.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
+                STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
                 if (ST.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                     ((MainWindow)Application.Current.MainWindow).RefreshDebugExpansion();
             }
@@ -152,7 +152,7 @@ namespace StarsectorTools.Pages
             TomlTable toml = TOML.Parse(ST.configFile);
             toml["Expansion"]["DebugPath"] = "";
             toml.SaveTo(ST.configFile);
-            STLog.Instance.WriteLine(I18n.ClearExpansionDebugPath);
+            STLog.WriteLine(I18n.ClearExpansionDebugPath);
         }
     }
 }

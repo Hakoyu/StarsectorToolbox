@@ -115,13 +115,13 @@ namespace StarsectorTools.Windows
             //MethodInfo mi = type.GetMethod("MehtodName")!;
             //object obj = assembly.CreateInstance(type.FullName!)!;
             //Frame_MainFrame.Content = obj;
-            STLog.Instance.WriteLine(I18n.InitializationCompleted);
+            STLog.WriteLine(I18n.InitializationCompleted);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             SetBlurEffect();
-            STLog.Instance.WriteLine(I18n.GlobalException, e.Exception);
+            STLog.WriteLine(I18n.GlobalException, e.Exception);
             ST.ShowMessageBox(I18n.GlobalExceptionMessage, MessageBoxImage.Error);
             e.Handled = true;
             RemoveBlurEffect();
@@ -160,7 +160,7 @@ namespace StarsectorTools.Windows
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
             ClearPages();
-            STLog.Instance.Close();
+            STLog.Close();
             Close();
         }
 
@@ -190,7 +190,7 @@ namespace StarsectorTools.Windows
                 {
                     if (!pages.ContainsKey(id))
                     {
-                        STLog.Instance.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
+                        STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
                         ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
                         ListBox_MainMenu.SelectedIndex = menuSelectedIndex;
                         return;
@@ -203,7 +203,7 @@ namespace StarsectorTools.Windows
                 {
                     if (!expansionPages.ContainsKey(id))
                     {
-                        STLog.Instance.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
+                        STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
                         ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
                         return;
@@ -216,7 +216,7 @@ namespace StarsectorTools.Windows
                     }
                     catch (Exception ex)
                     {
-                        STLog.Instance.WriteLine($"{I18n.PageInitializationError} {item.Content}", ex);
+                        STLog.WriteLine($"{I18n.PageInitializationError} {item.Content}", ex);
                         ST.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", MessageBoxImage.Error);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
                     }
@@ -238,7 +238,7 @@ namespace StarsectorTools.Windows
 
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
-            STLog.Instance.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
+            STLog.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
         }
 
         private void ListBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)

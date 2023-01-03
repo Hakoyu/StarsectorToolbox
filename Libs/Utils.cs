@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using Aspose.Zip;
@@ -38,42 +39,33 @@ namespace StarsectorTools.Utils
     }
 
     /// <summary>StarsectorTools日志</summary>
-    public sealed class STLog
+    public static class STLog
     {
         /// <summary>日志目录</summary>
         public const string logFile = $"{ST.coreDirectory}\\StarsectorTools.log";
 
-        /// <summary>延迟启用</summary>
-        private static readonly Lazy<STLog> lazy = new(new STLog());
-
         /// <summary>日志等级</summary>
-        public STLogLevel LogLevel = STLogLevel.INFO;
+        public static STLogLevel LogLevel = STLogLevel.INFO;
 
         /// <summary>写入流</summary>
-        private StreamWriter sw = new(logFile);
+        private static StreamWriter sw = new(logFile);
+        /// <summary>读写锁</summary>
+        private static ReaderWriterLockSlim rwLockS = new();
 
-        /// <summary>单例</summary>
-        public static STLog Instance
-        {
-            get => lazy.Value;
-        }
-        private STLog() { }
         /// <summary>
         /// 字符串转换成日志等级
         /// </summary>
         /// <param name="str">字符串</param>
         /// <returns>日志等级</returns>
-        public static STLogLevel Str2STLogLevel(string str)
+        public static STLogLevel Str2STLogLevel(string str) =>
+        str switch
         {
-            return str switch
-            {
-                nameof(STLogLevel.DEBUG) => STLogLevel.DEBUG,
-                nameof(STLogLevel.INFO) => STLogLevel.INFO,
-                nameof(STLogLevel.WARN) => STLogLevel.WARN,
-                nameof(STLogLevel.ERROR) => STLogLevel.ERROR,
-                _ => STLogLevel.INFO
-            };
-        }
+            nameof(STLogLevel.DEBUG) => STLogLevel.DEBUG,
+            nameof(STLogLevel.INFO) => STLogLevel.INFO,
+            nameof(STLogLevel.WARN) => STLogLevel.WARN,
+            nameof(STLogLevel.ERROR) => STLogLevel.ERROR,
+            _ => STLogLevel.INFO
+        };
 
         /// <summary>
         /// 获取所在类名和方法名
@@ -100,7 +92,7 @@ namespace StarsectorTools.Utils
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="logLevel">日志等级</param>
-        public void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
+        public static void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
         {
             WriteLine(message, logLevel, null!);
         }
@@ -111,34 +103,50 @@ namespace StarsectorTools.Utils
         /// <param name="message">消息</param>
         /// <param name="logLevel">日志等级</param>
         /// <param name="keys">嵌入实例</param>
-        public void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] keys)
+        public static void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] keys)
         {
-            if (logLevel >= LogLevel)
+            rwLockS.EnterWriteLock();
+            try
             {
-                string? name;
-                if (LogLevel == STLogLevel.DEBUG)
-                    name = GetClassNameAndMethodName();
-                else
-                    name = GetClassName();
-                sw.WriteLine($"[{name}] {logLevel} {KeyParse(message, keys)}");
-                sw.Flush();
+                if (logLevel >= LogLevel)
+                {
+                    string? name;
+                    if (LogLevel == STLogLevel.DEBUG)
+                        name = GetClassNameAndMethodName();
+                    else
+                        name = GetClassName();
+                    sw.WriteLine($"[{name}] {logLevel} {KeyParse(message, keys)}");
+                    sw.Flush();
+                }
+            }
+            finally
+            {
+                rwLockS.ExitWriteLock();
             }
         }
 
         /// <summary>
-        /// 写入捕获的错误日志
+        /// 写入捕获的异常
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="ex">错误</param>
         /// <param name="keys">嵌入实例</param>
-        public void WriteLine(string message, Exception ex, params object[] keys)
+        public static void WriteLine(string message, Exception ex, params object[] keys)
         {
-            sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {KeyParse(message, keys)}");
-            sw.WriteLine(ExceptionParse(ex));
-            sw.Flush();
+            rwLockS.EnterWriteLock();
+            try
+            {
+                sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {KeyParse(message, keys)}");
+                sw.WriteLine(ExceptionParse(ex));
+                sw.Flush();
+            }
+            finally
+            {
+                rwLockS.ExitWriteLock();
+            }
         }
 
-        private string KeyParse(string str, params object[] keys)
+        private static string KeyParse(string str, params object[] keys)
         {
             try
             {
@@ -160,9 +168,10 @@ namespace StarsectorTools.Utils
             return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?={nameof(StarsectorTools)})", "");
         }
         /// <summary>关闭</summary>
-        public void Close()
+        public static void Close()
         {
-            sw?.Close();
+            if (GetClassName() == nameof(MainWindow))
+                sw?.Close();
         }
     }
 
@@ -223,13 +232,13 @@ namespace StarsectorTools.Utils
                 }
                 catch (Exception ex)
                 {
-                    STLog.Instance.WriteLine($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
+                    STLog.WriteLine($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
                 }
             }
             else
             {
                 gameExeFile = null!;
-                STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
+                STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
                 ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
             }
         }
@@ -248,7 +257,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LoadError, ex);
+                STLog.WriteLine(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -267,7 +276,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LoadError, ex);
+                STLog.WriteLine(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -286,7 +295,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LoadError, ex);
+                STLog.WriteLine(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -321,12 +330,12 @@ namespace StarsectorTools.Utils
             if (File.Exists($"{newDirectory}\\starsector.exe"))
             {
                 SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!);
-                STLog.Instance.WriteLine($"{I18n.GameDirectorySetupSuccess} {I18n.Path}: {newDirectory}");
+                STLog.WriteLine($"{I18n.GameDirectorySetupSuccess} {I18n.Path}: {newDirectory}");
                 return true;
             }
             else
             {
-                STLog.Instance.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {newDirectory}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {newDirectory}", STLogLevel.WARN);
                 return false;
             }
         }
@@ -345,7 +354,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.LinkError, ex);
+                STLog.WriteLine(I18n.LinkError, ex);
                 return false;
             }
         }
@@ -375,7 +384,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectoryName}", ex);
+                STLog.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectoryName}", ex);
                 return false;
             }
             return true;
@@ -426,7 +435,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", ex);
+                STLog.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", ex);
                 if (Directory.Exists(destinationDirectoryName))
                     Directory.Delete(destinationDirectoryName);
                 return false;
@@ -527,7 +536,7 @@ namespace StarsectorTools.Utils
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.ModInfoError, ex);
+                STLog.WriteLine(I18n.ModInfoError, ex);
             }
         }
 

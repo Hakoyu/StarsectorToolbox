@@ -45,13 +45,13 @@ namespace StarsectorTools.Pages
                 var tagName = Regex.Match(releases, @"(?<=""name"": "")[^""]+").Value;
                 if (!string.IsNullOrEmpty(tagName))
                 {
-                    STLog.Instance.WriteLine($"获取成功\n{tagName}");
+                    STLog.WriteLine($"获取成功\n{tagName}");
                     //ST.ShowMessageBox($"获取成功\n最新版本: {tagName}");
                     TextBlock_CheckUpdateIcon.Text = "✅";
                 }
                 else
                 {
-                    STLog.Instance.WriteLine($"获取失败\n{releases}", STLogLevel.WARN);
+                    STLog.WriteLine($"获取失败\n{releases}", STLogLevel.WARN);
                     //ST.ShowMessageBox($"获取失败\n{releases}", MessageBoxImage.Warning);
                     TextBlock_CheckUpdateIcon.Text = "❎";
 

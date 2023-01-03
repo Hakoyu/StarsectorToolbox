@@ -79,7 +79,7 @@ namespace StarsectorTools.Tools.GameSettings
             }
             vmparamsData.xmsx = $"{memory}{unit}";
             File.WriteAllText($"{ST.gameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
-            STLog.Instance.WriteLine($"{I18n.VmparamsMemorySet}: {vmparamsData.xmsx}");
+            STLog.WriteLine($"{I18n.VmparamsMemorySet}: {vmparamsData.xmsx}");
             ST.ShowMessageBox(I18n.VmparamsMemorySetSuccess);
         }
 
@@ -109,7 +109,7 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.OpenLink(gameLogFile);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogFile}", MessageBoxImage.Warning);
             }
         }
@@ -120,12 +120,12 @@ namespace StarsectorTools.Tools.GameSettings
             {
                 ST.DeleteFileToRecycleBin(gameLogFile);
                 File.Create(gameLogFile).Close();
-                STLog.Instance.WriteLine(I18n.LogFileCleanCompleted);
+                STLog.WriteLine(I18n.LogFileCleanCompleted);
                 ST.ShowMessageBox(I18n.LogFileCleanCompleted);
             }
             else
             {
-                STLog.Instance.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogFile}", MessageBoxImage.Warning);
             }
         }
@@ -147,12 +147,12 @@ namespace StarsectorTools.Tools.GameSettings
                         ST.DeleteDirToRecycleBin($"{item.ToolTip}");
                         ComboBox_MissionsLoadouts.Items.Remove(item);
                     }
-                    STLog.Instance.WriteLine(I18n.MissionsLoadoutsClearCompleted);
+                    STLog.WriteLine(I18n.MissionsLoadoutsClearCompleted);
                     ST.ShowMessageBox(I18n.MissionsLoadoutsClearCompleted);
                 }
                 catch (Exception ex)
                 {
-                    STLog.Instance.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {item.ToolTip}", ex);
+                    STLog.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {item.ToolTip}", ex);
                     ST.ShowMessageBox($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {item.ToolTip}", MessageBoxImage.Error);
                 }
             }
@@ -171,7 +171,7 @@ namespace StarsectorTools.Tools.GameSettings
             int count = TextBox_ReservedSaveSize.Text.Length > 0 ? list.Count() - int.Parse(TextBox_ReservedSaveSize.Text) : 0;
             for (int i = 0; i < count; i++)
                 ST.DeleteDirToRecycleBin(list.ElementAt(i).Key);
-            STLog.Instance.WriteLine(I18n.SaveCleanCompleted);
+            STLog.WriteLine(I18n.SaveCleanCompleted);
             ST.ShowMessageBox(I18n.SaveCleanCompleted);
         }
 
@@ -182,7 +182,7 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.OpenLink(dirParh);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {dirParh}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {dirParh}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {dirParh}", MessageBoxImage.Warning);
             }
         }
@@ -193,7 +193,7 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.OpenLink(ST.gameSaveDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
             }
         }
@@ -218,12 +218,12 @@ namespace StarsectorTools.Tools.GameSettings
                 Button_CustomResolutionReset.IsEnabled = false;
                 TextBox_ResolutionWidth.Text = string.Empty;
                 TextBox_ResolutionHeight.Text = string.Empty;
-                STLog.Instance.WriteLine(I18n.ResetSuccessful);
+                STLog.WriteLine(I18n.ResetSuccessful);
                 ST.ShowMessageBox(I18n.ResetSuccessful);
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.CustomResolutionResetError, ex);
+                STLog.WriteLine(I18n.CustomResolutionResetError, ex);
                 ST.ShowMessageBox(I18n.CustomResolutionResetError, MessageBoxImage.Error);
             }
         }
@@ -245,12 +245,12 @@ namespace StarsectorTools.Tools.GameSettings
                 data = Regex.Replace(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",", @$"""resolutionOverride"":""{TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}"",");
                 File.WriteAllText(gameSettingsFile, data);
                 Button_CustomResolutionReset.IsEnabled = true;
-                STLog.Instance.WriteLine($"{I18n.SetupSuccessful} {TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}");
+                STLog.WriteLine($"{I18n.SetupSuccessful} {TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}");
                 ST.ShowMessageBox(I18n.SetupSuccessful);
             }
             catch (Exception ex)
             {
-                STLog.Instance.WriteLine(I18n.CustomResolutionSetupError, ex);
+                STLog.WriteLine(I18n.CustomResolutionSetupError, ex);
                 ST.ShowMessageBox(I18n.CustomResolutionSetupError, MessageBoxImage.Error);
             }
         }

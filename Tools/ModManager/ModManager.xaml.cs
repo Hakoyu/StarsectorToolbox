@@ -223,7 +223,7 @@ namespace StarsectorTools.Tools.ModManager
             InitializeComponent();
             //throw new();
             InitializeData();
-            STLog.Instance.WriteLine(I18n.InitialisationComplete);
+            STLog.WriteLine(I18n.InitialisationComplete);
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)
@@ -411,7 +411,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 if (err != null)
                 {
-                    STLog.Instance.WriteLine(err, STLogLevel.WARN);
+                    STLog.WriteLine(err, STLogLevel.WARN);
                     ST.ShowMessageBox(err, MessageBoxImage.Warning);
                 }
                 CheckEnabledModsDependencies();
@@ -507,7 +507,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             else
             {
-                STLog.Instance.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", MessageBoxImage.Warning);
             }
         }
@@ -539,7 +539,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     catch (Exception ex)
                     {
-                        STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", ex);
+                        STLog.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", ex);
                         ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", MessageBoxImage.Error);
                         return;
                     }
@@ -554,7 +554,7 @@ namespace StarsectorTools.Tools.ModManager
                             ChangeModEnabled(id, true);
                         else
                         {
-                            STLog.Instance.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
+                            STLog.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
                             err ??= $"{I18n.NotFoundMod}\n";
                             err += $"{id}\n";
                         }
@@ -562,12 +562,12 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 else
                 {
-                    STLog.Instance.WriteLine($"{I18n.FileNotExist} {I18n.Path}: {filePath}", STLogLevel.WARN);
+                    STLog.WriteLine($"{I18n.FileNotExist} {I18n.Path}: {filePath}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.FileNotExist}\n{I18n.Path}: {filePath}");
                 }
                 if (err != null)
                 {
-                    STLog.Instance.WriteLine(err, STLogLevel.WARN);
+                    STLog.WriteLine(err, STLogLevel.WARN);
                     ST.ShowMessageBox(err, MessageBoxImage.Warning);
                 }
             }
@@ -577,7 +577,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array array)
             {
-                STLog.Instance.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
+                STLog.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
                 new Task(() =>
                 {
                     int total = array.Length;
@@ -608,7 +608,7 @@ namespace StarsectorTools.Tools.ModManager
                         }
                         else
                         {
-                            STLog.Instance.WriteLine($"{I18n.FileError} {I18n.Path}: {path}", STLogLevel.WARN);
+                            STLog.WriteLine($"{I18n.FileError} {I18n.Path}: {path}", STLogLevel.WARN);
                             ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {path}", MessageBoxImage.Warning);
                         }
                     }
@@ -630,7 +630,7 @@ namespace StarsectorTools.Tools.ModManager
                 ST.OpenLink(ST.gameModsDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {ST.gameModsDirectory}", MessageBoxImage.Warning);
             }
         }
@@ -641,7 +641,7 @@ namespace StarsectorTools.Tools.ModManager
                 ST.OpenLink(backupDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {backupDirectory}", MessageBoxImage.Warning);
             }
         }
@@ -652,7 +652,7 @@ namespace StarsectorTools.Tools.ModManager
                 ST.OpenLink(ST.gameSaveDirectory);
             else
             {
-                STLog.Instance.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
+                STLog.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
                 ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
             }
         }
