@@ -11,6 +11,20 @@ namespace StarsectorTools.Tools.GameSettings
 {
     public partial class GameSettings
     {
+        private struct VmparamsData
+        {
+            public string data;
+            public string xmsx;
+        }
+
+        private VmparamsData vmparamsData = new();
+        private string gameKey = "";
+        private string hideGameKey = "";
+        private bool showKey = false;
+        private int systemTotalMemory = 0;
+        private string gameLogFile = @$"{ST.gameDirectory}\starsector-core\starsector.log";
+        private string gameSettingsFile = $"{ST.gameDirectory}\\starsector-core\\data\\config\\settings.json";
+
         private void GetVmparamsData()
         {
             vmparamsData.data = File.ReadAllText($"{ST.gameDirectory}\\vmparams");
@@ -76,6 +90,7 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.ShowMessageBox(I18n.CustomResolutionGetFailed, MessageBoxImage.Error);
             }
         }
+
         public int? CheckMemorySize(int size)
         {
             if (size < 1024)

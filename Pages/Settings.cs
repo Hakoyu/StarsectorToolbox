@@ -2,5 +2,6 @@
 {
     public partial class Settings
     {
+        private bool isFirst = true;
     }
 }

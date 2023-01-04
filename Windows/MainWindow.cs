@@ -1,25 +1,100 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
-using StarsectorTools.Utils;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
+using StarsectorTools.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
-using System.Windows.Threading;
-using System.Threading.Tasks;
 
 namespace StarsectorTools.Windows
 {
     public partial class MainWindow
     {
+        /// <summary>StarsectorTools配置文件资源链接</summary>
+        public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
+
+        /// <summary>拓展目录</summary>
+        private const string expansionDirectories = "Expansion";
+
+        /// <summary>拓展信息文件</summary>
+        private const string expansionInfoFile = "Expansion.toml";
+
+        private const string strName = "Name";
+        private const string strDescription = "Description";
+        private bool menuOpen = false;
+        private Dictionary<string, Page> pages = new();
+        private Dictionary<string, Lazy<Page>> expansionPages = new();
+        private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
+        private Settings settingsPage = null!;
+        private Info infoPage = null!;
+        private int menuSelectedIndex = -1;
+        private int exceptionMenuSelectedIndex = -1;
+        private string expansionDebugPath = string.Empty;
+
+        /// <summary>拓展信息</summary>
+        private class ExpansionInfo
+        {
+            /// <summary>ID</summary>
+            public string Id { get; private set; } = null!;
+
+            /// <summary>名称</summary>
+            public string Name { get; private set; } = null!;
+
+            /// <summary>作者</summary>
+            public string Author { get; private set; } = null!;
+
+            /// <summary>图标</summary>
+            public string Icon { get; private set; } = null!;
+
+            /// <summary>版本</summary>
+            public string Version { get; private set; } = null!;
+
+            /// <summary>支持的工具箱版本</summary>
+            public string ToolsVersion { get; private set; } = null!;
+
+            /// <summary>描述</summary>
+            public string Description { get; private set; } = null!;
+
+            /// <summary>拓展Id</summary>
+            public string ExpansionId { get; private set; } = null!;
+
+            /// <summary>拓展文件</summary>
+            public string ExpansionFile { get; private set; } = null!;
+
+            public Type ExpansionType = null!;
+
+            public ExpansionInfo(TomlTable table)
+            {
+                foreach (var info in table)
+                    SetInfo(info.Key, info.Value.AsString);
+            }
+
+            public void SetInfo(string key, string value)
+            {
+                switch (key)
+                {
+                    case nameof(Id): Id = value; break;
+                    case nameof(Name): Name = value; break;
+                    case nameof(Author): Author = value; break;
+                    case nameof(Icon): Icon = value; break;
+                    case nameof(Version): Version = value; break;
+                    case nameof(ToolsVersion): ToolsVersion = value; break;
+                    case nameof(Description): Description = value; break;
+                    case nameof(ExpansionId): ExpansionId = value; break;
+                    case nameof(ExpansionFile): ExpansionFile = value; break;
+                }
+            }
+        }
+
         private void InitializeDirectories()
         {
             if (!Directory.Exists(ST.coreDirectory))
@@ -27,6 +102,7 @@ namespace StarsectorTools.Windows
             if (!Directory.Exists(expansionDirectories))
                 Directory.CreateDirectory(expansionDirectories);
         }
+
         private void SetSettingsPage()
         {
             try
@@ -39,6 +115,7 @@ namespace StarsectorTools.Windows
                 ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Settings)}", MessageBoxImage.Error);
             }
         }
+
         private void SetInfoPage()
         {
             try
@@ -51,6 +128,7 @@ namespace StarsectorTools.Windows
                 ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Info)}", MessageBoxImage.Error);
             }
         }
+
         private bool SetConfig()
         {
             try
@@ -102,6 +180,7 @@ namespace StarsectorTools.Windows
             }
             return true;
         }
+
         /// <summary>
         /// 从资源中读取默认配置文件并创建
         /// </summary>
@@ -136,7 +215,6 @@ namespace StarsectorTools.Windows
             STLog.WriteLine(I18n.PageListRefreshComplete);
         }
 
-
         private void ShowPage()
         {
             if (string.IsNullOrEmpty(expansionDebugPath))
@@ -155,8 +233,8 @@ namespace StarsectorTools.Windows
             ClearPages();
             AddPage("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, CreatePage(typeof(ModManager)));
             AddPage("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, CreatePage(typeof(GameSettings)));
-
         }
+
         private Page? CreatePage(Type type)
         {
             try
@@ -187,6 +265,7 @@ namespace StarsectorTools.Windows
             if (page.GetType().GetMethod("Close") is MethodInfo info)
                 _ = info.Invoke(page, null)!;
         }
+
         private ListBoxItem CreateListBoxItemForPage(string icon, string name, string id, string toolTip)
         {
             var item = new ListBoxItem
@@ -233,6 +312,7 @@ namespace StarsectorTools.Windows
             ClearExpansionPages();
             GetAllExpansions();
         }
+
         private void ClearExpansionPages()
         {
             foreach (var lazyPage in expansionPages.Values)
@@ -241,6 +321,7 @@ namespace StarsectorTools.Windows
             allExpansionsInfo.Clear();
             ListBox_ExpansionMenu.Items.Clear();
         }
+
         private void GetAllExpansions()
         {
             DirectoryInfo dirs = new(expansionDirectories);
@@ -248,6 +329,7 @@ namespace StarsectorTools.Windows
                 if (CheckExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
                     GetExpansionPage(expansionInfo);
         }
+
         private ExpansionInfo? CheckExpansionInfo(string directory, bool loadInMemory = false)
         {
             string tomlFile = $"{directory}\\{expansionInfoFile}";
@@ -295,11 +377,13 @@ namespace StarsectorTools.Windows
                 return null;
             }
         }
+
         private void GetExpansionPage(ExpansionInfo expansionInfo)
         {
             allExpansionsInfo.Add(expansionInfo.Id, expansionInfo);
             AddExpansionPage(expansionInfo);
         }
+
         private void AddExpansionPage(ExpansionInfo expansionInfo)
         {
             string icon = expansionInfo.Icon;
@@ -329,6 +413,7 @@ namespace StarsectorTools.Windows
             expansionPages.Add(id, lazyPage);
             STLog.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
         }
+
         public void RefreshDebugExpansion()
         {
             if (ListBox_MainMenu.Items.Count > 3)

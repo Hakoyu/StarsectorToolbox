@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
@@ -49,6 +48,7 @@ namespace StarsectorTools.Utils
 
         /// <summary>写入流</summary>
         private static StreamWriter sw = new(logFile);
+
         /// <summary>读写锁</summary>
         private static ReaderWriterLockSlim rwLockS = new();
 
@@ -157,6 +157,7 @@ namespace StarsectorTools.Utils
                 return str;
             }
         }
+
         /// <summary>
         /// Exception解析 用来精简异常的堆栈输出
         /// </summary>
@@ -167,6 +168,7 @@ namespace StarsectorTools.Utils
             var list = ex.ToString().Split("\r\n").Where(s => !s.Contains("at System.") && !s.Contains("at MS.") && !s.Contains("End of inner exception stack trace"));
             return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?={nameof(StarsectorTools)})", "");
         }
+
         /// <summary>关闭</summary>
         public static void Close()
         {
@@ -179,6 +181,7 @@ namespace StarsectorTools.Utils
     public static class ST
     {
         public const string coreDirectory = "Core";
+
         /// <summary>StarsectorTools配置文件</summary>
         public const string configFile = $"{coreDirectory}\\Config.toml";
 
@@ -199,6 +202,7 @@ namespace StarsectorTools.Utils
 
         /// <summary>游戏已启用模组文件目录</summary>
         public static string enabledModsJsonFile { get; private set; } = null!;
+
         /// <summary>
         /// 格式化Json数据,去除掉注释以及不合规的逗号
         /// </summary>
@@ -242,6 +246,7 @@ namespace StarsectorTools.Utils
                 ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
             }
         }
+
         /// <summary>
         /// 复制文件夹至目标文件夹
         /// </summary>
@@ -544,6 +549,7 @@ namespace StarsectorTools.Utils
 
         /// <summary>本地路径</summary>
         public string Path = null!;
+
         public ModInfo(JsonObject jsonObject)
         {
             try

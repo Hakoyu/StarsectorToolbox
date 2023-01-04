@@ -15,8 +15,6 @@ namespace StarsectorTools.Pages
     /// </summary>
     public partial class Settings : Page
     {
-        private bool isFirst = true;
-
         public Settings()
         {
             InitializeComponent();

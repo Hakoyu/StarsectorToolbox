@@ -18,20 +18,6 @@ namespace StarsectorTools.Tools.GameSettings
     /// </summary>
     public partial class GameSettings : Page
     {
-        private struct VmparamsData
-        {
-            public string data;
-            public string xmsx;
-        }
-
-        private VmparamsData vmparamsData = new();
-        private string gameKey = "";
-        private string hideGameKey = "";
-        private bool showKey = false;
-        private int systemTotalMemory = 0;
-        private string gameLogFile = @$"{ST.gameDirectory}\starsector-core\starsector.log";
-        private string gameSettingsFile = $"{ST.gameDirectory}\\starsector-core\\data\\config\\settings.json";
-
         public GameSettings()
         {
             InitializeComponent();
@@ -254,6 +240,5 @@ namespace StarsectorTools.Tools.GameSettings
                 ST.ShowMessageBox(I18n.CustomResolutionSetupError, MessageBoxImage.Error);
             }
         }
-
     }
 }
