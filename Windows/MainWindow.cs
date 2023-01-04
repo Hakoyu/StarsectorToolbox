@@ -419,7 +419,7 @@ namespace StarsectorTools.Windows
             if (ListBox_MainMenu.Items.Count > 3)
             {
                 pages.Remove(((ListBoxItem)ListBox_MainMenu.Items[^2]).Tag.ToString()!);
-                ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2);
+                ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.Items.Count - 2);
             }
             expansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
             if (CheckExpansionInfo(expansionDebugPath, true) is ExpansionInfo info)

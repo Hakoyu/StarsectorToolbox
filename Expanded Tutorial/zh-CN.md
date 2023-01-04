@@ -212,7 +212,7 @@ static class ST
 
 ```
 
-### [StarsectorTools.Tools.ModManager](https://github.com/Hakoyu/StarsectorTools/blob/master/Tools/ModManager/ModManager.xaml.cs)
+### [StarsectorTools.Tools.ModManager](https://github.com/Hakoyu/StarsectorTools/blob/master/Tools/ModManager/ModManager.cs)
 
 ```csharp
 class ModManager
