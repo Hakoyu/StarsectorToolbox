@@ -148,6 +148,20 @@ class ST
     /// <summary>游戏日志文件</summary>
     string gameLogFile
     /// <summary>
+    /// 检测文件是否存在
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="outputLog">输出日志</param>
+    /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
+    bool FileExists(string path, bool outputLog = true)
+    /// <summary>
+    /// 检测文件夹是否存在
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="outputLog">输出日志</param>
+    /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
+    bool DirectoryExists(string path, bool outputLog = true)
+    /// <summary>
     /// 格式化Json数据,去除掉注释以及不合规的逗号
     /// </summary>
     /// <param name="jsonData">Json数据</param>

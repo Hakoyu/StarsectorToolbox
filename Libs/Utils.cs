@@ -208,26 +208,28 @@ namespace StarsectorTools.Utils
         public static string GameLogFile { get; private set; } = null!;
 
         /// <summary>
-        /// 检测文件是否存在,若不存在会自动输出日志
+        /// 检测文件是否存在
         /// </summary>
         /// <param name="path">路径</param>
+        /// <param name="outputLog">输出日志</param>
         /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
-        public static bool FileExists(string path, bool logOutputIfNotFound = true)
+        public static bool FileExists(string path, bool outputLog = true)
         {
             bool isExists = File.Exists(path);
-            if (!isExists && logOutputIfNotFound)
+            if (!isExists && outputLog)
                 STLog.WriteLine($"{I18n.FileNotFound} {I18n.Path}: {path}", STLogLevel.WARN);
             return isExists;
         }
         /// <summary>
-        /// 检测文件夹是否存在,若不存在会自动输出日志
+        /// 检测文件夹是否存在
         /// </summary>
         /// <param name="path">路径</param>
+        /// <param name="outputLog">输出日志</param>
         /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
-        public static bool DirectoryExists(string path, bool logOutputIfNotFound = true)
+        public static bool DirectoryExists(string path, bool outputLog = true)
         {
             bool exists = Directory.Exists(path);
-            if (!exists && logOutputIfNotFound)
+            if (!exists && outputLog)
                 STLog.WriteLine($"{I18n.DirectoryNotFound} {I18n.Path}: {path}", STLogLevel.WARN);
             return exists;
         }
