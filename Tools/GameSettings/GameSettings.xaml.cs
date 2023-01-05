@@ -34,9 +34,9 @@ namespace StarsectorTools.Tools.GameSettings
         {
             while (!ST.GetGameDirectory())
                 ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxImage.Warning);
-            var toml = TOML.Parse(ST.ConfigTomlFile);
+            var toml = TOML.Parse(ST.STConfigTomlFile);
             toml["Game"]["GamePath"] = ST.GameDirectory;
-            toml.SaveTo(ST.ConfigTomlFile);
+            toml.SaveTo(ST.STConfigTomlFile);
             Label_GamePath.Content = ST.GameDirectory;
         }
 

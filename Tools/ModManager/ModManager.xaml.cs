@@ -530,11 +530,11 @@ namespace StarsectorTools.Tools.ModManager
             if (sender is CheckBox checkBox)
             {
                 clearGameLogOnStart = (bool)checkBox.IsChecked!;
-                if (!ST.FileExists(ST.ConfigTomlFile))
+                if (!ST.FileExists(ST.STConfigTomlFile))
                     return;
-                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
                 toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;
-                toml.SaveTo(ST.ConfigTomlFile);
+                toml.SaveTo(ST.STConfigTomlFile);
             }
         }
     }

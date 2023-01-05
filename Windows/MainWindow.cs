@@ -133,10 +133,10 @@ namespace StarsectorTools.Windows
         {
             try
             {
-                if (ST.FileExists(ST.ConfigTomlFile, false))
+                if (ST.FileExists(ST.STConfigTomlFile, false))
                 {
                     // 读取设置
-                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                    TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
                     // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     // 日志等级
@@ -160,7 +160,7 @@ namespace StarsectorTools.Windows
                     }
                     else
                         toml["Expansion"]["DebugPath"] = "";
-                    toml.SaveTo(ST.ConfigTomlFile);
+                    toml.SaveTo(ST.STConfigTomlFile);
                 }
                 else
                 {
@@ -170,10 +170,10 @@ namespace StarsectorTools.Windows
                         return false;
                     }
                     CreateConfigFile();
-                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                    TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
                     toml["Game"]["GamePath"] = ST.GameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-                    toml.SaveTo(ST.ConfigTomlFile);
+                    toml.SaveTo(ST.STConfigTomlFile);
                 }
             }
             catch (Exception ex)
@@ -188,8 +188,8 @@ namespace StarsectorTools.Windows
         private void CreateConfigFile(bool clearGamePath = false)
         {
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
-            File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
-            STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.ConfigTomlFile}");
+            File.WriteAllText(ST.STConfigTomlFile, sr.ReadToEnd());
+            STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.STConfigTomlFile}");
         }
         /// <summary>
         /// 重置配置文件
@@ -199,8 +199,8 @@ namespace StarsectorTools.Windows
         {
             if (ex is not null)
             {
-                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.ConfigTomlFile}", ex);
-                ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.ConfigTomlFile}", MessageBoxImage.Error);
+                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.STConfigTomlFile}", ex);
+                ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.STConfigTomlFile}", MessageBoxImage.Error);
             }
             CreateConfigFile();
         }

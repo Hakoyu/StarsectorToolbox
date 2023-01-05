@@ -184,7 +184,7 @@ namespace StarsectorTools.Utils
         public const string CoreDirectory = "Core";
 
         /// <summary>StarsectorTools配置文件</summary>
-        public const string ConfigTomlFile = $"{CoreDirectory}\\Config.toml";
+        public const string STConfigTomlFile = $"{CoreDirectory}\\Config.toml";
 
         /// <summary>游戏目录</summary>
         public static string GameDirectory { get; private set; } = null!;

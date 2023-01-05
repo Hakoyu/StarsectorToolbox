@@ -230,9 +230,9 @@ namespace StarsectorTools.Tools.ModManager
 
         private void LoadConfig()
         {
-            if (!ST.FileExists(ST.ConfigTomlFile))
+            if (!ST.FileExists(ST.STConfigTomlFile))
                 return;
-            TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+            TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
             try
             {
                 clearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
@@ -240,7 +240,7 @@ namespace StarsectorTools.Tools.ModManager
             catch
             {
                 toml["Game"]["ClearLogOnStart"] = false;
-                toml.SaveTo(ST.ConfigTomlFile);
+                toml.SaveTo(ST.STConfigTomlFile);
             }
         }
 
