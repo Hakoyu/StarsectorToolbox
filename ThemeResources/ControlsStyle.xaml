@@ -226,4 +226,17 @@
   <Style x:Key="Grid_Style" TargetType="Grid">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
   </Style>
+  <Style
+    x:Key="CheckBox_Style"
+    BasedOn="{StaticResource {x:Type CheckBox}}"
+    TargetType="CheckBox">
+    <Setter Property="Background" Value="{DynamicResource ColorBG}" />
+    <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="pu:CheckBoxHelper.BoxHeight" Value="20" />
+    <Setter Property="pu:CheckBoxHelper.BoxWidth" Value="20" />
+    <Setter Property="pu:CheckBoxHelper.CheckedBackground" Value="{DynamicResource ColorAqua0}" />
+    <Setter Property="pu:CheckBoxHelper.HoverBackground" Value="{DynamicResource ColorLight2}" />
+
+  </Style>
 </ResourceDictionary>

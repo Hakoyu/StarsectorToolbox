@@ -112,13 +112,19 @@
   <data name="LoadError" xml:space="preserve">
     <value>载入错误</value>
   </data>
-  <data name="GameDirectorySetupSuccess" xml:space="preserve">
-    <value>游戏目录设置成功</value>
+  <data name="GameDirectorySetCompleted" xml:space="preserve">
+    <value>游戏目录设置完毕</value>
   </data>
   <data name="LinkError" xml:space="preserve">
     <value>链接错误</value>
   </data>
   <data name="ModInfoError" xml:space="preserve">
     <value>模组信息错误</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>文件未找到</value>
+  </data>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>目录不存在</value>
   </data>
 </root>

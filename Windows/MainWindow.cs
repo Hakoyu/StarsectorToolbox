@@ -19,14 +19,14 @@ namespace StarsectorTools.Windows
 {
     public partial class MainWindow
     {
-        /// <summary>StarsectorTools配置文件资源链接</summary>
-        public static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
-
         /// <summary>拓展目录</summary>
         private const string expansionDirectories = "Expansion";
 
         /// <summary>拓展信息文件</summary>
         private const string expansionInfoFile = "Expansion.toml";
+
+        /// <summary>StarsectorTools配置文件资源链接</summary>
+        private static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
 
         private const string strName = "Name";
         private const string strDescription = "Description";
@@ -97,9 +97,9 @@ namespace StarsectorTools.Windows
 
         private void InitializeDirectories()
         {
-            if (!Directory.Exists(ST.coreDirectory))
-                Directory.CreateDirectory(ST.coreDirectory);
-            if (!Directory.Exists(expansionDirectories))
+            if (!ST.DirectoryExists(ST.CoreDirectory))
+                Directory.CreateDirectory(ST.CoreDirectory);
+            if (!ST.DirectoryExists(expansionDirectories))
                 Directory.CreateDirectory(expansionDirectories);
         }
 
@@ -133,21 +133,25 @@ namespace StarsectorTools.Windows
         {
             try
             {
-                if (File.Exists(ST.configFile))
+                if (ST.FileExists(ST.ConfigTomlFile, false))
                 {
-                    TomlTable toml = TOML.Parse(ST.configFile);
+                    // 读取设置
+                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                    // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
+                    // 日志等级
                     STLog.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
-                    ST.SetGameData(toml["Game"]["GamePath"].AsString!);
-                    if (!File.Exists(ST.gameExeFile))
+                    // 游戏目录
+                    if (!ST.SetGameData(toml["Game"]["GamePath"].AsString!))
                     {
                         if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
                         {
                             ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxImage.Error);
                             return false;
                         }
-                        toml["Game"]["GamePath"] = ST.gameDirectory;
+                        toml["Game"]["GamePath"] = ST.GameDirectory;
                     }
+                    // 拓展调试目录
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
                     if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath, true) is ExpansionInfo)
                     {
@@ -156,7 +160,7 @@ namespace StarsectorTools.Windows
                     }
                     else
                         toml["Expansion"]["DebugPath"] = "";
-                    toml.SaveTo(ST.configFile);
+                    toml.SaveTo(ST.ConfigTomlFile);
                 }
                 else
                 {
@@ -166,34 +170,40 @@ namespace StarsectorTools.Windows
                         return false;
                     }
                     CreateConfigFile();
-                    TomlTable toml = TOML.Parse(ST.configFile);
-                    toml["Game"]["GamePath"] = ST.gameDirectory;
+                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                    toml["Game"]["GamePath"] = ST.GameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-                    toml.SaveTo(ST.configFile);
+                    toml.SaveTo(ST.ConfigTomlFile);
                 }
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.configFile}", ex);
-                ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.configFile}", MessageBoxImage.Error);
-                CreateConfigFile();
+                ResetConfigFile(ex);
             }
             return true;
         }
-
         /// <summary>
-        /// 从资源中读取默认配置文件并创建
+        /// 创建配置文件
         /// </summary>
-        private void CreateConfigFile()
+        private void CreateConfigFile(bool clearGamePath = false)
         {
-            if (File.Exists(ST.configFile))
-                File.Delete(ST.configFile);
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
-            string str = sr.ReadToEnd();
-            File.WriteAllText(ST.configFile, str);
-            STLog.WriteLine($"{I18n.ConfigFileCreatedSuccess} {ST.configFile}");
+            File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
+            STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.ConfigTomlFile}");
         }
-
+        /// <summary>
+        /// 重置配置文件
+        /// </summary>
+        /// <param name="ex">异常</param>
+        private void ResetConfigFile(Exception? ex = null)
+        {
+            if (ex is not null)
+            {
+                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.ConfigTomlFile}", ex);
+                ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.ConfigTomlFile}", MessageBoxImage.Error);
+            }
+            CreateConfigFile();
+        }
         public void SetBlurEffect()
         {
             Dispatcher.Invoke(() => Effect = new System.Windows.Media.Effects.BlurEffect());
@@ -335,7 +345,7 @@ namespace StarsectorTools.Windows
             string tomlFile = $"{directory}\\{expansionInfoFile}";
             try
             {
-                if (!File.Exists(tomlFile))
+                if (!ST.FileExists(tomlFile, false))
                 {
                     STLog.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
@@ -349,7 +359,7 @@ namespace StarsectorTools.Windows
                     ST.ShowMessageBox($"{I18n.ExtensionAlreadyExists}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);
                     return null;
                 }
-                if (!File.Exists(assemblyFile))
+                if (!ST.FileExists(assemblyFile, false))
                 {
                     STLog.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     ST.ShowMessageBox($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}", MessageBoxImage.Warning);

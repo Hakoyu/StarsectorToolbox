@@ -1,13 +1,13 @@
 ﻿<Page
   x:Class="StarsectorTools.Tools.ModManager.ModManager"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:local="clr-namespace:StarsectorTools.Tools.ModManager"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   Title="ModManager"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -807,6 +807,15 @@
             <pu:ButtonHelper.Icon>
               <emoji:TextBlock Text="▶" />
             </pu:ButtonHelper.Icon>
+            <Button.ContextMenu>
+              <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                <CheckBox
+                  x:Name="CheckBox_ClearLogOnStart"
+                  Click="CheckBox_ClearLogOnStart_Click"
+                  Content="{x:Static I18n:ModManager_I18n.ClearLogOnStart}"
+                  Style="{StaticResource CheckBox_Style}" />
+              </ContextMenu>
+            </Button.ContextMenu>
           </Button>
         </Grid>
         <Grid
@@ -819,13 +828,25 @@
             <ColumnDefinition Width="25*" MinWidth="200" />
           </Grid.ColumnDefinitions>
           <GridSplitter
-            Width="5"
-            Margin="0,0,-1,0"
+            Width="3"
+            Margin="0,0,0,0"
             Background="{DynamicResource ColorFG}"
             Foreground="{x:Null}" />
+          <Button
+            x:Name="Button_CLoseModDetails"
+            Grid.Column="1"
+            Width="10"
+            Height="NaN"
+            Padding="0"
+            HorizontalAlignment="Left"
+            Background="{DynamicResource ColorBB}"
+            Click="Button_CLoseModDetails_Click"
+            Content="》"
+            Style="{StaticResource Button_Style}" />
           <GroupBox
             x:Name="GroupBox_ModInfo"
             Grid.Column="1"
+            Margin="9,0,0,0"
             Background="{DynamicResource ColorBG}"
             Header="{x:Static I18n:ModManager_I18n.ModInfo}"
             Style="{StaticResource GroupBox_Style}">

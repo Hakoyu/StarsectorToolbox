@@ -1,5 +1,6 @@
 ﻿[Game]
-GamePath = ""
+Path = ""
+ClearLogOnStart = false
 [Extras]
 LogLevel = "INFO"
 Lang = "zh-CN"

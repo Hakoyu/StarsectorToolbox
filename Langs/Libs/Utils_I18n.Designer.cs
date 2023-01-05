@@ -61,11 +61,29 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 目录不存在 的本地化字符串。
+        /// </summary>
+        public static string DirectoryNotFound {
+            get {
+                return ResourceManager.GetString("DirectoryNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件 的本地化字符串。
         /// </summary>
         public static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件未找到 的本地化字符串。
+        /// </summary>
+        public static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
             }
         }
         
@@ -79,11 +97,11 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
-        ///   查找类似 游戏目录设置成功 的本地化字符串。
+        ///   查找类似 游戏目录设置完毕 的本地化字符串。
         /// </summary>
-        public static string GameDirectorySetupSuccess {
+        public static string GameDirectorySetCompleted {
             get {
-                return ResourceManager.GetString("GameDirectorySetupSuccess", resourceCulture);
+                return ResourceManager.GetString("GameDirectorySetCompleted", resourceCulture);
             }
         }
         

@@ -113,9 +113,6 @@
   <data name="GameNotFound_SelectAgain" xml:space="preserve">
     <value>未确认游戏启动程序, 请重新选择</value>
   </data>
-  <data name="ConfigFileError" xml:space="preserve">
-    <value>设置文件错误,将恢复为默认设置</value>
-  </data>
   <data name="InitializationCompleted" xml:space="preserve">
     <value>初始化完成</value>
   </data>
@@ -149,7 +146,7 @@
   <data name="GlobalExceptionMessage" xml:space="preserve">
     <value>全局异常 !!!警告!!!
 如果你看到了这个错误,说明这是意料之外的情况
-可能会影响软件的正常运行,建议查看log并提交至issue.</value>
+可能会影响软件的正常运行,建议查看log并提交issue.</value>
   </data>
   <data name="GlobalException" xml:space="preserve">
     <value>全局异常</value>
@@ -192,7 +189,10 @@
   <data name="ExtensionAlreadyExists" xml:space="preserve">
     <value>拓展已存在</value>
   </data>
-  <data name="ConfigFileCreatedSuccess" xml:space="preserve">
-    <value>设置文件创建成功</value>
+  <data name="ConfigFileCreationCompleted" xml:space="preserve">
+    <value>设置文件创建完毕</value>
+  </data>
+  <data name="ConfigFileError" xml:space="preserve">
+    <value>设置文件错误,将恢复为默认设置</value>
   </data>
 </root>

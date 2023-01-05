@@ -106,14 +106,8 @@
   <data name="Path" xml:space="preserve">
     <value>Path</value>
   </data>
-  <data name="LogFilesNotExist" xml:space="preserve">
-    <value>Log files do not exist</value>
-  </data>
-  <data name="LogFileCleanCompleted" xml:space="preserve">
-    <value>Log file cleanup completed</value>
-  </data>
-  <data name="FolderNotExist" xml:space="preserve">
-    <value>Folder does not exist</value>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>Directory not found</value>
   </data>
   <data name="MissionsLoadoutsNotExist" xml:space="preserve">
     <value>Missions loadouts not exist</value>
@@ -157,14 +151,14 @@
   <data name="GameVersion" xml:space="preserve">
     <value>Game version</value>
   </data>
-  <data name="LogClear" xml:space="preserve">
-    <value>Log clear</value>
+  <data name="GameLogClear" xml:space="preserve">
+    <value>Game log clear</value>
   </data>
-  <data name="OpenLogFile" xml:space="preserve">
-    <value>Open log file</value>
+  <data name="OpenGameLogFile" xml:space="preserve">
+    <value>Open game log file</value>
   </data>
-  <data name="ClearLogFiles" xml:space="preserve">
-    <value>Clear log file</value>
+  <data name="ClearGameLogFiles" xml:space="preserve">
+    <value>Clear game log file</value>
   </data>
   <data name="MissionsLoadoutsClean" xml:space="preserve">
     <value>Missions loadouts clean</value>
@@ -246,5 +240,11 @@
   </data>
   <data name="FormatError" xml:space="preserve">
     <value>Format error</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="GameLogCleanupCompleted" xml:space="preserve">
+    <value>Game log cleanup completed</value>
   </data>
 </root>

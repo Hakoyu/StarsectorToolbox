@@ -90,7 +90,7 @@ enum STLogLevel
 
 ```csharp
 /// <summary>StarsectorTools日志</summary>
-static class STLog
+class STLog
 {
     /// <summary>日志目录</summary>
     const string logFile
@@ -99,83 +99,85 @@ static class STLog
     /// </summary>
     /// <param name="str">字符串</param>
     /// <returns>日志等级</returns>
-    static STLogLevel Str2STLogLevel(string str)
+    STLogLevel Str2STLogLevel(string str)
     /// <summary>
     /// 写入日志
     /// </summary>
     /// <param name="message">消息</param>
     /// <param name="logLevel">日志等级</param>
-    static void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
+    void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
     /// <summary>
     /// 写入日志
     /// </summary>
     /// <param name="message">消息</param>
     /// <param name="logLevel">日志等级</param>
     /// <param name="keys">插入的对象</param>
-    static void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] args)
+    void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] args)
     /// <summary>
     /// 写入捕获的异常
     /// </summary>
     /// <param name="message">消息</param>
     /// <param name="ex">错误</param>
     /// <param name="args">插入的对象</param>
-    static void WriteLine(string message, Exception ex, params object[] args)
+    void WriteLine(string message, Exception ex, params object[] args)
      /// <summary>
     /// Exception解析 用来精简异常的堆栈输出
     /// </summary>
     /// <param name="ex">Exception</param>
     /// <returns></returns>
-    static string ExceptionParse(Exception ex)
+    string ExceptionParse(Exception ex)
 }
 ```
 
 ```csharp
 /// <summary>StarsectorTools全局工具</summary>
-static class ST
+class ST
 {
     /// <summary>游戏目录</summary>
-    static string gameDirectory
+    string gameDirectory
     /// <summary>游戏exe文件路径</summary>
-    static string gameExeFile
+    string gameExeFile
     /// <summary>游戏模组文件夹目录</summary>
-    static string gameModsDirectory
+    string gameModsDirectory
     /// <summary>游戏版本</summary>
-    static string gameVersion
+    string gameVersion
     /// <summary>游戏保存文件夹目录</summary>
-    static string gameSaveDirectory
+    string gameSaveDirectory
     /// <summary>游戏已启用模组文件目录</summary>
-    static string enabledModsJsonFile
+    string enabledModsJsonFile
+    /// <summary>游戏日志文件</summary>
+    string gameLogFile
     /// <summary>
     /// 格式化Json数据,去除掉注释以及不合规的逗号
     /// </summary>
     /// <param name="jsonData">Json数据</param>
     /// <returns>格式化后的数据</returns>
-    static string JsonParse(string jsonData)
+    string JsonParse(string jsonData)
     /// <summary>
     /// 复制文件夹至目标文件夹
     /// </summary>
     /// <param name="sourceDirectoryName">原始路径</param>
     /// <param name="destinationDirectoryName">目标路径</param>
     /// <returns>复制成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    static bool CopyDirectory(string sourceDirectoryName, string destinationDirectoryName)
+    bool CopyDirectory(string sourceDirectoryName, string destinationDirectoryName)
     /// <summary>
     /// 删除文件至回收站
     /// </summary>
     /// <param name="file"></param>
     /// <returns>删除成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    static bool DeleteFileToRecycleBin(string file)
+    bool DeleteFileToRecycleBin(string file)
     /// <summary>
     /// 删除文件夹至回收站
     /// </summary>
     /// <param name="directory">文件夹</param>
     /// <returns>删除成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    static bool DeleteDirToRecycleBin(string directory)
+    bool DeleteDirToRecycleBin(string directory)
     /// <summary>
     /// 使用系统默认打开方式打开链接,文件或文件夹
     /// </summary>
     /// <param name="link">链接</param>
     /// <returns>打开成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    static bool OpenLink(string link)
+    bool OpenLink(string link)
     /// <summary>
     /// <para>压缩文件夹至Zip文件并输出到目录</para>
     /// <para>若不输入压缩文件名,则以原始目录的文件夹名称来命名</para>
@@ -184,7 +186,7 @@ static class ST
     /// <param name="destinationDirectoryName">输出目录</param>
     /// <param name="archiveName">压缩文件名</param>
     /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    static bool ArchiveDirToDir(string sourceDirectoryName, string destinationDirectoryName, string? archiveName = null)
+    bool ArchiveDirToDir(string sourceDirectoryName, string destinationDirectoryName, string? archiveName = null)
     /// <summary>
     /// <para>解压压缩文件至目录</para>
     /// <para>支持: <see langword="Zip"/> <see langword="Rar"/> <see langword="7z"/></para>
@@ -192,14 +194,14 @@ static class ST
     /// <param name="sourceFileName">原始文件</param>
     /// <param name="destinationDirectoryName">输出目录</param>
     /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    static bool UnArchiveFileToDir(string sourceFileName, string destinationDirectoryName)
+    bool UnArchiveFileToDir(string sourceFileName, string destinationDirectoryName)
     /// <summary>
     /// 弹出消息窗口
     /// </summary>
     /// <param name="message">消息</param>
     /// <param name="image">显示的图标</param>
     /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-    static MessageBoxResult ShowMessageBox(string message, MessageBoxImage image = MessageBoxImage.Information, bool setBlurEffect = true)
+    MessageBoxResult ShowMessageBox(string message, MessageBoxImage image = MessageBoxImage.Information, bool setBlurEffect = true)
     /// <summary>
     /// 弹出消息窗口
     /// </summary>
@@ -207,7 +209,7 @@ static class ST
     /// <param name="button">显示的按钮</param>
     /// <param name="image">显示的图标</param>
     /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-    static MessageBoxResult ShowMessageBox(string message, MessageBoxButton button, MessageBoxImage image, bool setBlurEffect = true)
+    MessageBoxResult ShowMessageBox(string message, MessageBoxButton button, MessageBoxImage image, bool setBlurEffect = true)
 }
 
 ```
@@ -222,17 +224,17 @@ class ModManager
     /// <para><see langword="Key"/>: 模组ID</para>
     /// <para><see langword="Value"/>: 模组信息</para>
     /// </summary>
-    static Dictionary<string, ModInfo> AllModsInfo
+    Dictionary<string, ModInfo> AllModsInfo
     /// <summary>已启用的模组ID</summary>
-    static HashSet<string> AllEnabledModsId
+    HashSet<string> AllEnabledModsId
     /// <summary>已收藏的模组ID</summary>
-    static HashSet<string> AllCollectedModsId
+    HashSet<string> AllCollectedModsId
     /// <summary>
     /// <para>全部用户分组</para>
     /// <para><see langword="Key"/>: 分组名称</para>
     /// <para><see langword="Value"/>: 包含的模组</para>
     /// </summary>
-    static Dictionary<string, HashSet<string>> AllUserGroups
+    Dictionary<string, HashSet<string>> AllUserGroups
 }
 ```
 

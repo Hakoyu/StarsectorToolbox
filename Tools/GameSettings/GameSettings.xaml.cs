@@ -21,8 +21,8 @@ namespace StarsectorTools.Tools.GameSettings
         public GameSettings()
         {
             InitializeComponent();
-            Label_GamePath.Content = ST.gameDirectory;
-            Label_GameVersion.Content = ST.gameVersion;
+            Label_GamePath.Content = ST.GameDirectory;
+            Label_GameVersion.Content = ST.GameVersion;
             systemTotalMemory = Management.GetMemoryMetricsNow().Total;
             GetVmparamsData();
             GetGameKey();
@@ -33,15 +33,11 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_SetGameDirectory_Click(object sender, RoutedEventArgs e)
         {
             while (!ST.GetGameDirectory())
-            {
-                if (File.Exists(ST.gameExeFile))
-                    break;
                 ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxImage.Warning);
-            }
-            var toml = TOML.Parse(ST.configFile);
-            toml["Game"]["GamePath"] = ST.gameDirectory;
-            toml.SaveTo(ST.configFile);
-            Label_GamePath.Content = ST.gameDirectory;
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Game"]["GamePath"] = ST.GameDirectory;
+            toml.SaveTo(ST.ConfigTomlFile);
+            Label_GamePath.Content = ST.GameDirectory;
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
@@ -64,7 +60,7 @@ namespace StarsectorTools.Tools.GameSettings
                 return;
             }
             vmparamsData.xmsx = $"{memory}{unit}";
-            File.WriteAllText($"{ST.gameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
+            File.WriteAllText($"{ST.GameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
             STLog.WriteLine($"{I18n.VmparamsMemorySet}: {vmparamsData.xmsx}");
             ST.ShowMessageBox(I18n.VmparamsMemorySetSuccess);
         }
@@ -91,41 +87,29 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenLogFile_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(gameLogFile))
-                ST.OpenLink(gameLogFile);
-            else
-            {
-                STLog.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogFile}", MessageBoxImage.Warning);
-            }
+            if (!ST.FileExists(ST.GameLogFile, false))
+                File.Create(ST.GameLogFile).Close();
+            ST.OpenLink(ST.GameLogFile);
         }
 
         private void Button_ClearLogFile_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(gameLogFile))
-            {
-                ST.DeleteFileToRecycleBin(gameLogFile);
-                File.Create(gameLogFile).Close();
-                STLog.WriteLine(I18n.LogFileCleanCompleted);
-                ST.ShowMessageBox(I18n.LogFileCleanCompleted);
-            }
-            else
-            {
-                STLog.WriteLine($"{I18n.LogFilesNotExist} {I18n.Path}: {gameLogFile}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.LogFilesNotExist}\n{I18n.Path}: {gameLogFile}", MessageBoxImage.Warning);
-            }
+            if (ST.FileExists(ST.GameLogFile, false))
+                ST.DeleteFileToRecycleBin(ST.GameLogFile);
+            File.Create(ST.GameLogFile).Close();
+            STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
 
         private void Button_ClearMissionsLoadouts_Click(object sender, RoutedEventArgs e)
         {
             if (ComboBox_MissionsLoadouts.SelectedItem is ComboBoxItem item)
             {
-                string dirParh = $"{ST.gameSaveDirectory}\\missions";
+                string dirParh = $"{ST.GameSaveDirectory}\\missions";
                 try
                 {
                     if (item.Content.ToString() == "All")
                     {
-                        if (Directory.Exists(dirParh))
+                        if (ST.DirectoryExists(dirParh))
                             ST.DeleteDirToRecycleBin(dirParh);
                     }
                     else
@@ -146,13 +130,13 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_ClearSave_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(ST.gameSaveDirectory))
+            if (!ST.DirectoryExists(ST.GameSaveDirectory))
                 return;
-            DirectoryInfo dirs = new(ST.gameSaveDirectory);
+            DirectoryInfo dirs = new(ST.GameSaveDirectory);
             Dictionary<string, DateTime> dirsPath = new();
             foreach (var dir in dirs.GetDirectories())
                 dirsPath.Add(dir.FullName, dir.LastWriteTime);
-            dirsPath.Remove($"{ST.gameSaveDirectory}\\missions");
+            dirsPath.Remove($"{ST.GameSaveDirectory}\\missions");
             var list = dirsPath.OrderBy(kv => kv.Value);
             int count = TextBox_ReservedSaveSize.Text.Length > 0 ? list.Count() - int.Parse(TextBox_ReservedSaveSize.Text) : 0;
             for (int i = 0; i < count; i++)
@@ -163,8 +147,8 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenMissionsLoadoutsDirectory_Click(object sender, RoutedEventArgs e)
         {
-            string dirParh = $"{ST.gameSaveDirectory}\\missions";
-            if (Directory.Exists(dirParh))
+            string dirParh = $"{ST.GameSaveDirectory}\\missions";
+            if (ST.DirectoryExists(dirParh))
                 ST.OpenLink(dirParh);
             else
             {
@@ -175,19 +159,19 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameSaveDirectory))
-                ST.OpenLink(ST.gameSaveDirectory);
+            if (ST.DirectoryExists(ST.GameSaveDirectory))
+                ST.OpenLink(ST.GameSaveDirectory);
             else
             {
-                STLog.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
+                STLog.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.GameSaveDirectory}", STLogLevel.WARN);
+                ST.ShowMessageBox($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.GameSaveDirectory}", MessageBoxImage.Warning);
             }
         }
 
         private void Button_OpenGameDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameDirectory))
-                ST.OpenLink(ST.gameDirectory);
+            if (ST.DirectoryExists(ST.GameDirectory))
+                ST.OpenLink(ST.GameDirectory);
         }
 
         private void Button_CustomResolutionReset_Click(object sender, RoutedEventArgs e)

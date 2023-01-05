@@ -88,11 +88,11 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 清理Log文件 的本地化字符串。
+        ///   查找类似 清理游戏日志文件 的本地化字符串。
         /// </summary>
-        public static string ClearLogFiles {
+        public static string ClearGameLogFiles {
             get {
-                return ResourceManager.GetString("ClearLogFiles", resourceCulture);
+                return ResourceManager.GetString("ClearGameLogFiles", resourceCulture);
             }
         }
         
@@ -160,11 +160,20 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 文件夹不存在 的本地化字符串。
+        ///   查找类似 目录不存在 的本地化字符串。
         /// </summary>
-        public static string FolderNotExist {
+        public static string DirectoryNotFound {
             get {
-                return ResourceManager.GetString("FolderNotExist", resourceCulture);
+                return ResourceManager.GetString("DirectoryNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件未找到 的本地化字符串。
+        /// </summary>
+        public static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
             }
         }
         
@@ -192,6 +201,24 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static string GameKey {
             get {
                 return ResourceManager.GetString("GameKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 游戏日志清理完成 的本地化字符串。
+        /// </summary>
+        public static string GameLogCleanupCompleted {
+            get {
+                return ResourceManager.GetString("GameLogCleanupCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 游戏日志清理 的本地化字符串。
+        /// </summary>
+        public static string GameLogClear {
+            get {
+                return ResourceManager.GetString("GameLogClear", resourceCulture);
             }
         }
         
@@ -237,33 +264,6 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Log清理 的本地化字符串。
-        /// </summary>
-        public static string LogClear {
-            get {
-                return ResourceManager.GetString("LogClear", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Log文件清理完成 的本地化字符串。
-        /// </summary>
-        public static string LogFileCleanCompleted {
-            get {
-                return ResourceManager.GetString("LogFileCleanCompleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 Log文件不存在 的本地化字符串。
-        /// </summary>
-        public static string LogFilesNotExist {
-            get {
-                return ResourceManager.GetString("LogFilesNotExist", resourceCulture);
             }
         }
         
@@ -322,11 +322,11 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 打开Log文件 的本地化字符串。
+        ///   查找类似 打开游戏日志文件 的本地化字符串。
         /// </summary>
-        public static string OpenLogFile {
+        public static string OpenGameLogFile {
             get {
-                return ResourceManager.GetString("OpenLogFile", resourceCulture);
+                return ResourceManager.GetString("OpenGameLogFile", resourceCulture);
             }
         }
         

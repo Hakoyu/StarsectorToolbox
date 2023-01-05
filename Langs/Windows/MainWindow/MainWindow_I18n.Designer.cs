@@ -79,11 +79,11 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 设置文件创建成功 的本地化字符串。
+        ///   查找类似 设置文件创建完毕 的本地化字符串。
         /// </summary>
-        public static string ConfigFileCreatedSuccess {
+        public static string ConfigFileCreationCompleted {
             get {
-                return ResourceManager.GetString("ConfigFileCreatedSuccess", resourceCulture);
+                return ResourceManager.GetString("ConfigFileCreationCompleted", resourceCulture);
             }
         }
         
@@ -209,7 +209,7 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         /// <summary>
         ///   查找类似 全局异常 !!!警告!!!
         ///如果你看到了这个错误,说明这是意料之外的情况
-        ///可能会影响软件的正常运行,建议查看log并提交至issue. 的本地化字符串。
+        ///可能会影响软件的正常运行,建议查看log并提交issue. 的本地化字符串。
         /// </summary>
         public static string GlobalExceptionMessage {
             get {

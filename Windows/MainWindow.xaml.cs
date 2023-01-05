@@ -44,11 +44,9 @@ namespace StarsectorTools.Windows
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            SetBlurEffect();
             STLog.WriteLine(I18n.GlobalException, e.Exception);
             ST.ShowMessageBox(I18n.GlobalExceptionMessage, MessageBoxImage.Error);
             e.Handled = true;
-            RemoveBlurEffect();
         }
 
         //窗体移动

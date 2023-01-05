@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Linq;
+using HKW.TomlParse;
 using StarsectorTools.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
@@ -24,6 +25,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             InitializeComponent();
             //throw new();
+            LoadConfig();
             InitializeData();
         }
 
@@ -291,25 +293,22 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(ST.gameExeFile))
+            if (ST.FileExists(ST.GameExeFile))
             {
+                if (clearGameLogOnStart)
+                    ClearGameLogFile();
                 Process process = new();
                 process.StartInfo.FileName = "cmd";
                 process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.RedirectStandardInput = true;
                 if (process.Start())
                 {
-                    process.StandardInput.WriteLine($"cd /d {ST.gameDirectory}");
+                    process.StandardInput.WriteLine($"cd /d {ST.GameDirectory}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
                     SaveAllData();
                     ResetRemindSaveThread();
                 }
-            }
-            else
-            {
-                STLog.WriteLine($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.NotFoundFile}\n {I18n.Path}: {ST.gameExeFile}", MessageBoxImage.Warning);
             }
         }
 
@@ -330,7 +329,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 string? err = null;
                 string filePath = $"{string.Join("\\", openFileDialog.FileName.Split("\\")[..^1])}\\descriptor.xml";
-                if (File.Exists(filePath))
+                if (ST.FileExists(filePath))
                 {
                     IEnumerable<string> list = null!;
                     try
@@ -361,11 +360,6 @@ namespace StarsectorTools.Tools.ModManager
                         }
                     }
                 }
-                else
-                {
-                    STLog.WriteLine($"{I18n.FileNotExist} {I18n.Path}: {filePath}", STLogLevel.WARN);
-                    ST.ShowMessageBox($"{I18n.FileNotExist}\n{I18n.Path}: {filePath}");
-                }
                 if (err != null)
                 {
                     STLog.WriteLine(err, STLogLevel.WARN);
@@ -393,7 +387,7 @@ namespace StarsectorTools.Tools.ModManager
                     });
                     foreach (string path in array)
                     {
-                        if (File.Exists(path))
+                        if (ST.FileExists(path))
                         {
                             Dispatcher.BeginInvoke(() =>
                             {
@@ -406,11 +400,6 @@ namespace StarsectorTools.Tools.ModManager
                                 window.Label_Completed.Content = ++completed;
                                 window.Label_Incomplete.Content = total - completed;
                             });
-                        }
-                        else
-                        {
-                            STLog.WriteLine($"{I18n.FileError} {I18n.Path}: {path}", STLogLevel.WARN);
-                            ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {path}", MessageBoxImage.Warning);
                         }
                     }
                     Dispatcher.BeginInvoke(() => window.Close());
@@ -427,35 +416,20 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameModsDirectory))
-                ST.OpenLink(ST.gameModsDirectory);
-            else
-            {
-                STLog.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameModsDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {ST.gameModsDirectory}", MessageBoxImage.Warning);
-            }
+            if (ST.DirectoryExists(ST.GameModsDirectory))
+                ST.OpenLink(ST.GameModsDirectory);
         }
 
         private void Button_OpenBackupDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(backupDirectory))
+            if (ST.DirectoryExists(backupDirectory))
                 ST.OpenLink(backupDirectory);
-            else
-            {
-                STLog.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {backupDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {backupDirectory}", MessageBoxImage.Warning);
-            }
         }
 
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Directory.Exists(ST.gameSaveDirectory))
-                ST.OpenLink(ST.gameSaveDirectory);
-            else
-            {
-                STLog.WriteLine($"{I18n.DirectoryNotExist} {I18n.Path}: {ST.gameSaveDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.DirectoryNotExist}\n{I18n.Path}: {ST.gameSaveDirectory}", MessageBoxImage.Warning);
-            }
+            if (ST.DirectoryExists(ST.GameSaveDirectory))
+                ST.OpenLink(ST.GameSaveDirectory);
         }
 
         private void Button_RandomMods_Click(object sender, RoutedEventArgs e)
@@ -543,6 +517,24 @@ namespace StarsectorTools.Tools.ModManager
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
                 SaveUserGroup(saveFileDialog.FileName, ((ComboBoxItem)ComboBox_ExportUserGroup.SelectedItem).Tag.ToString()!);
+            }
+        }
+
+        private void Button_CLoseModDetails_Click(object sender, RoutedEventArgs e)
+        {
+            CloseModDetails();
+        }
+
+        private void CheckBox_ClearLogOnStart_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                clearGameLogOnStart = (bool)checkBox.IsChecked!;
+                if (!ST.FileExists(ST.ConfigTomlFile))
+                    return;
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;
+                toml.SaveTo(ST.ConfigTomlFile);
             }
         }
     }

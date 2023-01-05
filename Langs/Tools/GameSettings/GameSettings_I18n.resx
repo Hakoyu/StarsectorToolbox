@@ -106,14 +106,8 @@
   <data name="Path" xml:space="preserve">
     <value>位置</value>
   </data>
-  <data name="LogFilesNotExist" xml:space="preserve">
-    <value>Log文件不存在</value>
-  </data>
-  <data name="LogFileCleanCompleted" xml:space="preserve">
-    <value>Log文件清理完成</value>
-  </data>
-  <data name="FolderNotExist" xml:space="preserve">
-    <value>文件夹不存在</value>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>目录不存在</value>
   </data>
   <data name="MissionsLoadoutsNotExist" xml:space="preserve">
     <value>战役配装文件不存在</value>
@@ -157,14 +151,14 @@
   <data name="GameVersion" xml:space="preserve">
     <value>游戏版本</value>
   </data>
-  <data name="LogClear" xml:space="preserve">
-    <value>Log清理</value>
+  <data name="GameLogClear" xml:space="preserve">
+    <value>游戏日志清理</value>
   </data>
-  <data name="OpenLogFile" xml:space="preserve">
-    <value>打开Log文件</value>
+  <data name="OpenGameLogFile" xml:space="preserve">
+    <value>打开游戏日志文件</value>
   </data>
-  <data name="ClearLogFiles" xml:space="preserve">
-    <value>清理Log文件</value>
+  <data name="ClearGameLogFiles" xml:space="preserve">
+    <value>清理游戏日志文件</value>
   </data>
   <data name="MissionsLoadoutsClean" xml:space="preserve">
     <value>战役装配清理</value>
@@ -246,5 +240,11 @@
   </data>
   <data name="FormatError" xml:space="preserve">
     <value>格式错误</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>文件未找到</value>
+  </data>
+  <data name="GameLogCleanupCompleted" xml:space="preserve">
+    <value>游戏日志清理完成</value>
   </data>
 </root>

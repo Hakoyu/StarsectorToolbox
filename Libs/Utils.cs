@@ -12,6 +12,7 @@ using System.Windows.Media;
 using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
+using HKW.TomlParse;
 using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
@@ -41,7 +42,7 @@ namespace StarsectorTools.Utils
     public static class STLog
     {
         /// <summary>日志目录</summary>
-        public const string logFile = $"{ST.coreDirectory}\\StarsectorTools.log";
+        public const string logFile = $"{ST.CoreDirectory}\\StarsectorTools.log";
 
         /// <summary>日志等级</summary>
         public static STLogLevel LogLevel = STLogLevel.INFO;
@@ -180,28 +181,56 @@ namespace StarsectorTools.Utils
     /// <summary>StarsectorTools全局工具</summary>
     public static class ST
     {
-        public const string coreDirectory = "Core";
+        public const string CoreDirectory = "Core";
 
         /// <summary>StarsectorTools配置文件</summary>
-        public const string configFile = $"{coreDirectory}\\Config.toml";
+        public const string ConfigTomlFile = $"{CoreDirectory}\\Config.toml";
 
         /// <summary>游戏目录</summary>
-        public static string gameDirectory { get; private set; } = null!;
+        public static string GameDirectory { get; private set; } = null!;
 
-        /// <summary>游戏exe文件路径</summary>
-        public static string gameExeFile { get; private set; } = null!;
+        /// <summary>游戏exe文件</summary>
+        public static string GameExeFile { get; private set; } = null!;
 
-        /// <summary>游戏模组文件夹目录</summary>
-        public static string gameModsDirectory { get; private set; } = null!;
+        /// <summary>游戏模组文件夹</summary>
+        public static string GameModsDirectory { get; private set; } = null!;
 
         /// <summary>游戏版本</summary>
-        public static string gameVersion { get; private set; } = null!;
+        public static string GameVersion { get; private set; } = null!;
 
-        /// <summary>游戏保存文件夹目录</summary>
-        public static string gameSaveDirectory { get; private set; } = null!;
+        /// <summary>游戏存档文件夹</summary>
+        public static string GameSaveDirectory { get; private set; } = null!;
 
-        /// <summary>游戏已启用模组文件目录</summary>
-        public static string enabledModsJsonFile { get; private set; } = null!;
+        /// <summary>游戏已启用模组文件</summary>
+        public static string EnabledModsJsonFile { get; private set; } = null!;
+
+        /// <summary>游戏日志文件</summary>
+        public static string GameLogFile { get; private set; } = null!;
+
+        /// <summary>
+        /// 检测文件是否存在,若不存在会自动输出日志
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
+        public static bool FileExists(string path, bool logOutputIfNotFound = true)
+        {
+            bool isExists = File.Exists(path);
+            if (!isExists && logOutputIfNotFound)
+                STLog.WriteLine($"{I18n.FileNotFound} {I18n.Path}: {path}", STLogLevel.WARN);
+            return isExists;
+        }
+        /// <summary>
+        /// 检测文件夹是否存在,若不存在会自动输出日志
+        /// </summary>
+        /// <param name="path">路径</param>
+        /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
+        public static bool DirectoryExists(string path, bool logOutputIfNotFound = true)
+        {
+            bool exists = Directory.Exists(path);
+            if (!exists && logOutputIfNotFound)
+                STLog.WriteLine($"{I18n.DirectoryNotFound} {I18n.Path}: {path}", STLogLevel.WARN);
+            return exists;
+        }
 
         /// <summary>
         /// 格式化Json数据,去除掉注释以及不合规的逗号
@@ -221,18 +250,20 @@ namespace StarsectorTools.Utils
         /// 设置游戏信息
         /// </summary>
         /// <param name="directoryName">游戏目录</param>
-        public static void SetGameData(string directoryName)
+        public static bool SetGameData(string directoryName)
         {
-            gameExeFile = $"{directoryName}\\starsector.exe";
-            if (File.Exists(gameExeFile))
+            GameExeFile = $"{directoryName}\\starsector.exe";
+            if (FileExists(GameExeFile, false))
             {
-                gameDirectory = directoryName;
-                gameModsDirectory = $"{directoryName}\\mods";
-                gameSaveDirectory = $"{directoryName}\\saves";
-                enabledModsJsonFile = $"{gameModsDirectory}\\enabled_mods.json";
+                GameDirectory = directoryName;
+                GameModsDirectory = $"{directoryName}\\mods";
+                GameSaveDirectory = $"{directoryName}\\saves";
+                EnabledModsJsonFile = $"{GameModsDirectory}\\enabled_mods.json";
+                GameLogFile = $"{directoryName}\\starsector-core\\starsector.log";
                 try
                 {
-                    gameVersion = JsonNode.Parse(File.ReadAllText($"{directoryName}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+                    GameVersion = JsonNode.Parse(File.ReadAllText($"{directoryName}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+                    return true;
                 }
                 catch (Exception ex)
                 {
@@ -241,10 +272,11 @@ namespace StarsectorTools.Utils
             }
             else
             {
-                gameExeFile = null!;
+                GameExeFile = null!;
                 STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
                 ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
             }
+            return false;
         }
 
         /// <summary>
@@ -332,17 +364,12 @@ namespace StarsectorTools.Utils
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
             string newDirectory = Path.GetDirectoryName(openFileDialog.FileName)!;
-            if (File.Exists($"{newDirectory}\\starsector.exe"))
+            if (SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!))
             {
-                SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!);
-                STLog.WriteLine($"{I18n.GameDirectorySetupSuccess} {I18n.Path}: {newDirectory}");
+                STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {newDirectory}");
                 return true;
             }
-            else
-            {
-                STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {newDirectory}", STLogLevel.WARN);
-                return false;
-            }
+            return false;
         }
 
         /// <summary>
@@ -374,7 +401,7 @@ namespace StarsectorTools.Utils
         /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
         public static bool ArchiveDirToDir(string sourceDirectoryName, string destinationDirectoryName, string? archiveName = null)
         {
-            if (!Directory.Exists(sourceDirectoryName))
+            if (!DirectoryExists(sourceDirectoryName))
                 return false;
             try
             {
@@ -404,13 +431,13 @@ namespace StarsectorTools.Utils
         /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
         public static bool UnArchiveFileToDir(string sourceFileName, string destinationDirectoryName)
         {
-            if (!File.Exists(sourceFileName))
+            if (!FileExists(sourceFileName))
                 return false;
             //读取压缩文件头,以判断压缩文件类型
             using StreamReader sr = new(sourceFileName);
             string head = $"{sr.Read()}{sr.Read()}";
             sr.Close();
-            if (!Directory.Exists(destinationDirectoryName))
+            if (!DirectoryExists(destinationDirectoryName, false))
                 Directory.CreateDirectory(destinationDirectoryName);
             try
             {
@@ -441,7 +468,7 @@ namespace StarsectorTools.Utils
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFileName}", ex);
-                if (Directory.Exists(destinationDirectoryName))
+                if (DirectoryExists(destinationDirectoryName, false))
                     Directory.Delete(destinationDirectoryName);
                 return false;
             }

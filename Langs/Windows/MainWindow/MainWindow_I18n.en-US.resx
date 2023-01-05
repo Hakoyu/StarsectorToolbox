@@ -113,9 +113,6 @@ Please select the game launcher</value>
   <data name="GameNotFound_SelectAgain" xml:space="preserve">
     <value>Game launcher not found, please select again</value>
   </data>
-  <data name="ConfigFileError" xml:space="preserve">
-    <value>Config file error, will restore the default</value>
-  </data>
   <data name="InitializationCompleted" xml:space="preserve">
     <value>Initialization completed</value>
   </data>
@@ -147,9 +144,9 @@ Please select the game launcher</value>
     <value>Initialization error</value>
   </data>
   <data name="GlobalExceptionMessage" xml:space="preserve">
-    <value>Global Exception !!!WARNING!!!
-If you see this error, it is an unexpected situation
-It may affect the normal operation of the software, so it is recommended to check the log and submit it to the issue.</value>
+    <value>Global exception !!!Warning!!!
+If you see this error, it means that this is an unexpected situation
+It may affect the normal operation of the software, it is recommended to check the log and submit an issue.</value>
   </data>
   <data name="GlobalException" xml:space="preserve">
     <value>Global Exception</value>
@@ -192,7 +189,10 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="ExtensionAlreadyExists" xml:space="preserve">
     <value>Extension already exists</value>
   </data>
-  <data name="ConfigFileCreatedSuccess" xml:space="preserve">
-    <value>Config file created success</value>
+  <data name="ConfigFileCreationCompleted" xml:space="preserve">
+    <value>Config file creation completed</value>
+  </data>
+  <data name="ConfigFileError" xml:space="preserve">
+    <value>Config file error, will restore the default</value>
   </data>
 </root>

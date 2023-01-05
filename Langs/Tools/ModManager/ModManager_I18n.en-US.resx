@@ -532,4 +532,10 @@ Cannot be removed midway</value>
   <data name="TypeGroupRetrievalCompleted" xml:space="preserve">
     <value>Type group retrieval completed</value>
   </data>
+  <data name="ClearLogOnStart" xml:space="preserve">
+    <value>Clear log files on start</value>
+  </data>
+  <data name="GameLogCleanupCompleted" xml:space="preserve">
+    <value>Game log cleanup completed</value>
+  </data>
 </root>

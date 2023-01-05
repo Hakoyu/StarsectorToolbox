@@ -60,10 +60,9 @@ namespace StarsectorTools.Tools.ModManager
 
     public partial class ModManager
     {
-        private const string modTypeGroupFile = $"{ST.coreDirectory}\\ModTypeGroup.toml";
-        private const string userDataFile = $"{ST.coreDirectory}\\UserData.toml";
-        private const string userGroupFile = $"{ST.coreDirectory}\\UserGroup.toml";
-        private const string backupDirectory = $"{ST.coreDirectory}\\Backup";
+        private const string userDataFile = $"{ST.CoreDirectory}\\UserData.toml";
+        private const string userGroupFile = $"{ST.CoreDirectory}\\UserGroup.toml";
+        private const string backupDirectory = $"{ST.CoreDirectory}\\Backup";
         private const string backupModsDirectory = $"{backupDirectory}\\Mods";
         private const string modInfoFile = "mod_info.json";
         private const string strEnabledMods = "enabledMods";
@@ -75,6 +74,7 @@ namespace StarsectorTools.Tools.ModManager
         private const string strUserDescription = "UserDescription";
         private const string strName = "Name";
         private const string strAuthor = "Author";
+        private bool clearGameLogOnStart = false;
 
         /// <summary>记录了模组类型的嵌入资源链接</summary>
         private static readonly Uri modTypeGroupUri = new("/Resources/ModTypeGroup.toml", UriKind.Relative);
@@ -228,6 +228,22 @@ namespace StarsectorTools.Tools.ModManager
             ResetRemindSaveThread();
         }
 
+        private void LoadConfig()
+        {
+            if (!ST.FileExists(ST.ConfigTomlFile))
+                return;
+            TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+            try
+            {
+                clearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
+            }
+            catch
+            {
+                toml["Game"]["ClearLogOnStart"] = false;
+                toml.SaveTo(ST.ConfigTomlFile);
+            }
+        }
+
         /// <summary>
         /// 初始化数据
         /// </summary>
@@ -272,7 +288,7 @@ namespace StarsectorTools.Tools.ModManager
         private void GetAllModsInfo()
         {
             int size = 0;
-            DirectoryInfo dirs = new(ST.gameModsDirectory);
+            DirectoryInfo dirs = new(ST.GameModsDirectory);
             string err = null!;
             foreach (var dir in dirs.GetDirectories())
             {
@@ -305,10 +321,10 @@ namespace StarsectorTools.Tools.ModManager
 
         private void CheckEnabledMods()
         {
-            if (File.Exists(ST.enabledModsJsonFile))
-                GetEnabledMods(ST.enabledModsJsonFile);
+            if (ST.FileExists(ST.EnabledModsJsonFile))
+                GetEnabledMods(ST.EnabledModsJsonFile);
             else
-                SaveEnabledMods(ST.enabledModsJsonFile);
+                SaveEnabledMods(ST.EnabledModsJsonFile);
         }
 
         private void ImportMode()
@@ -365,11 +381,11 @@ namespace StarsectorTools.Tools.ModManager
 
         private void CheckUserData()
         {
-            if (File.Exists(userDataFile))
+            if (ST.FileExists(userDataFile))
                 GetUserData(userDataFile);
             else
                 SaveUserData(userDataFile);
-            if (File.Exists(userGroupFile))
+            if (ST.FileExists(userGroupFile))
                 GetUserGroup(userGroupFile);
             else
                 SaveUserGroup(userGroupFile);
@@ -550,14 +566,14 @@ namespace StarsectorTools.Tools.ModManager
                 Author = info.Author.Trim(),
                 Version = info.Version,
                 GameVersion = info.GameVersion,
-                IsSameToGameVersion = info.GameVersion == ST.gameVersion,
+                IsSameToGameVersion = info.GameVersion == ST.GameVersion,
                 MissDependencies = false,
                 DependenciesList = info.Dependencies is not null ? info.Dependencies.Select(i => i.Id).ToList() : null!,
                 ImageSource = GetIcon($"{info.Path}\\icon.ico"),
             };
             BitmapImage? GetIcon(string filePath)
             {
-                if (!File.Exists(filePath))
+                if (!ST.FileExists(filePath, false))
                     return null;
                 try
                 {
@@ -847,7 +863,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SaveAllData()
         {
-            SaveEnabledMods(ST.enabledModsJsonFile);
+            SaveEnabledMods(ST.EnabledModsJsonFile);
             SaveUserData(userDataFile);
             SaveUserGroup(userGroupFile);
         }
@@ -989,7 +1005,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 var newModInfo = GetModInfo(jsonPath);
                 string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
-                newModInfo.Path = $"{ST.gameModsDirectory}\\{directoryName}";
+                newModInfo.Path = $"{ST.GameModsDirectory}\\{directoryName}";
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];
@@ -1003,7 +1019,7 @@ namespace StarsectorTools.Tools.ModManager
                         ST.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
                         Directory.Delete(tempDirectory, true);
                         Directory.Delete(originalModInfo.Path, true);
-                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsDirectory);
+                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.GameModsDirectory);
                         Dispatcher.BeginInvoke(() =>
                         {
                             RemoveMod(newModInfo.Id);
@@ -1016,7 +1032,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 else
                 {
-                    ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.gameModsDirectory);
+                    ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, ST.GameModsDirectory);
                     Dispatcher.BeginInvoke(() =>
                     {
                         AddMod(newModInfo);
@@ -1257,6 +1273,14 @@ namespace StarsectorTools.Tools.ModManager
             if (remindSaveThread.ThreadState != ThreadState.Unstarted)
                 remindSaveThread.Join(1);
             remindSaveThread = new(RemindSave);
+        }
+
+        private void ClearGameLogFile()
+        {
+            if (ST.FileExists(ST.GameLogFile, false))
+                ST.DeleteFileToRecycleBin(ST.GameLogFile);
+            File.Create(ST.GameLogFile).Close();
+            STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
     }
 }

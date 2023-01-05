@@ -75,9 +75,9 @@ namespace StarsectorTools.Pages
         {
             try
             {
-                TomlTable toml = TOML.Parse(ST.configFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Extras"]["Lang"] = cultureInfo.Name;
-                toml.SaveTo(ST.configFile);
+                toml.SaveTo(ST.ConfigTomlFile);
             }
             catch
             {
@@ -109,9 +109,9 @@ namespace StarsectorTools.Pages
             try
             {
                 STLog.LogLevel = STLog.Str2STLogLevel(level);
-                TomlTable toml = TOML.Parse(ST.configFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Extras"]["LogLevel"] = level;
-                toml.SaveTo(ST.configFile);
+                toml.SaveTo(ST.ConfigTomlFile);
             }
             catch
             {
@@ -135,9 +135,9 @@ namespace StarsectorTools.Pages
             {
                 string path = Path.GetDirectoryName(openFileDialog.FileName)!;
                 TextBox_ExpansionDebugPath.Text = path;
-                TomlTable toml = TOML.Parse(ST.configFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Expansion"]["DebugPath"] = path;
-                toml.SaveTo(ST.configFile);
+                toml.SaveTo(ST.ConfigTomlFile);
                 STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
                 if (ST.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                     ((MainWindow)Application.Current.MainWindow).RefreshDebugExpansion();
@@ -147,9 +147,9 @@ namespace StarsectorTools.Pages
         private void Button_ClearExpansionDebugPath_Click(object sender, RoutedEventArgs e)
         {
             TextBox_ExpansionDebugPath.Text = "";
-            TomlTable toml = TOML.Parse(ST.configFile);
+            TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Expansion"]["DebugPath"] = "";
-            toml.SaveTo(ST.configFile);
+            toml.SaveTo(ST.ConfigTomlFile);
             STLog.WriteLine(I18n.ClearExpansionDebugPath);
         }
     }

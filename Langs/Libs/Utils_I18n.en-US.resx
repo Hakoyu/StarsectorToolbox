@@ -132,13 +132,19 @@
   <data name="LoadError" xml:space="preserve">
     <value>Load error</value>
   </data>
-  <data name="GameDirectorySetupSuccess" xml:space="preserve">
-    <value>Game directory setup success</value>
+  <data name="GameDirectorySetCompleted" xml:space="preserve">
+    <value>Game directory set completed</value>
   </data>
   <data name="LinkError" xml:space="preserve">
     <value>Link error</value>
   </data>
   <data name="ModInfoError" xml:space="preserve">
     <value>Mod info error</value>
+  </data>
+  <data name="FileNotFound" xml:space="preserve">
+    <value>File not found</value>
+  </data>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>Directory not found</value>
   </data>
 </root>

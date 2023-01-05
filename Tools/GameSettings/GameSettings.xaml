@@ -159,20 +159,20 @@
             <Expander
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
-              Header="{x:Static I18n:GameSettings_I18n.LogClear}"
+              Header="{x:Static I18n:GameSettings_I18n.GameLogClear}"
               Style="{StaticResource Expander_Style}">
               <StackPanel>
                 <Button
                   x:Name="Button_OpenLogFile"
                   Margin="0,0,0,5"
                   Click="Button_OpenLogFile_Click"
-                  Content="{x:Static I18n:GameSettings_I18n.OpenLogFile}"
+                  Content="{x:Static I18n:GameSettings_I18n.OpenGameLogFile}"
                   Style="{StaticResource Button_Style}" />
                 <Button
                   x:Name="Button_ClearLogFile"
                   Margin="0,0,0,5"
                   Click="Button_ClearLogFile_Click"
-                  Content="{x:Static I18n:GameSettings_I18n.ClearLogFiles}"
+                  Content="{x:Static I18n:GameSettings_I18n.ClearGameLogFiles}"
                   Style="{StaticResource Button_Style}" />
               </StackPanel>
             </Expander>
@@ -350,14 +350,8 @@
                   Height="30"
                   Margin="0,0,0,5"
                   Padding="-20,0,0,0"
-                  HorizontalContentAlignment="Center"
-                  pu:CheckBoxHelper.BoxHeight="20"
-                  pu:CheckBoxHelper.BoxWidth="20"
-                  pu:CheckBoxHelper.CheckedBackground="{DynamicResource ColorAqua0}"
-                  pu:CheckBoxHelper.HoverBackground="{DynamicResource ColorLight2}"
-                  Background="{DynamicResource ColorBG}"
                   Content="{x:Static I18n:GameSettings_I18n.BorderlessWindow}"
-                  Foreground="{DynamicResource ColorFG}" />
+                  Style="{StaticResource CheckBox_Style}" />
                 <Grid Margin="0,0,0,5">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition />
