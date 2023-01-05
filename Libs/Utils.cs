@@ -202,7 +202,7 @@ namespace StarsectorTools.Utils
         public static string GameSaveDirectory { get; private set; } = null!;
 
         /// <summary>游戏已启用模组文件</summary>
-        public static string EnabledModsJsonFile { get; private set; } = null!;
+        public static string GameEnabledModsJsonFile { get; private set; } = null!;
 
         /// <summary>游戏日志文件</summary>
         public static string GameLogFile { get; private set; } = null!;
@@ -260,7 +260,7 @@ namespace StarsectorTools.Utils
                 GameDirectory = directoryName;
                 GameModsDirectory = $"{directoryName}\\mods";
                 GameSaveDirectory = $"{directoryName}\\saves";
-                EnabledModsJsonFile = $"{GameModsDirectory}\\enabled_mods.json";
+                GameEnabledModsJsonFile = $"{GameModsDirectory}\\enabled_mods.json";
                 GameLogFile = $"{directoryName}\\starsector-core\\starsector.log";
                 try
                 {

@@ -321,10 +321,10 @@ namespace StarsectorTools.Tools.ModManager
 
         private void CheckEnabledMods()
         {
-            if (ST.FileExists(ST.EnabledModsJsonFile))
-                GetEnabledMods(ST.EnabledModsJsonFile);
+            if (ST.FileExists(ST.GameEnabledModsJsonFile))
+                GetEnabledMods(ST.GameEnabledModsJsonFile);
             else
-                SaveEnabledMods(ST.EnabledModsJsonFile);
+                SaveEnabledMods(ST.GameEnabledModsJsonFile);
         }
 
         private void ImportMode()
@@ -863,7 +863,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SaveAllData()
         {
-            SaveEnabledMods(ST.EnabledModsJsonFile);
+            SaveEnabledMods(ST.GameEnabledModsJsonFile);
             SaveUserData(userDataFile);
             SaveUserGroup(userGroupFile);
         }
