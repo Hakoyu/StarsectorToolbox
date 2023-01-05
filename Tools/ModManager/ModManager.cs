@@ -308,7 +308,7 @@ namespace StarsectorTools.Tools.ModManager
             }
             STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, size);
             if (err != null)
-                ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                ST.ShowMessageBox(err, MessageBoxIcon.Warning);
         }
 
         private static ModInfo GetModInfo(string jsonPath)
@@ -329,7 +329,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void ImportMode()
         {
-            var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, MessageBoxIcon.Question);
             if (result == MessageBoxResult.Yes)
                 ClearAllEnabledMods();
             else if (result == MessageBoxResult.Cancel)
@@ -370,12 +370,12 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 STLog.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
                 if (err != null)
-                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(err, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.LoadError} {I18n.Path}: {filePath}", ex);
-                ST.ShowMessageBox($"{I18n.LoadError}\n{I18n.Path}: {filePath}", MessageBoxImage.Error);
+                ST.ShowMessageBox($"{I18n.LoadError}\n{I18n.Path}: {filePath}", MessageBoxIcon.Error);
             }
         }
 
@@ -430,12 +430,12 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 if (err is not null)
-                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(err, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.FileError} {filePath}", ex);
-                ST.ShowMessageBox($"{I18n.FileError} {filePath}", MessageBoxImage.Error);
+                ST.ShowMessageBox($"{I18n.FileError} {filePath}", MessageBoxIcon.Error);
             }
         }
 
@@ -479,12 +479,12 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 if (!string.IsNullOrEmpty(err))
-                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(err, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.UserDataLoadError} {I18n.Path}: {filePath}", ex);
-                ST.ShowMessageBox($"{I18n.UserDataLoadError}\n{I18n.Path}: {filePath}", MessageBoxImage.Error);
+                ST.ShowMessageBox($"{I18n.UserDataLoadError}\n{I18n.Path}: {filePath}", MessageBoxIcon.Error);
             }
         }
 
@@ -652,7 +652,7 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Click += (s, e) =>
                 {
                     string path = allModsInfo[showInfo.Id].Path;
-                    if (ST.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    if (ST.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, MessageBoxIcon.Warning) == MessageBoxResult.Yes)
                     {
                         STLog.WriteLine($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
                         RemoveMod(showInfo.Id);
@@ -1011,7 +1011,7 @@ namespace StarsectorTools.Tools.ModManager
                     var originalModInfo = allModsInfo[newModInfo.Id];
                     if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}",
                                                                   MessageBoxButton.YesNo,
-                                                                  MessageBoxImage.Question,
+                                                                  MessageBoxIcon.Question,
                                                                   false) == MessageBoxResult.Yes)
                     {
                         ST.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
@@ -1175,7 +1175,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void RemoveUserGroup(ListBoxItem listBoxItem)
         {
-            if (ST.ShowMessageBox(I18n.ConfirmUserGroupDeletion, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            if (ST.ShowMessageBox(I18n.ConfirmUserGroupDeletion, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.No)
                 return;
             var name = listBoxItem.ToolTip.ToString()!;
             if (nowSelectedListBoxItem == listBoxItem)
@@ -1213,7 +1213,7 @@ namespace StarsectorTools.Tools.ModManager
                 string _name = window.TextBox_Name.Text;
                 if (_name == ModTypeGroup.Collected || _name == strUserCustomData)
                 {
-                    ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), MessageBoxImage.Warning, false);
+                    ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), MessageBoxIcon.Warning, false);
                     return;
                 }
                 if (name == _name || !allUserGroups.ContainsKey(_name))

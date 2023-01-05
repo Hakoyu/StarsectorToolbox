@@ -127,4 +127,7 @@
   <data name="DirectoryNotFound" xml:space="preserve">
     <value>目录不存在</value>
   </data>
+  <data name="GameDirectoryIsEmpty" xml:space="preserve">
+    <value>游戏目录为空</value>
+  </data>
 </root>

@@ -215,7 +215,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (err != null)
                 {
                     STLog.WriteLine(err, STLogLevel.WARN);
-                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(err, Panuon.WPF.UI.MessageBoxIcon.Warning);
                 }
                 CheckEnabledModsDependencies();
                 RefreshCountOfListBoxItems();
@@ -340,10 +340,10 @@ namespace StarsectorTools.Tools.ModManager
                     catch (Exception ex)
                     {
                         STLog.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", ex);
-                        ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", MessageBoxImage.Error);
+                        ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", Panuon.WPF.UI.MessageBoxIcon.Question);
                         return;
                     }
-                    var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                    var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, Panuon.WPF.UI.MessageBoxIcon.Question);
                     if (result == MessageBoxResult.Yes)
                         ClearAllEnabledMods();
                     else if (result == MessageBoxResult.Cancel)
@@ -363,7 +363,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (err != null)
                 {
                     STLog.WriteLine(err, STLogLevel.WARN);
-                    ST.ShowMessageBox(err, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(err, Panuon.WPF.UI.MessageBoxIcon.Warning);
                 }
             }
         }
@@ -436,7 +436,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             if (TextBox_MinRandomSize.Text.Length == 0 || TextBox_MaxRandomSize.Text.Length == 0)
             {
-                ST.ShowMessageBox(I18n.RandomNumberCannotNull, MessageBoxImage.Warning);
+                ST.ShowMessageBox(I18n.RandomNumberCannotNull, Panuon.WPF.UI.MessageBoxIcon.Warning);
                 return;
             }
             if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
@@ -447,12 +447,12 @@ namespace StarsectorTools.Tools.ModManager
                 int count = allUserGroups[group].Count;
                 if (maxSize > count)
                 {
-                    ST.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, Panuon.WPF.UI.MessageBoxIcon.Warning);
                     return;
                 }
                 else if (minSize > maxSize)
                 {
-                    ST.ShowMessageBox(I18n.MinRandomNumberCannotBeGreaterMaxRandomNumber, MessageBoxImage.Warning);
+                    ST.ShowMessageBox(I18n.MinRandomNumberCannotBeGreaterMaxRandomNumber, Panuon.WPF.UI.MessageBoxIcon.Warning);
                     return;
                 }
                 foreach (var info in allUserGroups[group])

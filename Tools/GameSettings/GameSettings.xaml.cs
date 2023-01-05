@@ -33,9 +33,9 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_SetGameDirectory_Click(object sender, RoutedEventArgs e)
         {
             while (!ST.GetGameDirectory())
-                ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxImage.Warning);
+                ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, Panuon.WPF.UI.MessageBoxIcon.Warning);
             var toml = TOML.Parse(ST.STConfigTomlFile);
-            toml["Game"]["GamePath"] = ST.GameDirectory;
+            toml["Game"]["Path"] = ST.GameDirectory;
             toml.SaveTo(ST.STConfigTomlFile);
             Label_GamePath.Content = ST.GameDirectory;
         }
@@ -46,7 +46,7 @@ namespace StarsectorTools.Tools.GameSettings
         {
             if (!Regex.IsMatch(TextBox_Memory.Text, "^[0-9]+[mg]$"))
             {
-                ST.ShowMessageBox(I18n.FormatError, MessageBoxImage.Warning);
+                ST.ShowMessageBox(I18n.FormatError, Panuon.WPF.UI.MessageBoxIcon.Warning);
                 TextBox_Memory.Text = vmparamsData.xmsx;
                 return;
             }
@@ -68,7 +68,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void Button_CopyKey_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(gameKey);
-            ST.ShowMessageBox(I18n.ReplicationSuccess, MessageBoxImage.Information);
+            ST.ShowMessageBox(I18n.ReplicationSuccess, Panuon.WPF.UI.MessageBoxIcon.Info);
         }
 
         private void Button_ShowKey_Click(object sender, RoutedEventArgs e)
@@ -123,7 +123,7 @@ namespace StarsectorTools.Tools.GameSettings
                 catch (Exception ex)
                 {
                     STLog.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {item.ToolTip}", ex);
-                    ST.ShowMessageBox($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {item.ToolTip}", MessageBoxImage.Error);
+                    ST.ShowMessageBox($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {item.ToolTip}", Panuon.WPF.UI.MessageBoxIcon.Error);
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace StarsectorTools.Tools.GameSettings
             else
             {
                 STLog.WriteLine($"{I18n.MissionsLoadoutsNotExist} {I18n.Path}: {dirParh}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {dirParh}", MessageBoxImage.Warning);
+                ST.ShowMessageBox($"{I18n.MissionsLoadoutsNotExist}\n{I18n.Path}: {dirParh}", Panuon.WPF.UI.MessageBoxIcon.Warning);
             }
         }
 
@@ -164,7 +164,7 @@ namespace StarsectorTools.Tools.GameSettings
             else
             {
                 STLog.WriteLine($"{I18n.SaveNotExist} {I18n.Path}: {ST.GameSaveDirectory}", STLogLevel.WARN);
-                ST.ShowMessageBox($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.GameSaveDirectory}", MessageBoxImage.Warning);
+                ST.ShowMessageBox($"{I18n.SaveNotExist}\n{I18n.Path}: {ST.GameSaveDirectory}", Panuon.WPF.UI.MessageBoxIcon.Warning);
             }
         }
 
@@ -194,7 +194,7 @@ namespace StarsectorTools.Tools.GameSettings
             catch (Exception ex)
             {
                 STLog.WriteLine(I18n.CustomResolutionResetError, ex);
-                ST.ShowMessageBox(I18n.CustomResolutionResetError, MessageBoxImage.Error);
+                ST.ShowMessageBox(I18n.CustomResolutionResetError, Panuon.WPF.UI.MessageBoxIcon.Error);
             }
         }
 
@@ -202,7 +202,7 @@ namespace StarsectorTools.Tools.GameSettings
         {
             if (TextBox_ResolutionWidth.Text.Length == 0 || TextBox_ResolutionHeight.Text.Length == 0)
             {
-                ST.ShowMessageBox(I18n.WidthAndHeightCannotBeEmpty, MessageBoxImage.Warning);
+                ST.ShowMessageBox(I18n.WidthAndHeightCannotBeEmpty, Panuon.WPF.UI.MessageBoxIcon.Warning);
                 return;
             }
             try
@@ -221,7 +221,7 @@ namespace StarsectorTools.Tools.GameSettings
             catch (Exception ex)
             {
                 STLog.WriteLine(I18n.CustomResolutionSetupError, ex);
-                ST.ShowMessageBox(I18n.CustomResolutionSetupError, MessageBoxImage.Error);
+                ST.ShowMessageBox(I18n.CustomResolutionSetupError, Panuon.WPF.UI.MessageBoxIcon.Error);
             }
         }
     }

@@ -97,6 +97,15 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 游戏目录为空 的本地化字符串。
+        /// </summary>
+        public static string GameDirectoryIsEmpty {
+            get {
+                return ResourceManager.GetString("GameDirectoryIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏目录设置完毕 的本地化字符串。
         /// </summary>
         public static string GameDirectorySetCompleted {

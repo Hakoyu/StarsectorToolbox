@@ -86,7 +86,7 @@ namespace StarsectorTools.Tools.GameSettings
             catch
             {
                 STLog.WriteLine(I18n.CustomResolutionGetFailed, STLogLevel.ERROR);
-                ST.ShowMessageBox(I18n.CustomResolutionGetFailed, MessageBoxImage.Error);
+                ST.ShowMessageBox(I18n.CustomResolutionGetFailed, Panuon.WPF.UI.MessageBoxIcon.Error);
             }
         }
 
@@ -94,12 +94,12 @@ namespace StarsectorTools.Tools.GameSettings
         {
             if (size < 1024)
             {
-                ST.ShowMessageBox($"{I18n.MinMemory} 1024", MessageBoxImage.Warning);
+                ST.ShowMessageBox($"{I18n.MinMemory} 1024", Panuon.WPF.UI.MessageBoxIcon.Warning);
                 return 1024;
             }
             else if (size > systemTotalMemory)
             {
-                ST.ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", MessageBoxImage.Warning);
+                ST.ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", Panuon.WPF.UI.MessageBoxIcon.Warning);
                 return systemTotalMemory;
             }
             return null;

@@ -45,7 +45,7 @@ namespace StarsectorTools.Windows
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             STLog.WriteLine(I18n.GlobalException, e.Exception);
-            ST.ShowMessageBox(I18n.GlobalExceptionMessage, MessageBoxImage.Error);
+            ST.ShowMessageBox(I18n.GlobalExceptionMessage, Panuon.WPF.UI.MessageBoxIcon.Error);
             e.Handled = true;
         }
 
@@ -59,7 +59,8 @@ namespace StarsectorTools.Windows
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
             //Visibility = Visibility.Hidden;
-            WindowState = WindowState.Minimized;
+            //WindowState = WindowState.Minimized;
+           var r =  ST.ShowMessageBox("114514\n1919810", MessageBoxButton.YesNo, Panuon.WPF.UI.MessageBoxIcon.Warning);
         }
 
         //最大化
@@ -113,7 +114,7 @@ namespace StarsectorTools.Windows
                     if (!pages.ContainsKey(id))
                     {
                         STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
-                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
+                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", Panuon.WPF.UI.MessageBoxIcon.Warning);
                         ListBox_MainMenu.SelectedIndex = menuSelectedIndex;
                         return;
                     }
@@ -126,7 +127,7 @@ namespace StarsectorTools.Windows
                     if (!expansionPages.ContainsKey(id))
                     {
                         STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
-                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", MessageBoxImage.Warning);
+                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", Panuon.WPF.UI.MessageBoxIcon.Warning);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
                         return;
                     }
@@ -139,7 +140,7 @@ namespace StarsectorTools.Windows
                     catch (Exception ex)
                     {
                         STLog.WriteLine($"{I18n.PageInitializationError} {item.Content}", ex);
-                        ST.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", MessageBoxImage.Error);
+                        ST.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", Panuon.WPF.UI.MessageBoxIcon.Error);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
                     }
                 }

@@ -237,6 +237,5 @@
     <Setter Property="pu:CheckBoxHelper.BoxWidth" Value="20" />
     <Setter Property="pu:CheckBoxHelper.CheckedBackground" Value="{DynamicResource ColorAqua0}" />
     <Setter Property="pu:CheckBoxHelper.HoverBackground" Value="{DynamicResource ColorLight2}" />
-
   </Style>
 </ResourceDictionary>

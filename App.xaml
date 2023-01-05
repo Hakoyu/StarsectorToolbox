@@ -2,6 +2,7 @@
   x:Class="StarsectorTools.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   StartupUri="Windows/MainWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>
@@ -9,6 +10,69 @@
         <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlsStyle.xaml" />
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/BlackStyle.xaml" />
+        <ResourceDictionary>
+          <pu:MessageBoxXSettings
+            x:Key="messageSetting"
+            CancelButtonContent="CANCEL"
+            NoButtonContent="NO"
+            OKButtonContent="OK"
+            YesButtonContent="YES">
+            <pu:MessageBoxXSettings.WindowXStyle>
+              <Style BasedOn="{StaticResource {ComponentResourceKey ResourceId=WindowXStyle, TypeInTargetAssembly={x:Type pu:MessageBoxX}}}" TargetType="pu:WindowX">
+                <Setter Property="SizeToContent" Value="WidthAndHeight" />
+                <Setter Property="Width" Value="NaN" />
+                <Setter Property="Height" Value="NaN" />
+                <Setter Property="MinWidth" Value="300" />
+                <Setter Property="MinHeight" Value="200" />
+                <Setter Property="Background" Value="{DynamicResource ColorBG}" />
+                <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+                <Setter Property="pu:WindowXModalDialog.ButtonPanelHorizontalAlignment" Value="Center" />
+                <Setter Property="pu:WindowXCaption.Height" Value="0" />
+              </Style>
+            </pu:MessageBoxXSettings.WindowXStyle>
+            <pu:MessageBoxXSettings.ButtonStyle>
+              <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
+                <Setter Property="Width" Value="60" />
+                <Setter Property="Margin" Value="20,0,20,0" />
+              </Style>
+            </pu:MessageBoxXSettings.ButtonStyle>
+            <pu:MessageBoxXSettings.ContentTemplate>
+              <DataTemplate>
+                <Grid Margin="10,10,10,10" VerticalAlignment="Center">
+                  <pu:StateControl
+                    HorizontalAlignment="Left"
+                    CurrentState="{Binding MessageBoxIcon}"
+                    FontFamily="/Panuon.WPF.UI;component/Resources/Fonts/#PanuonIcon"
+                    FontSize="64">
+                    <pu:StateItem State="Info">
+                      <TextBlock Foreground="#80BEE8" Text="&#xe92f;" />
+                    </pu:StateItem>
+                    <pu:StateItem State="Question">
+                      <TextBlock Foreground="#80BEE8" Text="&#xe937;" />
+                    </pu:StateItem>
+                    <pu:StateItem State="Warning">
+                      <TextBlock Foreground="#F9D01A" Text="&#xe931;" />
+                    </pu:StateItem>
+                    <pu:StateItem State="Error">
+                      <TextBlock Foreground="#FF5656" Text="&#xe933;" />
+                    </pu:StateItem>
+                    <pu:StateItem State="Success">
+                      <TextBlock Foreground="#75CD43" Text="&#xe935;" />
+                    </pu:StateItem>
+                  </pu:StateControl>
+                  <TextBlock
+                    Margin="100,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="{x:Null}"
+                    Foreground="{DynamicResource ColorFG}"
+                    Text="{Binding Message}"
+                    TextWrapping="Wrap" />
+                </Grid>
+              </DataTemplate>
+            </pu:MessageBoxXSettings.ContentTemplate>
+          </pu:MessageBoxXSettings>
+        </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

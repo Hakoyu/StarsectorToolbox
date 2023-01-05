@@ -254,6 +254,12 @@ namespace StarsectorTools.Utils
         /// <param name="directoryName">游戏目录</param>
         public static bool SetGameData(string directoryName)
         {
+            if (string.IsNullOrEmpty(directoryName))
+            {
+                STLog.WriteLine(I18n.GameDirectoryIsEmpty, STLogLevel.ERROR);
+                ShowMessageBox(I18n.GameDirectoryIsEmpty, Panuon.WPF.UI.MessageBoxIcon.Error);
+                return false;
+            }
             GameExeFile = $"{directoryName}\\starsector.exe";
             if (FileExists(GameExeFile, false))
             {
@@ -276,7 +282,7 @@ namespace StarsectorTools.Utils
             {
                 GameExeFile = null!;
                 STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
-                ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", MessageBoxImage.Error);
+                ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", Panuon.WPF.UI.MessageBoxIcon.Error);
             }
             return false;
         }
@@ -481,13 +487,13 @@ namespace StarsectorTools.Utils
         /// 弹出消息窗口
         /// </summary>
         /// <param name="message">消息</param>
-        /// <param name="image">显示的图标</param>
+        /// <param name="icon">显示的图标</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message,
-                                                      MessageBoxImage image = MessageBoxImage.Information,
+                                                      Panuon.WPF.UI.MessageBoxIcon icon = Panuon.WPF.UI.MessageBoxIcon.Info,
                                                       bool setBlurEffect = true)
         {
-            return ShowMessageBox(message, " ", image: image, setBlurEffect: setBlurEffect);
+            return ShowMessageBox(message, " ", icon: icon, setBlurEffect: setBlurEffect);
         }
 
         /// <summary>
@@ -495,14 +501,14 @@ namespace StarsectorTools.Utils
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="button">显示的按钮</param>
-        /// <param name="image">显示的图标</param>
+        /// <param name="icon">显示的图标</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message,
                                                       MessageBoxButton button,
-                                                      MessageBoxImage image,
+                                                      Panuon.WPF.UI.MessageBoxIcon icon,
                                                       bool setBlurEffect = true)
         {
-            return ShowMessageBox(message, " ", button, image, setBlurEffect: setBlurEffect);
+            return ShowMessageBox(message, " ", button, icon, setBlurEffect: setBlurEffect);
         }
 
         /// <summary>
@@ -518,20 +524,20 @@ namespace StarsectorTools.Utils
         public static MessageBoxResult ShowMessageBox(string message,
                                                       string caption,
                                                       MessageBoxButton button = MessageBoxButton.OK,
-                                                      MessageBoxImage image = MessageBoxImage.None,
-                                                      MessageBoxResult result = MessageBoxResult.None,
+                                                      Panuon.WPF.UI.MessageBoxIcon icon = Panuon.WPF.UI.MessageBoxIcon.Info,
                                                       bool setBlurEffect = true)
         {
             if (setBlurEffect)
             {
                 SetMainWindowBlurEffect();
-                var outResult = MessageBox.Show(message, caption, button, image, result);
+                var outResult = Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, icon);
+                //var outResult = MessageBox.Show(message, caption, button, icon, result);
                 RemoveMainWindowBlurEffect();
                 return outResult;
             }
             else
             {
-                return MessageBox.Show(message, caption, button, image, result);
+                return Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, icon);
             }
         }
 
