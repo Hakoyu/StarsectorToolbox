@@ -59,8 +59,8 @@ namespace StarsectorTools.Windows
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
             //Visibility = Visibility.Hidden;
-            //WindowState = WindowState.Minimized;
-           var r =  ST.ShowMessageBox("114514\n1919810", MessageBoxButton.YesNo, Panuon.WPF.UI.MessageBoxIcon.Warning);
+            WindowState = WindowState.Minimized;
+            //var r =  ST.ShowMessageBox("114514\n1919810", MessageBoxButton.YesNo, Panuon.WPF.UI.MessageBoxIcon.Warning);
         }
 
         //最大化

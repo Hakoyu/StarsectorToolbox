@@ -2,6 +2,7 @@
   x:Class="StarsectorTools.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   StartupUri="Windows/MainWindow.xaml">
   <Application.Resources>
@@ -13,10 +14,10 @@
         <ResourceDictionary>
           <pu:MessageBoxXSettings
             x:Key="messageSetting"
-            CancelButtonContent="CANCEL"
-            NoButtonContent="NO"
-            OKButtonContent="OK"
-            YesButtonContent="YES">
+            CancelButtonContent="{x:Static I18n:MessageBoxX_I18n.CANCEL}"
+            NoButtonContent="{x:Static I18n:MessageBoxX_I18n.NO}"
+            OKButtonContent="{x:Static I18n:MessageBoxX_I18n.OK}"
+            YesButtonContent="{x:Static I18n:MessageBoxX_I18n.YES}">
             <pu:MessageBoxXSettings.WindowXStyle>
               <Style BasedOn="{StaticResource {ComponentResourceKey ResourceId=WindowXStyle, TypeInTargetAssembly={x:Type pu:MessageBoxX}}}" TargetType="pu:WindowX">
                 <Setter Property="SizeToContent" Value="WidthAndHeight" />

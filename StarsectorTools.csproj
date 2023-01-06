@@ -87,7 +87,7 @@
       <LastGenOutput>Utils_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\MessageBoxX_I18n.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageBoxX_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Pages\Info_I18n.resx">
