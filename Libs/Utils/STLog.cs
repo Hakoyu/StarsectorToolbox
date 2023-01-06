@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using StarsectorTools.Windows;
 
 namespace StarsectorTools.Libs.Utils
@@ -31,13 +28,13 @@ namespace StarsectorTools.Libs.Utils
     public static class STLog
     {
         /// <summary>日志目录</summary>
-        public const string logFile = $"{ST.CoreDirectory}\\StarsectorTools.log";
+        public const string LogFile = $"{ST.CoreDirectory}\\StarsectorTools.log";
 
         /// <summary>日志等级</summary>
-        public static STLogLevel LogLevel = STLogLevel.INFO;
+        public static STLogLevel LogLevel { get; private set; } = STLogLevel.INFO;
 
         /// <summary>写入流</summary>
-        private static StreamWriter sw = new(logFile);
+        private static StreamWriter sw = new(LogFile);
 
         /// <summary>读写锁</summary>
         private static ReaderWriterLockSlim rwLockS = new();
@@ -77,6 +74,11 @@ namespace StarsectorTools.Libs.Utils
             return frame?.GetMethod()?.DeclaringType?.Name;
         }
 
+        public static void SetLogLevel(STLogLevel logLevel)
+        {
+            LogLevel = logLevel;
+        }
+
         /// <summary>
         /// 写入日志
         /// </summary>
@@ -98,10 +100,10 @@ namespace StarsectorTools.Libs.Utils
             rwLockS.EnterWriteLock();
             try
             {
-                if (logLevel >= LogLevel)
+                if (logLevel >= STLog.LogLevel)
                 {
                     string? name;
-                    if (LogLevel == STLogLevel.DEBUG)
+                    if (STLog.LogLevel == STLogLevel.DEBUG)
                         name = GetClassNameAndMethodName();
                     else
                         name = GetClassName();
@@ -166,5 +168,4 @@ namespace StarsectorTools.Libs.Utils
                 sw?.Close();
         }
     }
-
 }

@@ -186,13 +186,19 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="ExpansionFileError" xml:space="preserve">
     <value>ExpansionFile Error</value>
   </data>
-  <data name="ExtensionAlreadyExists" xml:space="preserve">
-    <value>Extension already exists</value>
+  <data name="ExpansionAlreadyExists" xml:space="preserve">
+    <value>Expansion already exists</value>
   </data>
   <data name="ConfigFileCreationCompleted" xml:space="preserve">
     <value>Config file creation completed</value>
   </data>
   <data name="ConfigFileError" xml:space="preserve">
     <value>Config file error, will restore the default</value>
+  </data>
+  <data name="ExpansionPathIsEmpty" xml:space="preserve">
+    <value>Expansion path is empty</value>
+  </data>
+  <data name="ExpansionTomlFileNotFound" xml:space="preserve">
+    <value>Expansion toml file not found</value>
   </data>
 </root>

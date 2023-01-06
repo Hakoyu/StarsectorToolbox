@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
 namespace StarsectorTools.Libs.Utils
 {
-    class GameInfo
+    /// <summary>游戏信息</summary>
+    public class GameInfo
     {
         /// <summary>游戏目录</summary>
-        public static string Directory { get; private set; } = null!;
+        public static string GameDirectory { get; private set; } = null!;
 
         /// <summary>游戏exe文件</summary>
         public static string ExeFile { get; private set; } = null!;
@@ -31,6 +28,7 @@ namespace StarsectorTools.Libs.Utils
 
         /// <summary>游戏日志文件</summary>
         public static string LogFile { get; private set; } = null!;
+
         /// <summary>
         /// 设置游戏信息
         /// </summary>
@@ -40,13 +38,13 @@ namespace StarsectorTools.Libs.Utils
             if (string.IsNullOrEmpty(directoryName))
             {
                 STLog.WriteLine(I18n.GameDirectoryIsEmpty, STLogLevel.ERROR);
-                ST.ShowMessageBox(I18n.GameDirectoryIsEmpty, Panuon.WPF.UI.MessageBoxIcon.Error);
+                Utils.ShowMessageBox(I18n.GameDirectoryIsEmpty, STMessageBoxIcon.Error);
                 return false;
             }
             ExeFile = $"{directoryName}\\starsector.exe";
-            if (ST.FileExists(ExeFile, false))
+            if (Utils.FileExists(ExeFile, false))
             {
-                Directory = directoryName;
+                GameDirectory = directoryName;
                 ModsDirectory = $"{directoryName}\\mods";
                 SaveDirectory = $"{directoryName}\\saves";
                 EnabledModsJsonFile = $"{ModsDirectory}\\enabled_mods.json";
@@ -65,10 +63,11 @@ namespace StarsectorTools.Libs.Utils
             {
                 ExeFile = null!;
                 STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
-                ST.ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", Panuon.WPF.UI.MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", STMessageBoxIcon.Error);
             }
             return false;
         }
+
         /// <summary>
         /// 获取游戏目录
         /// </summary>
@@ -85,10 +84,10 @@ namespace StarsectorTools.Libs.Utils
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
-            string newDirectory = Path.GetDirectoryName(openFileDialog.FileName)!;
-            if (SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!))
+            string directory = System.IO.Path.GetDirectoryName(openFileDialog.FileName)!;
+            if (SetGameData(System.IO.Path.GetDirectoryName(openFileDialog.FileName)!))
             {
-                STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {newDirectory}");
+                STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
                 return true;
             }
             return false;

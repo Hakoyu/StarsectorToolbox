@@ -89,7 +89,7 @@ namespace StarsectorTools.Pages
         {
             if (sender is Button)
             {
-                ST.OpenLink(STLog.logFile);
+                Utils.OpenLink(STLog.LogFile);
             }
         }
 
@@ -108,7 +108,7 @@ namespace StarsectorTools.Pages
         {
             try
             {
-                STLog.LogLevel = STLog.Str2STLogLevel(level);
+                STLog.SetLogLevel(STLog.Str2STLogLevel(level));
                 TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
                 toml["Extras"]["LogLevel"] = level;
                 toml.SaveTo(ST.STConfigTomlFile);
@@ -139,7 +139,7 @@ namespace StarsectorTools.Pages
                 toml["Expansion"]["DebugPath"] = path;
                 toml.SaveTo(ST.STConfigTomlFile);
                 STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
-                if (ST.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, Panuon.WPF.UI.MessageBoxIcon.Question) == MessageBoxResult.Yes)
+                if (Utils.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
                     ((MainWindow)Application.Current.MainWindow).RefreshDebugExpansion();
             }
         }

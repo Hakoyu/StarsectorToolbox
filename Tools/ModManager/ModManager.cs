@@ -58,6 +58,10 @@ namespace StarsectorTools.Tools.ModManager
         public const string Collected = nameof(Collected);
     }
 
+    public static class ModsInfo
+    {
+    }
+
     public partial class ModManager
     {
         private const string userDataFile = $"{ST.CoreDirectory}\\UserData.toml";
@@ -230,7 +234,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void LoadConfig()
         {
-            if (!ST.FileExists(ST.STConfigTomlFile))
+            if (!Utils.FileExists(ST.STConfigTomlFile))
                 return;
             TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
             try
@@ -308,20 +312,20 @@ namespace StarsectorTools.Tools.ModManager
             }
             STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, size);
             if (err != null)
-                ST.ShowMessageBox(err, MessageBoxIcon.Warning);
+                Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
         }
 
         private static ModInfo GetModInfo(string jsonPath)
         {
             string datas = File.ReadAllText(jsonPath);
-            ModInfo modInfo = new(JsonNode.Parse(ST.JsonParse(datas))!.AsObject());
+            ModInfo modInfo = new(JsonNode.Parse(Utils.JsonParse(datas))!.AsObject());
             modInfo.Path = Path.GetDirectoryName(jsonPath)!;
             return modInfo;
         }
 
         private void CheckEnabledMods()
         {
-            if (ST.FileExists(GameInfo.EnabledModsJsonFile))
+            if (Utils.FileExists(GameInfo.EnabledModsJsonFile))
                 GetEnabledMods(GameInfo.EnabledModsJsonFile);
             else
                 SaveEnabledMods(GameInfo.EnabledModsJsonFile);
@@ -329,7 +333,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void ImportMode()
         {
-            var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, MessageBoxIcon.Question);
+            var result = Utils.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, STMessageBoxIcon.Question);
             if (result == MessageBoxResult.Yes)
                 ClearAllEnabledMods();
             else if (result == MessageBoxResult.Cancel)
@@ -344,7 +348,7 @@ namespace StarsectorTools.Tools.ModManager
             try
             {
                 string err = null!;
-                JsonNode enabledModsJson = JsonNode.Parse(ST.JsonParse(datas))!;
+                JsonNode enabledModsJson = JsonNode.Parse(Utils.JsonParse(datas))!;
                 if (enabledModsJson.AsObject().Count != 1 || enabledModsJson.AsObject().ElementAt(0).Key != strEnabledMods)
                     throw new();
                 if (importMode)
@@ -370,22 +374,22 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 STLog.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
                 if (err != null)
-                    ST.ShowMessageBox(err, MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.LoadError} {I18n.Path}: {filePath}", ex);
-                ST.ShowMessageBox($"{I18n.LoadError}\n{I18n.Path}: {filePath}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.LoadError}\n{I18n.Path}: {filePath}", STMessageBoxIcon.Error);
             }
         }
 
         private void CheckUserData()
         {
-            if (ST.FileExists(userDataFile))
+            if (Utils.FileExists(userDataFile))
                 GetUserData(userDataFile);
             else
                 SaveUserData(userDataFile);
-            if (ST.FileExists(userGroupFile))
+            if (Utils.FileExists(userGroupFile))
                 GetUserGroup(userGroupFile);
             else
                 SaveUserGroup(userGroupFile);
@@ -430,12 +434,12 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 if (err is not null)
-                    ST.ShowMessageBox(err, MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.FileError} {filePath}", ex);
-                ST.ShowMessageBox($"{I18n.FileError} {filePath}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.FileError} {filePath}", STMessageBoxIcon.Error);
             }
         }
 
@@ -479,12 +483,12 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 if (!string.IsNullOrEmpty(err))
-                    ST.ShowMessageBox(err, MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.UserDataLoadError} {I18n.Path}: {filePath}", ex);
-                ST.ShowMessageBox($"{I18n.UserDataLoadError}\n{I18n.Path}: {filePath}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.UserDataLoadError}\n{I18n.Path}: {filePath}", STMessageBoxIcon.Error);
             }
         }
 
@@ -573,7 +577,7 @@ namespace StarsectorTools.Tools.ModManager
             };
             BitmapImage? GetIcon(string filePath)
             {
-                if (!ST.FileExists(filePath, false))
+                if (!Utils.FileExists(filePath, false))
                     return null;
                 try
                 {
@@ -642,7 +646,7 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Click += (s, e) =>
                 {
                     STLog.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[showInfo.Id].Path}");
-                    ST.OpenLink(allModsInfo[showInfo.Id].Path);
+                    Utils.OpenLink(allModsInfo[showInfo.Id].Path);
                 };
                 contextMenu.Items.Add(menuItem);
                 STLog.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -652,13 +656,13 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Click += (s, e) =>
                 {
                     string path = allModsInfo[showInfo.Id].Path;
-                    if (ST.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, MessageBoxIcon.Warning) == MessageBoxResult.Yes)
+                    if (Utils.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, STMessageBoxIcon.Warning) == MessageBoxResult.Yes)
                     {
                         STLog.WriteLine($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
                         RemoveMod(showInfo.Id);
                         RefreshDataGrid();
                         CloseModDetails();
-                        ST.DeleteDirToRecycleBin(path);
+                        Utils.DeleteDirToRecycleBin(path);
                         RefreshCountOfListBoxItems();
                         StartRemindSaveThread();
                     }
@@ -994,9 +998,9 @@ namespace StarsectorTools.Tools.ModManager
         private void DropFile(string filePath)
         {
             string tempPath = $"{AppDomain.CurrentDomain.BaseDirectory}Temp";
-            if (!ST.UnArchiveFileToDir(filePath, tempPath))
+            if (!Utils.UnArchiveFileToDir(filePath, tempPath))
             {
-                ST.ShowMessageBox($"{I18n.UnzipError}\n {I18n.Path}:{filePath}");
+                Utils.ShowMessageBox($"{I18n.UnzipError}\n {I18n.Path}:{filePath}");
                 return;
             }
             DirectoryInfo dirs = new(tempPath);
@@ -1009,17 +1013,17 @@ namespace StarsectorTools.Tools.ModManager
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];
-                    if (ST.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}",
+                    if (Utils.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}",
                                                                   MessageBoxButton.YesNo,
-                                                                  MessageBoxIcon.Question,
+                                                                  STMessageBoxIcon.Question,
                                                                   false) == MessageBoxResult.Yes)
                     {
-                        ST.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
+                        Utils.CopyDirectory(originalModInfo.Path, $"{backupModsDirectory}\\Temp");
                         string tempDirectory = $"{backupModsDirectory}\\Temp";
-                        ST.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
+                        Utils.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
                         Directory.Delete(tempDirectory, true);
                         Directory.Delete(originalModInfo.Path, true);
-                        ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                        Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                         Dispatcher.BeginInvoke(() =>
                         {
                             RemoveMod(newModInfo.Id);
@@ -1032,7 +1036,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
                 else
                 {
-                    ST.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     Dispatcher.BeginInvoke(() =>
                     {
                         AddMod(newModInfo);
@@ -1045,7 +1049,7 @@ namespace StarsectorTools.Tools.ModManager
             else
             {
                 STLog.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {filePath}");
-                ST.ShowMessageBox($"{I18n.ZipFileError}\n{I18n.Path}: {filePath}");
+                Utils.ShowMessageBox($"{I18n.ZipFileError}\n{I18n.Path}: {filePath}");
             }
             Dispatcher.BeginInvoke(() => dirs.Delete(true));
         }
@@ -1175,7 +1179,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void RemoveUserGroup(ListBoxItem listBoxItem)
         {
-            if (ST.ShowMessageBox(I18n.ConfirmUserGroupDeletion, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.No)
+            if (Utils.ShowMessageBox(I18n.ConfirmUserGroupDeletion, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.No)
                 return;
             var name = listBoxItem.ToolTip.ToString()!;
             if (nowSelectedListBoxItem == listBoxItem)
@@ -1213,7 +1217,7 @@ namespace StarsectorTools.Tools.ModManager
                 string _name = window.TextBox_Name.Text;
                 if (_name == ModTypeGroup.Collected || _name == strUserCustomData)
                 {
-                    ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), MessageBoxIcon.Warning, false);
+                    Utils.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), STMessageBoxIcon.Warning, false);
                     return;
                 }
                 if (name == _name || !allUserGroups.ContainsKey(_name))
@@ -1237,7 +1241,7 @@ namespace StarsectorTools.Tools.ModManager
                     StartRemindSaveThread();
                 }
                 else
-                    ST.ShowMessageBox(I18n.UserGroupNamingFailed);
+                    Utils.ShowMessageBox(I18n.UserGroupNamingFailed);
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
@@ -1277,8 +1281,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void ClearGameLogFile()
         {
-            if (ST.FileExists(GameInfo.LogFile, false))
-                ST.DeleteFileToRecycleBin(GameInfo.LogFile);
+            if (Utils.FileExists(GameInfo.LogFile, false))
+                Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
             File.Create(GameInfo.LogFile).Close();
             STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }

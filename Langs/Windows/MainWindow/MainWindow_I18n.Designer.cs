@@ -115,6 +115,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 拓展已存在 的本地化字符串。
+        /// </summary>
+        public static string ExpansionAlreadyExists {
+            get {
+                return ResourceManager.GetString("ExpansionAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 ExpansionFile错误 的本地化字符串。
         /// </summary>
         public static string ExpansionFileError {
@@ -142,11 +151,20 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 拓展已存在 的本地化字符串。
+        ///   查找类似 拓展目录为空 的本地化字符串。
         /// </summary>
-        public static string ExtensionAlreadyExists {
+        public static string ExpansionPathIsEmpty {
             get {
-                return ResourceManager.GetString("ExtensionAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("ExpansionPathIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 拓展信息文件未找到 的本地化字符串。
+        /// </summary>
+        public static string ExpansionTomlFileNotFound {
+            get {
+                return ResourceManager.GetString("ExpansionTomlFileNotFound", resourceCulture);
             }
         }
         

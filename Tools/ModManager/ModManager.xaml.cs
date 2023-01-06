@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -193,7 +192,7 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_ModPath_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
-                ST.OpenLink(button.Content.ToString()!);
+                Utils.OpenLink(button.Content.ToString()!);
         }
 
         private void Button_EnableDependencies_Click(object sender, RoutedEventArgs e)
@@ -215,7 +214,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (err != null)
                 {
                     STLog.WriteLine(err, STLogLevel.WARN);
-                    ST.ShowMessageBox(err, Panuon.WPF.UI.MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
                 }
                 CheckEnabledModsDependencies();
                 RefreshCountOfListBoxItems();
@@ -275,7 +274,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == ModTypeGroup.Collected || name == strUserCustomData)
-                        ST.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), setBlurEffect: false);
+                        Utils.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), setBlurEffect: false);
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
@@ -285,7 +284,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 else
-                    ST.ShowMessageBox(I18n.UserGroupNamingFailed);
+                    Utils.ShowMessageBox(I18n.UserGroupNamingFailed);
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
@@ -293,7 +292,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.FileExists(GameInfo.ExeFile))
+            if (Utils.FileExists(GameInfo.ExeFile))
             {
                 if (clearGameLogOnStart)
                     ClearGameLogFile();
@@ -303,7 +302,7 @@ namespace StarsectorTools.Tools.ModManager
                 process.StartInfo.RedirectStandardInput = true;
                 if (process.Start())
                 {
-                    process.StandardInput.WriteLine($"cd /d {GameInfo.Directory}");
+                    process.StandardInput.WriteLine($"cd /d {GameInfo.GameDirectory}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
                     SaveAllData();
@@ -329,7 +328,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 string? err = null;
                 string filePath = $"{string.Join("\\", openFileDialog.FileName.Split("\\")[..^1])}\\descriptor.xml";
-                if (ST.FileExists(filePath))
+                if (Utils.FileExists(filePath))
                 {
                     IEnumerable<string> list = null!;
                     try
@@ -340,10 +339,10 @@ namespace StarsectorTools.Tools.ModManager
                     catch (Exception ex)
                     {
                         STLog.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", ex);
-                        ST.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", Panuon.WPF.UI.MessageBoxIcon.Question);
+                        Utils.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", STMessageBoxIcon.Question);
                         return;
                     }
-                    var result = ST.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, Panuon.WPF.UI.MessageBoxIcon.Question);
+                    var result = Utils.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, STMessageBoxIcon.Question);
                     if (result == MessageBoxResult.Yes)
                         ClearAllEnabledMods();
                     else if (result == MessageBoxResult.Cancel)
@@ -363,7 +362,7 @@ namespace StarsectorTools.Tools.ModManager
                 if (err != null)
                 {
                     STLog.WriteLine(err, STLogLevel.WARN);
-                    ST.ShowMessageBox(err, Panuon.WPF.UI.MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
                 }
             }
         }
@@ -387,7 +386,7 @@ namespace StarsectorTools.Tools.ModManager
                     });
                     foreach (string path in array)
                     {
-                        if (ST.FileExists(path))
+                        if (Utils.FileExists(path))
                         {
                             Dispatcher.BeginInvoke(() =>
                             {
@@ -416,27 +415,27 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.DirectoryExists(GameInfo.ModsDirectory))
-                ST.OpenLink(GameInfo.ModsDirectory);
+            if (Utils.DirectoryExists(GameInfo.ModsDirectory))
+                Utils.OpenLink(GameInfo.ModsDirectory);
         }
 
         private void Button_OpenBackupDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.DirectoryExists(backupDirectory))
-                ST.OpenLink(backupDirectory);
+            if (Utils.DirectoryExists(backupDirectory))
+                Utils.OpenLink(backupDirectory);
         }
 
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.DirectoryExists(GameInfo.SaveDirectory))
-                ST.OpenLink(GameInfo.SaveDirectory);
+            if (Utils.DirectoryExists(GameInfo.SaveDirectory))
+                Utils.OpenLink(GameInfo.SaveDirectory);
         }
 
         private void Button_RandomMods_Click(object sender, RoutedEventArgs e)
         {
             if (TextBox_MinRandomSize.Text.Length == 0 || TextBox_MaxRandomSize.Text.Length == 0)
             {
-                ST.ShowMessageBox(I18n.RandomNumberCannotNull, Panuon.WPF.UI.MessageBoxIcon.Warning);
+                Utils.ShowMessageBox(I18n.RandomNumberCannotNull, STMessageBoxIcon.Warning);
                 return;
             }
             if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
@@ -447,12 +446,12 @@ namespace StarsectorTools.Tools.ModManager
                 int count = allUserGroups[group].Count;
                 if (maxSize > count)
                 {
-                    ST.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, Panuon.WPF.UI.MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, STMessageBoxIcon.Warning);
                     return;
                 }
                 else if (minSize > maxSize)
                 {
-                    ST.ShowMessageBox(I18n.MinRandomNumberCannotBeGreaterMaxRandomNumber, Panuon.WPF.UI.MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(I18n.MinRandomNumberCannotBeGreaterMaxRandomNumber, STMessageBoxIcon.Warning);
                     return;
                 }
                 foreach (var info in allUserGroups[group])
@@ -530,7 +529,7 @@ namespace StarsectorTools.Tools.ModManager
             if (sender is CheckBox checkBox)
             {
                 clearGameLogOnStart = (bool)checkBox.IsChecked!;
-                if (!ST.FileExists(ST.STConfigTomlFile))
+                if (!Utils.FileExists(ST.STConfigTomlFile))
                     return;
                 TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
                 toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;

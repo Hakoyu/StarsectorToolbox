@@ -18,7 +18,7 @@ namespace StarsectorTools.Pages
 
         private void Hyperlink_GitHub_Click(object sender, RoutedEventArgs e)
         {
-            ST.OpenLink("https://github.com/Hakoyu/StarsectorTools");
+            Utils.OpenLink("https://github.com/Hakoyu/StarsectorTools");
         }
 
         private async void Button_CheckUpdate_ClickAsync(object sender, RoutedEventArgs e)
@@ -33,13 +33,13 @@ namespace StarsectorTools.Pages
                 if (!string.IsNullOrEmpty(tagName))
                 {
                     STLog.WriteLine($"获取成功\n{tagName}");
-                    //ST.ShowMessageBox($"获取成功\n最新版本: {tagName}");
+                    //Utils.ShowMessageBox($"获取成功\n最新版本: {tagName}");
                     TextBlock_CheckUpdateIcon.Text = "✅";
                 }
                 else
                 {
                     STLog.WriteLine($"获取失败\n{releases}", STLogLevel.WARN);
-                    //ST.ShowMessageBox($"获取失败\n{releases}", MessageBoxImage.Warning);
+                    //Utils.ShowMessageBox($"获取失败\n{releases}", MessageBoxImage.Warning);
                     TextBlock_CheckUpdateIcon.Text = "❎";
                 }
                 //var downloadUrl = Regex.Match(releases, @"(?<=""browser_download_url"": "")[^""]+").Value;

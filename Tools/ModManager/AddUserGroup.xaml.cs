@@ -10,9 +10,9 @@ namespace StarsectorTools.Tools.ModManager
     {
         public AddUserGroup()
         {
-            ST.SetMainWindowBlurEffect();
+            Utils.SetMainWindowBlurEffect();
             InitializeComponent();
-            Closed += (s, e) => ST.RemoveMainWindowBlurEffect();
+            Closed += (s, e) => Utils.RemoveMainWindowBlurEffect();
         }
     }
 }

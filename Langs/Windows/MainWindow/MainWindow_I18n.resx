@@ -186,7 +186,7 @@
   <data name="ExpansionFileError" xml:space="preserve">
     <value>ExpansionFile错误</value>
   </data>
-  <data name="ExtensionAlreadyExists" xml:space="preserve">
+  <data name="ExpansionAlreadyExists" xml:space="preserve">
     <value>拓展已存在</value>
   </data>
   <data name="ConfigFileCreationCompleted" xml:space="preserve">
@@ -194,5 +194,11 @@
   </data>
   <data name="ConfigFileError" xml:space="preserve">
     <value>设置文件错误,将恢复为默认设置</value>
+  </data>
+  <data name="ExpansionPathIsEmpty" xml:space="preserve">
+    <value>拓展目录为空</value>
+  </data>
+  <data name="ExpansionTomlFileNotFound" xml:space="preserve">
+    <value>拓展信息文件未找到</value>
   </data>
 </root>

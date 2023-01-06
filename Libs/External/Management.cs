@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 namespace HKW.Management
 {
     ///<summary>内存指标</summary>
-    public class MemoryMetrics
+    internal class MemoryMetrics
     {
         ///<summary>内存总量</summary>
         public int Total;

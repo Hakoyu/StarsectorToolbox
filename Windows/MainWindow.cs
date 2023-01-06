@@ -9,10 +9,10 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
+using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
-using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows
@@ -97,9 +97,9 @@ namespace StarsectorTools.Windows
 
         private void InitializeDirectories()
         {
-            if (!ST.DirectoryExists(ST.CoreDirectory))
+            if (!Utils.DirectoryExists(ST.CoreDirectory))
                 Directory.CreateDirectory(ST.CoreDirectory);
-            if (!ST.DirectoryExists(expansionDirectories))
+            if (!Utils.DirectoryExists(expansionDirectories))
                 Directory.CreateDirectory(expansionDirectories);
         }
 
@@ -112,7 +112,7 @@ namespace StarsectorTools.Windows
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.PageInitializationError}: {nameof(Settings)}", ex);
-                ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Settings)}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Settings)}", STMessageBoxIcon.Error);
             }
         }
 
@@ -125,7 +125,7 @@ namespace StarsectorTools.Windows
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.PageInitializationError}: {nameof(Info)}", ex);
-                ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Info)}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Info)}", STMessageBoxIcon.Error);
             }
         }
 
@@ -133,23 +133,23 @@ namespace StarsectorTools.Windows
         {
             try
             {
-                if (ST.FileExists(ST.STConfigTomlFile, false))
+                if (Utils.FileExists(ST.STConfigTomlFile, false))
                 {
                     // 读取设置
                     TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
                     // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     // 日志等级
-                    STLog.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
+                    STLog.SetLogLevel(STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString));
                     // 游戏目录
                     if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString!))
                     {
-                        if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
+                        if (!(Utils.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
                         {
-                            ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxIcon.Error);
+                            Utils.ShowMessageBox(I18n.GameNotFound_SoftwareExit, STMessageBoxIcon.Error);
                             return false;
                         }
-                        toml["Game"]["Path"] = GameInfo.Directory;
+                        toml["Game"]["Path"] = GameInfo.GameDirectory;
                     }
                     // 拓展调试目录
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
@@ -164,14 +164,14 @@ namespace StarsectorTools.Windows
                 }
                 else
                 {
-                    if (!(ST.ShowMessageBox(I18n.FirstStart, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
+                    if (!(Utils.ShowMessageBox(I18n.FirstStart, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
                     {
-                        ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxIcon.Error);
+                        Utils.ShowMessageBox(I18n.GameNotFound_SoftwareExit, STMessageBoxIcon.Error);
                         return false;
                     }
                     CreateConfigFile();
                     TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
-                    toml["Game"]["Path"] = GameInfo.Directory;
+                    toml["Game"]["Path"] = GameInfo.GameDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.STConfigTomlFile);
                 }
@@ -182,6 +182,7 @@ namespace StarsectorTools.Windows
             }
             return true;
         }
+
         /// <summary>
         /// 创建配置文件
         /// </summary>
@@ -191,6 +192,7 @@ namespace StarsectorTools.Windows
             File.WriteAllText(ST.STConfigTomlFile, sr.ReadToEnd());
             STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.STConfigTomlFile}");
         }
+
         /// <summary>
         /// 重置配置文件
         /// </summary>
@@ -200,10 +202,11 @@ namespace StarsectorTools.Windows
             if (ex is not null)
             {
                 STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.STConfigTomlFile}", ex);
-                ST.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.STConfigTomlFile}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.STConfigTomlFile}", STMessageBoxIcon.Error);
             }
             CreateConfigFile();
         }
+
         public void SetBlurEffect()
         {
             Dispatcher.Invoke(() => Effect = new System.Windows.Media.Effects.BlurEffect());
@@ -254,7 +257,7 @@ namespace StarsectorTools.Windows
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.PageInitializationError}: {type.Name}", ex);
-                ST.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.Name}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.Name}", STMessageBoxIcon.Error);
                 return null;
             }
         }
@@ -342,27 +345,33 @@ namespace StarsectorTools.Windows
 
         private ExpansionInfo? CheckExpansionInfo(string directory, bool loadInMemory = false)
         {
+            if (string.IsNullOrEmpty(directory))
+            {
+                STLog.WriteLine(I18n.ExpansionPathIsEmpty, STLogLevel.WARN);
+                Utils.ShowMessageBox(I18n.ExpansionPathIsEmpty, STMessageBoxIcon.Warning);
+                return null;
+            }
             string tomlFile = $"{directory}\\{expansionInfoFile}";
             try
             {
-                if (!ST.FileExists(tomlFile, false))
+                if (!Utils.FileExists(tomlFile, false))
                 {
-                    STLog.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
-                    ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxIcon.Warning);
+                    STLog.WriteLine($"{I18n.ExpansionTomlFileNotFound} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Utils.ShowMessageBox($"{I18n.ExpansionTomlFileNotFound}\n{I18n.Path}: {tomlFile}", STMessageBoxIcon.Warning);
                     return null;
                 }
                 var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
                 var assemblyFile = $"{directory}\\{expansionInfo.ExpansionFile}";
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
-                    STLog.WriteLine($"{I18n.ExtensionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
-                    ST.ShowMessageBox($"{I18n.ExtensionAlreadyExists}\n{I18n.Path}: {tomlFile}", MessageBoxIcon.Warning);
+                    STLog.WriteLine($"{I18n.ExpansionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Utils.ShowMessageBox($"{I18n.ExpansionAlreadyExists}\n{I18n.Path}: {tomlFile}", STMessageBoxIcon.Warning);
                     return null;
                 }
-                if (!ST.FileExists(assemblyFile, false))
+                if (!Utils.FileExists(assemblyFile, false))
                 {
                     STLog.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
-                    ST.ShowMessageBox($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}", MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}", STMessageBoxIcon.Warning);
                     return null;
                 }
                 if (loadInMemory)
@@ -375,7 +384,7 @@ namespace StarsectorTools.Windows
                 if (expansionInfo.ExpansionType is null)
                 {
                     STLog.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
-                    ST.ShowMessageBox($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}", MessageBoxIcon.Warning);
+                    Utils.ShowMessageBox($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}", STMessageBoxIcon.Warning);
                     return null;
                 }
                 return expansionInfo;
@@ -383,7 +392,7 @@ namespace StarsectorTools.Windows
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
-                ST.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", MessageBoxIcon.Error);
+                Utils.ShowMessageBox($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}", STMessageBoxIcon.Error);
                 return null;
             }
         }

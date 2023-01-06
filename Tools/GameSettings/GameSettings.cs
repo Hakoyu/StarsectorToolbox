@@ -22,11 +22,11 @@ namespace StarsectorTools.Tools.GameSettings
         private string hideGameKey = "";
         private bool showKey = false;
         private int systemTotalMemory = 0;
-        private string gameSettingsFile = $"{GameInfo.Directory}\\starsector-core\\data\\config\\settings.json";
+        private string gameSettingsFile = $"{GameInfo.GameDirectory}\\starsector-core\\data\\config\\settings.json";
 
         private void GetVmparamsData()
         {
-            vmparamsData.data = File.ReadAllText($"{GameInfo.Directory}\\vmparams");
+            vmparamsData.data = File.ReadAllText($"{GameInfo.GameDirectory}\\vmparams");
             vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
             TextBox_Memory.Text = TextBox_Memory.Text = vmparamsData.xmsx;
         }
@@ -51,7 +51,7 @@ namespace StarsectorTools.Tools.GameSettings
         private void GetMissionsLoadouts()
         {
             string dirParh = $"{GameInfo.SaveDirectory}\\missions";
-            if (!ST.DirectoryExists(dirParh))
+            if (!Utils.DirectoryExists(dirParh))
                 return;
             DirectoryInfo dirs = new(dirParh);
             foreach (var dir in dirs.GetDirectories())
@@ -86,7 +86,7 @@ namespace StarsectorTools.Tools.GameSettings
             catch
             {
                 STLog.WriteLine(I18n.CustomResolutionGetFailed, STLogLevel.ERROR);
-                ST.ShowMessageBox(I18n.CustomResolutionGetFailed, Panuon.WPF.UI.MessageBoxIcon.Error);
+                Utils.ShowMessageBox(I18n.CustomResolutionGetFailed, STMessageBoxIcon.Error);
             }
         }
 
@@ -94,12 +94,12 @@ namespace StarsectorTools.Tools.GameSettings
         {
             if (size < 1024)
             {
-                ST.ShowMessageBox($"{I18n.MinMemory} 1024", Panuon.WPF.UI.MessageBoxIcon.Warning);
+                Utils.ShowMessageBox($"{I18n.MinMemory} 1024", STMessageBoxIcon.Warning);
                 return 1024;
             }
             else if (size > systemTotalMemory)
             {
-                ST.ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", Panuon.WPF.UI.MessageBoxIcon.Warning);
+                Utils.ShowMessageBox($"{I18n.MaxMemory} {systemTotalMemory}", STMessageBoxIcon.Warning);
                 return systemTotalMemory;
             }
             return null;

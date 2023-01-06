@@ -36,7 +36,7 @@ namespace StarsectorTools.Windows
             ShowPage();
             Grid_TitleBar.Background = SystemParameters.WindowGlassBrush;
             var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
-            if (ST.IsLightColor(color))
+            if (Utils.IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
 
             STLog.WriteLine(I18n.InitializationCompleted);
@@ -45,7 +45,7 @@ namespace StarsectorTools.Windows
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             STLog.WriteLine(I18n.GlobalException, e.Exception);
-            ST.ShowMessageBox(I18n.GlobalExceptionMessage, Panuon.WPF.UI.MessageBoxIcon.Error);
+            Utils.ShowMessageBox(I18n.GlobalExceptionMessage, STMessageBoxIcon.Error);
             e.Handled = true;
         }
 
@@ -60,7 +60,7 @@ namespace StarsectorTools.Windows
         {
             //Visibility = Visibility.Hidden;
             WindowState = WindowState.Minimized;
-            //var r =  ST.ShowMessageBox("114514\n1919810", MessageBoxButton.YesNo, Panuon.WPF.UI.MessageBoxIcon.Warning);
+            //var r =  Utils.ShowMessageBox("114514\n1919810", MessageBoxButton.YesNo, STMessageBoxIcon.Warning);
         }
 
         //最大化
@@ -114,7 +114,7 @@ namespace StarsectorTools.Windows
                     if (!pages.ContainsKey(id))
                     {
                         STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
-                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", Panuon.WPF.UI.MessageBoxIcon.Warning);
+                        Utils.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", STMessageBoxIcon.Warning);
                         ListBox_MainMenu.SelectedIndex = menuSelectedIndex;
                         return;
                     }
@@ -127,7 +127,7 @@ namespace StarsectorTools.Windows
                     if (!expansionPages.ContainsKey(id))
                     {
                         STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
-                        ST.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", Panuon.WPF.UI.MessageBoxIcon.Warning);
+                        Utils.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", STMessageBoxIcon.Warning);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
                         return;
                     }
@@ -140,7 +140,7 @@ namespace StarsectorTools.Windows
                     catch (Exception ex)
                     {
                         STLog.WriteLine($"{I18n.PageInitializationError} {item.Content}", ex);
-                        ST.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", Panuon.WPF.UI.MessageBoxIcon.Error);
+                        Utils.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", STMessageBoxIcon.Error);
                         ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
                     }
                 }
