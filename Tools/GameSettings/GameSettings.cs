@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings

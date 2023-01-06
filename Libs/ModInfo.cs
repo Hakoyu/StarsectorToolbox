@@ -6,7 +6,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
-namespace StarsectorTools.Utils
+namespace StarsectorTools.Libs.Utils
 {
     /// <summary>模组信息</summary>
     public class ModInfo

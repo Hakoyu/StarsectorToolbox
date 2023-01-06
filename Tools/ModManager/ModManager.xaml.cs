@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Linq;
 using HKW.TomlParse;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager

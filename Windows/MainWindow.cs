@@ -12,7 +12,7 @@ using Panuon.WPF.UI;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows
@@ -142,7 +142,7 @@ namespace StarsectorTools.Windows
                     // 日志等级
                     STLog.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
                     // 游戏目录
-                    if (!GameInfo.SetGameInfo(toml["Game"]["Path"].AsString!))
+                    if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString!))
                     {
                         if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
                         {

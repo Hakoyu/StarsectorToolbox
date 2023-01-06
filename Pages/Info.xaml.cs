@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 
 namespace StarsectorTools.Pages
 {

@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
-namespace StarsectorTools.Utils
+namespace StarsectorTools.Libs.Utils
 {
     class GameInfo
     {
@@ -35,7 +35,7 @@ namespace StarsectorTools.Utils
         /// 设置游戏信息
         /// </summary>
         /// <param name="directoryName">游戏目录</param>
-        public static bool SetGameInfo(string directoryName)
+        public static bool SetGameData(string directoryName)
         {
             if (string.IsNullOrEmpty(directoryName))
             {
@@ -86,7 +86,7 @@ namespace StarsectorTools.Utils
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
             string newDirectory = Path.GetDirectoryName(openFileDialog.FileName)!;
-            if (SetGameInfo(Path.GetDirectoryName(openFileDialog.FileName)!))
+            if (SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!))
             {
                 STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {newDirectory}");
                 return true;

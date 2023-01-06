@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using HKW.Management;
 using HKW.TomlParse;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings

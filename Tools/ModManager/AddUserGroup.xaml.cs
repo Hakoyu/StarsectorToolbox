@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 
 namespace StarsectorTools.Tools.ModManager
 {

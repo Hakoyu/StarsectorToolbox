@@ -20,7 +20,7 @@ using SharpCompress.Common;
 using StarsectorTools.Windows;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
-namespace StarsectorTools.Utils
+namespace StarsectorTools.Libs.Utils
 {
 
     /// <summary>StarsectorTools全局工具</summary>

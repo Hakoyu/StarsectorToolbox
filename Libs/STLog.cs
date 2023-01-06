@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using StarsectorTools.Windows;
 
-namespace StarsectorTools.Utils
+namespace StarsectorTools.Libs.Utils
 {
     /// <summary>StarsectorTools日志等级</summary>
     public enum STLogLevel

@@ -56,7 +56,7 @@ public Page1()
 }
 ```
 
-如果你无法使用 `using StarsectorTools.Utils;`
+如果你无法使用 `using StarsectorTools.Libs.Utils;`
 那可能是引用不正确
 
 然后使用 StarsectorTools 的拓展调试功能定位拓展的路径即可载入

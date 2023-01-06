@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using StarsectorTools.Utils;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows
