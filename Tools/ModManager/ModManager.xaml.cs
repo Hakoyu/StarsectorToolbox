@@ -293,7 +293,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_GameStart_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.FileExists(ST.GameExeFile))
+            if (ST.FileExists(GameInfo.ExeFile))
             {
                 if (clearGameLogOnStart)
                     ClearGameLogFile();
@@ -303,7 +303,7 @@ namespace StarsectorTools.Tools.ModManager
                 process.StartInfo.RedirectStandardInput = true;
                 if (process.Start())
                 {
-                    process.StandardInput.WriteLine($"cd /d {ST.GameDirectory}");
+                    process.StandardInput.WriteLine($"cd /d {GameInfo.Directory}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
                     SaveAllData();
@@ -416,8 +416,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenModDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.DirectoryExists(ST.GameModsDirectory))
-                ST.OpenLink(ST.GameModsDirectory);
+            if (ST.DirectoryExists(GameInfo.ModsDirectory))
+                ST.OpenLink(GameInfo.ModsDirectory);
         }
 
         private void Button_OpenBackupDirectory_Click(object sender, RoutedEventArgs e)
@@ -428,8 +428,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void Button_OpenSaveDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (ST.DirectoryExists(ST.GameSaveDirectory))
-                ST.OpenLink(ST.GameSaveDirectory);
+            if (ST.DirectoryExists(GameInfo.SaveDirectory))
+                ST.OpenLink(GameInfo.SaveDirectory);
         }
 
         private void Button_RandomMods_Click(object sender, RoutedEventArgs e)

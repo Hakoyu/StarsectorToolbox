@@ -142,14 +142,14 @@ namespace StarsectorTools.Windows
                     // 日志等级
                     STLog.LogLevel = STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString);
                     // 游戏目录
-                    if (!ST.SetGameData(toml["Game"]["Path"].AsString!))
+                    if (!GameInfo.SetGameInfo(toml["Game"]["Path"].AsString!))
                     {
-                        if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
+                        if (!(ST.ShowMessageBox(I18n.GameNotFound_SelectAgain, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
                         {
                             ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxIcon.Error);
                             return false;
                         }
-                        toml["Game"]["Path"] = ST.GameDirectory;
+                        toml["Game"]["Path"] = GameInfo.Directory;
                     }
                     // 拓展调试目录
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
@@ -164,14 +164,14 @@ namespace StarsectorTools.Windows
                 }
                 else
                 {
-                    if (!(ST.ShowMessageBox(I18n.FirstStart, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && ST.GetGameDirectory()))
+                    if (!(ST.ShowMessageBox(I18n.FirstStart, MessageBoxButton.YesNo, MessageBoxIcon.Question) == MessageBoxResult.Yes && GameInfo.GetGameDirectory()))
                     {
                         ST.ShowMessageBox(I18n.GameNotFound_SoftwareExit, MessageBoxIcon.Error);
                         return false;
                     }
                     CreateConfigFile();
                     TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
-                    toml["Game"]["Path"] = ST.GameDirectory;
+                    toml["Game"]["Path"] = GameInfo.Directory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.STConfigTomlFile);
                 }

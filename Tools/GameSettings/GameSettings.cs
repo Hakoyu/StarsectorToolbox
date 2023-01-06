@@ -22,11 +22,11 @@ namespace StarsectorTools.Tools.GameSettings
         private string hideGameKey = "";
         private bool showKey = false;
         private int systemTotalMemory = 0;
-        private string gameSettingsFile = $"{ST.GameDirectory}\\starsector-core\\data\\config\\settings.json";
+        private string gameSettingsFile = $"{GameInfo.Directory}\\starsector-core\\data\\config\\settings.json";
 
         private void GetVmparamsData()
         {
-            vmparamsData.data = File.ReadAllText($"{ST.GameDirectory}\\vmparams");
+            vmparamsData.data = File.ReadAllText($"{GameInfo.Directory}\\vmparams");
             vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
             TextBox_Memory.Text = TextBox_Memory.Text = vmparamsData.xmsx;
         }
@@ -50,7 +50,7 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void GetMissionsLoadouts()
         {
-            string dirParh = $"{ST.GameSaveDirectory}\\missions";
+            string dirParh = $"{GameInfo.SaveDirectory}\\missions";
             if (!ST.DirectoryExists(dirParh))
                 return;
             DirectoryInfo dirs = new(dirParh);
