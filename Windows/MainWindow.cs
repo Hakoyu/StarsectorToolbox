@@ -273,7 +273,7 @@ namespace StarsectorTools.Windows
             // 获取page中的Close方法并执行
             // 用于关闭page中创建的线程
             if (page.GetType().GetMethod("Close") is MethodInfo info)
-                _ = info.Invoke(page, null)!;
+                _ = info.Invoke(page, null);
         }
 
         private ListBoxItem CreateListBoxItemForPage(string icon, string name, string id, string toolTip)

@@ -75,9 +75,9 @@ public Page1()
 
 ## 基础 API 一览
 
-### [StarsectorTools.Libs.Utils](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils.cs)
+### [StarsectorTools.Libs.Utils.GameInfo](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs.)
 
-
+###
 ```csharp
 /// <summary>模组信息</summary>
 class ModInfo
