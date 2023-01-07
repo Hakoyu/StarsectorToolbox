@@ -98,11 +98,12 @@ namespace StarsectorTools.Libs.Utils
 
                 case "dependencies":
                     Dependencies ??= new();
-                    ReadOnlyDependencies = new(Dependencies);
                     foreach (var mod in kv.Value!.AsArray())
                         Dependencies.Add(new(mod!.AsObject()));
                     if (Dependencies.Count == 0)
                         Dependencies = null;
+                    else
+                        ReadOnlyDependencies = new(Dependencies);
                     break;
             }
         }
