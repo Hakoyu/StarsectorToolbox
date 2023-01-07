@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json.Nodes;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
@@ -33,13 +34,15 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>模组信息</summary>
         public string ModPlugin { get; private set; } = null!;
 
-        /// <summary>前置</summary>
-        public List<ModInfo>? Dependencies { get; private set; }
+        /// <summary>前置模组</summary>
+        internal List<ModInfo>? Dependencies { get; private set; }
+        /// <summary>前置模组</summary>
+        public ReadOnlyCollection<ModInfo>? ReadOnlyDependencies { get; private set; }
 
         /// <summary>本地路径</summary>
-        public string Path = null!;
+        public string Path { get; internal set; } = null!;
 
-        public ModInfo(JsonObject jsonObject)
+        internal ModInfo(JsonObject jsonObject)
         {
             try
             {
@@ -95,6 +98,7 @@ namespace StarsectorTools.Libs.Utils
 
                 case "dependencies":
                     Dependencies ??= new();
+                    ReadOnlyDependencies = new(Dependencies);
                     foreach (var mod in kv.Value!.AsArray())
                         Dependencies.Add(new(mod!.AsObject()));
                     if (Dependencies.Count == 0)

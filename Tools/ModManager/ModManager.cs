@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -57,9 +58,25 @@ namespace StarsectorTools.Tools.ModManager
         /// <summary>已收藏模组</summary>
         public const string Collected = nameof(Collected);
     }
-
+    /// <summary>所有模组信息</summary>
     public static class ModsInfo
     {
+        /// <summary>
+        /// <para>全部模组信息</para>
+        /// <para><see langword="Key"/>: 模组ID</para>
+        /// <para><see langword="Value"/>: 模组信息</para>
+        /// </summary>
+        public static ReadOnlyDictionary<string, ModInfo> AllModsInfo { get; internal set; } = null!;
+        /// <summary>已启用的模组ID</summary>
+        public static ExternalReadOnlySet<string> AllEnabledModsId { get; internal set; } = null!;
+        /// <summary>已收藏的模组ID</summary>
+        public static ExternalReadOnlySet<string> AllCollectedModsId { get; internal set; } = null!;
+        /// <summary>
+        /// <para>全部用户分组</para>
+        /// <para><see langword="Key"/>: 分组名称</para>
+        /// <para><see langword="Value"/>: 包含的模组</para>
+        /// </summary>
+        public static ReadOnlyDictionary<string, ExternalReadOnlySet<string>> AllUserGroups { get; internal set; } = null!;
     }
 
     public partial class ModManager
@@ -104,14 +121,8 @@ namespace StarsectorTools.Tools.ModManager
         /// <summary>已启用的模组ID</summary>
         private HashSet<string> allEnabledModsId = new();
 
-        /// <summary>已启用的模组ID</summary>
-        public static HashSet<string> AllEnabledModsId { get; private set; } = null!;
-
         /// <summary>已收藏的模组ID</summary>
         private HashSet<string> allCollectedModsId = new();
-
-        /// <summary>已收藏的模组ID</summary>
-        public static HashSet<string> AllCollectedModsId { get; private set; } = null!;
 
         /// <summary>
         /// <para>全部模组信息</para>
@@ -119,13 +130,6 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="Value"/>: 模组信息</para>
         /// </summary>
         private Dictionary<string, ModInfo> allModsInfo = new();
-
-        /// <summary>
-        /// <para>全部模组信息</para>
-        /// <para><see langword="Key"/>: 模组ID</para>
-        /// <para><see langword="Value"/>: 模组信息</para>
-        /// </summary>
-        public static Dictionary<string, ModInfo> AllModsInfo { get; private set; } = null!;
 
         /// <summary>
         /// <para>全部分组列表项</para>
@@ -153,14 +157,7 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
-        private Dictionary<string, HashSet<string>> allUserGroups = new();
-
-        /// <summary>
-        /// <para>全部用户分组</para>
-        /// <para><see langword="Key"/>: 分组名称</para>
-        /// <para><see langword="Value"/>: 包含的模组</para>
-        /// </summary>
-        public static Dictionary<string, HashSet<string>> AllUserGroups { get; private set; } = null!;
+        private Dictionary<string, ExternalReadOnlySet<string>> allUserGroups = new();
 
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
@@ -254,12 +251,13 @@ namespace StarsectorTools.Tools.ModManager
         private void InitializeData()
         {
             remindSaveThread = new(RemindSave);
-            AllEnabledModsId = allEnabledModsId = new();
-            AllCollectedModsId = allCollectedModsId = new();
-            AllModsInfo = allModsInfo = new();
+            ModsInfo.AllModsInfo = new(allModsInfo = new());
+            ModsInfo.AllEnabledModsId = new(allEnabledModsId = new());
+            ModsInfo.AllCollectedModsId = new(allCollectedModsId = new());
+            ModsInfo.AllUserGroups = new (allUserGroups = new());
+            //ModsInfo.AllUserGroups = (allUserGroups = new())
             allListBoxItems = new();
             allModsShowInfo = new();
-            AllUserGroups = allUserGroups = new();
             allModsTypeGroup = new();
             allModShowInfoGroups = new()
             {

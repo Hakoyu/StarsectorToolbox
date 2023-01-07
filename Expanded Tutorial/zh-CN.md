@@ -286,24 +286,24 @@ class Utils
 ### [StarsectorTools.Tools.ModManager](https://github.com/Hakoyu/StarsectorTools/blob/master/Tools/ModManager/ModManager.cs)
 
 ```csharp
-class ModManager
+class ModsInfo
 {
     /// <summary>
     /// <para>全部模组信息</para>
     /// <para><see langword="Key"/>: 模组ID</para>
     /// <para><see langword="Value"/>: 模组信息</para>
     /// </summary>
-    Dictionary<string, ModInfo> AllModsInfo
+    ReadOnlyDictionary<string, ModInfo> AllModsInfo
     /// <summary>已启用的模组ID</summary>
-    HashSet<string> AllEnabledModsId
+    ReadOnlySet<string> AllEnabledModsId
     /// <summary>已收藏的模组ID</summary>
-    HashSet<string> AllCollectedModsId
+    ReadOnlySet<string> AllCollectedModsId
     /// <summary>
     /// <para>全部用户分组</para>
     /// <para><see langword="Key"/>: 分组名称</para>
     /// <para><see langword="Value"/>: 包含的模组</para>
     /// </summary>
-    Dictionary<string, HashSet<string>> AllUserGroups
+    ReadOnlyDictionary<string, ReadOnlySet<string>> AllUserGroups
 }
 ```
 
