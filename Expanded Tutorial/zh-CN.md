@@ -295,15 +295,15 @@ class ModsInfo
     /// </summary>
     ReadOnlyDictionary<string, ModInfo> AllModsInfo
     /// <summary>已启用的模组ID</summary>
-    ReadOnlySet<string> AllEnabledModsId
+    ExternalReadOnlySet<string> AllEnabledModsId
     /// <summary>已收藏的模组ID</summary>
-    ReadOnlySet<string> AllCollectedModsId
+    ExternalReadOnlySet<string> AllCollectedModsId
     /// <summary>
     /// <para>全部用户分组</para>
     /// <para><see langword="Key"/>: 分组名称</para>
     /// <para><see langword="Value"/>: 包含的模组</para>
     /// </summary>
-    ReadOnlyDictionary<string, ReadOnlySet<string>> AllUserGroups
+    ReadOnlyDictionary<string, ExternalReadOnlySet<string>> AllUserGroups
 }
 ```
 
@@ -350,6 +350,7 @@ catch (Exception ex)
 
 控件风格是为了将拓展页面的风格与软件本体风格统一
 下面将演示拓展页面中如何引用及使用本体风格
+_注:xaml 设计器中显示的内容可能与实际显示有误差_
 
 **在页面资源(`Page.Resources`)中添加引用本体风格**
 
@@ -364,7 +365,13 @@ catch (Exception ex)
   </Page.Resources>
 ```
 
+**引用本体风格**
 
+```xaml
+<Button Content="Button" Style="{StaticResource Button_Style}" />
+```
+
+**完整示例**
 
 ```xaml
 <Page
@@ -400,8 +407,7 @@ catch (Exception ex)
 请为`Page`添加`public void Close()`方法
 并在里面销毁创建的所有线程
 当程序被关闭时会尝试调用此方法,以确保程序的正常关闭
-若不销毁线程,则会导致程序无法正常关闭
-此时请使用任务管理器结束任务
+若不销毁线程,则会导致程序无法正常关闭,此时请使用任务管理器结束任务
 _除了销毁线程之外,同样可以在此方法中进行资源回收,设置保存等关闭前操作_
 
 **示例:**
