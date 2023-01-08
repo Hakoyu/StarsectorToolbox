@@ -107,7 +107,7 @@ namespace StarsectorTools.Tools.ModManager
         private Dictionary<string, ObservableCollection<ModShowInfo>> allModShowInfoGroups = new();
 
         /// <summary>模组显示信息</summary>
-        public partial class ModShowInfo : ObservableObject
+        private partial class ModShowInfo : ObservableObject
         {
             /// <summary>ID</summary>
             public string Id { get; set; } = null!;
@@ -146,7 +146,7 @@ namespace StarsectorTools.Tools.ModManager
             private string? dependencies;
 
             /// <summary>前置模组列表</summary>
-            public List<string>? DependenciesList;
+            public HashSet<string>? DependenciesSet;
 
             /// <summary>展开启用前置的按钮</summary>
             [ObservableProperty]
@@ -510,7 +510,7 @@ namespace StarsectorTools.Tools.ModManager
                 GameVersion = info.GameVersion,
                 IsSameToGameVersion = info.GameVersion == GameInfo.Version,
                 MissDependencies = false,
-                DependenciesList = info.Dependencies is not null ? info.Dependencies.Select(i => i.Id).ToList() : null!,
+                DependenciesSet = info.Dependencies is not null ? new(info.Dependencies.Select(i => i.Id)) : null!,
                 ImageSource = GetIcon($"{info.Path}\\icon.ico"),
             };
             BitmapImage? GetIcon(string filePath)
@@ -591,7 +591,7 @@ namespace StarsectorTools.Tools.ModManager
                 // 删除模组至回收站
                 menuItem = new();
                 menuItem.Header = I18n.DeleteMod;
-                menuItem.Click += (s, e) =>
+                menuItem.Click +=  (s, e) => 
                 {
                     string path = allModsInfo[showInfo.Id].Path;
                     if (Utils.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, STMessageBoxIcon.Warning) == MessageBoxResult.Yes)
@@ -754,9 +754,9 @@ namespace StarsectorTools.Tools.ModManager
         {
             foreach (var showInfo in allModShowInfoGroups[ModTypeGroup.Enabled])
             {
-                if (showInfo.DependenciesList != null)
+                if (showInfo.DependenciesSet != null)
                 {
-                    showInfo.Dependencies = string.Join(" , ", showInfo.DependenciesList.Where(s => !allEnabledModsId.Contains(s)));
+                    showInfo.Dependencies = string.Join(" , ", showInfo.DependenciesSet.Where(s => !allEnabledModsId.Contains(s)));
                     if (showInfo.Dependencies.Length > 0)
                     {
                         STLog.WriteLine($"{showInfo.Id} {I18n.NotEnableDependencies} {showInfo.Dependencies}");
@@ -921,10 +921,10 @@ namespace StarsectorTools.Tools.ModManager
             Label_GameVersion.Content = showInfo.GameVersion;
             Button_ModPath.Content = info.Path;
             TextBlock_ModAuthor.Text = showInfo.Author;
-            if (info.Dependencies is List<ModInfo> list)
+            if (info.Dependencies is not null)
             {
                 GroupBox_ModDependencies.Visibility = Visibility.Visible;
-                TextBlock_ModDependencies.Text = string.Join("\n", list.Select(i => $"{I18n.Name}: {i.Name} ID: {i.Id} " + (i.Version is not null ? $"{I18n.Version} {i.Version}" : ""))!);
+                TextBlock_ModDependencies.Text = string.Join("\n", info.Dependencies.Select(i => $"{I18n.Name}: {i.Name} ID: {i.Id} " + (i.Version is not null ? $"{I18n.Version} {i.Version}" : ""))!);
             }
             else
                 GroupBox_ModDependencies.Visibility = Visibility.Collapsed;

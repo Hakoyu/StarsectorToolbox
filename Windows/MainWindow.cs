@@ -207,17 +207,17 @@ namespace StarsectorTools.Windows
             CreateConfigFile();
         }
 
-        public void SetBlurEffect()
+        internal void SetBlurEffect()
         {
             Dispatcher.Invoke(() => Effect = new System.Windows.Media.Effects.BlurEffect());
         }
 
-        public void RemoveBlurEffect()
+        internal void RemoveBlurEffect()
         {
             Dispatcher.Invoke(() => Effect = null);
         }
 
-        public void ChangeLanguage()
+        internal void ChangeLanguage()
         {
             STLog.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
             Label_Title.Content = I18n.StarsectorTools;
@@ -433,7 +433,7 @@ namespace StarsectorTools.Windows
             STLog.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
         }
 
-        public void RefreshDebugExpansion()
+        internal void RefreshDebugExpansion()
         {
             if (ListBox_MainMenu.Items.Count > 3)
             {

@@ -74,7 +74,7 @@ namespace StarsectorTools.Libs.Utils
             return frame?.GetMethod()?.DeclaringType?.Name;
         }
 
-        public static void SetLogLevel(STLogLevel logLevel)
+        internal static void SetLogLevel(STLogLevel logLevel)
         {
             LogLevel = logLevel;
         }
@@ -162,10 +162,9 @@ namespace StarsectorTools.Libs.Utils
         }
 
         /// <summary>关闭</summary>
-        public static void Close()
+        internal static void Close()
         {
-            if (GetClassName() == nameof(MainWindow))
-                sw?.Close();
+            sw?.Close();
         }
     }
 }

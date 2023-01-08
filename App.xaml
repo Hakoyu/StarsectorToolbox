@@ -2,8 +2,8 @@
   x:Class="StarsectorTools.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   StartupUri="Windows/MainWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>
@@ -44,7 +44,8 @@
                     HorizontalAlignment="Left"
                     CurrentState="{Binding MessageBoxIcon}"
                     FontFamily="/Panuon.WPF.UI;component/Resources/Fonts/#PanuonIcon"
-                    FontSize="64">
+                    FontSize="64"
+                    FontWeight="Bold">
                     <pu:StateItem State="Info">
                       <TextBlock Foreground="#80BEE8" Text="&#xe92f;" />
                     </pu:StateItem>

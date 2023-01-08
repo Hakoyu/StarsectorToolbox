@@ -8,7 +8,7 @@ namespace StarsectorTools.Tools.ModManager
     /// </summary>
     public partial class AddUserGroup : Window
     {
-        public AddUserGroup()
+        internal AddUserGroup()
         {
             Utils.SetMainWindowBlurEffect();
             InitializeComponent();

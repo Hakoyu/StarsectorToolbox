@@ -11,7 +11,7 @@ namespace StarsectorTools.Pages
     /// </summary>
     public partial class Info : Page
     {
-        public Info()
+        internal Info()
         {
             InitializeComponent();
         }

@@ -18,7 +18,7 @@ namespace StarsectorTools.Tools.GameSettings
     /// </summary>
     public partial class GameSettings : Page
     {
-        public GameSettings()
+        internal GameSettings()
         {
             InitializeComponent();
             Label_GamePath.Content = GameInfo.GameDirectory;

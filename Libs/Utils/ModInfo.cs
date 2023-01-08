@@ -35,14 +35,14 @@ namespace StarsectorTools.Libs.Utils
         public string ModPlugin { get; private set; } = null!;
 
         /// <summary>前置模组</summary>
-        internal List<ModInfo>? Dependencies { get; private set; }
+        internal HashSet<ModInfo>? Dependencies { get; private set; }
         /// <summary>前置模组</summary>
-        public ReadOnlyCollection<ModInfo>? ReadOnlyDependencies { get; private set; }
+        public ExternalReadOnlySet<ModInfo>? ReadOnlyDependencies { get; private set; }
 
         /// <summary>本地路径</summary>
         public string Path { get; internal set; } = null!;
 
-        internal ModInfo(JsonObject jsonObject)
+        public ModInfo(JsonObject jsonObject)
         {
             try
             {

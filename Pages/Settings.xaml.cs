@@ -15,7 +15,7 @@ namespace StarsectorTools.Pages
     /// </summary>
     public partial class Settings : Page
     {
-        public Settings()
+        internal Settings()
         {
             InitializeComponent();
             ShowCurrentLanguage();
@@ -119,7 +119,7 @@ namespace StarsectorTools.Pages
             }
         }
 
-        public void SetExpansionDebugPath(string path)
+        internal void SetExpansionDebugPath(string path)
         {
             TextBox_ExpansionDebugPath.Text = path;
         }

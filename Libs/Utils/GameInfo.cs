@@ -6,7 +6,7 @@ using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 namespace StarsectorTools.Libs.Utils
 {
     /// <summary>游戏信息</summary>
-    public class GameInfo
+    public static class GameInfo
     {
         /// <summary>游戏目录</summary>
         public static string GameDirectory { get; private set; } = null!;
@@ -33,7 +33,7 @@ namespace StarsectorTools.Libs.Utils
         /// 设置游戏信息
         /// </summary>
         /// <param name="directoryName">游戏目录</param>
-        public static bool SetGameData(string directoryName)
+        internal static bool SetGameData(string directoryName)
         {
             if (string.IsNullOrEmpty(directoryName))
             {
@@ -72,7 +72,7 @@ namespace StarsectorTools.Libs.Utils
         /// 获取游戏目录
         /// </summary>
         /// <returns>获取成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool GetGameDirectory()
+        internal static bool GetGameDirectory()
         {
             //新建文件选择
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()

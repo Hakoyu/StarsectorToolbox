@@ -8,7 +8,7 @@ namespace StarsectorTools.Tools.ModManager
     /// </summary>
     public partial class ModArchiveing : Window
     {
-        public ModArchiveing()
+        internal ModArchiveing()
         {
             Utils.SetMainWindowBlurEffect();
             InitializeComponent();
