@@ -111,8 +111,8 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializationError}: {nameof(Settings)}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Settings)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageInitializeError}: {nameof(Settings)}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{nameof(Settings)}", STMessageBoxIcon.Error);
             }
         }
 
@@ -124,8 +124,8 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializationError}: {nameof(Info)}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{nameof(Info)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageInitializeError}: {nameof(Info)}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{nameof(Info)}", STMessageBoxIcon.Error);
             }
         }
 
@@ -256,8 +256,8 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializationError}: {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.FullName}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageInitializeError}: {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{type.FullName}", STMessageBoxIcon.Error);
                 return null;
             }
         }
