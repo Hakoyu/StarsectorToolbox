@@ -284,9 +284,9 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         /// <summary>
         ///   查找类似 页面初始化错误 的本地化字符串。
         /// </summary>
-        public static string PageInitializationError {
+        public static string PageInitializeError {
             get {
-                return ResourceManager.GetString("PageInitializationError", resourceCulture);
+                return ResourceManager.GetString("PageInitializeError", resourceCulture);
             }
         }
         

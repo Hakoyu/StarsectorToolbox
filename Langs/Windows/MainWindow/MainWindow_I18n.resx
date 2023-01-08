@@ -177,7 +177,7 @@
   <data name="PageNotPresent" xml:space="preserve">
     <value>页面不存在</value>
   </data>
-  <data name="PageInitializationError" xml:space="preserve">
+  <data name="PageInitializeError" xml:space="preserve">
     <value>页面初始化错误</value>
   </data>
   <data name="ExpansionIdError" xml:space="preserve">

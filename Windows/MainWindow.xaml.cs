@@ -111,37 +111,24 @@ namespace StarsectorTools.Windows
                 var id = item.Tag.ToString()!;
                 if (listBox.Name == ListBox_MainMenu.Name)
                 {
-                    if (!pages.ContainsKey(id))
-                    {
-                        STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
-                        Utils.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", STMessageBoxIcon.Warning);
-                        ListBox_MainMenu.SelectedIndex = menuSelectedIndex;
-                        return;
-                    }
                     Frame_MainFrame.Content = pages[id];
-                    menuSelectedIndex = ListBox_MainMenu.SelectedIndex;
+                    pageSelectedIndex = ListBox_MainMenu.SelectedIndex;
                     ListBox_ExpansionMenu.SelectedIndex = -1;
                 }
                 else if (listBox.Name == ListBox_ExpansionMenu.Name)
                 {
-                    if (!expansionPages.ContainsKey(id))
-                    {
-                        STLog.WriteLine($"{I18n.PageNotPresent}: {item.Content}", STLogLevel.WARN);
-                        Utils.ShowMessageBox($"{I18n.PageNotPresent}:\n{item.Content}", STMessageBoxIcon.Warning);
-                        ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
-                        return;
-                    }
+                    var info = allExpansionsInfo[item.Tag.ToString()!];
                     try
                     {
                         Frame_MainFrame.Content = expansionPages[id].Value;
-                        exceptionMenuSelectedIndex = ListBox_ExpansionMenu.SelectedIndex;
+                        exceptionPageSelectedIndex = ListBox_ExpansionMenu.SelectedIndex;
                         ListBox_MainMenu.SelectedIndex = -1;
                     }
                     catch (Exception ex)
                     {
-                        STLog.WriteLine($"{I18n.PageInitializationError} {item.Content}", ex);
-                        Utils.ShowMessageBox($"{I18n.PageInitializationError}\n{item.Content}", STMessageBoxIcon.Error);
-                        ListBox_ExpansionMenu.SelectedIndex = exceptionMenuSelectedIndex;
+                        STLog.WriteLine($"{I18n.PageInitializeError} {info.ExpansionType.FullName}", ex);
+                        Utils.ShowMessageBox($"{I18n.PageInitializeError}\n{info.ExpansionType.FullName}", STMessageBoxIcon.Error);
+                        ListBox_ExpansionMenu.SelectedIndex = exceptionPageSelectedIndex;
                     }
                 }
             }

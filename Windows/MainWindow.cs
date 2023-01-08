@@ -36,8 +36,8 @@ namespace StarsectorTools.Windows
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
         private Settings settingsPage = null!;
         private Info infoPage = null!;
-        private int menuSelectedIndex = -1;
-        private int exceptionMenuSelectedIndex = -1;
+        private int pageSelectedIndex = -1;
+        private int exceptionPageSelectedIndex = -1;
         private string expansionDebugPath = string.Empty;
 
         /// <summary>拓展信息</summary>
@@ -236,8 +236,8 @@ namespace StarsectorTools.Windows
             }
             else if (CheckExpansionInfo(expansionDebugPath, true) is ExpansionInfo info)
             {
-                AddExpansionDebugPage(info);
-                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+                if (AddExpansionDebugPage(info))
+                    ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
             }
         }
 
@@ -256,8 +256,8 @@ namespace StarsectorTools.Windows
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializationError}: {type.Name}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.Name}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageInitializationError}: {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializationError}:\n{type.FullName}", STMessageBoxIcon.Error);
                 return null;
             }
         }
@@ -448,13 +448,15 @@ namespace StarsectorTools.Windows
             }
         }
 
-        private void AddExpansionDebugPage(ExpansionInfo expansionInfo)
+        private bool AddExpansionDebugPage(ExpansionInfo expansionInfo)
         {
             string icon = expansionInfo.Icon;
             string name = expansionInfo.Name;
             string id = expansionInfo.Id;
             string toolTip = expansionInfo.Description;
             var item = CreateListBoxItemForPage(icon, name, id, toolTip);
+            if (CreatePage(expansionInfo.ExpansionType) is not Page page)
+                return false;
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重载当前菜单
@@ -468,9 +470,9 @@ namespace StarsectorTools.Windows
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
             ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
-            Page page = (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!;
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
+            return true;
         }
     }
 }
