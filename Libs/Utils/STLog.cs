@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -38,6 +39,14 @@ namespace StarsectorTools.Libs.Utils
 
         /// <summary>读写锁</summary>
         internal static ReaderWriterLockSlim rwLockS = new();
+
+        private static List<string> shieldOutput = new()
+        {
+            "at System.",
+            "at MS.",
+            "at Microsoft.",
+            "End of inner exception stack trace",
+        };
 
         /// <summary>
         /// 字符串转换成日志等级
@@ -157,7 +166,7 @@ namespace StarsectorTools.Libs.Utils
         /// <returns></returns>
         public static string ExceptionParse(Exception ex)
         {
-            var list = ex.ToString().Split("\r\n").Where(s => !s.Contains("at System.") && !s.Contains("at MS.") && !s.Contains("End of inner exception stack trace"));
+            var list = ex.ToString().Split("\r\n").Where(s => !shieldOutput.Any(s1 => s.Contains(s1)));
             return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?={nameof(StarsectorTools)})", "");
         }
 
