@@ -186,7 +186,7 @@ namespace StarsectorTools.Windows
         /// <summary>
         /// 创建配置文件
         /// </summary>
-        private void CreateConfigFile(bool clearGamePath = false)
+        private void CreateConfigFile()
         {
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
             File.WriteAllText(ST.STConfigTomlFile, sr.ReadToEnd());

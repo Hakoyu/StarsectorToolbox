@@ -1,12 +1,12 @@
 ﻿<Window
   x:Class="StarsectorTools.Windows.MainWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Windows.MainWindow"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   Title="StarsectorTools"
   Width="1000"
   Height="500"
@@ -128,7 +128,6 @@
           Style="{StaticResource ListBox_Style}">
           <ListBoxItem x:Name="ListBoxItem_ExpansionPages" Padding="0">
             <Expander
-              Padding="0"
               Header="{x:Static I18n:MainWindow_I18n.Expansion}"
               IsExpanded="True"
               Style="{StaticResource Expander_Style}">

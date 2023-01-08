@@ -162,8 +162,8 @@
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
-    <Setter Property="Padding" Value="5,0,5,0" />
-    <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="5,3,5,3" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="10,3,5,3" />
     <Setter Property="pu:ExpanderHelper.HeaderHeight" Value="30" />
     <Setter Property="pu:ExpanderHelper.HeaderFontWeight" Value="Light" />
     <Setter Property="BorderThickness" Value="0" />
