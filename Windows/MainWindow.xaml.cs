@@ -14,7 +14,7 @@ namespace StarsectorTools.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
             //限制最大化区域,不然会盖住任务栏

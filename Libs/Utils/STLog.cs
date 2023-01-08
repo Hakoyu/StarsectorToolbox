@@ -37,7 +37,7 @@ namespace StarsectorTools.Libs.Utils
         private static StreamWriter sw = new(LogFile);
 
         /// <summary>读写锁</summary>
-        private static ReaderWriterLockSlim rwLockS = new();
+        internal static ReaderWriterLockSlim rwLockS = new();
 
         /// <summary>
         /// 字符串转换成日志等级
@@ -100,10 +100,10 @@ namespace StarsectorTools.Libs.Utils
             rwLockS.EnterWriteLock();
             try
             {
-                if (logLevel >= STLog.LogLevel)
+                if (logLevel >= LogLevel)
                 {
                     string? name;
-                    if (STLog.LogLevel == STLogLevel.DEBUG)
+                    if (LogLevel == STLogLevel.DEBUG)
                         name = GetClassNameAndMethodName();
                     else
                         name = GetClassName();

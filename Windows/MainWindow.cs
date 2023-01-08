@@ -97,9 +97,9 @@ namespace StarsectorTools.Windows
 
         private void InitializeDirectories()
         {
-            if (!Utils.DirectoryExists(ST.CoreDirectory))
+            if (!Utils.DirectoryExists(ST.CoreDirectory, false))
                 Directory.CreateDirectory(ST.CoreDirectory);
-            if (!Utils.DirectoryExists(expansionDirectories))
+            if (!Utils.DirectoryExists(expansionDirectories, false))
                 Directory.CreateDirectory(expansionDirectories);
         }
 

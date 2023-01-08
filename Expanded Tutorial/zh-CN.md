@@ -133,7 +133,7 @@ class ModInfo
     /// <summary>模组信息</summary>
     string ModPlugin
     /// <summary>前置</summary>
-    List<ModInfo>? Dependencies
+    HashSet<ModInfo>? Dependencies
     /// <summary>本地路径</summary>
     string Path
 }
@@ -283,7 +283,7 @@ class Utils
 }
 ```
 
-### [StarsectorTools.Tools.ModManager](https://github.com/Hakoyu/StarsectorTools/blob/master/Tools/ModManager/ModManager.cs)
+### [StarsectorTools.Libs.Utils.ModInfo](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils/ModInfo.cs)
 
 ```csharp
 class ModsInfo
@@ -407,7 +407,7 @@ _注:xaml 设计器中显示的内容可能与实际显示有误差_
 请为`Page`添加`public void Close()`方法
 并在里面销毁创建的所有线程
 当程序被关闭时会尝试调用此方法,以确保程序的正常关闭
-若不销毁线程,则会导致程序无法正常关闭,此时请使用任务管理器结束任务
+若未销毁线程,则会导致程序无法正常关闭,此时请使用任务管理器结束任务
 _除了销毁线程之外,同样可以在此方法中进行资源回收,设置保存等关闭前操作_
 
 **示例:**

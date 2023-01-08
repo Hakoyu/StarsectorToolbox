@@ -36,12 +36,15 @@ namespace StarsectorTools.Libs.Utils
 
         /// <summary>前置模组</summary>
         internal HashSet<ModInfo>? Dependencies { get; private set; }
-        /// <summary>前置模组</summary>
+        /// <summary>只读前置模组</summary>
         public ExternalReadOnlySet<ModInfo>? ReadOnlyDependencies { get; private set; }
 
         /// <summary>本地路径</summary>
         public string Path { get; internal set; } = null!;
-
+        /// <summary>
+        /// 构造,解析mod_info.json
+        /// </summary>
+        /// <param name="jsonObject">json对象</param>
         public ModInfo(JsonObject jsonObject)
         {
             try
