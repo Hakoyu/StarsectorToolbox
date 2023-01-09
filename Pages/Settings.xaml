@@ -39,6 +39,7 @@
             <Button
               x:Name="Button_OpenLogFile"
               Margin="0,0,5,0"
+              Padding="5,0,5,0"
               HorizontalAlignment="Left"
               Click="Button_OpenLogFile_Click"
               Content="{x:Static I18n:Settings_I18n.OpenLogFile}"
