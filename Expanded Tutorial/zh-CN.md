@@ -14,8 +14,10 @@
 
 1. 新建项目: **WPF 类库**
    注意是选择 **C#** 项目而不是 **Visual Basic** 项目
+   ![](https://s2.loli.net/2023/01/09/rKRmBXGDM1UPp8T.png)
 2. 创建完成后 为项目添加一个页面(`Page`)
    原来的**Class1.cs**可以自行选择删除或保留
+   ![](https://s2.loli.net/2023/01/09/y4YUb2EQX9r1RGl.png)
 3. 为项目添加引用 **StarsectorTools.dll**
    你可以在 **[Releases](https://github.com/Hakoyu/StarsectorTools/releases)** 中下载到
 

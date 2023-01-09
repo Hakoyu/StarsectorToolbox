@@ -217,8 +217,8 @@ namespace StarsectorTools.Windows
         {
             STLog.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
             Label_Title.Content = I18n.StarsectorTools;
-            Button_Settings.Content = I18n.Settings;
-            Button_Info.Content = I18n.Info;
+            Button_SettingsPage.Content = I18n.Settings;
+            Button_InfoPage.Content = I18n.Info;
             RefreshPages();
             RefreshExpansionPages();
             STLog.WriteLine(I18n.PageListRefreshComplete);
@@ -469,6 +469,11 @@ namespace StarsectorTools.Windows
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
             return true;
+        }
+        private void ButtonPageCancelPress()
+        {
+            Button_SettingsPage.Tag = false;
+            Button_InfoPage.Tag = false;
         }
     }
 }

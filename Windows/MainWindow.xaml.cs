@@ -119,6 +119,7 @@ namespace StarsectorTools.Windows
                     Frame_MainFrame.Content = pages[id];
                     pageSelectedIndex = ListBox_MainMenu.SelectedIndex;
                     ListBox_ExpansionMenu.SelectedIndex = -1;
+                    ButtonPageCancelPress();
                 }
                 else if (listBox.Name == ListBox_ExpansionMenu.Name)
                 {
@@ -128,6 +129,7 @@ namespace StarsectorTools.Windows
                         Frame_MainFrame.Content = expansionPages[id].Value;
                         exceptionPageSelectedIndex = ListBox_ExpansionMenu.SelectedIndex;
                         ListBox_MainMenu.SelectedIndex = -1;
+                        ButtonPageCancelPress();
                     }
                     catch (Exception ex)
                     {
@@ -144,6 +146,8 @@ namespace StarsectorTools.Windows
             Frame_MainFrame.Content = settingsPage;
             ListBox_MainMenu.SelectedIndex = -1;
             ListBox_ExpansionMenu.SelectedIndex = -1;
+            ButtonPageCancelPress();
+            Button_SettingsPage.Tag = true;
         }
 
         private void Grid_MainMenu_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -174,6 +178,8 @@ namespace StarsectorTools.Windows
             Frame_MainFrame.Content = infoPage;
             ListBox_MainMenu.SelectedIndex = -1;
             ListBox_ExpansionMenu.SelectedIndex = -1;
+            ButtonPageCancelPress();
+            Button_InfoPage.Tag = true;
         }
 
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
