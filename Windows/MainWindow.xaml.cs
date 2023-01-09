@@ -17,24 +17,29 @@ namespace StarsectorTools.Windows
         public MainWindow()
         {
             InitializeComponent();
-            //限制最大化区域,不然会盖住任务栏
+            // 限制最大化区域,不然会盖住任务栏
             MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
-            //亚克力背景
+            // 亚克力背景
             //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
-            InitializeDirectories();
-            SetSettingsPage();
-            SetInfoPage();
+            // 初始化设置
             if (!SetConfig())
             {
                 Close();
                 return;
             }
+            // 初始化页面
+            InitializeDirectories();
+            SetSettingsPage();
+            SetInfoPage();
             ChangeLanguage();
             ShowPage();
-            Grid_TitleBar.Background = SystemParameters.WindowGlassBrush;
+
+            // 获取系统主题色
+            Application.Current.Resources["WindowGlassBrush"] = SystemParameters.WindowGlassBrush;
+            // 根据主题色的明亮程度来设置字体颜色
             var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
             if (Utils.IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];

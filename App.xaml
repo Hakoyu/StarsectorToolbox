@@ -27,8 +27,12 @@
                 <Setter Property="MinHeight" Value="200" />
                 <Setter Property="Background" Value="{DynamicResource ColorBG}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+                <Setter Property="pu:WindowX.DisableDragMove" Value="True" />
                 <Setter Property="pu:WindowXModalDialog.ButtonPanelHorizontalAlignment" Value="Center" />
-                <Setter Property="pu:WindowXCaption.Height" Value="0" />
+                <Setter Property="pu:WindowXCaption.Height" Value="30" />
+                <Setter Property="pu:WindowXCaption.Buttons" Value="None" />
+                <Setter Property="pu:WindowXCaption.ShadowColor" Value="{DynamicResource ColorAqua}" />
+                <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource WindowGlassBrush}" />
               </Style>
             </pu:MessageBoxXSettings.WindowXStyle>
             <pu:MessageBoxXSettings.ButtonStyle>

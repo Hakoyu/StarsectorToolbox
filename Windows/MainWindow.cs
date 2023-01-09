@@ -38,7 +38,6 @@ namespace StarsectorTools.Windows
         private Info infoPage = null!;
         private int pageSelectedIndex = -1;
         private int exceptionPageSelectedIndex = -1;
-        private string expansionDebugPath = string.Empty;
 
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
@@ -154,10 +153,7 @@ namespace StarsectorTools.Windows
                     // 拓展调试目录
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
                     if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath, true) is ExpansionInfo)
-                    {
-                        expansionDebugPath = filePath;
-                        settingsPage.SetExpansionDebugPath(filePath);
-                    }
+                        ST.ExpansionDebugPath = filePath;
                     else
                         toml["Expansion"]["DebugPath"] = "";
                     toml.SaveTo(ST.STConfigTomlFile);
@@ -230,11 +226,11 @@ namespace StarsectorTools.Windows
 
         private void ShowPage()
         {
-            if (string.IsNullOrEmpty(expansionDebugPath))
+            if (string.IsNullOrEmpty(ST.ExpansionDebugPath))
             {
                 ListBox_MainMenu.SelectedIndex = 0;
             }
-            else if (CheckExpansionInfo(expansionDebugPath, true) is ExpansionInfo info)
+            else if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
             {
                 if (AddExpansionDebugPage(info))
                     ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
@@ -440,8 +436,8 @@ namespace StarsectorTools.Windows
                 pages.Remove(((ListBoxItem)ListBox_MainMenu.Items[^2]).Tag.ToString()!);
                 ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.Items.Count - 2);
             }
-            expansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
-            if (CheckExpansionInfo(expansionDebugPath, true) is ExpansionInfo info)
+            ST.ExpansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
+            if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
             {
                 AddExpansionDebugPage(info);
                 ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;

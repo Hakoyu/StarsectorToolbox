@@ -39,10 +39,12 @@
             Style="{StaticResource Label_Style}" />
           <Button
             x:Name="Button_CheckUpdate"
+            Padding="5,0,5,0"
             Click="Button_CheckUpdate_ClickAsync"
             Content="{x:Static I18n:Info_I18n.CheckUpdate}"
             Style="{StaticResource Button_Style}" />
-          <emoji:TextBlock x:Name="TextBlock_CheckUpdateIcon"
+          <emoji:TextBlock
+            x:Name="TextBlock_CheckUpdateIcon"
             VerticalAlignment="Center"
             FontSize="16"
             Text="✅" />

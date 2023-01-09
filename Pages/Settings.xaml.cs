@@ -20,6 +20,7 @@ namespace StarsectorTools.Pages
             InitializeComponent();
             ShowCurrentLanguage();
             ShowCurrentLogLevel();
+            TextBox_ExpansionDebugPath.Text = ST.ExpansionDebugPath;
             isFirst = false;
         }
 
@@ -117,11 +118,6 @@ namespace StarsectorTools.Pages
             {
                 MessageBox.Show(I18n.ConfigFileError);
             }
-        }
-
-        internal void SetExpansionDebugPath(string path)
-        {
-            TextBox_ExpansionDebugPath.Text = path;
         }
 
         private void Button_SetExpansionDebugPath_Click(object sender, RoutedEventArgs e)

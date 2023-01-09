@@ -37,7 +37,7 @@
     <Grid
       x:Name="Grid_TitleBar"
       VerticalAlignment="Top"
-      Background="{DynamicResource ColorLight2}"
+      Background="{DynamicResource WindowGlassBrush}"
       MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown">
       <Grid HorizontalAlignment="Center">
         <Image
