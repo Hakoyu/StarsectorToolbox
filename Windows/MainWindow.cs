@@ -451,8 +451,7 @@ namespace StarsectorTools.Windows
             string id = expansionInfo.Id;
             string toolTip = expansionInfo.Description;
             var item = CreateListBoxItemForPage(icon, name, id, toolTip);
-            if (CreatePage(expansionInfo.ExpansionType) is not Page page)
-                return false;
+            Page page = CreatePage(expansionInfo.ExpansionType)!;
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重载当前菜单
