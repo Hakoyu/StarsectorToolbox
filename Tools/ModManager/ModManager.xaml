@@ -555,7 +555,6 @@
             <StackPanel>
               <Expander
                 Margin="0,0,0,10"
-                Padding="5,0,5,0"
                 Header="{x:Static I18n:ModManager_I18n.OpenDirectory}"
                 Style="{StaticResource Expander_Style}">
                 <StackPanel>
@@ -587,7 +586,6 @@
               </Expander>
               <Expander
                 Margin="0,0,0,10"
-                Padding="5,0,5,0"
                 Header="{x:Static I18n:ModManager_I18n.ManipulateUserData}"
                 Style="{StaticResource Expander_Style}"
                 ToolTip="{x:Static I18n:ModManager_I18n.ManipulateUserDataToolTip}">
@@ -612,7 +610,6 @@
               </Expander>
               <Expander
                 Margin="0,0,0,10"
-                Padding="5,0,5,0"
                 Header="{x:Static I18n:ModManager_I18n.ManipulateUserGroup}"
                 Style="{StaticResource Expander_Style}">
                 <StackPanel>
@@ -648,7 +645,6 @@
               </Expander>
               <Expander
                 Margin="0,0,0,10"
-                Padding="5,0,5,0"
                 Header="{x:Static I18n:ModManager_I18n.ManipulateEnabledList}"
                 Style="{StaticResource Expander_Style}">
                 <StackPanel>
@@ -681,7 +677,6 @@
               <Expander
                 x:Name="Expander_RandomEnable"
                 Margin="0,0,0,10"
-                Padding="5,0,5,0"
                 Header="{x:Static I18n:ModManager_I18n.RandomEnableMods}"
                 Style="{StaticResource Expander_Style}">
                 <StackPanel>

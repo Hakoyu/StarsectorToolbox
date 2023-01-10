@@ -157,7 +157,7 @@
           Margin="0,5,0,0">
           <StackPanel>
             <Expander
-              Margin="0,0,0,5"
+              Margin="0,0,0,10"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
               Header="{x:Static I18n:GameSettings_I18n.GameLogClear}"
               Style="{StaticResource Expander_Style}">
@@ -177,7 +177,7 @@
               </StackPanel>
             </Expander>
             <Expander
-              Margin="0,0,0,5"
+              Margin="0,0,0,10"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
               Header="{x:Static I18n:GameSettings_I18n.MissionsLoadoutsClean}"
               Style="{StaticResource Expander_Style}">
@@ -208,7 +208,7 @@
             </Expander>
             <Expander
               x:Name="Expander_Save"
-              Margin="0,0,0,5"
+              Margin="0,0,0,10"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
               Header="{x:Static I18n:GameSettings_I18n.SaveClean}"
               Style="{StaticResource Expander_Style}">
@@ -257,7 +257,7 @@
             </Expander>
             <Expander
               x:Name="Expander_CustomResolution"
-              Margin="0,0,0,5"
+              Margin="0,0,0,10"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
               Header="{x:Static I18n:GameSettings_I18n.CustomResolution}"
               Style="{StaticResource Expander_Style}">
