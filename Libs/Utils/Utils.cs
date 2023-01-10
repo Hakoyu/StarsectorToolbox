@@ -76,6 +76,7 @@ namespace StarsectorTools.Libs.Utils
             }
             return jsonObject;
         }
+
         /// <summary>
         /// 保存json数据至文件
         /// </summary>
@@ -83,12 +84,20 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="file">文件</param>
         public static void SaveTo(this JsonNode jsonNode, string file)
         {
-            File.WriteAllText(file, jsonNode.ToJsonString(new()
+            File.WriteAllText(file, jsonNode.ToUTF8String());
+        }
+
+        /// <summary>
+        /// 转换json数据至字符串,采用格式化及不严格的编码器(不会生成中文乱码)
+        /// </summary>
+        /// <param name="jsonNode">json数据</param>
+        /// <returns>格式化及无乱码的字符串</returns>
+        public static string ToUTF8String(this JsonNode jsonNode) =>
+            jsonNode.ToJsonString(new()
             {
                 WriteIndented = true,
                 Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            }));
-        }
+            });
 
         /// <summary>
         /// 复制文件夹至目标文件夹
