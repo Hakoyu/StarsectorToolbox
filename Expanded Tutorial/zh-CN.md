@@ -23,6 +23,7 @@
    ![](https://s2.loli.net/2023/01/09/y4YUb2EQX9r1RGl.png)
 3. 为项目添加引用 **StarsectorTools.dll**
    你可以在 **[Releases](https://github.com/Hakoyu/StarsectorTools/releases)** 中下载到
+   此外 **StarsectorTools.xml** 文件提供了注释,以便在IDE中更好的使用API,可自行选择下载,与 **StarsectorTools.dll** 放同一目录即可
 
 ### 设置拓展信息
 

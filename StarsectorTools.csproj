@@ -18,6 +18,7 @@
 
   <PropertyGroup>
     <NoWarn>0068</NoWarn>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
