@@ -151,11 +151,11 @@
           HorizontalContentAlignment="Left"
           Background="{DynamicResource ColorDeep2}"
           Style="{StaticResource Label_Style}" />
-        <ScrollViewer Grid.Row="1" Grid.Column="0">
-          <StackPanel
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="5">
+        <ScrollViewer
+          Grid.Row="1"
+          Grid.Column="0"
+          Margin="0,5,0,0">
+          <StackPanel>
             <Expander
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
