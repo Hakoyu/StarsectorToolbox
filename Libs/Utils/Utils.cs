@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
@@ -20,7 +21,7 @@ using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 namespace StarsectorTools.Libs.Utils
 {
     /// <summary>通用方法</summary>
-    public class Utils
+    public static class Utils
     {
         /// <summary>
         /// 检测文件是否存在
@@ -51,17 +52,42 @@ namespace StarsectorTools.Libs.Utils
         }
 
         /// <summary>
-        /// 格式化Json数据,去除掉注释以及不合规的逗号
+        /// 从json文件中读取数据并格式化,去除掉注释以及不合规的逗号
         /// </summary>
-        /// <param name="jsonData">Json数据</param>
+        /// <param name="file">Json文件</param>
         /// <returns>格式化后的数据</returns>
-        public static string JsonParse(string jsonData)
+        public static JsonObject? JsonParse(string file)
         {
+            if (!FileExists(file))
+                return null;
+            string jsonData = File.ReadAllText(file);
+            JsonObject? jsonObject = null;
             // 清除json中的注释
             jsonData = Regex.Replace(jsonData, @"(#|//)[\S ]*", "");
             // 清除json中不符合规定的逗号
             jsonData = Regex.Replace(jsonData, @",(?=[\r\n \t]*[\]\}])|(?<=[\}\]]),[ \t]*\r?\Z", "");
-            return jsonData;
+            try
+            {
+                jsonObject = JsonNode.Parse(jsonData)?.AsObject();
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine(I18n.LoadError, ex);
+            }
+            return jsonObject;
+        }
+        /// <summary>
+        /// 保存json数据至文件
+        /// </summary>
+        /// <param name="jsonNode">json数据</param>
+        /// <param name="file">文件</param>
+        public static void SaveTo(this JsonNode jsonNode, string file)
+        {
+            File.WriteAllText(file, jsonNode.ToJsonString(new()
+            {
+                WriteIndented = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            }));
         }
 
         /// <summary>

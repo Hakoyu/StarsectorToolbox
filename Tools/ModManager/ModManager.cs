@@ -194,7 +194,7 @@ namespace StarsectorTools.Tools.ModManager
             ModsInfo.AllModsInfo = new(allModsInfo = new());
             ModsInfo.AllEnabledModsId = new(allEnabledModsId = new());
             ModsInfo.AllCollectedModsId = new(allCollectedModsId = new());
-            ModsInfo.AllUserGroups = new (allUserGroups = new());
+            ModsInfo.AllUserGroups = new(allUserGroups = new());
             //ModsInfo.AllUserGroups = (allUserGroups = new())
             allListBoxItems = new();
             allModsShowInfo = new();
@@ -255,8 +255,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private static ModInfo GetModInfo(string jsonPath)
         {
-            string datas = File.ReadAllText(jsonPath);
-            ModInfo modInfo = new(JsonNode.Parse(Utils.JsonParse(datas))!.AsObject());
+            ModInfo modInfo = new(Utils.JsonParse(jsonPath)!);
             modInfo.Path = Path.GetDirectoryName(jsonPath)!;
             return modInfo;
         }
@@ -280,17 +279,16 @@ namespace StarsectorTools.Tools.ModManager
 
         private void GetEnabledMods(string filePath, bool importMode = false)
         {
-            string datas = File.ReadAllText(filePath);
-            if (datas.Length == 0)
-                return;
             try
             {
                 string err = null!;
-                JsonNode enabledModsJson = JsonNode.Parse(Utils.JsonParse(datas))!;
+                JsonNode enabledModsJson = Utils.JsonParse(filePath)!;
+                if (enabledModsJson == null)
+                    throw new ArgumentNullException();
                 if (enabledModsJson.AsObject().Count != 1 || enabledModsJson.AsObject().ElementAt(0).Key != strEnabledMods)
-                    throw new();
+                    throw new ArgumentNullException();
                 if (importMode)
-                    ImportMode();
+                        ImportMode();
                 JsonArray enabledModsJsonArray = enabledModsJson[strEnabledMods]!.AsArray();
                 STLog.WriteLine($"{I18n.LoadEnabledModsFile} {I18n.Path}: {filePath}");
                 foreach (var modId in enabledModsJsonArray)
@@ -591,7 +589,7 @@ namespace StarsectorTools.Tools.ModManager
                 // 删除模组至回收站
                 menuItem = new();
                 menuItem.Header = I18n.DeleteMod;
-                menuItem.Click +=  (s, e) => 
+                menuItem.Click += (s, e) =>
                 {
                     string path = allModsInfo[showInfo.Id].Path;
                     if (Utils.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, STMessageBoxIcon.Warning) == MessageBoxResult.Yes)
@@ -812,13 +810,13 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SaveEnabledMods(string filePath)
         {
-            JsonObject keyValues = new()
+            JsonObject jsonObject = new()
             {
                 [strEnabledMods] = new JsonArray()
             };
             foreach (var mod in allEnabledModsId)
-                ((JsonArray)keyValues[strEnabledMods]!).Add(mod);
-            File.WriteAllText(filePath, keyValues.ToJsonString(new() { WriteIndented = true }));
+                jsonObject[strEnabledMods]!.AsArray().Add(mod);
+            jsonObject.SaveTo(filePath);
             STLog.WriteLine($"{I18n.EnabledListSaveCompleted} {I18n.Path}: {filePath}");
         }
 
