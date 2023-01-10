@@ -35,26 +35,59 @@ namespace StarsectorTools.Libs.Utils
         public string ModPlugin { get; private set; } = null!;
 
         /// <summary>前置模组</summary>
-        internal HashSet<ModInfo>? Dependencies { get; private set; }
-        /// <summary>只读前置模组</summary>
-        public ExternalReadOnlySet<ModInfo>? ReadOnlyDependencies { get; private set; }
+        public HashSet<ModInfo>? Dependencies { get; private set; }
 
         /// <summary>本地路径</summary>
-        public string Path { get; internal set; } = null!;
+        public string Path { get; private set; } = null!;
+
         /// <summary>
-        /// 构造,解析mod_info.json
+        /// 从json数据中解析模组信息,可设置路径
         /// </summary>
-        /// <param name="jsonObject">json对象</param>
-        public ModInfo(JsonObject jsonObject)
+        /// <param name="jsonNode">json数据</param>
+        /// <param name="jsonPath">json文件路径</param>
+        private ModInfo(JsonNode jsonNode, string? jsonPath = null)
+        {
+            if (!string.IsNullOrEmpty(jsonPath) && Utils.FileExists(jsonPath, false))
+                Path = jsonPath;
+            foreach (var kv in jsonNode.AsObject())
+                SetData(kv);
+        }
+        /// <summary>
+        /// 解析 <see langword="mod_info.json"/> 并生成模组信息
+        /// </summary>
+        /// <param name="jsonPath">json文件路径</param>
+        /// <returns>解析成功返回 <see cref="ModInfo"/> ,失败返回 <see langword="null"/></returns>
+        public static ModInfo? Parse(string jsonPath)
         {
             try
             {
-                foreach (var kv in jsonObject)
-                    SetData(kv);
+                if (Utils.JsonParse(jsonPath) is not JsonNode jsonNode)
+                    return null;
+                return new(jsonNode, jsonPath);
             }
             catch (Exception ex)
             {
                 STLog.WriteLine(I18n.ModInfoError, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 从json数据中解析模组信息,可设置路径
+        /// </summary>
+        /// <param name="jsonNode">json数据</param>
+        /// <param name="jsonPath">json文件路径</param>
+        /// <returns>解析成功返回 <see cref="ModInfo"/> ,失败返回 <see langword="null"/></returns>
+        public static ModInfo? Parse(JsonNode jsonNode, string? jsonPath = null)
+        {
+            try
+            {
+                return new(jsonNode, jsonPath);
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine(I18n.ModInfoError, ex);
+                return null;
             }
         }
 
@@ -105,8 +138,6 @@ namespace StarsectorTools.Libs.Utils
                         Dependencies.Add(new(mod!.AsObject()));
                     if (Dependencies.Count == 0)
                         Dependencies = null;
-                    else
-                        ReadOnlyDependencies = new(Dependencies);
                     break;
             }
         }

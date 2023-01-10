@@ -18,6 +18,9 @@ namespace StarsectorTools.Tools.GameSettings
     /// </summary>
     public partial class GameSettings : Page
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public GameSettings()
         {
             InitializeComponent();

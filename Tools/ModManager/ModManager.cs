@@ -229,35 +229,25 @@ namespace StarsectorTools.Tools.ModManager
 
         private void GetAllModsInfo()
         {
-            int size = 0;
+            int errSize = 0;
             DirectoryInfo dirs = new(GameInfo.ModsDirectory);
-            string err = null!;
+            string err = string.Empty;
             foreach (var dir in dirs.GetDirectories())
             {
-                try
+                if (ModInfo.Parse($"{dir.FullName}\\{modInfoFile}") is not ModInfo info)
                 {
-                    ModInfo info = GetModInfo($"{dir.FullName}\\{modInfoFile}");
-                    allModsInfo.Add(info.Id, info);
-                    STLog.WriteLine($"{I18n.ModAddSuccess}: {info.Id}", STLogLevel.DEBUG);
+                    err += $"{dir.FullName}\n";
+                    errSize++;
                 }
-                catch (Exception ex)
+                else
                 {
-                    STLog.WriteLine($"{I18n.ModAddFailed}: {dir.Name}", ex);
-                    err ??= $"{I18n.ModAddFailed}\n";
-                    err += $"{dir.Name}\n";
-                    size++;
+                    allModsInfo.Add(info.Id, info);
+                    STLog.WriteLine($"{I18n.ModAddSuccess}: {dir.FullName}", STLogLevel.DEBUG);
                 }
             }
-            STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, size);
-            if (err != null)
-                Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
-        }
-
-        private static ModInfo GetModInfo(string jsonPath)
-        {
-            ModInfo modInfo = new(Utils.JsonParse(jsonPath)!);
-            modInfo.Path = Path.GetDirectoryName(jsonPath)!;
-            return modInfo;
+            STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, errSize);
+            if (!string.IsNullOrEmpty(err))
+                Utils.ShowMessageBox($"{I18n.ModAddFailed} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
         }
 
         private void CheckEnabledMods()
@@ -281,14 +271,15 @@ namespace StarsectorTools.Tools.ModManager
         {
             try
             {
-                string err = null!;
+                string err = string.Empty;
+                int errSize = 0;
                 JsonNode enabledModsJson = Utils.JsonParse(filePath)!;
                 if (enabledModsJson == null)
                     throw new ArgumentNullException();
                 if (enabledModsJson.AsObject().Count != 1 || enabledModsJson.AsObject().ElementAt(0).Key != strEnabledMods)
                     throw new ArgumentNullException();
                 if (importMode)
-                        ImportMode();
+                    ImportMode();
                 JsonArray enabledModsJsonArray = enabledModsJson[strEnabledMods]!.AsArray();
                 STLog.WriteLine($"{I18n.LoadEnabledModsFile} {I18n.Path}: {filePath}");
                 foreach (var modId in enabledModsJsonArray)
@@ -304,13 +295,13 @@ namespace StarsectorTools.Tools.ModManager
                     else
                     {
                         STLog.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
-                        err ??= $"{I18n.NotFoundMod}:\n";
                         err += $"{id}\n";
+                        errSize++;
                     }
                 }
                 STLog.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
-                if (err != null)
-                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
+                if (!string.IsNullOrEmpty(err))
+                    Utils.ShowMessageBox($"{I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -336,7 +327,8 @@ namespace StarsectorTools.Tools.ModManager
             STLog.WriteLine($"{I18n.LoadUserGroup} {I18n.Path}: {filePath}");
             try
             {
-                string err = null!;
+                string err = string.Empty;
+                int errSize = 0;
                 TomlTable toml = TOML.Parse(filePath);
                 foreach (var kv in toml)
                 {
@@ -358,8 +350,8 @@ namespace StarsectorTools.Tools.ModManager
                             else
                             {
                                 STLog.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
-                                err ??= $"{I18n.NotFoundMod}\n";
                                 err += $"{id}\n";
+                                errSize++;
                             }
                         }
                     }
@@ -369,8 +361,8 @@ namespace StarsectorTools.Tools.ModManager
                         err ??= $"{I18n.DuplicateUserGroupName} {group}";
                     }
                 }
-                if (err is not null)
-                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
+                if (!string.IsNullOrEmpty(err))
+                    Utils.ShowMessageBox($"{I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -384,8 +376,10 @@ namespace StarsectorTools.Tools.ModManager
             STLog.WriteLine($"{I18n.LoadUserData} {I18n.Path}: {filePath}");
             try
             {
-                string err = null!;
+                string err = string.Empty;
+                int errSize = 0;
                 TomlTable toml = TOML.Parse(filePath);
+                STLog.WriteLine(I18n.LoadCollectedList);
                 foreach (string id in toml[ModTypeGroup.Collected].AsTomlArray)
                 {
                     if (string.IsNullOrEmpty(id))
@@ -397,10 +391,14 @@ namespace StarsectorTools.Tools.ModManager
                     else
                     {
                         STLog.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
-                        err ??= $"{I18n.NotFoundMod}\n";
                         err += $"{id}\n";
                     }
                 }
+                if (!string.IsNullOrEmpty(err))
+                    Utils.ShowMessageBox($"{I18n.LoadCollectedList} {I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
+                err = string.Empty;
+                errSize = 0;
+                STLog.WriteLine(I18n.LoadUserCustomData);
                 foreach (var dict in toml[strUserCustomData].AsTomlArray)
                 {
                     var id = dict[strId].AsString;
@@ -419,7 +417,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                 }
                 if (!string.IsNullOrEmpty(err))
-                    Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
+                    Utils.ShowMessageBox($"{I18n.LoadUserCustomData} {I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -941,11 +939,14 @@ namespace StarsectorTools.Tools.ModManager
             }
             DirectoryInfo dirs = new(tempPath);
             var filesInfo = dirs.GetFiles(modInfoFile, SearchOption.AllDirectories);
-            if (filesInfo.Length > 0 && filesInfo.First() is FileInfo fileInfo && fileInfo.FullName is string jsonPath)
+            if (filesInfo.FirstOrDefault(defaultValue: null) is FileInfo fileInfo && fileInfo.FullName is string jsonPath)
             {
-                var newModInfo = GetModInfo(jsonPath);
                 string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
-                newModInfo.Path = $"{GameInfo.ModsDirectory}\\{directoryName}";
+                if (ModInfo.Parse(Utils.JsonParse(jsonPath)!, $"{GameInfo.ModsDirectory}\\{directoryName}") is not ModInfo newModInfo)
+                {
+                    Utils.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}");
+                    return;
+                }
                 if (allModsInfo.ContainsKey(newModInfo.Id))
                 {
                     var originalModInfo = allModsInfo[newModInfo.Id];

@@ -287,6 +287,7 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="icon">显示的图标</param>
+        /// <param name="setBlurEffect">启用模糊效果</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message,
                                                       STMessageBoxIcon icon = STMessageBoxIcon.Info,
@@ -301,6 +302,7 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="message">消息</param>
         /// <param name="button">显示的按钮</param>
         /// <param name="icon">显示的图标</param>
+        /// <param name="setBlurEffect">启用模糊效果</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message,
                                                       MessageBoxButton button,
@@ -316,9 +318,8 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="message">消息</param>
         /// <param name="caption">标头</param>
         /// <param name="button">显示的按钮</param>
-        /// <param name="image">显示的图片</param>
-        /// <param name="result">默认按钮结果</param>
-        /// <param name="options">窗口设置</param>
+        /// <param name="icon">显示的图片</param>
+        /// <param name="setBlurEffect">启用模糊效果</param>
         /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
         public static MessageBoxResult ShowMessageBox(string message,
                                                       string caption,

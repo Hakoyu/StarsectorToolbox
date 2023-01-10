@@ -20,6 +20,9 @@ namespace StarsectorTools.Tools.ModManager
     /// </summary>
     public partial class ModManager : Page
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public ModManager()
         {
             InitializeComponent();
