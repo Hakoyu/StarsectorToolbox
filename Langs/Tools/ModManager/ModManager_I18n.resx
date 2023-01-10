@@ -240,9 +240,11 @@
     <value>解压错误</value>
   </data>
   <data name="DuplicateModExists" xml:space="preserve">
-    <value>已存在相同模组 是否覆盖?
-原始版本: {0}
-新增版本: {1}</value>
+    <value>已存在相同模组 请选择操作:
+是: 覆盖并备份原模组
+否: 覆盖但不备份原模组
+取消: 取消导入
+原始版本: {0} =&gt; 新增版本: {1}</value>
   </data>
   <data name="ReplaceMod" xml:space="preserve">
     <value>替换模组</value>

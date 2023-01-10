@@ -243,9 +243,11 @@ Yes:Replace No:Merge Cancel:Cancel</value>
     <value>Replace mod</value>
   </data>
   <data name="DuplicateModExists" xml:space="preserve">
-    <value>Duplicate mod exists, replace it?
-Original Version: {0}
-New Version: {1}</value>
+    <value>The same mod already exists Please select the action:
+Yes: Overwrite and backup the original mod
+No: Overwrite but do not backup the original mod
+Cancel: Cancel the import
+Original version: {0} =&gt; New version: {1}</value>
   </data>
   <data name="ZipFileError" xml:space="preserve">
     <value>Zip file error</value>

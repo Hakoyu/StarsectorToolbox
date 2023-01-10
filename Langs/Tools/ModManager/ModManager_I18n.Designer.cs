@@ -358,9 +358,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 已存在相同模组 是否覆盖?
-        ///原始版本: {0}
-        ///新增版本: {1} 的本地化字符串。
+        ///   查找类似 已存在相同模组 请选择操作:
+        ///是: 覆盖并备份原模组
+        ///否: 覆盖但不备份原模组
+        ///取消: 取消导入
+        ///原始版本: {0} =&gt; 新增版本: {1} 的本地化字符串。
         /// </summary>
         public static string DuplicateModExists {
             get {

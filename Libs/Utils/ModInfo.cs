@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.IO;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
 namespace StarsectorTools.Libs.Utils
@@ -38,7 +39,7 @@ namespace StarsectorTools.Libs.Utils
         public HashSet<ModInfo>? Dependencies { get; private set; }
 
         /// <summary>本地路径</summary>
-        public string Path { get; private set; } = null!;
+        public string DirectoryPath { get; private set; } = null!;
 
         /// <summary>
         /// 从json数据中解析模组信息,可设置路径
@@ -47,8 +48,10 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="jsonPath">json文件路径</param>
         private ModInfo(JsonNode jsonNode, string? jsonPath = null)
         {
-            if (!string.IsNullOrEmpty(jsonPath) && Utils.FileExists(jsonPath, false))
-                Path = jsonPath;
+            if (!string.IsNullOrEmpty(jsonPath)
+                && Utils.FileExists(jsonPath, false)
+                && Path.GetDirectoryName(jsonPath) is string directoryPath)
+                DirectoryPath = directoryPath;
             foreach (var kv in jsonNode.AsObject())
                 SetData(kv);
         }
