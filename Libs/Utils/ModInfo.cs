@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Json.Nodes;
 using System.IO;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
+using static StarsectorTools.Libs.Utils.SetExtension;
 
 namespace StarsectorTools.Libs.Utils
 {
@@ -35,9 +36,9 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>模组信息</summary>
         public string ModPlugin { get; private set; } = null!;
 
+        private HashSet<ModInfo>? dependencies;
         /// <summary>前置模组</summary>
-        public HashSet<ModInfo>? Dependencies { get; private set; }
-
+        public ReadOnlySet<ModInfo>? Dependencies { get; private set; }
         /// <summary>本地路径</summary>
         public string DirectoryPath { get; private set; } = null!;
 
@@ -136,13 +137,23 @@ namespace StarsectorTools.Libs.Utils
                     break;
 
                 case "dependencies":
-                    Dependencies ??= new();
+                    dependencies ??= new();
                     foreach (var mod in kv.Value!.AsArray())
-                        Dependencies.Add(new(mod!.AsObject()));
-                    if (Dependencies.Count == 0)
-                        Dependencies = null;
+                        dependencies.Add(new(mod!.AsObject()));
+                    if (dependencies.Count == 0)
+                        dependencies = null;
+                    else
+                        Dependencies = new(dependencies);
                     break;
             }
+        }
+        /// <summary>
+        /// 转为字符串
+        /// </summary>
+        /// <returns>名称与版本</returns>
+        public override string ToString()
+        {
+            return $"{Name}: {Version}";
         }
     }
 }

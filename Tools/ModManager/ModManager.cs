@@ -97,7 +97,7 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
-        private Dictionary<string, ExternalReadOnlySet<string>> allUserGroups = new();
+        private Dictionary<string, HashSet<string>> allUserGroups = new();
 
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
@@ -194,7 +194,7 @@ namespace StarsectorTools.Tools.ModManager
             ModsInfo.AllModsInfo = new(allModsInfo = new());
             ModsInfo.AllEnabledModsId = new(allEnabledModsId = new());
             ModsInfo.AllCollectedModsId = new(allCollectedModsId = new());
-            ModsInfo.AllUserGroups = new(allUserGroups = new());
+            ModsInfo.AllUserGroups = (allUserGroups = new()).AsReadOnly<string, HashSet<string>, IReadOnlySet<string>>();
             //ModsInfo.AllUserGroups = (allUserGroups = new())
             allListBoxItems = new();
             allModsShowInfo = new();

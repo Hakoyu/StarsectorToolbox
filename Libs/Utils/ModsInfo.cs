@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static StarsectorTools.Libs.Utils.SetExtension;
 
 namespace StarsectorTools.Libs.Utils
 {
@@ -17,14 +18,14 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         public static ReadOnlyDictionary<string, ModInfo> AllModsInfo { get; internal set; } = null!;
         /// <summary>已启用的模组ID</summary>
-        public static ExternalReadOnlySet<string> AllEnabledModsId { get; internal set; } = null!;
+        public static ReadOnlySet<string> AllEnabledModsId { get; internal set; } = null!;
         /// <summary>已收藏的模组ID</summary>
-        public static ExternalReadOnlySet<string> AllCollectedModsId { get; internal set; } = null!;
+        public static ReadOnlySet<string> AllCollectedModsId { get; internal set; } = null!;
         /// <summary>
         /// <para>全部用户分组</para>
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
-        public static ReadOnlyDictionary<string, ExternalReadOnlySet<string>> AllUserGroups { get; internal set; } = null!;
+        public static IReadOnlyDictionary<string, IReadOnlySet<string>> AllUserGroups { get; internal set; } = null!;
     }
 }
