@@ -67,9 +67,9 @@ namespace StarsectorTools.Windows
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
             //Visibility = Visibility.Hidden;
-            //WindowState = WindowState.Minimized;
-            string str = System.IO.File.ReadAllText("D:\\Games\\Starsector\\saves\\save_114514_3355952167025335621\\campaign.xml");
-            var r =  Utils.ShowMessageBox(str, MessageBoxButton.YesNo, STMessageBoxIcon.Warning);
+            WindowState = WindowState.Minimized;
+            //string str = System.IO.File.ReadAllText("D:\\Games\\Starsector\\saves\\save_114514_3355952167025335621\\campaign.xml");
+            //var r =  Utils.ShowMessageBox(str, MessageBoxButton.YesNo, STMessageBoxIcon.Warning);
         }
 
         //最大化
