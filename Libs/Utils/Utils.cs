@@ -23,6 +23,8 @@ namespace StarsectorTools.Libs.Utils
     /// <summary>通用方法</summary>
     public static class Utils
     {
+        /// <summary>消息长度限制</summary>
+        private static int messageLengthLimits = 8192;
         /// <summary>
         /// 检测文件是否存在
         /// </summary>
@@ -327,18 +329,22 @@ namespace StarsectorTools.Libs.Utils
                                                       STMessageBoxIcon icon = STMessageBoxIcon.Info,
                                                       bool setBlurEffect = true)
         {
+            if (message.Length > messageLengthLimits)
+                message = message[..messageLengthLimits] + $".........{I18n.ExcessivelyLongMessages}.........";
+            MessageBoxResult outResult;
             if (setBlurEffect)
             {
                 SetMainWindowBlurEffect();
-                var outResult = Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, GetMessageBoxIcon(icon));
-                //var outResult = MessageBox.Show(message, caption, button, icon, result);
+                outResult = Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, GetMessageBoxIcon(icon));
                 RemoveMainWindowBlurEffect();
-                return outResult;
             }
             else
             {
-                return Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, GetMessageBoxIcon(icon));
+                outResult = Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, GetMessageBoxIcon(icon));
             }
+            if (message.Length == messageLengthLimits)
+                GC.Collect();
+            return outResult;
         }
 
         /// <summary>

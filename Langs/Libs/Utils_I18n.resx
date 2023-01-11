@@ -130,4 +130,7 @@
   <data name="GameDirectoryIsEmpty" xml:space="preserve">
     <value>游戏目录为空</value>
   </data>
+  <data name="ExcessivelyLongMessages" xml:space="preserve">
+    <value>过长的消息</value>
+  </data>
 </root>

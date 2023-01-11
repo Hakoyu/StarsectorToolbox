@@ -70,6 +70,15 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 过长的消息 的本地化字符串。
+        /// </summary>
+        public static string ExcessivelyLongMessages {
+            get {
+                return ResourceManager.GetString("ExcessivelyLongMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 文件 的本地化字符串。
         /// </summary>
         public static string File {

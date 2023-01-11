@@ -319,8 +319,11 @@
                 <EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
                 <EventSetter Event="Selected" Handler="DataGridItem_Selected" />
                 <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />
-                <EventSetter Event="MouseMove" Handler="DataGridItem_MouseMove" />
-                <EventSetter Event="MouseLeave" Handler="DataGridItem_MouseLeave" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
+                  </DataTrigger>
+                </Style.Triggers>
               </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>

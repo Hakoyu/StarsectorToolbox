@@ -25,6 +25,8 @@
                 <Setter Property="Height" Value="NaN" />
                 <Setter Property="MinWidth" Value="300" />
                 <Setter Property="MinHeight" Value="200" />
+                <Setter Property="MaxWidth" Value="1280" />
+                <Setter Property="MaxHeight" Value="720" />
                 <Setter Property="Background" Value="{DynamicResource ColorBG}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
                 <Setter Property="pu:WindowX.DisableDragMove" Value="True" />
@@ -66,14 +68,16 @@
                       <TextBlock Foreground="#75CD43" Text="&#xe935;" />
                     </pu:StateItem>
                   </pu:StateControl>
-                  <TextBlock
-                    Margin="100,0,0,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Background="{x:Null}"
-                    Foreground="{DynamicResource ColorFG}"
-                    Text="{Binding Message}"
-                    TextWrapping="Wrap" />
+                  <ScrollViewer>
+                    <TextBlock
+                      Margin="100,0,0,0"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="{x:Null}"
+                      Foreground="{DynamicResource ColorFG}"
+                      Text="{Binding Message}"
+                      TextWrapping="Wrap" />
+                  </ScrollViewer>
                 </Grid>
               </DataTemplate>
             </pu:MessageBoxXSettings.ContentTemplate>

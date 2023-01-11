@@ -168,18 +168,6 @@ namespace StarsectorTools.Tools.ModManager
                 ChangeModInfoDetails(row.Tag.ToString()!);
         }
 
-        private void DataGridItem_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (sender is DataGridRow row)
-                row.Background = (Brush)Application.Current.Resources["ColorLight2"];
-        }
-
-        private void DataGridItem_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (sender is DataGridRow row)
-                row.Background = (Brush)Application.Current.Resources["ColorBG"];
-        }
-
         private void Button_Enabled_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
