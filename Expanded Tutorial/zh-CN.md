@@ -41,9 +41,9 @@ Name = "testName"
 # 拓展的作者
 Author = "testAuthor"
 # 拓展的版本
-Version = "114.514"
+Version = "1.0.0.0"
 # 拓展支持的工具箱版本
-ToolsVersion = "1919.810"
+ToolsVersion = "0.8.0.0"
 # 拓展的描述
 Description = "这是一个测试案例"
 # 拓展的入口
