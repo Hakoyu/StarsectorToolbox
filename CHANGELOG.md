@@ -1,5 +1,43 @@
 ﻿# StarsectorToolsChangeLog
 
+## 0.8.0.0
+
+### 全局
+
+新增:
+
+- 添加外部接口
+- 添加 Utils 命名空间
+
+### MainWindow
+
+修改:
+
+- 为信息和设置页面按钮设置按下状态
+
+### ModManager
+
+修改:
+
+- 优化 TypeGroup 的读取方式,不再使用外部文件
+
+### Utils
+
+修改:
+
+- 更新弹窗样式,现在弹出窗口将匹配本体样式并在弹出时为主窗口添加模糊效果
+- 添加json拓展方法
+- 添加ReadOnlySet类,用来设置只读的HashSet
+- 添加ReadOnlyDictionaryWrapper类,用来设置套娃只读字典
+
+### STLog
+
+修改:
+
+- 优化使用方式
+- 添加线程安全
+- 优化堆栈输出
+
 ## 0.7.9
 
 ### 全局
