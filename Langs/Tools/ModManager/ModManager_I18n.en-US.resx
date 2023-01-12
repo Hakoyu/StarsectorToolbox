@@ -540,4 +540,7 @@ Cannot be removed midway</value>
   <data name="GameLogCleanupCompleted" xml:space="preserve">
     <value>Game log cleanup completed</value>
   </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>List empty</value>
+  </data>
 </root>

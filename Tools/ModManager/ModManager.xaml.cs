@@ -325,7 +325,7 @@ namespace StarsectorTools.Tools.ModManager
                     try
                     {
                         XElement xes = XElement.Load(filePath);
-                        list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => (string)x.Element("id")!);
+                        list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => x.Element("id")!.Value);
                     }
                     catch (Exception ex)
                     {

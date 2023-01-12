@@ -540,4 +540,7 @@
   <data name="GameLogCleanupCompleted" xml:space="preserve">
     <value>游戏日志清理完成</value>
   </data>
+  <data name="ListEmpty" xml:space="preserve">
+    <value>列表为空</value>
+  </data>
 </root>

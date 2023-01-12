@@ -633,6 +633,15 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 列表为空 的本地化字符串。
+        /// </summary>
+        public static string ListEmpty {
+            get {
+                return ResourceManager.GetString("ListEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 加载收藏列表 的本地化字符串。
         /// </summary>
         public static string LoadCollectedList {
