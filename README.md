@@ -2,13 +2,19 @@
 
 环境: **[.NET6](https://dotnet.microsoft.com/zh-cn/download/dotnet/6.0)**
 
-## 前言:
+## 前言
 
-对游戏 **远行星号** 提供如模组管理,游戏设置等诸多功能
+对游戏 **远行星号** 提供如模组管理,游戏设置等诸多功能  
 并可以使用外部 API 来增加拓展插件以提供更多功能,对制作插件有兴趣可以查看 **[拓展教程](https://github.com/Hakoyu/StarsectorTools/blob/master/Expanded%20Tutorial/zh-CN.md)**
-若有需求的功能或建议及意见,欢迎提交 **[issue](https://github.com/Hakoyu/StarsectorTools/issues)**
-若在使用中遇到任何问题,请提交 **[issue](https://github.com/Hakoyu/StarsectorTools/issues)** ,并附带日志信息
-若发现有模组在 **未分类模组** 中 ,请提交 **[issue](https://github.com/Hakoyu/StarsectorTools/issues)** ,并提供其ID及应该在的分类
+
+若有需求的功能或建议及意见,欢迎提交 **[issue](https://github.com/Hakoyu/StarsectorTools/issues)**  
+若在使用中遇到任何问题,请提交 **[issue](https://github.com/Hakoyu/StarsectorTools/issues)** ,并附带日志信息  
+若发现有模组在 **未分类模组** 中 ,请提交 **[issue](https://github.com/Hakoyu/StarsectorTools/issues)** ,并提供其 ID 及应该在的分类
+
+## 下载
+
+**[站内链接](attach://26037.7z)**
+**[Releases](https://github.com/Hakoyu/StarsectorTools/releases)**
 
 ## 功能一览
 
@@ -60,6 +66,10 @@
     - 从游戏存档中导入
     - 导入启用列表
     - 导出启用列表
+  - 随机启用模组(需选定用户分组)
+    - 最小随机数
+    - 最大随机数
+    - 随即启用
   - 保存配置
   - 启动游戏(并保存配置)
     - 右键菜单
@@ -105,12 +115,13 @@
     - 清理战役配装
   - 存档清理
     - 打开存档文件夹
-    - 保留存档输入框,用于清理存档,为0或未填入时清理全部存档
+    - 保留存档输入框,用于清理存档,为 0 或未填入时清理全部存档
     - 清理存档
   - 自定义分辨率
-   - 自定义宽高
-   - 可选无边框窗口
-   - 重置
+    - 自定义宽高
+    - 可选无边框窗口
+    - 重置
+
 ---
 
 ## 插件列表
