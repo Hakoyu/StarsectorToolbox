@@ -11,16 +11,21 @@
 ## 创建项目
 
 [最小演示 Demo](https://github.com/Hakoyu/StarsectorTools/blob/master/Expanded%20Tutorial/WpfLibrary1.7z)
+
 [基础演示 Demo](https://github.com/Hakoyu/StarsectorToolsExpansionDemo)
 
 ### 设置项目
 
 1. 新建项目: **WPF 类库**
    注意是选择 **C#** 项目而不是 **Visual Basic** 项目
+
    ![](https://s2.loli.net/2023/01/09/rKRmBXGDM1UPp8T.png)
+
 2. 创建完成后 为项目添加一个页面(`Page`)
    原来的**Class1.cs**可以自行选择删除或保留
+
    ![](https://s2.loli.net/2023/01/09/y4YUb2EQX9r1RGl.png)
+
 3. 为项目添加引用 **StarsectorTools.dll**
    你可以在 **[Releases](https://github.com/Hakoyu/StarsectorTools/releases)** 中下载到
    此外 **StarsectorTools.xml** 文件提供了注释,以便在 IDE 中更好的使用 API,可自行选择下载,与 **StarsectorTools.dll** 放同一目录即可
@@ -52,6 +57,8 @@ ExpansionId = "WpfLibrary1.Page1"
 ExpansionFile = "WpfLibrary1.dll"
 ```
 
+工具箱版本可查看 https://github.com/Hakoyu/StarsectorTools/releases
+
 ## 测试项目
 
 用来测试项目是否能正确引用
@@ -72,7 +79,9 @@ public Page1()
 那可能是引用不正确
 
 然后使用 StarsectorTools 的拓展调试功能定位拓展的路径即可载入
+
 ![](https://s2.loli.net/2023/01/10/AMEHKxvF4ukg7On.png)
+
 如果操作正确,此时 **StarsectorTools.log** 中会输出 `[Page1] INFO WpfLibrary1.Page1`
 
 ### 测试断点调试
@@ -80,15 +89,20 @@ public Page1()
 在`STLog`处打上断点
 在 VS2022 **调试->附加到进程** 中选择 **StarsectorTools.exe**
 也可以通过选择窗口来指定 **StarsectorTools.exe**
+
 ![](https://s2.loli.net/2023/01/10/ypz32rQKxX6eu1S.png)
+
 完成后在 StarsectorTools 中右键拓展项,点击 **刷新页面**
 如果操作正确,此时会命中断点
+
 ![](https://s2.loli.net/2023/01/10/SgXsTzUmwOaW3tN.gif)
+
 如果断点处显示:**无法命中断点,源代码与原始版本不同**
 可能需要对拓展进行重新编译,或者检查引用的文件是否正确
 
 与正常的拓展载入不同,调试拓展会将内容载入到内存
 你可以对拓展进行修改与编译,完成后使用 **刷新页面** 即可
+
 ![](https://s2.loli.net/2023/01/10/zuNfrTocISq62JA.gif)
 
 ## 基础 API 一览
@@ -457,4 +471,5 @@ namespace WpfLibrary1
 将 **WpfLibrary1.dll** 与 **Expansion.toml** 放入同一个文件夹
 再将文件夹放入软件根目录的 **Expansion** 文件夹即可
 此时启动软件,可在主界面的 **拓展** 下拉列表中看到导入的拓展项
+
 ![](https://s2.loli.net/2023/01/12/IiUpqf9gchNGmAo.png)
