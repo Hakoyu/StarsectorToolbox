@@ -236,6 +236,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 此拓展支持的软件版本与当前版本不一致,可能会出现兼容问题 的本地化字符串。
+        /// </summary>
+        public static string IncompatibleExpansion {
+            get {
+                return ResourceManager.GetString("IncompatibleExpansion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 信息 的本地化字符串。
         /// </summary>
         public static string Info {

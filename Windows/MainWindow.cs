@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
@@ -407,6 +408,11 @@ namespace StarsectorTools.Windows
             string toolTip = expansionInfo.Description;
             Lazy<Page> lazyPage = new(() => (Page)expansionInfo.ExpansionType.Assembly.CreateInstance(expansionInfo.ExpansionType.FullName!)!);
             var item = CreateListBoxItemForPage(icon, name, id, toolTip);
+            if (expansionInfo.Version != ST.Version)
+            {
+                item.Background = (Brush)Application.Current.Resources["ColorYellow2"];
+                item.ToolTip = $"{I18n.IncompatibleExpansion}\n\n{item.ToolTip}";
+            }
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
             // 重载当前菜单
@@ -451,6 +457,11 @@ namespace StarsectorTools.Windows
             string id = expansionInfo.Id;
             string toolTip = expansionInfo.Description;
             var item = CreateListBoxItemForPage(icon, name, id, toolTip);
+            if (expansionInfo.Version != ST.Version)
+            {
+                item.Background = (Brush)Application.Current.Resources["ColorYellow2"];
+                item.ToolTip = $"{I18n.IncompatibleExpansion}\n\n{item.ToolTip}";
+            }
             Page page = CreatePage(expansionInfo.ExpansionType)!;
             ContextMenu contextMenu = new();
             contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];

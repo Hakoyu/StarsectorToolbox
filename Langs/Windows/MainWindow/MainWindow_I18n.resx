@@ -201,4 +201,7 @@
   <data name="ExpansionTomlFileNotFound" xml:space="preserve">
     <value>拓展信息文件未找到</value>
   </data>
+  <data name="IncompatibleExpansion" xml:space="preserve">
+    <value>此拓展支持的软件版本与当前版本不一致,可能会出现兼容问题</value>
+  </data>
 </root>

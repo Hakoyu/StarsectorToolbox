@@ -35,7 +35,7 @@
           <Label
             Height="NaN"
             Background="{x:Null}"
-            Content="114.514"
+            Content="0.8.0"
             Style="{StaticResource Label_Style}" />
           <Button
             x:Name="Button_CheckUpdate"
@@ -45,6 +45,7 @@
             Style="{StaticResource Button_Style}" />
           <emoji:TextBlock
             x:Name="TextBlock_CheckUpdateIcon"
+            Margin="5,0,0,0"
             VerticalAlignment="Center"
             FontSize="16"
             Text="✅" />

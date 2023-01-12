@@ -11,5 +11,8 @@
 
         /// <summary>拓展调试目录</summary>
         internal static string ExpansionDebugPath = string.Empty;
+
+        /// <summary>游戏版本</summary>
+        internal const string Version = "0.8.0";
     }
 }
