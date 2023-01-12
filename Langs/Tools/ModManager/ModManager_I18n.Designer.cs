@@ -452,11 +452,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 导出至文件 的本地化字符串。
+        ///   查找类似 导出启用列表 的本地化字符串。
         /// </summary>
-        public static string ExportToFile {
+        public static string ExportEnabledList {
             get {
-                return ResourceManager.GetString("ExportToFile", resourceCulture);
+                return ResourceManager.GetString("ExportEnabledList", resourceCulture);
             }
         }
         
@@ -560,11 +560,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 从文件导入 的本地化字符串。
+        ///   查找类似 导入启用列表 的本地化字符串。
         /// </summary>
-        public static string ImportFromFile {
+        public static string ImportEnabledList {
             get {
-                return ResourceManager.GetString("ImportFromFile", resourceCulture);
+                return ResourceManager.GetString("ImportEnabledList", resourceCulture);
             }
         }
         

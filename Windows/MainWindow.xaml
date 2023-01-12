@@ -138,6 +138,7 @@
           Style="{StaticResource ListBox_Style}">
           <ListBoxItem x:Name="ListBoxItem_ExpansionPages" Padding="0">
             <Expander
+              Padding="0"
               Header="{x:Static I18n:MainWindow_I18n.Expansion}"
               IsExpanded="True"
               Style="{StaticResource Expander_Style}">

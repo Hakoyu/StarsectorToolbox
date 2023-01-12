@@ -279,14 +279,14 @@ Original version: {0} =&gt; New version: {1}</value>
   <data name="InitialisationComplete" xml:space="preserve">
     <value>Initialisation complete</value>
   </data>
-  <data name="ImportFromFile" xml:space="preserve">
-    <value>Import from file</value>
+  <data name="ImportEnabledList" xml:space="preserve">
+    <value>Import enabled list</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="ExportToFile" xml:space="preserve">
-    <value>Export to file</value>
+  <data name="ExportEnabledList" xml:space="preserve">
+    <value>Export enabled list</value>
   </data>
   <data name="NotFoundDependencies" xml:space="preserve">
     <value>Not found dependencies in the game mods folder</value>

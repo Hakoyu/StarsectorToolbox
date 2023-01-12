@@ -279,14 +279,14 @@
   <data name="InitialisationComplete" xml:space="preserve">
     <value>初始化完成</value>
   </data>
-  <data name="ImportFromFile" xml:space="preserve">
-    <value>从文件导入</value>
+  <data name="ImportEnabledList" xml:space="preserve">
+    <value>导入启用列表</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>文件</value>
   </data>
-  <data name="ExportToFile" xml:space="preserve">
-    <value>导出至文件</value>
+  <data name="ExportEnabledList" xml:space="preserve">
+    <value>导出启用列表</value>
   </data>
   <data name="NotFoundDependencies" xml:space="preserve">
     <value>未找到前置模组</value>

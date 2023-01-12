@@ -4,14 +4,14 @@
 
 工具: **[Visual Studio 2022](https://visualstudio.microsoft.com/zh-hans/vs/)**
 
-工具包: **.NET 桌面开发** 和 **通用 Windows 平台开发**
+工具包: **.NET 桌面开发**
 
 环境: **[.NET6](https://dotnet.microsoft.com/zh-cn/download/dotnet/6.0)**
 
 ## 创建项目
 
 [最小演示 Demo](https://github.com/Hakoyu/StarsectorTools/blob/master/Expanded%20Tutorial/WpfLibrary1.7z)
-[基础演示 Demo]()
+[基础演示 Demo](https://github.com/Hakoyu/StarsectorToolsExpansionDemo)
 
 ### 设置项目
 
@@ -23,7 +23,7 @@
    ![](https://s2.loli.net/2023/01/09/y4YUb2EQX9r1RGl.png)
 3. 为项目添加引用 **StarsectorTools.dll**
    你可以在 **[Releases](https://github.com/Hakoyu/StarsectorTools/releases)** 中下载到
-   此外 **StarsectorTools.xml** 文件提供了注释,以便在IDE中更好的使用API,可自行选择下载,与 **StarsectorTools.dll** 放同一目录即可
+   此外 **StarsectorTools.xml** 文件提供了注释,以便在 IDE 中更好的使用 API,可自行选择下载,与 **StarsectorTools.dll** 放同一目录即可
 
 ### 设置拓展信息
 
@@ -307,15 +307,15 @@ class ModsInfo
     /// </summary>
     ReadOnlyDictionary<string, ModInfo> AllModsInfo
     /// <summary>已启用的模组ID</summary>
-    ExternalReadOnlySet<string> AllEnabledModsId
+    ReadOnlySet<string> AllEnabledModsId
     /// <summary>已收藏的模组ID</summary>
-    ExternalReadOnlySet<string> AllCollectedModsId
+    ReadOnlySet<string> AllCollectedModsId
     /// <summary>
     /// <para>全部用户分组</para>
     /// <para><see langword="Key"/>: 分组名称</para>
     /// <para><see langword="Value"/>: 包含的模组</para>
     /// </summary>
-    ReadOnlyDictionary<string, ExternalReadOnlySet<string>> AllUserGroups
+    ReadOnlyDictionary<string, ReadOnlySet<string>> AllUserGroups
 }
 ```
 
@@ -451,3 +451,10 @@ namespace WpfLibrary1
     }
 }
 ```
+
+## 打包
+
+将 **WpfLibrary1.dll** 与 **Expansion.toml** 放入同一个文件夹
+再将文件夹放入软件根目录的 **Expansion** 文件夹即可
+此时启动软件,可在主界面的 **拓展** 下拉列表中看到导入的拓展项
+![](https://s2.loli.net/2023/01/12/IiUpqf9gchNGmAo.png)

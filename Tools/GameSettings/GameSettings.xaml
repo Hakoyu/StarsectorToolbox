@@ -265,11 +265,11 @@
                 <Grid Margin="0,0,0,5">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition />
+                    <ColumnDefinition Width="30" />
                     <ColumnDefinition />
                   </Grid.ColumnDefinitions>
                   <TextBox
                     x:Name="TextBox_ResolutionWidth"
-                    Margin="0,0,10,0"
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
                     Style="{StaticResource TextBox_Style}"
@@ -303,21 +303,19 @@
                     </Label.Style>
                   </Label>
                   <Label
-                    Grid.ColumnSpan="2"
-                    Margin="100,0,100,0"
+                    Grid.Column="1"
                     Content="X"
                     Style="{StaticResource Label_Style}" />
                   <TextBox
                     x:Name="TextBox_ResolutionHeight"
-                    Grid.Column="1"
-                    Margin="10,0,0,0"
+                    Grid.Column="2"
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
                     Style="{StaticResource TextBox_Style}"
                     ToolTip="{x:Static I18n:GameSettings_I18n.Height}" />
                   <!--  TextBox输入占位符  -->
                   <Label
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Width="{Binding Width, ElementName=TextBox_ResolutionHeight}"
                     Height="{Binding Height, ElementName=TextBox_ResolutionHeight}"
                     Margin="{Binding Margin, ElementName=TextBox_ResolutionHeight}"

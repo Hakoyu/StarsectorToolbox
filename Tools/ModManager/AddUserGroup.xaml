@@ -53,17 +53,15 @@
             Style="{StaticResource Label_Style}" />
           <Label
             x:Name="Label_Preview"
+            Padding="0,0,5,0"
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
-            pu:IconHelper.Margin="5,0,10,0"
-            Background="{DynamicResource ColorLight}"
+            Background="{DynamicResource ColorLight1}"
+            Content="{Binding Text, ElementName=TextBox_Name}"
             Style="{StaticResource Label_Style}">
             <pu:LabelHelper.Icon>
-              <emoji:TextBlock Text="{Binding ElementName=TextBox_Icon, Path=Text}" />
+              <emoji:TextBlock Text="{Binding Text, ElementName=TextBox_Icon}" />
             </pu:LabelHelper.Icon>
-            <Label.Content>
-              <emoji:TextBlock Text="{Binding ElementName=TextBox_Name, Path=Text}" />
-            </Label.Content>
           </Label>
         </StackPanel>
       </Grid>

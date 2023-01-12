@@ -665,7 +665,7 @@
                     Margin="0,0,0,5"
                     VerticalAlignment="Bottom"
                     Click="Button_ImportEnabledList_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportFromFile}"
+                    Content="{x:Static I18n:ModManager_I18n.ImportEnabledList}"
                     Style="{StaticResource Button_Style}" />
                   <Button
                     x:Name="Button_ExportList"
@@ -673,7 +673,7 @@
                     Margin="0,0,0,5"
                     VerticalAlignment="Bottom"
                     Click="Button_ExportEnabledList_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ExportToFile}"
+                    Content="{x:Static I18n:ModManager_I18n.ExportEnabledList}"
                     Style="{StaticResource Button_Style}" />
                 </StackPanel>
               </Expander>

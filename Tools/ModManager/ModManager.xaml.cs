@@ -56,7 +56,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportFromFile,
+                Title = I18n.ImportEnabledList,
                 Filter = $"Json {I18n.File}|*.json"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
@@ -70,7 +70,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = I18n.ExportToFile,
+                Title = I18n.ExportEnabledList,
                 Filter = $"Json {I18n.File}|*.json"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
