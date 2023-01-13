@@ -204,4 +204,12 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="IncompatibleExpansion" xml:space="preserve">
     <value>This extension supports software versions that are inconsistent with the current version, which may cause compatibility problems</value>
   </data>
+  <data name="GlobalExpansionExceptionMessage" xml:space="preserve">
+    <value>Global expansion exception {0} !!!Warning!!!
+If you see this error, it means that this is an unexpected situation in the extension
+It may affect the normal operation of the extension, so it is recommended to check the logs and submit an issue to the extension developer.</value>
+  </data>
+  <data name="GlobalExpansionException" xml:space="preserve">
+    <value>Global expansion exception</value>
+  </data>
 </root>

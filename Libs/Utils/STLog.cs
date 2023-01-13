@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using StarsectorTools.Windows;
@@ -70,7 +71,7 @@ namespace StarsectorTools.Libs.Utils
         private static string? GetClassNameAndMethodName()
         {
             var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(STLog))?.GetMethod();
-            return $"{method?.DeclaringType?.Name}.{method?.Name}";
+            return $"{method?.DeclaringType?.FullName}.{method?.Name}";
         }
 
         /// <summary>
@@ -79,8 +80,11 @@ namespace StarsectorTools.Libs.Utils
         /// <returns></returns>
         private static string? GetClassName()
         {
-            var frame = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(STLog));
-            return frame?.GetMethod()?.DeclaringType?.Name;
+            var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(STLog)).GetMethod();
+            if (method?.DeclaringType?.Namespace?.Contains(nameof(StarsectorTools)) is true)
+                return nameof(StarsectorTools) + method?.DeclaringType?.Name;
+            else
+                return method?.DeclaringType?.FullName;
         }
 
         internal static void SetLogLevel(STLogLevel logLevel)

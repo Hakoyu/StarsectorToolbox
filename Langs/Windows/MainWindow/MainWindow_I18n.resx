@@ -146,7 +146,7 @@
   <data name="GlobalExceptionMessage" xml:space="preserve">
     <value>全局异常 !!!警告!!!
 如果你看到了这个错误,说明这是意料之外的情况
-可能会影响软件的正常运行,建议查看log并提交issue.</value>
+可能会影响软件的正常运行,建议查看日志并提交issue.</value>
   </data>
   <data name="GlobalException" xml:space="preserve">
     <value>全局异常</value>
@@ -203,5 +203,13 @@
   </data>
   <data name="IncompatibleExpansion" xml:space="preserve">
     <value>此拓展支持的软件版本与当前版本不一致,可能会出现兼容问题</value>
+  </data>
+  <data name="GlobalExpansionExceptionMessage" xml:space="preserve">
+    <value>全局拓展异常 {0} !!!警告!!!
+如果你看到了这个错误,说明这是拓展中意料之外的情况
+可能会影响拓展的正常运行,建议查看日志并提交issue至拓展开发者.</value>
+  </data>
+  <data name="GlobalExpansionException" xml:space="preserve">
+    <value>全局拓展异常</value>
   </data>
 </root>

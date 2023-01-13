@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -52,8 +53,16 @@ namespace StarsectorTools.Windows
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            STLog.WriteLine(I18n.GlobalException, e.Exception);
-            Utils.ShowMessageBox(I18n.GlobalExceptionMessage, STMessageBoxIcon.Error);
+            if (e.Exception.Source == nameof(StarsectorTools))
+            {
+                STLog.WriteLine(I18n.GlobalException, e.Exception);
+                Utils.ShowMessageBox($"{I18n.GlobalExceptionMessage}\n\n{STLog.ExceptionParse(e.Exception)}", STMessageBoxIcon.Error);
+            }
+            else
+            {
+                STLog.WriteLine(I18n.GlobalExpansionException, e.Exception);
+                Utils.ShowMessageBox($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.ExceptionParse(e.Exception)}", STMessageBoxIcon.Error);
+            }
             e.Handled = true;
         }
 
