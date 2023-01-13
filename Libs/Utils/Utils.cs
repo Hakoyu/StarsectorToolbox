@@ -66,15 +66,21 @@ namespace StarsectorTools.Libs.Utils
             // 清除json中的注释
             jsonData = Regex.Replace(jsonData, @"(#|//)[\S ]*", "");
             // 清除json中不符合规定的逗号
-            jsonData = Regex.Replace(jsonData, @",(?=[\r\n \t]*[\]\}])|(?<=[\}\]]),[ \t]*\r?\Z", "");
+            jsonData = Regex.Replace(jsonData, @",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", "");
+            // 将异常格式 id:" 变为 "id":"
+            jsonData = Regex.Replace(jsonData, @"id:""", @"""id"":""");
             JsonObject? jsonObject = null;
             try
             {
-                jsonObject = JsonNode.Parse(jsonData)?.AsObject();
+                jsonObject = JsonNode.Parse(jsonData, documentOptions: new()
+                {
+                    AllowTrailingCommas = true,
+                    CommentHandling = System.Text.Json.JsonCommentHandling.Skip
+                })?.AsObject();
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.LoadError, ex);
+                STLog.WriteLine($"{I18n.LoadError} {file}", ex);
             }
             return jsonObject;
         }
@@ -157,6 +163,22 @@ namespace StarsectorTools.Libs.Utils
                 STLog.WriteLine(I18n.LoadError, ex);
                 return false;
             }
+        }
+
+        /// <summary>
+        /// 获取所有文件(包括子目录)
+        /// </summary>
+        /// <param name="directory">目录</param>
+        /// <param name="fileInfos">文件信息(递归用)</param>
+        /// <returns>所有文件信息</returns>
+        public static List<FileInfo> GetAllSubFiles(string directory, List<FileInfo>? fileInfos = null)
+        {
+            var currentDirectoryInfo = new DirectoryInfo(directory);
+            fileInfos ??= new();
+            fileInfos.AddRange(currentDirectoryInfo.GetFiles());
+            foreach (var directoryInfo in currentDirectoryInfo.GetDirectories())
+                GetAllSubFiles(directoryInfo.FullName, fileInfos);
+            return fileInfos;
         }
 
         /// <summary>

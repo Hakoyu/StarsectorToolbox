@@ -25,7 +25,7 @@ namespace StarsectorTools.Tools.GameSettings
         public GameSettings()
         {
             InitializeComponent();
-            Label_GamePath.Content = GameInfo.GameDirectory;
+            Label_GamePath.Content = GameInfo.BaseDirectory;
             Label_GameVersion.Content = GameInfo.Version;
             systemTotalMemory = Management.GetMemoryMetricsNow().Total;
             GetVmparamsData();
@@ -39,9 +39,9 @@ namespace StarsectorTools.Tools.GameSettings
             while (!GameInfo.GetGameDirectory())
                 Utils.ShowMessageBox(I18n.GameNotFound_SelectAgain, STMessageBoxIcon.Warning);
             var toml = TOML.Parse(ST.STConfigTomlFile);
-            toml["Game"]["Path"] = GameInfo.GameDirectory;
+            toml["Game"]["Path"] = GameInfo.BaseDirectory;
             toml.SaveTo(ST.STConfigTomlFile);
-            Label_GamePath.Content = GameInfo.GameDirectory;
+            Label_GamePath.Content = GameInfo.BaseDirectory;
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
@@ -64,7 +64,7 @@ namespace StarsectorTools.Tools.GameSettings
                 return;
             }
             vmparamsData.xmsx = $"{memory}{unit}";
-            File.WriteAllText($"{GameInfo.GameDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
+            File.WriteAllText($"{GameInfo.BaseDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
             STLog.WriteLine($"{I18n.VmparamsMemorySet}: {vmparamsData.xmsx}");
             Utils.ShowMessageBox(I18n.VmparamsMemorySetSuccess);
         }
@@ -174,8 +174,8 @@ namespace StarsectorTools.Tools.GameSettings
 
         private void Button_OpenGameDirectory_Click(object sender, RoutedEventArgs e)
         {
-            if (Utils.DirectoryExists(GameInfo.GameDirectory))
-                Utils.OpenLink(GameInfo.GameDirectory);
+            if (Utils.DirectoryExists(GameInfo.BaseDirectory))
+                Utils.OpenLink(GameInfo.BaseDirectory);
         }
 
         private void Button_CustomResolutionReset_Click(object sender, RoutedEventArgs e)

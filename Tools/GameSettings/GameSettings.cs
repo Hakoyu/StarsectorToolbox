@@ -23,11 +23,11 @@ namespace StarsectorTools.Tools.GameSettings
         private string hideGameKey = "";
         private bool showKey = false;
         private int systemTotalMemory = 0;
-        private string gameSettingsFile = $"{GameInfo.GameDirectory}\\starsector-core\\data\\config\\settings.json";
+        private string gameSettingsFile = $"{GameInfo.CoreDirectory}\\data\\config\\settings.json";
 
         private void GetVmparamsData()
         {
-            vmparamsData.data = File.ReadAllText($"{GameInfo.GameDirectory}\\vmparams");
+            vmparamsData.data = File.ReadAllText($"{GameInfo.BaseDirectory}\\vmparams");
             vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
             TextBox_Memory.Text = TextBox_Memory.Text = vmparamsData.xmsx;
         }

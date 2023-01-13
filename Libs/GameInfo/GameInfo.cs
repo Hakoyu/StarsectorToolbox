@@ -10,16 +10,15 @@ namespace StarsectorTools.Libs.GameInfo
     public static class GameInfo
     {
         /// <summary>游戏目录</summary>
-        public static string GameDirectory { get; private set; } = null!;
+        public static string BaseDirectory { get; private set; } = null!;
+        /// <summary>Core目录</summary>
+        public static string CoreDirectory { get; private set; } = null!;
 
         /// <summary>游戏exe文件</summary>
         public static string ExeFile { get; private set; } = null!;
 
         /// <summary>游戏模组文件夹</summary>
         public static string ModsDirectory { get; private set; } = null!;
-
-        /// <summary>游戏版本</summary>
-        public static string Version { get; private set; } = null!;
 
         /// <summary>游戏存档文件夹</summary>
         public static string SaveDirectory { get; private set; } = null!;
@@ -29,6 +28,9 @@ namespace StarsectorTools.Libs.GameInfo
 
         /// <summary>游戏日志文件</summary>
         public static string LogFile { get; private set; } = null!;
+
+        /// <summary>游戏版本</summary>
+        public static string Version { get; private set; } = null!;
 
         /// <summary>
         /// 设置游戏信息
@@ -45,14 +47,15 @@ namespace StarsectorTools.Libs.GameInfo
             ExeFile = $"{directoryName}\\starsector.exe";
             if (Utils.Utils.FileExists(ExeFile, false))
             {
-                GameDirectory = directoryName;
+                BaseDirectory = directoryName;
                 ModsDirectory = $"{directoryName}\\mods";
                 SaveDirectory = $"{directoryName}\\saves";
+                CoreDirectory = $"{directoryName}\\starsector-core";
                 EnabledModsJsonFile = $"{ModsDirectory}\\enabled_mods.json";
-                LogFile = $"{directoryName}\\starsector-core\\starsector.log";
+                LogFile = $"{CoreDirectory}\\starsector.log";
                 try
                 {
-                    Version = JsonNode.Parse(File.ReadAllText($"{directoryName}\\starsector-core\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+                    Version = JsonNode.Parse(File.ReadAllText($"{CoreDirectory}\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
                     return true;
                 }
                 catch (Exception ex)

@@ -83,7 +83,7 @@ namespace StarsectorTools.Libs.Utils
         {
             var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(STLog)).GetMethod();
             if (method?.DeclaringType?.Namespace?.Contains(nameof(StarsectorTools)) is true)
-                return nameof(StarsectorTools) + method?.DeclaringType?.Name;
+                return $"{nameof(StarsectorTools)}.{method?.DeclaringType?.Name}";
             else
                 return method?.DeclaringType?.FullName;
         }

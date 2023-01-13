@@ -150,7 +150,7 @@ namespace StarsectorTools.Windows
                             Utils.ShowMessageBox(I18n.GameNotFound_SoftwareExit, STMessageBoxIcon.Error);
                             return false;
                         }
-                        toml["Game"]["Path"] = GameInfo.GameDirectory;
+                        toml["Game"]["Path"] = GameInfo.BaseDirectory;
                     }
                     // 拓展调试目录
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
@@ -169,7 +169,7 @@ namespace StarsectorTools.Windows
                     }
                     CreateConfigFile();
                     TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
-                    toml["Game"]["Path"] = GameInfo.GameDirectory;
+                    toml["Game"]["Path"] = GameInfo.BaseDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.STConfigTomlFile);
                 }

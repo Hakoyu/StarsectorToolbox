@@ -289,7 +289,7 @@ namespace StarsectorTools.Tools.ModManager
                 process.StartInfo.RedirectStandardInput = true;
                 if (process.Start())
                 {
-                    process.StandardInput.WriteLine($"cd /d {GameInfo.GameDirectory}");
+                    process.StandardInput.WriteLine($"cd /d {GameInfo.BaseDirectory}");
                     process.StandardInput.WriteLine($"starsector.exe");
                     process.Close();
                     SaveAllData();
