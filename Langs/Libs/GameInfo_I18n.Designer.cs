@@ -22,7 +22,7 @@ namespace StarsectorTools.Langs.Libs {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class GameInfo_I18n {
+    public class GameInfo_I18n {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace StarsectorTools.Langs.Libs {
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Libs.GameInfo_I18n", typeof(GameInfo_I18n).Assembly);
@@ -51,12 +51,183 @@ namespace StarsectorTools.Langs.Libs {
         ///   使用此强类型资源类的所有资源查找执行重写。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 遗弃船 的本地化字符串。
+        /// </summary>
+        public static string Derelict {
+            get {
+                return ResourceManager.GetString("Derelict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 霸主 的本地化字符串。
+        /// </summary>
+        public static string Hegemony {
+            get {
+                return ResourceManager.GetString("Hegemony", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 自由联盟 的本地化字符串。
+        /// </summary>
+        public static string Independent {
+            get {
+                return ResourceManager.GetString("Independent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 卢德骑士团 的本地化字符串。
+        /// </summary>
+        public static string KnightsOfLudd {
+            get {
+                return ResourceManager.GetString("KnightsOfLudd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 狮心守卫 的本地化字符串。
+        /// </summary>
+        public static string LionsGuard {
+            get {
+                return ResourceManager.GetString("LionsGuard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 卢德教会 的本地化字符串。
+        /// </summary>
+        public static string LuddicChurch {
+            get {
+                return ResourceManager.GetString("LuddicChurch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 卢德左径 的本地化字符串。
+        /// </summary>
+        public static string LuddicPath {
+            get {
+                return ResourceManager.GetString("LuddicPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 雇佣兵 的本地化字符串。
+        /// </summary>
+        public static string Mercenary {
+            get {
+                return ResourceManager.GetString("Mercenary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 中立 的本地化字符串。
+        /// </summary>
+        public static string Neutral {
+            get {
+                return ResourceManager.GetString("Neutral", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 欧米伽 的本地化字符串。
+        /// </summary>
+        public static string Omega {
+            get {
+                return ResourceManager.GetString("Omega", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 英仙座联盟 的本地化字符串。
+        /// </summary>
+        public static string Persean {
+            get {
+                return ResourceManager.GetString("Persean", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 海盗 的本地化字符串。
+        /// </summary>
+        public static string Pirates {
+            get {
+                return ResourceManager.GetString("Pirates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 玩家 的本地化字符串。
+        /// </summary>
+        public static string Player {
+            get {
+                return ResourceManager.GetString("Player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 难民 的本地化字符串。
+        /// </summary>
+        public static string Poor {
+            get {
+                return ResourceManager.GetString("Poor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 余辉 的本地化字符串。
+        /// </summary>
+        public static string Remnant {
+            get {
+                return ResourceManager.GetString("Remnant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 拾荒者 的本地化字符串。
+        /// </summary>
+        public static string Scavengers {
+            get {
+                return ResourceManager.GetString("Scavengers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 辛达强权 的本地化字符串。
+        /// </summary>
+        public static string SindrianDiktat {
+            get {
+                return ResourceManager.GetString("SindrianDiktat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 渗透者 的本地化字符串。
+        /// </summary>
+        public static string Sleeper {
+            get {
+                return ResourceManager.GetString("Sleeper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 速子科技 的本地化字符串。
+        /// </summary>
+        public static string Tritachyon {
+            get {
+                return ResourceManager.GetString("Tritachyon", resourceCulture);
             }
         }
     }

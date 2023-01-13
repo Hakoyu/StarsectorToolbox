@@ -92,7 +92,7 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Langs\Libs\GameInfo_I18n.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>GameInfo_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Libs\Utils_I18n.resx">
