@@ -38,6 +38,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Langs\Libs\GameInfo_I18n.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GameInfo_I18n.resx</DependentUpon>
+    </Compile>
     <Compile Update="Langs\Libs\Utils_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -86,6 +91,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Langs\Libs\GameInfo_I18n.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GameInfo_I18n.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Langs\Libs\Utils_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Utils_I18n.Designer.cs</LastGenOutput>

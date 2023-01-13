@@ -109,713 +109,715 @@
   <Grid>
     <GroupBox Header="{x:Static I18n:ModManager_I18n.ModManager}" Style="{StaticResource GroupBox_Style}">
       <Grid>
-        <Grid
-          x:Name="Grid_GroupMenu"
-          Width="30"
-          HorizontalAlignment="Left"
-          SizeChanged="Grid_GroupMenu_SizeChanged">
-          <ListBox
-            x:Name="ListBox_ModsGroupMenu"
-            Margin="0,30,0,30"
-            HorizontalContentAlignment="Stretch"
-            pu:IconHelper.Margin="0,0,10,0"
-            BorderThickness="0"
-            PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-            ScrollViewer.VerticalScrollBarVisibility="Hidden"
-            SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
-            Style="{StaticResource ListBox_Style}">
-            <ListBoxItem
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <Grid x:Name="Grid_GroupMenu" Width="30">
+            <ListBox
+              x:Name="ListBox_ModsGroupMenu"
+              Margin="0,30,0,30"
+              HorizontalContentAlignment="Stretch"
+              pu:IconHelper.Margin="0,0,10,0"
+              BorderThickness="0"
+              PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+              SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
+              Style="{StaticResource ListBox_Style}">
+              <ListBoxItem
+                Height="30"
+                Content="{x:Static I18n:ModManager_I18n.AllMods}"
+                Style="{StaticResource ListBoxItem_Style}"
+                Tag="{x:Static ModTypeGroup:ModTypeGroup.All}"
+                ToolTip="{x:Static I18n:ModManager_I18n.AllMods}">
+                <pu:ListBoxItemHelper.Icon>
+                  <emoji:TextBlock Text="🅰" />
+                </pu:ListBoxItemHelper.Icon>
+              </ListBoxItem>
+              <ListBoxItem
+                Content="{x:Static I18n:ModManager_I18n.EnabledMod}"
+                Style="{StaticResource ListBoxItem_Style}"
+                Tag="{x:Static ModTypeGroup:ModTypeGroup.Enabled}"
+                ToolTip="{x:Static I18n:ModManager_I18n.EnabledMod}">
+                <pu:ListBoxItemHelper.Icon>
+                  <emoji:TextBlock Text="✅" />
+                </pu:ListBoxItemHelper.Icon>
+              </ListBoxItem>
+              <ListBoxItem
+                Content="{x:Static I18n:ModManager_I18n.DisabledMod}"
+                Style="{StaticResource ListBoxItem_Style}"
+                Tag="{x:Static ModTypeGroup:ModTypeGroup.Disabled}"
+                ToolTip="{x:Static I18n:ModManager_I18n.DisabledMod}">
+                <pu:ListBoxItemHelper.Icon>
+                  <emoji:TextBlock Text="❎" />
+                </pu:ListBoxItemHelper.Icon>
+              </ListBoxItem>
+              <ListBoxItem Padding="0">
+                <Expander
+                  Padding="0"
+                  Header="{x:Static I18n:ModManager_I18n.GroupedByModType}"
+                  Style="{StaticResource Expander_Style}">
+                  <ListBox
+                    x:Name="ListBox_ModTypeGroup"
+                    HorizontalContentAlignment="Stretch"
+                    pu:IconHelper.Margin="0,0,10,0"
+                    PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                    PreviewMouseWheel="ListBox_PreviewMouseWheel"
+                    SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
+                    Style="{StaticResource ListBox_Style}">
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.Libraries}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.Libraries}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.Libraries}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🔝" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.MegaMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.MegaMods}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.MegaMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="☢" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.FactionMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.FactionMods}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.FactionMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🏁" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.ContentExpansions}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.ContentExpansions}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ContentExpansions}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🆙" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.UtilityMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.UtilityMods}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.UtilityMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🛠" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.MiscellaneousMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.MiscellaneousMods}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.MiscellaneousMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🛄" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.BeautifyMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.BeautifyMods}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.BeautifyMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="✨" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.UnknownMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.UnknownMods}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.UnknownMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🆓" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                  </ListBox>
+                </Expander>
+              </ListBoxItem>
+              <ListBoxItem Padding="0">
+                <Expander
+                  Padding="0"
+                  Header="{x:Static I18n:ModManager_I18n.UserGroup}"
+                  IsExpanded="True"
+                  Style="{StaticResource Expander_Style}">
+                  <ListBox
+                    x:Name="ListBox_UserGroup"
+                    HorizontalContentAlignment="Stretch"
+                    pu:IconHelper.Margin="0,0,10,0"
+                    PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                    PreviewMouseWheel="ListBox_PreviewMouseWheel"
+                    SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
+                    Style="{StaticResource ListBox_Style}">
+                    <ListBoxItem
+                      Content="{x:Static I18n:ModManager_I18n.CollectedMods}"
+                      Style="{StaticResource ListBoxItem_Style}"
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.Collected}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.CollectedMods}">
+                      <pu:ListBoxItemHelper.Icon>
+                        <emoji:TextBlock Text="🌟" />
+                      </pu:ListBoxItemHelper.Icon>
+                    </ListBoxItem>
+                  </ListBox>
+                </Expander>
+              </ListBoxItem>
+            </ListBox>
+            <Button
+              x:Name="Button_ExpandGroupMenu"
               Height="30"
-              Content="{x:Static I18n:ModManager_I18n.AllMods}"
-              Style="{StaticResource ListBoxItem_Style}"
-              Tag="{x:Static ModTypeGroup:ModTypeGroup.All}"
-              ToolTip="{x:Static I18n:ModManager_I18n.AllMods}">
-              <pu:ListBoxItemHelper.Icon>
-                <emoji:TextBlock Text="🅰" />
-              </pu:ListBoxItemHelper.Icon>
-            </ListBoxItem>
-            <ListBoxItem
-              Content="{x:Static I18n:ModManager_I18n.EnabledMod}"
-              Style="{StaticResource ListBoxItem_Style}"
-              Tag="{x:Static ModTypeGroup:ModTypeGroup.Enabled}"
-              ToolTip="{x:Static I18n:ModManager_I18n.EnabledMod}">
-              <pu:ListBoxItemHelper.Icon>
-                <emoji:TextBlock Text="✅" />
-              </pu:ListBoxItemHelper.Icon>
-            </ListBoxItem>
-            <ListBoxItem
-              Content="{x:Static I18n:ModManager_I18n.DisabledMod}"
-              Style="{StaticResource ListBoxItem_Style}"
-              Tag="{x:Static ModTypeGroup:ModTypeGroup.Disabled}"
-              ToolTip="{x:Static I18n:ModManager_I18n.DisabledMod}">
-              <pu:ListBoxItemHelper.Icon>
-                <emoji:TextBlock Text="❎" />
-              </pu:ListBoxItemHelper.Icon>
-            </ListBoxItem>
-            <ListBoxItem Padding="0">
-              <Expander
-                Padding="0"
-                Header="{x:Static I18n:ModManager_I18n.GroupedByModType}"
-                Style="{StaticResource Expander_Style}">
-                <ListBox
-                  x:Name="ListBox_ModTypeGroup"
-                  HorizontalContentAlignment="Stretch"
-                  pu:IconHelper.Margin="0,0,10,0"
-                  PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-                  PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                  SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
-                  Style="{StaticResource ListBox_Style}">
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.Libraries}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.Libraries}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.Libraries}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🔝" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.MegaMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.MegaMods}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.MegaMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="☢" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.FactionMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.FactionMods}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.FactionMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🏁" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.ContentExpansions}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.ContentExpansions}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ContentExpansions}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🆙" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.UtilityMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.UtilityMods}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.UtilityMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🛠" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.MiscellaneousMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.MiscellaneousMods}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.MiscellaneousMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🛄" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.BeautifyMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.BeautifyMods}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.BeautifyMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="✨" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.UnknownMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.UnknownMods}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.UnknownMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🆓" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                </ListBox>
-              </Expander>
-            </ListBoxItem>
-            <ListBoxItem Padding="0">
-              <Expander
-                Padding="0"
-                Header="{x:Static I18n:ModManager_I18n.UserGroup}"
-                IsExpanded="True"
-                Style="{StaticResource Expander_Style}">
-                <ListBox
-                  x:Name="ListBox_UserGroup"
-                  HorizontalContentAlignment="Stretch"
-                  pu:IconHelper.Margin="0,0,10,0"
-                  PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-                  PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                  SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
-                  Style="{StaticResource ListBox_Style}">
-                  <ListBoxItem
-                    Content="{x:Static I18n:ModManager_I18n.CollectedMods}"
-                    Style="{StaticResource ListBoxItem_Style}"
-                    Tag="{x:Static ModTypeGroup:ModTypeGroup.Collected}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.CollectedMods}">
-                    <pu:ListBoxItemHelper.Icon>
-                      <emoji:TextBlock Text="🌟" />
-                    </pu:ListBoxItemHelper.Icon>
-                  </ListBoxItem>
-                </ListBox>
-              </Expander>
-            </ListBoxItem>
-          </ListBox>
-          <Button
-            x:Name="Button_GroupMenu"
-            Height="30"
-            Padding="0"
-            VerticalAlignment="Top"
-            HorizontalContentAlignment="Left"
-            Click="Button_GroupMenu_Click"
-            FontSize="16"
-            Style="{StaticResource Button_Style}">
-            <pu:ButtonHelper.Icon>
-              <emoji:TextBlock x:Name="Button_GroupMenuIcon" Text="📘" />
-            </pu:ButtonHelper.Icon>
-          </Button>
-          <Button
-            x:Name="Button_AddUserGroup"
-            Height="30"
-            Padding="0,0,5,0"
-            VerticalAlignment="Bottom"
-            HorizontalContentAlignment="Left"
-            pu:ButtonHelper.Icon="➕"
-            Click="Button_AddUserGroup_Click"
-            Content="{x:Static I18n:ModManager_I18n.AddUserGroup}"
-            Style="{StaticResource Button_Style}" />
-        </Grid>
-        <Grid x:Name="Grid_DataGrid" Margin="30,0,120,0">
-          <DataGrid
-            x:Name="DataGrid_ModsShowList"
-            Margin="0,30,5,0"
-            d:ItemsSource="{d:SampleData ItemCount=5}"
-            pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
-            AllowDrop="True"
-            AutoGenerateColumns="False"
-            CanUserAddRows="False"
-            Drop="DataGrid_ModsShowList_Drop"
-            GridLinesVisibility="Horizontal"
-            LostFocus="DataGrid_ModsShowList_LostFocus"
-            MouseLeftButtonDown="DataGrid_ModsShowList_MouseLeftButtonDown"
-            RowDetailsVisibilityMode="Visible"
-            RowHeight="50"
-            Style="{StaticResource DataGrid_Style}"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
-            <DataGrid.InputBindings>
-              <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
-            </DataGrid.InputBindings>
-            <DataGrid.RowStyle>
-              <Style TargetType="DataGridRow">
-                <Setter Property="Tag" Value="{Binding Id}" />
-                <Setter Property="ContextMenu" Value="{Binding ContextMenu}" />
-                <EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
-                <EventSetter Event="Selected" Handler="DataGridItem_Selected" />
-                <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />
-                <Style.Triggers>
-                  <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
-                  </DataTrigger>
-                </Style.Triggers>
-              </Style>
-            </DataGrid.RowStyle>
-            <DataGrid.Columns>
-              <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Collected">
-                <DataGridTemplateColumn.Header>
-                  <emoji:TextBlock
-                    Background="{x:Null}"
-                    FontSize="20"
-                    Text="🌟"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModCollectState}" />
-                </DataGridTemplateColumn.Header>
-                <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate>
-                    <Button
-                      x:Name="Button_Collected"
-                      Margin="0,5,0,5"
-                      Padding="5,0,5,0"
-                      Click="Button_Collected_Click"
-                      Style="{StaticResource CollectedStyle}" />
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-              </DataGridTemplateColumn>
-              <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Enabled">
-                <DataGridTemplateColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.EnabledState}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModEnableState}" />
-                </DataGridTemplateColumn.Header>
-                <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate>
-                    <Button
-                      x:Name="Button_Enabled"
-                      Margin="0,5,0,5"
-                      Padding="5,0,5,0"
-                      Click="Button_Enabled_Click"
-                      Style="{StaticResource EnabledStyle}" />
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-              </DataGridTemplateColumn>
-              <DataGridTemplateColumn IsReadOnly="True">
-                <DataGridTemplateColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.Icon}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModIcon}" />
-                </DataGridTemplateColumn.Header>
-                <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate>
-                    <Image Source="{Binding ImageSource}" />
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-              </DataGridTemplateColumn>
-              <DataGridTextColumn
-                Binding="{Binding Name}"
-                ElementStyle="{StaticResource CenterAlignmentStyle}"
-                IsReadOnly="True"
-                SortMemberPath="Name">
-                <DataGridTextColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.Name}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModName}" />
-                </DataGridTextColumn.Header>
-              </DataGridTextColumn>
-              <DataGridTextColumn
-                Width="100"
-                Binding="{Binding Author}"
-                ElementStyle="{StaticResource CenterAlignmentStyle}"
-                IsReadOnly="True"
-                SortMemberPath="Author">
-                <DataGridTextColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.Author}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModAuthor}" />
-                </DataGridTextColumn.Header>
-              </DataGridTextColumn>
-              <DataGridTextColumn
-                Binding="{Binding Version}"
-                ElementStyle="{StaticResource CenterAlignmentStyle}"
-                IsReadOnly="True"
-                SortMemberPath="Version">
-                <DataGridTextColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.Version}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowModVersion}" />
-                </DataGridTextColumn.Header>
-              </DataGridTextColumn>
-              <DataGridTextColumn
-                Binding="{Binding GameVersion}"
-                ElementStyle="{StaticResource GameVersionStyle}"
-                IsReadOnly="True"
-                SortMemberPath="GameVersion">
-                <DataGridTextColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.GameVersion}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowGameVersion}" />
-                </DataGridTextColumn.Header>
-              </DataGridTextColumn>
-              <DataGridTextColumn
-                ElementStyle="{StaticResource UtilityStyle}"
-                IsReadOnly="True"
-                SortMemberPath="Utility">
-                <DataGridTextColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.Utility}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowUtility}" />
-                </DataGridTextColumn.Header>
-              </DataGridTextColumn>
-              <DataGridTextColumn
-                Binding="{Binding UserDescription}"
-                IsReadOnly="True"
-                SortMemberPath="UserDescription">
-                <DataGridTextColumn.ElementStyle>
-                  <Style BasedOn="{StaticResource CenterAlignmentStyle}" TargetType="TextBlock">
-                    <Setter Property="ToolTip" Value="{x:Null}" />
-                  </Style>
-                </DataGridTextColumn.ElementStyle>
-                <DataGridTextColumn.Header>
-                  <Label
-                    Background="{x:Null}"
-                    Content="{x:Static I18n:ModManager_I18n.UserDescription}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{x:Static I18n:ModManager_I18n.ShowUserDescription}" />
-                </DataGridTextColumn.Header>
-              </DataGridTextColumn>
-            </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-              <DataTemplate>
-                <StackPanel Orientation="Horizontal" Style="{StaticResource MissDependenciesStyle}">
-                  <Button
-                    x:Name="Button_EnableDependencies"
-                    Margin="10,0,0,0"
-                    Padding="5,0,5,0"
-                    Click="Button_EnableDependencies_Click"
-                    Content="{x:Static I18n:ModManager_I18n.EnableDependencies}"
-                    Style="{StaticResource Button_Style}"
-                    ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
-                  <Label
-                    HorizontalContentAlignment="Left"
-                    Background="{x:Null}"
-                    Content="{Binding Dependencies}"
-                    Style="{StaticResource Label_Style}"
-                    ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
-                </StackPanel>
-              </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-          </DataGrid>
-          <TextBox
-            x:Name="TextBox_SearchMods"
-            Height="30"
-            Margin="0,0,120,0"
-            VerticalAlignment="Top"
-            Style="{StaticResource TextBox_Style}"
-            TextChanged="TextBox_SearchMods_TextChanged"
-            TextWrapping="Wrap"
-            ToolTip="{x:Static I18n:ModManager_I18n.SearchMod}" />
-          <!--  TextBox输入占位符  -->
-          <Label
-            Width="{Binding Width, ElementName=TextBox_SearchMods}"
-            Height="{Binding Height, ElementName=TextBox_SearchMods}"
-            Margin="{Binding Margin, ElementName=TextBox_SearchMods}"
-            HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_SearchMods}"
-            VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_SearchMods}"
-            Background="{x:Null}"
-            Content="{x:Static I18n:ModManager_I18n.SearchMod}"
-            FontSize="16"
-            IsEnabled="False"
-            IsHitTestVisible="False">
-            <Label.Style>
-              <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
-                <Setter Property="Visibility" Value="Hidden" />
-                <Style.Triggers>
-                  <MultiDataTrigger>
-                    <MultiDataTrigger.Conditions>
-                      <Condition Binding="{Binding Text, ElementName=TextBox_SearchMods}" Value="" />
-                      <Condition Binding="{Binding IsFocused, ElementName=TextBox_SearchMods}" Value="False" />
-                    </MultiDataTrigger.Conditions>
-                    <MultiDataTrigger.Setters>
-                      <Setter Property="Visibility" Value="Visible" />
-                    </MultiDataTrigger.Setters>
-                  </MultiDataTrigger>
-                </Style.Triggers>
-              </Style>
-            </Label.Style>
-          </Label>
-          <ComboBox
-            x:Name="ComboBox_SearchType"
-            Width="115"
-            Height="30"
-            Margin="0,0,5,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            SelectedIndex="0"
-            SelectionChanged="ComboBox_SearchType_SelectionChanged"
-            Style="{StaticResource ComboBox_Style}">
-            <ComboBoxItem
-              Content="{x:Static I18n:ModManager_I18n.Name}"
-              Style="{StaticResource ComboBoxItem_Style}"
-              Tag="Name" />
-            <ComboBoxItem
-              Content="ID"
-              Style="{StaticResource ComboBoxItem_Style}"
-              Tag="Id" />
-            <ComboBoxItem
-              Content="{x:Static I18n:ModManager_I18n.Author}"
-              Style="{StaticResource ComboBoxItem_Style}"
-              Tag="Author" />
-            <ComboBoxItem
-              Content="{x:Static I18n:ModManager_I18n.UserDescription}"
-              Style="{StaticResource ComboBoxItem_Style}"
-              Tag="UserDescription" />
-          </ComboBox>
-        </Grid>
-        <Grid
-          x:Name="Grid_RightSide"
-          MinWidth="120"
-          HorizontalAlignment="Right"
-          SizeChanged="Grid_RightSide_SizeChanged">
-          <ScrollViewer Margin="0,0,0,80" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-              <Expander
-                Margin="0,0,0,10"
-                Header="{x:Static I18n:ModManager_I18n.OpenDirectory}"
-                Style="{StaticResource Expander_Style}">
-                <StackPanel>
-                  <Button
-                    x:Name="Button_OpenModDirectory"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_OpenModDirectory_Click"
-                    Content="{x:Static I18n:ModManager_I18n.OpenModsDirectory}"
-                    Style="{StaticResource Button_Style}" />
-                  <Button
-                    x:Name="Button_OpenBackupDirectory"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_OpenBackupDirectory_Click"
-                    Content="{x:Static I18n:ModManager_I18n.OpenBackupDirectory}"
-                    Style="{StaticResource Button_Style}" />
-                  <Button
-                    x:Name="Button_OpenSaveDirectory"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_OpenSaveDirectory_Click"
-                    Content="{x:Static I18n:ModManager_I18n.OpenSaveDirectory}"
-                    Style="{StaticResource Button_Style}" />
-                </StackPanel>
-              </Expander>
-              <Expander
-                Margin="0,0,0,10"
-                Header="{x:Static I18n:ModManager_I18n.ManipulateUserData}"
-                Style="{StaticResource Expander_Style}"
-                ToolTip="{x:Static I18n:ModManager_I18n.ManipulateUserDataToolTip}">
-                <StackPanel>
-                  <Button
-                    x:Name="Button_ImportUserData"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ImportUserData_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportUserData}"
-                    Style="{StaticResource Button_Style}" />
-                  <Button
-                    x:Name="Button_ExportUserData"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ExportUserData_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ExportUserData}"
-                    Style="{StaticResource Button_Style}" />
-                </StackPanel>
-              </Expander>
-              <Expander
-                Margin="0,0,0,10"
-                Header="{x:Static I18n:ModManager_I18n.ManipulateUserGroup}"
-                Style="{StaticResource Expander_Style}">
-                <StackPanel>
-                  <Button
-                    x:Name="Button_ImportUserGroup"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ImportUserGroup_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportUserGroup}"
-                    Style="{StaticResource Button_Style}" />
-                  <ComboBox
-                    x:Name="ComboBox_ExportUserGroup"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Top"
-                    SelectedIndex="0"
-                    Style="{StaticResource ComboBox_Style}">
-                    <ComboBoxItem
-                      Content="{x:Static I18n:ModManager_I18n.All}"
-                      Style="{StaticResource ComboBoxItem_Style}"
-                      Tag="All" />
-                  </ComboBox>
-                  <Button
-                    x:Name="Button_ExportUserGroup"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ExportUserGroup_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ExportUserGroup}"
-                    Style="{StaticResource Button_Style}" />
-                </StackPanel>
-              </Expander>
-              <Expander
-                Margin="0,0,0,10"
-                Header="{x:Static I18n:ModManager_I18n.ManipulateEnabledList}"
-                Style="{StaticResource Expander_Style}">
-                <StackPanel>
-                  <Button
-                    x:Name="Button_ImportEnabledListFromSave"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ImportEnabledListFromSave_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportFromSave}"
-                    Style="{StaticResource Button_Style}" />
-                  <Button
-                    x:Name="Button_ImportEnabledList"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ImportEnabledList_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ImportEnabledList}"
-                    Style="{StaticResource Button_Style}" />
-                  <Button
-                    x:Name="Button_ExportList"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_ExportEnabledList_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ExportEnabledList}"
-                    Style="{StaticResource Button_Style}" />
-                </StackPanel>
-              </Expander>
-              <Expander
-                x:Name="Expander_RandomEnable"
-                Margin="0,0,0,10"
-                Header="{x:Static I18n:ModManager_I18n.RandomEnableMods}"
-                Style="{StaticResource Expander_Style}">
-                <StackPanel>
-                  <Grid Margin="0,0,0,5">
-                    <TextBox
-                      x:Name="TextBox_MinRandomSize"
-                      Height="30"
-                      InputMethod.IsInputMethodEnabled="False"
-                      PreviewTextInput="TextBox_NumberInput"
-                      Style="{StaticResource TextBox_Style}"
-                      ToolTip="{x:Static I18n:ModManager_I18n.MinRandomNumber}" />
-                    <!--  TextBox输入占位符  -->
-                    <Label
-                      Width="{Binding Width, ElementName=TextBox_MinRandomSize}"
-                      Height="{Binding Height, ElementName=TextBox_MinRandomSize}"
-                      Margin="{Binding Margin, ElementName=TextBox_MinRandomSize}"
-                      HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MinRandomSize}"
-                      VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MinRandomSize}"
+              Padding="0"
+              VerticalAlignment="Top"
+              HorizontalContentAlignment="Left"
+              Click="Button_ExpandGroupMenu_Click"
+              FontSize="16"
+              Style="{StaticResource Button_Style}">
+              <pu:ButtonHelper.Icon>
+                <emoji:TextBlock x:Name="Button_GroupMenuIcon" Text="📘" />
+              </pu:ButtonHelper.Icon>
+            </Button>
+            <Button
+              x:Name="Button_AddUserGroup"
+              Height="30"
+              Padding="0,0,5,0"
+              VerticalAlignment="Bottom"
+              HorizontalContentAlignment="Left"
+              pu:ButtonHelper.Icon="➕"
+              Click="Button_AddUserGroup_Click"
+              Content="{x:Static I18n:ModManager_I18n.AddUserGroup}"
+              Style="{StaticResource Button_Style}" />
+          </Grid>
+          <Grid x:Name="Grid_DataGrid" Grid.Column="1">
+            <DataGrid
+              x:Name="DataGrid_ModsShowList"
+              Margin="0,30,5,0"
+              d:ItemsSource="{d:SampleData ItemCount=5}"
+              pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
+              AllowDrop="True"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              Drop="DataGrid_ModsShowList_Drop"
+              GridLinesVisibility="Horizontal"
+              LostFocus="DataGrid_ModsShowList_LostFocus"
+              MouseLeftButtonDown="DataGrid_ModsShowList_MouseLeftButtonDown"
+              RowDetailsVisibilityMode="Visible"
+              RowHeight="50"
+              Style="{StaticResource DataGrid_Style}"
+              VirtualizingStackPanel.IsVirtualizing="True"
+              VirtualizingStackPanel.VirtualizationMode="Recycling">
+              <DataGrid.InputBindings>
+                <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
+              </DataGrid.InputBindings>
+              <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                  <Setter Property="Tag" Value="{Binding Id}" />
+                  <Setter Property="ContextMenu" Value="{Binding ContextMenu}" />
+                  <EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
+                  <EventSetter Event="Selected" Handler="DataGridItem_Selected" />
+                  <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                      <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </DataGrid.RowStyle>
+              <DataGrid.Columns>
+                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Collected">
+                  <DataGridTemplateColumn.Header>
+                    <emoji:TextBlock
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManager_I18n.MinRandomNumber}"
-                      IsEnabled="False"
-                      IsHitTestVisible="False">
-                      <Label.Style>
-                        <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
-                          <Setter Property="Visibility" Value="Hidden" />
+                      FontSize="20"
+                      Text="🌟"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowModCollectState}" />
+                  </DataGridTemplateColumn.Header>
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Button
+                        x:Name="Button_Collected"
+                        Margin="0,5,0,5"
+                        Padding="5,0,5,0"
+                        Click="Button_Collected_Click"
+                        Style="{StaticResource CollectedStyle}" />
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Enabled">
+                  <DataGridTemplateColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.EnabledState}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowModEnableState}" />
+                  </DataGridTemplateColumn.Header>
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Button
+                        x:Name="Button_Enabled"
+                        Margin="0,5,0,5"
+                        Padding="5,0,5,0"
+                        Click="Button_Enabled_Click"
+                        Style="{StaticResource EnabledStyle}" />
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn IsReadOnly="True">
+                  <DataGridTemplateColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.Icon}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowModIcon}" />
+                  </DataGridTemplateColumn.Header>
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Image Source="{Binding ImageSource}" />
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn
+                  Binding="{Binding Name}"
+                  ElementStyle="{StaticResource CenterAlignmentStyle}"
+                  IsReadOnly="True"
+                  SortMemberPath="Name">
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.Name}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowModName}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                  Width="100"
+                  Binding="{Binding Author}"
+                  ElementStyle="{StaticResource CenterAlignmentStyle}"
+                  IsReadOnly="True"
+                  SortMemberPath="Author">
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.Author}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowModAuthor}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                  Binding="{Binding Version}"
+                  ElementStyle="{StaticResource CenterAlignmentStyle}"
+                  IsReadOnly="True"
+                  SortMemberPath="Version">
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.Version}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowModVersion}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                  Binding="{Binding GameVersion}"
+                  ElementStyle="{StaticResource GameVersionStyle}"
+                  IsReadOnly="True"
+                  SortMemberPath="GameVersion">
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.GameVersion}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowGameVersion}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                  ElementStyle="{StaticResource UtilityStyle}"
+                  IsReadOnly="True"
+                  SortMemberPath="Utility">
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.Utility}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowUtility}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                  Binding="{Binding UserDescription}"
+                  IsReadOnly="True"
+                  SortMemberPath="UserDescription">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style BasedOn="{StaticResource CenterAlignmentStyle}" TargetType="TextBlock">
+                      <Setter Property="ToolTip" Value="{x:Null}" />
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{x:Static I18n:ModManager_I18n.UserDescription}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{x:Static I18n:ModManager_I18n.ShowUserDescription}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+              </DataGrid.Columns>
+              <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                  <StackPanel Orientation="Horizontal" Style="{StaticResource MissDependenciesStyle}">
+                    <Button
+                      x:Name="Button_EnableDependencies"
+                      Margin="10,0,0,0"
+                      Padding="5,0,5,0"
+                      Click="Button_EnableDependencies_Click"
+                      Content="{x:Static I18n:ModManager_I18n.EnableDependencies}"
+                      Style="{StaticResource Button_Style}"
+                      ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
+                    <Label
+                      HorizontalContentAlignment="Left"
+                      Background="{x:Null}"
+                      Content="{Binding Dependencies}"
+                      Style="{StaticResource Label_Style}"
+                      ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
+                  </StackPanel>
+                </DataTemplate>
+              </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+            <TextBox
+              x:Name="TextBox_SearchMods"
+              Height="30"
+              Margin="0,0,120,0"
+              VerticalAlignment="Top"
+              Style="{StaticResource TextBox_Style}"
+              TextChanged="TextBox_SearchMods_TextChanged"
+              TextWrapping="Wrap"
+              ToolTip="{x:Static I18n:ModManager_I18n.SearchMod}" />
+            <!--  TextBox输入占位符  -->
+            <Label
+              Width="{Binding Width, ElementName=TextBox_SearchMods}"
+              Height="{Binding Height, ElementName=TextBox_SearchMods}"
+              Margin="{Binding Margin, ElementName=TextBox_SearchMods}"
+              HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_SearchMods}"
+              VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_SearchMods}"
+              Background="{x:Null}"
+              Content="{x:Static I18n:ModManager_I18n.SearchMod}"
+              FontSize="16"
+              IsEnabled="False"
+              IsHitTestVisible="False">
+              <Label.Style>
+                <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                  <Setter Property="Visibility" Value="Hidden" />
+                  <Style.Triggers>
+                    <MultiDataTrigger>
+                      <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Text, ElementName=TextBox_SearchMods}" Value="" />
+                        <Condition Binding="{Binding IsFocused, ElementName=TextBox_SearchMods}" Value="False" />
+                      </MultiDataTrigger.Conditions>
+                      <MultiDataTrigger.Setters>
+                        <Setter Property="Visibility" Value="Visible" />
+                      </MultiDataTrigger.Setters>
+                    </MultiDataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Label.Style>
+            </Label>
+            <ComboBox
+              x:Name="ComboBox_SearchType"
+              Width="115"
+              Height="30"
+              Margin="0,0,5,0"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              SelectedIndex="0"
+              SelectionChanged="ComboBox_SearchType_SelectionChanged"
+              Style="{StaticResource ComboBox_Style}">
+              <ComboBoxItem
+                Content="{x:Static I18n:ModManager_I18n.Name}"
+                Style="{StaticResource ComboBoxItem_Style}"
+                Tag="Name" />
+              <ComboBoxItem
+                Content="ID"
+                Style="{StaticResource ComboBoxItem_Style}"
+                Tag="Id" />
+              <ComboBoxItem
+                Content="{x:Static I18n:ModManager_I18n.Author}"
+                Style="{StaticResource ComboBoxItem_Style}"
+                Tag="Author" />
+              <ComboBoxItem
+                Content="{x:Static I18n:ModManager_I18n.UserDescription}"
+                Style="{StaticResource ComboBoxItem_Style}"
+                Tag="UserDescription" />
+            </ComboBox>
+          </Grid>
+          <Grid
+            x:Name="Grid_RightSide"
+            Grid.Column="2"
+            MinWidth="120">
+            <ScrollViewer Margin="0,0,0,80" VerticalScrollBarVisibility="Auto">
+              <StackPanel>
+                <Expander
+                  Margin="0,0,0,5"
+                  Header="{x:Static I18n:ModManager_I18n.OpenDirectory}"
+                  Style="{StaticResource Expander_Style}">
+                  <StackPanel>
+                    <Button
+                      x:Name="Button_OpenModDirectory"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_OpenModDirectory_Click"
+                      Content="{x:Static I18n:ModManager_I18n.OpenModsDirectory}"
+                      Style="{StaticResource Button_Style}" />
+                    <Button
+                      x:Name="Button_OpenBackupDirectory"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_OpenBackupDirectory_Click"
+                      Content="{x:Static I18n:ModManager_I18n.OpenBackupDirectory}"
+                      Style="{StaticResource Button_Style}" />
+                    <Button
+                      x:Name="Button_OpenSaveDirectory"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_OpenSaveDirectory_Click"
+                      Content="{x:Static I18n:ModManager_I18n.OpenSaveDirectory}"
+                      Style="{StaticResource Button_Style}" />
+                  </StackPanel>
+                </Expander>
+                <Expander
+                  Margin="0,0,0,5"
+                  Header="{x:Static I18n:ModManager_I18n.ManipulateUserData}"
+                  Style="{StaticResource Expander_Style}"
+                  ToolTip="{x:Static I18n:ModManager_I18n.ManipulateUserDataToolTip}">
+                  <StackPanel>
+                    <Button
+                      x:Name="Button_ImportUserData"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ImportUserData_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ImportUserData}"
+                      Style="{StaticResource Button_Style}" />
+                    <Button
+                      x:Name="Button_ExportUserData"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ExportUserData_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ExportUserData}"
+                      Style="{StaticResource Button_Style}" />
+                  </StackPanel>
+                </Expander>
+                <Expander
+                  Margin="0,0,0,5"
+                  Header="{x:Static I18n:ModManager_I18n.ManipulateUserGroup}"
+                  Style="{StaticResource Expander_Style}">
+                  <StackPanel>
+                    <Button
+                      x:Name="Button_ImportUserGroup"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ImportUserGroup_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ImportUserGroup}"
+                      Style="{StaticResource Button_Style}" />
+                    <ComboBox
+                      x:Name="ComboBox_ExportUserGroup"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Top"
+                      SelectedIndex="0"
+                      Style="{StaticResource ComboBox_Style}">
+                      <ComboBoxItem
+                        Content="{x:Static I18n:ModManager_I18n.All}"
+                        Style="{StaticResource ComboBoxItem_Style}"
+                        Tag="All" />
+                    </ComboBox>
+                    <Button
+                      x:Name="Button_ExportUserGroup"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ExportUserGroup_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ExportUserGroup}"
+                      Style="{StaticResource Button_Style}" />
+                  </StackPanel>
+                </Expander>
+                <Expander
+                  Margin="0,0,0,5"
+                  Header="{x:Static I18n:ModManager_I18n.ManipulateEnabledList}"
+                  Style="{StaticResource Expander_Style}">
+                  <StackPanel>
+                    <Button
+                      x:Name="Button_ImportEnabledListFromSave"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ImportEnabledListFromSave_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ImportFromSave}"
+                      Style="{StaticResource Button_Style}" />
+                    <Button
+                      x:Name="Button_ImportEnabledList"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ImportEnabledList_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ImportEnabledList}"
+                      Style="{StaticResource Button_Style}" />
+                    <Button
+                      x:Name="Button_ExportList"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_ExportEnabledList_Click"
+                      Content="{x:Static I18n:ModManager_I18n.ExportEnabledList}"
+                      Style="{StaticResource Button_Style}" />
+                  </StackPanel>
+                </Expander>
+                <Expander
+                  x:Name="Expander_RandomEnable"
+                  Margin="0,0,0,5"
+                  Header="{x:Static I18n:ModManager_I18n.RandomEnableMods}"
+                  Style="{StaticResource Expander_Style}">
+                  <StackPanel>
+                    <Grid Margin="0,0,0,5">
+                      <TextBox
+                        x:Name="TextBox_MinRandomSize"
+                        Height="30"
+                        InputMethod.IsInputMethodEnabled="False"
+                        PreviewTextInput="TextBox_NumberInput"
+                        Style="{StaticResource TextBox_Style}"
+                        ToolTip="{x:Static I18n:ModManager_I18n.MinRandomNumber}" />
+                      <!--  TextBox输入占位符  -->
+                      <Label
+                        Width="{Binding Width, ElementName=TextBox_MinRandomSize}"
+                        Height="{Binding Height, ElementName=TextBox_MinRandomSize}"
+                        Margin="{Binding Margin, ElementName=TextBox_MinRandomSize}"
+                        HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MinRandomSize}"
+                        VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MinRandomSize}"
+                        Background="{x:Null}"
+                        Content="{x:Static I18n:ModManager_I18n.MinRandomNumber}"
+                        IsEnabled="False"
+                        IsHitTestVisible="False">
+                        <Label.Style>
+                          <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                              <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                  <Condition Binding="{Binding Text, ElementName=TextBox_MinRandomSize}" Value="" />
+                                  <Condition Binding="{Binding IsFocused, ElementName=TextBox_MinRandomSize}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                  <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger.Setters>
+                              </MultiDataTrigger>
+                            </Style.Triggers>
+                          </Style>
+                        </Label.Style>
+                      </Label>
+                    </Grid>
+                    <Grid Margin="0,0,0,5">
+                      <TextBox
+                        x:Name="TextBox_MaxRandomSize"
+                        Height="30"
+                        InputMethod.IsInputMethodEnabled="False"
+                        PreviewTextInput="TextBox_NumberInput"
+                        Style="{StaticResource TextBox_Style}"
+                        ToolTip="{x:Static I18n:ModManager_I18n.MaxRandomNumber}" />
+                      <!--  TextBox输入占位符  -->
+                      <Label
+                        Width="{Binding Width, ElementName=TextBox_MaxRandomSize}"
+                        Height="{Binding Height, ElementName=TextBox_MaxRandomSize}"
+                        Margin="{Binding Margin, ElementName=TextBox_MaxRandomSize}"
+                        HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MaxRandomSize}"
+                        VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MaxRandomSize}"
+                        Background="{x:Null}"
+                        Content="{x:Static I18n:ModManager_I18n.MaxRandomNumber}"
+                        IsEnabled="False"
+                        IsHitTestVisible="False">
+                        <Label.Style>
+                          <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                            <Setter Property="Visibility" Value="Hidden" />
+                            <Style.Triggers>
+                              <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                  <Condition Binding="{Binding Text, ElementName=TextBox_MaxRandomSize}" Value="" />
+                                  <Condition Binding="{Binding IsFocused, ElementName=TextBox_MaxRandomSize}" Value="False" />
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                  <Setter Property="Visibility" Value="Visible" />
+                                </MultiDataTrigger.Setters>
+                              </MultiDataTrigger>
+                            </Style.Triggers>
+                          </Style>
+                        </Label.Style>
+                      </Label>
+                    </Grid>
+                    <Button
+                      x:Name="Button_RandomMods"
+                      Height="30"
+                      Margin="0,0,0,5"
+                      VerticalAlignment="Bottom"
+                      Click="Button_RandomMods_Click"
+                      Content="{x:Static I18n:ModManager_I18n.RandomEnableMods}">
+                      <Button.Style>
+                        <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
+                          <Setter Property="IsEnabled" Value="True" />
                           <Style.Triggers>
-                            <MultiDataTrigger>
-                              <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Text, ElementName=TextBox_MinRandomSize}" Value="" />
-                                <Condition Binding="{Binding IsFocused, ElementName=TextBox_MinRandomSize}" Value="False" />
-                              </MultiDataTrigger.Conditions>
-                              <MultiDataTrigger.Setters>
-                                <Setter Property="Visibility" Value="Visible" />
-                              </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>
+                            <DataTrigger Binding="{Binding Text, ElementName=TextBox_MaxRandomSize}" Value="">
+                              <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Text, ElementName=TextBox_MinRandomSize}" Value="">
+                              <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
                           </Style.Triggers>
                         </Style>
-                      </Label.Style>
-                    </Label>
-                  </Grid>
-                  <Grid Margin="0,0,0,5">
-                    <TextBox
-                      x:Name="TextBox_MaxRandomSize"
-                      Height="30"
-                      InputMethod.IsInputMethodEnabled="False"
-                      PreviewTextInput="TextBox_NumberInput"
-                      Style="{StaticResource TextBox_Style}"
-                      ToolTip="{x:Static I18n:ModManager_I18n.MaxRandomNumber}" />
-                    <!--  TextBox输入占位符  -->
-                    <Label
-                      Width="{Binding Width, ElementName=TextBox_MaxRandomSize}"
-                      Height="{Binding Height, ElementName=TextBox_MaxRandomSize}"
-                      Margin="{Binding Margin, ElementName=TextBox_MaxRandomSize}"
-                      HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MaxRandomSize}"
-                      VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MaxRandomSize}"
-                      Background="{x:Null}"
-                      Content="{x:Static I18n:ModManager_I18n.MaxRandomNumber}"
-                      IsEnabled="False"
-                      IsHitTestVisible="False">
-                      <Label.Style>
-                        <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
-                          <Setter Property="Visibility" Value="Hidden" />
-                          <Style.Triggers>
-                            <MultiDataTrigger>
-                              <MultiDataTrigger.Conditions>
-                                <Condition Binding="{Binding Text, ElementName=TextBox_MaxRandomSize}" Value="" />
-                                <Condition Binding="{Binding IsFocused, ElementName=TextBox_MaxRandomSize}" Value="False" />
-                              </MultiDataTrigger.Conditions>
-                              <MultiDataTrigger.Setters>
-                                <Setter Property="Visibility" Value="Visible" />
-                              </MultiDataTrigger.Setters>
-                            </MultiDataTrigger>
-                          </Style.Triggers>
-                        </Style>
-                      </Label.Style>
-                    </Label>
-                  </Grid>
-                  <Button
-                    x:Name="Button_RandomMods"
-                    Height="30"
-                    Margin="0,0,0,5"
-                    VerticalAlignment="Bottom"
-                    Click="Button_RandomMods_Click"
-                    Content="{x:Static I18n:ModManager_I18n.RandomEnableMods}">
-                    <Button.Style>
-                      <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
-                        <Setter Property="IsEnabled" Value="True" />
-                        <Style.Triggers>
-                          <DataTrigger Binding="{Binding Text, ElementName=TextBox_MaxRandomSize}" Value="">
-                            <Setter Property="IsEnabled" Value="False" />
-                          </DataTrigger>
-                          <DataTrigger Binding="{Binding Text, ElementName=TextBox_MinRandomSize}" Value="">
-                            <Setter Property="IsEnabled" Value="False" />
-                          </DataTrigger>
-                        </Style.Triggers>
-                      </Style>
-                    </Button.Style>
-                  </Button>
-                </StackPanel>
-              </Expander>
-            </StackPanel>
-          </ScrollViewer>
-          <Button
-            x:Name="Button_Save"
-            Height="30"
-            Margin="5,0,5,40"
-            VerticalAlignment="Bottom"
-            Click="Button_Save_Click"
-            Content="{x:Static I18n:ModManager_I18n.SaveConfig}"
-            Style="{StaticResource RemindStyle}"
-            Tag="False">
-            <pu:ButtonHelper.Icon>
-              <emoji:TextBlock Text="💾" />
-            </pu:ButtonHelper.Icon>
-          </Button>
-          <Button
-            x:Name="Button_GameStart"
-            Height="30"
-            Margin="5,0,5,5"
-            VerticalAlignment="Bottom"
-            Click="Button_GameStart_Click"
-            Content="{x:Static I18n:ModManager_I18n.StartGame}"
-            Style="{StaticResource Button_Style}">
-            <pu:ButtonHelper.Icon>
-              <emoji:TextBlock Text="▶" />
-            </pu:ButtonHelper.Icon>
-            <Button.ContextMenu>
-              <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                <CheckBox
-                  x:Name="CheckBox_ClearLogOnStart"
-                  Click="CheckBox_ClearLogOnStart_Click"
-                  Content="{x:Static I18n:ModManager_I18n.ClearLogOnStart}"
-                  Style="{StaticResource CheckBox_Style}" />
-              </ContextMenu>
-            </Button.ContextMenu>
-          </Button>
+                      </Button.Style>
+                    </Button>
+                  </StackPanel>
+                </Expander>
+              </StackPanel>
+            </ScrollViewer>
+            <Button
+              x:Name="Button_Save"
+              Height="30"
+              Margin="5,0,5,40"
+              VerticalAlignment="Bottom"
+              Click="Button_Save_Click"
+              Content="{x:Static I18n:ModManager_I18n.SaveConfig}"
+              Style="{StaticResource RemindStyle}"
+              Tag="False">
+              <pu:ButtonHelper.Icon>
+                <emoji:TextBlock Text="💾" />
+              </pu:ButtonHelper.Icon>
+            </Button>
+            <Button
+              x:Name="Button_GameStart"
+              Height="30"
+              Margin="5,0,5,5"
+              VerticalAlignment="Bottom"
+              Click="Button_GameStart_Click"
+              Content="{x:Static I18n:ModManager_I18n.StartGame}"
+              Style="{StaticResource Button_Style}">
+              <pu:ButtonHelper.Icon>
+                <emoji:TextBlock Text="▶" />
+              </pu:ButtonHelper.Icon>
+              <Button.ContextMenu>
+                <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                  <CheckBox
+                    x:Name="CheckBox_ClearLogOnStart"
+                    Click="CheckBox_ClearLogOnStart_Click"
+                    Content="{x:Static I18n:ModManager_I18n.ClearLogOnStart}"
+                    Style="{StaticResource CheckBox_Style}" />
+                </ContextMenu>
+              </Button.ContextMenu>
+            </Button>
+          </Grid>
         </Grid>
         <Grid
           x:Name="Grid_ModDetails"

@@ -161,11 +161,6 @@ namespace StarsectorTools.Windows
             Button_SettingsPage.Tag = true;
         }
 
-        private void Grid_MainMenu_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Frame_MainFrame.Margin = new Thickness(Grid_MainMenu.ActualWidth, 0, 0, 0);
-        }
-
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
             STLog.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");

@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
+using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
@@ -41,7 +42,7 @@ namespace StarsectorTools.Tools.ModManager
         private static readonly Uri modTypeGroupUri = new("/Resources/ModTypeGroup.toml", UriKind.Relative);
 
         /// <summary>模组分组列表的展开状态</summary>
-        private bool isGroupMenuOpen = false;
+        private bool expandGroupMenu = false;
 
         /// <summary>模组详情的展开状态</summary>
         private bool isShowModDetails = false;
@@ -230,19 +231,19 @@ namespace StarsectorTools.Tools.ModManager
         private void GetAllModsInfo()
         {
             int errSize = 0;
-            DirectoryInfo dirs = new(GameInfo.ModsDirectory);
+            DirectoryInfo dirInfo = new(GameInfo.ModsDirectory);
             string err = string.Empty;
-            foreach (var dir in dirs.GetDirectories())
+            foreach (var dir in dirInfo.GetDirectories())
             {
-                if (ModInfo.Parse($"{dir.FullName}\\{modInfoFile}") is not ModInfo info)
-                {
-                    err += $"{dir.FullName}\n";
-                    errSize++;
-                }
-                else
+                if (ModInfo.Parse($"{dir.FullName}\\{modInfoFile}") is ModInfo info)
                 {
                     allModsInfo.Add(info.Id, info);
                     STLog.WriteLine($"{I18n.ModAddSuccess}: {dir.FullName}", STLogLevel.DEBUG);
+                }
+                else
+                {
+                    err += $"{dir.FullName}\n";
+                    errSize++;
                 }
             }
             STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, errSize);

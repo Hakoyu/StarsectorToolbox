@@ -123,11 +123,11 @@
       </Button>
     </Grid>
     <Grid Margin="0,30,0,0">
-      <Grid
-        x:Name="Grid_MainMenu"
-        Width="30"
-        HorizontalAlignment="Left"
-        SizeChanged="Grid_MainMenu_SizeChanged">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Grid x:Name="Grid_MainMenu" Width="30">
         <ListBox
           x:Name="ListBox_MainMenu"
           Margin="0,0,0,60"
@@ -195,7 +195,7 @@
       </Grid>
       <Frame
         x:Name="Frame_MainFrame"
-        Margin="30,0,0,0"
+        Grid.Column="1"
         ContentRendered="Frame_MainFrame_ContentRendered"
         NavigationUIVisibility="Hidden" />
     </Grid>

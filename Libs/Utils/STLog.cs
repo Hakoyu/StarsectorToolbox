@@ -41,6 +41,7 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>读写锁</summary>
         internal static ReaderWriterLockSlim rwLockS = new();
 
+        /// <summary>堆栈过滤</summary>
         private static List<string> shieldOutput = new()
         {
             "at System.",

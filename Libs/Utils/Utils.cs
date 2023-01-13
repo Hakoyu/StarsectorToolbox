@@ -63,11 +63,11 @@ namespace StarsectorTools.Libs.Utils
             if (!FileExists(file))
                 return null;
             string jsonData = File.ReadAllText(file);
-            JsonObject? jsonObject = null;
             // 清除json中的注释
             jsonData = Regex.Replace(jsonData, @"(#|//)[\S ]*", "");
             // 清除json中不符合规定的逗号
             jsonData = Regex.Replace(jsonData, @",(?=[\r\n \t]*[\]\}])|(?<=[\}\]]),[ \t]*\r?\Z", "");
+            JsonObject? jsonObject = null;
             try
             {
                 jsonObject = JsonNode.Parse(jsonData)?.AsObject();

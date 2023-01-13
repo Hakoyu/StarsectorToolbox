@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using HKW.TomlParse;
 using Panuon.WPF.UI;
+using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;

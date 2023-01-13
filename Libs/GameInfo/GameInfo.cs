@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Text.Json.Nodes;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
-namespace StarsectorTools.Libs.Utils
+namespace StarsectorTools.Libs.GameInfo
 {
     /// <summary>游戏信息</summary>
     public static class GameInfo
@@ -38,11 +39,11 @@ namespace StarsectorTools.Libs.Utils
             if (string.IsNullOrEmpty(directoryName))
             {
                 STLog.WriteLine(I18n.GameDirectoryIsEmpty, STLogLevel.ERROR);
-                Utils.ShowMessageBox(I18n.GameDirectoryIsEmpty, STMessageBoxIcon.Error);
+                Utils.Utils.ShowMessageBox(I18n.GameDirectoryIsEmpty, STMessageBoxIcon.Error);
                 return false;
             }
             ExeFile = $"{directoryName}\\starsector.exe";
-            if (Utils.FileExists(ExeFile, false))
+            if (Utils.Utils.FileExists(ExeFile, false))
             {
                 GameDirectory = directoryName;
                 ModsDirectory = $"{directoryName}\\mods";
@@ -63,7 +64,7 @@ namespace StarsectorTools.Libs.Utils
             {
                 ExeFile = null!;
                 STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
-                Utils.ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", STMessageBoxIcon.Error);
+                Utils.Utils.ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", STMessageBoxIcon.Error);
             }
             return false;
         }
@@ -84,8 +85,8 @@ namespace StarsectorTools.Libs.Utils
             //显示文件选择对话框,并判断文件是否选取
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return false;
-            string directory = System.IO.Path.GetDirectoryName(openFileDialog.FileName)!;
-            if (SetGameData(System.IO.Path.GetDirectoryName(openFileDialog.FileName)!))
+            string directory = Path.GetDirectoryName(openFileDialog.FileName)!;
+            if (SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!))
             {
                 STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
                 return true;

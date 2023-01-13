@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Linq;
 using HKW.TomlParse;
+using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
@@ -79,9 +80,9 @@ namespace StarsectorTools.Tools.ModManager
             }
         }
 
-        private void Button_GroupMenu_Click(object sender, RoutedEventArgs e)
+        private void Button_ExpandGroupMenu_Click(object sender, RoutedEventArgs e)
         {
-            if (isGroupMenuOpen)
+            if (expandGroupMenu)
             {
                 Button_GroupMenuIcon.Text = "📘";
                 Grid_GroupMenu.Width = 30;
@@ -93,12 +94,7 @@ namespace StarsectorTools.Tools.ModManager
                 Grid_GroupMenu.Width = double.NaN;
                 ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Auto);
             }
-            isGroupMenuOpen = !isGroupMenuOpen;
-        }
-
-        private void Grid_GroupMenu_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
+            expandGroupMenu = !expandGroupMenu;
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
@@ -474,11 +470,6 @@ namespace StarsectorTools.Tools.ModManager
             if (sender is Control control && control.Parent is UIElement ui)
                 ui.RaiseEvent(eventArg);
             e.Handled = true;
-        }
-
-        private void Grid_RightSide_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Grid_DataGrid.Margin = new Thickness(Grid_GroupMenu.ActualWidth, 0, Grid_RightSide.ActualWidth, 0);
         }
 
         private void Button_ImportUserGroup_Click(object sender, RoutedEventArgs e)
