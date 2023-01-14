@@ -24,7 +24,7 @@ namespace StarsectorTools.Libs.Utils
                 where TKey : notnull
                 where TValue : TReadOnlyValue
         {
-            private IDictionary<TKey, TValue> rawDictionary;
+            private IDictionary<TKey, TValue> _dictionary;
 
             /// <summary>
             /// 构造只读字典
@@ -33,33 +33,33 @@ namespace StarsectorTools.Libs.Utils
             /// <exception cref="ArgumentNullException">输入为null</exception>
             public ReadOnlyDictionaryWrapper(IDictionary<TKey, TValue> dictionary)
             {
-                rawDictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
+                _dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
             }
             /// <inheritdoc/>
-            public bool ContainsKey(TKey key) => rawDictionary.ContainsKey(key);
+            public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
 
             /// <inheritdoc/>
-            public IEnumerable<TKey> Keys => rawDictionary.Keys;
+            public IEnumerable<TKey> Keys => _dictionary.Keys;
 
             /// <inheritdoc/>
             public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TReadOnlyValue value)
             {
-                var r = rawDictionary.TryGetValue(key, out var v);
+                var r = _dictionary.TryGetValue(key, out var v);
                 value = v!;
                 return r;
             }
 
             /// <inheritdoc/>
-            public IEnumerable<TReadOnlyValue> Values => rawDictionary.Values.Cast<TReadOnlyValue>();
+            public IEnumerable<TReadOnlyValue> Values => _dictionary.Values.Cast<TReadOnlyValue>();
 
             /// <inheritdoc/>
-            public TReadOnlyValue this[TKey key] => rawDictionary[key];
+            public TReadOnlyValue this[TKey key] => _dictionary[key];
 
             /// <inheritdoc/>
-            public int Count => rawDictionary.Count;
+            public int Count => _dictionary.Count;
 
             /// <inheritdoc/>
-            public IEnumerator<KeyValuePair<TKey, TReadOnlyValue>> GetEnumerator() => rawDictionary.Select(x => new KeyValuePair<TKey, TReadOnlyValue>(x.Key, x.Value)).GetEnumerator();
+            public IEnumerator<KeyValuePair<TKey, TReadOnlyValue>> GetEnumerator() => _dictionary.Select(x => new KeyValuePair<TKey, TReadOnlyValue>(x.Key, x.Value)).GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }

@@ -55,13 +55,13 @@ namespace StarsectorTools.Windows
         {
             if (e.Exception.Source == nameof(StarsectorTools))
             {
-                STLog.WriteLine(I18n.GlobalException, e.Exception);
-                Utils.ShowMessageBox($"{I18n.GlobalExceptionMessage}\n\n{STLog.ExceptionParse(e.Exception)}", STMessageBoxIcon.Error);
+                STLog.WriteLine(I18n.GlobalException, e.Exception, false);
+                Utils.ShowMessageBox($"{I18n.GlobalExceptionMessage}\n\n{STLog.SimplifyException(e.Exception)}", STMessageBoxIcon.Error);
             }
             else
             {
-                STLog.WriteLine(I18n.GlobalExpansionException, e.Exception);
-                Utils.ShowMessageBox($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.ExceptionParse(e.Exception)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.GlobalExpansionException}: {e.Exception.Source}", e.Exception, false);
+                Utils.ShowMessageBox($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.SimplifyException(e.Exception)}", STMessageBoxIcon.Error);
             }
             e.Handled = true;
         }

@@ -136,14 +136,18 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="ex">错误</param>
+        /// <param name="simplifyException">简化异常信息</param>
         /// <param name="args">插入的对象</param>
-        public static void WriteLine(string message, Exception ex, params object[] args)
+        public static void WriteLine(string message, Exception ex, bool simplifyException = true, params object[] args)
         {
             rwLockS.EnterWriteLock();
             try
             {
                 sw.WriteLine($"[{GetClassName()}] {STLogLevel.ERROR} {KeyParse(message, args)}");
-                sw.WriteLine(ExceptionParse(ex));
+                if (simplifyException)
+                    sw.WriteLine(SimplifyException(ex));
+                else
+                    sw.WriteLine(ex.Message);
                 sw.Flush();
             }
             finally
@@ -169,7 +173,7 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         /// <param name="ex">Exception</param>
         /// <returns></returns>
-        public static string ExceptionParse(Exception ex)
+        public static string SimplifyException(Exception ex)
         {
             var list = ex.ToString().Split("\r\n").Where(s => !shieldOutput.Any(s1 => s.Contains(s1)));
             return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?={nameof(StarsectorTools)})", "");

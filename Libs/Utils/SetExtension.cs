@@ -14,15 +14,14 @@ namespace StarsectorTools.Libs.Utils
     public static class SetExtension
     {
         /// <summary>
-        /// 外部只读集合
+        /// 只读哈希集合
         /// </summary>
         /// <typeparam name="T">类型</typeparam>
         [DebuggerDisplay("Count= {Count}")]
         public class ReadOnlySet<T> : IReadOnlySet<T>
             where T : notnull
         {
-            private readonly ISet<T> set;
-
+            private readonly ISet<T> _set;
             /// <summary>
             /// 初始化只读集合
             /// </summary>
@@ -30,26 +29,26 @@ namespace StarsectorTools.Libs.Utils
             public ReadOnlySet(ISet<T> set)
             {
                 ArgumentNullException.ThrowIfNull(set);
-                this.set = set;
+                this._set = set;
             }
             /// <inheritdoc/>
-            public int Count => set.Count;
+            public int Count => _set.Count;
             /// <inheritdoc/>
-            public bool Contains(T item) => set.Contains(item);
+            public bool Contains(T item) => _set.Contains(item);
             /// <inheritdoc/>
-            public bool IsProperSubsetOf(IEnumerable<T> other) => set.IsProperSubsetOf(other);
+            public bool IsProperSubsetOf(IEnumerable<T> other) => _set.IsProperSubsetOf(other);
             /// <inheritdoc/>
-            public bool IsProperSupersetOf(IEnumerable<T> other) => set.IsProperSupersetOf(other);
+            public bool IsProperSupersetOf(IEnumerable<T> other) => _set.IsProperSupersetOf(other);
             /// <inheritdoc/>
-            public bool IsSubsetOf(IEnumerable<T> other) => set.IsSubsetOf(other);
+            public bool IsSubsetOf(IEnumerable<T> other) => _set.IsSubsetOf(other);
             /// <inheritdoc/>
-            public bool IsSupersetOf(IEnumerable<T> other) => set.IsSupersetOf(other);
+            public bool IsSupersetOf(IEnumerable<T> other) => _set.IsSupersetOf(other);
             /// <inheritdoc/>
-            public bool Overlaps(IEnumerable<T> other) => set.Overlaps(other);
+            public bool Overlaps(IEnumerable<T> other) => _set.Overlaps(other);
             /// <inheritdoc/>
-            public bool SetEquals(IEnumerable<T> other) => set.SetEquals(other);
+            public bool SetEquals(IEnumerable<T> other) => _set.SetEquals(other);
             /// <inheritdoc/>
-            public IEnumerator<T> GetEnumerator() => set.GetEnumerator();
+            public IEnumerator<T> GetEnumerator() => _set.GetEnumerator();
             /// <inheritdoc/>
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
