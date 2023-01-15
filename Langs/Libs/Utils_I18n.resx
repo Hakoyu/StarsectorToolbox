@@ -115,8 +115,8 @@
   <data name="GameDirectorySetCompleted" xml:space="preserve">
     <value>游戏目录设置完毕</value>
   </data>
-  <data name="LinkError" xml:space="preserve">
-    <value>链接错误</value>
+  <data name="ProcessStartError" xml:space="preserve">
+    <value>进程启动错误</value>
   </data>
   <data name="ModInfoError" xml:space="preserve">
     <value>模组信息错误</value>

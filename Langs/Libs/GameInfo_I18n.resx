@@ -124,7 +124,7 @@
   <data name="Omega" xml:space="preserve">
     <value>欧米伽</value>
   </data>
-  <data name="Persean" xml:space="preserve">
+  <data name="PerseanLeague" xml:space="preserve">
     <value>英仙座联盟</value>
   </data>
   <data name="Pirates" xml:space="preserve">
@@ -136,7 +136,7 @@
   <data name="Poor" xml:space="preserve">
     <value>难民</value>
   </data>
-  <data name="Remnant" xml:space="preserve">
+  <data name="Remnants" xml:space="preserve">
     <value>余辉</value>
   </data>
   <data name="Scavengers" xml:space="preserve">

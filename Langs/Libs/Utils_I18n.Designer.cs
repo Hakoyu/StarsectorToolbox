@@ -124,15 +124,6 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
-        ///   查找类似 链接错误 的本地化字符串。
-        /// </summary>
-        public static string LinkError {
-            get {
-                return ResourceManager.GetString("LinkError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 载入错误 的本地化字符串。
         /// </summary>
         public static string LoadError {
@@ -156,6 +147,15 @@ namespace StarsectorTools.Langs.Libs {
         public static string Path {
             get {
                 return ResourceManager.GetString("Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 进程启动错误 的本地化字符串。
+        /// </summary>
+        public static string ProcessStartError {
+            get {
+                return ResourceManager.GetString("ProcessStartError", resourceCulture);
             }
         }
         

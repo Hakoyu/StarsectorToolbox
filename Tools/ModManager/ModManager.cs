@@ -547,11 +547,11 @@ namespace StarsectorTools.Tools.ModManager
         private void RefreshModsContextMenu()
         {
             foreach (var showInfo in allModsShowInfo.Values)
-                showInfo.ContextMenu = CreateContextMenu(showInfo);
+                showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
             STLog.WriteLine($"{I18n.ContextMenuRefreshCompleted} {I18n.Size}: {allModsShowInfo.Values.Count}");
         }
 
-        private ContextMenu CreateContextMenu(ModShowInfo showInfo)
+        private ContextMenu CreateModShowContextMenu(ModShowInfo showInfo)
         {
             STLog.WriteLine($"{showInfo.Id} {I18n.AddContextMenu}", STLogLevel.DEBUG);
             ContextMenu contextMenu = new();
@@ -693,7 +693,7 @@ namespace StarsectorTools.Tools.ModManager
                     STLog.WriteLine($"{id} {I18n.RemoveFromUserGroup} {group}", STLogLevel.DEBUG);
                 }
             }
-            showInfo.ContextMenu = CreateContextMenu(showInfo);
+            showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
         }
 
         private void ChangeSelectedModsEnabled(bool? enabled = null)
@@ -726,7 +726,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             ModShowInfo showInfo = allModsShowInfo[id];
             showInfo.IsEnabled = (bool)(enabled is null ? !showInfo.IsEnabled : enabled);
-            showInfo.ContextMenu = CreateContextMenu(showInfo);
+            showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
             if (showInfo.IsEnabled is true)
             {
                 if (allEnabledModsId.Add(showInfo.Id))
@@ -786,7 +786,7 @@ namespace StarsectorTools.Tools.ModManager
         {
             ModShowInfo showInfo = allModsShowInfo[id];
             showInfo.IsCollected = (bool)(collected is null ? !showInfo.IsCollected : collected);
-            showInfo.ContextMenu = CreateContextMenu(showInfo);
+            showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
             if (showInfo.IsCollected is true)
             {
                 if (allCollectedModsId.Add(showInfo.Id))
@@ -1082,7 +1082,7 @@ namespace StarsectorTools.Tools.ModManager
                 }
             }
             if (createContextMenu)
-                showInfo.ContextMenu = CreateContextMenu(showInfo);
+                showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
             STLog.WriteLine($"{I18n.AddMod} {showInfo.Id} {showInfo.Version}", STLogLevel.DEBUG);
         }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static StarsectorTools.Libs.Utils.SetExtension;
+using I18n = StarsectorTools.Langs.Libs.GameInfo_I18n;
 
 namespace StarsectorTools.Libs.GameInfo
 {
@@ -34,7 +36,7 @@ namespace StarsectorTools.Libs.GameInfo
         /// <summary>欧米伽</summary>
         public const string Omega = "omega";
         /// <summary>英仙座联盟</summary>
-        public const string Persean = "persean";
+        public const string PerseanLeague = "persean_league";
         /// <summary>海盗</summary>
         public const string Pirates = "pirates";
         /// <summary>玩家</summary>
@@ -42,7 +44,7 @@ namespace StarsectorTools.Libs.GameInfo
         /// <summary>难民</summary>
         public const string Poor = "poor";
         /// <summary>余辉</summary>
-        public const string Remnant = "remnant";
+        public const string Remnants= "remnants";
         /// <summary>拾荒者</summary>
         public const string Scavengers = "scavengers";
         /// <summary>辛达强权</summary>
@@ -51,27 +53,28 @@ namespace StarsectorTools.Libs.GameInfo
         public const string Sleeper = "sleeper";
         /// <summary>速子科技</summary>
         public const string Tritachyon = "tritachyon";
-        /// <summary>所有势力</summary>
-        public static ReadOnlySet<string> AllFactions = new(new HashSet<string>() {
-            Derelict,
-            Hegemony,
-            Independent,
-            KnightsOfLudd,
-            LionsGuard,
-            LuddicChurch,
-            LuddicPath,
-            Mercenary,
-            Neutral,
-            Omega,
-            Persean,
-            Pirates,
-            Player,
-            Poor,
-            Remnant,
-            Scavengers,
-            SindrianDiktat,
-            Sleeper,
-            Tritachyon
+        /// <summary>所有势力及其I18n</summary>
+        public static ReadOnlyDictionary<string, string> AllFactionsI18n = new(new Dictionary<string, string>()
+        {
+            [Derelict] = I18n.Derelict,
+            [Hegemony] = I18n.Hegemony,
+            [Independent] = I18n.Independent,
+            [KnightsOfLudd] = I18n.KnightsOfLudd,
+            [LionsGuard] = I18n.LionsGuard,
+            [LuddicChurch] = I18n.LuddicChurch,
+            [LuddicPath] = I18n.LuddicPath,
+            [Mercenary] = I18n.Mercenary,
+            [Neutral] = I18n.Neutral,
+            [Omega] = I18n.Omega,
+            [PerseanLeague] = I18n.PerseanLeague,
+            [Pirates] = I18n.Pirates,
+            [Player] = I18n.Player,
+            [Poor] = I18n.Poor,
+            [Remnants] = I18n.Remnants,
+            [Scavengers] = I18n.Scavengers,
+            [SindrianDiktat] = I18n.SindrianDiktat,
+            [Sleeper] = I18n.Sleeper,
+            [Tritachyon] = I18n.Tritachyon
         });
     }
 }

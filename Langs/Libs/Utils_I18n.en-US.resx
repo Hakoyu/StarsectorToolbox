@@ -135,8 +135,8 @@
   <data name="GameDirectorySetCompleted" xml:space="preserve">
     <value>Game directory set completed</value>
   </data>
-  <data name="LinkError" xml:space="preserve">
-    <value>Link error</value>
+  <data name="ProcessStartError" xml:space="preserve">
+    <value>Process start error</value>
   </data>
   <data name="ModInfoError" xml:space="preserve">
     <value>Mod info error</value>

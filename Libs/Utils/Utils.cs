@@ -200,12 +200,31 @@ namespace StarsectorTools.Libs.Utils
         {
             try
             {
-                Process.Start(new ProcessStartInfo(link) { UseShellExecute = true });
+                Process.Start(new ProcessStartInfo(link) { UseShellExecute = true })?.Close();
                 return true;
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.LinkError, ex);
+                STLog.WriteLine($"{I18n.ProcessStartError} {link}", ex);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 打开文件夹并定位到指定文件
+        /// </summary>
+        /// <param name="file">文件路径</param>
+        /// <returns>打开成功为<see langword="true"/>,失败为<see langword="false"/></returns>
+        public static bool OpenDirectoryAndLocateFile(string file)
+        {
+            try
+            {
+                Process.Start("Explorer", $"/select,{file.Replace("/", "\\")}")?.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.ProcessStartError} {file}", ex);
                 return false;
             }
         }

@@ -153,9 +153,9 @@ namespace StarsectorTools.Langs.Libs {
         /// <summary>
         ///   查找类似 英仙座联盟 的本地化字符串。
         /// </summary>
-        public static string Persean {
+        public static string PerseanLeague {
             get {
-                return ResourceManager.GetString("Persean", resourceCulture);
+                return ResourceManager.GetString("PerseanLeague", resourceCulture);
             }
         }
         
@@ -189,9 +189,9 @@ namespace StarsectorTools.Langs.Libs {
         /// <summary>
         ///   查找类似 余辉 的本地化字符串。
         /// </summary>
-        public static string Remnant {
+        public static string Remnants {
             get {
-                return ResourceManager.GetString("Remnant", resourceCulture);
+                return ResourceManager.GetString("Remnants", resourceCulture);
             }
         }
         

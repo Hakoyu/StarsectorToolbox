@@ -147,7 +147,7 @@ namespace StarsectorTools.Libs.Utils
                 if (simplifyException)
                     sw.WriteLine(SimplifyException(ex));
                 else
-                    sw.WriteLine(ex.Message);
+                    sw.WriteLine(ex);
                 sw.Flush();
             }
             finally
