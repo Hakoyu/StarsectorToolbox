@@ -54,7 +54,7 @@ namespace StarsectorTools.Libs.GameInfo
         /// <summary>速子科技</summary>
         public const string Tritachyon = "tritachyon";
         /// <summary>所有势力及其I18n</summary>
-        public static ReadOnlyDictionary<string, string> AllFactionsI18n = new(new Dictionary<string, string>()
+        public static ReadOnlyDictionary<string, string> AllVanillaFactionsI18n = new(new Dictionary<string, string>()
         {
             [Derelict] = I18n.Derelict,
             [Hegemony] = I18n.Hegemony,

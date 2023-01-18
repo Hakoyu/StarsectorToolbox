@@ -36,7 +36,6 @@ namespace StarsectorTools.Tools.ModManager
         private const string strUserDescription = "UserDescription";
         private const string strName = "Name";
         private const string strAuthor = "Author";
-        private bool clearGameLogOnStart = false;
 
         /// <summary>记录了模组类型的嵌入资源链接</summary>
         private static readonly Uri modTypeGroupUri = new("/Resources/ModTypeGroup.toml", UriKind.Relative);
@@ -170,20 +169,13 @@ namespace StarsectorTools.Tools.ModManager
             ResetRemindSaveThread();
         }
 
-        private void LoadConfig()
+        /// <summary>
+        /// 保存
+        /// </summary>
+        public void Save()
         {
-            if (!Utils.FileExists(ST.STConfigTomlFile))
-                return;
-            TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
-            try
-            {
-                clearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
-            }
-            catch
-            {
-                toml["Game"]["ClearLogOnStart"] = false;
-                toml.SaveTo(ST.STConfigTomlFile);
-            }
+            SaveAllData();
+            ResetRemindSaveThread();
         }
 
         /// <summary>
@@ -1229,14 +1221,6 @@ namespace StarsectorTools.Tools.ModManager
             if (remindSaveThread.ThreadState != ThreadState.Unstarted)
                 remindSaveThread.Join(1);
             remindSaveThread = new(RemindSave);
-        }
-
-        private void ClearGameLogFile()
-        {
-            if (Utils.FileExists(GameInfo.LogFile, false))
-                Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
-            File.Create(GameInfo.LogFile).Close();
-            STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
     }
 }

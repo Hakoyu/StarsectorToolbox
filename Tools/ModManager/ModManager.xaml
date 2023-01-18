@@ -786,7 +786,7 @@
             <Button
               x:Name="Button_Save"
               Height="30"
-              Margin="5,0,5,40"
+              Margin="5,0,5,5"
               VerticalAlignment="Bottom"
               Click="Button_Save_Click"
               Content="{x:Static I18n:ModManager_I18n.SaveConfig}"
@@ -795,27 +795,6 @@
               <pu:ButtonHelper.Icon>
                 <emoji:TextBlock Text="💾" />
               </pu:ButtonHelper.Icon>
-            </Button>
-            <Button
-              x:Name="Button_GameStart"
-              Height="30"
-              Margin="5,0,5,5"
-              VerticalAlignment="Bottom"
-              Click="Button_GameStart_Click"
-              Content="{x:Static I18n:ModManager_I18n.StartGame}"
-              Style="{StaticResource Button_Style}">
-              <pu:ButtonHelper.Icon>
-                <emoji:TextBlock Text="▶" />
-              </pu:ButtonHelper.Icon>
-              <Button.ContextMenu>
-                <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                  <CheckBox
-                    x:Name="CheckBox_ClearLogOnStart"
-                    Click="CheckBox_ClearLogOnStart_Click"
-                    Content="{x:Static I18n:ModManager_I18n.ClearLogOnStart}"
-                    Style="{StaticResource CheckBox_Style}" />
-                </ContextMenu>
-              </Button.ContextMenu>
             </Button>
           </Grid>
         </Grid>

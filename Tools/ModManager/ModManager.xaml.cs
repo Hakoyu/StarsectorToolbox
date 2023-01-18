@@ -28,7 +28,6 @@ namespace StarsectorTools.Tools.ModManager
         {
             InitializeComponent();
             //throw new();
-            LoadConfig();
             InitializeData();
         }
 
@@ -277,27 +276,6 @@ namespace StarsectorTools.Tools.ModManager
             window.ShowDialog();
         }
 
-        private void Button_GameStart_Click(object sender, RoutedEventArgs e)
-        {
-            if (Utils.FileExists(GameInfo.ExeFile))
-            {
-                if (clearGameLogOnStart)
-                    ClearGameLogFile();
-                Process process = new();
-                process.StartInfo.FileName = "cmd";
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.RedirectStandardInput = true;
-                if (process.Start())
-                {
-                    process.StandardInput.WriteLine($"cd /d {GameInfo.BaseDirectory}");
-                    process.StandardInput.WriteLine($"starsector.exe");
-                    process.Close();
-                    SaveAllData();
-                    ResetRemindSaveThread();
-                }
-            }
-        }
-
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGrid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
@@ -356,12 +334,12 @@ namespace StarsectorTools.Tools.ModManager
 
         private void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetData(DataFormats.FileDrop) is Array array)
+            if (e.Data.GetData(DataFormats.FileDrop) is Array fileArray)
             {
-                STLog.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {array.Length}");
+                STLog.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {fileArray.Length}");
                 new Task(() =>
                 {
-                    int total = array.Length;
+                    int total = fileArray.Length;
                     int completed = 0;
                     ModArchiveing window = null!;
                     Dispatcher.BeginInvoke(() =>
@@ -371,16 +349,16 @@ namespace StarsectorTools.Tools.ModManager
                         window.Label_Completed.Content = completed;
                         window.Label_Incomplete.Content = total;
                     });
-                    foreach (string path in array)
+                    foreach (string file in fileArray)
                     {
-                        if (Utils.FileExists(path))
+                        if (Utils.FileExists(file))
                         {
                             Dispatcher.BeginInvoke(() =>
                             {
-                                window.Label_Progress.Content = path;
+                                window.Label_Progress.Content = file;
                                 window.ShowDialog();
                             });
-                            DropFile(path);
+                            DropFile(file);
                             Dispatcher.BeginInvoke(() =>
                             {
                                 window.Label_Completed.Content = ++completed;
@@ -504,19 +482,6 @@ namespace StarsectorTools.Tools.ModManager
         private void Button_CLoseModDetails_Click(object sender, RoutedEventArgs e)
         {
             CloseModDetails();
-        }
-
-        private void CheckBox_ClearLogOnStart_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is CheckBox checkBox)
-            {
-                clearGameLogOnStart = (bool)checkBox.IsChecked!;
-                if (!Utils.FileExists(ST.STConfigTomlFile))
-                    return;
-                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
-                toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;
-                toml.SaveTo(ST.STConfigTomlFile);
-            }
         }
     }
 }

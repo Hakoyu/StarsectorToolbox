@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using HKW.TomlParse;
+using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
@@ -203,6 +205,39 @@ namespace StarsectorTools.Windows
         private void RefreshExpansionMenu_Click(object sender, RoutedEventArgs e)
         {
             RefreshExpansionPages();
+        }
+
+        private void Button_StartGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (Utils.FileExists(GameInfo.ExeFile))
+            {
+                SaveAllPages();
+                if (clearGameLogOnStart)
+                    ClearGameLogFile();
+                System.Diagnostics.Process process = new();
+                process.StartInfo.FileName = "cmd";
+                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.RedirectStandardInput = true;
+                if (process.Start())
+                {
+                    process.StandardInput.WriteLine($"cd /d {GameInfo.BaseDirectory}");
+                    process.StandardInput.WriteLine($"starsector.exe");
+                    process.Close();
+                }
+            }
+        }
+
+        private void CheckBox_ClearLogOnStart_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                clearGameLogOnStart = (bool)checkBox.IsChecked!;
+                if (!Utils.FileExists(ST.STConfigTomlFile))
+                    return;
+                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;
+                toml.SaveTo(ST.STConfigTomlFile);
+            }
         }
     }
 }

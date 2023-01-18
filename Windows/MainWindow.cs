@@ -40,6 +40,7 @@ namespace StarsectorTools.Windows
         private Info infoPage = null!;
         private int pageSelectedIndex = -1;
         private int exceptionPageSelectedIndex = -1;
+        private bool clearGameLogOnStart = false;
 
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
@@ -158,6 +159,7 @@ namespace StarsectorTools.Windows
                         ST.ExpansionDebugPath = filePath;
                     else
                         toml["Expansion"]["DebugPath"] = "";
+                    clearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
                     toml.SaveTo(ST.STConfigTomlFile);
                 }
                 else
@@ -269,12 +271,59 @@ namespace StarsectorTools.Windows
                 ListBox_MainMenu.Items.RemoveAt(0);
         }
 
-        private void ClosePage(Page page)
+        private void ClosePage(Page? page)
         {
+            if (page is null)
+                return;
             // 获取page中的Close方法并执行
             // 用于关闭page中创建的线程
-            if (page.GetType().GetMethod("Close") is MethodInfo info)
-                _ = info.Invoke(page, null);
+            try
+            {
+                if (page.GetType().GetMethod("Close") is MethodInfo info)
+                    _ = info.Invoke(page, null);
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.PageCloseError} {page.GetType().FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageCloseError} {page.GetType().FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+            }
+        }
+
+        private void SaveAllPages()
+        {
+            SavePages();
+            SaveExpansionPages();
+        }
+
+        private void SavePages()
+        {
+            foreach (var page in pages.Values)
+                SavePage(page);
+        }
+
+        private void SaveExpansionPages()
+        {
+            foreach (var lazyPage in expansionPages.Values)
+                if (lazyPage.IsValueCreated)
+                    SavePage(lazyPage.Value);
+        }
+
+        private void SavePage(Page? page)
+        {
+            if (page is null)
+                return;
+            // 获取page中的Save方法并执行
+            // 用于保存page中已修改的数据
+            try
+            {
+                if (page.GetType().GetMethod("Save") is MethodInfo info)
+                    _ = info.Invoke(page, null);
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.PageSaveError} {page.GetType().FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageSaveError} {page.GetType().FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+            }
         }
 
         private ListBoxItem CreateListBoxItemForPage(string icon, string name, string id, string toolTip)
@@ -310,6 +359,7 @@ namespace StarsectorTools.Windows
                 if (Frame_MainFrame.Content is Page oldPage && oldPage.GetType() == newPage.GetType())
                     Frame_MainFrame.Content = pages[id];
                 STLog.WriteLine($"{I18n.RefreshPage}: {id}");
+                GC.Collect();
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
@@ -327,7 +377,8 @@ namespace StarsectorTools.Windows
         private void ClearExpansionPages()
         {
             foreach (var lazyPage in expansionPages.Values)
-                ClosePage(lazyPage.Value);
+                if (lazyPage.IsValueCreated)
+                    ClosePage(lazyPage.Value);
             expansionPages.Clear();
             allExpansionsInfo.Clear();
             ListBox_ExpansionMenu.Items.Clear();
@@ -428,6 +479,7 @@ namespace StarsectorTools.Windows
                 if (Frame_MainFrame.Content is Page _page && _page.GetType() == type)
                     Frame_MainFrame.Content = expansionPages[id].Value;
                 STLog.WriteLine($"{I18n.RefreshPage}: {id}");
+                GC.Collect();
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
@@ -438,16 +490,22 @@ namespace StarsectorTools.Windows
 
         internal void RefreshDebugExpansion()
         {
-            if (ListBox_MainMenu.Items.Count > 3)
+            if (!string.IsNullOrEmpty(ST.ExpansionDebugPath))
             {
-                pages.Remove(((ListBoxItem)ListBox_MainMenu.Items[^2]).Tag.ToString()!);
+                var pageId = ((ListBoxItem)ListBox_MainMenu.Items[^2]).Tag.ToString()!;
+                var page = pages[pageId];
+                ClosePage(page);
+                pages.Remove(pageId);
                 ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.Items.Count - 2);
             }
-            ST.ExpansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
-            if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
+            else
             {
-                AddExpansionDebugPage(info);
-                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+                ST.ExpansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
+                if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
+                {
+                    AddExpansionDebugPage(info);
+                    ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+                }
             }
         }
 
@@ -473,6 +531,7 @@ namespace StarsectorTools.Windows
             menuItem.Click += (s, e) =>
             {
                 RefreshDebugExpansion();
+                GC.Collect();
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
@@ -485,6 +544,14 @@ namespace StarsectorTools.Windows
         {
             Button_SettingsPage.Tag = false;
             Button_InfoPage.Tag = false;
+        }
+
+        private void ClearGameLogFile()
+        {
+            if (Utils.FileExists(GameInfo.LogFile, false))
+                Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
+            File.Create(GameInfo.LogFile).Close();
+            STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
     }
 }

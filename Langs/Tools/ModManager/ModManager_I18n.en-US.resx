@@ -453,9 +453,6 @@ Original version: {0} =&gt; New version: {1}</value>
   <data name="SaveConfig" xml:space="preserve">
     <value>Save config</value>
   </data>
-  <data name="StartGame" xml:space="preserve">
-    <value>Start game</value>
-  </data>
   <data name="ModInfo" xml:space="preserve">
     <value>Mod info</value>
   </data>
@@ -533,12 +530,6 @@ Cannot be removed midway</value>
   </data>
   <data name="TypeGroupRetrievalCompleted" xml:space="preserve">
     <value>Type group retrieval completed</value>
-  </data>
-  <data name="ClearLogOnStart" xml:space="preserve">
-    <value>Clear log files on start</value>
-  </data>
-  <data name="GameLogCleanupCompleted" xml:space="preserve">
-    <value>Game log cleanup completed</value>
   </data>
   <data name="ListEmpty" xml:space="preserve">
     <value>List empty</value>

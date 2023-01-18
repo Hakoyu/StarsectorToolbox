@@ -111,13 +111,13 @@ namespace StarsectorTools.Libs.Utils
         /// 复制文件夹至目标文件夹
         /// </summary>
         /// <param name="sourceDirectory">原始路径</param>
-        /// <param name="destinationDirectory">目标路径</param>
+        /// <param name="destDirectory">目标路径</param>
         /// <returns>复制成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool CopyDirectory(string sourceDirectory, string destinationDirectory)
+        public static bool CopyDirectory(string sourceDirectory, string destDirectory)
         {
             try
             {
-                FileSystem.CopyDirectory(sourceDirectory, $"{destinationDirectory}\\{Path.GetFileName(sourceDirectory)}", UIOption.OnlyErrorDialogs);
+                FileSystem.CopyDirectory(sourceDirectory, $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}", UIOption.OnlyErrorDialogs);
                 return true;
             }
             catch (Exception ex)
@@ -171,8 +171,10 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="directory">目录</param>
         /// <param name="fileInfos">文件信息(递归用)</param>
         /// <returns>所有文件信息</returns>
-        public static List<FileInfo> GetAllSubFiles(string directory, List<FileInfo>? fileInfos = null)
+        public static List<FileInfo>? GetAllSubFiles(string directory, List<FileInfo>? fileInfos = null)
         {
+            if (!Directory.Exists(directory))
+                return null!;
             var currentDirectoryInfo = new DirectoryInfo(directory);
             fileInfos ??= new();
             fileInfos.AddRange(currentDirectoryInfo.GetFiles());
@@ -234,10 +236,10 @@ namespace StarsectorTools.Libs.Utils
         /// <para>若不输入压缩文件名,则以原始目录的文件夹名称来命名</para>
         /// </summary>
         /// <param name="sourceDirectory">原始目录</param>
-        /// <param name="destinationDirectory">输出目录</param>
+        /// <param name="destDirectory">输出目录</param>
         /// <param name="archiveName">压缩文件名</param>
         /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool ArchiveDirToDir(string sourceDirectory, string destinationDirectory, string? archiveName = null)
+        public static bool ArchiveDirToDir(string sourceDirectory, string destDirectory, string? archiveName = null)
         {
             if (!DirectoryExists(sourceDirectory))
                 return false;
@@ -247,9 +249,9 @@ namespace StarsectorTools.Libs.Utils
                 {
                     archive.AddAllFromDirectory(sourceDirectory);
                     if (archiveName is null)
-                        archive.SaveTo($"{destinationDirectory}\\{Path.GetFileName(sourceDirectory)}.zip", CompressionType.Deflate);
+                        archive.SaveTo($"{destDirectory}\\{Path.GetFileName(sourceDirectory)}.zip", CompressionType.Deflate);
                     else
-                        archive.SaveTo($"{destinationDirectory}\\{archiveName}.zip", CompressionType.Deflate);
+                        archive.SaveTo($"{destDirectory}\\{archiveName}.zip", CompressionType.Deflate);
                 }
                 return true;
             }
@@ -265,9 +267,9 @@ namespace StarsectorTools.Libs.Utils
         /// <para>支持: <see langword="Zip"/> <see langword="Rar"/> <see langword="7z"/></para>
         /// </summary>
         /// <param name="sourceFile">原始文件</param>
-        /// <param name="destinationDirectory">输出目录</param>
+        /// <param name="destDirectory">输出目录</param>
         /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool UnArchiveFileToDir(string sourceFile, string destinationDirectory)
+        public static bool UnArchiveFileToDir(string sourceFile, string destDirectory)
         {
             if (!FileExists(sourceFile))
                 return false;
@@ -275,29 +277,29 @@ namespace StarsectorTools.Libs.Utils
             using StreamReader sr = new(sourceFile);
             string head = $"{sr.Read()}{sr.Read()}";
             sr.Close();
-            if (!DirectoryExists(destinationDirectory, false))
-                Directory.CreateDirectory(destinationDirectory);
+            if (!DirectoryExists(destDirectory, false))
+                Directory.CreateDirectory(destDirectory);
             try
             {
                 if (head == "8075")//Zip文件
                 {
                     using (var archive = new Archive(sourceFile, new() { Encoding = Encoding.UTF8 }))
                     {
-                        archive.ExtractToDirectory(destinationDirectory);
+                        archive.ExtractToDirectory(destDirectory);
                     }
                 }
                 else if (head == "8297")//Rar文件
                 {
                     using (var archive = new RarArchive(sourceFile))
                     {
-                        archive.ExtractToDirectory(destinationDirectory);
+                        archive.ExtractToDirectory(destDirectory);
                     }
                 }
                 else if (head == "55122")//7z文件
                 {
                     using (var archive = new SevenZipArchive(sourceFile))
                     {
-                        archive.ExtractToDirectory(destinationDirectory);
+                        archive.ExtractToDirectory(destDirectory);
                     }
                 }
                 else
@@ -306,8 +308,8 @@ namespace StarsectorTools.Libs.Utils
             catch (Exception ex)
             {
                 STLog.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFile}", ex);
-                if (DirectoryExists(destinationDirectory, false))
-                    Directory.Delete(destinationDirectory);
+                if (DirectoryExists(destDirectory, false))
+                    Directory.Delete(destDirectory);
                 return false;
             }
             return true;

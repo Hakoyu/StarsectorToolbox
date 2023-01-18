@@ -178,15 +178,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 启动时清理日志文件 的本地化字符串。
-        /// </summary>
-        public static string ClearLogOnStart {
-            get {
-                return ResourceManager.GetString("ClearLogOnStart", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 关闭详情 的本地化字符串。
         /// </summary>
         public static string CloseDetails {
@@ -511,15 +502,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string FileNotExist {
             get {
                 return ResourceManager.GetString("FileNotExist", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 游戏日志清理完成 的本地化字符串。
-        /// </summary>
-        public static string GameLogCleanupCompleted {
-            get {
-                return ResourceManager.GetString("GameLogCleanupCompleted", resourceCulture);
             }
         }
         
@@ -1207,15 +1189,6 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static string Size {
             get {
                 return ResourceManager.GetString("Size", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 启动游戏 的本地化字符串。
-        /// </summary>
-        public static string StartGame {
-            get {
-                return ResourceManager.GetString("StartGame", resourceCulture);
             }
         }
         

@@ -82,10 +82,7 @@ namespace StarsectorTools.Libs.Utils
         private static string? GetClassName()
         {
             var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(STLog)).GetMethod();
-            if (method?.DeclaringType?.Namespace?.Contains(nameof(StarsectorTools)) is true)
-                return $"{nameof(StarsectorTools)}.{method?.DeclaringType?.Name}";
-            else
-                return method?.DeclaringType?.FullName;
+            return $"{method?.DeclaringType?.Namespace?.Split(".")?.First()}.{method?.DeclaringType?.Name}";
         }
 
         internal static void SetLogLevel(STLogLevel logLevel)

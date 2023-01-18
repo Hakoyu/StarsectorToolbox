@@ -69,12 +69,14 @@
                     </pu:StateItem>
                   </pu:StateControl>
                   <ScrollViewer>
-                    <TextBlock
+                    <TextBox
                       Margin="100,0,0,0"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Background="{x:Null}"
+                      BorderBrush="{x:Null}"
                       Foreground="{DynamicResource ColorFG}"
+                      IsReadOnly="True"
                       Text="{Binding Message}"
                       TextWrapping="Wrap" />
                   </ScrollViewer>

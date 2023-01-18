@@ -79,6 +79,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 启动时清理日志文件 的本地化字符串。
+        /// </summary>
+        public static string ClearLogOnStart {
+            get {
+                return ResourceManager.GetString("ClearLogOnStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 设置文件创建完毕 的本地化字符串。
         /// </summary>
         public static string ConfigFileCreationCompleted {
@@ -175,6 +184,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string FirstStart {
             get {
                 return ResourceManager.GetString("FirstStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 游戏日志清理完成 的本地化字符串。
+        /// </summary>
+        public static string GameLogCleanupCompleted {
+            get {
+                return ResourceManager.GetString("GameLogCleanupCompleted", resourceCulture);
             }
         }
         
@@ -311,6 +329,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 页面关闭错误 的本地化字符串。
+        /// </summary>
+        public static string PageCloseError {
+            get {
+                return ResourceManager.GetString("PageCloseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 页面初始化错误 的本地化字符串。
         /// </summary>
         public static string PageInitializeError {
@@ -334,6 +361,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string PageNotPresent {
             get {
                 return ResourceManager.GetString("PageNotPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 页面保存错误 的本地化字符串。
+        /// </summary>
+        public static string PageSaveError {
+            get {
+                return ResourceManager.GetString("PageSaveError", resourceCulture);
             }
         }
         
@@ -388,6 +424,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string StarsectorTools {
             get {
                 return ResourceManager.GetString("StarsectorTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 启动游戏 的本地化字符串。
+        /// </summary>
+        public static string StartGame {
+            get {
+                return ResourceManager.GetString("StartGame", resourceCulture);
             }
         }
     }

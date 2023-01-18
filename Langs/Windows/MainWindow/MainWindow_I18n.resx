@@ -212,4 +212,19 @@
   <data name="GlobalExpansionException" xml:space="preserve">
     <value>全局拓展异常</value>
   </data>
+  <data name="StartGame" xml:space="preserve">
+    <value>启动游戏</value>
+  </data>
+  <data name="ClearLogOnStart" xml:space="preserve">
+    <value>启动时清理日志文件</value>
+  </data>
+  <data name="GameLogCleanupCompleted" xml:space="preserve">
+    <value>游戏日志清理完成</value>
+  </data>
+  <data name="PageCloseError" xml:space="preserve">
+    <value>页面关闭错误</value>
+  </data>
+  <data name="PageSaveError" xml:space="preserve">
+    <value>页面保存错误</value>
+  </data>
 </root>

@@ -212,4 +212,19 @@ It may affect the normal operation of the extension, so it is recommended to che
   <data name="GlobalExpansionException" xml:space="preserve">
     <value>Global expansion exception</value>
   </data>
+  <data name="StartGame" xml:space="preserve">
+    <value>Start game</value>
+  </data>
+  <data name="ClearLogOnStart" xml:space="preserve">
+    <value>Clear log files on start</value>
+  </data>
+  <data name="GameLogCleanupCompleted" xml:space="preserve">
+    <value>Game log cleanup completed</value>
+  </data>
+  <data name="PageCloseError" xml:space="preserve">
+    <value>Page close error</value>
+  </data>
+  <data name="PageSaveError" xml:space="preserve">
+    <value>Page save error</value>
+  </data>
 </root>
