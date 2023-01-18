@@ -499,13 +499,11 @@ namespace StarsectorTools.Windows
                 ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.Items.Count - 2);
             }
             else
-            {
                 ST.ExpansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
-                if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
-                {
-                    AddExpansionDebugPage(info);
-                    ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
-                }
+            if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
+            {
+                AddExpansionDebugPage(info);
+                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
             }
         }
 
