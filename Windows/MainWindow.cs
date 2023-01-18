@@ -155,8 +155,11 @@ namespace StarsectorTools.Windows
                     }
                     // 拓展调试目录
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
-                    if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath, true) is ExpansionInfo)
+                    if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath, true) is ExpansionInfo info)
+                    {
                         ST.ExpansionDebugPath = filePath;
+                        ST.ExpansionDebugId = info.Id;
+                    }
                     else
                         toml["Expansion"]["DebugPath"] = "";
                     clearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
@@ -236,8 +239,7 @@ namespace StarsectorTools.Windows
             }
             else if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
             {
-                if (AddExpansionDebugPage(info))
-                    ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+                ListBox_MainMenu.SelectedItem = AddExpansionDebugPage(info);
             }
         }
 
@@ -490,24 +492,38 @@ namespace StarsectorTools.Windows
 
         internal void RefreshDebugExpansion()
         {
-            if (!string.IsNullOrEmpty(ST.ExpansionDebugPath))
+            if (!string.IsNullOrEmpty(ST.ExpansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text))
             {
-                var pageId = ((ListBoxItem)ListBox_MainMenu.Items[^2]).Tag.ToString()!;
-                var page = pages[pageId];
-                ClosePage(page);
-                pages.Remove(pageId);
-                ListBox_MainMenu.Items.RemoveAt(ListBox_MainMenu.Items.Count - 2);
+                if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
+                {
+                    ST.ExpansionDebugId = info.Id;
+                    if (pages.ContainsKey(info.Id))
+                        RemovePage(info.Id);
+                    ListBox_MainMenu.SelectedItem = AddExpansionDebugPage(info);
+                }
             }
-            else
-                ST.ExpansionDebugPath = settingsPage.TextBox_ExpansionDebugPath.Text;
-            if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
+            else if (!string.IsNullOrEmpty(ST.ExpansionDebugId))
             {
-                AddExpansionDebugPage(info);
-                ListBox_MainMenu.SelectedIndex = ListBox_MainMenu.Items.Count - 2;
+                if (ListBox_MainMenu.SelectedItem is ListBoxItem item && item.Tag.ToString() == ST.ExpansionDebugId)
+                    Frame_MainFrame.Content = null;
+                RemovePage(ST.ExpansionDebugId);
+                ST.ExpansionDebugId = string.Empty;
+            }
+
+        }
+        private void RemovePage(string pageId)
+        {
+            if (pages.ContainsKey(pageId))
+            {
+                ClosePage(pages[pageId]);
+                for (int i = 0; i < ListBox_MainMenu.Items.Count; i++)
+                    if (((ListBoxItem)ListBox_MainMenu.Items[i]).Tag.ToString() == pageId)
+                        ListBox_MainMenu.Items.RemoveAt(i);
+                pages.Remove(pageId);
             }
         }
 
-        private bool AddExpansionDebugPage(ExpansionInfo expansionInfo)
+        private ListBoxItem AddExpansionDebugPage(ExpansionInfo expansionInfo)
         {
             string icon = expansionInfo.Icon;
             string name = expansionInfo.Name;
@@ -536,7 +552,7 @@ namespace StarsectorTools.Windows
             ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
-            return true;
+            return item;
         }
         private void ButtonPageCancelPress()
         {
