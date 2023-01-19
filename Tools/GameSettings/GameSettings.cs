@@ -91,7 +91,7 @@ namespace StarsectorTools.Tools.GameSettings
             }
         }
 
-        internal int? CheckMemorySize(int size)
+        private int? CheckMemorySize(int size)
         {
             if (size < 1024)
             {

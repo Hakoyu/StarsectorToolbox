@@ -66,7 +66,7 @@ namespace StarsectorTools.Tools.GameSettings
             vmparamsData.xmsx = $"{memory}{unit}";
             File.WriteAllText($"{GameInfo.BaseDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
             STLog.WriteLine($"{I18n.VmparamsMemorySet}: {vmparamsData.xmsx}");
-            Utils.ShowMessageBox(I18n.VmparamsMemorySetSuccess);
+            Utils.ShowMessageBox(I18n.VmparamsMemorySetComplete);
         }
 
         private void Button_CopyKey_Click(object sender, RoutedEventArgs e)
@@ -145,8 +145,8 @@ namespace StarsectorTools.Tools.GameSettings
             int count = TextBox_ReservedSaveSize.Text.Length > 0 ? list.Count() - int.Parse(TextBox_ReservedSaveSize.Text) : 0;
             for (int i = 0; i < count; i++)
                 Utils.DeleteDirToRecycleBin(list.ElementAt(i).Key);
-            STLog.WriteLine(I18n.SaveCleanCompleted);
-            Utils.ShowMessageBox(I18n.SaveCleanCompleted);
+            STLog.WriteLine(I18n.SaveCleanComplete);
+            Utils.ShowMessageBox(I18n.SaveCleanComplete);
         }
 
         private void Button_OpenMissionsLoadoutsDirectory_Click(object sender, RoutedEventArgs e)
@@ -219,8 +219,8 @@ namespace StarsectorTools.Tools.GameSettings
                 data = Regex.Replace(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",", @$"""resolutionOverride"":""{TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}"",");
                 File.WriteAllText(gameSettingsFile, data);
                 Button_CustomResolutionReset.IsEnabled = true;
-                STLog.WriteLine($"{I18n.SetupSuccessful} {TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}");
-                Utils.ShowMessageBox(I18n.SetupSuccessful);
+                STLog.WriteLine($"{I18n.CustomResolutionSetComplete} {TextBox_ResolutionWidth.Text}x{TextBox_ResolutionHeight.Text}");
+                Utils.ShowMessageBox($"{I18n.CustomResolutionSetComplete}\n{I18n.CustomResolutionHelp}");
             }
             catch (Exception ex)
             {

@@ -142,11 +142,29 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 注意: 设置自定义分辨率后不能启用全屏 的本地化字符串。
+        /// </summary>
+        public static string CustomResolutionHelp {
+            get {
+                return ResourceManager.GetString("CustomResolutionHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 自定义分辨率重置错误 的本地化字符串。
         /// </summary>
         public static string CustomResolutionResetError {
             get {
                 return ResourceManager.GetString("CustomResolutionResetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 自定义分辨率设置成功 的本地化字符串。
+        /// </summary>
+        public static string CustomResolutionSetComplete {
+            get {
+                return ResourceManager.GetString("CustomResolutionSetComplete", resourceCulture);
             }
         }
         
@@ -405,9 +423,9 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         /// <summary>
         ///   查找类似 存档清理完成 的本地化字符串。
         /// </summary>
-        public static string SaveCleanCompleted {
+        public static string SaveCleanComplete {
             get {
-                return ResourceManager.GetString("SaveCleanCompleted", resourceCulture);
+                return ResourceManager.GetString("SaveCleanComplete", resourceCulture);
             }
         }
         
@@ -450,9 +468,9 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         /// <summary>
         ///   查找类似 设置成功 的本地化字符串。
         /// </summary>
-        public static string SetupSuccessful {
+        public static string SetupComplete {
             get {
-                return ResourceManager.GetString("SetupSuccessful", resourceCulture);
+                return ResourceManager.GetString("SetupComplete", resourceCulture);
             }
         }
         
@@ -486,9 +504,9 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         /// <summary>
         ///   查找类似 vmparams 内存设置设置成功 的本地化字符串。
         /// </summary>
-        public static string VmparamsMemorySetSuccess {
+        public static string VmparamsMemorySetComplete {
             get {
-                return ResourceManager.GetString("VmparamsMemorySetSuccess", resourceCulture);
+                return ResourceManager.GetString("VmparamsMemorySetComplete", resourceCulture);
             }
         }
         

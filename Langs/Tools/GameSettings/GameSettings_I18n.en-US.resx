@@ -115,8 +115,8 @@
   <data name="MissionsLoadoutsClearCompleted" xml:space="preserve">
     <value>Missions loadouts cleanup completed</value>
   </data>
-  <data name="SaveCleanCompleted" xml:space="preserve">
-    <value>Save cleanup completed</value>
+  <data name="SaveCleanComplete" xml:space="preserve">
+    <value>Save cleanup complete</value>
   </data>
   <data name="SaveNotExist" xml:space="preserve">
     <value>Save file does not exist</value>
@@ -190,8 +190,8 @@
   <data name="VmparamsMemorySet" xml:space="preserve">
     <value>Vmparams memory set to</value>
   </data>
-  <data name="VmparamsMemorySetSuccess" xml:space="preserve">
-    <value>Vmparams memory set success</value>
+  <data name="VmparamsMemorySetComplete" xml:space="preserve">
+    <value>Vmparams memory set complete</value>
   </data>
   <data name="CustomResolution" xml:space="preserve">
     <value>Custom resolution</value>
@@ -214,8 +214,8 @@
   <data name="Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
-  <data name="SetupSuccessful" xml:space="preserve">
-    <value>Setup successful</value>
+  <data name="SetupComplete" xml:space="preserve">
+    <value>Setup completed</value>
   </data>
   <data name="ResetSuccessful" xml:space="preserve">
     <value>Reset successful</value>
@@ -246,5 +246,11 @@
   </data>
   <data name="GameLogCleanupCompleted" xml:space="preserve">
     <value>Game log cleanup completed</value>
+  </data>
+  <data name="CustomResolutionSetComplete" xml:space="preserve">
+    <value>Custom resolution setup complete</value>
+  </data>
+  <data name="CustomResolutionHelp" xml:space="preserve">
+    <value>Info: Full screen cannot be enabled after setting custom resolution</value>
   </data>
 </root>

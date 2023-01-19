@@ -115,7 +115,7 @@
   <data name="MissionsLoadoutsClearCompleted" xml:space="preserve">
     <value>战役配装文件清理完成</value>
   </data>
-  <data name="SaveCleanCompleted" xml:space="preserve">
+  <data name="SaveCleanComplete" xml:space="preserve">
     <value>存档清理完成</value>
   </data>
   <data name="SaveNotExist" xml:space="preserve">
@@ -190,7 +190,7 @@
   <data name="VmparamsMemorySet" xml:space="preserve">
     <value>vmparams 内存设置为</value>
   </data>
-  <data name="VmparamsMemorySetSuccess" xml:space="preserve">
+  <data name="VmparamsMemorySetComplete" xml:space="preserve">
     <value>vmparams 内存设置设置成功</value>
   </data>
   <data name="CustomResolution" xml:space="preserve">
@@ -214,7 +214,7 @@
   <data name="Reset" xml:space="preserve">
     <value>重置</value>
   </data>
-  <data name="SetupSuccessful" xml:space="preserve">
+  <data name="SetupComplete" xml:space="preserve">
     <value>设置成功</value>
   </data>
   <data name="ResetSuccessful" xml:space="preserve">
@@ -246,5 +246,11 @@
   </data>
   <data name="GameLogCleanupCompleted" xml:space="preserve">
     <value>游戏日志清理完成</value>
+  </data>
+  <data name="CustomResolutionSetComplete" xml:space="preserve">
+    <value>自定义分辨率设置成功</value>
+  </data>
+  <data name="CustomResolutionHelp" xml:space="preserve">
+    <value>注意: 设置自定义分辨率后不能启用全屏</value>
   </data>
 </root>
