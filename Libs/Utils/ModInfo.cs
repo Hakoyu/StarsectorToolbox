@@ -39,8 +39,8 @@ namespace StarsectorTools.Libs.Utils
         private HashSet<ModInfo>? dependencies;
         /// <summary>前置模组</summary>
         public ReadOnlySet<ModInfo>? Dependencies { get; private set; }
-        /// <summary>本地路径</summary>
-        public string DirectoryPath { get; private set; } = null!;
+        /// <summary>模组文件夹</summary>
+        public string ModDirectory { get; private set; } = null!;
 
         /// <summary>
         /// 从json数据中解析模组信息,可设置路径
@@ -52,7 +52,7 @@ namespace StarsectorTools.Libs.Utils
             if (!string.IsNullOrEmpty(jsonPath)
                 && Utils.FileExists(jsonPath, false)
                 && Path.GetDirectoryName(jsonPath) is string directoryPath)
-                DirectoryPath = directoryPath;
+                ModDirectory = directoryPath;
             foreach (var kv in jsonNode.AsObject())
                 SetData(kv);
         }

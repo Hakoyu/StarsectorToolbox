@@ -566,7 +566,6 @@
                       x:Name="Button_OpenModDirectory"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_OpenModDirectory_Click"
                       Content="{x:Static I18n:ModManager_I18n.OpenModsDirectory}"
                       Style="{StaticResource Button_Style}" />
@@ -574,7 +573,6 @@
                       x:Name="Button_OpenBackupDirectory"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_OpenBackupDirectory_Click"
                       Content="{x:Static I18n:ModManager_I18n.OpenBackupDirectory}"
                       Style="{StaticResource Button_Style}" />
@@ -582,7 +580,6 @@
                       x:Name="Button_OpenSaveDirectory"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_OpenSaveDirectory_Click"
                       Content="{x:Static I18n:ModManager_I18n.OpenSaveDirectory}"
                       Style="{StaticResource Button_Style}" />
@@ -598,7 +595,6 @@
                       x:Name="Button_ImportUserData"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ImportUserData_Click"
                       Content="{x:Static I18n:ModManager_I18n.ImportUserData}"
                       Style="{StaticResource Button_Style}" />
@@ -606,7 +602,6 @@
                       x:Name="Button_ExportUserData"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ExportUserData_Click"
                       Content="{x:Static I18n:ModManager_I18n.ExportUserData}"
                       Style="{StaticResource Button_Style}" />
@@ -621,7 +616,6 @@
                       x:Name="Button_ImportUserGroup"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ImportUserGroup_Click"
                       Content="{x:Static I18n:ModManager_I18n.ImportUserGroup}"
                       Style="{StaticResource Button_Style}" />
@@ -641,7 +635,6 @@
                       x:Name="Button_ExportUserGroup"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ExportUserGroup_Click"
                       Content="{x:Static I18n:ModManager_I18n.ExportUserGroup}"
                       Style="{StaticResource Button_Style}" />
@@ -656,7 +649,6 @@
                       x:Name="Button_ImportEnabledListFromSave"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ImportEnabledListFromSave_Click"
                       Content="{x:Static I18n:ModManager_I18n.ImportFromSave}"
                       Style="{StaticResource Button_Style}" />
@@ -664,15 +656,13 @@
                       x:Name="Button_ImportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ImportEnabledList_Click"
                       Content="{x:Static I18n:ModManager_I18n.ImportEnabledList}"
                       Style="{StaticResource Button_Style}" />
                     <Button
-                      x:Name="Button_ExportList"
+                      x:Name="Button_ExportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_ExportEnabledList_Click"
                       Content="{x:Static I18n:ModManager_I18n.ExportEnabledList}"
                       Style="{StaticResource Button_Style}" />
@@ -762,7 +752,6 @@
                       x:Name="Button_RandomMods"
                       Height="30"
                       Margin="0,0,0,5"
-                      VerticalAlignment="Bottom"
                       Click="Button_RandomMods_Click"
                       Content="{x:Static I18n:ModManager_I18n.RandomEnableMods}">
                       <Button.Style>

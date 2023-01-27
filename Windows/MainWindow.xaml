@@ -10,6 +10,8 @@
   Title="StarsectorTools"
   Width="1000"
   Height="500"
+  MinWidth="800"
+  MinHeight="400"
   Padding="5"
   FontFamily="Consolas"
   MouseLeftButtonDown="Window_MouseLeftButtonDown"
@@ -20,7 +22,7 @@
   <WindowChrome.WindowChrome>
     <WindowChrome
       CaptionHeight="0"
-      GlassFrameThickness="-1"
+      GlassFrameThickness="0,0,0,1"
       ResizeBorderThickness="5" />
   </WindowChrome.WindowChrome>
   <Window.Resources>

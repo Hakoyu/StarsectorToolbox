@@ -500,7 +500,7 @@ namespace StarsectorTools.Tools.ModManager
                 IsSameToGameVersion = info.GameVersion == GameInfo.Version,
                 MissDependencies = false,
                 DependenciesSet = info.Dependencies is not null ? new(info.Dependencies.Select(i => i.Id)) : null!,
-                ImageSource = GetIcon($"{info.DirectoryPath}\\icon.ico"),
+                ImageSource = GetIcon($"{info.ModDirectory}\\icon.ico"),
             };
             BitmapImage? GetIcon(string filePath)
             {
@@ -572,8 +572,8 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Header = I18n.OpenModDirectory;
                 menuItem.Click += (s, e) =>
                 {
-                    STLog.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[showInfo.Id].DirectoryPath}");
-                    Utils.OpenLink(allModsInfo[showInfo.Id].DirectoryPath);
+                    STLog.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[showInfo.Id].ModDirectory}");
+                    Utils.OpenLink(allModsInfo[showInfo.Id].ModDirectory);
                 };
                 contextMenu.Items.Add(menuItem);
                 STLog.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -582,7 +582,7 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Header = I18n.DeleteMod;
                 menuItem.Click += (s, e) =>
                 {
-                    string path = allModsInfo[showInfo.Id].DirectoryPath;
+                    string path = allModsInfo[showInfo.Id].ModDirectory;
                     if (Utils.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, STMessageBoxIcon.Warning) == MessageBoxResult.Yes)
                     {
                         STLog.WriteLine($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
@@ -908,7 +908,7 @@ namespace StarsectorTools.Tools.ModManager
             Label_ModId.Content = showInfo.Id;
             Label_ModVersion.Content = showInfo.Version;
             Label_GameVersion.Content = showInfo.GameVersion;
-            Button_ModPath.Content = info.DirectoryPath;
+            Button_ModPath.Content = info.ModDirectory;
             TextBlock_ModAuthor.Text = showInfo.Author;
             if (info.Dependencies is not null)
             {
@@ -949,11 +949,11 @@ namespace StarsectorTools.Tools.ModManager
                                                                   false));
                     if (result == MessageBoxResult.Yes)
                     {
-                        Utils.CopyDirectory(originalModInfo.DirectoryPath, $"{backupModsDirectory}\\{tempPath}");
+                        Utils.CopyDirectory(originalModInfo.ModDirectory, $"{backupModsDirectory}\\{tempPath}");
                         string tempDirectory = $"{backupModsDirectory}\\{tempPath}";
                         Utils.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
                         Directory.Delete(tempDirectory, true);
-                        Directory.Delete(originalModInfo.DirectoryPath, true);
+                        Directory.Delete(originalModInfo.ModDirectory, true);
                         Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                         Dispatcher.BeginInvoke(() =>
                         {
@@ -966,7 +966,7 @@ namespace StarsectorTools.Tools.ModManager
                     }
                     else if (result == MessageBoxResult.No)
                     {
-                        Utils.DeleteDirToRecycleBin(originalModInfo.DirectoryPath);
+                        Utils.DeleteDirToRecycleBin(originalModInfo.ModDirectory);
                         Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                         Dispatcher.BeginInvoke(() =>
                         {
