@@ -15,7 +15,7 @@ using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using StarsectorTools.Windows;
+using StarsectorTools.Windows.MainWindow;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
 namespace StarsectorTools.Libs.Utils
@@ -393,12 +393,12 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>
         /// 为主窗口设置模糊效果,用于聚焦弹窗
         /// </summary>
-        public static void SetMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).SetBlurEffect();
+        public static void SetMainWindowBlurEffect() => ST.MainWindow.SetBlurEffect();
 
         /// <summary>
         /// 取消主窗口的模糊效果
         /// </summary>
-        public static void RemoveMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).RemoveBlurEffect();
+        public static void RemoveMainWindowBlurEffect() => ST.MainWindow.RemoveBlurEffect();
     }
 
     /// <summary>弹窗图案</summary>

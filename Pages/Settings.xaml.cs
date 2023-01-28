@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
-using StarsectorTools.Windows;
+using StarsectorTools.Windows.MainWindow;
 using I18n = StarsectorTools.Langs.Pages.Settings_I18n;
 
 namespace StarsectorTools.Pages
@@ -59,7 +59,7 @@ namespace StarsectorTools.Pages
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(item.ToolTip.ToString()!);
                 SaveLanguage(Thread.CurrentThread.CurrentUICulture);
                 ChangeLanguage();
-                ((MainWindow)Application.Current.MainWindow).ChangeLanguage();
+                ST.MainWindow.ChangeLanguage();
                 STLog.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }
@@ -136,7 +136,7 @@ namespace StarsectorTools.Pages
                 toml.SaveTo(ST.STConfigTomlFile);
                 STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
                 if (Utils.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
-                    ((MainWindow)Application.Current.MainWindow).RefreshDebugExpansion();
+                    ST.MainWindow.RefreshDebugExpansion();
             }
         }
 

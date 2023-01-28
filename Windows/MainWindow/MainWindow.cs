@@ -17,10 +17,11 @@ using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
-namespace StarsectorTools.Windows
+namespace StarsectorTools.Windows.MainWindow
 {
     public partial class MainWindow
     {
+        private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
         /// <summary>拓展目录</summary>
         private const string expansionDirectories = "Expansion";
 

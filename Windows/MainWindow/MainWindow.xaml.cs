@@ -5,12 +5,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.TomlParse;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
-namespace StarsectorTools.Windows
+namespace StarsectorTools.Windows.MainWindow
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -49,7 +50,7 @@ namespace StarsectorTools.Windows
             var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
             if (Utils.IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
-
+            DataContext = new MainWindowViewModel();
             STLog.WriteLine(I18n.InitializationCompleted);
         }
 

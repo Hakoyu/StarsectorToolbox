@@ -189,7 +189,7 @@ namespace StarsectorTools.Tools.ModManager
                 string err = null!;
                 foreach (var dependencie in allModsShowInfo[id].Dependencies!.Split(" , "))
                 {
-                    if (allModsInfo.ContainsKey(dependencie))
+                    if (allModInfos.ContainsKey(dependencie))
                         ChangeModEnabled(dependencie, true);
                     else
                     {
@@ -314,7 +314,7 @@ namespace StarsectorTools.Tools.ModManager
                         return;
                     foreach (string id in list)
                     {
-                        if (allModsInfo.ContainsKey(id))
+                        if (allModInfos.ContainsKey(id))
                             ChangeModEnabled(id, true);
                         else
                         {
@@ -342,7 +342,7 @@ namespace StarsectorTools.Tools.ModManager
                     int total = fileArray.Length;
                     int completed = 0;
                     ModArchiveing window = null!;
-                    Dispatcher.BeginInvoke(() =>
+                    Dispatcher.InvokeAsync(() =>
                     {
                         window = new ModArchiveing();
                         window.Label_Total.Content = total;
@@ -353,20 +353,20 @@ namespace StarsectorTools.Tools.ModManager
                     {
                         if (Utils.FileExists(file))
                         {
-                            Dispatcher.BeginInvoke(() =>
+                            Dispatcher.InvokeAsync(() =>
                             {
                                 window.Label_Progress.Content = file;
                                 window.ShowDialog();
                             });
                             DropFile(file);
-                            Dispatcher.BeginInvoke(() =>
+                            Dispatcher.InvokeAsync(() =>
                             {
                                 window.Label_Completed.Content = ++completed;
                                 window.Label_Incomplete.Content = total - completed;
                             });
                         }
                     }
-                    Dispatcher.BeginInvoke(() => window.Close());
+                    Dispatcher.InvokeAsync(() => window.Close());
                     GC.Collect();
                 }).Start();
             }

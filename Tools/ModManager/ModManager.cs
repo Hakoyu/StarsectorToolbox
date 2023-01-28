@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -16,6 +18,7 @@ using HKW.TomlParse;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
+using static StarsectorTools.Libs.Utils.SetExtension;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager
@@ -69,7 +72,7 @@ namespace StarsectorTools.Tools.ModManager
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 模组信息</para>
         /// </summary>
-        private Dictionary<string, ModInfo> allModsInfo = new();
+        private Dictionary<string, ModInfo> allModInfos = new();
 
         /// <summary>
         /// <para>全部分组列表项</para>
@@ -106,8 +109,65 @@ namespace StarsectorTools.Tools.ModManager
         /// </summary>
         private Dictionary<string, ObservableCollection<ModShowInfo>> allModShowInfoGroups = new();
 
+
+        //private class GroupData : IEnumerable<ModShowInfo>, IEnumerable
+        //{
+        //    public string Name { get; set; }
+        //    private HashSet<ModShowInfo> modShowInfos;
+        //    public ReadOnlySet<ModShowInfo> ModShowInfos { get; private set; }
+        //    public GroupData(string name, IEnumerable<ModShowInfo> modShowInfos)
+        //    {
+        //        Name = name;
+        //        ModShowInfos = new(this.modShowInfos = new(modShowInfos));
+        //    }
+
+        //    public new bool Add()
+        //    {
+        //        return false;
+        //    }
+
+        //    public IEnumerator<ModShowInfo> GetEnumerator() => ModShowInfos.GetEnumerator();
+
+        //    IEnumerator IEnumerable.GetEnumerator() => ModShowInfos.GetEnumerator();
+        //}
+        //private ViewModel viewModel;
+        //public partial class ViewModel : ObservableObject
+        //{
+        //    [ObservableProperty]
+        //    ICollectionView? collectionView;
+        //    HashSet<ModShowInfo> modShowInfos;
+        //    [ObservableProperty]
+        //    string? filterText;
+        //    public string filterType = strName;
+        //    partial void OnFilterTextChanged(string? value) => CollectionView?.Refresh();
+        //    public ViewModel(IEnumerable<ModShowInfo> modShowInfos)
+        //    {
+        //        this.modShowInfos = new(modShowInfos);
+        //        ChangeCollectionView(modShowInfos);
+        //    }
+        //    public void ChangeCollectionView(IEnumerable<ModShowInfo> modShowInfos)
+        //    {
+        //        CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
+        //        CollectionView.Filter = (o) =>
+        //        {
+        //            if (string.IsNullOrEmpty(filterText))
+        //                return true;
+        //            if (o is not ModShowInfo showInfo)
+        //                return true;
+        //            return filterType switch
+        //            {
+        //                strName => showInfo.Name.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strId => showInfo.Id.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strAuthor => showInfo.Author.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                strUserDescription => showInfo.UserDescription.Contains(filterText, StringComparison.OrdinalIgnoreCase),
+        //                _ => throw new NotImplementedException()
+        //            };
+        //        };
+        //    }
+        //}
+
         /// <summary>模组显示信息</summary>
-        private partial class ModShowInfo : ObservableObject
+        internal partial class ModShowInfo : ObservableObject
         {
             /// <summary>ID</summary>
             public string Id { get; set; } = null!;
@@ -184,7 +244,7 @@ namespace StarsectorTools.Tools.ModManager
         private void InitializeData()
         {
             remindSaveThread = new(RemindSave);
-            ModsInfo.AllModsInfo = new(allModsInfo = new());
+            ModsInfo.AllModsInfo = new(allModInfos = new());
             ModsInfo.AllEnabledModsId = new(allEnabledModsId = new());
             ModsInfo.AllCollectedModsId = new(allCollectedModsId = new());
             ModsInfo.AllUserGroups = (allUserGroups = new()).AsReadOnly<string, HashSet<string>, IReadOnlySet<string>>();
@@ -229,7 +289,7 @@ namespace StarsectorTools.Tools.ModManager
             {
                 if (ModInfo.Parse($"{dir.FullName}\\{modInfoFile}") is ModInfo info)
                 {
-                    allModsInfo.Add(info.Id, info);
+                    allModInfos.Add(info.Id, info);
                     STLog.WriteLine($"{I18n.ModAddSuccess}: {dir.FullName}", STLogLevel.DEBUG);
                 }
                 else
@@ -238,7 +298,7 @@ namespace StarsectorTools.Tools.ModManager
                     errSize++;
                 }
             }
-            STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModsInfo.Count, errSize);
+            STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModInfos.Count, errSize);
             if (!string.IsNullOrEmpty(err))
                 Utils.ShowMessageBox($"{I18n.ModAddFailed} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
         }
@@ -280,7 +340,7 @@ namespace StarsectorTools.Tools.ModManager
                     var id = modId!.GetValue<string>();
                     if (string.IsNullOrEmpty(id))
                         continue;
-                    if (allModsInfo.ContainsKey(id))
+                    if (allModInfos.ContainsKey(id))
                     {
                         STLog.WriteLine($"{I18n.EnableMod} {id}", STLogLevel.DEBUG);
                         ChangeModEnabled(id, true);
@@ -449,30 +509,33 @@ namespace StarsectorTools.Tools.ModManager
 
         private void GetAllModsShowInfo()
         {
-            foreach (var modInfo in allModsInfo.Values)
+            foreach (var modInfo in allModInfos.Values)
                 AddModShowInfo(modInfo, false);
-            STLog.WriteLine($"{I18n.ModShowInfoSetSuccess} {I18n.Size}: {allModsInfo.Count}");
+            STLog.WriteLine($"{I18n.ModShowInfoSetSuccess} {I18n.Size}: {allModInfos.Count}");
             ListBox_ModsGroupMenu.SelectedIndex = 0;
         }
 
         private void RefreshDataGrid()
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+            string text = Dispatcher.Invoke(() => TextBox_SearchMods.Text);
+            string type = Dispatcher.Invoke(() => ((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!);
+            if (text.Length > 0)
             {
-                string text = TextBox_SearchMods.Text;
-                string type = ((ComboBoxItem)ComboBox_SearchType.SelectedItem).Tag.ToString()!;
-                if (text.Length > 0)
-                {
-                    DataGrid_ModsShowList.ItemsSource = GetSearchModsShowInfo(text, type);
-                    STLog.WriteLine($"{I18n.SearchMod} {text}", STLogLevel.DEBUG);
-                }
-                else
-                {
-                    DataGrid_ModsShowList.ItemsSource = allModShowInfoGroups[nowGroupName];
-                    STLog.WriteLine($"{I18n.ShowGroup} {nowGroupName}");
-                    GC.Collect();
-                }
-            });
+                ShowDataGridItems(GetSearchModsShowInfo(text, type));
+                STLog.WriteLine($"{I18n.SearchMod} {text}");
+            }
+            else
+            {
+                ShowDataGridItems(allModShowInfoGroups[nowGroupName]);
+                STLog.WriteLine($"{I18n.ShowGroup} {nowGroupName}");
+            }
+        }
+
+        private void ShowDataGridItems(IEnumerable<ModShowInfo> infos)
+        {
+            DataGrid_ModsShowList.Items.Clear();
+            foreach (var info in infos)
+                Dispatcher.InvokeAsync(() => DataGrid_ModsShowList.Items.Add(info), DispatcherPriority.Background);
         }
 
         private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
@@ -572,8 +635,8 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Header = I18n.OpenModDirectory;
                 menuItem.Click += (s, e) =>
                 {
-                    STLog.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModsInfo[showInfo.Id].ModDirectory}");
-                    Utils.OpenLink(allModsInfo[showInfo.Id].ModDirectory);
+                    STLog.WriteLine($"{I18n.OpenModDirectory} {I18n.Path}: {allModInfos[showInfo.Id].ModDirectory}");
+                    Utils.OpenLink(allModInfos[showInfo.Id].ModDirectory);
                 };
                 contextMenu.Items.Add(menuItem);
                 STLog.WriteLine($"{I18n.AddMenuItem} {menuItem.Header}", STLogLevel.DEBUG);
@@ -582,7 +645,7 @@ namespace StarsectorTools.Tools.ModManager
                 menuItem.Header = I18n.DeleteMod;
                 menuItem.Click += (s, e) =>
                 {
-                    string path = allModsInfo[showInfo.Id].ModDirectory;
+                    string path = allModInfos[showInfo.Id].ModDirectory;
                     if (Utils.ShowMessageBox($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n", MessageBoxButton.YesNo, STMessageBoxIcon.Warning) == MessageBoxResult.Yes)
                     {
                         STLog.WriteLine($"{I18n.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18n.Path}: {path}\n");
@@ -898,7 +961,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void SetModDetails(string id)
         {
-            var info = allModsInfo[id];
+            var info = allModInfos[id];
             var showInfo = allModsShowInfo[id];
             if (showInfo.ImageSource != null)
                 Image_ModImage.Source = showInfo.ImageSource;
@@ -940,9 +1003,9 @@ namespace StarsectorTools.Tools.ModManager
                     Utils.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}");
                     return;
                 }
-                if (allModsInfo.ContainsKey(newModInfo.Id))
+                if (allModInfos.ContainsKey(newModInfo.Id))
                 {
-                    var originalModInfo = allModsInfo[newModInfo.Id];
+                    var originalModInfo = allModInfos[newModInfo.Id];
                     var result = Dispatcher.Invoke(() => Utils.ShowMessageBox($"{newModInfo.Id}\n{string.Format(I18n.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}",
                                                                   MessageBoxButton.YesNoCancel,
                                                                   STMessageBoxIcon.Question,
@@ -955,7 +1018,7 @@ namespace StarsectorTools.Tools.ModManager
                         Directory.Delete(tempDirectory, true);
                         Directory.Delete(originalModInfo.ModDirectory, true);
                         Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                        Dispatcher.BeginInvoke(() =>
+                        Dispatcher.InvokeAsync(() =>
                         {
                             RemoveMod(newModInfo.Id);
                             AddMod(newModInfo);
@@ -968,7 +1031,7 @@ namespace StarsectorTools.Tools.ModManager
                     {
                         Utils.DeleteDirToRecycleBin(originalModInfo.ModDirectory);
                         Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                        Dispatcher.BeginInvoke(() =>
+                        Dispatcher.InvokeAsync(() =>
                         {
                             RemoveMod(newModInfo.Id);
                             AddMod(newModInfo);
@@ -981,7 +1044,7 @@ namespace StarsectorTools.Tools.ModManager
                 else
                 {
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                    Dispatcher.BeginInvoke(() =>
+                    Dispatcher.InvokeAsync(() =>
                     {
                         AddMod(newModInfo);
                         RefreshCountOfListBoxItems();
@@ -1000,8 +1063,8 @@ namespace StarsectorTools.Tools.ModManager
 
         private void RemoveMod(string id)
         {
-            var modInfo = allModsInfo[id];
-            allModsInfo.Remove(id);
+            var modInfo = allModInfos[id];
+            allModInfos.Remove(id);
             RemoveModShowInfo(id);
             STLog.WriteLine($"{I18n.RemoveMod} {id} {modInfo.Version}", STLogLevel.DEBUG);
         }
@@ -1041,7 +1104,7 @@ namespace StarsectorTools.Tools.ModManager
 
         private void AddMod(ModInfo modInfo)
         {
-            allModsInfo.Add(modInfo.Id, modInfo);
+            allModInfos.Add(modInfo.Id, modInfo);
             AddModShowInfo(modInfo);
             STLog.WriteLine($"{I18n.RemoveMod} {modInfo.Id} {modInfo.Version}", STLogLevel.DEBUG);
         }
@@ -1203,9 +1266,9 @@ namespace StarsectorTools.Tools.ModManager
         {
             while (remindSaveThread.ThreadState != ThreadState.Unstarted)
             {
-                Dispatcher.BeginInvoke(() => Button_Save.Tag = true);
+                Dispatcher.InvokeAsync(() => Button_Save.Tag = true);
                 Thread.Sleep(1000);
-                Dispatcher.BeginInvoke(() => Button_Save.Tag = false);
+                Dispatcher.InvokeAsync(() => Button_Save.Tag = false);
                 Thread.Sleep(1000);
             }
         }
