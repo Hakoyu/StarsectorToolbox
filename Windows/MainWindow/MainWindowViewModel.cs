@@ -11,10 +11,16 @@ namespace StarsectorTools.Windows.MainWindow
 {
     internal partial class MainWindowViewModel : ObservableObject
     {
-
+        [ObservableProperty]
+        private bool mainMenuExpand = false;
         public MainWindowViewModel()
         {
 
+        }
+        [RelayCommand]
+        public void ChangeMenuExpansionStatus()
+        {
+            MainMenuExpand = !MainMenuExpand;
         }
     }
 }

@@ -122,18 +122,17 @@
         Padding="0"
         HorizontalAlignment="Left"
         VerticalAlignment="Center"
-        Click="Button_ExpandMainMenu_Click"
-        FontSize="16"
+        Command="{Binding ChangeMenuExpansionStatusCommand}"
         Style="{StaticResource Button_Style}"
-        Tag="{Binding}">
+        Tag="{Binding MainMenuExpand}">
         <pu:ButtonHelper.Icon>
           <emoji:TextBlock
             x:Name="Button_MainMenuIcon"
             FontSize="16"
-            Tag="{Binding Tag, ElementName=Button_MainMenu}"
-            Text="{x:Static Utils:ST.MenuCloseIcon}">
+            Tag="{Binding Tag, ElementName=Button_MainMenu}">
             <TextBlock.Style>
               <Style TargetType="emoji:TextBlock">
+                <Setter Property="Text" Value="{x:Static Utils:ST.MenuCloseIcon}" />
                 <Style.Triggers>
                   <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                     <Setter Property="Text" Value="{x:Static Utils:ST.MenuOpenIcon}" />
@@ -150,41 +149,68 @@
         <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      <Grid x:Name="Grid_MainMenu" Width="30">
-        <ListBox
-          x:Name="ListBox_MainMenu"
-          Margin="0,0,0,90"
-          HorizontalContentAlignment="Stretch"
-          FontSize="16"
-          PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-          SelectionChanged="ListBox_Menu_SelectionChanged"
-          Style="{StaticResource ListBox_Style}">
-          <ListBoxItem x:Name="ListBoxItem_ExpansionPages" Padding="0">
-            <Expander
-              Padding="0"
-              Header="{x:Static I18n:MainWindow_I18n.Expansion}"
-              IsExpanded="True"
-              Style="{StaticResource Expander_Style}">
-              <Expander.ContextMenu>
-                <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                  <MenuItem Click="RefreshExpansionMenu_Click" Header="{x:Static I18n:MainWindow_I18n.RefreshExpansionList}">
-                    <MenuItem.Icon>
-                      <emoji:TextBlock FontSize="16" Text="🔄" />
-                    </MenuItem.Icon>
-                  </MenuItem>
-                </ContextMenu>
-              </Expander.ContextMenu>
+      <Grid x:Name="Grid_MainMenu" Tag="{Binding Tag, ElementName=Button_MainMenu}">
+        <Grid.Style>
+          <Style TargetType="Grid">
+            <Setter Property="Width" Value="30" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                <Setter Property="Width" Value="NaN" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </Grid.Style>
+        <Grid Margin="0,0,0,90">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <ScrollViewer Tag="{Binding Tag, ElementName=Button_MainMenu}">
+            <ScrollViewer.Style>
+              <Style TargetType="ScrollViewer">
+                <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </ScrollViewer.Style>
+            <StackPanel>
               <ListBox
-                x:Name="ListBox_ExpansionMenu"
+                x:Name="ListBox_MainMenu"
                 HorizontalContentAlignment="Stretch"
-                pu:IconHelper.Margin="0,0,10,0"
+                FontSize="16"
                 PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-                PreviewMouseWheel="ListBox_PreviewMouseWheel"
                 SelectionChanged="ListBox_Menu_SelectionChanged"
                 Style="{StaticResource ListBox_Style}" />
-            </Expander>
-          </ListBoxItem>
-        </ListBox>
+              <Expander
+                Padding="0"
+                FontSize="16"
+                Header="{x:Static I18n:MainWindow_I18n.Expansion}"
+                IsExpanded="True"
+                Style="{StaticResource Expander_Style}">
+                <Expander.ContextMenu>
+                  <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                    <MenuItem Click="RefreshExpansionMenu_Click" Header="{x:Static I18n:MainWindow_I18n.RefreshExpansionList}">
+                      <MenuItem.Icon>
+                        <emoji:TextBlock FontSize="16" Text="🔄" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                  </ContextMenu>
+                </Expander.ContextMenu>
+                <ListBox
+                  x:Name="ListBox_ExpansionMenu"
+                  HorizontalContentAlignment="Stretch"
+                  pu:IconHelper.Margin="0,0,10,0"
+                  PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                  PreviewMouseWheel="ListBox_PreviewMouseWheel"
+                  SelectionChanged="ListBox_Menu_SelectionChanged"
+                  Style="{StaticResource ListBox_Style}" />
+              </Expander>
+            </StackPanel>
+          </ScrollViewer>
+        </Grid>
         <Button
           x:Name="Button_StartGame"
           Height="30"

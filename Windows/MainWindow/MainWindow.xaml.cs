@@ -24,11 +24,11 @@ namespace StarsectorTools.Windows.MainWindow
         public MainWindow()
         {
             InitializeComponent();
-            // 限制最大化区域,不然会盖住任务栏
-            MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+            // 限制最大化区域,不然会盖住任务栏(已在XAML中实现)
+            // MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            // MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             // 亚克力背景
-            //WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
+            // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
             // 初始化设置

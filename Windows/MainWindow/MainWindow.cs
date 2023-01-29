@@ -270,8 +270,7 @@ namespace StarsectorTools.Windows.MainWindow
             foreach (var page in pages.Values)
                 ClosePage(page);
             pages.Clear();
-            while (ListBox_MainMenu.Items.Count > 1)
-                ListBox_MainMenu.Items.RemoveAt(0);
+            ListBox_MainMenu.Items.Clear();
         }
 
         private void ClosePage(Page? page)
@@ -366,7 +365,7 @@ namespace StarsectorTools.Windows.MainWindow
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
+            ListBox_MainMenu.Items.Add(item);
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.AddPage} {icon} {name}");
         }
@@ -550,7 +549,7 @@ namespace StarsectorTools.Windows.MainWindow
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_MainMenu.Items.Insert(ListBox_MainMenu.Items.Count - 1, item);
+            ListBox_MainMenu.Items.Add(item);
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
             return item;
