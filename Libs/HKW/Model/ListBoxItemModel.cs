@@ -10,6 +10,8 @@ namespace HKW.Model
     public partial class ListBoxItemModel : ObservableObject
     {
         [ObservableProperty]
+        private string? id;
+        [ObservableProperty]
         private object? content;
         [ObservableProperty]
         private object? toolTip;
@@ -21,6 +23,10 @@ namespace HKW.Model
         private bool isSelected = false;
         [ObservableProperty]
         private List<MenuItemModel>? menuItems;
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="handler">委托</param>
         public ListBoxItemModel(ListBoxItemHandler? handler = null)
         {
             ListBoxItemEvent += handler;
@@ -32,7 +38,14 @@ namespace HKW.Model
                 ListBoxItemEvent(this);
         }
 
+        /// <summary>
+        /// 委托
+        /// </summary>
+        /// <param name="item">列表项模型</param>
         public delegate void ListBoxItemHandler(ListBoxItemModel item);
+        /// <summary>
+        /// 事件
+        /// </summary>
         public event ListBoxItemHandler? ListBoxItemEvent;
     }
 }

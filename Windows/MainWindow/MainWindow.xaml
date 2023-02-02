@@ -305,6 +305,7 @@
       <Frame
         x:Name="Frame_MainFrame"
         Grid.Column="1"
+        Content="{Binding NowPage}"
         ContentRendered="Frame_MainFrame_ContentRendered"
         NavigationUIVisibility="Hidden" />
     </Grid>

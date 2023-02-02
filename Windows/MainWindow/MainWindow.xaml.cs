@@ -10,6 +10,7 @@ using StarsectorTools.Libs.GameInfo;
 using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using StarsectorTools.Tools.ModManager;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -42,7 +43,7 @@ namespace StarsectorTools.Windows.MainWindow
             SetSettingsPage();
             SetInfoPage();
             ChangeLanguage();
-            ShowPage();
+            //ShowPage();
 
             // 获取系统主题色
             Application.Current.Resources["WindowGlassBrush"] = SystemParameters.WindowGlassBrush;
@@ -51,6 +52,10 @@ namespace StarsectorTools.Windows.MainWindow
             if (Utils.IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
             DataContext = new MainWindowViewModel();
+
+
+            ViewModel.AddPage("😃", "name", "nameI18n", "tooltip", CreatePage(typeof(ModManager)));
+
             STLog.WriteLine(I18n.InitializationCompleted);
         }
 

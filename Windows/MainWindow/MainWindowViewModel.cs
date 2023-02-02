@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Model;
-using static StarsectorTools.Windows.MainWindow.MainWindow;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows.MainWindow
@@ -23,14 +22,21 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private string title = I18n.StarsectorTools;
         [ObservableProperty]
-        private ListBoxItemModel nowSelectedItem = null!;
+        private ListBoxItemModel? nowSelectedItem;
+        [ObservableProperty]
+        private object? nowPage;
 
         [ObservableProperty]
         private List<ListBoxItemModel> pageItems = new();
 
         public MainWindowViewModel()
         {
-            pageItems.Add(new(SelectPageItem) { Content = "name", ToolTip = "tooltip", Icon = "😃" });
+            //PageItems.Add(new(SelectPageItem)
+            //{
+            //    Content = "name",
+            //    ToolTip = "tooltip",
+            //    Icon = "😃"
+            //});
         }
 
         [RelayCommand]
@@ -39,9 +45,25 @@ namespace StarsectorTools.Windows.MainWindow
             MainMenuIsExpand = !MainMenuIsExpand;
         }
 
+        public void AddPage(string icon, string name, string id, string toolTip, object page)
+        {
+            PageItems.Add(new(SelectPageItem)
+            {
+                Id = id,
+                Icon = icon,
+                Content = name,
+                ToolTip = toolTip,
+                Tag = page
+            });
+        }
+
         public void SelectPageItem(ListBoxItemModel item)
         {
-
+            if (nowSelectedItem is not null)
+                nowSelectedItem.IsSelected = false;
+            nowSelectedItem = item;
+            nowSelectedItem.IsSelected = true;
+            NowPage = item.Tag;
         }
     }
 }
