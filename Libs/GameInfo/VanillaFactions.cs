@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static StarsectorTools.Libs.Utils.SetExtension;
+using static HKW.Extension.SetExtension;
 using I18n = StarsectorTools.Langs.Libs.GameInfo_I18n;
 
 namespace StarsectorTools.Libs.GameInfo

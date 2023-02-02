@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace HKW.WindowAccent
+namespace HKW.WPF
 {
     public class WindowAccent
     {

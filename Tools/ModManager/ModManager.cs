@@ -14,11 +14,11 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using HKW.TomlParse;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs.GameInfo;
+using HKW.Extension;
 using StarsectorTools.Libs.Utils;
-using static StarsectorTools.Libs.Utils.SetExtension;
+using HKW.TomlParse;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
 
 namespace StarsectorTools.Tools.ModManager

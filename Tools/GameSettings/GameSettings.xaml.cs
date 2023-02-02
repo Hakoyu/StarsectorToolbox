@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using HKW.Management;
-using HKW.TomlParse;
 using StarsectorTools.Libs.GameInfo;
+using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
+using HKW.Extension;
 
 namespace StarsectorTools.Tools.GameSettings
 {
@@ -27,7 +27,7 @@ namespace StarsectorTools.Tools.GameSettings
             InitializeComponent();
             Label_GamePath.Content = GameInfo.BaseDirectory;
             Label_GameVersion.Content = GameInfo.Version;
-            systemTotalMemory = Management.GetMemoryMetricsNow().Total;
+            systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
             GetVmparamsData();
             GetGameKey();
             GetMissionsLoadouts();

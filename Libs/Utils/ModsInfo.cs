@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static StarsectorTools.Libs.Utils.SetExtension;
+using static HKW.Extension.SetExtension;
 
 namespace StarsectorTools.Libs.Utils
 {

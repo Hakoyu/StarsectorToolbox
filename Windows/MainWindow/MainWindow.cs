@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
-using HKW.TomlParse;
+using CommunityToolkit.Mvvm.Collections;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs.GameInfo;
+using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
@@ -42,6 +45,7 @@ namespace StarsectorTools.Windows.MainWindow
         private int pageSelectedIndex = -1;
         private int exceptionPageSelectedIndex = -1;
         private bool clearGameLogOnStart = false;
+
 
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
@@ -224,11 +228,11 @@ namespace StarsectorTools.Windows.MainWindow
         internal void ChangeLanguage()
         {
             STLog.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
-            Label_Title.Content = I18n.StarsectorTools;
+            //Label_Title.Content = I18n.StarsectorTools;
             Button_SettingsPage.Content = I18n.Settings;
             Button_InfoPage.Content = I18n.Info;
-            RefreshPages();
-            RefreshExpansionPages();
+            //RefreshPages();
+            //RefreshExpansionPages();
             STLog.WriteLine(I18n.PageListRefreshComplete);
         }
 
@@ -270,7 +274,7 @@ namespace StarsectorTools.Windows.MainWindow
             foreach (var page in pages.Values)
                 ClosePage(page);
             pages.Clear();
-            ListBox_MainMenu.Items.Clear();
+            //ListBox_MainMenu.Items.Clear();
         }
 
         private void ClosePage(Page? page)

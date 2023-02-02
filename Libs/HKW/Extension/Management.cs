@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace HKW.Management
+namespace HKW.Extension
 {
     ///<summary>内存指标</summary>
-    internal class MemoryMetrics
+    public class MemoryMetrics
     {
         ///<summary>内存总量</summary>
         public int Total;
@@ -20,9 +20,9 @@ namespace HKW.Management
     }
 
     ///<summary>系统</summary>
-    internal partial class Management
+    public partial class ManagementMemoryMetrics
     {
-        public Management()
+        public ManagementMemoryMetrics()
         {
             if (!WMIInitialize())
                 throw new ArgumentNullException(ToString(), "Initialization failure");
@@ -33,7 +33,6 @@ namespace HKW.Management
         public void Close()
         {
             process?.Close();
-            process = null!;
         }
 
         private Process process = null!;

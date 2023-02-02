@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json.Nodes;
 using System.IO;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
-using static StarsectorTools.Libs.Utils.SetExtension;
+using static HKW.Extension.SetExtension;
 
 namespace StarsectorTools.Libs.Utils
 {

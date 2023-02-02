@@ -2087,7 +2087,7 @@ namespace HKW.TomlParse
 
         public static bool MustBeEscaped(char c, bool allowNewLines = false)
         {
-            var result = c is (>= '\u0000' and <= '\u0008') or '\u000b' or '\u000c' or (>= '\u000e' and <= '\u001f') or '\u007f';
+            var result = c is >= '\u0000' and <= '\u0008' or '\u000b' or '\u000c' or >= '\u000e' and <= '\u001f' or '\u007f';
             if (!allowNewLines)
                 result |= c is >= '\u000a' and <= '\u000e';
             return result;

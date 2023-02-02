@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace StarsectorTools.Libs.Utils
+namespace HKW.Extension
 {
     /// <summary>
     /// 提供用于任何字典的方法 <see cref="AsReadOnly{TKey, TValue, TReadOnlyValue}(IDictionary{TKey, TValue})"/>

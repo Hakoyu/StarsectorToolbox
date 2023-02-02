@@ -7,6 +7,7 @@
   xmlns:Utils="clr-namespace:StarsectorTools.Libs.Utils"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+  xmlns:ex="clr-namespace:HKW.WPF"
   xmlns:local="clr-namespace:StarsectorTools.Windows.MainWindow"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
@@ -67,15 +68,14 @@
           Height="20"
           Margin="5,5,0,0"
           HorizontalAlignment="Left"
-          VerticalAlignment="Top"
-          Source="/Resources/recycling.ico" />
+          VerticalAlignment="Top" />
         <Label
           x:Name="Label_Title"
           Margin="30,0,0,0"
           Padding="0"
           HorizontalAlignment="Center"
           Background="{x:Null}"
-          Content="{x:Static I18n:MainWindow_I18n.StarsectorTools}"
+          Content="{Binding Title}"
           FontSize="20"
           FontWeight="Bold"
           Style="{StaticResource Label_Style}" />
@@ -124,7 +124,7 @@
         VerticalAlignment="Center"
         Command="{Binding ChangeMenuExpansionStatusCommand}"
         Style="{StaticResource Button_Style}"
-        Tag="{Binding MainMenuExpand}">
+        Tag="{Binding MainMenuIsExpand}">
         <pu:ButtonHelper.Icon>
           <emoji:TextBlock
             x:Name="Button_MainMenuIcon"
@@ -134,7 +134,7 @@
               <Style TargetType="emoji:TextBlock">
                 <Setter Property="Text" Value="{x:Static Utils:ST.MenuCloseIcon}" />
                 <Style.Triggers>
-                  <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                  <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=PreviousData}}" Value="True">
                     <Setter Property="Text" Value="{x:Static Utils:ST.MenuOpenIcon}" />
                   </DataTrigger>
                 </Style.Triggers>
@@ -160,57 +160,93 @@
             </Style.Triggers>
           </Style>
         </Grid.Style>
-        <Grid Margin="0,0,0,90">
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-          <ScrollViewer Tag="{Binding Tag, ElementName=Button_MainMenu}">
-            <ScrollViewer.Style>
-              <Style TargetType="ScrollViewer">
-                <Setter Property="VerticalScrollBarVisibility" Value="Disabled" />
-                <Style.Triggers>
-                  <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
-                    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-                  </DataTrigger>
-                </Style.Triggers>
-              </Style>
-            </ScrollViewer.Style>
-            <StackPanel>
+        <ScrollViewer Margin="0,0,0,90" Tag="{Binding Tag, ElementName=Button_MainMenu}">
+          <ScrollViewer.Style>
+            <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
+              <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                  <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </ScrollViewer.Style>
+          <StackPanel>
+            <ListBox
+              x:Name="ListBox_MainMenu"
+              HorizontalContentAlignment="Stretch"
+              FontSize="16"
+              ItemsSource="{Binding PageItems}"
+              SelectedItem="{Binding NowSelectedItem}"
+              Style="{StaticResource ListBox_Style}">
+              <ListBox.ItemContainerStyle>
+                <Style BasedOn="{StaticResource ListBoxItem_Style}" TargetType="ListBoxItem">
+                  <Setter Property="Content" Value="{Binding Content}" />
+                  <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+                  <Setter Property="Tag" Value="{Binding Tag}" />
+                  <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                  <Setter Property="pu:ListBoxItemHelper.Icon">
+                    <Setter.Value>
+                      <emoji:TextBlock Text="{Binding Icon}" />
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="ex:Attach.InputBindings">
+                    <Setter.Value>
+                      <InputBindingCollection>
+                        <!--  绑定单击事件  -->
+                        <MouseBinding
+                          Command="{Binding ListBoxItemCommand}"
+                          CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                          Gesture="LeftClick" />
+                      </InputBindingCollection>
+                    </Setter.Value>
+                  </Setter>
+                  <Setter Property="ContextMenu">
+                    <Setter.Value>
+                      <!--  绑定右键菜单  -->
+                      <ContextMenu ItemsSource="{Binding ContextMenus}">
+                        <ContextMenu.ItemTemplate>
+                          <DataTemplate>
+                            <MenuItem
+                              Command="{Binding MenuItemCommand}"
+                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                              Header="{Binding Header}"
+                              ToolTip="{Binding ToolTip}" />
+                          </DataTemplate>
+                        </ContextMenu.ItemTemplate>
+                      </ContextMenu>
+                    </Setter.Value>
+                  </Setter>
+                </Style>
+              </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Expander
+              Padding="0"
+              FontSize="16"
+              Header="{x:Static I18n:MainWindow_I18n.Expansion}"
+              IsExpanded="True"
+              Style="{StaticResource Expander_Style}">
+              <Expander.ContextMenu>
+                <ContextMenu Style="{StaticResource ContextMenu_Style}">
+                  <MenuItem Click="RefreshExpansionMenu_Click" Header="{x:Static I18n:MainWindow_I18n.RefreshExpansionList}">
+                    <MenuItem.Icon>
+                      <emoji:TextBlock FontSize="16" Text="🔄" />
+                    </MenuItem.Icon>
+                  </MenuItem>
+                </ContextMenu>
+              </Expander.ContextMenu>
               <ListBox
-                x:Name="ListBox_MainMenu"
+                x:Name="ListBox_ExpansionMenu"
                 HorizontalContentAlignment="Stretch"
-                FontSize="16"
+                VerticalContentAlignment="Stretch"
+                pu:IconHelper.Margin="0,0,10,0"
                 PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                PreviewMouseWheel="ListBox_PreviewMouseWheel"
                 SelectionChanged="ListBox_Menu_SelectionChanged"
                 Style="{StaticResource ListBox_Style}" />
-              <Expander
-                Padding="0"
-                FontSize="16"
-                Header="{x:Static I18n:MainWindow_I18n.Expansion}"
-                IsExpanded="True"
-                Style="{StaticResource Expander_Style}">
-                <Expander.ContextMenu>
-                  <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                    <MenuItem Click="RefreshExpansionMenu_Click" Header="{x:Static I18n:MainWindow_I18n.RefreshExpansionList}">
-                      <MenuItem.Icon>
-                        <emoji:TextBlock FontSize="16" Text="🔄" />
-                      </MenuItem.Icon>
-                    </MenuItem>
-                  </ContextMenu>
-                </Expander.ContextMenu>
-                <ListBox
-                  x:Name="ListBox_ExpansionMenu"
-                  HorizontalContentAlignment="Stretch"
-                  pu:IconHelper.Margin="0,0,10,0"
-                  PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
-                  PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                  SelectionChanged="ListBox_Menu_SelectionChanged"
-                  Style="{StaticResource ListBox_Style}" />
-              </Expander>
-            </StackPanel>
-          </ScrollViewer>
-        </Grid>
+            </Expander>
+          </StackPanel>
+        </ScrollViewer>
         <Button
           x:Name="Button_StartGame"
           Height="30"

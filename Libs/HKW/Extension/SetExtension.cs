@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarsectorTools.Libs.Utils
+namespace HKW.Extension
 {
     /// <summary>
     /// 集合拓展
@@ -29,7 +29,7 @@ namespace StarsectorTools.Libs.Utils
             public ReadOnlySet(ISet<T> set)
             {
                 ArgumentNullException.ThrowIfNull(set);
-                this._set = set;
+                _set = set;
             }
             /// <inheritdoc/>
             public int Count => _set.Count;
