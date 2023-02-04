@@ -13,6 +13,7 @@ using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using StarsectorTools.Tools.ModManager;
 using HKW.Model;
 using System.IO;
+using Panuon.WPF.UI;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -34,36 +35,104 @@ namespace StarsectorTools.Windows.MainWindow
             // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
-            // 初始化设置
-            if (!SetConfig())
-            {
-                Close();
-                return;
-            }
-            // 初始化页面
-            SetSettingsPage();
-            SetInfoPage();
-            ChangeLanguage();
-            //ShowPage();
-
             // 获取系统主题色
             Application.Current.Resources["WindowGlassBrush"] = SystemParameters.WindowGlassBrush;
             // 根据主题色的明亮程度来设置字体颜色
             var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
             if (Utils.IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
-            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
+            // 初始化设置
+            // 初始化页面
+            // SetSettingsPage();
+            // SetInfoPage();
+            // ChangeLanguage();
+            // ShowPage();
+
             DataContext = new MainWindowViewModel();
             // 注册消息窗口
-            MessageBoxModel.SetHandler((m) =>
-            {
-                return MessageBoxModel.Result.None;
-                //return (MessageBoxModel.Result)Utils.ShowMessageBox(m.Description, (MessageBoxButton)m.Button, (STMessageBoxIcon)m.Icon, m.Tag is not true);
-            });
+            RegisterMessageBoxModel();
             // 注册打开文件对话框
+            RegisterOpenFileDialogModel();
+            // 注册保存文件对话框
+            RegisterSaveFileDialogModel();
+
+            // 初始化设置
+            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
+            if(!ViewModel.SetConfig(sr.ReadToEnd()))
+            {
+                Close();
+                return;
+            }
+
+            // 添加页面
+            ViewModel.AddPage("😃", "name", "nameI18n", "tooltip", CreatePage(typeof(ModManager)));
+
+
+            STLog.WriteLine(I18n.InitializationCompleted);
+        }
+
+        private void RegisterMessageBoxModel()
+        {
+            // 消息长度限制
+            int messageLengthLimits = 8192;
+            MessageBoxModel.SetHandler((d) =>
+                {
+                    string message = d.Message.Length < messageLengthLimits
+                        ? d.Message
+                        : d.Message[..messageLengthLimits] + $".........{I18n.ExcessivelyLongMessages}.........";
+                    var button = ButtonConverter(d.Button);
+                    var icon = IconConverter(d.Icon);
+                    MessageBoxResult result;
+                    if (d.Tag is false)
+                    {
+                        result = MessageBoxX.Show(message, d.Caption, button, icon);
+                    }
+                    else
+                    {
+                        SetBlurEffect();
+                        result = MessageBoxX.Show(message, d.Caption, button, icon);
+                        RemoveBlurEffect();
+                    }
+                    if (message.Length == messageLengthLimits)
+                        GC.Collect();
+                    return ResultConverter(result);
+                });
+            static MessageBoxButton ButtonConverter(MessageBoxModel.Button? button) =>
+                button switch
+                {
+                    MessageBoxModel.Button.OK => MessageBoxButton.OK,
+                    MessageBoxModel.Button.OKCancel => MessageBoxButton.OKCancel,
+                    MessageBoxModel.Button.YesNo => MessageBoxButton.YesNo,
+                    MessageBoxModel.Button.YesNoCancel => MessageBoxButton.YesNoCancel,
+                    _ => MessageBoxButton.OK,
+                };
+            static MessageBoxIcon IconConverter(MessageBoxModel.Icon? icon) =>
+                icon switch
+                {
+                    MessageBoxModel.Icon.None => MessageBoxIcon.None,
+                    MessageBoxModel.Icon.Info => MessageBoxIcon.Info,
+                    MessageBoxModel.Icon.Warning => MessageBoxIcon.Warning,
+                    MessageBoxModel.Icon.Error => MessageBoxIcon.Error,
+                    MessageBoxModel.Icon.Success => MessageBoxIcon.Success,
+                    MessageBoxModel.Icon.Question => MessageBoxIcon.Question,
+                    _ => MessageBoxIcon.None,
+                };
+            static MessageBoxModel.Result ResultConverter(MessageBoxResult result) =>
+                result switch
+                {
+                    MessageBoxResult.None => MessageBoxModel.Result.None,
+                    MessageBoxResult.OK => MessageBoxModel.Result.OK,
+                    MessageBoxResult.Cancel => MessageBoxModel.Result.Cancel,
+                    MessageBoxResult.Yes => MessageBoxModel.Result.Yes,
+                    MessageBoxResult.No => MessageBoxModel.Result.No,
+                    _ => MessageBoxModel.Result.None,
+                };
+        }
+
+        private void RegisterOpenFileDialogModel()
+        {
             OpenFileDialogModel.SetHandler((d) =>
             {
-                //新建文件选择
                 var openFileDialog = new Microsoft.Win32.OpenFileDialog()
                 {
                     Title = d.Title,
@@ -73,7 +142,9 @@ namespace StarsectorTools.Windows.MainWindow
                 openFileDialog.ShowDialog();
                 return openFileDialog.FileNames;
             });
-            // 注册保存文件对话框
+        }
+        private void RegisterSaveFileDialogModel()
+        {
             SaveFileDialogModel.SetHandler((d) =>
             {
                 var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
@@ -81,12 +152,9 @@ namespace StarsectorTools.Windows.MainWindow
                     Title = d.Title,
                     Filter = d.Filter,
                 };
+                saveFileDialog.ShowDialog();
                 return saveFileDialog.FileName;
             });
-
-            ViewModel.AddPage("😃", "name", "nameI18n", "tooltip", CreatePage(typeof(ModManager)));
-
-            STLog.WriteLine(I18n.InitializationCompleted);
         }
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

@@ -16,7 +16,7 @@ namespace HKW.Model
             /// <summary>标记</summary>
             public object? Tag { get; set; }
             /// <summary>消息</summary>
-            public string? Message { get; set; }
+            public string Message { get; private set; }
             /// <summary>标题</summary>
             public string? Caption { get; set; }
             /// <summary>图标</summary>
@@ -25,6 +25,15 @@ namespace HKW.Model
             public Button? Button { get; set; }
             /// <summary>默认按钮</summary>
             public Button? DefaultButton { get; set; }
+
+            /// <summary>
+            /// 初始化
+            /// </summary>
+            /// <param name="message">消息</param>
+            public Description(string message)
+            {
+                Message = message;
+            }
         }
         /// <summary>模型图标</summary>
         public enum Icon
@@ -50,10 +59,10 @@ namespace HKW.Model
             OK,
             /// <summary>确认和取消</summary>
             OKCancel,
+            /// <summary>是和否</summary>
+            YesNo,
             /// <summary>是否和取消</summary>
             YesNoCancel,
-            /// <summary>是和否</summary>
-            YesNo
         }
 
         /// <summary></summary>

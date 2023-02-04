@@ -56,14 +56,14 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="str">字符串</param>
         /// <returns>日志等级</returns>
         public static STLogLevel Str2STLogLevel(string str) =>
-        str switch
-        {
-            nameof(STLogLevel.DEBUG) => STLogLevel.DEBUG,
-            nameof(STLogLevel.INFO) => STLogLevel.INFO,
-            nameof(STLogLevel.WARN) => STLogLevel.WARN,
-            nameof(STLogLevel.ERROR) => STLogLevel.ERROR,
-            _ => STLogLevel.INFO
-        };
+            str switch
+            {
+                nameof(STLogLevel.DEBUG) => STLogLevel.DEBUG,
+                nameof(STLogLevel.INFO) => STLogLevel.INFO,
+                nameof(STLogLevel.WARN) => STLogLevel.WARN,
+                nameof(STLogLevel.ERROR) => STLogLevel.ERROR,
+                _ => STLogLevel.INFO
+            };
 
         /// <summary>
         /// 获取所在类名和方法名

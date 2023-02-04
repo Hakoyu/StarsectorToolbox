@@ -55,13 +55,8 @@ namespace StarsectorTools.Windows.MainWindow
         [RelayCommand]
         private void ShowPage(object? page)
         {
-            var back = MessageBoxModel.Show(new()
-            {
-                Message = "114514",
-                Icon = MessageBoxModel.Icon.Info,
-                Button = MessageBoxModel.Button.OK
-            });
             NowPage = page;
+            STLog.WriteLine($"{I18n.ShowPage}: {page?.GetType().FullName}");
         }
 
         [RelayCommand]

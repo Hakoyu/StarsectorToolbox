@@ -227,4 +227,7 @@ It may affect the normal operation of the extension, so it is recommended to che
   <data name="PageSaveError" xml:space="preserve">
     <value>Page save error</value>
   </data>
+  <data name="ExcessivelyLongMessages" xml:space="preserve">
+    <value>Excessively long messages</value>
+  </data>
 </root>

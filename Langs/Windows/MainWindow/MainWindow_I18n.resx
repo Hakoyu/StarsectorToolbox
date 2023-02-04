@@ -227,4 +227,7 @@
   <data name="PageSaveError" xml:space="preserve">
     <value>页面保存错误</value>
   </data>
+  <data name="ExcessivelyLongMessages" xml:space="preserve">
+    <value>过长的消息</value>
+  </data>
 </root>
