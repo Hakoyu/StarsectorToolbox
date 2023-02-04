@@ -55,7 +55,7 @@ namespace StarsectorTools.Windows.MainWindow
         [RelayCommand]
         private void ShowPage(object? page)
         {
-            var back = MessageBox.Show(new()
+            var back = MessageBoxModel.Show(new()
             {
                 Message = "114514",
                 Icon = MessageBoxModel.Icon.Info,
