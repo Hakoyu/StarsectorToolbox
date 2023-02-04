@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>0068</NoWarn>
+    <NoWarn>0068,0229</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 

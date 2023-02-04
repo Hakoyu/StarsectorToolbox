@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -10,7 +11,11 @@ namespace HKW.Model
     public partial class ListBoxItemModel : ObservableObject
     {
         [ObservableProperty]
+        private string? name;
+        [ObservableProperty]
         private string? id;
+        [ObservableProperty]
+        private string? group;
         [ObservableProperty]
         private object? content;
         [ObservableProperty]
@@ -27,25 +32,24 @@ namespace HKW.Model
         /// 初始化
         /// </summary>
         /// <param name="handler">委托</param>
-        public ListBoxItemModel(ListBoxItemHandler? handler = null)
+        public ListBoxItemModel(ModelHandler? handler = null)
         {
-            ListBoxItemEvent += handler;
+            ModelEvent += handler;
         }
         [RelayCommand]
         private void ListBoxItem()
         {
-            if (ListBoxItemEvent is not null)
-                ListBoxItemEvent(this);
+            if (ModelEvent is not null)
+                ModelEvent(this);
         }
-
         /// <summary>
         /// 委托
         /// </summary>
-        /// <param name="item">列表项模型</param>
-        public delegate void ListBoxItemHandler(ListBoxItemModel item);
+        /// <param name="model">列表项模型</param>
+        public delegate void ModelHandler(ListBoxItemModel model);
         /// <summary>
         /// 事件
         /// </summary>
-        public event ListBoxItemHandler? ListBoxItemEvent;
+        public event ModelHandler? ModelEvent;
     }
 }

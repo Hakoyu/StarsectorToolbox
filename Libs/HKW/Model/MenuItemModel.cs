@@ -25,25 +25,25 @@ namespace HKW.Model
         /// 初始化
         /// </summary>
         /// <param name="handler">委托</param>
-        public MenuItemModel(MenuItemHandler? handler = null)
+        public MenuItemModel(ModelHandler? handler = null)
         {
-            MenuItemEvent += handler;
+            ModelEvent += handler;
         }
 
         [RelayCommand]
         private void MenuItem()
         {
-            if (MenuItemEvent is not null)
-                MenuItemEvent(this);
+            if (ModelEvent is not null)
+                ModelEvent(this);
         }
         /// <summary>
         /// 委托
         /// </summary>
-        /// <param name="item">菜单项模型</param>
-        public delegate void MenuItemHandler(MenuItemModel item);
+        /// <param name="model">菜单项模型</param>
+        public delegate void ModelHandler(MenuItemModel model);
         /// <summary>
         /// 事件
         /// </summary>
-        public event MenuItemHandler? MenuItemEvent;
+        public event ModelHandler? ModelEvent;
     }
 }

@@ -11,6 +11,8 @@ using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using StarsectorTools.Tools.ModManager;
+using HKW.Model;
+using System.IO;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -39,7 +41,6 @@ namespace StarsectorTools.Windows.MainWindow
                 return;
             }
             // 初始化页面
-            InitializeDirectories();
             SetSettingsPage();
             SetInfoPage();
             ChangeLanguage();
@@ -51,8 +52,37 @@ namespace StarsectorTools.Windows.MainWindow
             var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
             if (Utils.IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
+            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
             DataContext = new MainWindowViewModel();
-
+            // 注册消息窗口
+            MessageBoxModel.SetHandler((m) =>
+            {
+                return MessageBoxModel.Result.None;
+                //return (MessageBoxModel.Result)Utils.ShowMessageBox(m.Description, (MessageBoxButton)m.Button, (STMessageBoxIcon)m.Icon, m.Tag is not true);
+            });
+            // 注册打开文件对话框
+            OpenFileDialogModel.SetHandler((d) =>
+            {
+                //新建文件选择
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+                {
+                    Title = d.Title,
+                    Filter = d.Filter,
+                    Multiselect = d.Multiselect,
+                };
+                openFileDialog.ShowDialog();
+                return openFileDialog.FileNames;
+            });
+            // 注册保存文件对话框
+            SaveFileDialogModel.SetHandler((d) =>
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
+                {
+                    Title = d.Title,
+                    Filter = d.Filter,
+                };
+                return saveFileDialog.FileName;
+            });
 
             ViewModel.AddPage("😃", "name", "nameI18n", "tooltip", CreatePage(typeof(ModManager)));
 
@@ -110,65 +140,6 @@ namespace StarsectorTools.Windows.MainWindow
             Close();
         }
 
-        private void Button_ExpandMainMenu_Click(object sender, RoutedEventArgs e)
-        {
-            if (menuOpen)
-            {
-                Button_MainMenuIcon.Text = "📘";
-                Grid_MainMenu.Width = 30;
-                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_MainMenu, ScrollBarVisibility.Hidden);
-            }
-            else
-            {
-                Button_MainMenuIcon.Text = "📖";
-                Grid_MainMenu.Width = double.NaN;
-                ScrollViewer.SetVerticalScrollBarVisibility(ListBox_MainMenu, ScrollBarVisibility.Auto);
-            }
-            menuOpen = !menuOpen;
-        }
-
-        private void ListBox_Menu_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ListBox listBox && listBox.SelectedIndex != -1 && listBox.SelectedItem is ListBoxItem item && item.Content is not Expander)
-            {
-                var id = item.Tag.ToString()!;
-                if (listBox.Name == ListBox_MainMenu.Name)
-                {
-                    Frame_MainFrame.Content = pages[id];
-                    pageSelectedIndex = ListBox_MainMenu.SelectedIndex;
-                    ListBox_ExpansionMenu.SelectedIndex = -1;
-                    ButtonPageCancelPress();
-                }
-                else if (listBox.Name == ListBox_ExpansionMenu.Name)
-                {
-                    var info = allExpansionsInfo[item.Tag.ToString()!];
-                    try
-                    {
-                        Frame_MainFrame.Content = expansionPages[id].Value;
-                        exceptionPageSelectedIndex = ListBox_ExpansionMenu.SelectedIndex;
-                        ListBox_MainMenu.SelectedIndex = -1;
-                        ButtonPageCancelPress();
-                    }
-                    catch (Exception ex)
-                    {
-                        STLog.WriteLine($"{I18n.PageInitializeError} {info.ExpansionType.FullName}", ex);
-                        Utils.ShowMessageBox($"{I18n.PageInitializeError}\n{info.ExpansionType.FullName}", STMessageBoxIcon.Error);
-                        ListBox_ExpansionMenu.SelectedIndex = exceptionPageSelectedIndex;
-                    }
-                }
-                GC.Collect();
-            }
-        }
-
-        private void Button_SettingsPage_Click(object sender, RoutedEventArgs e)
-        {
-            Frame_MainFrame.Content = settingsPage;
-            ListBox_MainMenu.SelectedIndex = -1;
-            ListBox_ExpansionMenu.SelectedIndex = -1;
-            ButtonPageCancelPress();
-            Button_SettingsPage.Tag = true;
-        }
-
         private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
         {
             STLog.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
@@ -185,15 +156,6 @@ namespace StarsectorTools.Windows.MainWindow
             Keyboard.ClearFocus();
             DependencyObject scope = FocusManager.GetFocusScope(this);
             FocusManager.SetFocusedElement(scope, (FrameworkElement)Parent);
-        }
-
-        private void Button_InfoPage_Click(object sender, RoutedEventArgs e)
-        {
-            Frame_MainFrame.Content = infoPage;
-            ListBox_MainMenu.SelectedIndex = -1;
-            ListBox_ExpansionMenu.SelectedIndex = -1;
-            ButtonPageCancelPress();
-            Button_InfoPage.Tag = true;
         }
 
         private void ListBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -213,36 +175,16 @@ namespace StarsectorTools.Windows.MainWindow
             RefreshExpansionPages();
         }
 
-        private void Button_StartGame_Click(object sender, RoutedEventArgs e)
-        {
-            if (Utils.FileExists(GameInfo.ExeFile))
-            {
-                SaveAllPages();
-                if (clearGameLogOnStart)
-                    ClearGameLogFile();
-                System.Diagnostics.Process process = new();
-                process.StartInfo.FileName = "cmd";
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.RedirectStandardInput = true;
-                if (process.Start())
-                {
-                    process.StandardInput.WriteLine($"cd /d {GameInfo.BaseDirectory}");
-                    process.StandardInput.WriteLine($"starsector.exe");
-                    process.Close();
-                }
-            }
-        }
-
         private void CheckBox_ClearLogOnStart_Click(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox checkBox)
             {
                 clearGameLogOnStart = (bool)checkBox.IsChecked!;
-                if (!Utils.FileExists(ST.STConfigTomlFile))
+                if (!Utils.FileExists(ST.ConfigTomlFile))
                     return;
-                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;
-                toml.SaveTo(ST.STConfigTomlFile);
+                toml.SaveTo(ST.ConfigTomlFile);
             }
         }
     }

@@ -24,9 +24,7 @@ namespace StarsectorTools.Windows.MainWindow
 {
     public partial class MainWindow
     {
-        private MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
-        /// <summary>拓展目录</summary>
-        private const string expansionDirectories = "Expansion";
+        internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
         /// <summary>拓展信息文件</summary>
         private const string expansionInfoFile = "Expansion.toml";
@@ -102,13 +100,7 @@ namespace StarsectorTools.Windows.MainWindow
             }
         }
 
-        private void InitializeDirectories()
-        {
-            if (!Utils.DirectoryExists(ST.CoreDirectory, false))
-                Directory.CreateDirectory(ST.CoreDirectory);
-            if (!Utils.DirectoryExists(expansionDirectories, false))
-                Directory.CreateDirectory(expansionDirectories);
-        }
+
 
         private void SetSettingsPage()
         {
@@ -140,10 +132,10 @@ namespace StarsectorTools.Windows.MainWindow
         {
             try
             {
-                if (Utils.FileExists(ST.STConfigTomlFile, false))
+                if (Utils.FileExists(ST.ConfigTomlFile, false))
                 {
                     // 读取设置
-                    TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                     // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     // 日志等级
@@ -168,7 +160,7 @@ namespace StarsectorTools.Windows.MainWindow
                     else
                         toml["Expansion"]["DebugPath"] = "";
                     clearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
-                    toml.SaveTo(ST.STConfigTomlFile);
+                    toml.SaveTo(ST.ConfigTomlFile);
                 }
                 else
                 {
@@ -178,10 +170,10 @@ namespace StarsectorTools.Windows.MainWindow
                         return false;
                     }
                     CreateConfigFile();
-                    TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                     toml["Game"]["Path"] = GameInfo.BaseDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-                    toml.SaveTo(ST.STConfigTomlFile);
+                    toml.SaveTo(ST.ConfigTomlFile);
                 }
             }
             catch (Exception ex)
@@ -197,8 +189,8 @@ namespace StarsectorTools.Windows.MainWindow
         private void CreateConfigFile()
         {
             using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
-            File.WriteAllText(ST.STConfigTomlFile, sr.ReadToEnd());
-            STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.STConfigTomlFile}");
+            File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
+            STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.ConfigTomlFile}");
         }
 
         /// <summary>
@@ -209,8 +201,8 @@ namespace StarsectorTools.Windows.MainWindow
         {
             if (ex is not null)
             {
-                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.STConfigTomlFile}", ex);
-                Utils.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.STConfigTomlFile}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.ConfigTomlFile}", ex);
+                Utils.ShowMessageBox($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.ConfigTomlFile}", STMessageBoxIcon.Error);
             }
             CreateConfigFile();
         }
@@ -236,17 +228,6 @@ namespace StarsectorTools.Windows.MainWindow
             STLog.WriteLine(I18n.PageListRefreshComplete);
         }
 
-        private void ShowPage()
-        {
-            if (string.IsNullOrEmpty(ST.ExpansionDebugPath))
-            {
-                ListBox_MainMenu.SelectedIndex = 0;
-            }
-            else if (CheckExpansionInfo(ST.ExpansionDebugPath, true) is ExpansionInfo info)
-            {
-                ListBox_MainMenu.SelectedItem = AddExpansionDebugPage(info);
-            }
-        }
 
         private void RefreshPages()
         {
@@ -369,7 +350,7 @@ namespace StarsectorTools.Windows.MainWindow
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_MainMenu.Items.Add(item);
+            //ListBox_MainMenu.Items.Add(item);
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.AddPage} {icon} {name}");
         }
@@ -387,15 +368,15 @@ namespace StarsectorTools.Windows.MainWindow
                     ClosePage(lazyPage.Value);
             expansionPages.Clear();
             allExpansionsInfo.Clear();
-            ListBox_ExpansionMenu.Items.Clear();
+            //ListBox_ExpansionMenu.Items.Clear();
         }
 
         private void GetAllExpansions()
         {
-            DirectoryInfo dirs = new(expansionDirectories);
-            foreach (var dir in dirs.GetDirectories())
-                if (CheckExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
-                    GetExpansionPage(expansionInfo);
+            //DirectoryInfo dirs = new(expansionDirectories);
+            //foreach (var dir in dirs.GetDirectories())
+            //    if (CheckExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
+            //        GetExpansionPage(expansionInfo);
         }
 
         private ExpansionInfo? CheckExpansionInfo(string directory, bool loadInMemory = false)
@@ -489,7 +470,7 @@ namespace StarsectorTools.Windows.MainWindow
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_ExpansionMenu.Items.Add(item);
+            //ListBox_ExpansionMenu.Items.Add(item);
             expansionPages.Add(id, lazyPage);
             STLog.WriteLine($"{I18n.AddExpansionPage} {icon} {name}");
         }
@@ -503,13 +484,13 @@ namespace StarsectorTools.Windows.MainWindow
                     ST.ExpansionDebugId = info.Id;
                     if (pages.ContainsKey(info.Id))
                         RemovePage(info.Id);
-                    ListBox_MainMenu.SelectedItem = AddExpansionDebugPage(info);
+                    //ListBox_MainMenu.SelectedItem = AddExpansionDebugPage(info);
                 }
             }
             else if (!string.IsNullOrEmpty(ST.ExpansionDebugId))
             {
-                if (ListBox_MainMenu.SelectedItem is ListBoxItem item && item.Tag.ToString() == ST.ExpansionDebugId)
-                    Frame_MainFrame.Content = null;
+                //if (ListBox_MainMenu.SelectedItem is ListBoxItem item && item.Tag.ToString() == ST.ExpansionDebugId)
+                //    Frame_MainFrame.Content = null;
                 RemovePage(ST.ExpansionDebugId);
                 ST.ExpansionDebugId = string.Empty;
             }
@@ -519,11 +500,11 @@ namespace StarsectorTools.Windows.MainWindow
         {
             if (pages.ContainsKey(pageId))
             {
-                ClosePage(pages[pageId]);
-                for (int i = 0; i < ListBox_MainMenu.Items.Count; i++)
-                    if (((ListBoxItem)ListBox_MainMenu.Items[i]).Tag.ToString() == pageId)
-                        ListBox_MainMenu.Items.RemoveAt(i);
-                pages.Remove(pageId);
+                //ClosePage(pages[pageId]);
+                //for (int i = 0; i < ListBox_MainMenu.Items.Count; i++)
+                //    if (((ListBoxItem)ListBox_MainMenu.Items[i]).Tag.ToString() == pageId)
+                //        ListBox_MainMenu.Items.RemoveAt(i);
+                //pages.Remove(pageId);
             }
         }
 
@@ -553,7 +534,7 @@ namespace StarsectorTools.Windows.MainWindow
             };
             contextMenu.Items.Add(menuItem);
             item.ContextMenu = contextMenu;
-            ListBox_MainMenu.Items.Add(item);
+            //ListBox_MainMenu.Items.Add(item);
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
             return item;

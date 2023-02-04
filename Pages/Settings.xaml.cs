@@ -59,7 +59,7 @@ namespace StarsectorTools.Pages
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(item.ToolTip.ToString()!);
                 SaveLanguage(Thread.CurrentThread.CurrentUICulture);
                 ChangeLanguage();
-                ST.MainWindow.ChangeLanguage();
+                ((MainWindow)Application.Current.MainWindow).ChangeLanguage();
                 STLog.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }
@@ -76,9 +76,9 @@ namespace StarsectorTools.Pages
         {
             try
             {
-                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Extras"]["Lang"] = cultureInfo.Name;
-                toml.SaveTo(ST.STConfigTomlFile);
+                toml.SaveTo(ST.ConfigTomlFile);
             }
             catch
             {
@@ -110,9 +110,9 @@ namespace StarsectorTools.Pages
             try
             {
                 STLog.SetLogLevel(STLog.Str2STLogLevel(level));
-                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Extras"]["LogLevel"] = level;
-                toml.SaveTo(ST.STConfigTomlFile);
+                toml.SaveTo(ST.ConfigTomlFile);
             }
             catch
             {
@@ -131,21 +131,21 @@ namespace StarsectorTools.Pages
             {
                 string path = Path.GetDirectoryName(openFileDialog.FileName)!;
                 TextBox_ExpansionDebugPath.Text = path;
-                TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Expansion"]["DebugPath"] = path;
-                toml.SaveTo(ST.STConfigTomlFile);
+                toml.SaveTo(ST.ConfigTomlFile);
                 STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
                 if (Utils.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
-                    ST.MainWindow.RefreshDebugExpansion();
+                    ((MainWindow)Application.Current.MainWindow).RefreshDebugExpansion();
             }
         }
 
         private void Button_ClearExpansionDebugPath_Click(object sender, RoutedEventArgs e)
         {
             TextBox_ExpansionDebugPath.Text = "";
-            TomlTable toml = TOML.Parse(ST.STConfigTomlFile);
+            TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Expansion"]["DebugPath"] = "";
-            toml.SaveTo(ST.STConfigTomlFile);
+            toml.SaveTo(ST.ConfigTomlFile);
             STLog.WriteLine(I18n.ClearExpansionDebugPath);
         }
     }
