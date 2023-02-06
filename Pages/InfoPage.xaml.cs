@@ -9,9 +9,9 @@ namespace StarsectorTools.Pages
     /// <summary>
     /// Description.xaml 的交互逻辑
     /// </summary>
-    public partial class Info : Page
+    public partial class InfoPage : Page
     {
-        internal Info()
+        internal InfoPage()
         {
             InitializeComponent();
         }

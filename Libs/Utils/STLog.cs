@@ -27,10 +27,10 @@ namespace StarsectorTools.Libs.Utils
     }
 
     /// <summary>StarsectorTools日志</summary>
-    public static class STLog
+    public class STLog
     {
         /// <summary>日志目录</summary>
-        public const string LogFile = $"{ST.CoreDirectory}\\StarsectorTools.log";
+        public static string LogFile = $"{ST.CoreDirectory}\\StarsectorTools1.log";
 
         /// <summary>日志等级</summary>
         public static STLogLevel LogLevel { get; private set; } = STLogLevel.INFO;
@@ -55,7 +55,7 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         /// <param name="str">字符串</param>
         /// <returns>日志等级</returns>
-        public static STLogLevel Str2STLogLevel(string str) =>
+        public static STLogLevel GetSTLogLevel(string str) =>
             str switch
             {
                 nameof(STLogLevel.DEBUG) => STLogLevel.DEBUG,
@@ -129,7 +129,7 @@ namespace StarsectorTools.Libs.Utils
         }
 
         /// <summary>
-        /// 写入捕获的异常
+        /// 写入异常日志
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="ex">错误</param>

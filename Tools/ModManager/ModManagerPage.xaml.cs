@@ -9,22 +9,23 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Linq;
-using HKW.TomlParse;
+using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
+using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
 
 namespace StarsectorTools.Tools.ModManager
 {
     /// <summary>
-    /// ModManager.xaml 的交互逻辑
+    /// ModManagerPage.xaml 的交互逻辑
     /// </summary>
-    public partial class ModManager : Page
+    public partial class ModManagerPage : Page, ISTPage
     {
+        public bool NeedSave { get; private set; }
         /// <summary>
         /// 
         /// </summary>
-        public ModManager()
+        public ModManagerPage()
         {
             InitializeComponent();
             //throw new();

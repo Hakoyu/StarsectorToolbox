@@ -15,7 +15,7 @@
 
 - 为信息和设置页面按钮设置按下状态
 
-### ModManager
+### ModManagerPage
 
 修改:
 
@@ -50,7 +50,7 @@
 - 修复 MenuItem 会出现绑定错误的问题
 - 添加 Core 文件夹,整合零散文件
 
-### ModManager
+### ModManagerPage
 
 修改:
 
@@ -73,7 +73,7 @@
 
 ## 0.7.8
 
-### ModManager
+### ModManagerPage
 
 修改:
 

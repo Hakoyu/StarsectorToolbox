@@ -43,12 +43,12 @@ namespace HKW.Model
         }
         private OpenFileDialogModel() { }
         /// <summary>
-        /// 设置委托
+        /// 初始化委托
         /// 单例模式,只能设置一次
         /// </summary>
         /// <param name="handler">委托</param>
         /// <returns>设置成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool SetHandler(ModelHandler handler)
+        public static bool InitializeHandler(ModelHandler handler)
         {
             if (ModelEvent is null)
             {

@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using HKW.Model;
-using HKW.TomlParse;
 using StarsectorTools.Libs.GameInfo;
+using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
@@ -48,7 +48,8 @@ namespace StarsectorTools.Windows.MainWindow
             /// <summary>拓展文件</summary>
             public string ExpansionFile { get; private set; } = null!;
 
-            public Type ExpansionType = null!;
+            /// <summary>拓展页面</summary>
+            public object ExpansionPage { get; set; } = null!;
 
             public ExpansionInfo(TomlTable table)
             {
@@ -72,7 +73,13 @@ namespace StarsectorTools.Windows.MainWindow
                 }
             }
         }
-        internal void AddPage(string icon, string name, string id, string toolTip, object page)
+        internal void Close()
+        {
+            CloseAllPages();
+            CheckAllPagesSave();
+            STLog.Close();
+        }
+        internal void AddMainPage(string icon, string name, string id, string toolTip, object page)
         {
             MainPageItems.Add(new(SelectItem)
             {
@@ -80,16 +87,16 @@ namespace StarsectorTools.Windows.MainWindow
                 Icon = icon,
                 Content = name,
                 ToolTip = toolTip,
-                Tag = page
+                Tag = page,
             });
         }
 
         private void SelectItem(ListBoxItemModel item)
         {
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (MenuSelectedItem?.IsSelected is true)
-                MenuSelectedItem.IsSelected = false;
-            MenuSelectedItem = item;
+            if (SelectedPageItem?.IsSelected is true)
+                SelectedPageItem.IsSelected = false;
+            SelectedPageItem = item;
             ShowPage(item.Tag);
         }
 
@@ -100,32 +107,32 @@ namespace StarsectorTools.Windows.MainWindow
         }
         private void ClearGameLogFile()
         {
-            if (Utils.FileExists(GameInfo.LogFile, false))
+            if (File.Exists(GameInfo.LogFile))
                 Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
             File.Create(GameInfo.LogFile).Close();
             STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
         private void InitializeDirectories()
         {
-            if (!Utils.DirectoryExists(ST.CoreDirectory, false))
+            if (!Directory.Exists(ST.CoreDirectory))
                 Directory.CreateDirectory(ST.CoreDirectory);
-            if (!Utils.DirectoryExists(ST.ExpansionDirectories, false))
+            if (!Directory.Exists(ST.ExpansionDirectories))
                 Directory.CreateDirectory(ST.ExpansionDirectories);
         }
-        internal bool SetConfig(string originalConfigData)
+        private bool SetConfig(string originalConfigData)
         {
             try
             {
                 if (Utils.FileExists(ST.ConfigTomlFile, false))
                 {
                     // 读取设置
-                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                    var toml = TOML.Parse(ST.ConfigTomlFile);
                     // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     // 日志等级
-                    STLog.SetLogLevel(STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString));
+                    STLog.SetLogLevel(STLog.GetSTLogLevel(toml["Extras"]["LogLevel"].AsString));
                     // 游戏目录
-                    if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString!))
+                    if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
                     {
                         if (!(MessageBoxModel.Show(new(I18n.GameNotFound_SelectAgain)
                         {
@@ -168,7 +175,7 @@ namespace StarsectorTools.Windows.MainWindow
                         return false;
                     }
                     CreateConfigFile(originalConfigData);
-                    TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
+                    var toml = TOML.Parse(ST.ConfigTomlFile);
                     toml["Game"]["Path"] = GameInfo.BaseDirectory;
                     toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.ConfigTomlFile);
@@ -207,7 +214,8 @@ namespace StarsectorTools.Windows.MainWindow
             string tomlFile = $"{directory}\\{ST.ExpansionInfoFile}";
             try
             {
-                if (!Utils.FileExists(tomlFile, false))
+                // 判断文件存在性
+                if (!File.Exists(tomlFile))
                 {
                     STLog.WriteLine($"{I18n.ExpansionTomlFileNotFound} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionTomlFileNotFound}\n{I18n.Path}: {tomlFile}")
@@ -218,6 +226,7 @@ namespace StarsectorTools.Windows.MainWindow
                 }
                 var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
                 var assemblyFile = $"{directory}\\{expansionInfo.ExpansionFile}";
+                // 检测是否有相同的拓展
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
                     STLog.WriteLine($"{I18n.ExpansionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
@@ -227,7 +236,8 @@ namespace StarsectorTools.Windows.MainWindow
                     });
                     return null;
                 }
-                if (!Utils.FileExists(assemblyFile, false))
+                // 判断组件文件是否存在
+                if (!File.Exists(assemblyFile))
                 {
                     STLog.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}")
@@ -236,14 +246,31 @@ namespace StarsectorTools.Windows.MainWindow
                     });
                     return null;
                 }
+                // 从内存或外部载入
+                Type type;
                 if (loadInMemory)
                 {
                     var bytes = File.ReadAllBytes(assemblyFile);
-                    expansionInfo.ExpansionType = Assembly.Load(bytes).GetType(expansionInfo.ExpansionId)!;
+                    type = Assembly.Load(bytes).GetType(expansionInfo.ExpansionId)!;
+                    expansionInfo.ExpansionPage = type.Assembly.CreateInstance(type.FullName!)!;
                 }
                 else
-                    expansionInfo.ExpansionType = Assembly.LoadFrom(assemblyFile).GetType(expansionInfo.ExpansionId)!;
-                if (expansionInfo.ExpansionType is null)
+                {
+                    type = Assembly.LoadFrom(assemblyFile).GetType(expansionInfo.ExpansionId)!;
+                    expansionInfo.ExpansionPage = type.Assembly.CreateInstance(type.FullName!)!;
+                }
+                // 判断是否成功创建了页面
+                if (expansionInfo.ExpansionPage is null)
+                {
+                    STLog.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    MessageBoxModel.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
+                    {
+                        Icon = MessageBoxModel.Icon.Warning
+                    });
+                    return null;
+                }
+                // 判断页面是否实现了接口
+                if (type.GetInterface(nameof(ISTExpansionPage)) is not ISTExpansionPage)
                 {
                     STLog.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
@@ -264,44 +291,121 @@ namespace StarsectorTools.Windows.MainWindow
                 return null;
             }
         }
+
+        internal void ChangeLanguage()
+        {
+            STLog.WriteLine($"{I18n.DisplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
+            TitleI18n = I18n.StarsectorTools;
+            InfoI18n = I18n.Info;
+            SettingsI18n = I18n.Settings;
+            ClearGameLogOnStartI18n = I18n.ClearGameLogOnStart;
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
+            toml.SaveTo(ST.ConfigTomlFile);
+        }
+        private void InitializeExpansionPage()
+        {
+            DirectoryInfo dirs = new(ST.ExpansionDirectories);
+            foreach (var dir in dirs.GetDirectories())
+            {
+                if (CheckExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
+                {
+                    var page = expansionInfo.ExpansionPage;
+                    //var name = page.
+                    ExpansionPageItems.Add(new(SelectItem)
+                    {
+                        Id = expansionInfo.Id,
+                        Icon = expansionInfo.Icon,
+                        Content = expansionInfo.Name,
+                        ToolTip = $"Author: {expansionInfo.Author}\nDescription: {expansionInfo.Description}",
+                        Tag = page
+                    });
+                }
+            }
+        }
+        private void InitializeExpansionDebugPage()
+        {
+            // 添加拓展调试页面
+        }
+        #region CheckPageSave
+        private void CheckAllPagesSave()
+        {
+            CheckMainPagesSave();
+            CheckExpansionPagesSave();
+        }
+        private void CheckMainPagesSave()
+        {
+            foreach (var item in MainPageItems)
+                CheckPageSave(item);
+        }
+        private void CheckExpansionPagesSave()
+        {
+            foreach (var item in expansionPageItems)
+                CheckPageSave(item);
+        }
+        private void CheckPageSave(ListBoxItemModel model)
+        {
+            if (model.Tag is not object page)
+                return;
+            // 获取page中的Save方法并执行
+            // 用于保存page中已修改的数据
+            var type = page.GetType();
+            try
+            {
+                if (type.GetProperty("NeedSave") is PropertyInfo info)
+                {
+                    if (info.GetValue(page) is true && MessageBoxModel.Show(new($"{I18n.Page}: {model.Content} {I18n.PageCheckSave}")
+                    {
+                        Button = MessageBoxModel.Button.YesNo
+                    }) is MessageBoxModel.Result.Yes)
+                    {
+                        SavePage(model);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.PageSaveError} {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+            }
+        }
+        #endregion
         #region SavePage
         private void SaveAllPages()
         {
             SaveMainPages();
             SaveExpansionPages();
         }
-
         private void SaveMainPages()
         {
-            foreach (var item in mainPageItems)
-                SavePage(item.Tag);
+            foreach (var item in MainPageItems)
+                SavePage(item);
         }
         private void SaveExpansionPages()
         {
             foreach (var item in expansionPageItems)
-                SavePage(item.Tag);
+                SavePage(item);
         }
-
-        private void SavePage(object? page)
+        private void SavePage(ListBoxItemModel model)
         {
-            if (page is null)
+            if (model.Tag is not object page)
                 return;
             // 获取page中的Save方法并执行
             // 用于保存page中已修改的数据
+            var type = page.GetType();
             try
             {
-                if (page.GetType().GetMethod("Save") is MethodInfo info)
+                if (type.GetMethod("Save") is MethodInfo info)
                     _ = info.Invoke(page, null);
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageSaveError} {page.GetType().FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageSaveError} {page.GetType().FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageSaveError} {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
             }
         }
 
         #endregion
-
         #region ClosePage
 
         private void CloseAllPages()
@@ -312,31 +416,32 @@ namespace StarsectorTools.Windows.MainWindow
 
         private void CloseMainPages()
         {
-            foreach (var page in mainPageItems)
-                ClosePage(page.Tag);
+            foreach (var page in MainPageItems)
+                ClosePage(page);
         }
 
         private void CloseExpansionPages()
         {
             foreach (var page in expansionPageItems)
-                ClosePage(page.Tag);
+                ClosePage(page);
         }
 
-        private void ClosePage(object? page)
+        private void ClosePage(ListBoxItemModel model)
         {
-            if (page is null)
+            if (model.Tag is not object page)
                 return;
             // 获取page中的Close方法并执行
             // 用于关闭page中创建的线程
+            var type = page.GetType();
             try
             {
-                if (page.GetType().GetMethod("Close") is MethodInfo info)
+                if (type.GetMethod("Close") is MethodInfo info)
                     _ = info.Invoke(page, null);
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageCloseError} {page.GetType().FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageCloseError} {page.GetType().FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageCloseError} {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageCloseError} {type.FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
             }
         }
 

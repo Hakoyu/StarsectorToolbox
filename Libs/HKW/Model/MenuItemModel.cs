@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -7,6 +8,7 @@ namespace HKW.Model
     /// <summary>
     /// 菜单项模型,用于MVVM
     /// </summary>
+    [DebuggerDisplay("{Name} {Content}")]
     public partial class MenuItemModel : ObservableObject
     {
         [ObservableProperty]

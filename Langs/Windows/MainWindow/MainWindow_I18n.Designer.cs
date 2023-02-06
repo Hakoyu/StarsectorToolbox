@@ -79,11 +79,11 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 启动时清理日志文件 的本地化字符串。
+        ///   查找类似 启动时清理游戏日志文件 的本地化字符串。
         /// </summary>
-        public static string ClearLogOnStart {
+        public static string ClearGameLogOnStart {
             get {
-                return ResourceManager.GetString("ClearLogOnStart", resourceCulture);
+                return ResourceManager.GetString("ClearGameLogOnStart", resourceCulture);
             }
         }
         
@@ -108,9 +108,9 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         /// <summary>
         ///   查找类似 显示语言为 的本地化字符串。
         /// </summary>
-        public static string DIsplayLanguageIs {
+        public static string DisplayLanguageIs {
             get {
-                return ResourceManager.GetString("DIsplayLanguageIs", resourceCulture);
+                return ResourceManager.GetString("DisplayLanguageIs", resourceCulture);
             }
         }
         
@@ -334,6 +334,25 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string ModManagerToolTip {
             get {
                 return ResourceManager.GetString("ModManagerToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 页面 的本地化字符串。
+        /// </summary>
+        public static string Page {
+            get {
+                return ResourceManager.GetString("Page", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未保存
+        ///确定保存吗? 的本地化字符串。
+        /// </summary>
+        public static string PageCheckSave {
+            get {
+                return ResourceManager.GetString("PageCheckSave", resourceCulture);
             }
         }
         

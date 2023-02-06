@@ -10,8 +10,8 @@
   xmlns:ex="clr-namespace:HKW.WPF"
   xmlns:local="clr-namespace:StarsectorTools.Windows.MainWindow"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:model="clr-namespace:HKW.Model"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
-  Title="StarsectorTools"
   Width="1000"
   Height="500"
   MinWidth="800"
@@ -54,6 +54,44 @@
         </DataTrigger>
       </Style.Triggers>
     </Style>
+    <Style
+      x:Key="ListBoxItemMVVM"
+      BasedOn="{StaticResource ListBoxItem_Style}"
+      TargetType="ListBoxItem">
+      <Setter Property="Content" Value="{Binding Content}" />
+      <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+      <Setter Property="Tag" Value="{Binding Tag}" />
+      <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+      <Setter Property="pu:ListBoxItemHelper.Icon">
+        <Setter.Value>
+          <TextBlock Text="{Binding Icon}" />
+        </Setter.Value>
+      </Setter>
+      <Setter Property="ex:Attach.InputBindings">
+        <Setter.Value>
+          <InputBindingCollection>
+            <!--  绑定单击事件  -->
+            <MouseBinding Command="{Binding ListBoxItemCommand}" Gesture="LeftClick" />
+          </InputBindingCollection>
+        </Setter.Value>
+      </Setter>
+      <Setter Property="ContextMenu">
+        <Setter.Value>
+          <!--  绑定右键菜单  -->
+          <ContextMenu ItemsSource="{Binding ContextMenus}">
+            <ContextMenu.ItemTemplate>
+              <DataTemplate>
+                <MenuItem
+                  Command="{Binding MenuItemCommand}"
+                  CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                  Header="{Binding Header}"
+                  ToolTip="{Binding ToolTip}" />
+              </DataTemplate>
+            </ContextMenu.ItemTemplate>
+          </ContextMenu>
+        </Setter.Value>
+      </Setter>
+    </Style>
   </Window.Resources>
   <Grid Style="{StaticResource WindowMainPanelStyle}">
     <Grid
@@ -75,7 +113,7 @@
           Padding="0"
           HorizontalAlignment="Center"
           Background="{x:Null}"
-          Content="{Binding Title}"
+          Content="{Binding TitleI18n}"
           FontSize="20"
           FontWeight="Bold"
           Style="{StaticResource Label_Style}" />
@@ -176,50 +214,9 @@
             <ListBox
               x:Name="ListBox_MainMenu"
               FontSize="16"
+              ItemContainerStyle="{StaticResource ListBoxItemMVVM}"
               ItemsSource="{Binding MainPageItems}"
-              SelectedItem="{Binding MenuSelectedItem}"
-              Style="{StaticResource ListBox_Style}">
-              <ListBox.ItemContainerStyle>
-                <Style BasedOn="{StaticResource ListBoxItem_Style}" TargetType="ListBoxItem">
-                  <Setter Property="Content" Value="{Binding Content}" />
-                  <Setter Property="ToolTip" Value="{Binding ToolTip}" />
-                  <Setter Property="Tag" Value="{Binding Tag}" />
-                  <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                  <Setter Property="pu:ListBoxItemHelper.Icon">
-                    <Setter.Value>
-                      <emoji:TextBlock Text="{Binding Icon}" />
-                    </Setter.Value>
-                  </Setter>
-                  <Setter Property="ex:Attach.InputBindings">
-                    <Setter.Value>
-                      <InputBindingCollection>
-                        <!--  绑定单击事件  -->
-                        <MouseBinding
-                          Command="{Binding ListBoxItemCommand}"
-                          CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                          Gesture="LeftClick" />
-                      </InputBindingCollection>
-                    </Setter.Value>
-                  </Setter>
-                  <Setter Property="ContextMenu">
-                    <Setter.Value>
-                      <!--  绑定右键菜单  -->
-                      <ContextMenu ItemsSource="{Binding ContextMenus}">
-                        <ContextMenu.ItemTemplate>
-                          <DataTemplate>
-                            <MenuItem
-                              Command="{Binding MenuItemCommand}"
-                              CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
-                              Header="{Binding Header}"
-                              ToolTip="{Binding ToolTip}" />
-                          </DataTemplate>
-                        </ContextMenu.ItemTemplate>
-                      </ContextMenu>
-                    </Setter.Value>
-                  </Setter>
-                </Style>
-              </ListBox.ItemContainerStyle>
-            </ListBox>
+              Style="{StaticResource ListBox_Style}" />
             <Expander
               Padding="0"
               FontSize="16"
@@ -239,7 +236,7 @@
                 x:Name="ListBox_ExpansionMenu"
                 ItemsSource="{Binding ExpansionPageItems}"
                 PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                SelectedItem="{Binding MenuSelectedItem}"
+                SelectedItem="{Binding SelectedPageItem}"
                 Style="{StaticResource ListBox_Style}">
                 <ListBox.ItemContainerStyle>
                   <Style BasedOn="{StaticResource ListBoxItem_Style}" TargetType="ListBoxItem">
@@ -292,7 +289,7 @@
           VerticalAlignment="Bottom"
           HorizontalContentAlignment="Left"
           Command="{Binding StartGameCommand}"
-          Content="{x:Static I18n:MainWindow_I18n.StartGame}"
+          Content="{Binding StartGameI18n}"
           FontSize="16"
           Style="{StaticResource Button_Style}">
           <pu:ButtonHelper.Icon>
@@ -301,7 +298,7 @@
           <Button.ContextMenu>
             <ContextMenu Style="{StaticResource ContextMenu_Style}">
               <CheckBox
-                Content="{x:Static I18n:MainWindow_I18n.ClearLogOnStart}"
+                Content="{Binding ClearGameLogOnStartI18n}"
                 IsChecked="{Binding ClearGameLogOnStart}"
                 Style="{StaticResource CheckBox_Style}" />
             </ContextMenu>
@@ -316,7 +313,7 @@
           HorizontalContentAlignment="Left"
           Command="{Binding ShowPageCommand}"
           CommandParameter="{Binding InfoPage}"
-          Content="{x:Static I18n:MainWindow_I18n.Info}"
+          Content="{Binding InfoI18n}"
           FontSize="16"
           Style="{StaticResource ButtonPressed}">
           <pu:ButtonHelper.Icon>
@@ -332,9 +329,10 @@
           HorizontalContentAlignment="Left"
           Command="{Binding ShowPageCommand}"
           CommandParameter="{Binding SettingsPage}"
-          Content="{x:Static I18n:MainWindow_I18n.Settings}"
+          Content="{Binding SettingsI18n}"
           FontSize="16"
-          Style="{StaticResource ButtonPressed}">
+          Style="{StaticResource ButtonPressed}"
+          Tag="">
           <pu:ButtonHelper.Icon>
             <emoji:TextBlock FontSize="16" Text="⚙" />
           </pu:ButtonHelper.Icon>
@@ -344,7 +342,6 @@
         x:Name="Frame_MainFrame"
         Grid.Column="1"
         Content="{Binding NowPage}"
-        ContentRendered="Frame_MainFrame_ContentRendered"
         NavigationUIVisibility="Hidden" />
     </Grid>
   </Grid>

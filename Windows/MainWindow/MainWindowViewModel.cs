@@ -25,9 +25,13 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private bool menuIsExpand = false;
         [ObservableProperty]
-        private string title = I18n.StarsectorTools;
+        private bool clearGameLogOnStart = true;
         [ObservableProperty]
-        private ListBoxItemModel? menuSelectedItem;
+        private bool infoPageIsChecked = false;
+        [ObservableProperty]
+        private bool settingsPageIsChecked = false;
+
+        #region Page
         [ObservableProperty]
         private object? nowPage;
         [ObservableProperty]
@@ -35,15 +39,68 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private object? settingsPage;
         [ObservableProperty]
+        private object? expansionDebugPage;
+        #endregion
+        #region PageItem
+        [ObservableProperty]
+        private ListBoxItemModel? selectedPageItem;
+        [ObservableProperty]
         private List<ListBoxItemModel> mainPageItems = new();
         [ObservableProperty]
         private List<ListBoxItemModel> expansionPageItems = new();
+        #endregion
+        #region I18n
         [ObservableProperty]
-        private bool clearGameLogOnStart = true;
+        private string titleI18n = I18n.StarsectorTools;
+        [ObservableProperty]
+        private string infoI18n = I18n.Info;
+        [ObservableProperty]
+        private string settingsI18n = I18n.Settings;
+        [ObservableProperty]
+        private string startGameI18n = I18n.StartGame;
+        [ObservableProperty]
+        private string clearGameLogOnStartI18n = I18n.ClearGameLogOnStart;
+        #endregion
 
         public MainWindowViewModel()
         {
+            //InitializeDirectories();
+            MainPageItems.Add(new()
+            {
+                Icon = "A",
+                Content = "AAA",
+            });
+            MainPageItems.Add(new()
+            {
+                Icon = "B",
+                Content = "BBB",
+            });
+            MainPageItems.Add(new()
+            {
+                Icon = "C",
+                Content = "CCC",
+            });
+            MainPageItems.Add(new()
+            {
+                Icon = "D",
+                Content = "DDD",
+            });
+            MainPageItems.Add(new()
+            {
+                Icon = "E",
+                Content = "EEE",
+            });
+            MainPageItems.Add(new()
+            {
+                Icon = "F",
+                Content = "FFF",
+            });
+
+        }
+        public MainWindowViewModel(string configData)
+        {
             InitializeDirectories();
+            SetConfig(configData);
         }
 
         [RelayCommand]
@@ -56,6 +113,20 @@ namespace StarsectorTools.Windows.MainWindow
         private void ShowPage(object? page)
         {
             NowPage = page;
+            // 取消按钮页面选中状态
+            // 设置选中状态
+            if (page == infoPage)
+            {
+                InfoPageIsChecked = true;
+                SettingsPageIsChecked = false;
+                SelectedPageItem = null;
+            }
+            else if (page == settingsPage)
+            {
+                SettingsPageIsChecked = true;
+                InfoPageIsChecked = false;
+                SelectedPageItem = null;
+            }
             STLog.WriteLine($"{I18n.ShowPage}: {page?.GetType().FullName}");
         }
 

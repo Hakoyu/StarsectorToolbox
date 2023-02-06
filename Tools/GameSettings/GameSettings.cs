@@ -10,7 +10,7 @@ using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
 namespace StarsectorTools.Tools.GameSettings
 {
-    public partial class GameSettings
+    public partial class GameSettingsPage
     {
         private struct VmparamsData
         {

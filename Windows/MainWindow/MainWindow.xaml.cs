@@ -7,13 +7,16 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using StarsectorTools.Libs.GameInfo;
-using HKW.TomlParse;
+using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using StarsectorTools.Tools.ModManager;
+using StarsectorTools.Tools.GameSettings;
 using HKW.Model;
+using HKW.Libs.Log4Cs;
 using System.IO;
 using Panuon.WPF.UI;
+using StarsectorTools.Pages;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -22,6 +25,9 @@ namespace StarsectorTools.Windows.MainWindow
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>StarsectorTools配置文件资源链接</summary>
+        private static readonly Uri resourcesConfigUri = new("\\Resources\\Config.toml", UriKind.Relative);
+        internal static MainWindowViewModel ViewModel => (MainWindowViewModel)((MainWindow)Application.Current.MainWindow).DataContext;
         /// <summary>
         /// 
         /// </summary>
@@ -33,6 +39,8 @@ namespace StarsectorTools.Windows.MainWindow
             // MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             // 亚克力背景
             // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
+            Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
+            Logger.Record("114514");
             // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
             // 获取系统主题色
@@ -47,8 +55,6 @@ namespace StarsectorTools.Windows.MainWindow
             // SetInfoPage();
             // ChangeLanguage();
             // ShowPage();
-
-            DataContext = new MainWindowViewModel();
             // 注册消息窗口
             RegisterMessageBoxModel();
             // 注册打开文件对话框
@@ -56,16 +62,18 @@ namespace StarsectorTools.Windows.MainWindow
             // 注册保存文件对话框
             RegisterSaveFileDialogModel();
 
-            // 初始化设置
-            using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
-            if(!ViewModel.SetConfig(sr.ReadToEnd()))
+            try
             {
+                using StreamReader sr = new(Application.GetResourceStream(resourcesConfigUri).Stream);
+                DataContext = new MainWindowViewModel(sr.ReadToEnd());
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.InitializationError}: {nameof(MainWindowViewModel)}", ex, false);
                 Close();
                 return;
             }
-
-            // 添加页面
-            ViewModel.AddPage("😃", "name", "nameI18n", "tooltip", CreatePage(typeof(ModManager)));
+            InitializePage();
 
 
             STLog.WriteLine(I18n.InitializationCompleted);
@@ -75,7 +83,7 @@ namespace StarsectorTools.Windows.MainWindow
         {
             // 消息长度限制
             int messageLengthLimits = 8192;
-            MessageBoxModel.SetHandler((d) =>
+            MessageBoxModel.InitializeHandler((d) =>
                 {
                     string message = d.Message.Length < messageLengthLimits
                         ? d.Message
@@ -115,7 +123,7 @@ namespace StarsectorTools.Windows.MainWindow
                     MessageBoxModel.Icon.Error => MessageBoxIcon.Error,
                     MessageBoxModel.Icon.Success => MessageBoxIcon.Success,
                     MessageBoxModel.Icon.Question => MessageBoxIcon.Question,
-                    _ => MessageBoxIcon.None,
+                    _ => MessageBoxIcon.Info,
                 };
             static MessageBoxModel.Result ResultConverter(MessageBoxResult result) =>
                 result switch
@@ -131,7 +139,7 @@ namespace StarsectorTools.Windows.MainWindow
 
         private void RegisterOpenFileDialogModel()
         {
-            OpenFileDialogModel.SetHandler((d) =>
+            OpenFileDialogModel.InitializeHandler((d) =>
             {
                 var openFileDialog = new Microsoft.Win32.OpenFileDialog()
                 {
@@ -145,7 +153,7 @@ namespace StarsectorTools.Windows.MainWindow
         }
         private void RegisterSaveFileDialogModel()
         {
-            SaveFileDialogModel.SetHandler((d) =>
+            SaveFileDialogModel.InitializeHandler((d) =>
             {
                 var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
                 {
@@ -162,12 +170,18 @@ namespace StarsectorTools.Windows.MainWindow
             if (e.Exception.Source == nameof(StarsectorTools))
             {
                 STLog.WriteLine(I18n.GlobalException, e.Exception, false);
-                Utils.ShowMessageBox($"{I18n.GlobalExceptionMessage}\n\n{STLog.SimplifyException(e.Exception)}", STMessageBoxIcon.Error);
+                MessageBoxModel.Show(new($"{I18n.GlobalExceptionMessage}\n\n{STLog.SimplifyException(e.Exception)}")
+                {
+                    Icon = MessageBoxModel.Icon.Error,
+                });
             }
             else
             {
                 STLog.WriteLine($"{I18n.GlobalExpansionException}: {e.Exception.Source}", e.Exception, false);
-                Utils.ShowMessageBox($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.SimplifyException(e.Exception)}", STMessageBoxIcon.Error);
+                MessageBoxModel.Show(new($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.SimplifyException(e.Exception)}")
+                {
+                    Icon = MessageBoxModel.Icon.Error,
+                });
             }
             e.Handled = true;
         }
@@ -200,17 +214,25 @@ namespace StarsectorTools.Windows.MainWindow
             }
         }
 
+        private Page? CreatePage(Type type)
+        {
+            try
+            {
+                return (Page)type.Assembly.CreateInstance(type.FullName!)!;
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.PageInitializeError}: {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{type.FullName}", STMessageBoxIcon.Error);
+                return null;
+            }
+        }
+
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
-            ClearPages();
-            STLog.Close();
+            ViewModel.Close();
             Close();
-        }
-
-        private void Frame_MainFrame_ContentRendered(object sender, EventArgs e)
-        {
-            STLog.WriteLine($"{I18n.ShowPage} {Frame_MainFrame.Content}");
         }
 
         private void ListBox_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -243,17 +265,30 @@ namespace StarsectorTools.Windows.MainWindow
             RefreshExpansionPages();
         }
 
-        private void CheckBox_ClearLogOnStart_Click(object sender, RoutedEventArgs e)
+        private void InitializePage()
         {
-            if (sender is CheckBox checkBox)
-            {
-                clearGameLogOnStart = (bool)checkBox.IsChecked!;
-                if (!Utils.FileExists(ST.ConfigTomlFile))
-                    return;
-                TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
-                toml["Game"]["ClearLogOnStart"] = clearGameLogOnStart;
-                toml.SaveTo(ST.ConfigTomlFile);
-            }
+            // 添加页面
+            ViewModel.InfoPage = new InfoPage();
+            ViewModel.SettingsPage = new SettingsPage();
+            // 主界面必须在View中生成,拓展及调试拓展可以在ViewModel中使用反射
+            InitializeMainPage();
+            //InitializeExpansionPage();
+            //InitializeExpansionDebugPage();
+        }
+
+        private void InitializeMainPage()
+        {
+            // 添加主要页面
+            ViewModel.AddMainPage("🌐", I18n.ModManager, nameof(ModManagerPage), I18n.ModManagerToolTip, CreatePage(typeof(ModManagerPage)));
+            ViewModel.AddMainPage("⚙", I18n.GameSettings, nameof(GameSettingsPage), I18n.GameSettingsToolTip, CreatePage(typeof(GameSettingsPage)));
+        }
+        private void InitializeExpansionPage()
+        {
+            // 添加拓展页面
+        }
+        private void InitializeExpansionDebugPage()
+        {
+            // 添加拓展调试页面
         }
     }
 }

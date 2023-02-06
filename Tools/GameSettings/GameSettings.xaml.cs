@@ -7,22 +7,22 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using StarsectorTools.Libs.GameInfo;
-using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
-using HKW.Extension;
+using HKW.Libs.TomlParse;
+using HKW.Libs;
 
 namespace StarsectorTools.Tools.GameSettings
 {
     /// <summary>
-    /// GameSettings.xaml 的交互逻辑
+    /// GameSettingsPage.xaml 的交互逻辑
     /// </summary>
-    public partial class GameSettings : Page
+    public partial class GameSettingsPage : Page
     {
         /// <summary>
         /// 
         /// </summary>
-        public GameSettings()
+        public GameSettingsPage()
         {
             InitializeComponent();
             Label_GamePath.Content = GameInfo.BaseDirectory;

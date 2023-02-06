@@ -13,24 +13,23 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Collections;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs.GameInfo;
-using HKW.TomlParse;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using HKW.Libs;
+using HKW.Libs.TomlParse;
 
 namespace StarsectorTools.Windows.MainWindow
 {
     public partial class MainWindow
     {
-        internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
         /// <summary>拓展信息文件</summary>
         private const string expansionInfoFile = "Expansion.toml";
 
-        /// <summary>StarsectorTools配置文件资源链接</summary>
-        private static readonly Uri resourcesConfigUri = new("/Resources/Config.toml", UriKind.Relative);
+
 
         private const string strName = "Name";
         private const string strDescription = "Description";
@@ -38,8 +37,8 @@ namespace StarsectorTools.Windows.MainWindow
         private Dictionary<string, Page> pages = new();
         private Dictionary<string, Lazy<Page>> expansionPages = new();
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
-        private Settings settingsPage = null!;
-        private Info infoPage = null!;
+        private SettingsPage settingsPage = null!;
+        private InfoPage infoPage = null!;
         private int pageSelectedIndex = -1;
         private int exceptionPageSelectedIndex = -1;
         private bool clearGameLogOnStart = false;
@@ -110,8 +109,8 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializeError}: {nameof(Settings)}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{nameof(Settings)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageInitializeError}: {nameof(SettingsPage)}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{nameof(SettingsPage)}", STMessageBoxIcon.Error);
             }
         }
 
@@ -123,8 +122,8 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializeError}: {nameof(Info)}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{nameof(Info)}", STMessageBoxIcon.Error);
+                STLog.WriteLine($"{I18n.PageInitializeError}: {nameof(InfoPage)}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{nameof(InfoPage)}", STMessageBoxIcon.Error);
             }
         }
 
@@ -139,7 +138,7 @@ namespace StarsectorTools.Windows.MainWindow
                     // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     // 日志等级
-                    STLog.SetLogLevel(STLog.Str2STLogLevel(toml["Extras"]["LogLevel"].AsString));
+                    STLog.SetLogLevel(STLog.GetSTLogLevel(toml["Extras"]["LogLevel"].AsString));
                     // 游戏目录
                     if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString!))
                     {
@@ -207,19 +206,25 @@ namespace StarsectorTools.Windows.MainWindow
             CreateConfigFile();
         }
 
-        internal void SetBlurEffect()
+        /// <summary>
+        /// 设置模糊效果
+        /// </summary>
+        public static void SetBlurEffect()
         {
-            Dispatcher.Invoke(() => Effect = new System.Windows.Media.Effects.BlurEffect());
+            ((MainWindow)Application.Current.MainWindow).Dispatcher.Invoke(() => ((MainWindow)Application.Current.MainWindow).Effect = new System.Windows.Media.Effects.BlurEffect());
         }
 
-        internal void RemoveBlurEffect()
+        /// <summary>
+        /// 取消模糊效果
+        /// </summary>
+        public static void RemoveBlurEffect()
         {
-            Dispatcher.Invoke(() => Effect = null);
+            ((MainWindow)Application.Current.MainWindow).Dispatcher.Invoke(() => ((MainWindow)Application.Current.MainWindow).Effect = null);
         }
 
         internal void ChangeLanguage()
         {
-            STLog.WriteLine($"{I18n.DIsplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
+            STLog.WriteLine($"{I18n.DisplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
             //Label_Title.Content = I18n.StarsectorTools;
             Button_SettingsPage.Content = I18n.Settings;
             Button_InfoPage.Content = I18n.Info;
@@ -232,23 +237,11 @@ namespace StarsectorTools.Windows.MainWindow
         private void RefreshPages()
         {
             ClearPages();
-            AddPage("🌐", I18n.ModManager, nameof(ModManager), I18n.ModManagerToolTip, CreatePage(typeof(ModManager)));
-            AddPage("⚙", I18n.GameSettings, nameof(GameSettings), I18n.GameSettingsToolTip, CreatePage(typeof(GameSettings)));
+            AddPage("🌐", I18n.ModManager, nameof(ModManagerPage), I18n.ModManagerToolTip, CreatePage(typeof(ModManagerPage)));
+            AddPage("⚙", I18n.GameSettings, nameof(GameSettingsPage), I18n.GameSettingsToolTip, CreatePage(typeof(GameSettingsPage)));
         }
 
-        private Page? CreatePage(Type type)
-        {
-            try
-            {
-                return (Page)type.Assembly.CreateInstance(type.FullName!)!;
-            }
-            catch (Exception ex)
-            {
-                STLog.WriteLine($"{I18n.PageInitializeError}: {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{type.FullName}", STMessageBoxIcon.Error);
-                return null;
-            }
-        }
+
 
         private void ClearPages()
         {
@@ -538,19 +531,6 @@ namespace StarsectorTools.Windows.MainWindow
             pages.Add(id, page);
             STLog.WriteLine($"{I18n.RefreshPage} {icon} {name}");
             return item;
-        }
-        private void ButtonPageCancelPress()
-        {
-            Button_SettingsPage.Tag = false;
-            Button_InfoPage.Tag = false;
-        }
-
-        private void ClearGameLogFile()
-        {
-            if (Utils.FileExists(GameInfo.LogFile, false))
-                Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
-            File.Create(GameInfo.LogFile).Close();
-            STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
     }
 }

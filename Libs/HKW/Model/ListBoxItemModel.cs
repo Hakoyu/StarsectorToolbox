@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -8,6 +9,7 @@ namespace HKW.Model
     /// <summary>
     /// 列表项模型,用于MVVM
     /// </summary>
+    [DebuggerDisplay("{Id} {Content}")]
     public partial class ListBoxItemModel : ObservableObject
     {
         [ObservableProperty]

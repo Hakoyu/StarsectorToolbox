@@ -18,17 +18,17 @@ using Panuon.WPF.UI;
 using StarsectorTools.Libs.GameInfo;
 using HKW.Extension;
 using StarsectorTools.Libs.Utils;
-using HKW.TomlParse;
-using I18n = StarsectorTools.Langs.Tools.ModManager.ModManager_I18n;
+using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
+using HKW.Libs.TomlParse;
 
 namespace StarsectorTools.Tools.ModManager
 {
-    public partial class ModManager
+    public partial class ModManagerPage
     {
-        private const string userDataFile = $"{ST.CoreDirectory}\\UserData.toml";
-        private const string userGroupFile = $"{ST.CoreDirectory}\\UserGroup.toml";
-        private const string backupDirectory = $"{ST.CoreDirectory}\\Backup";
-        private const string backupModsDirectory = $"{backupDirectory}\\Mods";
+        private static string userDataFile = $"{ST.CoreDirectory}\\UserData.toml";
+        private static string userGroupFile = $"{ST.CoreDirectory}\\UserGroup.toml";
+        private static string backupDirectory = $"{ST.CoreDirectory}\\Backup";
+        private static string backupModsDirectory = $"{backupDirectory}\\Mods";
         private const string modInfoFile = "mod_info.json";
         private const string strEnabledMods = "enabledMods";
         private const string strAll = "All";

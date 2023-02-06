@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json.Nodes;
+using HKW.Model;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 
@@ -78,21 +80,18 @@ namespace StarsectorTools.Libs.GameInfo
         /// <returns>获取成功为<see langword="true"/>,失败为<see langword="false"/></returns>
         internal static bool GetGameDirectory()
         {
-            //新建文件选择
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            var fileNames = OpenFileDialogModel.Show(new()
             {
-                //文件选择类型
-                //格式:文件描述|*.文件后缀(;*.文件后缀(适用于多个文件类型))|文件描述|*.文件后缀
                 Filter = $"Exe {I18n.File}|starsector.exe"
-            };
-            //显示文件选择对话框,并判断文件是否选取
-            if (!openFileDialog.ShowDialog().GetValueOrDefault())
-                return false;
-            string directory = Path.GetDirectoryName(openFileDialog.FileName)!;
-            if (SetGameData(Path.GetDirectoryName(openFileDialog.FileName)!))
+            })!;
+            if (fileNames.Any() && fileNames.First() is string fileName)
             {
-                STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
-                return true;
+                string directory = Path.GetDirectoryName(fileName)!;
+                if (SetGameData(Path.GetDirectoryName(fileName)!))
+                {
+                    STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
+                    return true;
+                }
             }
             return false;
         }

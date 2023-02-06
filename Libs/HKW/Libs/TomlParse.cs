@@ -41,7 +41,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace HKW.TomlParse
+namespace HKW.Libs.TomlParse
 {
     #region TOML Nodes
 

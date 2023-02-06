@@ -171,7 +171,7 @@
   <data name="AddExpansionPage" xml:space="preserve">
     <value>添加拓展页面</value>
   </data>
-  <data name="DIsplayLanguageIs" xml:space="preserve">
+  <data name="DisplayLanguageIs" xml:space="preserve">
     <value>显示语言为</value>
   </data>
   <data name="PageNotPresent" xml:space="preserve">
@@ -215,8 +215,8 @@
   <data name="StartGame" xml:space="preserve">
     <value>启动游戏</value>
   </data>
-  <data name="ClearLogOnStart" xml:space="preserve">
-    <value>启动时清理日志文件</value>
+  <data name="ClearGameLogOnStart" xml:space="preserve">
+    <value>启动时清理游戏日志文件</value>
   </data>
   <data name="GameLogCleanupCompleted" xml:space="preserve">
     <value>游戏日志清理完成</value>
@@ -229,5 +229,12 @@
   </data>
   <data name="ExcessivelyLongMessages" xml:space="preserve">
     <value>过长的消息</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>页面</value>
+  </data>
+  <data name="PageCheckSave" xml:space="preserve">
+    <value>未保存
+确定保存吗?</value>
   </data>
 </root>

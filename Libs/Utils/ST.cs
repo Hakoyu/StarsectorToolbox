@@ -7,20 +7,23 @@ namespace StarsectorTools.Libs.Utils
     public static class ST
     {
         /// <summary>核心文件夹</summary>
-        public const string CoreDirectory = "STCore";
+        public static string CoreDirectory => "STCore";
         /// <summary>拓展目录</summary>
-        public const string ExpansionDirectories = "STExpansion";
-        /// <summary>StarsectorTools配置文件</summary>
-        public const string ConfigTomlFile = $"{CoreDirectory}\\Config.toml";
+        public static string ExpansionDirectories => "STExpansion";
+        /// <summary>配置文件</summary>
+        public static string ConfigTomlFile => $"{CoreDirectory}\\Config.toml";
+        /// <summary>日志文件</summary>
+        public static string LogFile => $"{CoreDirectory}\\{nameof(StarsectorTools)}.log";
+
         /// <summary>拓展信息文件</summary>
-        public const string ExpansionInfoFile = "Expansion.toml";
+        public static string ExpansionInfoFile => "Expansion.toml";
 
         /// <summary>拓展调试目录</summary>
-        internal static string ExpansionDebugPath = string.Empty;
+        internal static string ExpansionDebugPath { get; set; } = string.Empty;
         /// <summary>拓展调试Id</summary>
-        internal static string ExpansionDebugId = string.Empty;
+        internal static string ExpansionDebugId { get; set; } = string.Empty;
 
         /// <summary>游戏版本</summary>
-        public const string Version = "0.8.0.0";
+        public static string Version => "0.8.0.0";
     }
 }

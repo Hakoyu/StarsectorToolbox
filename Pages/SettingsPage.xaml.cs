@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using HKW.TomlParse;
+using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Windows.MainWindow;
 using I18n = StarsectorTools.Langs.Pages.Settings_I18n;
@@ -13,9 +13,9 @@ namespace StarsectorTools.Pages
     /// <summary>
     /// Settings.xaml 的交互逻辑
     /// </summary>
-    public partial class Settings : Page
+    public partial class SettingsPage : Page
     {
-        internal Settings()
+        internal SettingsPage()
         {
             InitializeComponent();
             ShowCurrentLanguage();
@@ -59,7 +59,7 @@ namespace StarsectorTools.Pages
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(item.ToolTip.ToString()!);
                 SaveLanguage(Thread.CurrentThread.CurrentUICulture);
                 ChangeLanguage();
-                ((MainWindow)Application.Current.MainWindow).ChangeLanguage();
+                MainWindow.ViewModel.ChangeLanguage();
                 STLog.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }
@@ -109,7 +109,7 @@ namespace StarsectorTools.Pages
         {
             try
             {
-                STLog.SetLogLevel(STLog.Str2STLogLevel(level));
+                STLog.SetLogLevel(STLog.GetSTLogLevel(level));
                 TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
                 toml["Extras"]["LogLevel"] = level;
                 toml.SaveTo(ST.ConfigTomlFile);

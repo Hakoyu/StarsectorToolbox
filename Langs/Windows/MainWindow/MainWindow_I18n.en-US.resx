@@ -171,7 +171,7 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="AddExpansionPage" xml:space="preserve">
     <value>Add expansion page</value>
   </data>
-  <data name="DIsplayLanguageIs" xml:space="preserve">
+  <data name="DisplayLanguageIs" xml:space="preserve">
     <value>Display language is</value>
   </data>
   <data name="PageNotPresent" xml:space="preserve">
@@ -215,8 +215,8 @@ It may affect the normal operation of the extension, so it is recommended to che
   <data name="StartGame" xml:space="preserve">
     <value>Start game</value>
   </data>
-  <data name="ClearLogOnStart" xml:space="preserve">
-    <value>Clear log files on start</value>
+  <data name="ClearGameLogOnStart" xml:space="preserve">
+    <value>Clear game log files on start</value>
   </data>
   <data name="GameLogCleanupCompleted" xml:space="preserve">
     <value>Game log cleanup completed</value>
@@ -229,5 +229,12 @@ It may affect the normal operation of the extension, so it is recommended to che
   </data>
   <data name="ExcessivelyLongMessages" xml:space="preserve">
     <value>Excessively long messages</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="PageCheckSave" xml:space="preserve">
+    <value>Not saved
+Sure to save?</value>
   </data>
 </root>

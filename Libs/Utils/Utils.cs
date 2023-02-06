@@ -393,12 +393,12 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>
         /// 为主窗口设置模糊效果,用于聚焦弹窗
         /// </summary>
-        public static void SetMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).SetBlurEffect();
+        public static void SetMainWindowBlurEffect() => MainWindow.SetBlurEffect();
 
         /// <summary>
         /// 取消主窗口的模糊效果
         /// </summary>
-        public static void RemoveMainWindowBlurEffect() => ((MainWindow)Application.Current.MainWindow).RemoveBlurEffect();
+        public static void RemoveMainWindowBlurEffect() => MainWindow.RemoveBlurEffect();
     }
 
     /// <summary>弹窗图案</summary>

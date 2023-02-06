@@ -78,10 +78,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ModArchiveing_I18n.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Tools\ModManager\ModManager_I18n.Designer.cs">
+    <Compile Update="Langs\Tools\ModManager\ModManagerPage_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ModManager_I18n.resx</DependentUpon>
+      <DependentUpon>ModManagerPage_I18n.resx</DependentUpon>
     </Compile>
     <Compile Update="Langs\Windows\MainWindow\MainWindow_I18n.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -123,9 +123,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ModArchiveing_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Tools\ModManager\ModManager_I18n.resx">
+    <EmbeddedResource Update="Langs\Tools\ModManager\ModManagerPage_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModManager_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>ModManagerPage_I18n.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Windows\MainWindow\MainWindow_I18n.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

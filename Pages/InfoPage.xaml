@@ -1,5 +1,5 @@
 ﻿<Page
-  x:Class="StarsectorTools.Pages.Info"
+  x:Class="StarsectorTools.Pages.InfoPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"

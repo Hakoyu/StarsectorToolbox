@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace HKW.Extension
+namespace HKW.Libs
 {
     ///<summary>内存指标</summary>
     public class MemoryMetrics
