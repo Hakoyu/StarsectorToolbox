@@ -13,14 +13,14 @@ namespace HKW.ViewModels.Controls
     /// 上下文菜单模型,用于MVVM
     /// </summary>
     [DebuggerDisplay("{Name}, Count = {ItemsSource.Count}")]
-    public partial class ContextMenuModel : ItemsCollectionModel<MenuItemModel>
+    public partial class ContextMenuVM : ItemsCollectionVM<MenuItemVM>
     {
         /// <summary>
         /// 初始化
         /// </summary>
-        public ContextMenuModel()
+        public ContextMenuVM()
         {
-            ItemsSource = new List<MenuItemModel>();
+            ItemsSource = new List<MenuItemVM>();
         }
     }
 }

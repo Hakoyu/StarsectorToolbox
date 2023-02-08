@@ -21,7 +21,7 @@ namespace StarsectorTools.Windows.MainWindow
     internal partial class MainWindowViewModel
     {
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
-        private ListBoxItemModel? previousSelectedPageItem;
+        private ListBoxItemVM? previousSelectedPageItem;
         private ExpansionInfo? deubgExpansionInfo;
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
@@ -84,12 +84,12 @@ namespace StarsectorTools.Windows.MainWindow
             CheckAllPagesSave();
             STLog.Close();
         }
-        internal void AddMainPageItem(ListBoxItemModel model)
+        internal void AddMainPageItem(ListBoxItemVM model)
         {
             DetectPageItemData(ref model);
             MainListBox.Add(model);
         }
-        private void DetectPageItemData(ref ListBoxItemModel model)
+        private void DetectPageItemData(ref ListBoxItemVM model)
         {
             if (model?.Tag is not ISTPage page)
                 return;
@@ -98,12 +98,12 @@ namespace StarsectorTools.Windows.MainWindow
             model.ToolTip = page.DescriptionI18n;
             model.ContextMenu = CreateItemContextMenu();
         }
-        private ContextMenuModel CreateItemContextMenu() =>
+        private ContextMenuVM CreateItemContextMenu() =>
             new()
             {
                 new((o) =>
                     {
-                        if(o is not ListBoxItemModel model)
+                        if(o is not ListBoxItemVM model)
                             return;
                         model.Tag = CreatePage(model.Tag!.GetType());
                         if(model.IsSelected)
@@ -384,7 +384,7 @@ namespace StarsectorTools.Windows.MainWindow
             foreach (var item in ExpansionListBox)
                 CheckPageSave(item);
         }
-        private void CheckPageSave(ListBoxItemModel model)
+        private void CheckPageSave(ListBoxItemVM model)
         {
             if (model.Tag is not object page)
                 return;
@@ -430,7 +430,7 @@ namespace StarsectorTools.Windows.MainWindow
             foreach (var item in ExpansionListBox)
                 SavePage(item);
         }
-        private void SavePage(ListBoxItemModel model)
+        private void SavePage(ListBoxItemVM model)
         {
             if (model.Tag is not object page)
                 return;
@@ -473,7 +473,7 @@ namespace StarsectorTools.Windows.MainWindow
                 ClosePage(page);
         }
 
-        private void ClosePage(ListBoxItemModel model)
+        private void ClosePage(ListBoxItemVM model)
         {
             if (model.Tag is not object page)
                 return;

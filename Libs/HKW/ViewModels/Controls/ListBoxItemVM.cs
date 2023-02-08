@@ -10,7 +10,7 @@ namespace HKW.ViewModels.Controls
     /// 列表项模型,用于MVVM
     /// </summary>
     [DebuggerDisplay("{Name}, Content = {Content}")]
-    public partial class ListBoxItemModel : ContentControlModel
+    public partial class ListBoxItemVM : ContentControlVM
     {
         [ObservableProperty]
         private string? group;
@@ -21,6 +21,6 @@ namespace HKW.ViewModels.Controls
         /// <summary>
         /// 初始化
         /// </summary>
-        public ListBoxItemModel() { }
+        public ListBoxItemVM() { }
     }
 }

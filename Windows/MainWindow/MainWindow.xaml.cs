@@ -80,7 +80,7 @@ namespace StarsectorTools.Windows.MainWindow
         {
             // 消息长度限制
             int messageLengthLimits = 8192;
-            MessageBoxModel.InitializeHandler((d) =>
+            MessageBoxVM.InitializeHandler((d) =>
                 {
                     string message = d.Message.Length < messageLengthLimits
                         ? d.Message
@@ -102,41 +102,41 @@ namespace StarsectorTools.Windows.MainWindow
                         GC.Collect();
                     return ResultConverter(result);
                 });
-            static MessageBoxButton ButtonConverter(MessageBoxModel.Button? button) =>
+            static MessageBoxButton ButtonConverter(MessageBoxVM.Button? button) =>
                 button switch
                 {
-                    MessageBoxModel.Button.OK => MessageBoxButton.OK,
-                    MessageBoxModel.Button.OKCancel => MessageBoxButton.OKCancel,
-                    MessageBoxModel.Button.YesNo => MessageBoxButton.YesNo,
-                    MessageBoxModel.Button.YesNoCancel => MessageBoxButton.YesNoCancel,
+                    MessageBoxVM.Button.OK => MessageBoxButton.OK,
+                    MessageBoxVM.Button.OKCancel => MessageBoxButton.OKCancel,
+                    MessageBoxVM.Button.YesNo => MessageBoxButton.YesNo,
+                    MessageBoxVM.Button.YesNoCancel => MessageBoxButton.YesNoCancel,
                     _ => MessageBoxButton.OK,
                 };
-            static MessageBoxIcon IconConverter(MessageBoxModel.Icon? icon) =>
+            static MessageBoxIcon IconConverter(MessageBoxVM.Icon? icon) =>
                 icon switch
                 {
-                    MessageBoxModel.Icon.None => MessageBoxIcon.None,
-                    MessageBoxModel.Icon.Info => MessageBoxIcon.Info,
-                    MessageBoxModel.Icon.Warning => MessageBoxIcon.Warning,
-                    MessageBoxModel.Icon.Error => MessageBoxIcon.Error,
-                    MessageBoxModel.Icon.Success => MessageBoxIcon.Success,
-                    MessageBoxModel.Icon.Question => MessageBoxIcon.Question,
+                    MessageBoxVM.Icon.None => MessageBoxIcon.None,
+                    MessageBoxVM.Icon.Info => MessageBoxIcon.Info,
+                    MessageBoxVM.Icon.Warning => MessageBoxIcon.Warning,
+                    MessageBoxVM.Icon.Error => MessageBoxIcon.Error,
+                    MessageBoxVM.Icon.Success => MessageBoxIcon.Success,
+                    MessageBoxVM.Icon.Question => MessageBoxIcon.Question,
                     _ => MessageBoxIcon.Info,
                 };
-            static MessageBoxModel.Result ResultConverter(MessageBoxResult result) =>
+            static MessageBoxVM.Result ResultConverter(MessageBoxResult result) =>
                 result switch
                 {
-                    MessageBoxResult.None => MessageBoxModel.Result.None,
-                    MessageBoxResult.OK => MessageBoxModel.Result.OK,
-                    MessageBoxResult.Cancel => MessageBoxModel.Result.Cancel,
-                    MessageBoxResult.Yes => MessageBoxModel.Result.Yes,
-                    MessageBoxResult.No => MessageBoxModel.Result.No,
-                    _ => MessageBoxModel.Result.None,
+                    MessageBoxResult.None => MessageBoxVM.Result.None,
+                    MessageBoxResult.OK => MessageBoxVM.Result.OK,
+                    MessageBoxResult.Cancel => MessageBoxVM.Result.Cancel,
+                    MessageBoxResult.Yes => MessageBoxVM.Result.Yes,
+                    MessageBoxResult.No => MessageBoxVM.Result.No,
+                    _ => MessageBoxVM.Result.None,
                 };
         }
 
         private void RegisterOpenFileDialogModel()
         {
-            OpenFileDialogModel.InitializeHandler((d) =>
+            OpenFileDialogVM.InitializeHandler((d) =>
             {
                 var openFileDialog = new Microsoft.Win32.OpenFileDialog()
                 {
@@ -150,7 +150,7 @@ namespace StarsectorTools.Windows.MainWindow
         }
         private void RegisterSaveFileDialogModel()
         {
-            SaveFileDialogModel.InitializeHandler((d) =>
+            SaveFileDialogVM.InitializeHandler((d) =>
             {
                 var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
                 {
@@ -167,17 +167,17 @@ namespace StarsectorTools.Windows.MainWindow
             if (e.Exception.Source == nameof(StarsectorTools))
             {
                 STLog.WriteLine(I18n.GlobalException, e.Exception, false);
-                MessageBoxModel.Show(new($"{I18n.GlobalExceptionMessage}\n\n{STLog.SimplifyException(e.Exception)}")
+                MessageBoxVM.Show(new($"{I18n.GlobalExceptionMessage}\n\n{STLog.SimplifyException(e.Exception)}")
                 {
-                    Icon = MessageBoxModel.Icon.Error,
+                    Icon = MessageBoxVM.Icon.Error,
                 });
             }
             else
             {
                 STLog.WriteLine($"{I18n.GlobalExpansionException}: {e.Exception.Source}", e.Exception, false);
-                MessageBoxModel.Show(new($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.SimplifyException(e.Exception)}")
+                MessageBoxVM.Show(new($"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.SimplifyException(e.Exception)}")
                 {
-                    Icon = MessageBoxModel.Icon.Error,
+                    Icon = MessageBoxVM.Icon.Error,
                 });
             }
             e.Handled = true;

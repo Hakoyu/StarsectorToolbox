@@ -9,15 +9,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace HKW.ViewModels.Controls
 {
     /// <summary>
-    /// 带多个项并且具有标题的控件模型
+    /// 可包含任意类型内容的控件模型
     /// </summary>
-    [DebuggerDisplay("{Name}, Header = {Header},Count = {ItemsSource.Count}")]
-    public partial class HeaderedItemsControl<T> : ItemsCollectionModel<T>
+    [DebuggerDisplay("{Name}, Content = {Content}")]
+    public partial class ContentControlVM : ControlVMBase
     {
-        /// <summary>
-        /// 标题
-        /// </summary>
         [ObservableProperty]
-        private object? header;
+        private object? content;
     }
 }

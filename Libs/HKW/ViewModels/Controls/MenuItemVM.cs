@@ -11,7 +11,7 @@ namespace HKW.ViewModels.Controls
     /// 菜单项模型,用于MVVM
     /// </summary>
     [DebuggerDisplay("{Name},Header = {Header},Count = {ItemsSource.Count}")]
-    public partial class MenuItemModel : HeaderedItemsControl<MenuItemModel>
+    public partial class MenuItemVM : HeaderedItemsControlVM<MenuItemVM>
     {
         [ObservableProperty]
         private object? icon;
@@ -19,7 +19,7 @@ namespace HKW.ViewModels.Controls
         /// 初始化
         /// </summary>
         /// <param name="handler">委托</param>
-        public MenuItemModel(ModelHandler? handler = null)
+        public MenuItemVM(ModelHandler? handler = null)
         {
             ModelEvent += handler;
         }

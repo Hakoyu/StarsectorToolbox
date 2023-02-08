@@ -3,7 +3,7 @@
     /// <summary>
     /// 打开文件对话框
     /// </summary>
-    public class SaveFileDialogModel
+    public class SaveFileDialogVM
     {
         /// <summary>
         /// 描述
@@ -12,7 +12,7 @@
         {
 
         }
-        private SaveFileDialogModel() { }
+        private SaveFileDialogVM() { }
         /// <summary>
         /// 初始化委托
         /// 单例模式,只能设置一次

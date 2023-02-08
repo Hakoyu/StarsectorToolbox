@@ -12,18 +12,18 @@ namespace HKW.ViewModels.Controls
     /// 列表模型,用于MVVM
     /// </summary>
     [DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
-    public partial class ListBoxModel : ItemsCollectionModel<ListBoxItemModel>
+    public partial class ListBoxVM : ItemsCollectionVM<ListBoxItemVM>
     {
         [ObservableProperty]
         private int selectedIndex;
         [ObservableProperty]
-        private ListBoxItemModel? selectedItem;
+        private ListBoxItemVM? selectedItem;
         /// <summary>
         /// 构造
         /// </summary>
-        public ListBoxModel()
+        public ListBoxVM()
         {
-            ItemsSource = new List<ListBoxItemModel>();
+            ItemsSource = new List<ListBoxItemVM>();
         }
     }
 }

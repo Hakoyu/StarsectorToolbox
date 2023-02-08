@@ -80,7 +80,7 @@ namespace StarsectorTools.Libs.GameInfo
         /// <returns>获取成功为<see langword="true"/>,失败为<see langword="false"/></returns>
         internal static bool GetGameDirectory()
         {
-            var fileNames = OpenFileDialogModel.Show(new()
+            var fileNames = OpenFileDialogVM.Show(new()
             {
                 Filter = $"Exe {I18n.File}|starsector.exe"
             })!;

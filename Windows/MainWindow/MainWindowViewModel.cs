@@ -43,14 +43,14 @@ namespace StarsectorTools.Windows.MainWindow
         #endregion
         #region PageItem
         [ObservableProperty]
-        private ListBoxItemModel? selectedPageItem;
+        private ListBoxItemVM? selectedPageItem;
         [ObservableProperty]
-        private ListBoxModel mainListBox = new();
+        private ListBoxVM mainListBox = new();
         [ObservableProperty]
-        private ListBoxModel expansionListBox = new();
+        private ListBoxVM expansionListBox = new();
         #endregion
         [ObservableProperty]
-        private ContextMenuModel contextMenu;
+        private ContextMenuVM contextMenu;
         #region I18n
         [ObservableProperty]
         private string titleI18n = I18n.StarsectorTools;
@@ -101,7 +101,7 @@ namespace StarsectorTools.Windows.MainWindow
             MenuIsExpand = !MenuIsExpand;
         }
         [RelayCommand]
-        private void MenuSelectionChanged(ListBoxItemModel item)
+        private void MenuSelectionChanged(ListBoxItemVM item)
         {
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
             if (previousSelectedPageItem?.IsSelected is true)

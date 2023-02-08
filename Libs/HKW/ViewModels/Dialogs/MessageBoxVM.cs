@@ -3,7 +3,7 @@
     /// <summary>
     /// 消息窗口模型
     /// </summary>
-    public class MessageBoxModel
+    public class MessageBoxVM
     {
         /// <summary>
         /// 描述
@@ -81,7 +81,7 @@
         /// <summary>
         /// 初始化
         /// </summary>
-        private MessageBoxModel() { }
+        private MessageBoxVM() { }
         /// <summary>
         /// 初始化委托
         /// 单例模式,只能设置一次

@@ -3,7 +3,7 @@
     /// <summary>
     /// 打开文件对话框
     /// </summary>
-    public class OpenFileDialogModel
+    public class OpenFileDialogVM
     {
         /// <summary>
         /// 描述
@@ -13,7 +13,7 @@
             /// <summary>多选</summary>
             public bool Multiselect { get; set; } = false;
         }
-        private OpenFileDialogModel() { }
+        private OpenFileDialogVM() { }
         /// <summary>
         /// 初始化委托
         /// 单例模式,只能设置一次

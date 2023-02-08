@@ -9,7 +9,7 @@ namespace HKW.ViewModels.Controls
     /// 基础控件模型
     /// </summary>
     [DebuggerDisplay("{Name}, Count = {TagDictionary.Count}")]
-    public partial class ControlModelBase : ObservableObject
+    public partial class ControlVMBase : ObservableObject
     {
         /// <summary>
         /// Id
@@ -35,7 +35,7 @@ namespace HKW.ViewModels.Controls
         /// 上下文菜单
         /// </summary>
         [ObservableProperty]
-        private ContextMenuModel? contextMenu;
+        private ContextMenuVM? contextMenu;
         /// <summary>
         /// 数据字典
         /// </summary>
