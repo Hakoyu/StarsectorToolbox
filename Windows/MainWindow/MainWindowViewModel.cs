@@ -10,7 +10,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HKW.Model;
+using HKW.Models.ControlModels;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
@@ -27,9 +27,9 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private bool clearGameLogOnStart = true;
         [ObservableProperty]
-        private bool infoPageIsChecked = false;
+        private bool infoButtonIsChecked = false;
         [ObservableProperty]
-        private bool settingsPageIsChecked = false;
+        private bool settingsButtonIsChecked = false;
 
         #region Page
         [ObservableProperty]
@@ -45,9 +45,9 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private ListBoxItemModel? selectedPageItem;
         [ObservableProperty]
-        private List<ListBoxItemModel> mainPageItems = new();
+        private ListBoxModel mainListBox = new();
         [ObservableProperty]
-        private List<ListBoxItemModel> expansionPageItems = new();
+        private ListBoxModel expansionListBox = new();
         #endregion
         #region I18n
         [ObservableProperty]
@@ -65,35 +65,23 @@ namespace StarsectorTools.Windows.MainWindow
         public MainWindowViewModel()
         {
             //InitializeDirectories();
-            MainPageItems.Add(new()
+            MainListBox.Add(new()
             {
                 Icon = "A",
                 Content = "AAA",
+                ContextMenu = new() { new() { Name = "AMenu1", Header = "AMenu1" } }
             });
-            MainPageItems.Add(new()
+            MainListBox.Add(new()
             {
                 Icon = "B",
                 Content = "BBB",
+                ContextMenu = new() { new() { Name = "BMenu1", Header = "CMenu1" } }
             });
-            MainPageItems.Add(new()
+            MainListBox.Add(new()
             {
                 Icon = "C",
                 Content = "CCC",
-            });
-            MainPageItems.Add(new()
-            {
-                Icon = "D",
-                Content = "DDD",
-            });
-            MainPageItems.Add(new()
-            {
-                Icon = "E",
-                Content = "EEE",
-            });
-            MainPageItems.Add(new()
-            {
-                Icon = "F",
-                Content = "FFF",
+                ContextMenu = new() { new() { Name = "CMenu1", Header = "CMenu1" } }
             });
 
         }
@@ -104,9 +92,18 @@ namespace StarsectorTools.Windows.MainWindow
         }
 
         [RelayCommand]
-        private void ChangeMenuExpansionStatus()
+        private void ChangeMenuExpansion()
         {
             MenuIsExpand = !MenuIsExpand;
+        }
+        [RelayCommand]
+        private void MainMenuSelectionChanged(ListBoxItemModel item)
+        {
+            // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
+            if (previousSelectedPageItem?.IsSelected is true)
+                previousSelectedPageItem.IsSelected = false;
+            previousSelectedPageItem = item;
+            ShowPage(item.Tag);
         }
 
         [RelayCommand]
@@ -114,17 +111,17 @@ namespace StarsectorTools.Windows.MainWindow
         {
             NowPage = page;
             // 取消按钮页面选中状态
+            InfoButtonIsChecked = false;
+            SettingsButtonIsChecked = false;
             // 设置选中状态
             if (page == infoPage)
             {
-                InfoPageIsChecked = true;
-                SettingsPageIsChecked = false;
+                InfoButtonIsChecked = true;
                 SelectedPageItem = null;
             }
             else if (page == settingsPage)
             {
-                SettingsPageIsChecked = true;
-                InfoPageIsChecked = false;
+                SettingsButtonIsChecked = true;
                 SelectedPageItem = null;
             }
             STLog.WriteLine($"{I18n.ShowPage}: {page?.GetType().FullName}");

@@ -12,11 +12,11 @@ using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using StarsectorTools.Tools.ModManager;
 using StarsectorTools.Tools.GameSettings;
-using HKW.Model;
 using HKW.Libs.Log4Cs;
 using System.IO;
 using Panuon.WPF.UI;
 using StarsectorTools.Pages;
+using HKW.Models.DialogModels;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -40,7 +40,6 @@ namespace StarsectorTools.Windows.MainWindow
             // 亚克力背景
             // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
             Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
-            Logger.Record("114514");
             // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
             // 获取系统主题色
@@ -214,20 +213,6 @@ namespace StarsectorTools.Windows.MainWindow
             }
         }
 
-        private Page? CreatePage(Type type)
-        {
-            try
-            {
-                return (Page)type.Assembly.CreateInstance(type.FullName!)!;
-            }
-            catch (Exception ex)
-            {
-                STLog.WriteLine($"{I18n.PageInitializeError}: {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{type.FullName}", STMessageBoxIcon.Error);
-                return null;
-            }
-        }
-
         //关闭
         private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
         {
@@ -278,9 +263,17 @@ namespace StarsectorTools.Windows.MainWindow
 
         private void InitializeMainPage()
         {
-            // 添加主要页面
-            ViewModel.AddMainPage("🌐", I18n.ModManager, nameof(ModManagerPage), I18n.ModManagerToolTip, CreatePage(typeof(ModManagerPage)));
-            ViewModel.AddMainPage("⚙", I18n.GameSettings, nameof(GameSettingsPage), I18n.GameSettingsToolTip, CreatePage(typeof(GameSettingsPage)));
+            //添加主要页面
+            ViewModel.AddMainPage(new()
+            {
+                Icon = "🌐",
+                Tag = CreatePage(typeof(ModManagerPage))
+            });
+            ViewModel.AddMainPage(new()
+            {
+                Icon = "⚙",
+                Tag = CreatePage(typeof(GameSettingsPage))
+            });
         }
         private void InitializeExpansionPage()
         {
@@ -289,6 +282,20 @@ namespace StarsectorTools.Windows.MainWindow
         private void InitializeExpansionDebugPage()
         {
             // 添加拓展调试页面
+        }
+
+        private Page? CreatePage(Type type)
+        {
+            try
+            {
+                return (Page)type.Assembly.CreateInstance(type.FullName!)!;
+            }
+            catch (Exception ex)
+            {
+                STLog.WriteLine($"{I18n.PageInitializeError}: {type.FullName}", ex);
+                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{type.FullName}", STMessageBoxIcon.Error);
+                return null;
+            }
         }
     }
 }

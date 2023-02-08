@@ -1,20 +1,19 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace HKW.WPF
+namespace HKW.WPF.Attach
 {
     /// <summary>
     /// WPF附加属性
     /// <para>示例:
     /// <code lang="xaml">
     /// <![CDATA[
-    /// <Setter Property="ex:InputBindingsAttach.InputBindings">
+    /// <Setter Property="attack:AttachInputBindings.Attach">
     ///   <Setter.Value>
     ///     <InputBindingCollection>
     ///       <!--  绑定单击事件  -->
     ///       <MouseBinding
     ///         Command="{Binding ItemClickCommand}"
-    ///         CommandParameter="{Binding Tag, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}"
     ///         Gesture="LeftClick" />
     ///     </InputBindingCollection>
     ///    </Setter.Value>
@@ -23,13 +22,13 @@ namespace HKW.WPF
     /// </code>
     /// </para>
     /// </summary>
-    public static class Attach
+    public static class AttachInputBindings
     {
         /// <summary>
         /// 注册事件
         /// </summary>
         public static readonly DependencyProperty InputBindingsProperty =
-            DependencyProperty.RegisterAttached("InputBindings", typeof(InputBindingCollection), typeof(Attach),
+            DependencyProperty.RegisterAttached("Attach", typeof(InputBindingCollection), typeof(AttachInputBindings),
             new FrameworkPropertyMetadata(new InputBindingCollection(),
             (sender, e) =>
             {
@@ -38,13 +37,12 @@ namespace HKW.WPF
                 element.InputBindings.Clear();
                 element.InputBindings.AddRange((InputBindingCollection)e.NewValue);
             }));
-
         /// <summary>
         /// 获取输入绑定
         /// </summary>
         /// <param name="element">元素</param>
         /// <returns></returns>
-        public static InputBindingCollection GetInputBindings(UIElement element) =>
+        public static InputBindingCollection GetAttach(UIElement element) =>
             (InputBindingCollection)element.GetValue(InputBindingsProperty);
 
         /// <summary>
@@ -52,7 +50,7 @@ namespace HKW.WPF
         /// </summary>
         /// <param name="element">元素</param>
         /// <param name="inputBindings">输入绑定</param>
-        public static void SetInputBindings(UIElement element, InputBindingCollection inputBindings) =>
+        public static void SetAttach(UIElement element, InputBindingCollection inputBindings) =>
             element.SetValue(InputBindingsProperty, inputBindings);
     }
 }

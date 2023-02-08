@@ -7,21 +7,26 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using HKW.Model;
+using HKW.Models.ControlModels;
 using StarsectorTools.Libs.GameInfo;
 using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using System.Xml.Serialization;
+using HKW.Libs.Log4Cs;
+using HKW.Models.ControlModels;
+using HKW.Models.DialogModels;
 
 namespace StarsectorTools.Windows.MainWindow
 {
     internal partial class MainWindowViewModel
     {
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
+        private ListBoxItemModel? previousSelectedPageItem;
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
         {
-            /// <summary>ID</summary>
+            /// <summary>Id</summary>
             public string Id { get; private set; } = null!;
 
             /// <summary>名称</summary>
@@ -79,25 +84,22 @@ namespace StarsectorTools.Windows.MainWindow
             CheckAllPagesSave();
             STLog.Close();
         }
-        internal void AddMainPage(string icon, string name, string id, string toolTip, object page)
+        internal void AddMainPage(ListBoxItemModel model)
         {
-            MainPageItems.Add(new(SelectItem)
-            {
-                Id = id,
-                Icon = icon,
-                Content = name,
-                ToolTip = toolTip,
-                Tag = page,
-            });
+            GetMainPageData(ref model);
+            MainListBox.Add(model);
         }
-
-        private void SelectItem(ListBoxItemModel item)
+        private void GetMainPageData(ref ListBoxItemModel model)
         {
-            // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (SelectedPageItem?.IsSelected is true)
-                SelectedPageItem.IsSelected = false;
-            SelectedPageItem = item;
-            ShowPage(item.Tag);
+            if (model?.Tag is not ISTPage page)
+                return;
+            model.Id = page.GetType().FullName;
+            model.Content = page.NameI18n;
+            model.ToolTip = page.DescriptionI18n;
+        }
+        private void CreatePageItem()
+        {
+
         }
 
         private void CheckGameStartOption()
@@ -110,7 +112,7 @@ namespace StarsectorTools.Windows.MainWindow
             if (File.Exists(GameInfo.LogFile))
                 Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
             File.Create(GameInfo.LogFile).Close();
-            STLog.WriteLine(I18n.GameLogCleanupCompleted);
+            Logger.Record(I18n.GameLogCleanupCompleted);
         }
         private void InitializeDirectories()
         {
@@ -130,7 +132,7 @@ namespace StarsectorTools.Windows.MainWindow
                     // 语言
                     Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     // 日志等级
-                    STLog.SetLogLevel(STLog.GetSTLogLevel(toml["Extras"]["LogLevel"].AsString));
+                    Logger.Options.DefaultLevel = Logger.LevelConverter(toml["Extras"]["LogLevel"].AsString);
                     // 游戏目录
                     if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
                     {
@@ -183,7 +185,7 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ConfigFileError} {I18n.Path}: {ST.ConfigTomlFile}", ex);
+                Logger.Record($"{I18n.ConfigFileError} {I18n.Path}: {ST.ConfigTomlFile}", ex);
                 MessageBoxModel.Show(new($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.ConfigTomlFile}")
                 {
                     Icon = MessageBoxModel.Icon.Error,
@@ -198,13 +200,13 @@ namespace StarsectorTools.Windows.MainWindow
         private void CreateConfigFile(string configData)
         {
             File.WriteAllText(ST.ConfigTomlFile, configData);
-            STLog.WriteLine($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.ConfigTomlFile}");
+            Logger.Record($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.ConfigTomlFile}");
         }
         private ExpansionInfo? CheckExpansionInfo(string directory, bool loadInMemory = false)
         {
             if (string.IsNullOrEmpty(directory))
             {
-                STLog.WriteLine(I18n.ExpansionPathIsEmpty, STLogLevel.WARN);
+                Logger.Record(I18n.ExpansionPathIsEmpty, Logger.Level.WARN);
                 MessageBoxModel.Show(new(I18n.ExpansionPathIsEmpty)
                 {
                     Icon = MessageBoxModel.Icon.Warning
@@ -217,7 +219,7 @@ namespace StarsectorTools.Windows.MainWindow
                 // 判断文件存在性
                 if (!File.Exists(tomlFile))
                 {
-                    STLog.WriteLine($"{I18n.ExpansionTomlFileNotFound} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Logger.Record($"{I18n.ExpansionTomlFileNotFound} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionTomlFileNotFound}\n{I18n.Path}: {tomlFile}")
                     {
                         Icon = MessageBoxModel.Icon.Warning
@@ -229,7 +231,7 @@ namespace StarsectorTools.Windows.MainWindow
                 // 检测是否有相同的拓展
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
-                    STLog.WriteLine($"{I18n.ExpansionAlreadyExists} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Logger.Record($"{I18n.ExpansionAlreadyExists} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionAlreadyExists}\n{I18n.Path}: {tomlFile}")
                     {
                         Icon = MessageBoxModel.Icon.Warning
@@ -239,7 +241,7 @@ namespace StarsectorTools.Windows.MainWindow
                 // 判断组件文件是否存在
                 if (!File.Exists(assemblyFile))
                 {
-                    STLog.WriteLine($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Logger.Record($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}")
                     {
                         Icon = MessageBoxModel.Icon.Warning
@@ -262,7 +264,7 @@ namespace StarsectorTools.Windows.MainWindow
                 // 判断是否成功创建了页面
                 if (expansionInfo.ExpansionPage is null)
                 {
-                    STLog.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Logger.Record($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
                     {
                         Icon = MessageBoxModel.Icon.Warning
@@ -270,9 +272,9 @@ namespace StarsectorTools.Windows.MainWindow
                     return null;
                 }
                 // 判断页面是否实现了接口
-                if (type.GetInterface(nameof(ISTExpansionPage)) is not ISTExpansionPage)
+                if (expansionInfo.ExpansionPage is not ISTPage)
                 {
-                    STLog.WriteLine($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", STLogLevel.WARN);
+                    Logger.Record($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
                     MessageBoxModel.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
                     {
                         Icon = MessageBoxModel.Icon.Warning
@@ -283,7 +285,7 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
+                Logger.Record($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
                 MessageBoxModel.Show(new($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}")
                 {
                     Icon = MessageBoxModel.Icon.Error
@@ -294,7 +296,7 @@ namespace StarsectorTools.Windows.MainWindow
 
         internal void ChangeLanguage()
         {
-            STLog.WriteLine($"{I18n.DisplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
+            Logger.Record($"{I18n.DisplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
             TitleI18n = I18n.StarsectorTools;
             InfoI18n = I18n.Info;
             SettingsI18n = I18n.Settings;
@@ -312,7 +314,7 @@ namespace StarsectorTools.Windows.MainWindow
                 {
                     var page = expansionInfo.ExpansionPage;
                     //var name = page.
-                    ExpansionPageItems.Add(new(SelectItem)
+                    ExpansionListBox.Add(new()
                     {
                         Id = expansionInfo.Id,
                         Icon = expansionInfo.Icon,
@@ -335,12 +337,12 @@ namespace StarsectorTools.Windows.MainWindow
         }
         private void CheckMainPagesSave()
         {
-            foreach (var item in MainPageItems)
+            foreach (var item in MainListBox)
                 CheckPageSave(item);
         }
         private void CheckExpansionPagesSave()
         {
-            foreach (var item in expansionPageItems)
+            foreach (var item in ExpansionListBox)
                 CheckPageSave(item);
         }
         private void CheckPageSave(ListBoxItemModel model)
@@ -365,8 +367,11 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageSaveError} {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+                Logger.Record($"{I18n.PageSaveError} {type.FullName}", ex);
+                MessageBoxModel.Show(new($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}")
+                {
+                    Icon = MessageBoxModel.Icon.Error
+                });
             }
         }
         #endregion
@@ -378,12 +383,12 @@ namespace StarsectorTools.Windows.MainWindow
         }
         private void SaveMainPages()
         {
-            foreach (var item in MainPageItems)
+            foreach (var item in MainListBox)
                 SavePage(item);
         }
         private void SaveExpansionPages()
         {
-            foreach (var item in expansionPageItems)
+            foreach (var item in ExpansionListBox)
                 SavePage(item);
         }
         private void SavePage(ListBoxItemModel model)
@@ -400,8 +405,11 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageSaveError} {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+                Logger.Record($"{I18n.PageSaveError} {type.FullName}", ex);
+                MessageBoxModel.Show(new($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}")
+                {
+                    Icon = MessageBoxModel.Icon.Error
+                });
             }
         }
 
@@ -416,13 +424,13 @@ namespace StarsectorTools.Windows.MainWindow
 
         private void CloseMainPages()
         {
-            foreach (var page in MainPageItems)
+            foreach (var page in MainListBox)
                 ClosePage(page);
         }
 
         private void CloseExpansionPages()
         {
-            foreach (var page in expansionPageItems)
+            foreach (var page in ExpansionListBox)
                 ClosePage(page);
         }
 
@@ -440,11 +448,13 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageCloseError} {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageCloseError} {type.FullName}\n{STLog.SimplifyException(ex)}", STMessageBoxIcon.Error);
+                Logger.Record($"{I18n.PageCloseError} {type.FullName}", ex);
+                MessageBoxModel.Show(new($"{I18n.PageCloseError} {type.FullName}\n{STLog.SimplifyException(ex)}")
+                {
+                    Icon = MessageBoxModel.Icon.Error
+                });
             }
         }
-
         #endregion 
     }
 }

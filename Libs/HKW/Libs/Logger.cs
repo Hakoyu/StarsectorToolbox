@@ -31,19 +31,19 @@ namespace HKW.Libs.Log4Cs
             ERROR
         }
         /// <summary>日志文件</summary>
-        private static string LogFile = null!;
+        public static string LogFile { get; private set; } = string.Empty;
 
         /// <summary>基命名空间</summary>
-        private static string BaseNamespace = null!;
+        public static string BaseNamespace { get; private set; } = string.Empty;
+
+        /// <summary>设置</summary>
+        public static InitializeOptions Options { get; set; } = null!;
 
         /// <summary>写入流</summary>
         private static StreamWriter sw = null!;
 
         /// <summary>读写锁</summary>
         private static ReaderWriterLockSlim rwLockS = new();
-
-        /// <summary>设置</summary>
-        private static InitializeOptions options = null!;
 
         /// <summary>
         /// 初始化设置
@@ -59,23 +59,33 @@ namespace HKW.Libs.Log4Cs
             /// </summary>
             public bool DefaultAppend { get; set; } = false;
             /// <summary>
-            /// 默认启动异常过滤器
+            /// 默认过滤异常
             /// </summary>
-            public bool DefaultEnableExceptionFilter { get; set; } = false;
+            public bool DefaultFilterException { get; set; } = false;
+            /// <summary>
+            /// 默认显示方法名
+            /// </summary>
+            public bool DefaultShowMethod { get; set; } = true;
+            /// <summary>
+            /// 默认显示类名
+            /// </summary>
+            public bool DefaultShowClass { get; set; } = true;
             /// <summary>
             /// 默认显示命名空间
             /// </summary>
             public bool DefaultShowNameSpace { get; set; } = false;
-
+            /// <summary>
+            /// 默认显示线程Id
+            /// </summary>
+            public bool DefaultShowThreadId { get; set; } = false;
             /// <summary>
             /// 默认显示时间
             /// </summary>
-            public bool DefaultShowTime { get; set; } = true;
-
+            public bool DefaultShowTime { get; set; } = false;
             /// <summary>
             /// 默认显示日期
             /// </summary>
-            public bool DefaultShowDate { get; set; } = true;
+            public bool DefaultShowDate { get; set; } = false;
             /// <summary>
             /// 异常过滤器
             /// </summary>
@@ -93,15 +103,16 @@ namespace HKW.Libs.Log4Cs
         /// <summary>
         /// 初始化
         /// </summary>
-        /// <param name="baseNamespce">基础命名空间</param>
+        /// <param name="baseNamespce">基命名空间</param>
         /// <param name="logFile">日志文件</param>
         /// <param name="initializeOptions">初始化设置</param>
         public static void Initialize(string baseNamespce, string logFile, InitializeOptions? initializeOptions = null)
         {
-            options = initializeOptions ?? new();
+            Options = initializeOptions ?? new();
             LogFile = logFile;
             BaseNamespace = baseNamespce;
-            sw = new(LogFile, options.DefaultAppend);
+            sw?.Close();
+            sw = new(LogFile, Options.DefaultAppend);
         }
 
         /// <summary>
@@ -118,6 +129,85 @@ namespace HKW.Libs.Log4Cs
                 nameof(Level.ERROR) => Level.ERROR,
                 _ => Level.INFO
             };
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        public static void Record(string message) =>
+            RecordBase(message, Options.DefaultLevel, null, null);
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="logLevel">日志等级</param>
+        public static void Record(string message, Level logLevel) =>
+            RecordBase(message, logLevel, null, null);
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="ex">异常</param>
+        public static void Record(string message, Exception ex) =>
+            RecordBase(message, Level.ERROR, ex, null);
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="ex">异常</param>
+        /// <param name="filterException">过滤器</param>
+        public static void Record(string message, Exception ex, bool filterException) =>
+            RecordBase(message, Level.ERROR, ex, filterException);
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="logLevel">日志等级</param>
+        /// <param name="ex">异常</param>
+        public static void Record(string message, Level logLevel, Exception ex) =>
+            RecordBase(message, logLevel, ex, null);
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="logLevel">日志等级</param>
+        /// <param name="ex">异常</param>
+        /// <param name="filterException">过滤器</param>
+        public static void Record(string message, Level logLevel, Exception ex, bool filterException) =>
+            RecordBase(message, logLevel, ex, filterException);
+
+        /// <summary>
+        /// 记录日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="logLevel">日志等级</param>
+        /// <param name="ex">异常</param>
+        /// <param name="filterException">过滤器</param>
+        private static void RecordBase(string message, Level logLevel, Exception? ex, bool? filterException)
+        {
+            rwLockS.EnterWriteLock();
+            try
+            {
+                if (logLevel >= Options.DefaultLevel)
+                {
+                    string origin = GetOriginMessage(logLevel);
+                    string dateTime = GetDataTimeMessage();
+                    string threadId = GetThreadIdMessage();
+                    string exMessage = GetExceptionMessage(ex, filterException);
+                    sw.WriteLine($"{dateTime}[{origin}{threadId}] {logLevel} {message}{exMessage}");
+                    sw.Flush();
+                }
+            }
+            finally
+            {
+                rwLockS.ExitWriteLock();
+            }
+        }
 
         /// <summary>
         /// 获取源信息
@@ -144,69 +234,78 @@ namespace HKW.Libs.Log4Cs
         /// <returns>线程Id</returns>
         private static string GetThreadId()
         {
-            return Thread.CurrentThread.ManagedThreadId.ToString();
+            return Options.DefaultShowThreadId ? Thread.CurrentThread.ManagedThreadId.ToString() : string.Empty;
         }
         /// <summary>
         /// 根据默认值获取日期时间
         /// </summary>
         /// <returns>日期时间</returns>
-        private static string? GetDataTime()
+        private static string GetDataTime()
         {
             string dateTime = string.Empty;
             var nowDateTime = DateTime.Now;
-            if (options.DefaultShowDate)
+            if (Options.DefaultShowDate)
                 dateTime += $"{nowDateTime.Year}/{nowDateTime.Month}/{nowDateTime.Day} ";
-            if (options.DefaultShowTime)
+            if (Options.DefaultShowTime)
                 dateTime += nowDateTime.TimeOfDay.ToString();
+            return dateTime;
+        }
+
+        private static string GetOriginMessage(Level logLevel)
+        {
+            string origin;
+            if (logLevel == Level.DEBUG)
+                origin = GetOrigin(true, true, true);
+            else
+                origin = GetOrigin(Options.DefaultShowClass, Options.DefaultShowNameSpace, Options.DefaultShowMethod);
+            return origin;
+        }
+
+        private static string GetDataTimeMessage()
+        {
+            string dateTime = GetDataTime();
             if (!string.IsNullOrEmpty(dateTime))
                 dateTime += " ";
             return dateTime;
         }
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message"></param>
-        public static void Record(string message)
+
+        private static string GetThreadIdMessage()
         {
-            Record(message, options.DefaultLevel);
+            string threadId = GetThreadId();
+            if (!string.IsNullOrEmpty(threadId))
+                threadId = $":{threadId}";
+            return threadId;
+        }
+
+        private static string GetExceptionMessage(Exception? ex, bool? filterException)
+        {
+            if (ex is null)
+                return string.Empty;
+            string exMessage;
+            if (filterException is true)
+                exMessage = FilterException(ex);
+            else if (filterException is false)
+                exMessage = ex.ToString();
+            else
+            {
+                if (Options.DefaultFilterException)
+                    exMessage = FilterException(ex);
+                else
+                    exMessage = ex.ToString();
+            }
+            if (!string.IsNullOrEmpty(exMessage))
+                exMessage = $"\n{exMessage}";
+            return exMessage;
         }
 
         /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="logLevel">日志等级</param>
-        public static void Record(string message, Level logLevel)
-        {
-            rwLockS.EnterWriteLock();
-            try
-            {
-                if (logLevel >= options.DefaultLevel)
-                {
-                    string? origin;
-                    if (logLevel == Level.DEBUG)
-                        origin = GetOrigin(true, true, true);
-                    else
-                        origin = GetOrigin(true, false, false);
-                    string? dateTime = GetDataTime();
-                    sw.WriteLine($"{dateTime}[{origin}:{GetThreadId()}] {logLevel} {message}");
-                    sw.Flush();
-                }
-            }
-            finally
-            {
-                rwLockS.ExitWriteLock();
-            }
-        }
-
-        /// <summary>
-        /// Exception解析 用来精简异常的堆栈输出
+        /// 过滤异常
         /// </summary>
         /// <param name="ex">Exception</param>
         /// <returns></returns>
-        public static string SimplifyException(Exception ex)
+        public static string FilterException(Exception ex)
         {
-            var list = ex.ToString().Split("\r\n").Where(s => !options.ExceptionFilter.Any(f => s.Contains(f)));
+            var list = ex.ToString().Split("\r\n").Where(s => !Options.ExceptionFilter.Any(f => s.Contains(f)));
             return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?=. {BaseNamespace})", "");
         }
 

@@ -21,7 +21,12 @@ namespace StarsectorTools.Tools.ModManager
     /// </summary>
     public partial class ModManagerPage : Page, ISTPage
     {
-        public bool NeedSave { get; private set; }
+        public bool NeedSave { get; private set; } = false;
+
+        public string NameI18n { get; private set; } = "";
+
+        public string DescriptionI18n { get; private set; } = "";
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,6 +35,10 @@ namespace StarsectorTools.Tools.ModManager
             InitializeComponent();
             //throw new();
             InitializeData();
+        }
+        public void ChangeLanguage()
+        {
+
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)

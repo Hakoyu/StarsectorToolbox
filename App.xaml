@@ -9,7 +9,8 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlsStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlStyles.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/ThemeResources/UnSharedControls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ColorStyle.xaml" />
         <ResourceDictionary>
           <pu:MessageBoxXSettings

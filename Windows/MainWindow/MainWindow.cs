@@ -18,7 +18,7 @@ using StarsectorTools.Pages;
 using StarsectorTools.Tools.GameSettings;
 using StarsectorTools.Tools.ModManager;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
-using HKW.Libs;
+using HKW.Models.ControlModels;
 using HKW.Libs.TomlParse;
 
 namespace StarsectorTools.Windows.MainWindow

@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace StarsectorTools.Libs.Utils
 {
@@ -14,9 +13,21 @@ namespace StarsectorTools.Libs.Utils
     public interface ISTPage
     {
         /// <summary>
+        /// 本地化名称
+        /// </summary>
+        public string NameI18n { get; }
+        /// <summary>
+        /// 本地化描述
+        /// </summary>
+        public string DescriptionI18n { get; }
+        /// <summary>
         /// 需要保存
         /// </summary>
         public bool NeedSave { get; }
+        /// <summary>
+        /// 改变语言
+        /// </summary>
+        public void ChangeLanguage();
         /// <summary>
         /// 保存
         /// </summary>
