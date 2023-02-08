@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.Models.ControlModels
+namespace HKW.ViewModels.Controls
 {
     /// <summary>
     /// 项目集合模型

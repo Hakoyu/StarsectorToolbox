@@ -16,7 +16,7 @@ using HKW.Libs.Log4Cs;
 using System.IO;
 using Panuon.WPF.UI;
 using StarsectorTools.Pages;
-using HKW.Models.DialogModels;
+using HKW.ViewModels.Dialog;
 
 namespace StarsectorTools.Windows.MainWindow
 {

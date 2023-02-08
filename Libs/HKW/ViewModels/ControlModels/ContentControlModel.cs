@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.Models.ControlModels
+namespace HKW.ViewModels.Controls
 {
     /// <summary>
     /// 可包含任意类型内容的控件模型

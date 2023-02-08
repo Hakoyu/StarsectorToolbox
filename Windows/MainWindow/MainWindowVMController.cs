@@ -7,14 +7,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using HKW.Models.ControlModels;
+using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
 using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using System.Xml.Serialization;
 using HKW.Libs.Log4Cs;
-using HKW.Models.DialogModels;
+using HKW.ViewModels.Dialog;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -105,7 +105,7 @@ namespace StarsectorTools.Windows.MainWindow
                     {
                         if(o is not ListBoxItemModel model)
                             return;
-                        model.Tag = CreatePage(model.Tag.GetType());
+                        model.Tag = CreatePage(model.Tag!.GetType());
                         if(model.IsSelected)
                             ShowPage(model.Tag);
                     })

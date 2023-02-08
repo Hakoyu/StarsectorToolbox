@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace HKW.Models.ControlModels
+namespace HKW.ViewModels.Controls
 {
     /// <summary>
     /// 菜单项模型,用于MVVM

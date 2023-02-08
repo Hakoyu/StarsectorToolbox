@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HKW.Models.DialogModels
+namespace HKW.ViewModels.Dialog
 {
     /// <summary>
     /// 基础描述

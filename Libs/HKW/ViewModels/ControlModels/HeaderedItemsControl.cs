@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.Models.ControlModels
+namespace HKW.ViewModels.Controls
 {
     /// <summary>
     /// 带多个项并且具有标题的控件模型

@@ -1,4 +1,4 @@
-﻿namespace HKW.Models.DialogModels
+﻿namespace HKW.ViewModels.Dialog
 {
     /// <summary>
     /// 消息窗口模型

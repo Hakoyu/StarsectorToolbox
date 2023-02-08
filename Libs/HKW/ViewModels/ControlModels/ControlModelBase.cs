@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.Models.ControlModels
+namespace HKW.ViewModels.Controls
 {
     /// <summary>
     /// 基础控件模型

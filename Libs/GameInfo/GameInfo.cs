@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
-using HKW.Models.DialogModels;
+using HKW.ViewModels.Dialog;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
 

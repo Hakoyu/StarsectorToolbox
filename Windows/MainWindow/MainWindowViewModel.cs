@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs.Log4Cs;
-using HKW.Models.ControlModels;
+using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
