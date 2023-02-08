@@ -12,7 +12,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 上下文菜单模型,用于MVVM
     /// </summary>
-    [DebuggerDisplay("{Name} {ItemsSource.Count}")]
+    [DebuggerDisplay("{Name}, Count = {ItemsSource.Count}")]
     public partial class ContextMenuModel : ItemsCollectionModel<MenuItemModel>
     {
         /// <summary>

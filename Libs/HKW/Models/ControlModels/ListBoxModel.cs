@@ -11,7 +11,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 列表模型,用于MVVM
     /// </summary>
-    [DebuggerDisplay("{Name} {ItemsSource.Count}")]
+    [DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
     public partial class ListBoxModel : ItemsCollectionModel<ListBoxItemModel>
     {
         [ObservableProperty]

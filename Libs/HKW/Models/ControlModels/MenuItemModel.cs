@@ -10,9 +10,11 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 菜单项模型,用于MVVM
     /// </summary>
-    [DebuggerDisplay("{Name} {Header} {ItemsSource.Count}")]
+    [DebuggerDisplay("{Name},Header = {Header},Count = {ItemsSource.Count}")]
     public partial class MenuItemModel : HeaderedItemsControl<MenuItemModel>
     {
+        [ObservableProperty]
+        private object? icon;
         /// <summary>
         /// 初始化
         /// </summary>

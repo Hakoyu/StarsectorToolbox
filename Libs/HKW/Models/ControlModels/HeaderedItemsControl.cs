@@ -11,7 +11,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 带多个项并且具有标题的控件模型
     /// </summary>
-    [DebuggerDisplay("{Name} {Header} {ItemsSource.Count}")]
+    [DebuggerDisplay("{Name}, Header = {Header},Count = {ItemsSource.Count}")]
     public partial class HeaderedItemsControl<T> : ItemsCollectionModel<T>
     {
         /// <summary>

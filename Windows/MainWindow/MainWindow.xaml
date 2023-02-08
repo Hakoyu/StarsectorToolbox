@@ -206,11 +206,11 @@
               FontSize="16"
               ItemContainerStyle="{StaticResource ListBoxItemMVVM}"
               ItemsSource="{Binding MainListBox}"
-              SelectedItem="{Binding MainListBox.SelectedItem}"
+              SelectedItem="{Binding SelectedPageItem}"
               Style="{StaticResource ListBox_Style}">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                  <i:InvokeCommandAction Command="{Binding MainMenuSelectionChangedCommand}" CommandParameter="{Binding SelectedPageItem}" />
+                  <i:InvokeCommandAction Command="{Binding MenuSelectionChangedCommand}" CommandParameter="{Binding SelectedPageItem}" />
                 </i:EventTrigger>
               </i:Interaction.Triggers>
             </ListBox>

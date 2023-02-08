@@ -9,7 +9,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 列表项模型,用于MVVM
     /// </summary>
-    [DebuggerDisplay("{Name} {Content}")]
+    [DebuggerDisplay("{Name}, Content = {Content}")]
     public partial class ListBoxItemModel : ContentControlModel
     {
         [ObservableProperty]

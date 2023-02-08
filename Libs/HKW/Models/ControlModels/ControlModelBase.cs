@@ -8,7 +8,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 基础控件模型
     /// </summary>
-    [DebuggerDisplay("{Name} {TagDictionary.Count}")]
+    [DebuggerDisplay("{Name}, Count = {TagDictionary.Count}")]
     public partial class ControlModelBase : ObservableObject
     {
         /// <summary>
@@ -37,8 +37,8 @@ namespace HKW.Models.ControlModels
         [ObservableProperty]
         private ContextMenuModel? contextMenu;
         /// <summary>
-        /// 标签字典
+        /// 数据字典
         /// </summary>
-        public Dictionary<string, object>? TagDictionary { get; set; }
+        public Dictionary<string, object?>? DataDictionary { get; set; }
     }
 }

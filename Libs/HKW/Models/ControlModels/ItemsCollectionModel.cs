@@ -12,7 +12,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 项目集合模型
     /// </summary>
-    [DebuggerDisplay("{Name} {ItemsSource.Count}")]
+    [DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
     public partial class ItemsCollectionModel<T> : ControlModelBase, IList<T>, IEnumerable<T>, IEnumerable
     {
         /// <summary>

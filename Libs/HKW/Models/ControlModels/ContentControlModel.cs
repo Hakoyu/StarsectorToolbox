@@ -11,7 +11,7 @@ namespace HKW.Models.ControlModels
     /// <summary>
     /// 可包含任意类型内容的控件模型
     /// </summary>
-    [DebuggerDisplay("{Name} {Content}")]
+    [DebuggerDisplay("{Name}, Content = {Content}")]
     public partial class ContentControlModel : ControlModelBase
     {
         [ObservableProperty]

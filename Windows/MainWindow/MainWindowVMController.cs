@@ -14,7 +14,6 @@ using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 using System.Xml.Serialization;
 using HKW.Libs.Log4Cs;
-using HKW.Models.ControlModels;
 using HKW.Models.DialogModels;
 
 namespace StarsectorTools.Windows.MainWindow
@@ -23,6 +22,7 @@ namespace StarsectorTools.Windows.MainWindow
     {
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
         private ListBoxItemModel? previousSelectedPageItem;
+        private ExpansionInfo? deubgExpansionInfo;
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
         {
@@ -84,22 +84,52 @@ namespace StarsectorTools.Windows.MainWindow
             CheckAllPagesSave();
             STLog.Close();
         }
-        internal void AddMainPage(ListBoxItemModel model)
+        internal void AddMainPageItem(ListBoxItemModel model)
         {
-            GetMainPageData(ref model);
+            DetectPageItemData(ref model);
             MainListBox.Add(model);
         }
-        private void GetMainPageData(ref ListBoxItemModel model)
+        private void DetectPageItemData(ref ListBoxItemModel model)
         {
             if (model?.Tag is not ISTPage page)
                 return;
             model.Id = page.GetType().FullName;
             model.Content = page.NameI18n;
             model.ToolTip = page.DescriptionI18n;
+            model.ContextMenu = CreateItemContextMenu();
         }
-        private void CreatePageItem()
-        {
+        private ContextMenuModel CreateItemContextMenu() =>
+            new()
+            {
+                new((o) =>
+                    {
+                        if(o is not ListBoxItemModel model)
+                            return;
+                        model.Tag = CreatePage(model.Tag.GetType());
+                        if(model.IsSelected)
+                            ShowPage(model.Tag);
+                    })
+                {
+                    Icon = "🔄",
+                    Header = I18n.RefreshPage,
+                }
+            };
 
+        private object? CreatePage(Type type)
+        {
+            try
+            {
+                return type.Assembly.CreateInstance(type.FullName!)!;
+            }
+            catch (Exception ex)
+            {
+                Logger.Record($"{I18n.PageInitializeError}: {type.FullName}", ex);
+                MessageBoxModel.Show(new($"{I18n.PageInitializeError}:\n{type.FullName}")
+                {
+                    Icon = MessageBoxModel.Icon.Error
+                });
+                return null;
+            }
         }
 
         private void CheckGameStartOption()
@@ -154,6 +184,7 @@ namespace StarsectorTools.Windows.MainWindow
                     string filePath = toml["Expansion"]["DebugPath"].AsString;
                     if (!string.IsNullOrEmpty(filePath) && CheckExpansionInfo(filePath, true) is ExpansionInfo info)
                     {
+                        deubgExpansionInfo = info;
                         ST.ExpansionDebugPath = filePath;
                         ST.ExpansionDebugId = info.Id;
                     }
@@ -328,6 +359,14 @@ namespace StarsectorTools.Windows.MainWindow
         private void InitializeExpansionDebugPage()
         {
             // 添加拓展调试页面
+            if (deubgExpansionInfo is not null)
+            {
+                AddMainPageItem(new()
+                {
+                    Icon = deubgExpansionInfo.Icon,
+                    Tag = deubgExpansionInfo.ExpansionPage,
+                });
+            }
         }
         #region CheckPageSave
         private void CheckAllPagesSave()

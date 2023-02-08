@@ -73,8 +73,6 @@ namespace StarsectorTools.Windows.MainWindow
                 return;
             }
             InitializePage();
-
-
             STLog.WriteLine(I18n.InitializationCompleted);
         }
 
@@ -264,12 +262,12 @@ namespace StarsectorTools.Windows.MainWindow
         private void InitializeMainPage()
         {
             //添加主要页面
-            ViewModel.AddMainPage(new()
+            ViewModel.AddMainPageItem(new()
             {
                 Icon = "🌐",
-                Tag = CreatePage(typeof(ModManagerPage))
+                Tag = CreatePage(typeof(ModManagerPage)),
             });
-            ViewModel.AddMainPage(new()
+            ViewModel.AddMainPageItem(new()
             {
                 Icon = "⚙",
                 Tag = CreatePage(typeof(GameSettingsPage))

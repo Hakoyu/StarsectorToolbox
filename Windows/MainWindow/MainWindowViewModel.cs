@@ -10,6 +10,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HKW.Libs.Log4Cs;
 using HKW.Models.ControlModels;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
@@ -30,7 +31,6 @@ namespace StarsectorTools.Windows.MainWindow
         private bool infoButtonIsChecked = false;
         [ObservableProperty]
         private bool settingsButtonIsChecked = false;
-
         #region Page
         [ObservableProperty]
         private object? nowPage;
@@ -49,6 +49,8 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private ListBoxModel expansionListBox = new();
         #endregion
+        [ObservableProperty]
+        private ContextMenuModel contextMenu;
         #region I18n
         [ObservableProperty]
         private string titleI18n = I18n.StarsectorTools;
@@ -83,12 +85,14 @@ namespace StarsectorTools.Windows.MainWindow
                 Content = "CCC",
                 ContextMenu = new() { new() { Name = "CMenu1", Header = "CMenu1" } }
             });
-
         }
         public MainWindowViewModel(string configData)
         {
+            MainListBox.SelectedItem = ExpansionListBox.SelectedItem = SelectedPageItem;
             InitializeDirectories();
             SetConfig(configData);
+            InitializeExpansionPage();
+            InitializeExpansionDebugPage();
         }
 
         [RelayCommand]
@@ -97,7 +101,7 @@ namespace StarsectorTools.Windows.MainWindow
             MenuIsExpand = !MenuIsExpand;
         }
         [RelayCommand]
-        private void MainMenuSelectionChanged(ListBoxItemModel item)
+        private void MenuSelectionChanged(ListBoxItemModel item)
         {
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
             if (previousSelectedPageItem?.IsSelected is true)
@@ -124,7 +128,7 @@ namespace StarsectorTools.Windows.MainWindow
                 SettingsButtonIsChecked = true;
                 SelectedPageItem = null;
             }
-            STLog.WriteLine($"{I18n.ShowPage}: {page?.GetType().FullName}");
+            Logger.Record($"{I18n.ShowPage}: {page?.GetType().FullName}");
         }
 
         [RelayCommand]
