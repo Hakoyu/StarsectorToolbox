@@ -12,6 +12,7 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:sys="clr-namespace:System.Windows;assembly=PresentationFramework"
+  xmlns:vmc="clr-namespace:HKW.ViewModels.Controls"
   Width="1000"
   Height="500"
   MinWidth="800"
@@ -69,6 +70,11 @@
         <Setter.Value>
           <!--  绑定右键菜单  -->
           <ContextMenu ItemsSource="{Binding ContextMenu}" Style="{StaticResource ContextMenu_Style}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ContextMenu.ItemContainerStyle>
               <Style BasedOn="{StaticResource MenuItem_Style}" TargetType="MenuItem">
                 <Setter Property="Icon" Value="{Binding Icon}" />

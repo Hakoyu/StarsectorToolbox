@@ -98,8 +98,10 @@ namespace StarsectorTools.Windows.MainWindow
             model.ToolTip = page.DescriptionI18n;
             model.ContextMenu = CreateItemContextMenu();
         }
-        private ContextMenuVM CreateItemContextMenu() =>
-            new()
+        private ContextMenuVM CreateItemContextMenu()
+        {
+            // 标准模式
+            return new()
             {
                 new((o) =>
                     {
@@ -114,6 +116,24 @@ namespace StarsectorTools.Windows.MainWindow
                     Header = I18n.RefreshPage,
                 }
             };
+            // 延迟加载,有问题 暂不使用
+            //return new((list) =>
+            //{
+            //    list.Add(new((o) =>
+            //    {
+            //        if (o is not ListBoxItemVM model)
+            //            return;
+            //        model.Tag = CreatePage(model.Tag!.GetType());
+            //        if (model.IsSelected)
+            //            ShowPage(model.Tag);
+            //    })
+            //    {
+            //        Icon = "🔄",
+            //        Header = I18n.RefreshPage,
+            //    });
+            //});
+        }
+
 
         private object? CreatePage(Type type)
         {
@@ -124,9 +144,9 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record($"{I18n.PageInitializeError}: {type.FullName}", ex);
-                MessageBoxModel.Show(new($"{I18n.PageInitializeError}:\n{type.FullName}")
+                MessageBoxVM.Show(new($"{I18n.PageInitializeError}:\n{type.FullName}")
                 {
-                    Icon = MessageBoxModel.Icon.Error
+                    Icon = MessageBoxVM.Icon.Error
                 });
                 return null;
             }
@@ -166,15 +186,15 @@ namespace StarsectorTools.Windows.MainWindow
                     // 游戏目录
                     if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
                     {
-                        if (!(MessageBoxModel.Show(new(I18n.GameNotFound_SelectAgain)
+                        if (!(MessageBoxVM.Show(new(I18n.GameNotFound_SelectAgain)
                         {
-                            Button = MessageBoxModel.Button.YesNo,
-                            Icon = MessageBoxModel.Icon.Question,
-                        }) == MessageBoxModel.Result.Yes && GameInfo.GetGameDirectory()))
+                            Button = MessageBoxVM.Button.YesNo,
+                            Icon = MessageBoxVM.Icon.Question,
+                        }) == MessageBoxVM.Result.Yes && GameInfo.GetGameDirectory()))
                         {
-                            MessageBoxModel.Show(new(I18n.GameNotFound_SoftwareExit)
+                            MessageBoxVM.Show(new(I18n.GameNotFound_SoftwareExit)
                             {
-                                Icon = MessageBoxModel.Icon.Error
+                                Icon = MessageBoxVM.Icon.Error
                             });
                             return false;
                         }
@@ -195,15 +215,15 @@ namespace StarsectorTools.Windows.MainWindow
                 }
                 else
                 {
-                    if (!(MessageBoxModel.Show(new(I18n.FirstStart)
+                    if (!(MessageBoxVM.Show(new(I18n.FirstStart)
                     {
-                        Button = MessageBoxModel.Button.YesNo,
-                        Icon = MessageBoxModel.Icon.Question,
-                    }) == MessageBoxModel.Result.Yes && GameInfo.GetGameDirectory()))
+                        Button = MessageBoxVM.Button.YesNo,
+                        Icon = MessageBoxVM.Icon.Question,
+                    }) == MessageBoxVM.Result.Yes && GameInfo.GetGameDirectory()))
                     {
-                        MessageBoxModel.Show(new(I18n.GameNotFound_SoftwareExit)
+                        MessageBoxVM.Show(new(I18n.GameNotFound_SoftwareExit)
                         {
-                            Icon = MessageBoxModel.Icon.Error
+                            Icon = MessageBoxVM.Icon.Error
                         });
                         return false;
                     }
@@ -217,9 +237,9 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record($"{I18n.ConfigFileError} {I18n.Path}: {ST.ConfigTomlFile}", ex);
-                MessageBoxModel.Show(new($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.ConfigTomlFile}")
+                MessageBoxVM.Show(new($"{I18n.ConfigFileError}\n{I18n.Path}: {ST.ConfigTomlFile}")
                 {
-                    Icon = MessageBoxModel.Icon.Error,
+                    Icon = MessageBoxVM.Icon.Error,
                 });
                 CreateConfigFile(originalConfigData);
             }
@@ -238,9 +258,9 @@ namespace StarsectorTools.Windows.MainWindow
             if (string.IsNullOrEmpty(directory))
             {
                 Logger.Record(I18n.ExpansionPathIsEmpty, Logger.Level.WARN);
-                MessageBoxModel.Show(new(I18n.ExpansionPathIsEmpty)
+                MessageBoxVM.Show(new(I18n.ExpansionPathIsEmpty)
                 {
-                    Icon = MessageBoxModel.Icon.Warning
+                    Icon = MessageBoxVM.Icon.Warning
                 });
                 return null;
             }
@@ -251,9 +271,9 @@ namespace StarsectorTools.Windows.MainWindow
                 if (!File.Exists(tomlFile))
                 {
                     Logger.Record($"{I18n.ExpansionTomlFileNotFound} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
-                    MessageBoxModel.Show(new($"{I18n.ExpansionTomlFileNotFound}\n{I18n.Path}: {tomlFile}")
+                    MessageBoxVM.Show(new($"{I18n.ExpansionTomlFileNotFound}\n{I18n.Path}: {tomlFile}")
                     {
-                        Icon = MessageBoxModel.Icon.Warning
+                        Icon = MessageBoxVM.Icon.Warning
                     });
                     return null;
                 }
@@ -263,9 +283,9 @@ namespace StarsectorTools.Windows.MainWindow
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
                     Logger.Record($"{I18n.ExpansionAlreadyExists} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
-                    MessageBoxModel.Show(new($"{I18n.ExpansionAlreadyExists}\n{I18n.Path}: {tomlFile}")
+                    MessageBoxVM.Show(new($"{I18n.ExpansionAlreadyExists}\n{I18n.Path}: {tomlFile}")
                     {
-                        Icon = MessageBoxModel.Icon.Warning
+                        Icon = MessageBoxVM.Icon.Warning
                     });
                     return null;
                 }
@@ -273,9 +293,9 @@ namespace StarsectorTools.Windows.MainWindow
                 if (!File.Exists(assemblyFile))
                 {
                     Logger.Record($"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
-                    MessageBoxModel.Show(new($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}")
+                    MessageBoxVM.Show(new($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}")
                     {
-                        Icon = MessageBoxModel.Icon.Warning
+                        Icon = MessageBoxVM.Icon.Warning
                     });
                     return null;
                 }
@@ -296,9 +316,9 @@ namespace StarsectorTools.Windows.MainWindow
                 if (expansionInfo.ExpansionPage is null)
                 {
                     Logger.Record($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
-                    MessageBoxModel.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
+                    MessageBoxVM.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
                     {
-                        Icon = MessageBoxModel.Icon.Warning
+                        Icon = MessageBoxVM.Icon.Warning
                     });
                     return null;
                 }
@@ -306,9 +326,9 @@ namespace StarsectorTools.Windows.MainWindow
                 if (expansionInfo.ExpansionPage is not ISTPage)
                 {
                     Logger.Record($"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}", Logger.Level.WARN);
-                    MessageBoxModel.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
+                    MessageBoxVM.Show(new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
                     {
-                        Icon = MessageBoxModel.Icon.Warning
+                        Icon = MessageBoxVM.Icon.Warning
                     });
                     return null;
                 }
@@ -317,9 +337,9 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record($"{I18n.ExpansionLoadError} {I18n.Path}: {tomlFile}", ex);
-                MessageBoxModel.Show(new($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}")
+                MessageBoxVM.Show(new($"{I18n.ExpansionLoadError}\n{I18n.Path}: {tomlFile}")
                 {
-                    Icon = MessageBoxModel.Icon.Error
+                    Icon = MessageBoxVM.Icon.Error
                 });
                 return null;
             }
@@ -395,10 +415,10 @@ namespace StarsectorTools.Windows.MainWindow
             {
                 if (type.GetProperty("NeedSave") is PropertyInfo info)
                 {
-                    if (info.GetValue(page) is true && MessageBoxModel.Show(new($"{I18n.Page}: {model.Content} {I18n.PageCheckSave}")
+                    if (info.GetValue(page) is true && MessageBoxVM.Show(new($"{I18n.Page}: {model.Content} {I18n.PageCheckSave}")
                     {
-                        Button = MessageBoxModel.Button.YesNo
-                    }) is MessageBoxModel.Result.Yes)
+                        Button = MessageBoxVM.Button.YesNo
+                    }) is MessageBoxVM.Result.Yes)
                     {
                         SavePage(model);
                     }
@@ -407,9 +427,9 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record($"{I18n.PageSaveError} {type.FullName}", ex);
-                MessageBoxModel.Show(new($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}")
+                MessageBoxVM.Show(new($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}")
                 {
-                    Icon = MessageBoxModel.Icon.Error
+                    Icon = MessageBoxVM.Icon.Error
                 });
             }
         }
@@ -445,9 +465,9 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record($"{I18n.PageSaveError} {type.FullName}", ex);
-                MessageBoxModel.Show(new($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}")
+                MessageBoxVM.Show(new($"{I18n.PageSaveError} {type.FullName}\n{STLog.SimplifyException(ex)}")
                 {
-                    Icon = MessageBoxModel.Icon.Error
+                    Icon = MessageBoxVM.Icon.Error
                 });
             }
         }
@@ -488,9 +508,9 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record($"{I18n.PageCloseError} {type.FullName}", ex);
-                MessageBoxModel.Show(new($"{I18n.PageCloseError} {type.FullName}\n{STLog.SimplifyException(ex)}")
+                MessageBoxVM.Show(new($"{I18n.PageCloseError} {type.FullName}\n{STLog.SimplifyException(ex)}")
                 {
-                    Icon = MessageBoxModel.Icon.Error
+                    Icon = MessageBoxVM.Icon.Error
                 });
             }
         }
