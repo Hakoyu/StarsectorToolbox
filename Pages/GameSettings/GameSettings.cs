@@ -8,7 +8,7 @@ using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 
-namespace StarsectorTools.Tools.GameSettings
+namespace StarsectorTools.Pages.GameSettings
 {
     public partial class GameSettingsPage
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -19,13 +20,13 @@ namespace HKW.ViewModels.Controls
         /// 项目资源
         /// </summary>
         [ObservableProperty]
-        private IList<T> itemsSource = null!;
+        private ObservableCollection<T> itemsSource = null!;
         /// <inheritdoc/>
         public T this[int index] { get => ItemsSource[index]; set => ItemsSource[index] = value; }
         /// <inheritdoc/>
         public int Count => ItemsSource.Count;
         /// <inheritdoc/>
-        public bool IsReadOnly => ItemsSource.IsReadOnly;
+        public bool IsReadOnly => ((IList)ItemsSource).IsReadOnly;
         /// <inheritdoc/>
         public void Add(T item) => ItemsSource.Add(item);
         /// <inheritdoc/>

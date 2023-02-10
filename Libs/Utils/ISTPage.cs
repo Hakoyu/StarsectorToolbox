@@ -27,7 +27,7 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>
         /// 改变语言
         /// </summary>
-        public void ChangeLanguage();
+        public bool ChangeLanguage();
         /// <summary>
         /// 保存
         /// </summary>

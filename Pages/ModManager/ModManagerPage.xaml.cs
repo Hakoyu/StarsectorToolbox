@@ -14,7 +14,7 @@ using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
 
-namespace StarsectorTools.Tools.ModManager
+namespace StarsectorTools.Pages.ModManager
 {
     /// <summary>
     /// ModManagerPage.xaml 的交互逻辑
@@ -36,9 +36,9 @@ namespace StarsectorTools.Tools.ModManager
             //throw new();
             InitializeData();
         }
-        public void ChangeLanguage()
+        public bool ChangeLanguage()
         {
-
+            return false;
         }
 
         private void Lable_CopyInfo_Click(object sender, RoutedEventArgs e)

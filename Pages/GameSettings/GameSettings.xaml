@@ -1,5 +1,5 @@
 ﻿<Page
-  x:Class="StarsectorTools.Tools.GameSettings.GameSettingsPage"
+  x:Class="StarsectorTools.Pages.GameSettings.GameSettingsPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.GameSettings"
@@ -14,7 +14,7 @@
     <GroupBox
       pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
       Header="{x:Static I18n:GameSettings_I18n.GameSettings}"
-      Style="{StaticResource GroupBox_Style}">
+      Style="{StaticResource GroupBoxBaseStyle}">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="250" />
@@ -64,7 +64,7 @@
           VerticalAlignment="Top"
           pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
           Header="{x:Static I18n:GameSettings_I18n.SetMemory}"
-          Style="{StaticResource GroupBox_Style}">
+          Style="{StaticResource GroupBoxBaseStyle}">
           <Grid VerticalAlignment="Center">
             <TextBox
               x:Name="TextBox_Memory"
@@ -106,7 +106,7 @@
           VerticalAlignment="Top"
           pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
           Header="{x:Static I18n:GameSettings_I18n.GameKey}"
-          Style="{StaticResource GroupBox_Style}">
+          Style="{StaticResource GroupBoxBaseStyle}">
           <Grid>
             <Label
               x:Name="Label_GameKey"

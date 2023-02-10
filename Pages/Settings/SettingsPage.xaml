@@ -1,5 +1,5 @@
 ﻿<Page
-  x:Class="StarsectorTools.Pages.SettingsPage"
+  x:Class="StarsectorTools.Pages.Settings.SettingsPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
@@ -17,7 +17,7 @@
       x:Name="GroupBox_Settings"
       pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
       Header="{x:Static I18n:Settings_I18n.Settings}"
-      Style="{StaticResource GroupBox_Style}">
+      Style="{StaticResource GroupBoxBaseStyle}">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="250" />

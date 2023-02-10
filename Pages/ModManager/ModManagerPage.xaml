@@ -1,12 +1,12 @@
 ﻿<Page
-  x:Class="StarsectorTools.Tools.ModManager.ModManagerPage"
+  x:Class="StarsectorTools.Pages.ModManager.ModManagerPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
   xmlns:ModTypeGroup="clr-namespace:StarsectorTools.Libs.Utils"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-  xmlns:local="clr-namespace:StarsectorTools.Tools.ModManager"
+  xmlns:local="clr-namespace:StarsectorTools.Pages.ModManager"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   Title="ModManager"
@@ -107,7 +107,7 @@
     </Style>
   </Page.Resources>
   <Grid>
-    <GroupBox Header="{x:Static I18n:ModManagerPage_I18n.ModManager}" Style="{StaticResource GroupBox_Style}">
+    <GroupBox Header="{x:Static I18n:ModManagerPage_I18n.ModManager}" Style="{StaticResource GroupBoxBaseStyle}">
       <Grid>
         <Grid>
           <Grid.ColumnDefinitions>
@@ -818,7 +818,7 @@
             Margin="9,0,0,0"
             Background="{DynamicResource ColorBG}"
             Header="{x:Static I18n:ModManagerPage_I18n.ModInfo}"
-            Style="{StaticResource GroupBox_Style}">
+            Style="{StaticResource GroupBoxBaseStyle}">
             <ScrollViewer>
               <StackPanel>
                 <Grid Margin="0,0,0,5">
@@ -929,7 +929,7 @@
                 <GroupBox
                   Margin="0,0,0,5"
                   Header="{x:Static I18n:ModManagerPage_I18n.Author}"
-                  Style="{StaticResource GroupBox_Style}">
+                  Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBlock
                     x:Name="TextBlock_ModAuthor"
                     VerticalAlignment="Top"
@@ -947,7 +947,7 @@
                   x:Name="GroupBox_ModDependencies"
                   Margin="0,0,0,5"
                   Header="{x:Static I18n:ModManagerPage_I18n.Dependencies}"
-                  Style="{StaticResource GroupBox_Style}">
+                  Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBlock
                     x:Name="TextBlock_ModDependencies"
                     Style="{StaticResource TextBlock_Style}"
@@ -963,7 +963,7 @@
                 <GroupBox
                   Margin="0,0,0,5"
                   Header="{x:Static I18n:ModManagerPage_I18n.Description}"
-                  Style="{StaticResource GroupBox_Style}">
+                  Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBlock
                     x:Name="TextBlock_ModDescription"
                     Style="{StaticResource TextBlock_Style}"
@@ -976,7 +976,7 @@
                     </TextBlock.ContextMenu>
                   </TextBlock>
                 </GroupBox>
-                <GroupBox Header="{x:Static I18n:ModManagerPage_I18n.UserDescription}" Style="{StaticResource GroupBox_Style}">
+                <GroupBox Header="{x:Static I18n:ModManagerPage_I18n.UserDescription}" Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBox
                     x:Name="TextBox_UserDescription"
                     KeyDown="TextBox_UserDescription_KeyDown"

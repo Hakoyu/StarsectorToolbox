@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Collections;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Controls;
@@ -18,6 +8,9 @@ using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
 
 namespace StarsectorTools.Windows.MainWindow
 {
+    /// <summary>
+    /// 主窗口视图模型
+    /// </summary>
     internal partial class MainWindowViewModel : ObservableObject
     {
         /// <summary>
@@ -25,73 +18,82 @@ namespace StarsectorTools.Windows.MainWindow
         /// </summary>
         [ObservableProperty]
         private bool menuIsExpand = false;
+
         [ObservableProperty]
         private bool clearGameLogOnStart = true;
+
         [ObservableProperty]
         private bool infoButtonIsChecked = false;
+
         [ObservableProperty]
         private bool settingsButtonIsChecked = false;
+
         #region Page
+
         [ObservableProperty]
         private object? nowPage;
+
         [ObservableProperty]
         private object? infoPage;
+
         [ObservableProperty]
         private object? settingsPage;
+
         [ObservableProperty]
         private object? expansionDebugPage;
-        #endregion
+
+        #endregion Page
+
         #region PageItem
+
         [ObservableProperty]
         private ListBoxItemVM? selectedPageItem;
+
         [ObservableProperty]
         private ListBoxVM mainListBox = new();
+
         [ObservableProperty]
         private ListBoxVM expansionListBox = new();
-        #endregion
-        [ObservableProperty]
-        private ContextMenuVM contextMenu;
+
+        #endregion PageItem
+
         #region I18n
+
         [ObservableProperty]
-        private string titleI18n = I18n.StarsectorTools;
+        private string i18nStarsectorTools = I18n.StarsectorTools;
+
         [ObservableProperty]
-        private string infoI18n = I18n.Info;
+        private string i18nInfo = I18n.Info;
+
         [ObservableProperty]
-        private string settingsI18n = I18n.Settings;
+        private string i18nSettings = I18n.Settings;
+
         [ObservableProperty]
-        private string startGameI18n = I18n.StartGame;
+        private string i18nStartGame = I18n.StartGame;
+
         [ObservableProperty]
-        private string clearGameLogOnStartI18n = I18n.ClearGameLogOnStart;
-        #endregion
+        private string i18nClearGameLogOnStart = I18n.ClearGameLogOnStart;
+
+        [ObservableProperty]
+        private string i18nRefreshExpansionList = I18n.RefreshExpansionList;
+
+        [ObservableProperty]
+        private string i18nExpansion = I18n.Expansion;
+
+        #endregion I18n
 
         public MainWindowViewModel()
         {
             //InitializeDirectories();
-            MainListBox.Add(new()
-            {
-                Icon = "A",
-                Content = "AAA",
-                ContextMenu = new() { new() { Name = "AMenu1", Header = "AMenu1" } }
-            });
-            MainListBox.Add(new()
-            {
-                Icon = "B",
-                Content = "BBB",
-                ContextMenu = new() { new() { Name = "BMenu1", Header = "CMenu1" } }
-            });
-            MainListBox.Add(new()
-            {
-                Icon = "C",
-                Content = "CCC",
-                ContextMenu = new() { new() { Name = "CMenu1", Header = "CMenu1" } }
-            });
         }
+
         public MainWindowViewModel(string configData)
         {
+            Instance = this;
             MainListBox.SelectedItem = ExpansionListBox.SelectedItem = SelectedPageItem;
             InitializeDirectories();
             SetConfig(configData);
-            InitializeExpansionPage();
+            InitializeExpansionPages();
             InitializeExpansionDebugPage();
         }
 
@@ -100,6 +102,7 @@ namespace StarsectorTools.Windows.MainWindow
         {
             MenuIsExpand = !MenuIsExpand;
         }
+
         [RelayCommand]
         private void MenuSelectionChanged(ListBoxItemVM item)
         {
@@ -148,6 +151,13 @@ namespace StarsectorTools.Windows.MainWindow
                     process.StandardInput.WriteLine($"starsector.exe");
                 }
             }
+        }
+
+        [RelayCommand]
+        internal void RefreshExpansionMenu()
+        {
+            CloseExpansionPages();
+            InitializeExpansionPages();
         }
     }
 }

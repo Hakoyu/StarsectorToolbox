@@ -23,7 +23,7 @@ namespace HKW.ViewModels.Controls
         /// </summary>
         public ListBoxVM()
         {
-            ItemsSource = new List<ListBoxItemVM>();
+            ItemsSource = new();
         }
     }
 }

@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI">
   <Style
-    x:Key="GroupBox_Style"
+    x:Key="GroupBoxBaseStyle"
     BasedOn="{StaticResource {x:Type GroupBox}}"
     TargetType="GroupBox">
     <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
@@ -81,12 +81,6 @@
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="pu:IconHelper.FontSize" Value="16" />
-    <Setter Property="pu:IconHelper.Width" Value="30" />
-    <Setter Property="pu:IconHelper.Height" Value="30" />
-    <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
-    <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
-    <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
     <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside" />
     <Setter Property="pu:ListBoxHelper.ItemsHoverBackground" Value="{DynamicResource ColorLight2}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorLight2}" />
@@ -180,12 +174,6 @@
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="RowHeaderWidth" Value="0" />
     <Setter Property="RowBackground" Value="{DynamicResource ColorBG}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="16" />
-    <Setter Property="pu:IconHelper.Width" Value="30" />
-    <Setter Property="pu:IconHelper.Height" Value="30" />
-    <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
-    <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
-    <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
     <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside" />
     <Setter Property="pu:DataGridHelper.ColumnHeaderFontSize" Value="16" />
     <Setter Property="pu:DataGridHelper.ColumnHeaderSeparatorVisibility" Value="Collapsed" />
@@ -231,7 +219,6 @@
     <Setter Property="pu:ShadowHelper.ShadowDepth" Value="3" />
     <Setter Property="pu:ContextMenuHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
     <Setter Property="pu:ContextMenuHelper.ItemsWidth" Value="NaN" />
-    <!--<Setter Property="pu:ContextMenuHelper.ItemsIconWidth" Value="0" />-->
     <Setter Property="pu:ContextMenuHelper.ItemsHoverBackground" Value="{DynamicResource ColorLight2}" />
     <Setter Property="pu:ContextMenuHelper.ItemsCheckedBackground" Value="{DynamicResource ColorLightBlue2}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBG}" />

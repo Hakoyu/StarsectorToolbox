@@ -5,5 +5,6 @@
   <emoji:TextBlock
     x:Key="EmojiTextBlock"
     x:Shared="false"
+    FontSize="16"
     Text="{Binding Icon}" />
 </ResourceDictionary>

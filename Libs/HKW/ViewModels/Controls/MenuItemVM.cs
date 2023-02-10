@@ -19,24 +19,24 @@ namespace HKW.ViewModels.Controls
         /// 初始化
         /// </summary>
         /// <param name="handler">委托</param>
-        public MenuItemVM(ModelHandler? handler = null)
+        public MenuItemVM(CommandHandler? handler = null)
         {
-            ModelEvent += handler;
+            CommandEvent += handler;
         }
         [RelayCommand]
         private void MenuItem(object parameter)
         {
-            if (ModelEvent is not null)
-                ModelEvent(parameter);
+            if (CommandEvent is not null)
+                CommandEvent(parameter);
         }
         /// <summary>
         /// 委托
         /// </summary>
         /// <param name="parameter">参数</param>
-        public delegate void ModelHandler(object parameter);
+        public delegate void CommandHandler(object parameter);
         /// <summary>
         /// 事件
         /// </summary>
-        public event ModelHandler? ModelEvent;
+        public event CommandHandler? CommandEvent;
     }
 }

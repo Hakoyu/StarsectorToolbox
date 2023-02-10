@@ -1,11 +1,10 @@
 ﻿<Window
-  x:Class="StarsectorTools.Tools.ModManager.AddUserGroup"
+  x:Class="StarsectorTools.Pages.ModManager.AddUserGroup"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-  xmlns:local="clr-namespace:StarsectorTools.Windows"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   Title="AddUserGroup"
@@ -16,7 +15,7 @@
   WindowStartupLocation="CenterScreen"
   WindowStyle="None"
   mc:Ignorable="d">
-  <GroupBox Header="{x:Static I18n:AddUserGroup_I18n.SetUserGroupInfo}" Style="{StaticResource GroupBox_Style}">
+  <GroupBox Header="{x:Static I18n:AddUserGroup_I18n.SetUserGroupInfo}" Style="{StaticResource GroupBoxBaseStyle}">
     <StackPanel Margin="10,10,10,10">
       <Label
         Height="30"

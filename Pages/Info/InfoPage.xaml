@@ -1,11 +1,11 @@
 ﻿<Page
-  x:Class="StarsectorTools.Pages.InfoPage"
+  x:Class="StarsectorTools.Pages.Info.InfoPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-  xmlns:local="clr-namespace:StarsectorTools.Pages"
+  xmlns:local="clr-namespace:StarsectorTools.Pages.Info"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   Title="Info"
   d:DesignHeight="450"
@@ -13,7 +13,7 @@
   mc:Ignorable="d">
 
   <Grid>
-    <GroupBox Header="信息" Style="{StaticResource GroupBox_Style}">
+    <GroupBox Header="信息" Style="{StaticResource GroupBoxBaseStyle}">
       <StackPanel HorizontalAlignment="Center">
         <Label
           Height="NaN"

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using StarsectorTools.Libs.Utils;
 
-namespace StarsectorTools.Pages
+namespace StarsectorTools.Pages.Info
 {
     /// <summary>
     /// Description.xaml 的交互逻辑

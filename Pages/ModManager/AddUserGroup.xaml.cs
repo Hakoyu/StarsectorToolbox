@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using StarsectorTools.Libs.Utils;
 
-namespace StarsectorTools.Tools.ModManager
+namespace StarsectorTools.Pages.ModManager
 {
     /// <summary>
     /// AddUserGroup.xaml 的交互逻辑

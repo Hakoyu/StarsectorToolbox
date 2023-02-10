@@ -8,7 +8,7 @@ using StarsectorTools.Libs.Utils;
 using StarsectorTools.Windows.MainWindow;
 using I18n = StarsectorTools.Langs.Pages.Settings_I18n;
 
-namespace StarsectorTools.Pages
+namespace StarsectorTools.Pages.Settings
 {
     /// <summary>
     /// Settings.xaml 的交互逻辑
@@ -136,7 +136,7 @@ namespace StarsectorTools.Pages
                 toml.SaveTo(ST.ConfigTomlFile);
                 STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
                 if (Utils.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
-                    ((MainWindow)Application.Current.MainWindow).RefreshDebugExpansion();
+                    MainWindowViewModel.Instance.RefreshExpansionMenu();
             }
         }
 

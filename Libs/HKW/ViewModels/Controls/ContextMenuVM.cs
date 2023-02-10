@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -28,11 +29,19 @@ namespace HKW.ViewModels.Controls
         private bool isLoaded = false;
         /// <summary>
         /// 初始化
+        /// <para>
+        /// 如果需要使用延迟加载模式 
+        /// <c>Binding</c> 
+        /// 需要设置为 
+        /// <c>ContextMenuVM.ItemsSource</c> 
+        /// 而不是 
+        /// <c>ContextMenuVM</c> 
+        /// </para>
         /// </summary>
         /// <param name="handler">委托</param>
         public ContextMenuVM(LoadedHandler? handler = null)
         {
-            ItemsSource = new List<MenuItemVM>();
+            ItemsSource = new();
             if (handler is not null)
                 LoadedEvent += handler;
         }
@@ -44,7 +53,6 @@ namespace HKW.ViewModels.Controls
         [RelayCommand]
         private void Loaded(object parameter)
         {
-            // 被加载后无法显示,需要再次右键,故暂不使用
             if (LoadedEvent is not null && IsLoaded is false)
             {
                 LoadedEvent(ItemsSource);
@@ -56,7 +64,7 @@ namespace HKW.ViewModels.Controls
         /// 委托
         /// </summary>
         /// <param name="items">参数</param>
-        public delegate void LoadedHandler(IList<MenuItemVM> items);
+        public delegate void LoadedHandler(ObservableCollection<MenuItemVM> items);
         /// <summary>
         /// 事件
         /// </summary>

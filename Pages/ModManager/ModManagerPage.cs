@@ -21,7 +21,7 @@ using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
 using HKW.Libs.TomlParse;
 
-namespace StarsectorTools.Tools.ModManager
+namespace StarsectorTools.Pages.ModManager
 {
     public partial class ModManagerPage
     {

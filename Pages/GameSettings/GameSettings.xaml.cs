@@ -12,7 +12,7 @@ using I18n = StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n;
 using HKW.Libs.TomlParse;
 using HKW.Libs;
 
-namespace StarsectorTools.Tools.GameSettings
+namespace StarsectorTools.Pages.GameSettings
 {
     /// <summary>
     /// GameSettingsPage.xaml 的交互逻辑
