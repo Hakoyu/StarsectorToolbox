@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static HKW.Extension.SetExtension;
 
 namespace StarsectorTools.Libs.Utils
 {
@@ -24,6 +26,10 @@ namespace StarsectorTools.Libs.Utils
         /// 需要保存
         /// </summary>
         public bool NeedSave { get; }
+        /// <summary>
+        /// 本地化兼容集合
+        /// </summary>
+        public ReadOnlySet<string> I18nSet { get; }
         /// <summary>
         /// 改变语言
         /// </summary>

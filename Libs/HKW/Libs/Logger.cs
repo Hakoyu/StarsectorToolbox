@@ -131,6 +131,51 @@ namespace HKW.Libs.Log4Cs
             };
 
         /// <summary>
+        /// 记录调试日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        public static void Debug(string message) =>
+            RecordBase(message, Level.DEBUG, null, null);
+
+        /// <summary>
+        /// 记录信息日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        public static void Info(string message) =>
+            RecordBase(message, Level.INFO, null, null);
+        
+        /// <summary>
+        /// 记录警告日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        public static void Warring(string message) =>
+            RecordBase(message, Level.WARN, null, null);
+
+        /// <summary>
+        /// 记录错误日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        public static void Error(string message) =>
+            RecordBase(message, Level.ERROR, null, null);
+
+        /// <summary>
+        /// 记录错误日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="ex">异常</param>
+        public static void Error(string message, Exception ex) =>
+            RecordBase(message, Level.ERROR, ex, null);
+
+        /// <summary>
+        /// 记录错误日志
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <param name="ex">异常</param>
+        /// <param name="filterException">过滤器</param>
+        public static void Error(string message, Exception ex, bool filterException) =>
+            RecordBase(message, Level.ERROR, ex, filterException);
+
+        /// <summary>
         /// 记录日志
         /// </summary>
         /// <param name="message">消息</param>

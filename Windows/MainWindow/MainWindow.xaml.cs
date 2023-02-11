@@ -64,7 +64,7 @@ namespace StarsectorTools.Windows.MainWindow
             }
             // 初始化页面
             InitializePage();
-            STLog.WriteLine(I18n.InitializationCompleted);
+            Logger.Record(I18n.InitializationCompleted);
         }
 
         private void RegisterMessageBoxModel()

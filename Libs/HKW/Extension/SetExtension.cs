@@ -26,7 +26,7 @@ namespace HKW.Extension
             /// 初始化只读集合
             /// </summary>
             /// <param name="set">集合</param>
-            public ReadOnlySet(ISet<T> set)
+            public ReadOnlySet(HashSet<T> set)
             {
                 ArgumentNullException.ThrowIfNull(set);
                 _set = set;
@@ -58,7 +58,7 @@ namespace HKW.Extension
         /// <typeparam name="T">类型</typeparam>
         /// <param name="this">此集合</param>
         /// <returns>只读集合</returns>
-        public static ReadOnlySet<T> AsReadOnly<T>(this ISet<T> @this)
+        public static ReadOnlySet<T> AsReadOnly<T>(this HashSet<T> @this)
             where T : notnull
         {
             return new ReadOnlySet<T>(@this);

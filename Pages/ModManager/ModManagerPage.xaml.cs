@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Xml.Linq;
 using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
+using static HKW.Extension.SetExtension;
 using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
 
 namespace StarsectorTools.Pages.ModManager
@@ -26,6 +28,11 @@ namespace StarsectorTools.Pages.ModManager
         public string NameI18n { get; private set; } = "";
 
         public string DescriptionI18n { get; private set; } = "";
+
+        public ReadOnlySet<string> I18nSet { get; private set; } = new(new()
+        {
+            "zh-CN"
+        });
 
         /// <summary>
         /// 

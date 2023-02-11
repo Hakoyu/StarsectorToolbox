@@ -23,7 +23,7 @@ namespace StarsectorTools.Windows.MainWindow
         public static MainWindowViewModel Instance { get; private set; }
 
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
-        private ListBoxItemVM? previousSelectedPageItem;
+        private ListBoxItemVM? selectedItem;
         private ExpansionInfo? deubgExpansionInfo;
 
         /// <summary>拓展信息</summary>
@@ -527,8 +527,9 @@ namespace StarsectorTools.Windows.MainWindow
                 return;
             try
             {
-                if (page.ChangeLanguage() is false)
-                    RefreshPage(vm);
+                if (page.I18nSet.Contains(Thread.CurrentThread.CurrentCulture.Name))
+                    if (page.ChangeLanguage() is false)
+                        RefreshPage(vm);
             }
             catch (Exception ex)
             {
@@ -568,8 +569,6 @@ namespace StarsectorTools.Windows.MainWindow
         {
             if (vm.Tag is not ISTPage page)
                 return;
-            // 获取page中的Save方法并执行
-            // 用于保存page中已修改的数据
             try
             {
                 if (page.NeedSave)

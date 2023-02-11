@@ -47,9 +47,6 @@ namespace StarsectorTools.Windows.MainWindow
         #region PageItem
 
         [ObservableProperty]
-        private ListBoxItemVM? selectedPageItem;
-
-        [ObservableProperty]
         private ListBoxVM mainListBox = new();
 
         [ObservableProperty]
@@ -90,7 +87,6 @@ namespace StarsectorTools.Windows.MainWindow
         public MainWindowViewModel(string configData)
         {
             Instance = this;
-            MainListBox.SelectedItem = ExpansionListBox.SelectedItem = SelectedPageItem;
             InitializeDirectories();
             SetConfig(configData);
             InitializeExpansionPages();
@@ -104,12 +100,18 @@ namespace StarsectorTools.Windows.MainWindow
         }
 
         [RelayCommand]
-        private void MenuSelectionChanged(ListBoxItemVM item)
+        private void SelectionChanged(ListBoxItemVM item)
         {
+            // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
+            if (item is null || selectedItem == item)
+            {
+                selectedItem = null;
+                return;
+            }
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (previousSelectedPageItem?.IsSelected is true)
-                previousSelectedPageItem.IsSelected = false;
-            previousSelectedPageItem = item;
+            if (selectedItem?.IsSelected is true)
+                selectedItem.IsSelected = false;
+            selectedItem = item;
             ShowPage(item.Tag);
         }
 
@@ -124,12 +126,12 @@ namespace StarsectorTools.Windows.MainWindow
             if (page == infoPage)
             {
                 InfoButtonIsChecked = true;
-                SelectedPageItem = null;
+                MainListBox.SelectedItem = ExpansionListBox.SelectedItem = null;
             }
             else if (page == settingsPage)
             {
                 SettingsButtonIsChecked = true;
-                SelectedPageItem = null;
+                MainListBox.SelectedItem = ExpansionListBox.SelectedItem = null;
             }
             Logger.Record($"{I18n.ShowPage}: {page?.GetType().FullName}");
         }
@@ -154,7 +156,7 @@ namespace StarsectorTools.Windows.MainWindow
         }
 
         [RelayCommand]
-        internal void RefreshExpansionMenu()
+        private void RefreshExpansionMenu()
         {
             CloseExpansionPages();
             InitializeExpansionPages();
