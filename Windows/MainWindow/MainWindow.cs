@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using HKW.ViewModels.Dialog;
+using Panuon.WPF.UI;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages.GameSettings;
 using StarsectorTools.Pages.Info;
@@ -12,6 +14,11 @@ namespace StarsectorTools.Windows.MainWindow
 {
     public partial class MainWindow
     {
+        /// <summary>
+        /// 消息长度限制
+        /// </summary>
+        private int messageLengthLimits = 8192;
+
         /// <summary>StarsectorTools配置文件资源链接</summary>
         private static readonly Uri resourcesConfigUri =
             new("\\Resources\\Config.toml", UriKind.Relative);
@@ -29,6 +36,101 @@ namespace StarsectorTools.Windows.MainWindow
             // 注册主窗口模糊效果触发器
             ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
         }
+
+        private void RegisterMessageBoxModel()
+        {
+            // 消息长度限制
+            MessageBoxVM.InitializeHandler(
+                (d) =>
+                {
+                    string message =
+                        d.Message.Length < messageLengthLimits
+                            ? d.Message
+                            : d.Message[..messageLengthLimits]
+                                + $".........{I18n.ExcessivelyLongMessages}.........";
+                    var button = ButtonConverter(d.Button);
+                    var icon = IconConverter(d.Icon);
+                    MessageBoxResult result;
+                    if (d.Tag is false)
+                    {
+                        result = MessageBoxX.Show(message, d.Caption, button, icon);
+                    }
+                    else
+                    {
+                        SetBlurEffect();
+                        result = MessageBoxX.Show(message, d.Caption, button, icon);
+                        RemoveBlurEffect();
+                    }
+                    if (message.Length == messageLengthLimits)
+                        GC.Collect();
+                    return ResultConverter(result);
+                }
+            );
+            static MessageBoxButton ButtonConverter(MessageBoxVM.Button? button) =>
+                button switch
+                {
+                    MessageBoxVM.Button.OK => MessageBoxButton.OK,
+                    MessageBoxVM.Button.OKCancel => MessageBoxButton.OKCancel,
+                    MessageBoxVM.Button.YesNo => MessageBoxButton.YesNo,
+                    MessageBoxVM.Button.YesNoCancel => MessageBoxButton.YesNoCancel,
+                    _ => MessageBoxButton.OK,
+                };
+            static MessageBoxIcon IconConverter(MessageBoxVM.Icon? icon) =>
+                icon switch
+                {
+                    MessageBoxVM.Icon.None => MessageBoxIcon.None,
+                    MessageBoxVM.Icon.Info => MessageBoxIcon.Info,
+                    MessageBoxVM.Icon.Warning => MessageBoxIcon.Warning,
+                    MessageBoxVM.Icon.Error => MessageBoxIcon.Error,
+                    MessageBoxVM.Icon.Success => MessageBoxIcon.Success,
+                    MessageBoxVM.Icon.Question => MessageBoxIcon.Question,
+                    _ => MessageBoxIcon.Info,
+                };
+            static MessageBoxVM.Result ResultConverter(MessageBoxResult result) =>
+                result switch
+                {
+                    MessageBoxResult.None => MessageBoxVM.Result.None,
+                    MessageBoxResult.OK => MessageBoxVM.Result.OK,
+                    MessageBoxResult.Cancel => MessageBoxVM.Result.Cancel,
+                    MessageBoxResult.Yes => MessageBoxVM.Result.Yes,
+                    MessageBoxResult.No => MessageBoxVM.Result.No,
+                    _ => MessageBoxVM.Result.None,
+                };
+        }
+
+        private void RegisterOpenFileDialogModel()
+        {
+            OpenFileDialogVM.InitializeHandler(
+                (d) =>
+                {
+                    var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+                    {
+                        Title = d.Title,
+                        Filter = d.Filter,
+                        Multiselect = d.Multiselect,
+                    };
+                    openFileDialog.ShowDialog();
+                    return openFileDialog.FileNames;
+                }
+            );
+        }
+
+        private void RegisterSaveFileDialogModel()
+        {
+            SaveFileDialogVM.InitializeHandler(
+                (d) =>
+                {
+                    var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
+                    {
+                        Title = d.Title,
+                        Filter = d.Filter,
+                    };
+                    saveFileDialog.ShowDialog();
+                    return saveFileDialog.FileName;
+                }
+            );
+        }
+
 
         private void InitializePage()
         {
