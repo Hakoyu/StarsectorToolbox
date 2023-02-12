@@ -2,7 +2,7 @@
   x:Class="StarsectorTools.Pages.ModManager.ModArchiveing"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages.ModManager"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
@@ -16,7 +16,7 @@
   mc:Ignorable="d">
   <GroupBox
     Padding="10"
-    Header="{x:Static I18n:ModArchiveing_I18n.UnzipNow}"
+    Header="{x:Static I18n:ModArchiveingI18nRes.UnzipNow}"
     Style="{StaticResource GroupBoxBaseStyle}">
     <Grid>
       <Grid.RowDefinitions>
@@ -51,7 +51,7 @@
       <Label
         Width="80"
         HorizontalAlignment="Left"
-        Content="{x:Static I18n:ModArchiveing_I18n.TotalFileNumber}"
+        Content="{x:Static I18n:ModArchiveingI18nRes.TotalFileNumber}"
         Style="{StaticResource Label_Style}" />
       <Label
         x:Name="Label_Total"
@@ -63,7 +63,7 @@
         Width="60"
         Margin="5,0,0,0"
         HorizontalAlignment="Left"
-        Content="{x:Static I18n:ModArchiveing_I18n.Completed}"
+        Content="{x:Static I18n:ModArchiveingI18nRes.Completed}"
         Style="{StaticResource Label_Style}" />
       <Label
         x:Name="Label_Incomplete"
@@ -76,7 +76,7 @@
         Width="60"
         Margin="0,0,55,0"
         HorizontalAlignment="Right"
-        Content="{x:Static I18n:ModArchiveing_I18n.Incomplete}"
+        Content="{x:Static I18n:ModArchiveingI18nRes.Incomplete}"
         Style="{StaticResource Label_Style}" />
       <Label
         x:Name="Label_Completed"

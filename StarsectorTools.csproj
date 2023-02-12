@@ -39,98 +39,98 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Langs\Libs\GameInfo_I18n.Designer.cs">
+    <Compile Update="Langs\Libs\GameInfoI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>GameInfo_I18n.resx</DependentUpon>
+      <DependentUpon>GameInfoI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Libs\Utils_I18n.Designer.cs">
+    <Compile Update="Langs\Libs\UtilsI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Utils_I18n.resx</DependentUpon>
+      <DependentUpon>UtilsI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\MessageBoxX_I18n.Designer.cs">
+    <Compile Update="Langs\MessageBoxXI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>MessageBoxX_I18n.resx</DependentUpon>
+      <DependentUpon>MessageBoxXI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Pages\Info_I18n.Designer.cs">
+    <Compile Update="Langs\Pages\Info\InfoPageI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Info_I18n.resx</DependentUpon>
+      <DependentUpon>InfoPageI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Pages\Settings_I18n.Designer.cs">
+    <Compile Update="Langs\Pages\Settings\SettingsPageI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Settings_I18n.resx</DependentUpon>
+      <DependentUpon>SettingsPageI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Tools\GameSettings\GameSettings_I18n.Designer.cs">
+    <Compile Update="Langs\Pages\GameSettings\GameSettingsPageI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>GameSettings_I18n.resx</DependentUpon>
+      <DependentUpon>GameSettingsPageI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Tools\ModManager\AddUserGroup_I18n.Designer.cs">
+    <Compile Update="Langs\Pages\ModManager\AddUserGroupI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>AddUserGroup_I18n.resx</DependentUpon>
+      <DependentUpon>AddUserGroupI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Tools\ModManager\ModArchiveing_I18n.Designer.cs">
+    <Compile Update="Langs\Pages\ModManager\ModArchiveingI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ModArchiveing_I18n.resx</DependentUpon>
+      <DependentUpon>ModArchiveingI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Tools\ModManager\ModManagerPage_I18n.Designer.cs">
+    <Compile Update="Langs\Pages\ModManager\ModManagerPageI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ModManagerPage_I18n.resx</DependentUpon>
+      <DependentUpon>ModManagerPageI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Windows\MainWindow\MainWindow_I18n.Designer.cs">
+    <Compile Update="Langs\Windows\MainWindow\MainWindowI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>MainWindow_I18n.resx</DependentUpon>
+      <DependentUpon>MainWindowI18nRes.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Langs\Libs\GameInfo_I18n.resx">
+    <EmbeddedResource Update="Langs\Libs\GameInfoI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>GameInfo_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>GameInfoI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Libs\Utils_I18n.resx">
+    <EmbeddedResource Update="Langs\Libs\UtilsI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Utils_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>UtilsI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\MessageBoxX_I18n.resx">
+    <EmbeddedResource Update="Langs\MessageBoxXI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MessageBoxX_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>MessageBoxXI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Pages\Info_I18n.resx">
+    <EmbeddedResource Update="Langs\Pages\Info\InfoPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Info_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>InfoPageI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Pages\Settings_I18n.resx">
+    <EmbeddedResource Update="Langs\Pages\Settings\SettingsPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Settings_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>SettingsPageI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Tools\GameSettings\GameSettings_I18n.resx">
+    <EmbeddedResource Update="Langs\Pages\GameSettings\GameSettingsPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>GameSettings_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>GameSettingsPageI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Tools\ModManager\AddUserGroup_I18n.resx">
+    <EmbeddedResource Update="Langs\Pages\ModManager\AddUserGroupI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AddUserGroup_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>AddUserGroupI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Tools\ModManager\ModArchiveing_I18n.resx">
+    <EmbeddedResource Update="Langs\Pages\ModManager\ModArchiveingI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModArchiveing_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>ModArchiveingI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Tools\ModManager\ModManagerPage_I18n.resx">
+    <EmbeddedResource Update="Langs\Pages\ModManager\ModManagerPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModManagerPage_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>ModManagerPageI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Windows\MainWindow\MainWindow_I18n.resx">
+    <EmbeddedResource Update="Langs\Windows\MainWindow\MainWindowI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>MainWindow_I18n.Designer.cs</LastGenOutput>
+      <LastGenOutput>MainWindowI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

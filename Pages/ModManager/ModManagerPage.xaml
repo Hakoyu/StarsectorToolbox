@@ -2,7 +2,7 @@
   x:Class="StarsectorTools.Pages.ModManager.ModManagerPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Tools.ModManager"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages.ModManager"
   xmlns:ModTypeGroup="clr-namespace:StarsectorTools.Libs.Utils"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
@@ -29,14 +29,14 @@
       BasedOn="{StaticResource Button_Style}"
       TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource ColorAqua2}" />
-      <Setter Property="Content" Value="{x:Static I18n:ModManagerPage_I18n.Enabled}" />
-      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.Enabled}" />
+      <Setter Property="Content" Value="{x:Static I18n:ModManagerPageI18nRes.Enabled}" />
+      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.Enabled}" />
       <Setter Property="Tag" Value="true" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsEnabled}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorRed2}" />
-          <Setter Property="Content" Value="{x:Static I18n:ModManagerPage_I18n.Disabled}" />
-          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.Disabled}" />
+          <Setter Property="Content" Value="{x:Static I18n:ModManagerPageI18nRes.Disabled}" />
+          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.Disabled}" />
           <Setter Property="Tag" Value="false" />
         </DataTrigger>
       </Style.Triggers>
@@ -46,14 +46,14 @@
       BasedOn="{StaticResource Button_Style}"
       TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource ColorYellow2}" />
-      <Setter Property="Content" Value="{x:Static I18n:ModManagerPage_I18n.Collected}" />
-      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.Collected}" />
+      <Setter Property="Content" Value="{x:Static I18n:ModManagerPageI18nRes.Collected}" />
+      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.Collected}" />
       <Setter Property="Tag" Value="true" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsCollected}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
-          <Setter Property="Content" Value="{x:Static I18n:ModManagerPage_I18n.UnCollected}" />
-          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.UnCollected}" />
+          <Setter Property="Content" Value="{x:Static I18n:ModManagerPageI18nRes.UnCollected}" />
+          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.UnCollected}" />
           <Setter Property="Tag" Value="false" />
         </DataTrigger>
       </Style.Triggers>
@@ -63,11 +63,11 @@
       BasedOn="{StaticResource CenterAlignmentStyle}"
       TargetType="TextBlock">
       <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
-      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.SupportedVersionSameAsGameVersion}" />
+      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.SupportedVersionSameAsGameVersion}" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsSameToGameVersion}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorYellow2}" />
-          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.SupportedVersionNotSameAsGameVersion}" />
+          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.SupportedVersionNotSameAsGameVersion}" />
         </DataTrigger>
       </Style.Triggers>
     </Style>
@@ -77,12 +77,12 @@
       TargetType="TextBlock">
       <Setter Property="Background" Value="{DynamicResource ColorBlue2}" />
       <Setter Property="Text" Value="✅" />
-      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.IsUtilityMod}" />
+      <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.IsUtilityMod}" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsUtility}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
           <Setter Property="Text" Value="❎" />
-          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPage_I18n.NotUtilityMod}" />
+          <Setter Property="ToolTip" Value="{x:Static I18n:ModManagerPageI18nRes.NotUtilityMod}" />
         </DataTrigger>
       </Style.Triggers>
     </Style>
@@ -107,7 +107,7 @@
     </Style>
   </Page.Resources>
   <Grid>
-    <GroupBox Header="{x:Static I18n:ModManagerPage_I18n.ModManager}" Style="{StaticResource GroupBoxBaseStyle}">
+    <GroupBox Header="{x:Static I18n:ModManagerPageI18nRes.ModManager}" Style="{StaticResource GroupBoxBaseStyle}">
       <Grid>
         <Grid>
           <Grid.ColumnDefinitions>
@@ -128,28 +128,28 @@
               Style="{StaticResource ListBox_Style}">
               <ListBoxItem
                 Height="30"
-                Content="{x:Static I18n:ModManagerPage_I18n.AllMods}"
+                Content="{x:Static I18n:ModManagerPageI18nRes.AllMods}"
                 Style="{StaticResource ListBoxItem_Style}"
                 Tag="{x:Static ModTypeGroup:ModTypeGroup.All}"
-                ToolTip="{x:Static I18n:ModManagerPage_I18n.AllMods}">
+                ToolTip="{x:Static I18n:ModManagerPageI18nRes.AllMods}">
                 <pu:ListBoxItemHelper.Icon>
                   <emoji:TextBlock Text="🅰" />
                 </pu:ListBoxItemHelper.Icon>
               </ListBoxItem>
               <ListBoxItem
-                Content="{x:Static I18n:ModManagerPage_I18n.EnabledMod}"
+                Content="{x:Static I18n:ModManagerPageI18nRes.EnabledMod}"
                 Style="{StaticResource ListBoxItem_Style}"
                 Tag="{x:Static ModTypeGroup:ModTypeGroup.Enabled}"
-                ToolTip="{x:Static I18n:ModManagerPage_I18n.EnabledMod}">
+                ToolTip="{x:Static I18n:ModManagerPageI18nRes.EnabledMod}">
                 <pu:ListBoxItemHelper.Icon>
                   <emoji:TextBlock Text="✅" />
                 </pu:ListBoxItemHelper.Icon>
               </ListBoxItem>
               <ListBoxItem
-                Content="{x:Static I18n:ModManagerPage_I18n.DisabledMod}"
+                Content="{x:Static I18n:ModManagerPageI18nRes.DisabledMod}"
                 Style="{StaticResource ListBoxItem_Style}"
                 Tag="{x:Static ModTypeGroup:ModTypeGroup.Disabled}"
-                ToolTip="{x:Static I18n:ModManagerPage_I18n.DisabledMod}">
+                ToolTip="{x:Static I18n:ModManagerPageI18nRes.DisabledMod}">
                 <pu:ListBoxItemHelper.Icon>
                   <emoji:TextBlock Text="❎" />
                 </pu:ListBoxItemHelper.Icon>
@@ -157,7 +157,7 @@
               <ListBoxItem Padding="0">
                 <Expander
                   Padding="0"
-                  Header="{x:Static I18n:ModManagerPage_I18n.GroupedByModType}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.GroupedByModType}"
                   Style="{StaticResource Expander_Style}">
                   <ListBox
                     x:Name="ListBox_ModTypeGroup"
@@ -168,73 +168,73 @@
                     SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
                     Style="{StaticResource ListBox_Style}">
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.Libraries}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.Libraries}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.Libraries}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.Libraries}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.Libraries}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🔝" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.MegaMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.MegaMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.MegaMods}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.MegaMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.MegaMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="☢" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.FactionMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.FactionMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.FactionMods}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.FactionMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.FactionMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🏁" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.ContentExpansions}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ContentExpansions}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.ContentExpansions}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ContentExpansions}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ContentExpansions}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🆙" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.UtilityMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.UtilityMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.UtilityMods}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.UtilityMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.UtilityMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🛠" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.MiscellaneousMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.MiscellaneousMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.MiscellaneousMods}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.MiscellaneousMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.MiscellaneousMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🛄" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.BeautifyMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.BeautifyMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.BeautifyMods}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.BeautifyMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.BeautifyMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="✨" />
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.UnknownMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.UnknownMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.UnknownMods}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.UnknownMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.UnknownMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🆓" />
                       </pu:ListBoxItemHelper.Icon>
@@ -245,7 +245,7 @@
               <ListBoxItem Padding="0">
                 <Expander
                   Padding="0"
-                  Header="{x:Static I18n:ModManagerPage_I18n.UserGroup}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.UserGroup}"
                   IsExpanded="True"
                   Style="{StaticResource Expander_Style}">
                   <ListBox
@@ -257,10 +257,10 @@
                     SelectionChanged="ListBox_ModsGroupMenu_SelectionChanged"
                     Style="{StaticResource ListBox_Style}">
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPage_I18n.CollectedMods}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.CollectedMods}"
                       Style="{StaticResource ListBoxItem_Style}"
                       Tag="{x:Static ModTypeGroup:ModTypeGroup.Collected}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.CollectedMods}">
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.CollectedMods}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🌟" />
                       </pu:ListBoxItemHelper.Icon>
@@ -290,7 +290,7 @@
               HorizontalContentAlignment="Left"
               pu:ButtonHelper.Icon="➕"
               Click="Button_AddUserGroup_Click"
-              Content="{x:Static I18n:ModManagerPage_I18n.AddUserGroup}"
+              Content="{x:Static I18n:ModManagerPageI18nRes.AddUserGroup}"
               Style="{StaticResource Button_Style}" />
           </Grid>
           <Grid x:Name="Grid_DataGrid" Grid.Column="1">
@@ -335,7 +335,7 @@
                       Background="{x:Null}"
                       FontSize="20"
                       Text="🌟"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowModCollectState}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowModCollectState}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -352,9 +352,9 @@
                   <DataGridTemplateColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.EnabledState}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.EnabledState}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowModEnableState}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowModEnableState}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -371,9 +371,9 @@
                   <DataGridTemplateColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.Icon}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.Icon}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowModIcon}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowModIcon}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -389,9 +389,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.Name}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.Name}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowModName}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowModName}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -403,9 +403,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.Author}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.Author}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowModAuthor}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowModAuthor}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -416,9 +416,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.Version}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.Version}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowModVersion}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowModVersion}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -429,9 +429,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.GameVersion}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.GameVersion}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowGameVersion}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowGameVersion}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -441,9 +441,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.Utility}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.Utility}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowUtility}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowUtility}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -458,9 +458,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{x:Static I18n:ModManagerPage_I18n.UserDescription}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.UserDescription}"
                       Style="{StaticResource Label_Style}"
-                      ToolTip="{x:Static I18n:ModManagerPage_I18n.ShowUserDescription}" />
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ShowUserDescription}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
               </DataGrid.Columns>
@@ -472,7 +472,7 @@
                       Margin="10,0,0,0"
                       Padding="5,0,5,0"
                       Click="Button_EnableDependencies_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.EnableDependencies}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.EnableDependencies}"
                       Style="{StaticResource Button_Style}"
                       ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                     <Label
@@ -493,7 +493,7 @@
               Style="{StaticResource TextBox_Style}"
               TextChanged="TextBox_SearchMods_TextChanged"
               TextWrapping="Wrap"
-              ToolTip="{x:Static I18n:ModManagerPage_I18n.SearchMod}" />
+              ToolTip="{x:Static I18n:ModManagerPageI18nRes.SearchMod}" />
             <!--  TextBox输入占位符  -->
             <Label
               Width="{Binding Width, ElementName=TextBox_SearchMods}"
@@ -502,7 +502,7 @@
               HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_SearchMods}"
               VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_SearchMods}"
               Background="{x:Null}"
-              Content="{x:Static I18n:ModManagerPage_I18n.SearchMod}"
+              Content="{x:Static I18n:ModManagerPageI18nRes.SearchMod}"
               FontSize="16"
               IsEnabled="False"
               IsHitTestVisible="False">
@@ -534,7 +534,7 @@
               SelectionChanged="ComboBox_SearchType_SelectionChanged"
               Style="{StaticResource ComboBox_Style}">
               <ComboBoxItem
-                Content="{x:Static I18n:ModManagerPage_I18n.Name}"
+                Content="{x:Static I18n:ModManagerPageI18nRes.Name}"
                 Style="{StaticResource ComboBoxItem_Style}"
                 Tag="Name" />
               <ComboBoxItem
@@ -542,11 +542,11 @@
                 Style="{StaticResource ComboBoxItem_Style}"
                 Tag="Id" />
               <ComboBoxItem
-                Content="{x:Static I18n:ModManagerPage_I18n.Author}"
+                Content="{x:Static I18n:ModManagerPageI18nRes.Author}"
                 Style="{StaticResource ComboBoxItem_Style}"
                 Tag="Author" />
               <ComboBoxItem
-                Content="{x:Static I18n:ModManagerPage_I18n.UserDescription}"
+                Content="{x:Static I18n:ModManagerPageI18nRes.UserDescription}"
                 Style="{StaticResource ComboBoxItem_Style}"
                 Tag="UserDescription" />
             </ComboBox>
@@ -559,7 +559,7 @@
               <StackPanel>
                 <Expander
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.OpenDirectory}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.OpenDirectory}"
                   Style="{StaticResource Expander_Style}">
                   <StackPanel>
                     <Button
@@ -567,49 +567,49 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_OpenModDirectory_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.OpenModsDirectory}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.OpenModsDirectory}"
                       Style="{StaticResource Button_Style}" />
                     <Button
                       x:Name="Button_OpenBackupDirectory"
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_OpenBackupDirectory_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.OpenBackupDirectory}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.OpenBackupDirectory}"
                       Style="{StaticResource Button_Style}" />
                     <Button
                       x:Name="Button_OpenSaveDirectory"
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_OpenSaveDirectory_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.OpenSaveDirectory}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.OpenSaveDirectory}"
                       Style="{StaticResource Button_Style}" />
                   </StackPanel>
                 </Expander>
                 <Expander
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.ManipulateUserData}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.ManipulateUserData}"
                   Style="{StaticResource Expander_Style}"
-                  ToolTip="{x:Static I18n:ModManagerPage_I18n.ManipulateUserDataToolTip}">
+                  ToolTip="{x:Static I18n:ModManagerPageI18nRes.ManipulateUserDataToolTip}">
                   <StackPanel>
                     <Button
                       x:Name="Button_ImportUserData"
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ImportUserData_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ImportUserData}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ImportUserData}"
                       Style="{StaticResource Button_Style}" />
                     <Button
                       x:Name="Button_ExportUserData"
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ExportUserData_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ExportUserData}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ExportUserData}"
                       Style="{StaticResource Button_Style}" />
                   </StackPanel>
                 </Expander>
                 <Expander
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.ManipulateUserGroup}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.ManipulateUserGroup}"
                   Style="{StaticResource Expander_Style}">
                   <StackPanel>
                     <Button
@@ -617,7 +617,7 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ImportUserGroup_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ImportUserGroup}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ImportUserGroup}"
                       Style="{StaticResource Button_Style}" />
                     <ComboBox
                       x:Name="ComboBox_ExportUserGroup"
@@ -627,7 +627,7 @@
                       SelectedIndex="0"
                       Style="{StaticResource ComboBox_Style}">
                       <ComboBoxItem
-                        Content="{x:Static I18n:ModManagerPage_I18n.All}"
+                        Content="{x:Static I18n:ModManagerPageI18nRes.All}"
                         Style="{StaticResource ComboBoxItem_Style}"
                         Tag="All" />
                     </ComboBox>
@@ -636,13 +636,13 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ExportUserGroup_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ExportUserGroup}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ExportUserGroup}"
                       Style="{StaticResource Button_Style}" />
                   </StackPanel>
                 </Expander>
                 <Expander
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.ManipulateEnabledList}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.ManipulateEnabledList}"
                   Style="{StaticResource Expander_Style}">
                   <StackPanel>
                     <Button
@@ -650,28 +650,28 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ImportEnabledListFromSave_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ImportFromSave}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ImportFromSave}"
                       Style="{StaticResource Button_Style}" />
                     <Button
                       x:Name="Button_ImportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ImportEnabledList_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ImportEnabledList}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ImportEnabledList}"
                       Style="{StaticResource Button_Style}" />
                     <Button
                       x:Name="Button_ExportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_ExportEnabledList_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.ExportEnabledList}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ExportEnabledList}"
                       Style="{StaticResource Button_Style}" />
                   </StackPanel>
                 </Expander>
                 <Expander
                   x:Name="Expander_RandomEnable"
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.RandomEnableMods}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.RandomEnableMods}"
                   Style="{StaticResource Expander_Style}">
                   <StackPanel>
                     <Grid Margin="0,0,0,5">
@@ -681,7 +681,7 @@
                         InputMethod.IsInputMethodEnabled="False"
                         PreviewTextInput="TextBox_NumberInput"
                         Style="{StaticResource TextBox_Style}"
-                        ToolTip="{x:Static I18n:ModManagerPage_I18n.MinRandomNumber}" />
+                        ToolTip="{x:Static I18n:ModManagerPageI18nRes.MinRandomNumber}" />
                       <!--  TextBox输入占位符  -->
                       <Label
                         Width="{Binding Width, ElementName=TextBox_MinRandomSize}"
@@ -690,7 +690,7 @@
                         HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MinRandomSize}"
                         VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MinRandomSize}"
                         Background="{x:Null}"
-                        Content="{x:Static I18n:ModManagerPage_I18n.MinRandomNumber}"
+                        Content="{x:Static I18n:ModManagerPageI18nRes.MinRandomNumber}"
                         IsEnabled="False"
                         IsHitTestVisible="False">
                         <Label.Style>
@@ -718,7 +718,7 @@
                         InputMethod.IsInputMethodEnabled="False"
                         PreviewTextInput="TextBox_NumberInput"
                         Style="{StaticResource TextBox_Style}"
-                        ToolTip="{x:Static I18n:ModManagerPage_I18n.MaxRandomNumber}" />
+                        ToolTip="{x:Static I18n:ModManagerPageI18nRes.MaxRandomNumber}" />
                       <!--  TextBox输入占位符  -->
                       <Label
                         Width="{Binding Width, ElementName=TextBox_MaxRandomSize}"
@@ -727,7 +727,7 @@
                         HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MaxRandomSize}"
                         VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MaxRandomSize}"
                         Background="{x:Null}"
-                        Content="{x:Static I18n:ModManagerPage_I18n.MaxRandomNumber}"
+                        Content="{x:Static I18n:ModManagerPageI18nRes.MaxRandomNumber}"
                         IsEnabled="False"
                         IsHitTestVisible="False">
                         <Label.Style>
@@ -753,7 +753,7 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Click="Button_RandomMods_Click"
-                      Content="{x:Static I18n:ModManagerPage_I18n.RandomEnableMods}">
+                      Content="{x:Static I18n:ModManagerPageI18nRes.RandomEnableMods}">
                       <Button.Style>
                         <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
                           <Setter Property="IsEnabled" Value="True" />
@@ -778,7 +778,7 @@
               Margin="5,0,5,5"
               VerticalAlignment="Bottom"
               Click="Button_Save_Click"
-              Content="{x:Static I18n:ModManagerPage_I18n.SaveConfig}"
+              Content="{x:Static I18n:ModManagerPageI18nRes.SaveConfig}"
               Style="{StaticResource RemindStyle}"
               Tag="False">
               <pu:ButtonHelper.Icon>
@@ -817,7 +817,7 @@
             Grid.Column="1"
             Margin="9,0,0,0"
             Background="{DynamicResource ColorBG}"
-            Header="{x:Static I18n:ModManagerPage_I18n.ModInfo}"
+            Header="{x:Static I18n:ModManagerPageI18nRes.ModInfo}"
             Style="{StaticResource GroupBoxBaseStyle}">
             <ScrollViewer>
               <StackPanel>
@@ -839,7 +839,7 @@
                     ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                     <Label.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </Label.ContextMenu>
                   </Label>
@@ -850,7 +850,7 @@
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Content="{x:Static I18n:ModManagerPage_I18n.Name}"
+                    Content="{x:Static I18n:ModManagerPageI18nRes.Name}"
                     Style="{StaticResource Label_Style}" />
                   <Label
                     x:Name="Label_ModName"
@@ -861,7 +861,7 @@
                     ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                     <Label.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </Label.ContextMenu>
                   </Label>
@@ -871,7 +871,7 @@
                     Height="30"
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
-                    Content="{x:Static I18n:ModManagerPage_I18n.Version}"
+                    Content="{x:Static I18n:ModManagerPageI18nRes.Version}"
                     Style="{StaticResource Label_Style}" />
                   <Label
                     x:Name="Label_ModVersion"
@@ -881,7 +881,7 @@
                     ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                     <Label.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </Label.ContextMenu>
                   </Label>
@@ -894,7 +894,7 @@
                     Height="30"
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
-                    Content="{x:Static I18n:ModManagerPage_I18n.GameVersion}"
+                    Content="{x:Static I18n:ModManagerPageI18nRes.GameVersion}"
                     Style="{StaticResource Label_Style}" />
                   <Label
                     x:Name="Label_GameVersion"
@@ -904,7 +904,7 @@
                     ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                     <Label.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="Lable_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </Label.ContextMenu>
                   </Label>
@@ -921,14 +921,14 @@
                     ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
                     <Button.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="Button_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="Button_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </Button.ContextMenu>
                   </Button>
                 </Grid>
                 <GroupBox
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.Author}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.Author}"
                   Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBlock
                     x:Name="TextBlock_ModAuthor"
@@ -938,7 +938,7 @@
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
                     <TextBlock.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </TextBlock.ContextMenu>
                   </TextBlock>
@@ -946,7 +946,7 @@
                 <GroupBox
                   x:Name="GroupBox_ModDependencies"
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.Dependencies}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.Dependencies}"
                   Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBlock
                     x:Name="TextBlock_ModDependencies"
@@ -955,14 +955,14 @@
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
                     <TextBlock.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </TextBlock.ContextMenu>
                   </TextBlock>
                 </GroupBox>
                 <GroupBox
                   Margin="0,0,0,5"
-                  Header="{x:Static I18n:ModManagerPage_I18n.Description}"
+                  Header="{x:Static I18n:ModManagerPageI18nRes.Description}"
                   Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBlock
                     x:Name="TextBlock_ModDescription"
@@ -971,12 +971,12 @@
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
                     <TextBlock.ContextMenu>
                       <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManagerPage_I18n.CopyInfo}" />
+                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{x:Static I18n:ModManagerPageI18nRes.CopyInfo}" />
                       </ContextMenu>
                     </TextBlock.ContextMenu>
                   </TextBlock>
                 </GroupBox>
-                <GroupBox Header="{x:Static I18n:ModManagerPage_I18n.UserDescription}" Style="{StaticResource GroupBoxBaseStyle}">
+                <GroupBox Header="{x:Static I18n:ModManagerPageI18nRes.UserDescription}" Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBox
                     x:Name="TextBox_UserDescription"
                     KeyDown="TextBox_UserDescription_KeyDown"

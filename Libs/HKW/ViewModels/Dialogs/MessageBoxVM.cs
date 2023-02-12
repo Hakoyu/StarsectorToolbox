@@ -1,15 +1,36 @@
-﻿namespace HKW.ViewModels.Dialog
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace HKW.ViewModels.Dialog
 {
     /// <summary>
     /// 消息窗口模型
     /// </summary>
-    public class MessageBoxVM
+    public partial class MessageBoxVM : ObservableObject
     {
         /// <summary>
         /// 描述
         /// </summary>
-        public class Description
+        public partial class Description : ObservableObject
         {
+            #region CheckBox
+            /// <summary>启用复选框</summary>
+            [ObservableProperty]
+            private bool showCheckBox = false;
+            /// <summary>复选框信息</summary>
+            [ObservableProperty]
+            private string? checkBoxMessage;
+            /// <summary>复选框被点击</summary>
+            [ObservableProperty]
+            private bool checkBoxIsChecked = false;
+            #endregion
+            #region TextBox
+            /// <summary>启用文本框</summary>
+            [ObservableProperty]
+            private bool showTextBox = false;
+            /// <summary>文本框内容</summary>
+            [ObservableProperty]
+            private bool textBoxText = false;
+            #endregion
             /// <summary>拥有者</summary>
             public object? Owner { get; set; }
             /// <summary>标记</summary>

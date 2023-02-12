@@ -18,11 +18,6 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>拓展信息文件</summary>
         public static string ExpansionInfoFile => "Expansion.toml";
 
-        /// <summary>拓展调试目录</summary>
-        internal static string ExpansionDebugPath { get; set; } = string.Empty;
-        /// <summary>拓展调试Id</summary>
-        internal static string ExpansionDebugId { get; set; } = string.Empty;
-
         /// <summary>游戏版本</summary>
         public static string Version => "0.8.0.0";
     }

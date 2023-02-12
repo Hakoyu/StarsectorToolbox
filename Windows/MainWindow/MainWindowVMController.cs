@@ -11,7 +11,7 @@ using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialog;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -20,11 +20,13 @@ namespace StarsectorTools.Windows.MainWindow
         /// <summary>
         /// 单例化
         /// </summary>
-        public static MainWindowViewModel Instance { get; private set; }
+        public static MainWindowViewModel Instance { get; private set; } = null!;
 
         private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
         private ListBoxItemVM? selectedItem;
-        private ExpansionInfo? deubgExpansionInfo;
+        private ExpansionInfo? deubgItemExpansionInfo;
+        private ListBoxItemVM? deubgItem;
+        private string? deubgItemPath;
 
         /// <summary>拓展信息</summary>
         private class ExpansionInfo
@@ -208,23 +210,21 @@ namespace StarsectorTools.Windows.MainWindow
                     // 读取设置
                     var toml = TOML.Parse(ST.ConfigTomlFile);
                     // 语言
-                    var cultureInfo = CultureInfo.GetCultureInfo(
-                         toml["Extras"]["Lang"].AsString
-                     );
+                    var cultureInfo = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
                     if (Thread.CurrentThread.CurrentUICulture.Name != cultureInfo.Name)
                     {
                         Thread.CurrentThread.CurrentUICulture = cultureInfo;
                         ChangeLanguage();
                     }
                     // 日志等级
-                    Logger.Options.DefaultLevel = Logger.LevelConverter(
+                    Logger.Options.DefaultLevel = Logger.LogLevelConverter(
                         toml["Extras"]["LogLevel"].AsString
                     );
                     // 游戏目录
                     if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
                     {
                         if (
-                            !(
+                            (
                                 MessageBoxVM.Show(
                                     new(I18n.GameNotFound_SelectAgain)
                                     {
@@ -233,7 +233,7 @@ namespace StarsectorTools.Windows.MainWindow
                                     }
                                 ) is MessageBoxVM.Result.Yes
                                 && GameInfo.GetGameDirectory()
-                            )
+                            ) is false
                         )
                         {
                             MessageBoxVM.Show(
@@ -247,15 +247,14 @@ namespace StarsectorTools.Windows.MainWindow
                         toml["Game"]["Path"] = GameInfo.BaseDirectory;
                     }
                     // 拓展调试目录
-                    string filePath = toml["Expansion"]["DebugPath"].AsString;
+                    string debugPath = toml["Expansion"]["DebugPath"].AsString;
                     if (
-                        !string.IsNullOrEmpty(filePath)
-                        && GetExpansionInfo(filePath, true) is ExpansionInfo info
+                        !string.IsNullOrEmpty(debugPath)
+                        && GetExpansionInfo(debugPath, true) is ExpansionInfo info
                     )
                     {
-                        deubgExpansionInfo = info;
-                        ST.ExpansionDebugPath = filePath;
-                        ST.ExpansionDebugId = info.Id;
+                        deubgItemExpansionInfo = info;
+                        deubgItemPath = debugPath;
                     }
                     else
                         toml["Expansion"]["DebugPath"] = "";
@@ -312,17 +311,17 @@ namespace StarsectorTools.Windows.MainWindow
             Logger.Record($"{I18n.ConfigFileCreationCompleted} {I18n.Path}: {ST.ConfigTomlFile}");
         }
 
-        private ExpansionInfo? GetExpansionInfo(string directory, bool loadInMemory = false)
+        private ExpansionInfo? GetExpansionInfo(string path, bool loadInMemory = false)
         {
-            if (string.IsNullOrEmpty(directory))
+            if (string.IsNullOrEmpty(path))
             {
-                Logger.Record(I18n.ExpansionPathIsEmpty, Logger.Level.WARN);
+                Logger.Record(I18n.ExpansionPathIsEmpty, LogLevel.WARN);
                 MessageBoxVM.Show(
                     new(I18n.ExpansionPathIsEmpty) { Icon = MessageBoxVM.Icon.Warning }
                 );
                 return null;
             }
-            string tomlFile = $"{directory}\\{ST.ExpansionInfoFile}";
+            string tomlFile = $"{path}\\{ST.ExpansionInfoFile}";
             try
             {
                 // 判断文件存在性
@@ -330,7 +329,7 @@ namespace StarsectorTools.Windows.MainWindow
                 {
                     Logger.Record(
                         $"{I18n.ExpansionTomlFileNotFound} {I18n.Path}: {tomlFile}",
-                        Logger.Level.WARN
+                        LogLevel.WARN
                     );
                     MessageBoxVM.Show(
                         new($"{I18n.ExpansionTomlFileNotFound}\n{I18n.Path}: {tomlFile}")
@@ -341,13 +340,13 @@ namespace StarsectorTools.Windows.MainWindow
                     return null;
                 }
                 var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
-                var assemblyFile = $"{directory}\\{expansionInfo.ExpansionFile}";
+                var assemblyFile = $"{path}\\{expansionInfo.ExpansionFile}";
                 // 检测是否有相同的拓展
                 if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
                 {
                     Logger.Record(
                         $"{I18n.ExpansionAlreadyExists} {I18n.Path}: {tomlFile}",
-                        Logger.Level.WARN
+                        LogLevel.WARN
                     );
                     MessageBoxVM.Show(
                         new($"{I18n.ExpansionAlreadyExists}\n{I18n.Path}: {tomlFile}")
@@ -362,7 +361,7 @@ namespace StarsectorTools.Windows.MainWindow
                 {
                     Logger.Record(
                         $"{I18n.ExpansionFileError} {I18n.Path}: {tomlFile}",
-                        Logger.Level.WARN
+                        LogLevel.WARN
                     );
                     MessageBoxVM.Show(
                         new($"{I18n.ExpansionFileError}\n{I18n.Path}: {tomlFile}")
@@ -389,7 +388,7 @@ namespace StarsectorTools.Windows.MainWindow
                 {
                     Logger.Record(
                         $"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}",
-                        Logger.Level.WARN
+                        LogLevel.WARN
                     );
                     MessageBoxVM.Show(
                         new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
@@ -404,7 +403,7 @@ namespace StarsectorTools.Windows.MainWindow
                 {
                     Logger.Record(
                         $"{I18n.ExpansionIdError} {I18n.Path}: {tomlFile}",
-                        Logger.Level.WARN
+                        LogLevel.WARN
                     );
                     MessageBoxVM.Show(
                         new($"{I18n.ExpansionIdError}\n{I18n.Path}: {tomlFile}")
@@ -446,8 +445,6 @@ namespace StarsectorTools.Windows.MainWindow
             toml.SaveTo(ST.ConfigTomlFile);
         }
 
-
-
         private void InitializeExpansionPages()
         {
             DirectoryInfo dirs = new(ST.ExpansionDirectories);
@@ -474,34 +471,48 @@ namespace StarsectorTools.Windows.MainWindow
         private void InitializeExpansionDebugPage()
         {
             // 添加拓展调试页面
-            if (deubgExpansionInfo is not null)
+            if (deubgItemExpansionInfo is not null)
             {
-                AddMainPageItem(
-                    new()
-                    {
-                        Icon = deubgExpansionInfo.Icon,
-                        Tag = deubgExpansionInfo.ExpansionPage,
-                    }
-                );
+                deubgItem = new()
+                {
+                    Icon = deubgItemExpansionInfo.Icon,
+                    Tag = deubgItemExpansionInfo.ExpansionPage,
+                };
+                AddMainPageItem(deubgItem);
             }
         }
 
-        internal void RegisterChangeWindowEffectEvent(ChangeWindowEffectHandler setHandler, ChangeWindowEffectHandler removeHandler)
+        internal void RefreshExpansionDebugPage(string path)
+        {
+            var isSelected = MainListBox.SelectedItem == deubgItem;
+            MainListBox.Remove(deubgItem);
+            InitializeExpansionDebugPage();
+            if (isSelected)
+                MainListBox.SelectedItem = deubgItem;
+        }
+        #region WindowEffect
+
+        internal void RegisterChangeWindowEffectEvent(
+            ChangeWindowEffectHandler setHandler,
+            ChangeWindowEffectHandler removeHandler
+        )
         {
             SetWindowEffectEvent += setHandler;
             RemoveWindowEffectEvent += removeHandler;
         }
 
-        public void SetBlurEffect()
+        internal void SetBlurEffect()
         {
             if (SetWindowEffectEvent is not null)
                 SetWindowEffectEvent();
         }
-        public void RemoveBlurEffect()
+
+        internal void RemoveBlurEffect()
         {
             if (RemoveWindowEffectEvent is not null)
                 RemoveWindowEffectEvent();
         }
+        #endregion
 
         #region ChangeLanguageToPage
         private void ChangeLanguageToAllPages()
@@ -509,6 +520,7 @@ namespace StarsectorTools.Windows.MainWindow
             ChangeLanguageToMainPages();
             ChangeLanguageToExpansionPages();
         }
+
         private void ChangeLanguageToMainPages()
         {
             foreach (var item in MainListBox)
@@ -692,10 +704,12 @@ namespace StarsectorTools.Windows.MainWindow
         /// 改变窗口效果委托
         /// </summary>
         internal delegate void ChangeWindowEffectHandler();
+
         /// <summary>
         /// 设置窗口效果事件
         /// </summary>
         internal event ChangeWindowEffectHandler? SetWindowEffectEvent;
+
         /// <summary>
         /// 取消窗口效果事件
         /// </summary>

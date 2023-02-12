@@ -10,26 +10,26 @@ using System.Threading.Tasks;
 
 namespace HKW.Libs.Log4Cs
 {
+    /// <summary>日志等级</summary>
+    public enum LogLevel
+    {
+        /// <summary>调试</summary>
+        DEBUG,
+
+        /// <summary>提示</summary>
+        INFO,
+
+        /// <summary>警告</summary>
+        WARN,
+
+        /// <summary>错误</summary>
+        ERROR
+    }
     /// <summary>
     /// 记录器
     /// </summary>
     public class Logger
     {
-        /// <summary>日志等级</summary>
-        public enum Level
-        {
-            /// <summary>调试</summary>
-            DEBUG,
-
-            /// <summary>提示</summary>
-            INFO,
-
-            /// <summary>警告</summary>
-            WARN,
-
-            /// <summary>错误</summary>
-            ERROR
-        }
         /// <summary>日志文件</summary>
         public static string LogFile { get; private set; } = string.Empty;
 
@@ -53,7 +53,7 @@ namespace HKW.Libs.Log4Cs
             /// <summary>
             /// 默认日志等级
             /// </summary>
-            public Level DefaultLevel { get; set; } = Level.INFO;
+            public LogLevel DefaultLevel { get; set; } = LogLevel.INFO;
             /// <summary>
             /// 默认附加
             /// </summary>
@@ -120,14 +120,14 @@ namespace HKW.Libs.Log4Cs
         /// </summary>
         /// <param name="str">字符串</param>
         /// <returns>日志等级</returns>
-        public static Level LevelConverter(string str) =>
+        public static LogLevel LogLevelConverter(string str) =>
             str.ToUpper() switch
             {
-                nameof(Level.DEBUG) => Level.DEBUG,
-                nameof(Level.INFO) => Level.INFO,
-                nameof(Level.WARN) => Level.WARN,
-                nameof(Level.ERROR) => Level.ERROR,
-                _ => Level.INFO
+                nameof(LogLevel.DEBUG) => LogLevel.DEBUG,
+                nameof(LogLevel.INFO) => LogLevel.INFO,
+                nameof(LogLevel.WARN) => LogLevel.WARN,
+                nameof(LogLevel.ERROR) => LogLevel.ERROR,
+                _ => LogLevel.INFO
             };
 
         /// <summary>
@@ -135,28 +135,28 @@ namespace HKW.Libs.Log4Cs
         /// </summary>
         /// <param name="message">消息</param>
         public static void Debug(string message) =>
-            RecordBase(message, Level.DEBUG, null, null);
+            RecordBase(message, LogLevel.DEBUG, null, null);
 
         /// <summary>
         /// 记录信息日志
         /// </summary>
         /// <param name="message">消息</param>
         public static void Info(string message) =>
-            RecordBase(message, Level.INFO, null, null);
-        
+            RecordBase(message, LogLevel.INFO, null, null);
+
         /// <summary>
         /// 记录警告日志
         /// </summary>
         /// <param name="message">消息</param>
         public static void Warring(string message) =>
-            RecordBase(message, Level.WARN, null, null);
+            RecordBase(message, LogLevel.WARN, null, null);
 
         /// <summary>
         /// 记录错误日志
         /// </summary>
         /// <param name="message">消息</param>
         public static void Error(string message) =>
-            RecordBase(message, Level.ERROR, null, null);
+            RecordBase(message, LogLevel.ERROR, null, null);
 
         /// <summary>
         /// 记录错误日志
@@ -164,7 +164,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="message">消息</param>
         /// <param name="ex">异常</param>
         public static void Error(string message, Exception ex) =>
-            RecordBase(message, Level.ERROR, ex, null);
+            RecordBase(message, LogLevel.ERROR, ex, null);
 
         /// <summary>
         /// 记录错误日志
@@ -173,7 +173,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="ex">异常</param>
         /// <param name="filterException">过滤器</param>
         public static void Error(string message, Exception ex, bool filterException) =>
-            RecordBase(message, Level.ERROR, ex, filterException);
+            RecordBase(message, LogLevel.ERROR, ex, filterException);
 
         /// <summary>
         /// 记录日志
@@ -187,7 +187,7 @@ namespace HKW.Libs.Log4Cs
         /// </summary>
         /// <param name="message">消息</param>
         /// <param name="logLevel">日志等级</param>
-        public static void Record(string message, Level logLevel) =>
+        public static void Record(string message, LogLevel logLevel) =>
             RecordBase(message, logLevel, null, null);
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="message">消息</param>
         /// <param name="ex">异常</param>
         public static void Record(string message, Exception ex) =>
-            RecordBase(message, Level.ERROR, ex, null);
+            RecordBase(message, LogLevel.ERROR, ex, null);
 
         /// <summary>
         /// 记录日志
@@ -205,7 +205,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="ex">异常</param>
         /// <param name="filterException">过滤器</param>
         public static void Record(string message, Exception ex, bool filterException) =>
-            RecordBase(message, Level.ERROR, ex, filterException);
+            RecordBase(message, LogLevel.ERROR, ex, filterException);
 
         /// <summary>
         /// 记录日志
@@ -213,7 +213,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="message">消息</param>
         /// <param name="logLevel">日志等级</param>
         /// <param name="ex">异常</param>
-        public static void Record(string message, Level logLevel, Exception ex) =>
+        public static void Record(string message, LogLevel logLevel, Exception ex) =>
             RecordBase(message, logLevel, ex, null);
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="logLevel">日志等级</param>
         /// <param name="ex">异常</param>
         /// <param name="filterException">过滤器</param>
-        public static void Record(string message, Level logLevel, Exception ex, bool filterException) =>
+        public static void Record(string message, LogLevel logLevel, Exception ex, bool filterException) =>
             RecordBase(message, logLevel, ex, filterException);
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="logLevel">日志等级</param>
         /// <param name="ex">异常</param>
         /// <param name="filterException">过滤器</param>
-        private static void RecordBase(string message, Level logLevel, Exception? ex, bool? filterException)
+        private static void RecordBase(string message, LogLevel logLevel, Exception? ex, bool? filterException)
         {
             rwLockS.EnterWriteLock();
             try
@@ -296,10 +296,10 @@ namespace HKW.Libs.Log4Cs
             return dateTime;
         }
 
-        private static string GetOriginMessage(Level logLevel)
+        private static string GetOriginMessage(LogLevel logLevel)
         {
             string origin;
-            if (logLevel == Level.DEBUG)
+            if (logLevel == LogLevel.DEBUG)
                 origin = GetOrigin(true, true, true);
             else
                 origin = GetOrigin(Options.DefaultShowClass, Options.DefaultShowNameSpace, Options.DefaultShowMethod);

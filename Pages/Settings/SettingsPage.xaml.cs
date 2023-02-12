@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Windows.MainWindow;
-using I18n = StarsectorTools.Langs.Pages.Settings_I18n;
+using I18n = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
 
 namespace StarsectorTools.Pages.Settings
 {
@@ -15,39 +15,40 @@ namespace StarsectorTools.Pages.Settings
     /// </summary>
     public partial class SettingsPage : Page
     {
+        internal SettingsPageViewModel ViewModel => (SettingsPageViewModel)DataContext;
         internal SettingsPage()
         {
             InitializeComponent();
             ShowCurrentLanguage();
             ShowCurrentLogLevel();
-            TextBox_ExpansionDebugPath.Text = ST.ExpansionDebugPath;
+            DataContext = new SettingsPageViewModel(true);
             isFirst = false;
         }
 
         private void ShowCurrentLanguage()
         {
-            foreach (ComboBoxItem item in ComboBox_Language.Items)
-            {
-                if (item.ToolTip.ToString() == Thread.CurrentThread.CurrentUICulture.Name)
-                {
-                    ComboBox_Language.SelectedItem = item;
-                    return;
-                }
-            }
-            ComboBox_Language.SelectedIndex = 0;
+            //foreach (ComboBoxItem item in ComboBox_Language.Items)
+            //{
+            //    if (item.ToolTip.ToString() == Thread.CurrentThread.CurrentUICulture.Name)
+            //    {
+            //        ComboBox_Language.SelectedItem = item;
+            //        return;
+            //    }
+            //}
+            //ComboBox_Language.SelectedIndex = 0;
         }
 
         private void ShowCurrentLogLevel()
         {
-            foreach (ComboBoxItem item in ComboBox_LogLevel.Items)
-            {
-                if (item.ToolTip.ToString() == STLog.LogLevel.ToString())
-                {
-                    ComboBox_LogLevel.SelectedItem = item;
-                    return;
-                }
-            }
-            ComboBox_LogLevel.SelectedIndex = 1;
+            //foreach (ComboBoxItem item in ComboBox_LogLevel.Items)
+            //{
+            //    if (item.ToolTip.ToString() == STLog.LogLevel.ToString())
+            //    {
+            //        ComboBox_LogLevel.SelectedItem = item;
+            //        return;
+            //    }
+            //}
+            //ComboBox_LogLevel.SelectedIndex = 1;
         }
 
         private void ComboBox_Language_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -59,7 +60,7 @@ namespace StarsectorTools.Pages.Settings
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(item.ToolTip.ToString()!);
                 SaveLanguage(Thread.CurrentThread.CurrentUICulture);
                 ChangeLanguage();
-                MainWindow.ViewModel.ChangeLanguage();
+                //MainWindow.ViewModel.ChangeLanguage();
                 STLog.WriteLine($"{I18n.LanguageSwitch}: {Thread.CurrentThread.CurrentUICulture.Name}");
             }
         }

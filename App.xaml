@@ -4,6 +4,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  xmlns:vm="clr-namespace:HKW.ViewModels.Dialog"
   StartupUri="Windows/MainWindow/MainWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>
@@ -14,11 +15,11 @@
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ColorStyle.xaml" />
         <ResourceDictionary>
           <pu:MessageBoxXSettings
-            x:Key="messageSetting"
-            CancelButtonContent="{x:Static I18n:MessageBoxX_I18n.CANCEL}"
-            NoButtonContent="{x:Static I18n:MessageBoxX_I18n.NO}"
-            OKButtonContent="{x:Static I18n:MessageBoxX_I18n.OK}"
-            YesButtonContent="{x:Static I18n:MessageBoxX_I18n.YES}">
+            x:Key="MessageBoxXSettings"
+            CancelButtonContent="{x:Static I18n:MessageBoxXI18nRes.CANCEL}"
+            NoButtonContent="{x:Static I18n:MessageBoxXI18nRes.NO}"
+            OKButtonContent="{x:Static I18n:MessageBoxXI18nRes.OK}"
+            YesButtonContent="{x:Static I18n:MessageBoxXI18nRes.YES}">
             <pu:MessageBoxXSettings.WindowXStyle>
               <Style BasedOn="{StaticResource {ComponentResourceKey ResourceId=WindowXStyle, TypeInTargetAssembly={x:Type pu:MessageBoxX}}}" TargetType="pu:WindowX">
                 <Setter Property="SizeToContent" Value="WidthAndHeight" />
@@ -46,42 +47,60 @@
             </pu:MessageBoxXSettings.ButtonStyle>
             <pu:MessageBoxXSettings.ContentTemplate>
               <DataTemplate>
-                <Grid Margin="10,10,10,10" VerticalAlignment="Center">
-                  <pu:StateControl
-                    HorizontalAlignment="Left"
-                    CurrentState="{Binding MessageBoxIcon}"
-                    FontFamily="/Panuon.WPF.UI;component/Resources/Fonts/#PanuonIcon"
-                    FontSize="64"
-                    FontWeight="Bold">
-                    <pu:StateItem State="Info">
-                      <TextBlock Foreground="#80BEE8" Text="&#xe92f;" />
-                    </pu:StateItem>
-                    <pu:StateItem State="Question">
-                      <TextBlock Foreground="#80BEE8" Text="&#xe937;" />
-                    </pu:StateItem>
-                    <pu:StateItem State="Warning">
-                      <TextBlock Foreground="#F9D01A" Text="&#xe931;" />
-                    </pu:StateItem>
-                    <pu:StateItem State="Error">
-                      <TextBlock Foreground="#FF5656" Text="&#xe933;" />
-                    </pu:StateItem>
-                    <pu:StateItem State="Success">
-                      <TextBlock Foreground="#75CD43" Text="&#xe935;" />
-                    </pu:StateItem>
-                  </pu:StateControl>
-                  <ScrollViewer>
-                    <TextBox
-                      Margin="100,0,0,0"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Stretch"
-                      Background="{x:Null}"
-                      BorderBrush="{x:Null}"
-                      Foreground="{DynamicResource ColorFG}"
-                      IsReadOnly="True"
-                      Text="{Binding Message}"
-                      TextWrapping="Wrap" />
-                  </ScrollViewer>
-                </Grid>
+                <StackPanel Margin="10,10,10,0" VerticalAlignment="Center">
+                  <Grid>
+                    <pu:StateControl
+                      HorizontalAlignment="Left"
+                      CurrentState="{Binding MessageBoxIcon}"
+                      FontFamily="/Panuon.WPF.UI;component/Resources/Fonts/#PanuonIcon"
+                      FontSize="64"
+                      FontWeight="Bold"
+                      IsHitTestVisible="False">
+                      <pu:StateItem State="Info">
+                        <TextBlock Foreground="#80BEE8" Text="&#xe92f;" />
+                      </pu:StateItem>
+                      <pu:StateItem State="Question">
+                        <TextBlock Foreground="#80BEE8" Text="&#xe937;" />
+                      </pu:StateItem>
+                      <pu:StateItem State="Warning">
+                        <TextBlock Foreground="#F9D01A" Text="&#xe931;" />
+                      </pu:StateItem>
+                      <pu:StateItem State="Error">
+                        <TextBlock Foreground="#FF5656" Text="&#xe933;" />
+                      </pu:StateItem>
+                      <pu:StateItem State="Success">
+                        <TextBlock Foreground="#75CD43" Text="&#xe935;" />
+                      </pu:StateItem>
+                    </pu:StateControl>
+                    <ScrollViewer>
+                      <TextBox
+                        Margin="100,0,0,0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="{x:Null}"
+                        BorderBrush="{x:Null}"
+                        Foreground="{DynamicResource ColorFG}"
+                        IsReadOnly="True"
+                        Text="{Binding Message}"
+                        TextWrapping="Wrap" />
+                    </ScrollViewer>
+                  </Grid>
+                  <!--<CheckBox
+                    Margin="0,10,0,0"
+                    Content="{Binding CheckBoxMessage}"
+                    IsChecked="{Binding CheckBoxIsIsChecked}">
+                    <CheckBox.Style>
+                      <Style BasedOn="{StaticResource CheckBox_Style}" TargetType="CheckBox">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                          <DataTrigger Binding="{Binding ShowCheckBox}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                          </DataTrigger>
+                        </Style.Triggers>
+                      </Style>
+                    </CheckBox.Style>
+                  </CheckBox>-->
+                </StackPanel>
               </DataTemplate>
             </pu:MessageBoxXSettings.ContentTemplate>
           </pu:MessageBoxXSettings>

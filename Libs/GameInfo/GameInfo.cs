@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.ViewModels.Dialog;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Libs.Utils_I18n;
+using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorTools.Libs.GameInfo
 {

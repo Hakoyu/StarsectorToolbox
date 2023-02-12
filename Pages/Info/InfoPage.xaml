@@ -2,7 +2,7 @@
   x:Class="StarsectorTools.Pages.Info.InfoPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages.Info"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:local="clr-namespace:StarsectorTools.Pages.Info"
@@ -41,7 +41,7 @@
             x:Name="Button_CheckUpdate"
             Padding="5,0,5,0"
             Click="Button_CheckUpdate_ClickAsync"
-            Content="{x:Static I18n:Info_I18n.CheckUpdate}"
+            Content="{x:Static I18n:InfoPageI18nRes.CheckUpdate}"
             Style="{StaticResource Button_Style}" />
           <emoji:TextBlock
             x:Name="TextBlock_CheckUpdateIcon"

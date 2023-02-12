@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Tools.ModManager {
+namespace StarsectorTools.Langs.Pages.Info {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace StarsectorTools.Langs.Tools.ModManager {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ModArchiveing_I18n {
+    public class InfoPageI18nRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ModArchiveing_I18n() {
+        internal InfoPageI18nRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Tools.ModManager.ModArchiveing_I18n", typeof(ModArchiveing_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Pages.Info.InfoPageI18nRes", typeof(InfoPageI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,11 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 已完成 的本地化字符串。
+        ///   查找类似 检测更新 的本地化字符串。
         /// </summary>
-        public static string Completed {
+        public static string CheckUpdate {
             get {
-                return ResourceManager.GetString("Completed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 未完成 的本地化字符串。
-        /// </summary>
-        public static string Incomplete {
-            get {
-                return ResourceManager.GetString("Incomplete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 文件总数 的本地化字符串。
-        /// </summary>
-        public static string TotalFileNumber {
-            get {
-                return ResourceManager.GetString("TotalFileNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 正在解压 的本地化字符串。
-        /// </summary>
-        public static string UnzipNow {
-            get {
-                return ResourceManager.GetString("UnzipNow", resourceCulture);
+                return ResourceManager.GetString("CheckUpdate", resourceCulture);
             }
         }
     }

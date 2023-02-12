@@ -5,11 +5,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialog;
 using Panuon.WPF.UI;
+using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -21,7 +24,7 @@ namespace StarsectorTools.Windows.MainWindow
         /// <summary>
         ///
         /// </summary>
-        public MainWindow()
+        internal MainWindow()
         {
             InitializeComponent();
             // 限制最大化区域,不然会盖住任务栏(已在XAML中实现)
@@ -59,11 +62,16 @@ namespace StarsectorTools.Windows.MainWindow
                     ex,
                     false
                 );
+                MessageBoxVM.Show(new($"{I18n.InitializationError}: {nameof(MainWindowViewModel)}")
+                {
+                    Icon = MessageBoxVM.Icon.Error
+                });
                 Environment.Exit(-1);
                 return;
             }
             // 初始化页面
             InitializePage();
+
             Logger.Record(I18n.InitializationCompleted);
         }
 
@@ -74,9 +82,9 @@ namespace StarsectorTools.Windows.MainWindow
         {
             if (e.Exception.Source is nameof(StarsectorTools))
             {
-                STLog.WriteLine(I18n.GlobalException, e.Exception, false);
+                Logger.Record(I18n.GlobalException, e.Exception, false);
                 MessageBoxVM.Show(
-                    new($"{I18n.GlobalExceptionMessage}\n\n{STLog.SimplifyException(e.Exception)}")
+                    new($"{I18n.GlobalExceptionMessage}\n\n{Logger.FilterException(e.Exception)}")
                     {
                         Icon = MessageBoxVM.Icon.Error,
                     }
@@ -84,14 +92,14 @@ namespace StarsectorTools.Windows.MainWindow
             }
             else
             {
-                STLog.WriteLine(
+                Logger.Record(
                     $"{I18n.GlobalExpansionException}: {e.Exception.Source}",
                     e.Exception,
                     false
                 );
                 MessageBoxVM.Show(
                     new(
-                        $"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{STLog.SimplifyException(e.Exception)}"
+                        $"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{Logger.FilterException(e.Exception)}"
                     )
                     {
                         Icon = MessageBoxVM.Icon.Error,
@@ -110,7 +118,8 @@ namespace StarsectorTools.Windows.MainWindow
         //最小化
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Minimized;
+            //WindowState = WindowState.Minimized;
+            MessageBoxVM.Show(new("114514"));
         }
 
         //最大化

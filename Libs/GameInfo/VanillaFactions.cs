@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static HKW.Extension.SetExtension;
-using I18n = StarsectorTools.Langs.Libs.GameInfo_I18n;
+using I18n = StarsectorTools.Langs.Libs.GameInfoI18nRes;
 
 namespace StarsectorTools.Libs.GameInfo
 {

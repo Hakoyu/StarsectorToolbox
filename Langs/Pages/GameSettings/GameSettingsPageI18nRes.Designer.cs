@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Tools.GameSettings {
+namespace StarsectorTools.Langs.Pages.GameSettings {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class GameSettings_I18n {
+    public class GameSettingsPageI18nRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal GameSettings_I18n() {
+        internal GameSettingsPageI18nRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Tools.GameSettings {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Tools.GameSettings.GameSettings_I18n", typeof(GameSettings_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Pages.GameSettings.GameSettingsPageI18nRes", typeof(GameSettingsPageI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

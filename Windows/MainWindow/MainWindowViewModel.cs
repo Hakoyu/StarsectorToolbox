@@ -1,17 +1,21 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
+using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
     /// <summary>
     /// 主窗口视图模型
     /// </summary>
-    internal partial class MainWindowViewModel : ObservableObject
+    internal partial class MainWindowViewModel : ObservableRecipient
     {
         /// <summary>
         /// 主菜单展开状态
@@ -91,6 +95,8 @@ namespace StarsectorTools.Windows.MainWindow
             SetConfig(configData);
             InitializeExpansionPages();
             InitializeExpansionDebugPage();
+            WeakReferenceMessenger.Default.Register<ExpansionDebugPathChangeMessage>(this, ExpansionDebugPathChangeReceiv);
+            WeakReferenceMessenger.Default.Register<ExpansionDebugPathRequestMessage>(this, ExpansionDebugPathRequestReceive);
         }
 
         [RelayCommand]
@@ -160,6 +166,18 @@ namespace StarsectorTools.Windows.MainWindow
         {
             CloseExpansionPages();
             InitializeExpansionPages();
+        }
+        private void ExpansionDebugPathChangeReceiv(object recipient, ExpansionDebugPathChangeMessage message)
+        {
+            if (GetExpansionInfo(message.Value, true) is ExpansionInfo info)
+            {
+                deubgItemExpansionInfo = info;
+                deubgItemPath = message.Value;
+            }
+        }
+        private void ExpansionDebugPathRequestReceive(object recipient, ExpansionDebugPathRequestMessage message)
+        {
+            message.Reply(deubgItemPath!);
         }
     }
 }

@@ -14,7 +14,7 @@ using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using static HKW.Extension.SetExtension;
-using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
+using I18n = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
 namespace StarsectorTools.Pages.ModManager
 {

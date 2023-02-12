@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialog;
 using Panuon.WPF.UI;
+using Panuon.WPF.UI.Configurations;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages.GameSettings;
 using StarsectorTools.Pages.Info;
 using StarsectorTools.Pages.ModManager;
 using StarsectorTools.Pages.Settings;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindow_I18n;
+using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -23,8 +27,8 @@ namespace StarsectorTools.Windows.MainWindow
         private static readonly Uri resourcesConfigUri =
             new("\\Resources\\Config.toml", UriKind.Relative);
 
-        internal static MainWindowViewModel ViewModel =>
-            (MainWindowViewModel)((MainWindow)Application.Current.MainWindow).DataContext;
+        internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
+
         private void RegisterData()
         {
             // 注册消息窗口
@@ -43,7 +47,7 @@ namespace StarsectorTools.Windows.MainWindow
             MessageBoxVM.InitializeHandler(
                 (d) =>
                 {
-                    string message =
+                    var message =
                         d.Message.Length < messageLengthLimits
                             ? d.Message
                             : d.Message[..messageLengthLimits]
@@ -115,6 +119,7 @@ namespace StarsectorTools.Windows.MainWindow
             );
         }
 
+
         private void RegisterSaveFileDialogModel()
         {
             SaveFileDialogVM.InitializeHandler(
@@ -131,7 +136,6 @@ namespace StarsectorTools.Windows.MainWindow
             );
         }
 
-
         private void InitializePage()
         {
             // 添加页面
@@ -146,16 +150,12 @@ namespace StarsectorTools.Windows.MainWindow
         private void InitializeMainPage()
         {
             //添加主要页面
-            ViewModel.AddMainPageItem(new()
-            {
-                Icon = "🌐",
-                Tag = CreatePage(typeof(ModManagerPage)),
-            });
-            ViewModel.AddMainPageItem(new()
-            {
-                Icon = "⚙",
-                Tag = CreatePage(typeof(GameSettingsPage))
-            });
+            ViewModel.AddMainPageItem(
+                new() { Icon = "🌐", Tag = CreatePage(typeof(ModManagerPage)), }
+            );
+            ViewModel.AddMainPageItem(
+                new() { Icon = "⚙", Tag = CreatePage(typeof(GameSettingsPage)) }
+            );
         }
 
         private Page? CreatePage(Type type)
@@ -166,8 +166,13 @@ namespace StarsectorTools.Windows.MainWindow
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.PageInitializeError}: {type.FullName}", ex);
-                Utils.ShowMessageBox($"{I18n.PageInitializeError}:\n{type.FullName}", STMessageBoxIcon.Error);
+                Logger.Record($"{I18n.PageInitializeError}: {type.FullName}", ex);
+                MessageBoxVM.Show(
+                    new($"{I18n.PageInitializeError}:\n{type.FullName}")
+                    {
+                        Icon = MessageBoxVM.Icon.Error
+                    }
+                );
                 return null;
             }
         }

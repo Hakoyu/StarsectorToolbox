@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Input;
 namespace HKW.ViewModels.Controls
 {
     /// <summary>
-    /// 列表项模型,用于MVVM
+    /// 列表项视图模型
     /// </summary>
     [DebuggerDisplay("{Name}, Content = {Content}")]
     public partial class ListBoxItemVM : ContentControlVM

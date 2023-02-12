@@ -18,7 +18,7 @@ using Panuon.WPF.UI;
 using StarsectorTools.Libs.GameInfo;
 using HKW.Extension;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Tools.ModManager.ModManagerPage_I18n;
+using I18n = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 using HKW.Libs.TomlParse;
 
 namespace StarsectorTools.Pages.ModManager

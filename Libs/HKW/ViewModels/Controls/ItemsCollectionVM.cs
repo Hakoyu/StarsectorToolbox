@@ -19,8 +19,7 @@ namespace HKW.ViewModels.Controls
         /// <summary>
         /// 项目资源
         /// </summary>
-        [ObservableProperty]
-        private ObservableCollection<T> itemsSource = null!;
+        public ObservableCollection<T> ItemsSource { get; set; } = null!;
         /// <inheritdoc/>
         public T this[int index] { get => ItemsSource[index]; set => ItemsSource[index] = value; }
         /// <inheritdoc/>

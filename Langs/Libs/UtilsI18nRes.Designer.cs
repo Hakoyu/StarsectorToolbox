@@ -22,14 +22,14 @@ namespace StarsectorTools.Langs.Libs {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Utils_I18n {
+    public class UtilsI18nRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Utils_I18n() {
+        internal UtilsI18nRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Libs {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Libs.Utils_I18n", typeof(Utils_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Libs.UtilsI18nRes", typeof(UtilsI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

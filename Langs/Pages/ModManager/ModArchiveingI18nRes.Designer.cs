@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Tools.ModManager {
+namespace StarsectorTools.Langs.Pages.ModManager {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace StarsectorTools.Langs.Tools.ModManager {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AddUserGroup_I18n {
+    public class ModArchiveingI18nRes {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AddUserGroup_I18n() {
+        internal ModArchiveingI18nRes() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Tools.ModManager.AddUserGroup_I18n", typeof(AddUserGroup_I18n).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Pages.ModManager.ModArchiveingI18nRes", typeof(ModArchiveingI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,56 +61,38 @@ namespace StarsectorTools.Langs.Tools.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 取消 的本地化字符串。
+        ///   查找类似 已完成 的本地化字符串。
         /// </summary>
-        public static string Cancel {
+        public static string Completed {
             get {
-                return ResourceManager.GetString("Cancel", resourceCulture);
+                return ResourceManager.GetString("Completed", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 图标 的本地化字符串。
+        ///   查找类似 未完成 的本地化字符串。
         /// </summary>
-        public static string Icon {
+        public static string Incomplete {
             get {
-                return ResourceManager.GetString("Icon", resourceCulture);
+                return ResourceManager.GetString("Incomplete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 名称 的本地化字符串。
+        ///   查找类似 文件总数 的本地化字符串。
         /// </summary>
-        public static string Name {
+        public static string TotalFileNumber {
             get {
-                return ResourceManager.GetString("Name", resourceCulture);
+                return ResourceManager.GetString("TotalFileNumber", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 预览 的本地化字符串。
+        ///   查找类似 正在解压 的本地化字符串。
         /// </summary>
-        public static string Preview {
+        public static string UnzipNow {
             get {
-                return ResourceManager.GetString("Preview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 设置用户分组信息 的本地化字符串。
-        /// </summary>
-        public static string SetUserGroupInfo {
-            get {
-                return ResourceManager.GetString("SetUserGroupInfo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 确定 的本地化字符串。
-        /// </summary>
-        public static string Yes {
-            get {
-                return ResourceManager.GetString("Yes", resourceCulture);
+                return ResourceManager.GetString("UnzipNow", resourceCulture);
             }
         }
     }

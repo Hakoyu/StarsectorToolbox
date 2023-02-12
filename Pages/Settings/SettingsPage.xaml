@@ -2,21 +2,27 @@
   x:Class="StarsectorTools.Pages.Settings.SettingsPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages"
-  xmlns:Utils="clr-namespace:StarsectorTools.Libs.Utils"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:local="clr-namespace:StarsectorTools.Pages.Settings"
+  xmlns:log="clr-namespace:HKW.Libs.Log4Cs"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   Title="Setting"
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-
+  <Page.Resources>
+    <local:SettingsI18n x:Key="I18n" />
+  </Page.Resources>
+  <Page.DataContext>
+    <local:SettingsPageViewModel />
+  </Page.DataContext>
   <Grid>
     <GroupBox
       x:Name="GroupBox_Settings"
       pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-      Header="{x:Static I18n:Settings_I18n.Settings}"
+      Header="{Binding I18nSettings}"
       Style="{StaticResource GroupBoxBaseStyle}">
       <Grid>
         <Grid.ColumnDefinitions>
@@ -42,47 +48,35 @@
               Padding="5,0,5,0"
               HorizontalAlignment="Left"
               Click="Button_OpenLogFile_Click"
-              Content="{x:Static I18n:Settings_I18n.OpenLogFile}"
+              Content="{Binding I18nOpenLogFile}"
               Style="{StaticResource Button_Style}" />
             <Label
               x:Name="Label_LogLevel"
-              Content="{x:Static I18n:Settings_I18n.LogLevel}"
+              Content="{Binding I18nLogLevel}"
               Style="{StaticResource Label_Style}" />
             <ComboBox
               x:Name="ComboBox_LogLevel"
               Margin="0,0,5,0"
-              SelectionChanged="ComboBox_LogLevel_SelectionChanged"
-              Style="{StaticResource ComboBox_Style}">
-              <ComboBoxItem
-                Content="{x:Static Utils:STLogLevel.DEBUG}"
-                Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="{x:Static Utils:STLogLevel.DEBUG}" />
-              <ComboBoxItem
-                Content="{x:Static Utils:STLogLevel.INFO}"
-                Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="{x:Static Utils:STLogLevel.INFO}" />
-              <ComboBoxItem
-                Content="{x:Static Utils:STLogLevel.WARN}"
-                Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="{x:Static Utils:STLogLevel.WARN}" />
-            </ComboBox>
+              ItemContainerStyle="{StaticResource ComboBoxItem_Style}"
+              ItemsSource="{Binding LogLevelComboBox}"
+              SelectedItem="{Binding LanguageComboBox.SelectedItem}"
+              Style="{StaticResource ComboBox_Style}" />
             <Label
               x:Name="Label_Language"
-              Content="{x:Static I18n:Settings_I18n.Language}"
+              Content="{Binding I18n.Language, Source={StaticResource I18n}}"
               Style="{StaticResource Label_Style}" />
             <ComboBox
               x:Name="ComboBox_Language"
               Margin="0,0,5,0"
-              SelectionChanged="ComboBox_Language_SelectionChanged"
+              ItemContainerStyle="{StaticResource ComboBoxItem_Style}"
+              ItemsSource="{Binding LanguageComboBox.ItemsSource}"
+              SelectedItem="{Binding LanguageComboBox.SelectedItem}"
               Style="{StaticResource ComboBox_Style}">
-              <ComboBoxItem
-                Content="简体中文"
-                Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="zh-CN" />
-              <ComboBoxItem
-                Content="English"
-                Style="{StaticResource ComboBoxItem_Style}"
-                ToolTip="en-US" />
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                  <i:InvokeCommandAction Command="{Binding LanguageComboBox.SelectionChangedCommand}" CommandParameter="{Binding LanguageComboBox.SelectedItem}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
             </ComboBox>
           </StackPanel>
           <Grid VerticalAlignment="Top" Cursor="">
@@ -94,7 +88,8 @@
               InputMethod.IsInputMethodEnabled="False"
               IsReadOnly="True"
               Style="{StaticResource TextBox_Style}"
-              ToolTip="{x:Static I18n:Settings_I18n.ExpansionDebugPathToolTip}" />
+              Text=""
+              ToolTip="{Binding I18nExpansionDebugPathToolTip}" />
             <!--  TextBox输入占位符  -->
             <Label
               Width="{Binding Width, ElementName=TextBox_ExpansionDebugPath}"
@@ -103,7 +98,7 @@
               HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ExpansionDebugPath}"
               VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ExpansionDebugPath}"
               Background="{x:Null}"
-              Content="{x:Static I18n:Settings_I18n.ExpansionDebugPath}"
+              Content="{Binding I18nExpansionDebugPath}"
               IsEnabled="False"
               IsHitTestVisible="False">
               <Label.Style>
@@ -122,15 +117,15 @@
               Width="60"
               Margin="0,0,65,0"
               HorizontalAlignment="Right"
-              Click="Button_SetExpansionDebugPath_Click"
-              Content="{x:Static I18n:Settings_I18n.Set}"
+              Command="{Binding SetExpansionDebugPathCommand}"
+              Content="{Binding I18nSet}"
               Style="{StaticResource Button_Style}" />
             <Button
               x:Name="Button_ClearExpansionDebugPath"
               Width="60"
               HorizontalAlignment="Right"
               Click="Button_ClearExpansionDebugPath_Click"
-              Content="{x:Static I18n:Settings_I18n.Clear}">
+              Content="{Binding I18nClear}">
               <Button.Style>
                 <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
                   <Setter Property="IsEnabled" Value="True" />

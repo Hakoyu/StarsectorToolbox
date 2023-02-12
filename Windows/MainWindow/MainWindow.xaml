@@ -234,7 +234,7 @@
               Style="{StaticResource Expander_Style}">
               <Expander.ContextMenu>
                 <ContextMenu Style="{StaticResource ContextMenu_Style}">
-                  <MenuItem Command="{Binding RefreshExpansionMenuCommand}" Header="{x:Static I18n:MainWindow_I18n.RefreshExpansionList}">
+                  <MenuItem Command="{Binding RefreshExpansionMenuCommand}" Header="{x:Static I18n:MainWindowI18nRes.RefreshExpansionList}">
                     <MenuItem.Icon>
                       <emoji:TextBlock FontSize="16" Text="🔄" />
                     </MenuItem.Icon>
