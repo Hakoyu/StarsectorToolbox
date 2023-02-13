@@ -48,7 +48,7 @@ namespace HKW.ViewModels
     public class ObservableI18n : INotifyPropertyChanged
     {
         private readonly object _i18nRes;
-        private static List<ObservableI18n> _observableI18nSet = null!;
+        private static List<ObservableI18n> _observableI18nSet = new();
         private static string _language = CultureInfo.CurrentCulture.Name;
         /// <summary>
         /// 语言
@@ -76,7 +76,6 @@ namespace HKW.ViewModels
         protected ObservableI18n(object i18nRes)
         {
             _i18nRes = i18nRes;
-            _observableI18nSet ??= new();
             _observableI18nSet.Add(this);
         }
         /// <summary>
