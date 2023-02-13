@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HKW.ViewModels.ObservableI18n
+namespace HKW.ViewModels
 {
     /// <summary>
     /// 可观测本地化资源实例
@@ -43,6 +43,7 @@ namespace HKW.ViewModels.ObservableI18n
 
     /// <summary>
     /// 可观测本地化
+    /// <c>ObservableI18n.Language = "zh-CN"</c>
     /// </summary>
     public class ObservableI18n : INotifyPropertyChanged
     {
@@ -72,7 +73,7 @@ namespace HKW.ViewModels.ObservableI18n
         /// 构造
         /// </summary>
         /// <param name="i18nRes">本地化资源</param>
-        public ObservableI18n(object i18nRes)
+        protected ObservableI18n(object i18nRes)
         {
             _i18nRes = i18nRes;
             _observableI18nSet ??= new();
