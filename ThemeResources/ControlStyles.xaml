@@ -21,7 +21,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="Label_Style"
+    x:Key="LabelBaseStyle"
     BasedOn="{StaticResource {x:Type Label}}"
     TargetType="Label">
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -42,7 +42,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="TextBlock_Style"
+    x:Key="TextBlockBaseStyle"
     BasedOn="{StaticResource {x:Type TextBlock}}"
     TargetType="TextBlock">
     <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
@@ -53,7 +53,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="Button_Style"
+    x:Key="ButtonBaseStyle"
     BasedOn="{StaticResource {x:Type Button}}"
     TargetType="Button">
     <Setter Property="Background" Value="{DynamicResource ColorLight3}" />
@@ -74,7 +74,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="ListBox_Style"
+    x:Key="ListBoxBaseStyle"
     BasedOn="{StaticResource {x:Type ListBox}}"
     TargetType="ListBox">
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -88,7 +88,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="ListBoxItem_Style"
+    x:Key="ListBoxItemBaseStyle"
     BasedOn="{StaticResource {x:Type ListBoxItem}}"
     TargetType="ListBoxItem">
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -110,7 +110,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="ComboBox_Style"
+    x:Key="ComboBoxBaseStyle"
     BasedOn="{StaticResource {x:Type ComboBox}}"
     TargetType="ComboBox">
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -129,7 +129,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="ComboBoxItem_Style"
+    x:Key="ComboBoxItemBaseStyle"
     BasedOn="{StaticResource {x:Type ComboBoxItem}}"
     TargetType="ComboBoxItem">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
@@ -150,7 +150,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="Expander_Style"
+    x:Key="ExpanderBaseStyle"
     BasedOn="{StaticResource {x:Type Expander}}"
     TargetType="Expander">
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -166,7 +166,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="DataGrid_Style"
+    x:Key="DataGridBaseStyle"
     BasedOn="{StaticResource {x:Type DataGrid}}"
     TargetType="DataGrid">
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -187,7 +187,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="TextBox_Style"
+    x:Key="TextBoxBaseStyle"
     BasedOn="{StaticResource {x:Type TextBox}}"
     TargetType="TextBox">
     <Setter Property="Background" Value="{DynamicResource ColorDeep2}" />
@@ -208,7 +208,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="ContextMenu_Style"
+    x:Key="ContextMenuBaseStyle"
     BasedOn="{StaticResource {x:Type ContextMenu}}"
     TargetType="ContextMenu">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
@@ -226,7 +226,7 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
-    x:Key="MenuItem_Style"
+    x:Key="MenuItemBaseStyle"
     BasedOn="{StaticResource {x:Static pu:ContextMenuHelper.MenuItemStyle}}"
     TargetType="MenuItem">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
@@ -235,7 +235,7 @@
     <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{DynamicResource ColorSelected}" />
   </Style>
   <Style
-    x:Key="Window_Style"
+    x:Key="WindowBaseStyle"
     BasedOn="{StaticResource {x:Type Window}}"
     TargetType="Window">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
@@ -249,7 +249,7 @@
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
   </Style>
   <Style
-    x:Key="CheckBox_Style"
+    x:Key="CheckBoxBaseStyle"
     BasedOn="{StaticResource {x:Type CheckBox}}"
     TargetType="CheckBox">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />

@@ -10,7 +10,7 @@
   Width="500"
   Height="200"
   ResizeMode="NoResize"
-  Style="{StaticResource Window_Style}"
+  Style="{StaticResource WindowBaseStyle}"
   WindowStartupLocation="CenterScreen"
   WindowStyle="None"
   mc:Ignorable="d">
@@ -47,43 +47,43 @@
         HorizontalContentAlignment="Center"
         VerticalContentAlignment="Center"
         Background="{x:Null}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <Label
         Width="80"
         HorizontalAlignment="Left"
         Content="{x:Static I18n:ModArchiveingI18nRes.TotalFileNumber}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <Label
         x:Name="Label_Total"
         Margin="80,0,5,0"
         Background="{DynamicResource ColorLight1}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <Label
         Grid.Column="1"
         Width="60"
         Margin="5,0,0,0"
         HorizontalAlignment="Left"
         Content="{x:Static I18n:ModArchiveingI18nRes.Completed}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <Label
         x:Name="Label_Incomplete"
         Grid.Column="1"
         Margin="184,0,0,0"
         Background="{DynamicResource ColorLight1}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <Label
         Grid.Column="1"
         Width="60"
         Margin="0,0,55,0"
         HorizontalAlignment="Right"
         Content="{x:Static I18n:ModArchiveingI18nRes.Incomplete}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <Label
         x:Name="Label_Completed"
         Grid.Column="1"
         Margin="65,0,119,0"
         Background="{DynamicResource ColorLight1}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
     </Grid>
   </GroupBox>
 </Window>

@@ -21,7 +21,7 @@
           Background="{x:Null}"
           Content="Starsector Tools"
           FontSize="24"
-          Style="{StaticResource Label_Style}" />
+          Style="{StaticResource LabelBaseStyle}" />
         <StackPanel
           Margin="0,0,0,5"
           HorizontalAlignment="Center"
@@ -31,18 +31,18 @@
             Height="NaN"
             Background="{x:Null}"
             Content="Version:"
-            Style="{StaticResource Label_Style}" />
+            Style="{StaticResource LabelBaseStyle}" />
           <Label
             Height="NaN"
             Background="{x:Null}"
             Content="0.8.0"
-            Style="{StaticResource Label_Style}" />
+            Style="{StaticResource LabelBaseStyle}" />
           <Button
             x:Name="Button_CheckUpdate"
             Padding="5,0,5,0"
             Click="Button_CheckUpdate_ClickAsync"
             Content="{x:Static I18n:InfoPageI18nRes.CheckUpdate}"
-            Style="{StaticResource Button_Style}" />
+            Style="{StaticResource ButtonBaseStyle}" />
           <emoji:TextBlock
             x:Name="TextBlock_CheckUpdateIcon"
             Margin="5,0,0,0"
@@ -59,8 +59,8 @@
             Height="NaN"
             Background="{x:Null}"
             Content="Github:"
-            Style="{StaticResource Label_Style}" />
-          <Label Background="{x:Null}" Style="{StaticResource Label_Style}">
+            Style="{StaticResource LabelBaseStyle}" />
+          <Label Background="{x:Null}" Style="{StaticResource LabelBaseStyle}">
             <Hyperlink x:Name="Hyperlink_GitHub" Click="Hyperlink_GitHub_Click">
               https://github.com/Hakoyu/StarsectorTools
             </Hyperlink>

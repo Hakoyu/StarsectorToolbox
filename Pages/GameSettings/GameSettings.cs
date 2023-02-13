@@ -61,7 +61,7 @@ namespace StarsectorTools.Pages.GameSettings
                 {
                     Content = dir.Name,
                     ToolTip = dir.FullName,
-                    Style = (Style)Application.Current.Resources["ComboBoxItem_Style"],
+                    Style = (Style)Application.Current.Resources["ComboBoxItemBaseStyle"],
                 });
             }
         }

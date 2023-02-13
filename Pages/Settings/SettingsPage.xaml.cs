@@ -136,7 +136,7 @@ namespace StarsectorTools.Pages.Settings
                 toml["Expansion"]["DebugPath"] = path;
                 toml.SaveTo(ST.ConfigTomlFile);
                 STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
-                //if (Utils.ShowMessageBox(I18n.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
+                //if (Utils.ShowMessageBox(I18nRes.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
                 //    MainWindowViewModel.Instance.RefreshExpansionMenu();
             }
         }

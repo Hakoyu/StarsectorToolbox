@@ -617,7 +617,7 @@ namespace StarsectorTools.Pages.ModManager
             {
                 if (contextMenu.Tag is true)
                     return;
-                contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+                contextMenu.Style = (Style)Application.Current.Resources["ContextMenuBaseStyle"];
                 // 启用或禁用
                 MenuItem menuItem = new();
                 menuItem.Header = showInfo.IsEnabled ? I18n.DisableSelectedMods : I18n.EnabledSelectedMods;
@@ -669,7 +669,7 @@ namespace StarsectorTools.Pages.ModManager
                         {
                             MenuItem groupItem = new();
                             groupItem.Header = group;
-                            groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
+                            groupItem.Style = (Style)Application.Current.Resources["MenuItemBaseStyle"];
                             groupItem.Click += (s, e) =>
                             {
                                 ChangeSelectedModsInUserGroup(group, true);
@@ -693,7 +693,7 @@ namespace StarsectorTools.Pages.ModManager
                     {
                         MenuItem groupItem = new();
                         groupItem.Header = group.Key;
-                        groupItem.Style = (Style)Application.Current.Resources["MenuItem_Style"];
+                        groupItem.Style = (Style)Application.Current.Resources["MenuItemBaseStyle"];
                         groupItem.Click += (s, e) =>
                         {
                             ChangeSelectedModsInUserGroup(group.Key, false);
@@ -1150,10 +1150,10 @@ namespace StarsectorTools.Pages.ModManager
         {
             ListBoxItem listBoxItem = new();
             // 调用全局资源需要写全
-            listBoxItem.Style = (Style)Application.Current.Resources["ListBoxItem_Style"];
+            listBoxItem.Style = (Style)Application.Current.Resources["ListBoxItemBaseStyle"];
             SetListBoxItemData(listBoxItem, name);
             ContextMenu contextMenu = new();
-            contextMenu.Style = (Style)Application.Current.Resources["ContextMenu_Style"];
+            contextMenu.Style = (Style)Application.Current.Resources["ContextMenuBaseStyle"];
             // 重命名分组
             MenuItem menuItem = new();
             menuItem.Header = I18n.RenameUserGroup;
@@ -1180,7 +1180,7 @@ namespace StarsectorTools.Pages.ModManager
             allListBoxItems.Add(name, listBoxItem);
             allModShowInfoGroups.Add(name, new());
             StartRemindSaveThread();
-            ComboBox_ExportUserGroup.Items.Add(new ComboBoxItem() { Content = name, Tag = name, Style = (Style)Application.Current.Resources["ComboBoxItem_Style"] });
+            ComboBox_ExportUserGroup.Items.Add(new ComboBoxItem() { Content = name, Tag = name, Style = (Style)Application.Current.Resources["ComboBoxItemBaseStyle"] });
             STLog.WriteLine($"{I18n.AddUserGroup} {icon} {name}");
         }
 

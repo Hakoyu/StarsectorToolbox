@@ -1,0 +1,36 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI">
+  <Style
+    x:Key="ListBoxItemView"
+    BasedOn="{StaticResource ListBoxItemBaseStyle}"
+    TargetType="ListBoxItem">
+    <Setter Property="Content" Value="{Binding Content}" />
+    <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+    <Setter Property="Tag" Value="{Binding Tag}" />
+    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+    <!--<Setter Property="pu:ListBoxItemHelper.Icon" Value="{Binding Icon}" />-->
+    <Setter Property="pu:ListBoxItemHelper.Icon" Value="{DynamicResource EmojiTextBlock}" />
+    <Setter Property="ContextMenu">
+      <Setter.Value>
+        <!--  绑定右键菜单  -->
+        <ContextMenu ItemsSource="{Binding ContextMenu.ItemsSource}" Style="{StaticResource ContextMenuBaseStyle}">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+              <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+          <ContextMenu.ItemContainerStyle>
+            <Style BasedOn="{StaticResource MenuItemBaseStyle}" TargetType="MenuItem">
+              <Setter Property="Icon" Value="{Binding Icon}" />
+              <Setter Property="Header" Value="{Binding Header}" />
+              <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+            </Style>
+          </ContextMenu.ItemContainerStyle>
+        </ContextMenu>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

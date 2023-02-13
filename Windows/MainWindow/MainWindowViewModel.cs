@@ -5,17 +5,18 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Controls;
+using HKW.ViewModels.ObservableI18n;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
     /// <summary>
     /// 主窗口视图模型
     /// </summary>
-    internal partial class MainWindowViewModel : ObservableRecipient
+    internal partial class MainWindowViewModel : ObservableObject
     {
         /// <summary>
         /// 主菜单展开状态
@@ -31,6 +32,9 @@ namespace StarsectorTools.Windows.MainWindow
 
         [ObservableProperty]
         private bool settingsButtonIsChecked = false;
+
+        [ObservableProperty]
+        private ObservableI18n<I18nRes> i18n = new(new());
 
         #region Page
 
@@ -57,31 +61,6 @@ namespace StarsectorTools.Windows.MainWindow
         private ListBoxVM expansionListBox = new();
 
         #endregion PageItem
-
-        #region I18n
-
-        [ObservableProperty]
-        private string i18nStarsectorTools = I18n.StarsectorTools;
-
-        [ObservableProperty]
-        private string i18nInfo = I18n.Info;
-
-        [ObservableProperty]
-        private string i18nSettings = I18n.Settings;
-
-        [ObservableProperty]
-        private string i18nStartGame = I18n.StartGame;
-
-        [ObservableProperty]
-        private string i18nClearGameLogOnStart = I18n.ClearGameLogOnStart;
-
-        [ObservableProperty]
-        private string i18nRefreshExpansionList = I18n.RefreshExpansionList;
-
-        [ObservableProperty]
-        private string i18nExpansion = I18n.Expansion;
-
-        #endregion I18n
 
         public MainWindowViewModel()
         {
@@ -139,7 +118,7 @@ namespace StarsectorTools.Windows.MainWindow
                 SettingsButtonIsChecked = true;
                 MainListBox.SelectedItem = ExpansionListBox.SelectedItem = null;
             }
-            Logger.Record($"{I18n.ShowPage}: {page?.GetType().FullName}");
+            Logger.Record($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
         }
 
         [RelayCommand]

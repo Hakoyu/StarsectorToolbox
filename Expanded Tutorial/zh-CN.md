@@ -387,7 +387,7 @@ _注: xaml 设计器中显示的内容可能与实际显示有误差_
 **引用本体风格**
 
 ```xaml
-<Button Content="Button" Style="{StaticResource Button_Style}" />
+<Button Content="Button" Style="{StaticResource ButtonBaseStyle}" />
 ```
 
 **完整示例**
@@ -415,7 +415,7 @@ _注: xaml 设计器中显示的内容可能与实际显示有误差_
   <Grid>
     <Button
       Content="Button"
-      Style="{StaticResource Button_Style}" />
+      Style="{StaticResource ButtonBaseStyle}" />
   </Grid>
 </Page>
 ```

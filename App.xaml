@@ -11,8 +11,9 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlStyles.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/ThemeResources/UnSharedControls.xaml" />
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ColorStyle.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/ThemeResources/UnSharedControls.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlView.xaml" />
         <ResourceDictionary>
           <pu:MessageBoxXSettings
             x:Key="MessageBoxXSettings"
@@ -40,7 +41,7 @@
               </Style>
             </pu:MessageBoxXSettings.WindowXStyle>
             <pu:MessageBoxXSettings.ButtonStyle>
-              <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
+              <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
                 <Setter Property="Width" Value="60" />
                 <Setter Property="Margin" Value="20,0,20,0" />
               </Style>
@@ -90,7 +91,7 @@
                     Content="{Binding CheckBoxMessage}"
                     IsChecked="{Binding CheckBoxIsIsChecked}">
                     <CheckBox.Style>
-                      <Style BasedOn="{StaticResource CheckBox_Style}" TargetType="CheckBox">
+                      <Style BasedOn="{StaticResource CheckBoxBaseStyle}" TargetType="CheckBox">
                         <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
                           <DataTrigger Binding="{Binding ShowCheckBox}" Value="True">

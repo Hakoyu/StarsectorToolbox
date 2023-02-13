@@ -11,7 +11,7 @@
   Width="400"
   Height="270"
   ResizeMode="NoResize"
-  Style="{StaticResource Window_Style}"
+  Style="{StaticResource WindowBaseStyle}"
   WindowStartupLocation="CenterScreen"
   WindowStyle="None"
   mc:Ignorable="d">
@@ -23,24 +23,24 @@
         HorizontalAlignment="Left"
         VerticalContentAlignment="Center"
         Content="{x:Static I18n:AddUserGroupI18nRes.Icon}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <TextBox
         x:Name="TextBox_Icon"
         Height="30"
         Margin="0,0,0,5"
-        Style="{StaticResource TextBox_Style}" />
+        Style="{StaticResource TextBoxBaseStyle}" />
       <Label
         Height="30"
         Margin="0,0,0,5"
         HorizontalAlignment="Left"
         VerticalContentAlignment="Center"
         Content="{x:Static I18n:AddUserGroupI18nRes.Name}"
-        Style="{StaticResource Label_Style}" />
+        Style="{StaticResource LabelBaseStyle}" />
       <TextBox
         x:Name="TextBox_Name"
         Height="30"
         Margin="0,0,0,5"
-        Style="{StaticResource TextBox_Style}" />
+        Style="{StaticResource TextBoxBaseStyle}" />
       <Grid Margin="0,0,0,5">
         <StackPanel Orientation="Horizontal">
           <Label
@@ -49,7 +49,7 @@
             HorizontalAlignment="Left"
             VerticalContentAlignment="Center"
             Content="{x:Static I18n:AddUserGroupI18nRes.Preview}"
-            Style="{StaticResource Label_Style}" />
+            Style="{StaticResource LabelBaseStyle}" />
           <Label
             x:Name="Label_Preview"
             Padding="0,0,5,0"
@@ -57,7 +57,7 @@
             VerticalContentAlignment="Center"
             Background="{DynamicResource ColorLight1}"
             Content="{Binding Text, ElementName=TextBox_Name}"
-            Style="{StaticResource Label_Style}">
+            Style="{StaticResource LabelBaseStyle}">
             <pu:LabelHelper.Icon>
               <emoji:TextBlock Text="{Binding Text, ElementName=TextBox_Icon}" />
             </pu:LabelHelper.Icon>
@@ -72,7 +72,7 @@
           Margin="0,10,0,0"
           HorizontalAlignment="Left"
           Content="{x:Static I18n:AddUserGroupI18nRes.Cancel}"
-          Style="{StaticResource Button_Style}" />
+          Style="{StaticResource ButtonBaseStyle}" />
         <Button
           x:Name="Button_Yes"
           Width="100"
@@ -80,7 +80,7 @@
           Margin="0,10,0,0"
           HorizontalAlignment="Right"
           Content="{x:Static I18n:AddUserGroupI18nRes.Yes}"
-          Style="{StaticResource Button_Style}" />
+          Style="{StaticResource ButtonBaseStyle}" />
       </Grid>
     </StackPanel>
   </GroupBox>

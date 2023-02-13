@@ -16,42 +16,18 @@ using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialog;
-using I18n = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
+using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Windows.MainWindow;
+using HKW.ViewModels.ObservableI18n;
 
 namespace StarsectorTools.Pages.Settings
 {
-    internal partial class SettingsI18n : INotifyPropertyChanged
+    internal partial class SettingsPageViewModel : ObservableObject
     {
-        public I18n I18n => new();
-        public static SettingsI18n Current { get; private set; }
-
-        public SettingsI18n()
-        {
-            Current = this;
-        }
-        private string language;
-        public string Language
-        {
-            get { return language; }
-            set
-            {
-                if (language == value)
-                    return;
-                language = value;
-                var cultureInfo = new CultureInfo(value);
-                Thread.CurrentThread.CurrentUICulture = cultureInfo;
-                Thread.CurrentThread.CurrentCulture = cultureInfo;
-                I18n.Culture = cultureInfo;
-                PropertyChanged?.Invoke(this, new(""));
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-    }
-    internal partial class SettingsPageViewModel : ObservableRecipient
-    {
+        [ObservableProperty]
+        private ObservableI18n<I18nRes> i18n = new(new());
 
         public static SettingsPageViewModel Instance { get; private set; }
         //[ObservableProperty]
@@ -69,9 +45,9 @@ namespace StarsectorTools.Pages.Settings
 
         public ComboBoxVM LogLevelComboBox { get; set; } = new(new()
         {
-            //new(){ Content = SettingsI18n.LogLevel_DEBUG,ToolTip = LogLevel.DEBUG},
-            //new(){ Content = SettingsI18n.LogLevel_INFO,ToolTip = LogLevel.INFO},
-            //new(){ Content = SettingsI18n.LogLevel_WARN,ToolTip = LogLevel.WARN},
+            new(){ Content = I18nRes.LogLevel_DEBUG,ToolTip = LogLevel.DEBUG},
+            new(){ Content = I18nRes.LogLevel_INFO,ToolTip = LogLevel.INFO},
+            new(){ Content = I18nRes.LogLevel_WARN,ToolTip = LogLevel.WARN},
         });
 
         public ComboBoxVM LanguageComboBox { get; set; } = new(new()
@@ -82,35 +58,9 @@ namespace StarsectorTools.Pages.Settings
 
         public ButtonVM OpenLogFileButton { get; set; } = new()
         {
-            Content = I18n.OpenLogFile,
-            ToolTip = I18n.OpenLogFile,
+            Content = I18nRes.OpenLogFile,
+            ToolTip = I18nRes.OpenLogFile,
         };
-
-        #region I18n
-        [ObservableProperty]
-        private string i18nSettings = I18n.Settings;
-
-        [ObservableProperty]
-        private string i18nOpenLogFile = I18n.OpenLogFile;
-
-        [ObservableProperty]
-        private string i18nLogLevel = I18n.LogLevel;
-
-        [ObservableProperty]
-        private string i18nLanguage = I18n.Language;
-
-        [ObservableProperty]
-        private string i18nExpansionDebugPath = I18n.ExpansionDebugPath;
-
-        [ObservableProperty]
-        private string i18nExpansionDebugPathToolTip = I18n.ExpansionDebugPathToolTip;
-
-        [ObservableProperty]
-        private string i18nSet = I18n.Set;
-
-        [ObservableProperty]
-        private string i18nClear = I18n.Clear;
-        #endregion
 
         public SettingsPageViewModel()
         {
@@ -129,13 +79,7 @@ namespace StarsectorTools.Pages.Settings
         {
             if (parameter is not ComboBoxItemVM item)
                 return;
-            SettingsI18n.Current.Language = item.ToolTip.ToString();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void RaiseProoertyChanged()
-        {
-            PropertyChanged?.Invoke(this, new(""));
+            ObservableI18n.Language = item.ToolTip.ToString();
         }
 
         private void LogLevelComboBox_SelectionChangedEvent(object parameter)
@@ -147,7 +91,7 @@ namespace StarsectorTools.Pages.Settings
         private void SetExpansionDebugPath()
         {
             var filesName = OpenFileDialogVM.Show(
-                new() { Title = I18n.SelectDebugFile, Filter = $"Toml {I18n.File}|Expansion.toml" }
+                new() { Title = I18nRes.SelectDebugFile, Filter = $"Toml {I18nRes.File}|Expansion.toml" }
             );
             if (filesName is null || filesName.Any() is false)
                 return;
@@ -156,10 +100,10 @@ namespace StarsectorTools.Pages.Settings
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Expansion"]["DebugPath"] = path;
             toml.SaveTo(ST.ConfigTomlFile);
-            Logger.Record($"{I18n.SetExpansionDebugPath}: {path}");
+            Logger.Record($"{I18nRes.SetExpansionDebugPath}: {path}");
             if (
                 MessageBoxVM.Show(
-                    new(I18n.EffectiveAfterReload)
+                    new(I18nRes.EffectiveAfterReload)
                     {
                         Button = MessageBoxVM.Button.YesNo,
                         Icon = MessageBoxVM.Icon.Question

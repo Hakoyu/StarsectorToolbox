@@ -12,9 +12,6 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-  <Page.Resources>
-    <local:SettingsI18n x:Key="I18n" />
-  </Page.Resources>
   <Page.DataContext>
     <local:SettingsPageViewModel />
   </Page.DataContext>
@@ -22,7 +19,7 @@
     <GroupBox
       x:Name="GroupBox_Settings"
       pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-      Header="{Binding I18nSettings}"
+      Header="{Binding I18n.I18nRes.Settings}"
       Style="{StaticResource GroupBoxBaseStyle}">
       <Grid>
         <Grid.ColumnDefinitions>
@@ -48,30 +45,30 @@
               Padding="5,0,5,0"
               HorizontalAlignment="Left"
               Click="Button_OpenLogFile_Click"
-              Content="{Binding I18nOpenLogFile}"
-              Style="{StaticResource Button_Style}" />
+              Content="{Binding I18n.I18nRes.OpenLogFile}"
+              Style="{StaticResource ButtonBaseStyle}" />
             <Label
               x:Name="Label_LogLevel"
-              Content="{Binding I18nLogLevel}"
-              Style="{StaticResource Label_Style}" />
+              Content="{Binding I18n.I18nRes.LogLevel}"
+              Style="{StaticResource LabelBaseStyle}" />
             <ComboBox
               x:Name="ComboBox_LogLevel"
               Margin="0,0,5,0"
-              ItemContainerStyle="{StaticResource ComboBoxItem_Style}"
+              ItemContainerStyle="{StaticResource ComboBoxItemBaseStyle}"
               ItemsSource="{Binding LogLevelComboBox}"
               SelectedItem="{Binding LanguageComboBox.SelectedItem}"
-              Style="{StaticResource ComboBox_Style}" />
+              Style="{StaticResource ComboBoxBaseStyle}" />
             <Label
               x:Name="Label_Language"
-              Content="{Binding I18n.Language, Source={StaticResource I18n}}"
-              Style="{StaticResource Label_Style}" />
+              Content="{Binding I18n.I18nRes.Language}"
+              Style="{StaticResource LabelBaseStyle}" />
             <ComboBox
               x:Name="ComboBox_Language"
               Margin="0,0,5,0"
-              ItemContainerStyle="{StaticResource ComboBoxItem_Style}"
+              ItemContainerStyle="{StaticResource ComboBoxItemBaseStyle}"
               ItemsSource="{Binding LanguageComboBox.ItemsSource}"
               SelectedItem="{Binding LanguageComboBox.SelectedItem}"
-              Style="{StaticResource ComboBox_Style}">
+              Style="{StaticResource ComboBoxBaseStyle}">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                   <i:InvokeCommandAction Command="{Binding LanguageComboBox.SelectionChangedCommand}" CommandParameter="{Binding LanguageComboBox.SelectedItem}" />
@@ -87,9 +84,9 @@
               Cursor="Arrow"
               InputMethod.IsInputMethodEnabled="False"
               IsReadOnly="True"
-              Style="{StaticResource TextBox_Style}"
+              Style="{StaticResource TextBoxBaseStyle}"
               Text=""
-              ToolTip="{Binding I18nExpansionDebugPathToolTip}" />
+              ToolTip="{Binding I18n.I18nRes.ExpansionDebugPathToolTip}" />
             <!--  TextBox输入占位符  -->
             <Label
               Width="{Binding Width, ElementName=TextBox_ExpansionDebugPath}"
@@ -98,11 +95,11 @@
               HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ExpansionDebugPath}"
               VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ExpansionDebugPath}"
               Background="{x:Null}"
-              Content="{Binding I18nExpansionDebugPath}"
+              Content="{Binding I18n.I18nRes.ExpansionDebugPath}"
               IsEnabled="False"
               IsHitTestVisible="False">
               <Label.Style>
-                <Style BasedOn="{StaticResource Label_Style}" TargetType="Label">
+                <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
                   <Setter Property="Visibility" Value="Hidden" />
                   <Style.Triggers>
                     <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExpansionDebugPath}" Value="">
@@ -118,16 +115,16 @@
               Margin="0,0,65,0"
               HorizontalAlignment="Right"
               Command="{Binding SetExpansionDebugPathCommand}"
-              Content="{Binding I18nSet}"
-              Style="{StaticResource Button_Style}" />
+              Content="{Binding I18n.I18nRes.Set}"
+              Style="{StaticResource ButtonBaseStyle}" />
             <Button
               x:Name="Button_ClearExpansionDebugPath"
               Width="60"
               HorizontalAlignment="Right"
               Click="Button_ClearExpansionDebugPath_Click"
-              Content="{Binding I18nClear}">
+              Content="{Binding I18n.I18nRes.Clear}">
               <Button.Style>
-                <Style BasedOn="{StaticResource Button_Style}" TargetType="Button">
+                <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
                   <Setter Property="IsEnabled" Value="True" />
                   <Style.Triggers>
                     <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExpansionDebugPath}" Value="">
