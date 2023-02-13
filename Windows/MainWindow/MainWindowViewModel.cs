@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Controls;
-using HKW.ViewModels.ObservableI18n;
+using HKW.ViewModels;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;

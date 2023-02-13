@@ -20,7 +20,7 @@ using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Windows.MainWindow;
-using HKW.ViewModels.ObservableI18n;
+using HKW.ViewModels;
 
 namespace StarsectorTools.Pages.Settings
 {
