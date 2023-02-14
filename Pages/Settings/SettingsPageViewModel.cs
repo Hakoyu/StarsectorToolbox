@@ -27,9 +27,7 @@ namespace StarsectorTools.Pages.Settings
     internal partial class SettingsPageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = new(new());
-
-        public static SettingsPageViewModel Instance { get; private set; }
+        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
         //[ObservableProperty]
         //private string language;
         //partial void OnLanguageChanged(string value)
@@ -68,7 +66,6 @@ namespace StarsectorTools.Pages.Settings
         }
         public SettingsPageViewModel(bool noop)
         {
-            Instance = this;
             ExpansionDebugPath = WeakReferenceMessenger.Default.Send<ExpansionDebugPathRequestMessage>();
             //LogLevelComboBox.SelectedItem = LogLevelComboBox.First(vm => vm.ToolTip is LogLevel level && level == Logger.Options.DefaultLevel);
             LogLevelComboBox.SelectionChangedEvent += LogLevelComboBox_SelectionChangedEvent;
@@ -79,7 +76,7 @@ namespace StarsectorTools.Pages.Settings
         {
             if (parameter is not ComboBoxItemVM item)
                 return;
-            ObservableI18n.Language = item.ToolTip.ToString();
+            ObservableI18n.Language = item.ToolTip!.ToString()!;
         }
 
         private void LogLevelComboBox_SelectionChangedEvent(object parameter)

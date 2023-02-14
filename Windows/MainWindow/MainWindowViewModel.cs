@@ -34,7 +34,7 @@ namespace StarsectorTools.Windows.MainWindow
         private bool settingsButtonIsChecked = false;
 
         [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = new(new());
+        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
 
         #region Page
 
