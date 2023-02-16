@@ -1,8 +1,7 @@
-﻿[Game]
+﻿Lang = "zh-CN"
+LogLevel = "INFO"
+[Game]
 Path = ""
 ClearLogOnStart = false
-[Extras]
-LogLevel = "INFO"
-Lang = "zh-CN"
-[Expansion]
+[Extension]
 DebugPath = ""

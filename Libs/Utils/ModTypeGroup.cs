@@ -28,7 +28,7 @@ namespace StarsectorTools.Libs.Utils
         public const string FactionMods = nameof(FactionMods);
 
         /// <summary>内容模组</summary>
-        public const string ContentExpansions = nameof(ContentExpansions);
+        public const string ContentExtensions = nameof(ContentExtensions);
 
         /// <summary>功能模组</summary>
         public const string UtilityMods = nameof(UtilityMods);

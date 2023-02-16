@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Messaging.Messages;
 
 namespace StarsectorTools.Libs.Messages
 {
-    internal sealed class ExpansionDebugPathRequestMessage : RequestMessage<string>
+    internal sealed class ExtensionDebugPathRequestMessage : RequestMessage<string>
     {
 
     }

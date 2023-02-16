@@ -153,8 +153,8 @@
   <data name="Set" xml:space="preserve">
     <value>Set</value>
   </data>
-  <data name="ExpansionDebugPath" xml:space="preserve">
-    <value>Expansion debug path</value>
+  <data name="ExtensionDebugPath" xml:space="preserve">
+    <value>Extension debug path</value>
   </data>
   <data name="SelectDebugFile" xml:space="preserve">
     <value>Select debug file</value>
@@ -162,13 +162,13 @@
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="SetExpansionDebugPath" xml:space="preserve">
-    <value>Set expansion debug path</value>
+  <data name="SetExtensionDebugPath" xml:space="preserve">
+    <value>Set extension debug path</value>
   </data>
-  <data name="ClearExpansionDebugPath" xml:space="preserve">
-    <value>Clear expansion debug path</value>
+  <data name="ClearExtensionDebugPath" xml:space="preserve">
+    <value>Clear extension debug path</value>
   </data>
-  <data name="ExpansionDebugPathToolTip" xml:space="preserve">
+  <data name="ExtensionDebugPathToolTip" xml:space="preserve">
     <value>Used to specify the path of the extension, for developers to debug.</value>
   </data>
   <data name="EffectiveAfterReload" xml:space="preserve">

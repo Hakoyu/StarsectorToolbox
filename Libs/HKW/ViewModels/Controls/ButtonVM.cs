@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace HKW.ViewModels.Controls
 {
@@ -20,6 +22,12 @@ namespace HKW.ViewModels.Controls
         {
 
         }
+        [ObservableProperty]
+        private bool canExecute = true;
+
+        [RelayCommand(CanExecute = nameof(CanExecute))]
+        private void Button(object parameter) => CommandEvent?.Invoke(parameter);
+
         /// <summary>
         /// 委托
         /// </summary>
@@ -28,6 +36,6 @@ namespace HKW.ViewModels.Controls
         /// <summary>
         /// 选择改变事件
         /// </summary>
-        public event ViewModelHandler? ClickEvent;
+        public event ViewModelHandler? CommandEvent;
     }
 }

@@ -260,7 +260,7 @@ namespace StarsectorTools.Pages.ModManager
                 [ModTypeGroup.Libraries] = new(),
                 [ModTypeGroup.MegaMods] = new(),
                 [ModTypeGroup.FactionMods] = new(),
-                [ModTypeGroup.ContentExpansions] = new(),
+                [ModTypeGroup.ContentExtensions] = new(),
                 [ModTypeGroup.UtilityMods] = new(),
                 [ModTypeGroup.MiscellaneousMods] = new(),
                 [ModTypeGroup.BeautifyMods] = new(),

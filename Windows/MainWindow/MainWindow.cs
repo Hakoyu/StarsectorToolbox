@@ -143,8 +143,8 @@ namespace StarsectorTools.Windows.MainWindow
             ViewModel.SettingsPage = new SettingsPage();
             // 主界面必须在View中生成,拓展及调试拓展可以在ViewModel中使用反射
             InitializeMainPage();
-            //InitializeExpansionPages();
-            //InitializeExpansionDebugPage();
+            //InitializeExtensionPages();
+            //InitializeExtensionDebugPage();
         }
 
         private void InitializeMainPage()

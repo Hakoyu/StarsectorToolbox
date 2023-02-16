@@ -151,11 +151,11 @@
   <data name="GlobalException" xml:space="preserve">
     <value>全局异常</value>
   </data>
-  <data name="Expansion" xml:space="preserve">
-    <value>拓展</value>
+  <data name="Extension" xml:space="preserve">
+    <value>扩展</value>
   </data>
-  <data name="RefreshExpansionList" xml:space="preserve">
-    <value>刷新拓展列表</value>
+  <data name="RefreshExtensionList" xml:space="preserve">
+    <value>刷新扩展列表</value>
   </data>
   <data name="ModManagerToolTip" xml:space="preserve">
     <value>用于浏览并管理游戏模组
@@ -165,11 +165,11 @@
     <value>用于对游戏进行设置
 能修改游戏内存,清理存档和战役配装等</value>
   </data>
-  <data name="ExpansionLoadError" xml:space="preserve">
-    <value>拓展加载错误</value>
+  <data name="ExtensionLoadError" xml:space="preserve">
+    <value>扩展加载错误</value>
   </data>
-  <data name="AddExpansionPage" xml:space="preserve">
-    <value>添加拓展页面</value>
+  <data name="AddExtensionPage" xml:space="preserve">
+    <value>添加扩展页面</value>
   </data>
   <data name="DisplayLanguageIs" xml:space="preserve">
     <value>显示语言为</value>
@@ -180,14 +180,14 @@
   <data name="PageInitializeError" xml:space="preserve">
     <value>页面初始化错误</value>
   </data>
-  <data name="ExpansionIdError" xml:space="preserve">
-    <value>ExpansionId错误</value>
+  <data name="ExtensionIdError" xml:space="preserve">
+    <value>扩展ID错误</value>
   </data>
-  <data name="ExpansionFileError" xml:space="preserve">
-    <value>ExpansionFile错误</value>
+  <data name="ExtensionFileError" xml:space="preserve">
+    <value>扩展文件错误</value>
   </data>
-  <data name="ExpansionAlreadyExists" xml:space="preserve">
-    <value>拓展已存在</value>
+  <data name="ExtensionAlreadyExists" xml:space="preserve">
+    <value>扩展已存在</value>
   </data>
   <data name="ConfigFileCreationCompleted" xml:space="preserve">
     <value>设置文件创建完毕</value>
@@ -195,22 +195,22 @@
   <data name="ConfigFileError" xml:space="preserve">
     <value>设置文件错误,将恢复为默认设置</value>
   </data>
-  <data name="ExpansionPathIsEmpty" xml:space="preserve">
-    <value>拓展目录为空</value>
+  <data name="ExtensionPathIsEmpty" xml:space="preserve">
+    <value>扩展目录为空</value>
   </data>
-  <data name="ExpansionTomlFileNotFound" xml:space="preserve">
-    <value>拓展信息文件未找到</value>
+  <data name="ExtensionTomlFileNotFound" xml:space="preserve">
+    <value>扩展信息文件未找到</value>
   </data>
-  <data name="IncompatibleExpansion" xml:space="preserve">
-    <value>此拓展支持的软件版本与当前版本不一致,可能会出现兼容问题</value>
+  <data name="IncompatibleExtension" xml:space="preserve">
+    <value>此扩展支持的软件版本与当前版本不一致,可能会出现兼容问题</value>
   </data>
-  <data name="GlobalExpansionExceptionMessage" xml:space="preserve">
-    <value>全局拓展异常 {0} !!!警告!!!
-如果你看到了这个错误,说明这是拓展中意料之外的情况
-可能会影响拓展的正常运行,建议查看日志并提交issue至拓展开发者.</value>
+  <data name="GlobalExtensionExceptionMessage" xml:space="preserve">
+    <value>全局扩展异常 {0} !!!警告!!!
+如果你看到了这个错误,说明这是扩展中意料之外的情况
+可能会影响扩展的正常运行,建议查看日志并提交issue至扩展开发者.</value>
   </data>
-  <data name="GlobalExpansionException" xml:space="preserve">
-    <value>全局拓展异常</value>
+  <data name="GlobalExtensionException" xml:space="preserve">
+    <value>全局扩展异常</value>
   </data>
   <data name="StartGame" xml:space="preserve">
     <value>启动游戏</value>

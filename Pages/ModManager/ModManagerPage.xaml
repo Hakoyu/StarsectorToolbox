@@ -195,10 +195,10 @@
                       </pu:ListBoxItemHelper.Icon>
                     </ListBoxItem>
                     <ListBoxItem
-                      Content="{x:Static I18n:ModManagerPageI18nRes.ContentExpansions}"
+                      Content="{x:Static I18n:ModManagerPageI18nRes.ContentExtensions}"
                       Style="{StaticResource ListBoxItemBaseStyle}"
-                      Tag="{x:Static ModTypeGroup:ModTypeGroup.ContentExpansions}"
-                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ContentExpansions}">
+                      Tag="{x:Static ModTypeGroup:ModTypeGroup.ContentExtensions}"
+                      ToolTip="{x:Static I18n:ModManagerPageI18nRes.ContentExtensions}">
                       <pu:ListBoxItemHelper.Icon>
                         <emoji:TextBlock Text="🆙" />
                       </pu:ListBoxItemHelper.Icon>

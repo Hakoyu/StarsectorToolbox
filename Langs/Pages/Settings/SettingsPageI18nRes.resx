@@ -133,7 +133,7 @@
   <data name="Set" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="ExpansionDebugPath" xml:space="preserve">
+  <data name="ExtensionDebugPath" xml:space="preserve">
     <value>拓展调试路径</value>
   </data>
   <data name="SelectDebugFile" xml:space="preserve">
@@ -142,13 +142,13 @@
   <data name="File" xml:space="preserve">
     <value>文件</value>
   </data>
-  <data name="SetExpansionDebugPath" xml:space="preserve">
+  <data name="SetExtensionDebugPath" xml:space="preserve">
     <value>设置拓展调试目录</value>
   </data>
-  <data name="ClearExpansionDebugPath" xml:space="preserve">
+  <data name="ClearExtensionDebugPath" xml:space="preserve">
     <value>清除拓展调试目录</value>
   </data>
-  <data name="ExpansionDebugPathToolTip" xml:space="preserve">
+  <data name="ExtensionDebugPathToolTip" xml:space="preserve">
     <value>用于指定拓展的路径,方便开发者调试.</value>
   </data>
   <data name="EffectiveAfterReload" xml:space="preserve">

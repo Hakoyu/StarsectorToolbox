@@ -11,7 +11,7 @@
 ## 创建项目
 
 [最小演示 Demo](https://github.com/Hakoyu/StarsectorTools/blob/master/Expanded%20Tutorial/WpfLibrary1.7z)  
-[基础演示 Demo](https://github.com/Hakoyu/StarsectorToolsExpansionDemo)
+[基础演示 Demo](https://github.com/Hakoyu/StarsectorToolsExtensionDemo)
 
 ### 设置项目
 
@@ -30,7 +30,7 @@
 ### 设置拓展信息
 
 在 Debug 目录下(通常位于 **\bin\Debug\net6.0-windows**)  
-建立拓展信息文件 **Expansion.toml**  
+建立拓展信息文件 **Extension.toml**  
 标准格式如下
 
 ```toml
@@ -49,9 +49,9 @@ ToolsVersion = "0.8.0.0"
 # 拓展的描述
 Description = "这是一个测试案例"
 # 拓展的入口
-ExpansionId = "WpfLibrary1.Page1"
+ExtensionId = "WpfLibrary1.Page1"
 # 拓展的入口文件
-ExpansionFile = "WpfLibrary1.dll"
+ExtensionFile = "WpfLibrary1.dll"
 ```
 
 工具箱版本可查看 https://github.com/Hakoyu/StarsectorTools/releases
@@ -461,7 +461,7 @@ namespace WpfLibrary1
 
 ## 打包
 
-将 **WpfLibrary1.dll** 与 **Expansion.toml** 放入同一个文件夹  
-再将文件夹放入软件根目录的 **Expansion** 文件夹即可  
+将 **WpfLibrary1.dll** 与 **Extension.toml** 放入同一个文件夹  
+再将文件夹放入软件根目录的 **Extension** 文件夹即可  
 此时启动软件,可在主界面的 **拓展** 下拉列表中看到导入的拓展项  
 ![](https://s2.loli.net/2023/01/12/IiUpqf9gchNGmAo.png)

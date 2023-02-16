@@ -21,6 +21,7 @@ using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Windows.MainWindow;
 using HKW.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace StarsectorTools.Pages.Settings
 {
@@ -28,76 +29,103 @@ namespace StarsectorTools.Pages.Settings
     {
         [ObservableProperty]
         private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
-        //[ObservableProperty]
-        //private string language;
-        //partial void OnLanguageChanged(string value)
-        //{
-        //    var cultureInfo = new CultureInfo(value);
-        //    Thread.CurrentThread.CurrentUICulture = cultureInfo;
-        //    Thread.CurrentThread.CurrentCulture = cultureInfo;
-        //    SettingsI18n.Current.Language = value;
-        //}
 
         [ObservableProperty]
-        private string? expansionDebugPath;
+        private string? extensionDebugPath;
 
-        public ComboBoxVM LogLevelComboBox { get; set; } = new(new()
-        {
-            new(){ Content = I18nRes.LogLevel_DEBUG,ToolTip = LogLevel.DEBUG},
-            new(){ Content = I18nRes.LogLevel_INFO,ToolTip = LogLevel.INFO},
-            new(){ Content = I18nRes.LogLevel_WARN,ToolTip = LogLevel.WARN},
-        });
+        [ObservableProperty]
+        private ComboBoxVM comboBox_LogLevel =
+            new(
+                new()
+                {
+                    new() { Content = I18nRes.LogLevel_DEBUG, ToolTip = LogLevel.DEBUG },
+                    new() { Content = I18nRes.LogLevel_INFO, ToolTip = LogLevel.INFO },
+                    new() { Content = I18nRes.LogLevel_WARN, ToolTip = LogLevel.WARN },
+                }
+            );
 
-        public ComboBoxVM LanguageComboBox { get; set; } = new(new()
-        {
-            new(){ Content = "简体中文",ToolTip = "zh-CN"},
-            new(){ Content = "English",ToolTip = "en-US"},
-        });
-
-        public ButtonVM OpenLogFileButton { get; set; } = new()
-        {
-            Content = I18nRes.OpenLogFile,
-            ToolTip = I18nRes.OpenLogFile,
-        };
+        [ObservableProperty]
+        private ComboBoxVM comboBox_Language =
+            new(
+                new()
+                {
+                    new() { Content = "English", ToolTip = "en-US" },
+                    new() { Content = "简体中文", ToolTip = "zh-CN" },
+                }
+            );
 
         public SettingsPageViewModel()
         {
-            //ExpansionDebugPath = WeakReferenceMessenger.Default.Send<ExpansionDebugPathRequestMessage>();
-        }
-        public SettingsPageViewModel(bool noop)
-        {
-            ExpansionDebugPath = WeakReferenceMessenger.Default.Send<ExpansionDebugPathRequestMessage>();
-            //LogLevelComboBox.SelectedItem = LogLevelComboBox.First(vm => vm.ToolTip is LogLevel level && level == Logger.Options.DefaultLevel);
-            LogLevelComboBox.SelectionChangedEvent += LogLevelComboBox_SelectionChangedEvent;
-            LanguageComboBox.SelectionChangedEvent += LanguageComboBox_SelectionChangedEvent;
+            //ExtensionDebugPath = WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
         }
 
-        private void LanguageComboBox_SelectionChangedEvent(object parameter)
+        public SettingsPageViewModel(bool noop)
+        {
+            I18n.AddChangedActionAndRefresh(I18nChangedAction);
+            ExtensionDebugPath =
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
+            // 设置LogLevel初始值
+            ComboBox_LogLevel.SelectedItem = ComboBox_LogLevel.First(
+                i => i.ToolTip is LogLevel level && level == Logger.Options.DefaultLevel
+            );
+            // 设置Language初始值
+            ComboBox_Language.SelectedItem = ComboBox_Language.FirstOrDefault(
+                i => i.ToolTip.ToString() == ObservableI18n.Language,
+                ComboBox_Language[0]
+            );
+            // 注册事件
+            ComboBox_LogLevel.SelectionChangedEvent += ComboBox_LogLevel_SelectionChangedEvent;
+            ComboBox_Language.SelectionChangedEvent += ComboBox_Language_SelectionChangedEvent;
+        }
+
+        private void I18nChangedAction()
+        {
+            ComboBox_LogLevel[0].Content = I18nRes.LogLevel_DEBUG;
+            ComboBox_LogLevel[1].Content = I18nRes.LogLevel_INFO;
+            ComboBox_LogLevel[2].Content = I18nRes.LogLevel_WARN;
+        }
+
+        private void ComboBox_Language_SelectionChangedEvent(object parameter)
         {
             if (parameter is not ComboBoxItemVM item)
                 return;
+            var language = item.ToolTip!.ToString()!;
+            if (ObservableI18n.Language == language)
+                return;
             ObservableI18n.Language = item.ToolTip!.ToString()!;
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Lang"] = ObservableI18n.Language;
+            toml.SaveTo(ST.ConfigTomlFile);
         }
 
-        private void LogLevelComboBox_SelectionChangedEvent(object parameter)
+        private void ComboBox_LogLevel_SelectionChangedEvent(object parameter)
         {
-
+            if (parameter is not ComboBoxItemVM item)
+                return;
+            var level = item.ToolTip!.ToString()!;
+            if (Logger.Options.DefaultLevel.ToString() == level)
+                return;
+            Logger.Options.DefaultLevel = Logger.LogLevelConverter(level);
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["LogLevel"] = level;
+            toml.SaveTo(ST.ConfigTomlFile);
         }
 
         [RelayCommand]
-        private void SetExpansionDebugPath()
+        private void SetExtensionDebugPath()
         {
             var filesName = OpenFileDialogVM.Show(
-                new() { Title = I18nRes.SelectDebugFile, Filter = $"Toml {I18nRes.File}|Expansion.toml" }
+                new()
+                {
+                    Title = I18nRes.SelectDebugFile,
+                    Filter = $"Toml {I18nRes.File}|Extension.toml"
+                }
             );
             if (filesName is null || filesName.Any() is false)
                 return;
             string path = Path.GetDirectoryName(filesName.First())!;
-            ExpansionDebugPath = path;
-            var toml = TOML.Parse(ST.ConfigTomlFile);
-            toml["Expansion"]["DebugPath"] = path;
-            toml.SaveTo(ST.ConfigTomlFile);
-            Logger.Record($"{I18nRes.SetExpansionDebugPath}: {path}");
+            ExtensionDebugPath = path;
+            Logger.Record($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
             if (
                 MessageBoxVM.Show(
                     new(I18nRes.EffectiveAfterReload)
@@ -107,7 +135,30 @@ namespace StarsectorTools.Pages.Settings
                     }
                 ) is MessageBoxVM.Result.Yes
             )
-                WeakReferenceMessenger.Default.Send<ExpansionDebugPathChangeMessage>(new(path));
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
+                    new(ExtensionDebugPath)
+                );
         }
+
+        [RelayCommand(CanExecute = nameof(ClearButtonCanExecute))]
+        private void ClearExtensionDebugPath()
+        {
+            ExtensionDebugPath = string.Empty;
+            Logger.Record($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
+            if (
+                MessageBoxVM.Show(
+                    new(I18nRes.EffectiveAfterReload)
+                    {
+                        Button = MessageBoxVM.Button.YesNo,
+                        Icon = MessageBoxVM.Icon.Question
+                    }
+                ) is MessageBoxVM.Result.Yes
+            )
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
+                    new(ExtensionDebugPath)
+                );
+        }
+
+        private bool ClearButtonCanExecute() => string.IsNullOrEmpty(ExtensionDebugPath);
     }
 }

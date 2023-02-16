@@ -54,10 +54,16 @@
             <ComboBox
               x:Name="ComboBox_LogLevel"
               Margin="0,0,5,0"
-              ItemContainerStyle="{StaticResource ComboBoxItemBaseStyle}"
-              ItemsSource="{Binding LogLevelComboBox}"
-              SelectedItem="{Binding LanguageComboBox.SelectedItem}"
-              Style="{StaticResource ComboBoxBaseStyle}" />
+              DisplayMemberPath="Content"
+              ItemsSource="{Binding ComboBox_LogLevel.ItemsSource}"
+              SelectedItem="{Binding ComboBox_LogLevel.SelectedItem}"
+              Style="{StaticResource ComboBoxBaseStyle}">
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                  <i:InvokeCommandAction Command="{Binding ComboBox_LogLevel.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_LogLevel.SelectedItem}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+            </ComboBox>
             <Label
               x:Name="Label_Language"
               Content="{Binding I18n.I18nRes.Language}"
@@ -65,20 +71,20 @@
             <ComboBox
               x:Name="ComboBox_Language"
               Margin="0,0,5,0"
-              ItemContainerStyle="{StaticResource ComboBoxItemBaseStyle}"
-              ItemsSource="{Binding LanguageComboBox.ItemsSource}"
-              SelectedItem="{Binding LanguageComboBox.SelectedItem}"
+              DisplayMemberPath="Content"
+              ItemsSource="{Binding ComboBox_Language.ItemsSource}"
+              SelectedItem="{Binding ComboBox_Language.SelectedItem}"
               Style="{StaticResource ComboBoxBaseStyle}">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                  <i:InvokeCommandAction Command="{Binding LanguageComboBox.SelectionChangedCommand}" CommandParameter="{Binding LanguageComboBox.SelectedItem}" />
+                  <i:InvokeCommandAction Command="{Binding ComboBox_Language.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_Language.SelectedItem}" />
                 </i:EventTrigger>
               </i:Interaction.Triggers>
             </ComboBox>
           </StackPanel>
           <Grid VerticalAlignment="Top" Cursor="">
             <TextBox
-              x:Name="TextBox_ExpansionDebugPath"
+              x:Name="TextBox_ExtensionDebugPath"
               Margin="0,0,125,0"
               VerticalAlignment="Top"
               Cursor="Arrow"
@@ -86,23 +92,23 @@
               IsReadOnly="True"
               Style="{StaticResource TextBoxBaseStyle}"
               Text=""
-              ToolTip="{Binding I18n.I18nRes.ExpansionDebugPathToolTip}" />
+              ToolTip="{Binding I18n.I18nRes.ExtensionDebugPathToolTip}" />
             <!--  TextBox输入占位符  -->
             <Label
-              Width="{Binding Width, ElementName=TextBox_ExpansionDebugPath}"
-              Height="{Binding Height, ElementName=TextBox_ExpansionDebugPath}"
-              Margin="{Binding Margin, ElementName=TextBox_ExpansionDebugPath}"
-              HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ExpansionDebugPath}"
-              VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ExpansionDebugPath}"
+              Width="{Binding Width, ElementName=TextBox_ExtensionDebugPath}"
+              Height="{Binding Height, ElementName=TextBox_ExtensionDebugPath}"
+              Margin="{Binding Margin, ElementName=TextBox_ExtensionDebugPath}"
+              HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ExtensionDebugPath}"
+              VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ExtensionDebugPath}"
               Background="{x:Null}"
-              Content="{Binding I18n.I18nRes.ExpansionDebugPath}"
+              Content="{Binding I18n.I18nRes.ExtensionDebugPath}"
               IsEnabled="False"
               IsHitTestVisible="False">
               <Label.Style>
                 <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
                   <Setter Property="Visibility" Value="Hidden" />
                   <Style.Triggers>
-                    <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExpansionDebugPath}" Value="">
+                    <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExtensionDebugPath}" Value="">
                       <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                   </Style.Triggers>
@@ -110,24 +116,24 @@
               </Label.Style>
             </Label>
             <Button
-              x:Name="Button_SetExpansionDebugPath"
+              x:Name="Button_SetExtensionDebugPath"
               Width="60"
               Margin="0,0,65,0"
               HorizontalAlignment="Right"
-              Command="{Binding SetExpansionDebugPathCommand}"
+              Command="{Binding SetExtensionDebugPathCommand}"
               Content="{Binding I18n.I18nRes.Set}"
               Style="{StaticResource ButtonBaseStyle}" />
             <Button
-              x:Name="Button_ClearExpansionDebugPath"
+              x:Name="Button_ClearExtensionDebugPath"
               Width="60"
               HorizontalAlignment="Right"
-              Click="Button_ClearExpansionDebugPath_Click"
+              Command="{Binding ClearExtensionDebugPathCommand}"
               Content="{Binding I18n.I18nRes.Clear}">
               <Button.Style>
                 <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
                   <Setter Property="IsEnabled" Value="True" />
                   <Style.Triggers>
-                    <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExpansionDebugPath}" Value="">
+                    <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExtensionDebugPath}" Value="">
                       <Setter Property="IsEnabled" Value="False" />
                     </DataTrigger>
                   </Style.Triggers>

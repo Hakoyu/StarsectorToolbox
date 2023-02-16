@@ -24,11 +24,8 @@ namespace HKW.ViewModels.Controls
             CommandEvent += handler;
         }
         [RelayCommand]
-        private void MenuItem(object parameter)
-        {
-            if (CommandEvent is not null)
-                CommandEvent(parameter);
-        }
+        private void MenuItem(object parameter) => CommandEvent?.Invoke(parameter);
+
         /// <summary>
         /// 委托
         /// </summary>

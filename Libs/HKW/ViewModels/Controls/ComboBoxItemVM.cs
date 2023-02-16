@@ -15,7 +15,7 @@ namespace HKW.ViewModels.Controls
     public partial class ComboBoxItemVM : ContentControlVM
     {
         [ObservableProperty]
-        private object? icon;
+        private bool isSelected = false;
         /// <summary>
         /// 初始化
         /// </summary>

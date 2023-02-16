@@ -61,11 +61,11 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 添加拓展页面 的本地化字符串。
+        ///   查找类似 添加扩展页面 的本地化字符串。
         /// </summary>
-        public static string AddExpansionPage {
+        public static string AddExtensionPage {
             get {
-                return ResourceManager.GetString("AddExpansionPage", resourceCulture);
+                return ResourceManager.GetString("AddExtensionPage", resourceCulture);
             }
         }
         
@@ -124,65 +124,65 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 拓展 的本地化字符串。
+        ///   查找类似 扩展 的本地化字符串。
         /// </summary>
-        public static string Expansion {
+        public static string Extension {
             get {
-                return ResourceManager.GetString("Expansion", resourceCulture);
+                return ResourceManager.GetString("Extension", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 拓展已存在 的本地化字符串。
+        ///   查找类似 扩展已存在 的本地化字符串。
         /// </summary>
-        public static string ExpansionAlreadyExists {
+        public static string ExtensionAlreadyExists {
             get {
-                return ResourceManager.GetString("ExpansionAlreadyExists", resourceCulture);
+                return ResourceManager.GetString("ExtensionAlreadyExists", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 ExpansionFile错误 的本地化字符串。
+        ///   查找类似 扩展文件错误 的本地化字符串。
         /// </summary>
-        public static string ExpansionFileError {
+        public static string ExtensionFileError {
             get {
-                return ResourceManager.GetString("ExpansionFileError", resourceCulture);
+                return ResourceManager.GetString("ExtensionFileError", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 ExpansionId错误 的本地化字符串。
+        ///   查找类似 扩展ID错误 的本地化字符串。
         /// </summary>
-        public static string ExpansionIdError {
+        public static string ExtensionIdError {
             get {
-                return ResourceManager.GetString("ExpansionIdError", resourceCulture);
+                return ResourceManager.GetString("ExtensionIdError", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 拓展加载错误 的本地化字符串。
+        ///   查找类似 扩展加载错误 的本地化字符串。
         /// </summary>
-        public static string ExpansionLoadError {
+        public static string ExtensionLoadError {
             get {
-                return ResourceManager.GetString("ExpansionLoadError", resourceCulture);
+                return ResourceManager.GetString("ExtensionLoadError", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 拓展目录为空 的本地化字符串。
+        ///   查找类似 扩展目录为空 的本地化字符串。
         /// </summary>
-        public static string ExpansionPathIsEmpty {
+        public static string ExtensionPathIsEmpty {
             get {
-                return ResourceManager.GetString("ExpansionPathIsEmpty", resourceCulture);
+                return ResourceManager.GetString("ExtensionPathIsEmpty", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 拓展信息文件未找到 的本地化字符串。
+        ///   查找类似 扩展信息文件未找到 的本地化字符串。
         /// </summary>
-        public static string ExpansionTomlFileNotFound {
+        public static string ExtensionTomlFileNotFound {
             get {
-                return ResourceManager.GetString("ExpansionTomlFileNotFound", resourceCulture);
+                return ResourceManager.GetString("ExtensionTomlFileNotFound", resourceCulture);
             }
         }
         
@@ -263,31 +263,31 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 全局拓展异常 的本地化字符串。
+        ///   查找类似 全局扩展异常 的本地化字符串。
         /// </summary>
-        public static string GlobalExpansionException {
+        public static string GlobalExtensionException {
             get {
-                return ResourceManager.GetString("GlobalExpansionException", resourceCulture);
+                return ResourceManager.GetString("GlobalExtensionException", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 全局拓展异常 {0} !!!警告!!!
-        ///如果你看到了这个错误,说明这是拓展中意料之外的情况
-        ///可能会影响拓展的正常运行,建议查看日志并提交issue至拓展开发者. 的本地化字符串。
+        ///   查找类似 全局扩展异常 {0} !!!警告!!!
+        ///如果你看到了这个错误,说明这是扩展中意料之外的情况
+        ///可能会影响扩展的正常运行,建议查看日志并提交issue至扩展开发者. 的本地化字符串。
         /// </summary>
-        public static string GlobalExpansionExceptionMessage {
+        public static string GlobalExtensionExceptionMessage {
             get {
-                return ResourceManager.GetString("GlobalExpansionExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("GlobalExtensionExceptionMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 此拓展支持的软件版本与当前版本不一致,可能会出现兼容问题 的本地化字符串。
+        ///   查找类似 此扩展支持的软件版本与当前版本不一致,可能会出现兼容问题 的本地化字符串。
         /// </summary>
-        public static string IncompatibleExpansion {
+        public static string IncompatibleExtension {
             get {
-                return ResourceManager.GetString("IncompatibleExpansion", resourceCulture);
+                return ResourceManager.GetString("IncompatibleExtension", resourceCulture);
             }
         }
         
@@ -411,11 +411,11 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 刷新拓展列表 的本地化字符串。
+        ///   查找类似 刷新扩展列表 的本地化字符串。
         /// </summary>
-        public static string RefreshExpansionList {
+        public static string RefreshExtensionList {
             get {
-                return ResourceManager.GetString("RefreshExpansionList", resourceCulture);
+                return ResourceManager.GetString("RefreshExtensionList", resourceCulture);
             }
         }
         

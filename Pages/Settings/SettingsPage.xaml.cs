@@ -42,7 +42,7 @@ namespace StarsectorTools.Pages.Settings
         {
             //foreach (ComboBoxItem item in ComboBox_LogLevel.Items)
             //{
-            //    if (item.ToolTip.ToString() == STLog.LogLevel.ToString())
+            //    if (item.ToolTip.ToString() == STLog.ComboBox_LogLevel.ToString())
             //    {
             //        ComboBox_LogLevel.SelectedItem = item;
             //        return;
@@ -121,33 +121,33 @@ namespace StarsectorTools.Pages.Settings
             }
         }
 
-        private void Button_SetExpansionDebugPath_Click(object sender, RoutedEventArgs e)
+        private void Button_SetExtensionDebugPath_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
                 Title = I18n.SelectDebugFile,
-                Filter = $"Toml {I18n.File}|Expansion.toml"
+                Filter = $"Toml {I18n.File}|Extension.toml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
                 string path = Path.GetDirectoryName(openFileDialog.FileName)!;
-                TextBox_ExpansionDebugPath.Text = path;
+                TextBox_ExtensionDebugPath.Text = path;
                 TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
-                toml["Expansion"]["DebugPath"] = path;
+                toml["Extension"]["DebugPath"] = path;
                 toml.SaveTo(ST.ConfigTomlFile);
-                STLog.WriteLine($"{I18n.SetExpansionDebugPath}: {path}");
+                STLog.WriteLine($"{I18n.SetExtensionDebugPath}: {path}");
                 //if (Utils.ShowMessageBox(I18nRes.EffectiveAfterReload, MessageBoxButton.YesNo, STMessageBoxIcon.Question) == MessageBoxResult.Yes)
-                //    MainWindowViewModel.Instance.RefreshExpansionMenu();
+                //    MainWindowViewModel.Instance.RefreshExtensionMenu();
             }
         }
 
-        private void Button_ClearExpansionDebugPath_Click(object sender, RoutedEventArgs e)
+        private void Button_ClearExtensionDebugPath_Click(object sender, RoutedEventArgs e)
         {
-            TextBox_ExpansionDebugPath.Text = "";
+            TextBox_ExtensionDebugPath.Text = "";
             TomlTable toml = TOML.Parse(ST.ConfigTomlFile);
-            toml["Expansion"]["DebugPath"] = "";
+            toml["Extension"]["DebugPath"] = "";
             toml.SaveTo(ST.ConfigTomlFile);
-            STLog.WriteLine(I18n.ClearExpansionDebugPath);
+            STLog.WriteLine(I18n.ClearExtensionDebugPath);
         }
     }
 }

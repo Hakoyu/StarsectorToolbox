@@ -243,9 +243,9 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         /// <summary>
         ///   查找类似 内容拓展 的本地化字符串。
         /// </summary>
-        public static string ContentExpansions {
+        public static string ContentExtensions {
             get {
-                return ResourceManager.GetString("ContentExpansions", resourceCulture);
+                return ResourceManager.GetString("ContentExtensions", resourceCulture);
             }
         }
         

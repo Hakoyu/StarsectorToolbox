@@ -15,8 +15,6 @@ namespace HKW.ViewModels.Controls
         [ObservableProperty]
         private string? group;
         [ObservableProperty]
-        private object? icon;
-        [ObservableProperty]
         private bool isSelected = false;
         /// <summary>
         /// 初始化

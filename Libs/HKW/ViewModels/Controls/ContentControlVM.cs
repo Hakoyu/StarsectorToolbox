@@ -15,6 +15,8 @@ namespace HKW.ViewModels.Controls
     public partial class ContentControlVM : ControlVMBase
     {
         [ObservableProperty]
+        private object? icon;
+        [ObservableProperty]
         private object? content;
     }
 }

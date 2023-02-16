@@ -348,7 +348,7 @@
   <data name="FactionMods" xml:space="preserve">
     <value>派系模组</value>
   </data>
-  <data name="ContentExpansions" xml:space="preserve">
+  <data name="ContentExtensions" xml:space="preserve">
     <value>内容拓展</value>
   </data>
   <data name="UtilityMods" xml:space="preserve">

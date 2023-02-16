@@ -3,7 +3,7 @@
 # 大型模组
 "MegaMods" = ["nexerelin", "IndEvo"]
 # 内容模组
-"ContentExpansions" = [
+"ContentExtensions" = [
     "BSC",
     "HHE",
     "fluffships",

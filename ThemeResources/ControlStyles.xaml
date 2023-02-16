@@ -86,6 +86,7 @@
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorLight2}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
+    <Setter Property="ItemContainerStyle" Value="{DynamicResource ListBoxItemBaseStyle}" />
   </Style>
   <Style
     x:Key="ListBoxItemBaseStyle"
@@ -117,6 +118,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="Height" Value="30" />
+    <Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItemBaseStyle}" />
     <Setter Property="pu:IconHelper.FontSize" Value="16" />
     <Setter Property="pu:IconHelper.Width" Value="30" />
     <Setter Property="pu:IconHelper.Height" Value="30" />
@@ -211,11 +213,12 @@
     x:Key="ContextMenuBaseStyle"
     BasedOn="{StaticResource {x:Type ContextMenu}}"
     TargetType="ContextMenu">
+    <Setter Property="Width" Value="NaN" />
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="Width" Value="NaN" />
+    <Setter Property="ItemContainerStyle" Value="{DynamicResource MenuItemBaseStyle}" />
     <Setter Property="pu:ShadowHelper.ShadowDepth" Value="3" />
     <Setter Property="pu:ContextMenuHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
     <Setter Property="pu:ContextMenuHelper.ItemsWidth" Value="NaN" />
@@ -232,6 +235,7 @@
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+    <Setter Property="ItemContainerStyle" Value="{DynamicResource MenuItemBaseStyle}" />
     <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{DynamicResource ColorSelected}" />
   </Style>
   <Style
@@ -245,7 +249,7 @@
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
-  <Style x:Key="Grid_Style" TargetType="Grid">
+  <Style x:Key="GridBaseStyle" TargetType="Grid">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
   </Style>
   <Style

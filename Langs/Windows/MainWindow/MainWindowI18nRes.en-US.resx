@@ -151,11 +151,11 @@ It may affect the normal operation of the software, it is recommended to check t
   <data name="GlobalException" xml:space="preserve">
     <value>Global Exception</value>
   </data>
-  <data name="Expansion" xml:space="preserve">
-    <value>Expansion</value>
+  <data name="Extension" xml:space="preserve">
+    <value>Extension</value>
   </data>
-  <data name="RefreshExpansionList" xml:space="preserve">
-    <value>Refresh expansion list</value>
+  <data name="RefreshExtensionList" xml:space="preserve">
+    <value>Refresh extension list</value>
   </data>
   <data name="ModManagerToolTip" xml:space="preserve">
     <value>For browsing and managing game mod
@@ -165,11 +165,11 @@ There are functions to enable and disable, favorite, set user groups, etc</value
     <value>For setting up the game
 Can modify the game memory, clean up archives and campaign outfits, etc</value>
   </data>
-  <data name="ExpansionLoadError" xml:space="preserve">
-    <value>Expansion load error</value>
+  <data name="ExtensionLoadError" xml:space="preserve">
+    <value>Extension load error</value>
   </data>
-  <data name="AddExpansionPage" xml:space="preserve">
-    <value>Add expansion page</value>
+  <data name="AddExtensionPage" xml:space="preserve">
+    <value>Add extension page</value>
   </data>
   <data name="DisplayLanguageIs" xml:space="preserve">
     <value>Display language is</value>
@@ -180,14 +180,14 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="PageInitializeError" xml:space="preserve">
     <value>Page initialize error</value>
   </data>
-  <data name="ExpansionIdError" xml:space="preserve">
-    <value>ExpansionId Error</value>
+  <data name="ExtensionIdError" xml:space="preserve">
+    <value>ExtensionId Error</value>
   </data>
-  <data name="ExpansionFileError" xml:space="preserve">
-    <value>ExpansionFile Error</value>
+  <data name="ExtensionFileError" xml:space="preserve">
+    <value>ExtensionFile Error</value>
   </data>
-  <data name="ExpansionAlreadyExists" xml:space="preserve">
-    <value>Expansion already exists</value>
+  <data name="ExtensionAlreadyExists" xml:space="preserve">
+    <value>Extension already exists</value>
   </data>
   <data name="ConfigFileCreationCompleted" xml:space="preserve">
     <value>Config file creation completed</value>
@@ -195,25 +195,25 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   <data name="ConfigFileError" xml:space="preserve">
     <value>Config file error, will restore the default</value>
   </data>
-  <data name="ExpansionPathIsEmpty" xml:space="preserve">
-    <value>Expansion path is empty</value>
+  <data name="ExtensionPathIsEmpty" xml:space="preserve">
+    <value>Extension path is empty</value>
   </data>
-  <data name="ExpansionTomlFileNotFound" xml:space="preserve">
-    <value>Expansion toml file not found</value>
+  <data name="ExtensionTomlFileNotFound" xml:space="preserve">
+    <value>Extension toml file not found</value>
   </data>
-  <data name="IncompatibleExpansion" xml:space="preserve">
+  <data name="IncompatibleExtension" xml:space="preserve">
     <value>This extension supports software versions that are inconsistent with the current version, which may cause compatibility problems</value>
   </data>
-  <data name="GlobalExpansionExceptionMessage" xml:space="preserve">
-    <value>Global expansion exception {0} !!!Warning!!!
+  <data name="GlobalExtensionExceptionMessage" xml:space="preserve">
+    <value>Global extension exception {0} !!!Warning!!!
 If you see this error, it means that this is an unexpected situation in the extension
 It may affect the normal operation of the extension, so it is recommended to check the logs and submit an issue to the extension developer.</value>
   </data>
-  <data name="GlobalExpansionException" xml:space="preserve">
-    <value>Global expansion exception</value>
+  <data name="GlobalExtensionException" xml:space="preserve">
+    <value>Global extension exception</value>
   </data>
   <data name="StartGame" xml:space="preserve">
-    <value>Start game</value>
+    <value>Start Game</value>
   </data>
   <data name="ClearGameLogOnStart" xml:space="preserve">
     <value>Clear game log files on start</value>

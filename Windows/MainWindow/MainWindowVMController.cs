@@ -7,6 +7,7 @@ using System.Reflection.Metadata;
 using System.Threading;
 using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
+using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialog;
 using StarsectorTools.Libs.GameInfo;
@@ -22,14 +23,14 @@ namespace StarsectorTools.Windows.MainWindow
         /// </summary>
         public static MainWindowViewModel Instance { get; private set; } = null!;
 
-        private Dictionary<string, ExpansionInfo> allExpansionsInfo = new();
+        private Dictionary<string, ExtensionInfo> allExtensionsInfo = new();
         private ListBoxItemVM? selectedItem;
-        private ExpansionInfo? deubgItemExpansionInfo;
+        private ExtensionInfo? deubgItemExtensionInfo;
         private ListBoxItemVM? deubgItem;
         private string? deubgItemPath;
 
         /// <summary>拓展信息</summary>
-        private class ExpansionInfo
+        private class ExtensionInfo
         {
             /// <summary>Id</summary>
             public string Id { get; private set; } = null!;
@@ -53,15 +54,15 @@ namespace StarsectorTools.Windows.MainWindow
             public string Description { get; private set; } = null!;
 
             /// <summary>拓展Id</summary>
-            public string ExpansionId { get; private set; } = null!;
+            public string ExtensionId { get; private set; } = null!;
 
             /// <summary>拓展文件</summary>
-            public string ExpansionFile { get; private set; } = null!;
+            public string ExtensionFile { get; private set; } = null!;
 
             /// <summary>拓展页面</summary>
-            public object ExpansionPage { get; set; } = null!;
+            public object ExtensionPage { get; set; } = null!;
 
-            public ExpansionInfo(TomlTable table)
+            public ExtensionInfo(TomlTable table)
             {
                 foreach (var info in table)
                     SetInfo(info.Key, info.Value.AsString);
@@ -99,12 +100,12 @@ namespace StarsectorTools.Windows.MainWindow
                         Description = value;
                         break;
 
-                    case nameof(ExpansionId):
-                        ExpansionId = value;
+                    case nameof(ExtensionId):
+                        ExtensionId = value;
                         break;
 
-                    case nameof(ExpansionFile):
-                        ExpansionFile = value;
+                    case nameof(ExtensionFile):
+                        ExtensionFile = value;
                         break;
                 }
             }
@@ -119,7 +120,7 @@ namespace StarsectorTools.Windows.MainWindow
         internal void AddMainPageItem(ListBoxItemVM vm)
         {
             DetectPageItemData(ref vm);
-            MainListBox.Add(vm);
+            ListBox_MainMenu.Add(vm);
         }
 
         private void DetectPageItemData(ref ListBoxItemVM vm)
@@ -197,8 +198,8 @@ namespace StarsectorTools.Windows.MainWindow
         {
             if (!Directory.Exists(ST.CoreDirectory))
                 Directory.CreateDirectory(ST.CoreDirectory);
-            if (!Directory.Exists(ST.ExpansionDirectories))
-                Directory.CreateDirectory(ST.ExpansionDirectories);
+            if (!Directory.Exists(ST.ExtensionDirectories))
+                Directory.CreateDirectory(ST.ExtensionDirectories);
         }
 
         private bool SetConfig(string originalConfigData)
@@ -210,15 +211,11 @@ namespace StarsectorTools.Windows.MainWindow
                     // 读取设置
                     var toml = TOML.Parse(ST.ConfigTomlFile);
                     // 语言
-                    var cultureInfo = CultureInfo.GetCultureInfo(toml["Extras"]["Lang"].AsString);
-                    if (Thread.CurrentThread.CurrentUICulture.Name != cultureInfo.Name)
-                    {
-                        Thread.CurrentThread.CurrentUICulture = cultureInfo;
-                        ChangeLanguage();
-                    }
+                    var cultureInfo = CultureInfo.GetCultureInfo(toml["Lang"].AsString);
+                    ObservableI18n.Language = cultureInfo.Name;
                     // 日志等级
                     Logger.Options.DefaultLevel = Logger.LogLevelConverter(
-                        toml["Extras"]["LogLevel"].AsString
+                        toml["LogLevel"].AsString
                     );
                     // 游戏目录
                     if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
@@ -247,17 +244,17 @@ namespace StarsectorTools.Windows.MainWindow
                         toml["Game"]["Path"] = GameInfo.BaseDirectory;
                     }
                     // 拓展调试目录
-                    string debugPath = toml["Expansion"]["DebugPath"].AsString;
+                    string debugPath = toml["Extension"]["DebugPath"].AsString;
                     if (
                         !string.IsNullOrEmpty(debugPath)
-                        && GetExpansionInfo(debugPath, true) is ExpansionInfo info
+                        && GetExtensionInfo(debugPath, true) is ExtensionInfo info
                     )
                     {
-                        deubgItemExpansionInfo = info;
+                        deubgItemExtensionInfo = info;
                         deubgItemPath = debugPath;
                     }
                     else
-                        toml["Expansion"]["DebugPath"] = "";
+                        toml["Extension"]["DebugPath"] = "";
                     ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
                     toml.SaveTo(ST.ConfigTomlFile);
                 }
@@ -284,7 +281,7 @@ namespace StarsectorTools.Windows.MainWindow
                     CreateConfigFile(originalConfigData);
                     var toml = TOML.Parse(ST.ConfigTomlFile);
                     toml["Game"]["Path"] = GameInfo.BaseDirectory;
-                    toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
+                    toml["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
                     toml.SaveTo(ST.ConfigTomlFile);
                 }
             }
@@ -311,45 +308,45 @@ namespace StarsectorTools.Windows.MainWindow
             Logger.Record($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}");
         }
 
-        private ExpansionInfo? GetExpansionInfo(string path, bool loadInMemory = false)
+        private ExtensionInfo? GetExtensionInfo(string path, bool loadInMemory = false)
         {
             if (string.IsNullOrEmpty(path))
             {
-                Logger.Record(I18nRes.ExpansionPathIsEmpty, LogLevel.WARN);
+                Logger.Record(I18nRes.ExtensionPathIsEmpty, LogLevel.WARN);
                 MessageBoxVM.Show(
-                    new(I18nRes.ExpansionPathIsEmpty) { Icon = MessageBoxVM.Icon.Warning }
+                    new(I18nRes.ExtensionPathIsEmpty) { Icon = MessageBoxVM.Icon.Warning }
                 );
                 return null;
             }
-            string tomlFile = $"{path}\\{ST.ExpansionInfoFile}";
+            string tomlFile = $"{path}\\{ST.ExtensionInfoFile}";
             try
             {
                 // 判断文件存在性
                 if (!File.Exists(tomlFile))
                 {
                     Logger.Record(
-                        $"{I18nRes.ExpansionTomlFileNotFound} {I18nRes.Path}: {tomlFile}",
+                        $"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}",
                         LogLevel.WARN
                     );
                     MessageBoxVM.Show(
-                        new($"{I18nRes.ExpansionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
+                        new($"{I18nRes.ExtensionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
                     );
                     return null;
                 }
-                var expansionInfo = new ExpansionInfo(TOML.Parse(tomlFile));
-                var assemblyFile = $"{path}\\{expansionInfo.ExpansionFile}";
+                var extensionInfo = new ExtensionInfo(TOML.Parse(tomlFile));
+                var assemblyFile = $"{path}\\{extensionInfo.ExtensionFile}";
                 // 检测是否有相同的拓展
-                if (allExpansionsInfo.ContainsKey(expansionInfo.ExpansionId))
+                if (allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
                 {
                     Logger.Record(
-                        $"{I18nRes.ExpansionAlreadyExists} {I18nRes.Path}: {tomlFile}",
+                        $"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}",
                         LogLevel.WARN
                     );
                     MessageBoxVM.Show(
-                        new($"{I18nRes.ExpansionAlreadyExists}\n{I18nRes.Path}: {tomlFile}")
+                        new($"{I18nRes.ExtensionAlreadyExists}\n{I18nRes.Path}: {tomlFile}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
@@ -360,11 +357,11 @@ namespace StarsectorTools.Windows.MainWindow
                 if (!File.Exists(assemblyFile))
                 {
                     Logger.Record(
-                        $"{I18nRes.ExpansionFileError} {I18nRes.Path}: {tomlFile}",
+                        $"{I18nRes.ExtensionFileError} {I18nRes.Path}: {tomlFile}",
                         LogLevel.WARN
                     );
                     MessageBoxVM.Show(
-                        new($"{I18nRes.ExpansionFileError}\n{I18nRes.Path}: {tomlFile}")
+                        new($"{I18nRes.ExtensionFileError}\n{I18nRes.Path}: {tomlFile}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
@@ -375,23 +372,23 @@ namespace StarsectorTools.Windows.MainWindow
                 if (loadInMemory)
                 {
                     var bytes = File.ReadAllBytes(assemblyFile);
-                    var type = Assembly.Load(bytes).GetType(expansionInfo.ExpansionId)!;
-                    expansionInfo.ExpansionPage = type.Assembly.CreateInstance(type.FullName!)!;
+                    var type = Assembly.Load(bytes).GetType(extensionInfo.ExtensionId)!;
+                    extensionInfo.ExtensionPage = type.Assembly.CreateInstance(type.FullName!)!;
                 }
                 else
                 {
-                    var type = Assembly.LoadFrom(assemblyFile).GetType(expansionInfo.ExpansionId)!;
-                    expansionInfo.ExpansionPage = type.Assembly.CreateInstance(type.FullName!)!;
+                    var type = Assembly.LoadFrom(assemblyFile).GetType(extensionInfo.ExtensionId)!;
+                    extensionInfo.ExtensionPage = type.Assembly.CreateInstance(type.FullName!)!;
                 }
                 // 判断是否成功创建了页面
-                if (expansionInfo.ExpansionPage is null)
+                if (extensionInfo.ExtensionPage is null)
                 {
                     Logger.Record(
-                        $"{I18nRes.ExpansionIdError} {I18nRes.Path}: {tomlFile}",
+                        $"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}",
                         LogLevel.WARN
                     );
                     MessageBoxVM.Show(
-                        new($"{I18nRes.ExpansionIdError}\n{I18nRes.Path}: {tomlFile}")
+                        new($"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
@@ -399,27 +396,27 @@ namespace StarsectorTools.Windows.MainWindow
                     return null;
                 }
                 // 判断页面是否实现了接口
-                if (expansionInfo.ExpansionPage is not ISTPage)
+                if (extensionInfo.ExtensionPage is not ISTPage)
                 {
                     Logger.Record(
-                        $"{I18nRes.ExpansionIdError} {I18nRes.Path}: {tomlFile}",
+                        $"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}",
                         LogLevel.WARN
                     );
                     MessageBoxVM.Show(
-                        new($"{I18nRes.ExpansionIdError}\n{I18nRes.Path}: {tomlFile}")
+                        new($"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
                     );
                     return null;
                 }
-                return expansionInfo;
+                return extensionInfo;
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.ExpansionLoadError} {I18nRes.Path}: {tomlFile}", ex);
+                Logger.Record($"{I18nRes.ExtensionLoadError} {I18nRes.Path}: {tomlFile}", ex);
                 MessageBoxVM.Show(
-                    new($"{I18nRes.ExpansionLoadError}\n{I18nRes.Path}: {tomlFile}")
+                    new($"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}")
                     {
                         Icon = MessageBoxVM.Icon.Error
                     }
@@ -438,22 +435,22 @@ namespace StarsectorTools.Windows.MainWindow
             toml.SaveTo(ST.ConfigTomlFile);
         }
 
-        private void InitializeExpansionPages()
+        private void InitializeExtensionPages()
         {
-            DirectoryInfo dirs = new(ST.ExpansionDirectories);
+            DirectoryInfo dirs = new(ST.ExtensionDirectories);
             foreach (var dir in dirs.GetDirectories())
             {
-                if (GetExpansionInfo(dir.FullName) is ExpansionInfo expansionInfo)
+                if (GetExtensionInfo(dir.FullName) is ExtensionInfo extensionInfo)
                 {
-                    var page = expansionInfo.ExpansionPage;
-                    ExpansionListBox.Add(
+                    var page = extensionInfo.ExtensionPage;
+                    ListBox_ExtensionMenu.Add(
                         new()
                         {
-                            Id = expansionInfo.Id,
-                            Icon = expansionInfo.Icon,
-                            Content = expansionInfo.Name,
+                            Id = extensionInfo.Id,
+                            Icon = extensionInfo.Icon,
+                            Content = extensionInfo.Name,
                             ToolTip =
-                                $"Author: {expansionInfo.Author}\nDescription: {expansionInfo.Description}",
+                                $"Author: {extensionInfo.Author}\nDescription: {extensionInfo.Description}",
                             Tag = page
                         }
                     );
@@ -461,27 +458,27 @@ namespace StarsectorTools.Windows.MainWindow
             }
         }
 
-        private void InitializeExpansionDebugPage()
+        private void InitializeExtensionDebugPage()
         {
             // 添加拓展调试页面
-            if (deubgItemExpansionInfo is not null)
+            if (deubgItemExtensionInfo is not null)
             {
                 deubgItem = new()
                 {
-                    Icon = deubgItemExpansionInfo.Icon,
-                    Tag = deubgItemExpansionInfo.ExpansionPage,
+                    Icon = deubgItemExtensionInfo.Icon,
+                    Tag = deubgItemExtensionInfo.ExtensionPage,
                 };
                 AddMainPageItem(deubgItem);
             }
         }
 
-        internal void RefreshExpansionDebugPage(string path)
+        internal void RefreshExtensionDebugPage(string path)
         {
-            var isSelected = MainListBox.SelectedItem == deubgItem;
-            MainListBox.Remove(deubgItem);
-            InitializeExpansionDebugPage();
+            var isSelected = ListBox_MainMenu.SelectedItem == deubgItem;
+            ListBox_MainMenu.Remove(deubgItem);
+            InitializeExtensionDebugPage();
             if (isSelected)
-                MainListBox.SelectedItem = deubgItem;
+                ListBox_MainMenu.SelectedItem = deubgItem;
         }
         #region WindowEffect
 
@@ -511,18 +508,18 @@ namespace StarsectorTools.Windows.MainWindow
         private void ChangeLanguageToAllPages()
         {
             ChangeLanguageToMainPages();
-            ChangeLanguageToExpansionPages();
+            ChangeLanguageToExtensionPages();
         }
 
         private void ChangeLanguageToMainPages()
         {
-            foreach (var item in MainListBox)
+            foreach (var item in ListBox_MainMenu)
                 ChangeLanguageToPage(item);
         }
 
-        private void ChangeLanguageToExpansionPages()
+        private void ChangeLanguageToExtensionPages()
         {
-            foreach (var item in ExpansionListBox)
+            foreach (var item in ListBox_ExtensionMenu)
                 ChangeLanguageToPage(item);
         }
 
@@ -555,18 +552,18 @@ namespace StarsectorTools.Windows.MainWindow
         private void ReminderSaveAllPages()
         {
             ReminderSaveMainPages();
-            TrySaveExpansionPages();
+            TrySaveExtensionPages();
         }
 
         private void ReminderSaveMainPages()
         {
-            foreach (var item in MainListBox)
+            foreach (var item in ListBox_MainMenu)
                 ReminderSavePage(item);
         }
 
-        private void TrySaveExpansionPages()
+        private void TrySaveExtensionPages()
         {
-            foreach (var item in ExpansionListBox)
+            foreach (var item in ListBox_ExtensionMenu)
                 ReminderSavePage(item);
         }
 
@@ -612,18 +609,18 @@ namespace StarsectorTools.Windows.MainWindow
         private void SaveAllPages()
         {
             SaveMainPages();
-            SaveExpansionPages();
+            SaveExtensionPages();
         }
 
         private void SaveMainPages()
         {
-            foreach (var item in MainListBox)
+            foreach (var item in ListBox_MainMenu)
                 SavePage(item);
         }
 
-        private void SaveExpansionPages()
+        private void SaveExtensionPages()
         {
-            foreach (var item in ExpansionListBox)
+            foreach (var item in ListBox_ExtensionMenu)
                 SavePage(item);
         }
 
@@ -655,18 +652,18 @@ namespace StarsectorTools.Windows.MainWindow
         private void CloseAllPages()
         {
             CloseMainPages();
-            CloseExpansionPages();
+            CloseExtensionPages();
         }
 
         private void CloseMainPages()
         {
-            foreach (var page in MainListBox)
+            foreach (var page in ListBox_MainMenu)
                 ClosePage(page);
         }
 
-        private void CloseExpansionPages()
+        private void CloseExtensionPages()
         {
-            foreach (var page in ExpansionListBox)
+            foreach (var page in ListBox_ExtensionMenu)
                 ClosePage(page);
         }
 

@@ -72,9 +72,9 @@ namespace StarsectorTools.Langs.Pages.Settings {
         /// <summary>
         ///   查找类似 清除拓展调试目录 的本地化字符串。
         /// </summary>
-        public static string ClearExpansionDebugPath {
+        public static string ClearExtensionDebugPath {
             get {
-                return ResourceManager.GetString("ClearExpansionDebugPath", resourceCulture);
+                return ResourceManager.GetString("ClearExtensionDebugPath", resourceCulture);
             }
         }
         
@@ -99,18 +99,18 @@ namespace StarsectorTools.Langs.Pages.Settings {
         /// <summary>
         ///   查找类似 拓展调试路径 的本地化字符串。
         /// </summary>
-        public static string ExpansionDebugPath {
+        public static string ExtensionDebugPath {
             get {
-                return ResourceManager.GetString("ExpansionDebugPath", resourceCulture);
+                return ResourceManager.GetString("ExtensionDebugPath", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 用于指定拓展的路径,方便开发者调试. 的本地化字符串。
         /// </summary>
-        public static string ExpansionDebugPathToolTip {
+        public static string ExtensionDebugPathToolTip {
             get {
-                return ResourceManager.GetString("ExpansionDebugPathToolTip", resourceCulture);
+                return ResourceManager.GetString("ExtensionDebugPathToolTip", resourceCulture);
             }
         }
         
@@ -216,9 +216,9 @@ namespace StarsectorTools.Langs.Pages.Settings {
         /// <summary>
         ///   查找类似 设置拓展调试目录 的本地化字符串。
         /// </summary>
-        public static string SetExpansionDebugPath {
+        public static string SetExtensionDebugPath {
             get {
-                return ResourceManager.GetString("SetExpansionDebugPath", resourceCulture);
+                return ResourceManager.GetString("SetExtensionDebugPath", resourceCulture);
             }
         }
         

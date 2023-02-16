@@ -24,7 +24,7 @@ namespace StarsectorTools.Windows.MainWindow
         /// <summary>
         ///
         /// </summary>
-        internal MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
             // 限制最大化区域,不然会盖住任务栏(已在XAML中实现)
@@ -93,13 +93,13 @@ namespace StarsectorTools.Windows.MainWindow
             else
             {
                 Logger.Record(
-                    $"{I18n.GlobalExpansionException}: {e.Exception.Source}",
+                    $"{I18n.GlobalExtensionException}: {e.Exception.Source}",
                     e.Exception,
                     false
                 );
                 MessageBoxVM.Show(
                     new(
-                        $"{string.Format(I18n.GlobalExpansionExceptionMessage, e.Exception.Source)}\n\n{Logger.FilterException(e.Exception)}"
+                        $"{string.Format(I18n.GlobalExtensionExceptionMessage, e.Exception.Source)}\n\n{Logger.FilterException(e.Exception)}"
                     )
                     {
                         Icon = MessageBoxVM.Icon.Error,
@@ -126,10 +126,16 @@ namespace StarsectorTools.Windows.MainWindow
         private void Button_TitleMax_Click(object sender, RoutedEventArgs e)
         {
             //检测当前窗口状态
-            if (WindowState is WindowState.Normal)
+            if (WindowState == WindowState.Normal)
+            {
                 WindowState = WindowState.Maximized;
+                Button_TitleMax.Content = "🔳";
+            }
             else
+            {
                 WindowState = WindowState.Normal;
+                Button_TitleMax.Content = "🔲";
+            }
         }
 
         //关闭

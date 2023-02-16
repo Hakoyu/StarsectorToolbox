@@ -10,6 +10,7 @@ using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using HKW.Libs.TomlParse;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -48,19 +49,19 @@ namespace StarsectorTools.Windows.MainWindow
         private object? settingsPage;
 
         [ObservableProperty]
-        private object? expansionDebugPage;
+        private object? extensionDebugPage;
 
         #endregion Page
 
-        #region PageItem
+        #region ListBox
 
         [ObservableProperty]
-        private ListBoxVM mainListBox = new();
+        private ListBoxVM listBox_MainMenu = new();
 
         [ObservableProperty]
-        private ListBoxVM expansionListBox = new();
+        private ListBoxVM listBox_ExtensionMenu = new();
 
-        #endregion PageItem
+        #endregion
 
         public MainWindowViewModel()
         {
@@ -69,36 +70,30 @@ namespace StarsectorTools.Windows.MainWindow
 
         public MainWindowViewModel(string configData)
         {
-            Instance = this;
+            InitializeData();
             InitializeDirectories();
             SetConfig(configData);
-            InitializeExpansionPages();
-            InitializeExpansionDebugPage();
-            WeakReferenceMessenger.Default.Register<ExpansionDebugPathChangeMessage>(this, ExpansionDebugPathChangeReceiv);
-            WeakReferenceMessenger.Default.Register<ExpansionDebugPathRequestMessage>(this, ExpansionDebugPathRequestReceive);
+            InitializeExtensionPages();
+            InitializeExtensionDebugPage();
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceiv);
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(this, ExtensionDebugPathRequestReceive);
+            I18n.AddChangedActionAndRefresh(I18nAction);
         }
 
-        [RelayCommand]
-        private void ChangeMenuExpansion()
+        private void I18nAction()
         {
-            MenuIsExpand = !MenuIsExpand;
         }
 
-        [RelayCommand]
-        private void SelectionChanged(ListBoxItemVM item)
+        private void InitializeData()
         {
-            // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
-            if (item is null || selectedItem == item)
-            {
-                selectedItem = null;
-                return;
-            }
-            // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (selectedItem?.IsSelected is true)
-                selectedItem.IsSelected = false;
-            selectedItem = item;
-            ShowPage(item.Tag);
+            ListBox_MainMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
+            ListBox_ExtensionMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
         }
+
+
+
+        [RelayCommand]
+        private void ChangeMenuExpand(object parameter) => MenuIsExpand = !MenuIsExpand;
 
         [RelayCommand]
         private void ShowPage(object? page)
@@ -111,12 +106,12 @@ namespace StarsectorTools.Windows.MainWindow
             if (page == infoPage)
             {
                 InfoButtonIsChecked = true;
-                MainListBox.SelectedItem = ExpansionListBox.SelectedItem = null;
+                ListBox_MainMenu.SelectedItem = ListBox_ExtensionMenu.SelectedItem = null;
             }
             else if (page == settingsPage)
             {
                 SettingsButtonIsChecked = true;
-                MainListBox.SelectedItem = ExpansionListBox.SelectedItem = null;
+                ListBox_MainMenu.SelectedItem = ListBox_ExtensionMenu.SelectedItem = null;
             }
             Logger.Record($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
         }
@@ -141,20 +136,38 @@ namespace StarsectorTools.Windows.MainWindow
         }
 
         [RelayCommand]
-        private void RefreshExpansionMenu()
+        private void RefreshExtensionMenu()
         {
-            CloseExpansionPages();
-            InitializeExpansionPages();
+            CloseExtensionPages();
+            InitializeExtensionPages();
         }
-        private void ExpansionDebugPathChangeReceiv(object recipient, ExpansionDebugPathChangeMessage message)
+
+        private void ListBox_SelectionChangedEvent(ListBoxItemVM item)
         {
-            if (GetExpansionInfo(message.Value, true) is ExpansionInfo info)
+            // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
+            if (item is null || selectedItem == item)
             {
-                deubgItemExpansionInfo = info;
+                selectedItem = null;
+                return;
+            }
+            // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
+            if (selectedItem?.IsSelected is true)
+                selectedItem.IsSelected = false;
+            selectedItem = item;
+            ShowPage(item.Tag);
+        }
+        private void ExtensionDebugPathChangeReceiv(object recipient, ExtensionDebugPathChangeMessage message)
+        {
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Extension"]["DebugPath"] = message.Value;
+            toml.SaveTo(ST.ConfigTomlFile);
+            if (GetExtensionInfo(message.Value, true) is ExtensionInfo info)
+            {
+                deubgItemExtensionInfo = info;
                 deubgItemPath = message.Value;
             }
         }
-        private void ExpansionDebugPathRequestReceive(object recipient, ExpansionDebugPathRequestMessage message)
+        private void ExtensionDebugPathRequestReceive(object recipient, ExtensionDebugPathRequestMessage message)
         {
             message.Reply(deubgItemPath!);
         }

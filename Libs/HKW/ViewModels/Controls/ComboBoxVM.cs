@@ -14,39 +14,15 @@ namespace HKW.ViewModels.Controls
     /// 组合框视图模型
     /// </summary>
     [DebuggerDisplay("{Name},Count = {ItemsSource.Count}")]
-    public partial class ComboBoxVM : ItemsCollectionVM<ComboBoxItemVM>
+    public partial class ComboBoxVM : SelectorVM<ComboBoxItemVM>
     {
-        [ObservableProperty]
-        private int selectedIndex;
-        [ObservableProperty]
-        private ComboBoxItemVM? selectedItem;
         /// <summary>
         /// 构造
         /// </summary>
+        /// <param name="collection">初始集合</param>
         public ComboBoxVM(ObservableCollection<ComboBoxItemVM>? collection = null)
         {
             ItemsSource = collection ?? new();
         }
-
-        /// <summary>
-        /// 选择改变
-        /// </summary>
-        /// <param name="parameter">参数</param>
-        [RelayCommand]
-        private void SelectionChanged(object parameter)
-        {
-            if (SelectionChangedEvent is not null)
-                SelectionChangedEvent(parameter);
-        }
-
-        /// <summary>
-        /// 委托
-        /// </summary>
-        /// <param name="parameter">参数</param>
-        public delegate void ViewModelHandler(object parameter);
-        /// <summary>
-        /// 选择改变事件
-        /// </summary>
-        public event ViewModelHandler? SelectionChangedEvent;
     }
 }

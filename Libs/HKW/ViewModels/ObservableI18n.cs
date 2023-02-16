@@ -11,17 +11,30 @@ namespace HKW.ViewModels
 {
     /// <summary>
     /// 可观测本地化资源实例
-    /// <para>示例:
-    /// <code>
-    /// <![CDATA[
-    /// public partial class MainWindowViewModel : ObservableObject
+    /// <para>创建实例:<code><![CDATA[    public partial class MainWindowViewModel : ObservableObject
     /// {
     ///     [ObservableProperty]
     ///     public ObservableI18n<MainWindowI18nRes> i18n = ObservableI18n<MainWindowI18nRes>.Create(new());
     /// }
-    /// ]]>
-    /// </code>
-    /// </para>
+    /// ]]></code></para>
+    /// <para>在xaml中使用:<code><![CDATA[    <Window.DataContext>
+    ///     <local:MainWindowViewModel />
+    /// </Window.DataContext>
+    /// <Grid>
+    ///     <Label Content="{Binding I18n.I18nRes.Key}" />
+    ///     <Label Content="{Binding LabelContent}" />
+    /// </Grid>
+    /// ]]></code></para>
+    /// <para>在代码中使用:<code><![CDATA[    [ObservableProperty]
+    /// private string labelContent;
+    /// public MainWindowViewModel()
+    /// {
+    ///     I18n.AddChangedActionAndRefresh(() =>
+    ///     {
+    ///        LabelContent = MainWindowI18nRes.Test;
+    ///     });
+    /// }
+    /// ]]></code></para>
     /// </summary>
     /// <typeparam name="TI18nRes">I18n资源</typeparam>
     public class ObservableI18n<TI18nRes> : ObservableI18n
@@ -53,7 +66,7 @@ namespace HKW.ViewModels
         public static ObservableI18n<TI18nRes> Create(TI18nRes i18nRes)
         {
             var resName = i18nRes.GetType().FullName!;
-            return _observableI18nSet.TryGetValue(resName, out var value)
+            return ObservableI18nTSet.TryGetValue(resName, out var value)
                 ? (ObservableI18n<TI18nRes>)value
                 : new(i18nRes, resName);
         }
@@ -68,17 +81,19 @@ namespace HKW.ViewModels
         /// <summary>
         /// 资源名称
         /// </summary>
-        protected readonly object _i18nRes;
+        protected object _i18nRes;
 
         /// <summary>
         /// 本地化资源
         /// </summary>
         protected readonly string _resName;
 
+        private static readonly Dictionary<string, object> _observableI18nTSet = new();
+
         /// <summary>
         /// 本地化资源实例集合
         /// </summary>
-        protected static Dictionary<string, object> _observableI18nSet = new();
+        protected static Dictionary<string, object> ObservableI18nTSet => _observableI18nTSet;
         private static string _language = CultureInfo.CurrentCulture.Name;
 
         /// <summary>
@@ -96,11 +111,12 @@ namespace HKW.ViewModels
                 CultureInfo.CurrentCulture = cultureInfo;
                 Thread.CurrentThread.CurrentCulture = cultureInfo;
                 Thread.CurrentThread.CurrentUICulture = cultureInfo;
-                foreach (var observableI18n in _observableI18nSet)
-                    ((ObservableI18n)observableI18n.Value).PropertyChanged?.Invoke(
-                        (ObservableI18n)observableI18n.Value,
-                        new(null)
-                    );
+                foreach (var observableI18nT in ObservableI18nTSet)
+                {
+                    if (observableI18nT.Value is not ObservableI18n observableI18n)
+                        return;
+                    observableI18n.PropertyChanged?.Invoke(observableI18n, new(null));
+                }
             }
         }
 
@@ -113,7 +129,20 @@ namespace HKW.ViewModels
         {
             _i18nRes = i18nRes;
             _resName = resName;
-            _observableI18nSet.TryAdd(resName, this);
+            ObservableI18nTSet.TryAdd(resName, this);
+        }
+
+        /// <summary>
+        /// 添加属性改变委托,并刷新
+        /// </summary>
+        /// <param name="propertyChangedAction">属性改变委托</param>
+        public void AddChangedActionAndRefresh(Action propertyChangedAction)
+        {
+            PropertyChanged += (s, e) =>
+            {
+                propertyChangedAction();
+            };
+            PropertyChanged?.Invoke(this, new(null));
         }
 
         /// <summary>
