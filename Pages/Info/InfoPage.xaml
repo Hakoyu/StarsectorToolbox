@@ -11,9 +11,11 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-
+  <Page.DataContext>
+    <local:InfoPageViewModel />
+  </Page.DataContext>
   <Grid>
-    <GroupBox Header="信息" Style="{StaticResource GroupBoxBaseStyle}">
+    <GroupBox Header="{Binding I18n.I18nRes.Info}" Style="{StaticResource GroupBoxBaseStyle}">
       <StackPanel HorizontalAlignment="Center">
         <Label
           Height="NaN"
@@ -30,7 +32,7 @@
           <Label
             Height="NaN"
             Background="{x:Null}"
-            Content="Version:"
+            Content="{Binding I18n.I18nRes.Version}"
             Style="{StaticResource LabelBaseStyle}" />
           <Label
             Height="NaN"
@@ -40,15 +42,15 @@
           <Button
             x:Name="Button_CheckUpdate"
             Padding="5,0,5,0"
-            Click="Button_CheckUpdate_ClickAsync"
-            Content="{x:Static I18n:InfoPageI18nRes.CheckUpdate}"
+            Command="{Binding CheckUpdateCommand}"
+            Content="{Binding I18n.I18nRes.CheckUpdate}"
             Style="{StaticResource ButtonBaseStyle}" />
           <emoji:TextBlock
             x:Name="TextBlock_CheckUpdateIcon"
             Margin="5,0,0,0"
             VerticalAlignment="Center"
             FontSize="16"
-            Text="✅" />
+            Text="{Binding CheckUpdateIcon}" />
         </StackPanel>
         <StackPanel
           Margin="0,0,0,5"
@@ -61,7 +63,7 @@
             Content="Github:"
             Style="{StaticResource LabelBaseStyle}" />
           <Label Background="{x:Null}" Style="{StaticResource LabelBaseStyle}">
-            <Hyperlink x:Name="Hyperlink_GitHub" Click="Hyperlink_GitHub_Click">
+            <Hyperlink Command="{Binding OpenGitHubCommand}">
               https://github.com/Hakoyu/StarsectorTools
             </Hyperlink>
           </Label>

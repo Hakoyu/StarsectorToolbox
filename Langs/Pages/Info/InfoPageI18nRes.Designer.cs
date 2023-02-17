@@ -68,5 +68,23 @@ namespace StarsectorTools.Langs.Pages.Info {
                 return ResourceManager.GetString("CheckUpdate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 信息 的本地化字符串。
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 版本 的本地化字符串。
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
     }
 }
