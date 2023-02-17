@@ -150,7 +150,7 @@ namespace StarsectorTools.Pages.ModManager
         //        CollectionView = CollectionViewSource.GetDefaultView(modShowInfos);
         //        CollectionView.Filter = (o) =>
         //        {
-        //            if (string.IsNullOrEmpty(filterText))
+        //            if (string.IsNullOrWhiteSpace(filterText))
         //                return true;
         //            if (o is not ModShowInfo showInfo)
         //                return true;
@@ -299,7 +299,7 @@ namespace StarsectorTools.Pages.ModManager
                 }
             }
             STLog.WriteLine(I18n.ModAddCompleted, STLogLevel.INFO, allModInfos.Count, errSize);
-            if (!string.IsNullOrEmpty(err))
+            if (!string.IsNullOrWhiteSpace(err))
                 Utils.ShowMessageBox($"{I18n.ModAddFailed} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
         }
 
@@ -338,7 +338,7 @@ namespace StarsectorTools.Pages.ModManager
                 foreach (var modId in enabledModsJsonArray)
                 {
                     var id = modId!.GetValue<string>();
-                    if (string.IsNullOrEmpty(id))
+                    if (string.IsNullOrWhiteSpace(id))
                         continue;
                     if (allModInfos.ContainsKey(id))
                     {
@@ -353,7 +353,7 @@ namespace StarsectorTools.Pages.ModManager
                     }
                 }
                 STLog.WriteLine($"{I18n.EnableMod} {I18n.Size}: {allEnabledModsId.Count}");
-                if (!string.IsNullOrEmpty(err))
+                if (!string.IsNullOrWhiteSpace(err))
                     Utils.ShowMessageBox($"{I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
@@ -393,7 +393,7 @@ namespace StarsectorTools.Pages.ModManager
                         AddUserGroup(kv.Value[strIcon]!, group);
                         foreach (string id in kv.Value[strMods].AsTomlArray)
                         {
-                            if (string.IsNullOrEmpty(id))
+                            if (string.IsNullOrWhiteSpace(id))
                                 continue;
                             if (allModsShowInfo.ContainsKey(id))
                             {
@@ -414,7 +414,7 @@ namespace StarsectorTools.Pages.ModManager
                         err ??= $"{I18n.DuplicateUserGroupName} {group}";
                     }
                 }
-                if (!string.IsNullOrEmpty(err))
+                if (!string.IsNullOrWhiteSpace(err))
                     Utils.ShowMessageBox($"{I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
             }
             catch (Exception ex)
@@ -435,7 +435,7 @@ namespace StarsectorTools.Pages.ModManager
                 STLog.WriteLine(I18n.LoadCollectedList);
                 foreach (string id in toml[ModTypeGroup.Collected].AsTomlArray)
                 {
-                    if (string.IsNullOrEmpty(id))
+                    if (string.IsNullOrWhiteSpace(id))
                         continue;
                     if (allModsShowInfo.ContainsKey(id))
                     {
@@ -447,7 +447,7 @@ namespace StarsectorTools.Pages.ModManager
                         err += $"{id}\n";
                     }
                 }
-                if (!string.IsNullOrEmpty(err))
+                if (!string.IsNullOrWhiteSpace(err))
                     Utils.ShowMessageBox($"{I18n.LoadCollectedList} {I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
                 err = string.Empty;
                 errSize = 0;
@@ -455,7 +455,7 @@ namespace StarsectorTools.Pages.ModManager
                 foreach (var dict in toml[strUserCustomData].AsTomlArray)
                 {
                     var id = dict[strId].AsString;
-                    if (string.IsNullOrEmpty(id))
+                    if (string.IsNullOrWhiteSpace(id))
                         continue;
                     if (allModsShowInfo.ContainsKey(id))
                     {
@@ -469,7 +469,7 @@ namespace StarsectorTools.Pages.ModManager
                         err += $"{id}\n";
                     }
                 }
-                if (!string.IsNullOrEmpty(err))
+                if (!string.IsNullOrWhiteSpace(err))
                     Utils.ShowMessageBox($"{I18n.LoadUserCustomData} {I18n.NotFoundMod} {I18n.Size}: {errSize}\n{err}", STMessageBoxIcon.Warning);
             }
             catch (Exception ex)

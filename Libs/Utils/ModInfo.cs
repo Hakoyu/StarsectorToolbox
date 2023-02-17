@@ -49,7 +49,7 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="jsonPath">json文件路径</param>
         private ModInfo(JsonNode jsonNode, string? jsonPath = null)
         {
-            if (!string.IsNullOrEmpty(jsonPath)
+            if (!string.IsNullOrWhiteSpace(jsonPath)
                 && Utils.FileExists(jsonPath, false)
                 && Path.GetDirectoryName(jsonPath) is string directoryPath)
                 ModDirectory = directoryPath;

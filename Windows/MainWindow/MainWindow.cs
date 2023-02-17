@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using HKW.Libs.Log4Cs;
+using HKW.ViewModels;
 using HKW.ViewModels.Dialog;
 using Panuon.WPF.UI;
 using Panuon.WPF.UI.Configurations;
@@ -32,16 +33,18 @@ namespace StarsectorTools.Windows.MainWindow
         private void RegisterData()
         {
             // 注册消息窗口
-            RegisterMessageBoxModel();
+            RegisterMessageBox();
             // 注册打开文件对话框
-            RegisterOpenFileDialogModel();
+            RegisterOpenFileDialog();
             // 注册保存文件对话框
-            RegisterSaveFileDialogModel();
+            RegisterSaveFileDialog();
+            // 注册剪切板视图模型
+
             // 注册主窗口模糊效果触发器
             ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
         }
 
-        private void RegisterMessageBoxModel()
+        private void RegisterMessageBox()
         {
             // 消息长度限制
             MessageBoxVM.InitializeHandler(
@@ -102,7 +105,7 @@ namespace StarsectorTools.Windows.MainWindow
                 };
         }
 
-        private void RegisterOpenFileDialogModel()
+        private void RegisterOpenFileDialog()
         {
             OpenFileDialogVM.InitializeHandler(
                 (d) =>
@@ -119,8 +122,7 @@ namespace StarsectorTools.Windows.MainWindow
             );
         }
 
-
-        private void RegisterSaveFileDialogModel()
+        private void RegisterSaveFileDialog()
         {
             SaveFileDialogVM.InitializeHandler(
                 (d) =>
@@ -134,6 +136,14 @@ namespace StarsectorTools.Windows.MainWindow
                     return saveFileDialog.FileName;
                 }
             );
+        }
+
+        private void RegisterClipboard()
+        {
+            ClipboardVM.InitializeHandler(s =>
+            {
+                Clipboard.SetText(s);
+            });
         }
 
         private void InitializePage()

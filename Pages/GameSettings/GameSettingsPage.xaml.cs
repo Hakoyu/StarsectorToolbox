@@ -19,17 +19,19 @@ namespace StarsectorTools.Pages.GameSettings
     /// </summary>
     public partial class GameSettingsPage : Page
     {
+        internal GameSettingsPageViewModel ViewModel => (GameSettingsPageViewModel)DataContext;
         /// <summary>
         /// 
         /// </summary>
         public GameSettingsPage()
         {
             InitializeComponent();
+            DataContext = new GameSettingsPageViewModel(true);
             Label_GamePath.Content = GameInfo.BaseDirectory;
             Label_GameVersion.Content = GameInfo.Version;
             systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
             GetVmparamsData();
-            GetGameKey();
+            //GetGameKey();
             GetMissionsLoadouts();
             GetCustomResolution();
         }
@@ -87,21 +89,6 @@ namespace StarsectorTools.Pages.GameSettings
                 Label_GameKey.Content = gameKey;
                 showKey = true;
             }
-        }
-
-        private void Button_OpenLogFile_Click(object sender, RoutedEventArgs e)
-        {
-            if (!Utils.FileExists(GameInfo.LogFile, false))
-                File.Create(GameInfo.LogFile).Close();
-            Utils.OpenLink(GameInfo.LogFile);
-        }
-
-        private void Button_ClearLogFile_Click(object sender, RoutedEventArgs e)
-        {
-            if (Utils.FileExists(GameInfo.LogFile, false))
-                Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
-            File.Create(GameInfo.LogFile).Close();
-            STLog.WriteLine(I18n.GameLogCleanupCompleted);
         }
 
         private void Button_ClearMissionsLoadouts_Click(object sender, RoutedEventArgs e)

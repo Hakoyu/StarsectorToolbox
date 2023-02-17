@@ -309,7 +309,7 @@ namespace HKW.Libs.Log4Cs
         private static string GetDataTimeMessage()
         {
             string dateTime = GetDataTime();
-            if (!string.IsNullOrEmpty(dateTime))
+            if (!string.IsNullOrWhiteSpace(dateTime))
                 dateTime += " ";
             return dateTime;
         }
@@ -317,7 +317,7 @@ namespace HKW.Libs.Log4Cs
         private static string GetThreadIdMessage()
         {
             string threadId = GetThreadId();
-            if (!string.IsNullOrEmpty(threadId))
+            if (!string.IsNullOrWhiteSpace(threadId))
                 threadId = $":{threadId}";
             return threadId;
         }
@@ -338,7 +338,7 @@ namespace HKW.Libs.Log4Cs
                 else
                     exMessage = ex.ToString();
             }
-            if (!string.IsNullOrEmpty(exMessage))
+            if (!string.IsNullOrWhiteSpace(exMessage))
                 exMessage = $"\n{exMessage}";
             return exMessage;
         }

@@ -246,7 +246,7 @@ namespace StarsectorTools.Windows.MainWindow
                     // 拓展调试目录
                     string debugPath = toml["Extension"]["DebugPath"].AsString;
                     if (
-                        !string.IsNullOrEmpty(debugPath)
+                        !string.IsNullOrWhiteSpace(debugPath)
                         && GetExtensionInfo(debugPath, true) is ExtensionInfo info
                     )
                     {
@@ -310,7 +310,7 @@ namespace StarsectorTools.Windows.MainWindow
 
         private ExtensionInfo? GetExtensionInfo(string path, bool loadInMemory = false)
         {
-            if (string.IsNullOrEmpty(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
                 Logger.Record(I18nRes.ExtensionPathIsEmpty, LogLevel.WARN);
                 MessageBoxVM.Show(

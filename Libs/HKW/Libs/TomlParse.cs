@@ -2207,7 +2207,7 @@ namespace HKW.Libs.TomlParse
 
         public static string Unescape(this string txt)
         {
-            if (string.IsNullOrEmpty(txt))
+            if (string.IsNullOrWhiteSpace(txt))
                 return txt;
             var stringBuilder = new StringBuilder(txt.Length);
             for (var i = 0; i < txt.Length;)

@@ -253,4 +253,7 @@
   <data name="CustomResolutionHelp" xml:space="preserve">
     <value>注意: 设置自定义分辨率后不能启用全屏</value>
   </data>
+  <data name="Hide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
 </root>

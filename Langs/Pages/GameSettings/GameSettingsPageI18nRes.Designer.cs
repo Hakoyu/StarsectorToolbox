@@ -286,6 +286,15 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 隐藏 的本地化字符串。
+        /// </summary>
+        public static string Hide {
+            get {
+                return ResourceManager.GetString("Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 最大内存不能超过 的本地化字符串。
         /// </summary>
         public static string MaxMemory {

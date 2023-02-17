@@ -253,4 +253,7 @@
   <data name="CustomResolutionHelp" xml:space="preserve">
     <value>Info: Full screen cannot be enabled after setting custom resolution</value>
   </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
 </root>

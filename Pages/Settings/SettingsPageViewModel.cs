@@ -168,7 +168,7 @@ namespace StarsectorTools.Pages.Settings
             }
         }
 
-        private bool ClearButtonCanExecute() => string.IsNullOrEmpty(ExtensionDebugPath);
+        private bool ClearButtonCanExecute() => string.IsNullOrWhiteSpace(ExtensionDebugPath);
 
         [RelayCommand]
         private void OpenLogFile()

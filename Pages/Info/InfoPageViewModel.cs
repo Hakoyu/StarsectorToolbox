@@ -43,7 +43,7 @@ namespace StarsectorTools.Pages.Info
                 var response = await httpClient.GetAsync("https://api.github.com/repos/Hakoyu/StarsectorTools/releases/latest");
                 var releases = await response.Content.ReadAsStringAsync();
                 var tagName = Regex.Match(releases, @"(?<=""name"": "")[^""]+").Value;
-                if (!string.IsNullOrEmpty(tagName))
+                if (!string.IsNullOrWhiteSpace(tagName))
                 {
                     Logger.Record($"获取成功\n{tagName}");
                     //Utils.ShowMessageBox($"获取成功\n最新版本: {tagName}");

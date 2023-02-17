@@ -109,11 +109,11 @@ namespace HKW.ViewModels.Dialog
         /// </summary>
         /// <param name="handler">委托</param>
         /// <returns>设置成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool InitializeHandler(ModelHandler handler)
+        public static bool InitializeHandler(ViewModelHandler handler)
         {
-            if (ModelEvent is null)
+            if (ViewModelEvent is null)
             {
-                ModelEvent += handler;
+                ViewModelEvent += handler;
                 return true;
             }
             return false;
@@ -125,18 +125,18 @@ namespace HKW.ViewModels.Dialog
         /// <returns>结果</returns>
         public static Result? Show(Description description)
         {
-            if (ModelEvent is not null)
-                return ModelEvent(description);
+            if (ViewModelEvent is not null)
+                return ViewModelEvent(description);
             return null;
         }
         /// <summary>
         /// 委托
         /// </summary>
         /// <param name="description">描述</param>
-        public delegate Result ModelHandler(Description description);
+        public delegate Result ViewModelHandler(Description description);
         /// <summary>
         /// 事件
         /// </summary>
-        private static event ModelHandler? ModelEvent;
+        private static event ViewModelHandler? ViewModelEvent;
     }
 }

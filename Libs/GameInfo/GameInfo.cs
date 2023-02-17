@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
+using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialog;
 using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
@@ -40,15 +41,16 @@ namespace StarsectorTools.Libs.GameInfo
         /// <param name="directoryName">游戏目录</param>
         internal static bool SetGameData(string directoryName)
         {
-            if (string.IsNullOrEmpty(directoryName))
+            if (string.IsNullOrWhiteSpace(directoryName))
             {
-                STLog.WriteLine(I18n.GameDirectoryIsEmpty, STLogLevel.ERROR);
-                Utils.Utils.ShowMessageBox(I18n.GameDirectoryIsEmpty, STMessageBoxIcon.Error);
+                Logger.Record(I18n.GameDirectoryIsEmpty, LogLevel.ERROR);
+                MessageBoxVM.Show(new(I18n.GameDirectoryIsEmpty) { Icon = MessageBoxVM.Icon.Error });
                 return false;
             }
-            ExeFile = $"{directoryName}\\starsector.exe";
-            if (Utils.Utils.FileExists(ExeFile, false))
+            var exeFile = $"{directoryName}\\starsector.exe";
+            if (File.Exists(exeFile))
             {
+                ExeFile = exeFile;
                 BaseDirectory = directoryName;
                 ModsDirectory = $"{directoryName}\\mods";
                 SaveDirectory = $"{directoryName}\\saves";
@@ -67,9 +69,8 @@ namespace StarsectorTools.Libs.GameInfo
             }
             else
             {
-                ExeFile = null!;
-                STLog.WriteLine($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", STLogLevel.ERROR);
-                Utils.Utils.ShowMessageBox($"{I18n.GameDirectoryError}\n{I18n.Path}", STMessageBoxIcon.Error);
+                Logger.Record($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", LogLevel.ERROR);
+                MessageBoxVM.Show(new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error });
             }
             return false;
         }
@@ -87,9 +88,9 @@ namespace StarsectorTools.Libs.GameInfo
             if (fileNames.Any() && fileNames.First() is string fileName)
             {
                 string directory = Path.GetDirectoryName(fileName)!;
-                if (SetGameData(Path.GetDirectoryName(fileName)!))
+                if (SetGameData(directory))
                 {
-                    STLog.WriteLine($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
+                    Logger.Record($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
                     return true;
                 }
             }
