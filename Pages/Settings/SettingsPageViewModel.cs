@@ -70,7 +70,7 @@ namespace StarsectorTools.Pages.Settings
             );
             // 设置Language初始值
             ComboBox_Language.SelectedItem = ComboBox_Language.FirstOrDefault(
-                i => i.ToolTip.ToString() == ObservableI18n.Language,
+                i => i.ToolTip is string language && language == ObservableI18n.Language,
                 ComboBox_Language[0]
             );
             // 注册事件

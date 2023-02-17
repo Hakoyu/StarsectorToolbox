@@ -9,11 +9,14 @@
   xmlns:local="clr-namespace:StarsectorTools.Windows.MainWindow"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  xmlns:sys="clr-namespace:System.Windows;assembly=PresentationFramework"
   x:Name="Window_MainWindow"
   Width="1000"
   Height="500"
   MinWidth="800"
   MinHeight="400"
+  MaxWidth="{x:Static sys:SystemParameters.MaximizedPrimaryScreenWidth}"
+  MaxHeight="{x:Static sys:SystemParameters.MaximizedPrimaryScreenHeight}"
   Padding="5"
   FontFamily="Consolas"
   MouseLeftButtonDown="Window_MouseLeftButtonDown"
@@ -127,9 +130,18 @@
         pu:ButtonHelper.ClickBackground="LightBlue"
         pu:ButtonHelper.HoverBackground="Aqua"
         Click="Button_TitleMax_Click"
-        Content="🔲"
-        FontSize="16"
-        Style="{StaticResource ButtonBaseStyle}" />
+        FontSize="16">
+        <Button.Style>
+          <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
+            <Setter Property="Content" Value="🔲" />
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding WindowState, ElementName=Window_MainWindow}" Value="{x:Static sys:WindowState.Maximized}">
+                <Setter Property="Content" Value="🔳" />
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </Button.Style>
+      </Button>
       <Button
         x:Name="Button_TitleClose"
         Width="40"

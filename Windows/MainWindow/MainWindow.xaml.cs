@@ -127,15 +127,9 @@ namespace StarsectorTools.Windows.MainWindow
         {
             //检测当前窗口状态
             if (WindowState == WindowState.Normal)
-            {
                 WindowState = WindowState.Maximized;
-                Button_TitleMax.Content = "🔳";
-            }
             else
-            {
                 WindowState = WindowState.Normal;
-                Button_TitleMax.Content = "🔲";
-            }
         }
 
         //关闭
