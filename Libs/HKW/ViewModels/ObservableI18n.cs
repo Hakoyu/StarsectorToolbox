@@ -138,11 +138,11 @@ namespace HKW.ViewModels
         /// <param name="propertyChangedAction">属性改变委托</param>
         public void AddChangedActionAndRefresh(Action propertyChangedAction)
         {
+            propertyChangedAction();
             PropertyChanged += (s, e) =>
             {
                 propertyChangedAction();
             };
-            PropertyChanged?.Invoke(this, new(null));
         }
 
         /// <summary>
