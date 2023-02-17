@@ -127,7 +127,7 @@
   <data name="GameDirectory" xml:space="preserve">
     <value>Game directory</value>
   </data>
-  <data name="SetGameDirectory" xml:space="preserve">
+  <data name="SetDirectory" xml:space="preserve">
     <value>Set directory</value>
   </data>
   <data name="SetMemory" xml:space="preserve">
@@ -151,14 +151,14 @@
   <data name="GameVersion" xml:space="preserve">
     <value>Game version</value>
   </data>
-  <data name="GameLogClear" xml:space="preserve">
-    <value>Game log clear</value>
+  <data name="GameLogClean" xml:space="preserve">
+    <value>Game log clean</value>
   </data>
-  <data name="OpenGameLogFile" xml:space="preserve">
+  <data name="OpenLogFile" xml:space="preserve">
     <value>Open game log file</value>
   </data>
-  <data name="ClearGameLogFiles" xml:space="preserve">
-    <value>Clear game log file</value>
+  <data name="ClearLogFile" xml:space="preserve">
+    <value>Clear log file</value>
   </data>
   <data name="MissionsLoadoutsClean" xml:space="preserve">
     <value>Missions loadouts clean</value>
@@ -169,8 +169,8 @@
   <data name="ClearMissionsLoadouts" xml:space="preserve">
     <value>Clear missions loadouts</value>
   </data>
-  <data name="OpenMissionsLoadoutsFolder" xml:space="preserve">
-    <value>Open missions loadouts folder</value>
+  <data name="OpenMissionsLoadoutsDirectory" xml:space="preserve">
+    <value>Open missions loadouts directory</value>
   </data>
   <data name="SaveClean" xml:space="preserve">
     <value>Save clean</value>
@@ -181,10 +181,10 @@
   <data name="ClearSave" xml:space="preserve">
     <value>Clear save</value>
   </data>
-  <data name="OpenSaveFolder" xml:space="preserve">
-    <value>Open save folder</value>
+  <data name="OpenSaveDirectory" xml:space="preserve">
+    <value>Open save directory</value>
   </data>
-  <data name="OpenGameDirectory" xml:space="preserve">
+  <data name="OpenDirectory" xml:space="preserve">
     <value>Open directory</value>
   </data>
   <data name="VmparamsMemorySet" xml:space="preserve">
@@ -232,10 +232,10 @@
   <data name="WidthAndHeightCannotBeEmpty" xml:space="preserve">
     <value>Width and height cannot be empty</value>
   </data>
-  <data name="MinMemory" xml:space="preserve">
+  <data name="MinMemoryConnotLowThan" xml:space="preserve">
     <value>Minimum memory cannot be lower than</value>
   </data>
-  <data name="MaxMemory" xml:space="preserve">
+  <data name="MaxMemoryConnotExceed" xml:space="preserve">
     <value>Maximum memory cannot exceed</value>
   </data>
   <data name="FormatError" xml:space="preserve">

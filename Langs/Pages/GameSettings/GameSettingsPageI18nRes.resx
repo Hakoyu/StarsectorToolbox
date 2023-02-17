@@ -127,7 +127,7 @@
   <data name="GameDirectory" xml:space="preserve">
     <value>游戏目录</value>
   </data>
-  <data name="SetGameDirectory" xml:space="preserve">
+  <data name="SetDirectory" xml:space="preserve">
     <value>设置目录</value>
   </data>
   <data name="SetMemory" xml:space="preserve">
@@ -151,14 +151,14 @@
   <data name="GameVersion" xml:space="preserve">
     <value>游戏版本</value>
   </data>
-  <data name="GameLogClear" xml:space="preserve">
+  <data name="GameLogClean" xml:space="preserve">
     <value>游戏日志清理</value>
   </data>
-  <data name="OpenGameLogFile" xml:space="preserve">
-    <value>打开游戏日志文件</value>
+  <data name="OpenLogFile" xml:space="preserve">
+    <value>打开日志文件</value>
   </data>
-  <data name="ClearGameLogFiles" xml:space="preserve">
-    <value>清理游戏日志文件</value>
+  <data name="ClearLogFile" xml:space="preserve">
+    <value>清理日志文件</value>
   </data>
   <data name="MissionsLoadoutsClean" xml:space="preserve">
     <value>战役装配清理</value>
@@ -167,10 +167,10 @@
     <value>全部</value>
   </data>
   <data name="ClearMissionsLoadouts" xml:space="preserve">
-    <value>清理战役装配</value>
+    <value>清理装配</value>
   </data>
-  <data name="OpenMissionsLoadoutsFolder" xml:space="preserve">
-    <value>打开战役配装文件夹</value>
+  <data name="OpenMissionsLoadoutsDirectory" xml:space="preserve">
+    <value>打开配装目录</value>
   </data>
   <data name="SaveClean" xml:space="preserve">
     <value>存档清理</value>
@@ -181,10 +181,10 @@
   <data name="ClearSave" xml:space="preserve">
     <value>清理存档</value>
   </data>
-  <data name="OpenSaveFolder" xml:space="preserve">
-    <value>打开存档文件夹</value>
+  <data name="OpenSaveDirectory" xml:space="preserve">
+    <value>打开存档目录</value>
   </data>
-  <data name="OpenGameDirectory" xml:space="preserve">
+  <data name="OpenDirectory" xml:space="preserve">
     <value>打开目录</value>
   </data>
   <data name="VmparamsMemorySet" xml:space="preserve">
@@ -232,10 +232,10 @@
   <data name="WidthAndHeightCannotBeEmpty" xml:space="preserve">
     <value>宽与高不能为空</value>
   </data>
-  <data name="MinMemory" xml:space="preserve">
+  <data name="MinMemoryConnotLowThan" xml:space="preserve">
     <value>最小内存不能低于</value>
   </data>
-  <data name="MaxMemory" xml:space="preserve">
+  <data name="MaxMemoryConnotExceed" xml:space="preserve">
     <value>最大内存不能超过</value>
   </data>
   <data name="FormatError" xml:space="preserve">

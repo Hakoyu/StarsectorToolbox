@@ -14,7 +14,7 @@ namespace StarsectorTools.Libs.GameInfo
     {
         /// <summary>游戏目录</summary>
         public static string BaseDirectory { get; private set; } = null!;
-        /// <summary>Core目录</summary>
+        /// <summary>游戏Core目录</summary>
         public static string CoreDirectory { get; private set; } = null!;
 
         /// <summary>游戏exe文件</summary>
@@ -35,6 +35,9 @@ namespace StarsectorTools.Libs.GameInfo
         /// <summary>游戏版本</summary>
         public static string Version { get; private set; } = null!;
 
+        /// <summary>游戏设置文件</summary>
+        public static string SettingsFile { get; private set; } = null!;
+
         /// <summary>
         /// 设置游戏信息
         /// </summary>
@@ -47,24 +50,25 @@ namespace StarsectorTools.Libs.GameInfo
                 MessageBoxVM.Show(new(I18n.GameDirectoryIsEmpty) { Icon = MessageBoxVM.Icon.Error });
                 return false;
             }
-            var exeFile = $"{directoryName}\\starsector.exe";
+            var exeFile = Path.Combine(directoryName, "starsector.exe");
             if (File.Exists(exeFile))
             {
                 ExeFile = exeFile;
                 BaseDirectory = directoryName;
-                ModsDirectory = $"{directoryName}\\mods";
-                SaveDirectory = $"{directoryName}\\saves";
-                CoreDirectory = $"{directoryName}\\starsector-core";
-                EnabledModsJsonFile = $"{ModsDirectory}\\enabled_mods.json";
-                LogFile = $"{CoreDirectory}\\starsector.log";
+                ModsDirectory = Path.Combine(directoryName, "mods");
+                SaveDirectory = Path.Combine(directoryName, "saves");
+                CoreDirectory = Path.Combine(directoryName, "starsector-core");
+                EnabledModsJsonFile = Path.Combine(ModsDirectory, "enabled_mods.json");
+                LogFile = Path.Combine(CoreDirectory, "starsector.log");
+                SettingsFile = Path.Combine(CoreDirectory, "data", "config", "settings.json");
                 try
                 {
-                    Version = JsonNode.Parse(File.ReadAllText($"{CoreDirectory}\\localization_version.json"))!.AsObject()["game_version"]!.GetValue<string>();
+                    Version = JsonNode.Parse(File.ReadAllText(Path.Combine(CoreDirectory, "localization_version.json")))!.AsObject()["game_version"]!.GetValue<string>();
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    STLog.WriteLine($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
+                    Logger.Record($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
                 }
             }
             else

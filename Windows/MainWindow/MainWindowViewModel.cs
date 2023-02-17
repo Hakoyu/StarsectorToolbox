@@ -70,6 +70,7 @@ namespace StarsectorTools.Windows.MainWindow
 
         public MainWindowViewModel(string configData)
         {
+            Instance = this;
             InitializeData();
             InitializeDirectories();
             SetConfig(configData);

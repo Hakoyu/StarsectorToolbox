@@ -88,16 +88,16 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 清理游戏日志文件 的本地化字符串。
+        ///   查找类似 清理日志文件 的本地化字符串。
         /// </summary>
-        public static string ClearGameLogFiles {
+        public static string ClearLogFile {
             get {
-                return ResourceManager.GetString("ClearGameLogFiles", resourceCulture);
+                return ResourceManager.GetString("ClearLogFile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 清理战役装配 的本地化字符串。
+        ///   查找类似 清理装配 的本地化字符串。
         /// </summary>
         public static string ClearMissionsLoadouts {
             get {
@@ -223,20 +223,20 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 游戏日志清理 的本地化字符串。
+        /// </summary>
+        public static string GameLogClean {
+            get {
+                return ResourceManager.GetString("GameLogClean", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏日志清理完成 的本地化字符串。
         /// </summary>
         public static string GameLogCleanupCompleted {
             get {
                 return ResourceManager.GetString("GameLogCleanupCompleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 游戏日志清理 的本地化字符串。
-        /// </summary>
-        public static string GameLogClear {
-            get {
-                return ResourceManager.GetString("GameLogClear", resourceCulture);
             }
         }
         
@@ -297,18 +297,18 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         /// <summary>
         ///   查找类似 最大内存不能超过 的本地化字符串。
         /// </summary>
-        public static string MaxMemory {
+        public static string MaxMemoryConnotExceed {
             get {
-                return ResourceManager.GetString("MaxMemory", resourceCulture);
+                return ResourceManager.GetString("MaxMemoryConnotExceed", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 最小内存不能低于 的本地化字符串。
         /// </summary>
-        public static string MinMemory {
+        public static string MinMemoryConnotLowThan {
             get {
-                return ResourceManager.GetString("MinMemory", resourceCulture);
+                return ResourceManager.GetString("MinMemoryConnotLowThan", resourceCulture);
             }
         }
         
@@ -342,36 +342,36 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         /// <summary>
         ///   查找类似 打开目录 的本地化字符串。
         /// </summary>
-        public static string OpenGameDirectory {
+        public static string OpenDirectory {
             get {
-                return ResourceManager.GetString("OpenGameDirectory", resourceCulture);
+                return ResourceManager.GetString("OpenDirectory", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 打开游戏日志文件 的本地化字符串。
+        ///   查找类似 打开日志文件 的本地化字符串。
         /// </summary>
-        public static string OpenGameLogFile {
+        public static string OpenLogFile {
             get {
-                return ResourceManager.GetString("OpenGameLogFile", resourceCulture);
+                return ResourceManager.GetString("OpenLogFile", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 打开战役配装文件夹 的本地化字符串。
+        ///   查找类似 打开配装目录 的本地化字符串。
         /// </summary>
-        public static string OpenMissionsLoadoutsFolder {
+        public static string OpenMissionsLoadoutsDirectory {
             get {
-                return ResourceManager.GetString("OpenMissionsLoadoutsFolder", resourceCulture);
+                return ResourceManager.GetString("OpenMissionsLoadoutsDirectory", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   查找类似 打开存档文件夹 的本地化字符串。
+        ///   查找类似 打开存档目录 的本地化字符串。
         /// </summary>
-        public static string OpenSaveFolder {
+        public static string OpenSaveDirectory {
             get {
-                return ResourceManager.GetString("OpenSaveFolder", resourceCulture);
+                return ResourceManager.GetString("OpenSaveDirectory", resourceCulture);
             }
         }
         
@@ -450,9 +450,9 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         /// <summary>
         ///   查找类似 设置目录 的本地化字符串。
         /// </summary>
-        public static string SetGameDirectory {
+        public static string SetDirectory {
             get {
-                return ResourceManager.GetString("SetGameDirectory", resourceCulture);
+                return ResourceManager.GetString("SetDirectory", resourceCulture);
             }
         }
         

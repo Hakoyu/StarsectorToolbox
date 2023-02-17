@@ -3,6 +3,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:local="clr-namespace:StarsectorTools.Pages.GameSettings"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
@@ -48,15 +49,15 @@
           Margin="0,0,85,0"
           HorizontalAlignment="Right"
           Command="{Binding SetGameDirectoryCommand}"
-          Content="{Binding I18n.I18nRes.SetGameDirectory}"
+          Content="{Binding I18n.I18nRes.SetDirectory}"
           Style="{StaticResource ButtonBaseStyle}" />
         <Button
           x:Name="Button_OpenGameDirectory"
           Grid.Column="1"
           Width="80"
           HorizontalAlignment="Right"
-          Click="Button_OpenGameDirectory_Click"
-          Content="{Binding I18n.I18nRes.OpenGameDirectory}"
+          Command="{Binding OpenGameDirectoryCommand}"
+          Content="{Binding I18n.I18nRes.OpenDirectory}"
           Style="{StaticResource ButtonBaseStyle}" />
         <GroupBox
           Grid.Row="1"
@@ -79,7 +80,8 @@
               VerticalAlignment="Center"
               HorizontalContentAlignment="Center"
               InputMethod.IsInputMethodEnabled="False"
-              Style="{StaticResource TextBoxBaseStyle}" />
+              Style="{StaticResource TextBoxBaseStyle}"
+              Text="{Binding GameMemory}" />
             <Button
               x:Name="Button_SetMemory"
               Width="45"
@@ -87,7 +89,6 @@
               Margin="0,0,50,0"
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
-              Click="Button_SetMemory_Click"
               Content="{Binding I18n.I18nRes.Used}"
               Style="{StaticResource ButtonBaseStyle}" />
             <Button
@@ -174,20 +175,20 @@
             <Expander
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
-              Header="{Binding I18n.I18nRes.GameLogClear}"
+              Header="{Binding I18n.I18nRes.GameLogClean}"
               Style="{StaticResource ExpanderBaseStyle}">
               <StackPanel>
                 <Button
                   x:Name="Button_OpenLogFile"
                   Margin="0,0,0,5"
                   Command="{Binding OpenGameLogFileCommand}"
-                  Content="{Binding I18n.I18nRes.OpenGameLogFile}"
+                  Content="{Binding I18n.I18nRes.OpenLogFile}"
                   Style="{StaticResource ButtonBaseStyle}" />
                 <Button
                   x:Name="Button_ClearLogFile"
                   Margin="0,0,0,5"
                   Command="{Binding ClearGameLogFileCommand}"
-                  Content="{Binding I18n.I18nRes.ClearGameLogFiles}"
+                  Content="{Binding I18n.I18nRes.ClearLogFile}"
                   Style="{StaticResource ButtonBaseStyle}" />
               </StackPanel>
             </Expander>
@@ -200,24 +201,21 @@
                 <ComboBox
                   x:Name="ComboBox_MissionsLoadouts"
                   Margin="0,0,0,5"
-                  SelectedIndex="0"
-                  Style="{StaticResource ComboBoxBaseStyle}">
-                  <ComboBoxItem
-                    Content="{Binding I18n.I18nRes.All}"
-                    Style="{StaticResource ComboBoxItemBaseStyle}"
-                    ToolTip="All" />
-                </ComboBox>
+                  DisplayMemberPath="Content"
+                  ItemsSource="{Binding ComboBox_MissionsLoadouts.ItemsSource}"
+                  SelectedItem="{Binding ComboBox_MissionsLoadouts.SelectedItem}"
+                  Style="{StaticResource ComboBoxBaseStyle}" />
                 <Button
                   x:Name="Button_ClearMissionsLoadouts"
                   Margin="0,0,0,5"
-                  Click="Button_ClearMissionsLoadouts_Click"
+                  Command="{Binding ClearMissionsLoadoutsCommand}"
                   Content="{Binding I18n.I18nRes.ClearMissionsLoadouts}"
                   Style="{StaticResource ButtonBaseStyle}" />
                 <Button
                   x:Name="Button_OpenMissionsLoadoutsDirectory"
                   Margin="0,0,0,5"
-                  Click="Button_OpenMissionsLoadoutsDirectory_Click"
-                  Content="{Binding I18n.I18nRes.OpenMissionsLoadoutsFolder}"
+                  Command="{Binding OpenMissionsLoadoutsDirectoryCommand}"
+                  Content="{Binding I18n.I18nRes.OpenMissionsLoadoutsDirectory}"
                   Style="{StaticResource ButtonBaseStyle}" />
               </StackPanel>
             </Expander>
@@ -234,7 +232,7 @@
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="5"
+                    Text="{Binding RetainRecentSaveCount}"
                     ToolTip="{Binding I18n.I18nRes.RetainRecentSaveCount}" />
                   <!--  TextBox输入占位符  -->
                   <Label Background="{x:Null}" Content="{Binding I18n.I18nRes.ClearAll}">
@@ -259,14 +257,14 @@
                 <Button
                   x:Name="Button_ClearSave"
                   Margin="0,0,0,5"
-                  Click="Button_ClearSave_Click"
+                  Command="{Binding ClearSaveCommand}"
                   Content="{Binding I18n.I18nRes.ClearSave}"
                   Style="{StaticResource ButtonBaseStyle}" />
                 <Button
                   x:Name="Button_OpenSaveDirectory"
                   Margin="0,0,0,5"
-                  Click="Button_OpenSaveDirectory_Click"
-                  Content="{Binding I18n.I18nRes.OpenSaveFolder}"
+                  Command="{Binding OpenSaveDirectoryCommand}"
+                  Content="{Binding I18n.I18nRes.OpenSaveDirectory}"
                   Style="{StaticResource ButtonBaseStyle}" />
               </StackPanel>
             </Expander>
@@ -288,6 +286,7 @@
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
                     Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ResolutionWidth}"
                     ToolTip="{Binding I18n.I18nRes.Width}" />
                   <!--  TextBox输入占位符  -->
                   <Label
@@ -327,6 +326,7 @@
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
                     Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ResolutionHeight}"
                     ToolTip="{Binding I18n.I18nRes.Height}" />
                   <!--  TextBox输入占位符  -->
                   <Label
@@ -364,6 +364,7 @@
                   Margin="0,0,0,5"
                   Padding="-20,0,0,0"
                   Content="{Binding I18n.I18nRes.BorderlessWindow}"
+                  IsChecked="{Binding BorderlessWindow}"
                   Style="{StaticResource CheckBoxBaseStyle}" />
                 <Grid Margin="0,0,0,5">
                   <Grid.ColumnDefinitions>
@@ -371,17 +372,15 @@
                     <ColumnDefinition />
                   </Grid.ColumnDefinitions>
                   <Button
-                    x:Name="Button_CustomResolutionReset"
                     Margin="10,0,10,0"
-                    Click="Button_CustomResolutionReset_Click"
+                    Command="{Binding ResetCustomResolutionCommand}"
                     Content="{Binding I18n.I18nRes.Reset}"
-                    IsEnabled="False"
+                    IsEnabled="{Binding CustomResolutionCanReset}"
                     Style="{StaticResource ButtonBaseStyle}" />
                   <Button
-                    x:Name="Button_CustomResolutionSetup"
                     Grid.Column="1"
                     Margin="10,0,10,0"
-                    Click="Button_CustomResolutionSetup_Click"
+                    Command="{Binding SetCustomResolutionCommand}"
                     Content="{Binding I18n.I18nRes.Setup}"
                     Style="{StaticResource ButtonBaseStyle}" />
                 </Grid>
