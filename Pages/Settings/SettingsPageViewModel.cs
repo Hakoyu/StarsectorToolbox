@@ -56,7 +56,8 @@ namespace StarsectorTools.Pages.Settings
 
         public SettingsPageViewModel()
         {
-            //ExtensionDebugPath = WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
+            // https://github.com/CommunityToolkit/dotnet/issues/604
+            // ExtensionDebugPath = WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
         }
 
         public SettingsPageViewModel(bool noop)
@@ -96,6 +97,7 @@ namespace StarsectorTools.Pages.Settings
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Lang"] = ObservableI18n.Language;
             toml.SaveTo(ST.ConfigTomlFile);
+            Logger.Record($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
         }
 
         private void ComboBox_LogLevel_SelectionChangedEvent(object parameter)
@@ -105,10 +107,11 @@ namespace StarsectorTools.Pages.Settings
             var level = item.ToolTip!.ToString()!;
             if (Logger.Options.DefaultLevel.ToString() == level)
                 return;
-            Logger.Options.DefaultLevel = Logger.LogLevelConverter(level);
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["LogLevel"] = level;
             toml.SaveTo(ST.ConfigTomlFile);
+            Logger.Options.DefaultLevel = Logger.LogLevelConverter(level);
+            Logger.Record($"{I18nRes.LogLevelSwitch}: {Logger.Options.DefaultLevel}");
         }
 
         [RelayCommand]
@@ -125,7 +128,6 @@ namespace StarsectorTools.Pages.Settings
                 return;
             string path = Path.GetDirectoryName(filesName.First())!;
             ExtensionDebugPath = path;
-            Logger.Record($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
             if (
                 MessageBoxVM.Show(
                     new(I18nRes.EffectiveAfterReload)
@@ -135,16 +137,19 @@ namespace StarsectorTools.Pages.Settings
                     }
                 ) is MessageBoxVM.Result.Yes
             )
+            {
+
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
                     new(ExtensionDebugPath)
                 );
+                Logger.Record($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
+            }
         }
 
         [RelayCommand(CanExecute = nameof(ClearButtonCanExecute))]
         private void ClearExtensionDebugPath()
         {
             ExtensionDebugPath = string.Empty;
-            Logger.Record($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
             if (
                 MessageBoxVM.Show(
                     new(I18nRes.EffectiveAfterReload)
@@ -154,11 +159,21 @@ namespace StarsectorTools.Pages.Settings
                     }
                 ) is MessageBoxVM.Result.Yes
             )
+            {
+
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
                     new(ExtensionDebugPath)
                 );
+                Logger.Record($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
+            }
         }
 
         private bool ClearButtonCanExecute() => string.IsNullOrEmpty(ExtensionDebugPath);
+
+        [RelayCommand]
+        private void OpenLogFile()
+        {
+            Utils.OpenLink(Logger.LogFile);
+        }
     }
 }

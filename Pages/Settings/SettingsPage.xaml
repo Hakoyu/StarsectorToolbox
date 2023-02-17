@@ -44,7 +44,7 @@
               Margin="0,0,5,0"
               Padding="5,0,5,0"
               HorizontalAlignment="Left"
-              Click="Button_OpenLogFile_Click"
+              Command="{Binding OpenLogFileCommand}"
               Content="{Binding I18n.I18nRes.OpenLogFile}"
               Style="{StaticResource ButtonBaseStyle}" />
             <Label
@@ -91,7 +91,7 @@
               InputMethod.IsInputMethodEnabled="False"
               IsReadOnly="True"
               Style="{StaticResource TextBoxBaseStyle}"
-              Text=""
+              Text="{Binding ExtensionDebugPath}"
               ToolTip="{Binding I18n.I18nRes.ExtensionDebugPathToolTip}" />
             <!--  TextBox输入占位符  -->
             <Label
@@ -116,7 +116,6 @@
               </Label.Style>
             </Label>
             <Button
-              x:Name="Button_SetExtensionDebugPath"
               Width="60"
               Margin="0,0,65,0"
               HorizontalAlignment="Right"
@@ -124,7 +123,6 @@
               Content="{Binding I18n.I18nRes.Set}"
               Style="{StaticResource ButtonBaseStyle}" />
             <Button
-              x:Name="Button_ClearExtensionDebugPath"
               Width="60"
               HorizontalAlignment="Right"
               Command="{Binding ClearExtensionDebugPathCommand}"
