@@ -35,24 +35,20 @@ namespace StarsectorTools.Pages.Settings
 
         [ObservableProperty]
         private ComboBoxVM comboBox_LogLevel =
-            new(
-                new()
-                {
-                    new() { Content = I18nRes.LogLevel_DEBUG, ToolTip = LogLevel.DEBUG },
-                    new() { Content = I18nRes.LogLevel_INFO, ToolTip = LogLevel.INFO },
-                    new() { Content = I18nRes.LogLevel_WARN, ToolTip = LogLevel.WARN },
-                }
-            );
+            new()
+            {
+                new() { Content = I18nRes.LogLevel_DEBUG, ToolTip = LogLevel.DEBUG },
+                new() { Content = I18nRes.LogLevel_INFO, ToolTip = LogLevel.INFO },
+                new() { Content = I18nRes.LogLevel_WARN, ToolTip = LogLevel.WARN },
+            };
 
         [ObservableProperty]
         private ComboBoxVM comboBox_Language =
-            new(
-                new()
-                {
-                    new() { Content = "English", ToolTip = "en-US" },
-                    new() { Content = "简体中文", ToolTip = "zh-CN" },
-                }
-            );
+            new()
+            {
+                new() { Content = "English", ToolTip = "en-US" },
+                new() { Content = "简体中文", ToolTip = "zh-CN" },
+            };
 
         public SettingsPageViewModel()
         {
@@ -62,7 +58,7 @@ namespace StarsectorTools.Pages.Settings
 
         public SettingsPageViewModel(bool noop)
         {
-            I18n.AddChangedAction(I18nChangedAction);
+            I18n.AddPropertyChangedAction(I18nChangedAction);
             ExtensionDebugPath =
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
             // 设置LogLevel初始值
@@ -138,7 +134,6 @@ namespace StarsectorTools.Pages.Settings
                 ) is MessageBoxVM.Result.Yes
             )
             {
-
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
                     new(ExtensionDebugPath)
                 );
@@ -160,7 +155,6 @@ namespace StarsectorTools.Pages.Settings
                 ) is MessageBoxVM.Result.Yes
             )
             {
-
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
                     new(ExtensionDebugPath)
                 );

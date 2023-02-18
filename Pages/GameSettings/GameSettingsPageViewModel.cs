@@ -68,8 +68,8 @@ namespace StarsectorTools.Pages.GameSettings
             GetVmparamsData();
             GetMissionsLoadouts();
             GetCustomResolution();
-            I18n.AddChangedAction(I18nChangedAction);
-            ComboBox_MissionsLoadouts.SelectedItem = ComboBox_MissionsLoadouts[0];
+            I18n.AddPropertyChangedAction(I18nChangedAction);
+            ComboBox_MissionsLoadouts.SelectedIndex = 0;
         }
 
         private void I18nChangedAction()

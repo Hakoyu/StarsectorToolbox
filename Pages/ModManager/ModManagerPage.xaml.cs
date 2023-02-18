@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Linq;
+using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
@@ -41,7 +42,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             InitializeComponent();
             //throw new();
-            InitializeData();
+            //InitializeData();
         }
         public bool ChangeLanguage()
         {
@@ -214,7 +215,7 @@ namespace StarsectorTools.Pages.ModManager
                 }
                 if (err != null)
                 {
-                    STLog.WriteLine(err, STLogLevel.WARN);
+                    Logger.Record(err, LogLevel.WARN);
                     Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
                 }
                 CheckEnabledModsDependencies();
@@ -318,7 +319,7 @@ namespace StarsectorTools.Pages.ModManager
                     }
                     catch (Exception ex)
                     {
-                        STLog.WriteLine($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
+                        Logger.Record($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
                         Utils.ShowMessageBox($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}\n", STMessageBoxIcon.Question);
                         return;
                     }
@@ -333,7 +334,7 @@ namespace StarsectorTools.Pages.ModManager
                             ChangeModEnabled(id, true);
                         else
                         {
-                            STLog.WriteLine($"{I18nRes.NotFoundMod} {id}", STLogLevel.WARN);
+                            Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
                             err ??= $"{I18nRes.NotFoundMod}\n";
                             err += $"{id}\n";
                         }
@@ -341,7 +342,7 @@ namespace StarsectorTools.Pages.ModManager
                 }
                 if (err != null)
                 {
-                    STLog.WriteLine(err, STLogLevel.WARN);
+                    Logger.Record(err, LogLevel.WARN);
                     Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
                 }
             }
@@ -351,7 +352,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array fileArray)
             {
-                STLog.WriteLine($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {fileArray.Length}");
+                Logger.Record($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {fileArray.Length}");
                 new Task(() =>
                 {
                     int total = fileArray.Length;

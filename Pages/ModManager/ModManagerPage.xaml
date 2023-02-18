@@ -17,7 +17,7 @@
   FontSize="16"
   mc:Ignorable="d">
   <Page.DataContext>
-    <local:ModManagerPageViewModel x:Name="VM" />
+    <local:ModManagerPageViewModel />
   </Page.DataContext>
   <Page.Resources>
     <Style
@@ -153,6 +153,7 @@
                   ItemContainerStyle="{StaticResource ListBoxItemView}"
                   ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
                   PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                  PreviewMouseWheel="ListBox_PreviewMouseWheel"
                   SelectedItem="{Binding ListBox_MainMenu.SelectedItem}"
                   Style="{StaticResource ListBoxBaseStyle}">
                   <i:Interaction.Triggers>
@@ -171,6 +172,7 @@
                     ItemContainerStyle="{StaticResource ListBoxItemView}"
                     ItemsSource="{Binding ListBox_TypeGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                    PreviewMouseWheel="ListBox_PreviewMouseWheel"
                     SelectedItem="{Binding ListBox_TypeGroupMenu.SelectedItem}"
                     Style="{StaticResource ListBoxBaseStyle}">
                     <i:Interaction.Triggers>
@@ -192,6 +194,7 @@
                     ItemContainerStyle="{StaticResource ListBoxItemView}"
                     ItemsSource="{Binding ListBox_UserGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
+                    PreviewMouseWheel="ListBox_PreviewMouseWheel"
                     SelectedItem="{Binding ListBox_UserGroupMenu.SelectedItem}"
                     Style="{StaticResource ListBoxBaseStyle}">
                     <i:Interaction.Triggers>
@@ -237,10 +240,13 @@
               Content="{Binding I18n.I18nRes.AddUserGroup}"
               Style="{StaticResource ButtonBaseStyle}" />
           </Grid>
-          <Grid x:Name="Grid_DataGrid" Grid.Column="1">
+          <Grid
+            x:Name="Grid_DataGrid"
+            Grid.Column="1"
+            Margin="0,0,5,0">
             <DataGrid
               x:Name="DataGrid_ModsShowList"
-              Margin="0,30,5,0"
+              Margin="0,30,0,0"
               d:ItemsSource="{d:SampleData ItemCount=5}"
               pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
               AllowDrop="True"
@@ -248,6 +254,7 @@
               CanUserAddRows="False"
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
+              ItemsSource="{Binding NowShowMods}"
               LostFocus="DataGrid_ModsShowList_LostFocus"
               MouseLeftButtonDown="DataGrid_ModsShowList_MouseLeftButtonDown"
               RowDetailsVisibilityMode="Visible"
@@ -478,30 +485,19 @@
             </Label>
             <ComboBox
               x:Name="ComboBox_SearchType"
-              Width="115"
+              Width="120"
               Height="30"
-              Margin="0,0,5,0"
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
-              SelectedIndex="0"
-              SelectionChanged="ComboBox_SearchType_SelectionChanged"
+              DisplayMemberPath="Content"
+              ItemsSource="{Binding ComboBox_ModFilterType.ItemsSource}"
+              SelectedItem="{Binding ComboBox_ModFilterType.SelectedItem}"
               Style="{StaticResource ComboBoxBaseStyle}">
-              <ComboBoxItem
-                Content="{Binding I18n.I18nRes.Name}"
-                Style="{StaticResource ComboBoxItemBaseStyle}"
-                Tag="Name" />
-              <ComboBoxItem
-                Content="ID"
-                Style="{StaticResource ComboBoxItemBaseStyle}"
-                Tag="Id" />
-              <ComboBoxItem
-                Content="{Binding I18n.I18nRes.Author}"
-                Style="{StaticResource ComboBoxItemBaseStyle}"
-                Tag="Author" />
-              <ComboBoxItem
-                Content="{Binding I18n.I18nRes.UserDescription}"
-                Style="{StaticResource ComboBoxItemBaseStyle}"
-                Tag="UserDescription" />
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                  <i:InvokeCommandAction Command="{Binding ComboBox_ModFilterType.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_ModFilterType.SelectedItem}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
             </ComboBox>
           </Grid>
           <Grid

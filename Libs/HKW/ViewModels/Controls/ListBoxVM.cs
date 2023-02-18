@@ -19,10 +19,9 @@ namespace HKW.ViewModels.Controls
         /// <summary>
         /// 构造
         /// </summary>
-        /// <param name="collection">初始集合</param>
-        public ListBoxVM(ObservableCollection<ListBoxItemVM>? collection = null)
+        public ListBoxVM()
         {
-            ItemsSource = collection ?? new();
+            ItemsSource ??= new();
         }
     }
 }

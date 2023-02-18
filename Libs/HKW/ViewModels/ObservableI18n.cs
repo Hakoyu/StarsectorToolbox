@@ -29,7 +29,7 @@ namespace HKW.ViewModels
     /// private string labelContent;
     /// public MainWindowViewModel()
     /// {
-    ///     I18nRes.AddChangedAction(() =>
+    ///     I18nRes.AddPropertyChangedAction(() =>
     ///     {
     ///        LabelContent = MainWindowI18nRes.Test;
     ///     });
@@ -137,7 +137,7 @@ namespace HKW.ViewModels
         /// </summary>
         /// <param name="propertyChangedAction">属性改变委托</param>
         /// <param name="nowRefresh">立刻刷新</param>
-        public void AddChangedAction(Action propertyChangedAction, bool nowRefresh = false)
+        public void AddPropertyChangedAction(Action propertyChangedAction, bool nowRefresh = false)
         {
             if (nowRefresh)
                 propertyChangedAction();

@@ -78,7 +78,7 @@ namespace StarsectorTools.Windows.MainWindow
             InitializeExtensionDebugPage();
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceiv);
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(this, ExtensionDebugPathRequestReceive);
-            I18n.AddChangedAction(I18nAction);
+            I18n.AddPropertyChangedAction(I18nAction);
         }
 
         private void I18nAction()

@@ -18,11 +18,13 @@ namespace HKW.ViewModels.Controls
         /// 选中项的索引
         /// </summary>
         [ObservableProperty]
-        private int selectedIndex;
+        [NotifyPropertyChangedFor(nameof(SelectedItem))]
+        private int selectedIndex = -1;
         /// <summary>
         /// 选中项的值
         /// </summary>
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SelectedIndex))]
         private TItem? selectedItem;
 
         /// <summary>
@@ -31,6 +33,21 @@ namespace HKW.ViewModels.Controls
         /// <param name="item">选中项</param>
         [RelayCommand]
         private void SelectionChanged(TItem item) => SelectionChangedEvent?.Invoke(item);
+
+        partial void OnSelectedIndexChanged(int value)
+        {
+            if (value < 0)
+                SelectedItem = default;
+            else
+                SelectedItem = ItemsSource[value];
+        }
+
+        partial void OnSelectedItemChanged(TItem? value)
+        {
+            if (value is null)
+                return;
+            SelectedIndex = ItemsSource.IndexOf(value);
+        }
 
         /// <summary>
         /// 委托
