@@ -177,6 +177,11 @@ namespace StarsectorTools.Pages.ModManager
 
         public ModManagerPageViewModel()
         {
+
+        }
+
+        public ModManagerPageViewModel(bool noop)
+        {
             InitializeData();
             ComboBox_ModFilterType.SelectedIndex = 0;
             ListBox_MainMenu.SelectedIndex = 0;

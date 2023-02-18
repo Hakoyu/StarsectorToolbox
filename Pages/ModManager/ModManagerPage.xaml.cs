@@ -34,6 +34,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             "zh-CN"
         });
+        internal ModManagerPageViewModel ViewModel => (ModManagerPageViewModel)DataContext;
 
         /// <summary>
         /// 
@@ -41,6 +42,7 @@ namespace StarsectorTools.Pages.ModManager
         public ModManagerPage()
         {
             InitializeComponent();
+            DataContext = new ModManagerPageViewModel(true);
             //throw new();
             //InitializeData();
         }

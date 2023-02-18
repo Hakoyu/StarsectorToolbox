@@ -58,15 +58,15 @@ namespace StarsectorTools.Windows.MainWindow
                     var button = ButtonConverter(d.Button);
                     var icon = IconConverter(d.Icon);
                     MessageBoxResult result;
-                    if (d.Tag is false)
-                    {
-                        result = MessageBoxX.Show(message, d.Caption, button, icon);
-                    }
-                    else
+                    if (d.Tag is true)
                     {
                         SetBlurEffect();
                         result = MessageBoxX.Show(message, d.Caption, button, icon);
                         RemoveBlurEffect();
+                    }
+                    else
+                    {
+                        result = MessageBoxX.Show(message, d.Caption, button, icon);
                     }
                     if (message.Length == messageLengthLimits)
                         GC.Collect();
