@@ -14,7 +14,7 @@ using HKW.Libs.TomlParse;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using static HKW.Extension.SetExtension;
-using I18n = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
+using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
 namespace StarsectorTools.Pages.ModManager
 {
@@ -73,8 +73,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportEnabledList,
-                Filter = $"Json {I18n.File}|*.json"
+                Title = I18nRes.ImportEnabledList,
+                Filter = $"Json {I18nRes.File}|*.json"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -87,8 +87,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = I18n.ExportEnabledList,
-                Filter = $"Json {I18n.File}|*.json"
+                Title = I18nRes.ExportEnabledList,
+                Filter = $"Json {I18nRes.File}|*.json"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -100,13 +100,11 @@ namespace StarsectorTools.Pages.ModManager
         {
             if (expandGroupMenu)
             {
-                Button_GroupMenuIcon.Text = "📘";
                 Grid_GroupMenu.Width = 30;
                 ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Hidden);
             }
             else
             {
-                Button_GroupMenuIcon.Text = "📖";
                 Grid_GroupMenu.Width = double.NaN;
                 ScrollViewer.SetVerticalScrollBarVisibility(ListBox_ModsGroupMenu, ScrollBarVisibility.Auto);
             }
@@ -210,7 +208,7 @@ namespace StarsectorTools.Pages.ModManager
                         ChangeModEnabled(dependencie, true);
                     else
                     {
-                        err ??= $"{I18n.NotFoundDependencies}\n";
+                        err ??= $"{I18nRes.NotFoundDependencies}\n";
                         err += $"{dependencie}\n";
                     }
                 }
@@ -229,8 +227,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportUserData,
-                Filter = $"Toml {I18n.File}|*.toml"
+                Title = I18nRes.ImportUserData,
+                Filter = $"Toml {I18nRes.File}|*.toml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -244,8 +242,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = I18n.ExportUserData,
-                Filter = $"Toml {I18n.File}|*.toml"
+                Title = I18nRes.ExportUserData,
+                Filter = $"Toml {I18nRes.File}|*.toml"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -277,7 +275,7 @@ namespace StarsectorTools.Pages.ModManager
                 if (name.Length > 0 && !allUserGroups.ContainsKey(name))
                 {
                     if (name == ModTypeGroup.Collected || name == strUserCustomData)
-                        Utils.ShowMessageBox(string.Format(I18n.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), setBlurEffect: false);
+                        Utils.ShowMessageBox(string.Format(I18nRes.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData), setBlurEffect: false);
                     else
                     {
                         AddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text);
@@ -287,7 +285,7 @@ namespace StarsectorTools.Pages.ModManager
                     }
                 }
                 else
-                    Utils.ShowMessageBox(I18n.UserGroupNamingFailed);
+                    Utils.ShowMessageBox(I18nRes.UserGroupNamingFailed);
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
@@ -303,8 +301,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportFromSave,
-                Filter = $"Xml {I18n.File}|*.xml"
+                Title = I18nRes.ImportFromSave,
+                Filter = $"Xml {I18nRes.File}|*.xml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -320,11 +318,11 @@ namespace StarsectorTools.Pages.ModManager
                     }
                     catch (Exception ex)
                     {
-                        STLog.WriteLine($"{I18n.FileError} {I18n.Path}: {filePath}\n", ex);
-                        Utils.ShowMessageBox($"{I18n.FileError}\n{I18n.Path}: {filePath}\n", STMessageBoxIcon.Question);
+                        STLog.WriteLine($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
+                        Utils.ShowMessageBox($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}\n", STMessageBoxIcon.Question);
                         return;
                     }
-                    var result = Utils.ShowMessageBox(I18n.SelectImportMode, MessageBoxButton.YesNoCancel, STMessageBoxIcon.Question);
+                    var result = Utils.ShowMessageBox(I18nRes.SelectImportMode, MessageBoxButton.YesNoCancel, STMessageBoxIcon.Question);
                     if (result == MessageBoxResult.Yes)
                         ClearAllEnabledMods();
                     else if (result == MessageBoxResult.Cancel)
@@ -335,8 +333,8 @@ namespace StarsectorTools.Pages.ModManager
                             ChangeModEnabled(id, true);
                         else
                         {
-                            STLog.WriteLine($"{I18n.NotFoundMod} {id}", STLogLevel.WARN);
-                            err ??= $"{I18n.NotFoundMod}\n";
+                            STLog.WriteLine($"{I18nRes.NotFoundMod} {id}", STLogLevel.WARN);
+                            err ??= $"{I18nRes.NotFoundMod}\n";
                             err += $"{id}\n";
                         }
                     }
@@ -353,7 +351,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array fileArray)
             {
-                STLog.WriteLine($"{I18n.ConfirmDragFiles} {I18n.Size}: {fileArray.Length}");
+                STLog.WriteLine($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {fileArray.Length}");
                 new Task(() =>
                 {
                     int total = fileArray.Length;
@@ -417,7 +415,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             if (TextBox_MinRandomSize.Text.Length == 0 || TextBox_MaxRandomSize.Text.Length == 0)
             {
-                Utils.ShowMessageBox(I18n.RandomNumberCannotNull, STMessageBoxIcon.Warning);
+                Utils.ShowMessageBox(I18nRes.RandomNumberCannotNull, STMessageBoxIcon.Warning);
                 return;
             }
             if (nowSelectedListBoxItem is ListBoxItem item && allUserGroups.ContainsKey(item.ToolTip.ToString()!))
@@ -428,12 +426,12 @@ namespace StarsectorTools.Pages.ModManager
                 int count = allUserGroups[group].Count;
                 if (maxSize > count)
                 {
-                    Utils.ShowMessageBox(I18n.RandomNumberCannotGreaterTotal, STMessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(I18nRes.RandomNumberCannotGreaterTotal, STMessageBoxIcon.Warning);
                     return;
                 }
                 else if (minSize > maxSize)
                 {
-                    Utils.ShowMessageBox(I18n.MinRandomNumberCannotBeGreaterMaxRandomNumber, STMessageBoxIcon.Warning);
+                    Utils.ShowMessageBox(I18nRes.MinRandomNumberCannotBeGreaterMaxRandomNumber, STMessageBoxIcon.Warning);
                     return;
                 }
                 foreach (var info in allUserGroups[group])
@@ -471,8 +469,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var openFileDialog = new Microsoft.Win32.OpenFileDialog()
             {
-                Title = I18n.ImportUserGroup,
-                Filter = $"Toml {I18n.File}|*.toml"
+                Title = I18nRes.ImportUserGroup,
+                Filter = $"Toml {I18nRes.File}|*.toml"
             };
             if (openFileDialog.ShowDialog().GetValueOrDefault())
             {
@@ -487,8 +485,8 @@ namespace StarsectorTools.Pages.ModManager
         {
             var saveFileDialog = new Microsoft.Win32.SaveFileDialog()
             {
-                Title = I18n.ExportUserGroup,
-                Filter = $"Toml {I18n.File}|*.toml"
+                Title = I18nRes.ExportUserGroup,
+                Filter = $"Toml {I18nRes.File}|*.toml"
             };
             if (saveFileDialog.ShowDialog().GetValueOrDefault())
             {

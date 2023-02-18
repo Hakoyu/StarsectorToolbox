@@ -62,7 +62,7 @@ namespace StarsectorTools.Pages.Settings
 
         public SettingsPageViewModel(bool noop)
         {
-            I18n.AddChangedActionAndRefresh(I18nChangedAction);
+            I18n.AddChangedAction(I18nChangedAction);
             ExtensionDebugPath =
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
             // 设置LogLevel初始值

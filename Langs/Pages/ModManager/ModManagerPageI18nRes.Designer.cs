@@ -333,9 +333,9 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         /// <summary>
         ///   查找类似 禁用的模组 的本地化字符串。
         /// </summary>
-        public static string DisabledMod {
+        public static string DisabledMods {
             get {
-                return ResourceManager.GetString("DisabledMod", resourceCulture);
+                return ResourceManager.GetString("DisabledMods", resourceCulture);
             }
         }
         
@@ -400,9 +400,9 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         /// <summary>
         ///   查找类似 启用的模组 的本地化字符串。
         /// </summary>
-        public static string EnabledMod {
+        public static string EnabledMods {
             get {
-                return ResourceManager.GetString("EnabledMod", resourceCulture);
+                return ResourceManager.GetString("EnabledMods", resourceCulture);
             }
         }
         

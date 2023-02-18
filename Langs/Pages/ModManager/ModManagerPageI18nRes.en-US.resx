@@ -330,11 +330,11 @@ Original version: {0} =&gt; New version: {1}</value>
   <data name="AllMods" xml:space="preserve">
     <value>All mods</value>
   </data>
-  <data name="EnabledMod" xml:space="preserve">
-    <value>Enabled mod</value>
+  <data name="EnabledMods" xml:space="preserve">
+    <value>Enabled mods</value>
   </data>
-  <data name="DisabledMod" xml:space="preserve">
-    <value>Disabled mod</value>
+  <data name="DisabledMods" xml:space="preserve">
+    <value>Disabled mods</value>
   </data>
   <data name="GroupedByModType" xml:space="preserve">
     <value>Grouped by mod type</value>

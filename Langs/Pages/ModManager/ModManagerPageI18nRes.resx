@@ -330,10 +330,10 @@
   <data name="AllMods" xml:space="preserve">
     <value>全部模组</value>
   </data>
-  <data name="EnabledMod" xml:space="preserve">
+  <data name="EnabledMods" xml:space="preserve">
     <value>启用的模组</value>
   </data>
-  <data name="DisabledMod" xml:space="preserve">
+  <data name="DisabledMods" xml:space="preserve">
     <value>禁用的模组</value>
   </data>
   <data name="GroupedByModType" xml:space="preserve">

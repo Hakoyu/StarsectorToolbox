@@ -160,7 +160,7 @@
         Padding="0"
         HorizontalAlignment="Left"
         VerticalAlignment="Center"
-        Command="{Binding ChangeMenuExpandCommand}"
+        Command="{Binding MenuExpandCommand}"
         Style="{StaticResource ButtonBaseStyle}">
         <pu:ButtonHelper.Icon>
           <emoji:TextBlock FontSize="16">
@@ -181,7 +181,7 @@
     <Grid Margin="0,30,0,0">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="*" />
+        <ColumnDefinition />
       </Grid.ColumnDefinitions>
       <Grid
         x:Name="Grid_MainMenu"
@@ -213,6 +213,7 @@
               FontSize="16"
               ItemContainerStyle="{StaticResource ListBoxItemView}"
               ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
+              ScrollViewer.VerticalScrollBarVisibility="Hidden"
               SelectedItem="{Binding ListBox_MainMenu.SelectedItem}"
               Style="{StaticResource ListBoxBaseStyle}">
               <i:Interaction.Triggers>

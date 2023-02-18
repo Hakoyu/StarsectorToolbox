@@ -12,7 +12,7 @@ using HKW.ViewModels.Dialog;
 using Panuon.WPF.UI;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -58,11 +58,11 @@ namespace StarsectorTools.Windows.MainWindow
             catch (Exception ex)
             {
                 Logger.Record(
-                    $"{I18n.InitializationError}: {nameof(MainWindowViewModel)}",
+                    $"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}",
                     ex,
                     false
                 );
-                MessageBoxVM.Show(new($"{I18n.InitializationError}: {nameof(MainWindowViewModel)}")
+                MessageBoxVM.Show(new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
                 {
                     Icon = MessageBoxVM.Icon.Error
                 });
@@ -71,8 +71,11 @@ namespace StarsectorTools.Windows.MainWindow
             }
             // 初始化页面
             InitializePage();
+            //设置启动页
+            ViewModel.ListBox_MainMenu.SelectedItem = ViewModel.ListBox_MainMenu[0];
+            ViewModel.NowPage = ViewModel.ListBox_MainMenu.SelectedItem.Tag;
 
-            Logger.Record(I18n.InitializationCompleted);
+            Logger.Record(I18nRes.InitializationCompleted);
         }
 
         private void OnDispatcherUnhandledException(
@@ -82,9 +85,9 @@ namespace StarsectorTools.Windows.MainWindow
         {
             if (e.Exception.Source is nameof(StarsectorTools))
             {
-                Logger.Record(I18n.GlobalException, e.Exception, false);
+                Logger.Record(I18nRes.GlobalException, e.Exception, false);
                 MessageBoxVM.Show(
-                    new($"{I18n.GlobalExceptionMessage}\n\n{Logger.FilterException(e.Exception)}")
+                    new($"{I18nRes.GlobalExceptionMessage}\n\n{Logger.FilterException(e.Exception)}")
                     {
                         Icon = MessageBoxVM.Icon.Error,
                     }
@@ -93,13 +96,13 @@ namespace StarsectorTools.Windows.MainWindow
             else
             {
                 Logger.Record(
-                    $"{I18n.GlobalExtensionException}: {e.Exception.Source}",
+                    $"{I18nRes.GlobalExtensionException}: {e.Exception.Source}",
                     e.Exception,
                     false
                 );
                 MessageBoxVM.Show(
                     new(
-                        $"{string.Format(I18n.GlobalExtensionExceptionMessage, e.Exception.Source)}\n\n{Logger.FilterException(e.Exception)}"
+                        $"{string.Format(I18nRes.GlobalExtensionExceptionMessage, e.Exception.Source)}\n\n{Logger.FilterException(e.Exception)}"
                     )
                     {
                         Icon = MessageBoxVM.Icon.Error,

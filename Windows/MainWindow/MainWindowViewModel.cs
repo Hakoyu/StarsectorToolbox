@@ -78,7 +78,7 @@ namespace StarsectorTools.Windows.MainWindow
             InitializeExtensionDebugPage();
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceiv);
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(this, ExtensionDebugPathRequestReceive);
-            I18n.AddChangedActionAndRefresh(I18nAction);
+            I18n.AddChangedAction(I18nAction);
         }
 
         private void I18nAction()
@@ -94,7 +94,7 @@ namespace StarsectorTools.Windows.MainWindow
 
 
         [RelayCommand]
-        private void ChangeMenuExpand(object parameter) => MenuIsExpand = !MenuIsExpand;
+        private void MenuExpand(object parameter) => MenuIsExpand = !MenuIsExpand;
 
         [RelayCommand]
         private void ShowPage(object? page)

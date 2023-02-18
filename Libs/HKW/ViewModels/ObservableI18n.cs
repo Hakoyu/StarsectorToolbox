@@ -21,7 +21,7 @@ namespace HKW.ViewModels
     ///     <local:MainWindowViewModel />
     /// </Window.DataContext>
     /// <Grid>
-    ///     <Label Content="{Binding I18n.I18nRes.Key}" />
+    ///     <Label Content="{Binding I18nRes.I18nRes.Key}" />
     ///     <Label Content="{Binding LabelContent}" />
     /// </Grid>
     /// ]]></code></para>
@@ -29,7 +29,7 @@ namespace HKW.ViewModels
     /// private string labelContent;
     /// public MainWindowViewModel()
     /// {
-    ///     I18n.AddChangedActionAndRefresh(() =>
+    ///     I18nRes.AddChangedAction(() =>
     ///     {
     ///        LabelContent = MainWindowI18nRes.Test;
     ///     });
@@ -136,9 +136,11 @@ namespace HKW.ViewModels
         /// 添加属性改变委托,并刷新
         /// </summary>
         /// <param name="propertyChangedAction">属性改变委托</param>
-        public void AddChangedActionAndRefresh(Action propertyChangedAction)
+        /// <param name="nowRefresh">立刻刷新</param>
+        public void AddChangedAction(Action propertyChangedAction, bool nowRefresh = false)
         {
-            propertyChangedAction();
+            if (nowRefresh)
+                propertyChangedAction();
             PropertyChanged += (s, e) =>
             {
                 propertyChangedAction();
