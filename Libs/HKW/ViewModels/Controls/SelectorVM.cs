@@ -40,6 +40,7 @@ namespace HKW.ViewModels.Controls
                 SelectedItem = default;
             else
                 SelectedItem = ItemsSource[value];
+            SelectionChangedCommand.Execute(SelectedItem);
         }
 
         partial void OnSelectedItemChanged(TItem? value)
@@ -47,6 +48,7 @@ namespace HKW.ViewModels.Controls
             if (value is null)
                 return;
             SelectedIndex = ItemsSource.IndexOf(value);
+            SelectionChangedCommand.Execute(SelectedItem);
         }
 
         /// <summary>

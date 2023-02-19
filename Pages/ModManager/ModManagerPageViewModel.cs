@@ -1,16 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialog;
+using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
@@ -25,13 +28,18 @@ namespace StarsectorTools.Pages.ModManager
         private bool groupMenuIsExpand = false;
 
         /// <summary>当前选择的列表项</summary>
-        [ObservableProperty]
         private ListBoxItemVM nowSelectedGroup = null!;
-
-        private string nowGroupName => NowSelectedGroup!.Tag!.ToString()!;
+        private string nowSelectedGroupName => nowSelectedGroup!.Tag!.ToString()!;
 
         [ObservableProperty]
-        private ObservableCollection<ModShowInfo> nowShowMods;
+        private ObservableCollection<ModShowInfo> nowShowMods = new();
+
+
+        /// <summary>当前选择的模组</summary>
+        private List<ModShowInfo> nowSelectedMods = new();
+
+        /// <summary>当前选择的模组</summary>
+        private ModShowInfo? nowSelectedMod;
 
         /// <summary>模组详情的展开状态</summary>
         [ObservableProperty]
@@ -61,16 +69,17 @@ namespace StarsectorTools.Pages.ModManager
         private string? modDetailUserDescription;
 
         [ObservableProperty]
-        private string modFilterText;
+        private string modFilterText = string.Empty;
+
+        [ObservableProperty]
+        private string minRandomSize;
+        [ObservableProperty]
+        private string maxRandomSize;
 
         [ObservableProperty]
         private bool showRandomEnable = false;
         [ObservableProperty]
         private bool isRemindSave = false;
-
-        /// <summary>当前选择的模组ID</summary>
-        [ObservableProperty]
-        private ModShowInfo? nowSelectedMod = null;
 
         [ObservableProperty]
         private ListBoxVM listBox_MainMenu =
@@ -166,14 +175,17 @@ namespace StarsectorTools.Pages.ModManager
         private ComboBoxVM comboBox_ModFilterType =
             new()
             {
-                new() { Content = I18nRes.Name,ToolTip = I18nRes.Name, Tag = nameof(I18nRes.Name) },
+                new() { Content = I18nRes.Name ,Tag = nameof(I18nRes.Name) },
                 new() { Content = "Id",ToolTip = "Id", Tag = "Id" },
-                new() { Content = I18nRes.Author,ToolTip = I18nRes.Author, Tag = nameof(I18nRes.Author) },
-                new() { Content = I18nRes.UserDescription,ToolTip = I18nRes.UserDescription, Tag = nameof(I18nRes.UserDescription) },
+                new() { Content = I18nRes.Author, Tag = nameof(I18nRes.Author) },
+                new() { Content = I18nRes.UserDescription, Tag = nameof(I18nRes.UserDescription) },
             };
 
         [ObservableProperty]
-        private ComboBoxVM comboBox_ExportUserGroup = new();
+        private ComboBoxVM comboBox_ExportUserGroup = new()
+        {
+            new(){Content = I18nRes.All ,Tag= nameof(I18nRes.All)}
+        };
 
         public ModManagerPageViewModel()
         {
@@ -183,12 +195,13 @@ namespace StarsectorTools.Pages.ModManager
         public ModManagerPageViewModel(bool noop)
         {
             InitializeData();
-            ComboBox_ModFilterType.SelectedIndex = 0;
-            ListBox_MainMenu.SelectedIndex = 0;
             I18n.AddPropertyChangedAction(I18nPropertyChangeAction);
             ListBox_MainMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
             ListBox_TypeGroupMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
             ListBox_UserGroupMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
+            ComboBox_ModFilterType.SelectedIndex = 0;
+            ListBox_MainMenu.SelectedIndex = 0;
+            ComboBox_ExportUserGroup.SelectedIndex = 0;
         }
 
         private void I18nPropertyChangeAction()
@@ -208,10 +221,14 @@ namespace StarsectorTools.Pages.ModManager
             ComboBox_ModFilterType[0].Content = I18nRes.Name;
             ComboBox_ModFilterType[1].Content = I18nRes.Author;
             ComboBox_ModFilterType[2].Content = I18nRes.UserDescription;
+            ComboBox_ExportUserGroup[0].Content = I18nRes.All;
         }
 
         private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
         {
+            nowSelectedGroup = item;
+            if (allUserGroups.ContainsKey(item.ToolTip!.ToString()!))
+                ShowRandomEnable = true;
             RefreshDataGrid();
         }
 
@@ -220,5 +237,250 @@ namespace StarsectorTools.Pages.ModManager
         {
             GroupMenuIsExpand = !GroupMenuIsExpand;
         }
+        [RelayCommand]
+        private void DataGridSelectionChanged(IList items)
+        {
+            nowSelectedMods = new(items.OfType<ModShowInfo>());
+            ChangeShowModDetails(nowSelectedMods.LastOrDefault(defaultValue: null!));
+        }
+
+        [RelayCommand]
+        private void Collected()
+        {
+            if (nowSelectedMod is null)
+                return;
+            ChangeSelectedModsCollected(!nowSelectedMod.IsCollected);
+        }
+        [RelayCommand]
+        private void Enabled()
+        {
+            if (nowSelectedMod is null)
+                return;
+            ChangeSelectedModsEnabled(!nowSelectedMod.IsEnabled);
+        }
+
+        [RelayCommand]
+        private void EnableDependencies()
+        {
+            if (nowSelectedMod is null)
+                return;
+            string err = null!;
+            foreach (var dependencie in nowSelectedMod.DependenciesSet!)
+            {
+                if (allModInfos.ContainsKey(dependencie))
+                    ChangeModEnabled(dependencie, true);
+                else
+                {
+                    err ??= $"{I18nRes.NotFoundDependencies}\n";
+                    err += $"{dependencie}\n";
+                }
+            }
+            if (err != null)
+            {
+                Logger.Record(err, LogLevel.WARN);
+                Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
+            }
+            CheckEnabledModsDependencies();
+            RefreshCountOfListBoxItems();
+            StartRemindSaveThread();
+        }
+        [RelayCommand]
+        private void ModFilterTextChanged()
+        {
+            RefreshDataGrid();
+        }
+
+        [RelayCommand]
+        private void Save()
+        {
+            SaveAllData();
+            ResetRemindSaveThread();
+        }
+
+        [RelayCommand]
+        private void OpenModDirectory()
+        {
+            if (Utils.DirectoryExists(GameInfo.ModsDirectory))
+                Utils.OpenLink(GameInfo.ModsDirectory);
+        }
+
+        [RelayCommand]
+        private void OpenBackupDirectory()
+        {
+            if (Utils.DirectoryExists(backupDirectory))
+                Utils.OpenLink(backupDirectory);
+        }
+        [RelayCommand]
+        private void OpenSaveDirectory()
+        {
+            if (Utils.DirectoryExists(GameInfo.SaveDirectory))
+                Utils.OpenLink(GameInfo.SaveDirectory);
+        }
+        [RelayCommand]
+        private void ImportUserData()
+        {
+            var filesName = OpenFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ImportUserData,
+                Filter = $"Toml {I18nRes.File}|*.toml"
+            });
+            if (filesName?.First() is string fileName)
+            {
+                GetUserData(fileName);
+                RefreshModsContextMenu();
+                RefreshCountOfListBoxItems();
+            }
+        }
+        [RelayCommand]
+        private void ExportUserData()
+        {
+            var fileName = SaveFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ImportUserData,
+                Filter = $"Toml {I18nRes.File}|*.toml"
+            });
+            if (fileName is not null)
+            {
+                SaveUserData(fileName);
+            }
+        }
+        [RelayCommand]
+        private void ImportUserGroup()
+        {
+            var filesName = OpenFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ImportUserGroup,
+                Filter = $"Toml {I18nRes.File}|*.toml"
+            });
+            if (filesName?.First() is string fileName)
+            {
+                GetUserGroup(fileName);
+                RefreshModsContextMenu();
+                RefreshCountOfListBoxItems();
+                StartRemindSaveThread();
+            }
+        }
+        [RelayCommand]
+        private void ExportUserGroup()
+        {
+            var fileName = SaveFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ExportUserGroup,
+                Filter = $"Toml {I18nRes.File}|*.toml"
+            });
+            if (fileName is not null)
+            {
+                SaveUserGroup(fileName, ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString()!);
+            }
+        }
+        [RelayCommand]
+        private void ImportEnabledListFromSave()
+        {
+            var filesName = OpenFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ImportFromSave,
+                Filter = $"Xml {I18nRes.File}|*.xml"
+            });
+            if (filesName?.First() is not string fileName)
+                return;
+            string filePath = $"{string.Join("\\", fileName.Split("\\")[..^1])}\\descriptor.xml";
+            if (!Utils.FileExists(filePath))
+                return;
+            string? err = null;
+            IEnumerable<string> list = null!;
+            try
+            {
+                XElement xes = XElement.Load(filePath);
+                list = xes.Descendants("spec").Where(x => x.Element("id") != null).Select(x => x.Element("id")!.Value);
+            }
+            catch (Exception ex)
+            {
+                Logger.Record($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
+                MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}\n") { Icon = MessageBoxVM.Icon.Question });
+                return;
+            }
+            var result = MessageBoxVM.Show(new(I18nRes.SelectImportMode)
+            {
+                Button = MessageBoxVM.Button.YesNoCancel,
+                Icon = MessageBoxVM.Icon.Question
+            });
+            if (result == MessageBoxVM.Result.Yes)
+                ClearAllEnabledMods();
+            else if (result == MessageBoxVM.Result.Cancel)
+                return;
+            foreach (string id in list)
+            {
+                if (allModInfos.ContainsKey(id))
+                    ChangeModEnabled(id, true);
+                else
+                {
+                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    err ??= $"{I18nRes.NotFoundMod}\n";
+                    err += $"{id}\n";
+                }
+            }
+            if (err != null)
+            {
+                Logger.Record(err, LogLevel.WARN);
+                MessageBoxVM.Show(new(err) { Icon = MessageBoxVM.Icon.Warning });
+            }
+        }
+        [RelayCommand]
+        private void ImportEnabledList()
+        {
+            var filesName = OpenFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ImportEnabledList,
+                Filter = $"Json {I18nRes.File}|*.json"
+            });
+            if (filesName?.First() is string fileName)
+            {
+                GetEnabledMods(fileName, true);
+                RefreshCountOfListBoxItems();
+            }
+        }
+        [RelayCommand]
+        private void ExportEnabledList()
+        {
+            var fileName = SaveFileDialogVM.Show(new()
+            {
+                Title = I18nRes.ExportEnabledList,
+                Filter = $"Json {I18nRes.File}|*.json"
+            });
+            if (fileName is not null)
+            {
+                SaveEnabledMods(fileName);
+            }
+        }
+        [RelayCommand(CanExecute = nameof(RandomEnableModsCanExecute))]
+        private void RandomEnableMods()
+        {
+            string groupName = nowSelectedGroupName;
+            int minSize = int.Parse(MinRandomSize);
+            int maxSize = int.Parse(MaxRandomSize);
+            int count = allUserGroups[groupName].Count;
+            if (maxSize > count)
+            {
+                MessageBoxVM.Show(new(I18nRes.RandomNumberCannotGreaterTotal) { Icon = MessageBoxVM.Icon.Warning });
+                return;
+            }
+            else if (minSize > maxSize)
+            {
+                MessageBoxVM.Show(new(I18nRes.MinRandomNumberCannotBeGreaterMaxRandomNumber) { Icon = MessageBoxVM.Icon.Warning });
+                return;
+            }
+            foreach (var info in allUserGroups[groupName])
+                ChangeModEnabled(info, false);
+            int needSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
+            HashSet<int> set = new();
+            while (set.Count < needSize)
+                set.Add(new Random(Guid.NewGuid().GetHashCode()).Next(0, count));
+            foreach (int i in set)
+                ChangeModEnabled(allUserGroups[groupName].ElementAt(i));
+            CheckEnabledModsDependencies();
+            RefreshCountOfListBoxItems();
+        }
+
+        private bool RandomEnableModsCanExecute() => string.IsNullOrEmpty(MinRandomSize) || string.IsNullOrEmpty(MaxRandomSize);
     }
 }

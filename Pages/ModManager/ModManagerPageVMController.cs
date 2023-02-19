@@ -147,7 +147,7 @@ namespace StarsectorTools.Pages.ModManager
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组显示信息的列表</para>
         /// </summary>
-        private Dictionary<string, ObservableCollection<ModShowInfo>> allModShowInfoGroups =
+        private Dictionary<string, HashSet<ModShowInfo>> allModShowInfoGroups =
             new()
             {
                 [ModTypeGroup.All] = new(),
@@ -484,15 +484,15 @@ namespace StarsectorTools.Pages.ModManager
         {
             var text = ModFilterText;
             var type = ComboBox_ModFilterType.SelectedItem!.Tag!.ToString()!;
-            if (string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(text))
             {
                 ShowDataGridItems(GetSearchModsShowInfo(text, type));
                 Logger.Record($"{I18nRes.SearchMod} {text}");
             }
             else
             {
-                ShowDataGridItems(allModShowInfoGroups[nowGroupName]);
-                Logger.Record($"{I18nRes.ShowGroup} {nowGroupName}");
+                ShowDataGridItems(allModShowInfoGroups[nowSelectedGroupName]);
+                Logger.Record($"{I18nRes.ShowGroup} {nowSelectedGroupName}");
             }
         }
 
@@ -500,27 +500,31 @@ namespace StarsectorTools.Pages.ModManager
         {
             NowShowMods.Clear();
             foreach (var info in infos)
+            {
+                // TODO: 需优化显示方式,DataGrid效率太差
+                //await Task.Delay(10);
                 NowShowMods.Add(info);
+            }
         }
 
-        private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
-            new ObservableCollection<ModShowInfo>(
+        private List<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
+            new List<ModShowInfo>(
                 type switch
                 {
                     strName
-                        => allModShowInfoGroups[nowGroupName].Where(
+                        => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i => i.Name.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
                     strId
-                        => allModShowInfoGroups[nowGroupName].Where(
+                        => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
                     strAuthor
-                        => allModShowInfoGroups[nowGroupName].Where(
+                        => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i => i.Author.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
                     strUserDescription
-                        => allModShowInfoGroups[nowGroupName].Where(
+                        => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i =>
                                 i.UserDescription.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
@@ -545,11 +549,11 @@ namespace StarsectorTools.Pages.ModManager
                 DependenciesSet = info.Dependencies is not null
                     ? new(info.Dependencies.Select(i => i.Id))
                     : null!,
-                ImageSource = GetIcon($"{info.ModDirectory}\\icon.ico"),
+                ImageSource = GetImage($"{info.ModDirectory}\\icon.ico"),
             };
-            BitmapImage? GetIcon(string filePath)
+            BitmapImage? GetImage(string filePath)
             {
-                if (!Utils.FileExists(filePath, false))
+                if (!File.Exists(filePath))
                     return null;
                 try
                 {
@@ -714,20 +718,19 @@ namespace StarsectorTools.Pages.ModManager
 
         private void ChangeSelectedModsInUserGroup(string group, bool isInGroup)
         {
-            //int conut = NowShowMods.SelectedItems.Count;
-            //for (int i = 0; i < NowShowMods.SelectedItems.Count;)
-            //{
-            //    ModShowInfo showInfo = (ModShowInfo)NowShowMods.SelectedItems[i]!;
-            //    ChangeModInUserGroup(group, showInfo.Id, isInGroup);
-            //    // 如果已选择数量没有变化,则继续下一个选项
-            //    if (conut == NowShowMods.SelectedItems.Count)
-            //        i++;
-            //}
-            //// 判断显示的数量与原来的数量是否一致
-            //if (conut != NowShowMods.SelectedItems.Count)
-            //    CloseModDetails();
-            //RefreshCountOfListBoxItems();
-            //StartRemindSaveThread();
+            int conut = nowSelectedMods.Count;
+            for (int i = 0; i < nowSelectedMods.Count;)
+            {
+                ChangeModInUserGroup(group, nowSelectedMods[i].Id, isInGroup);
+                // 如果已选择数量没有变化,则继续下一个选项
+                if (conut == nowSelectedMods.Count)
+                    i++;
+            }
+            // 判断显示的数量与原来的数量是否一致
+            if (conut != nowSelectedMods.Count)
+                CloseModDetails();
+            RefreshCountOfListBoxItems();
+            StartRemindSaveThread();
         }
 
         private void ChangeModInUserGroup(string group, string id, bool isInGroup)
@@ -754,21 +757,20 @@ namespace StarsectorTools.Pages.ModManager
 
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
-            //int conut = DataGrid_ModsShowList.SelectedItems.Count;
-            //for (int i = 0; i < DataGrid_ModsShowList.SelectedItems.Count;)
-            //{
-            //    ModShowInfo showInfo = (ModShowInfo)DataGrid_ModsShowList.SelectedItems[i]!;
-            //    ChangeModEnabled(showInfo.Id, enabled);
-            //    // 如果已选择数量没有变化,则继续下一个选项
-            //    if (conut == DataGrid_ModsShowList.SelectedItems.Count)
-            //        i++;
-            //}
-            //// 判断显示的数量与原来的数量是否一致
-            //if (conut != DataGrid_ModsShowList.SelectedItems.Count)
-            //    CloseModDetails();
-            //RefreshCountOfListBoxItems();
-            //CheckEnabledModsDependencies();
-            //StartRemindSaveThread();
+            int conut = nowSelectedMods.Count;
+            for (int i = 0; i < nowSelectedMods.Count;)
+            {
+                ChangeModEnabled(nowSelectedMods[i].Id, enabled);
+                // 如果已选择数量没有变化,则继续下一个选项
+                if (conut == nowSelectedMods.Count)
+                    i++;
+            }
+            // 判断显示的数量与原来的数量是否一致
+            if (conut != nowSelectedMods.Count)
+                CloseModDetails();
+            RefreshCountOfListBoxItems();
+            CheckEnabledModsDependencies();
+            StartRemindSaveThread();
         }
 
         private void ClearAllEnabledMods()
@@ -831,19 +833,18 @@ namespace StarsectorTools.Pages.ModManager
 
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
-            //int conut = DataGrid_ModsShowList.SelectedItems.Count;
-            //for (int i = 0; i < DataGrid_ModsShowList.SelectedItems.Count;)
-            //{
-            //    ModShowInfo showInfo = (ModShowInfo)DataGrid_ModsShowList.SelectedItems[i]!;
-            //    ChangeModCollected(showInfo.Id, collected);
-            //    if (conut == DataGrid_ModsShowList.SelectedItems.Count)
-            //        i++;
-            //}
-            //// 判断显示的数量与原来的数量是否一致
-            //if (conut != DataGrid_ModsShowList.SelectedItems.Count)
-            //    CloseModDetails();
-            //RefreshCountOfListBoxItems();
-            //StartRemindSaveThread();
+            int conut = nowSelectedMods.Count;
+            for (int i = 0; i < nowSelectedMods.Count;)
+            {
+                ChangeModCollected(nowSelectedMods[i].Id, collected);
+                if (conut == nowSelectedMods.Count)
+                    i++;
+            }
+            // 判断显示的数量与原来的数量是否一致
+            if (conut != nowSelectedMods.Count)
+                CloseModDetails();
+            RefreshCountOfListBoxItems();
+            StartRemindSaveThread();
         }
 
         private void ChangeModCollected(string id, bool? collected = null)
@@ -941,46 +942,35 @@ namespace StarsectorTools.Pages.ModManager
             }
         }
 
-        private void ChangeModInfoDetails(string id)
+        private void ChangeShowModDetails(ModShowInfo? info)
         {
-            if (IsShowModDetails)
-            {
-                if (NowSelectedMod.Id != id)
-                    SetModDetails(id);
-                else
-                    CloseModDetails();
-            }
+            if (info is null)
+                CloseModDetails();
+            else if (IsShowModDetails && nowSelectedMod?.Id == info.Id)
+                CloseModDetails();
             else
-            {
-                ShowModDetails(id);
-            }
+                ShowModDetails(info.Id);
+            nowSelectedMod = info;
         }
 
         private void ShowModDetails(string id)
         {
-            if (NowSelectedMod.Id == id)
-                return;
             IsShowModDetails = true;
-            NowSelectedMod.Id = id;
             SetModDetails(id);
         }
 
         private void CloseModDetails()
         {
             IsShowModDetails = false;
-            NowSelectedMod = null;
             ModDetailUserDescription = string.Empty;
-            Logger.Record($"{I18nRes.CloseDetails} {NowSelectedMod.Id}", LogLevel.DEBUG);
+            Logger.Record($"{I18nRes.CloseDetails}", LogLevel.DEBUG);
         }
 
         private void SetModDetails(string id)
         {
             var info = allModInfos[id];
             var showInfo = allModsShowInfo[id];
-            if (showInfo.ImageSource != null)
-                ModDetailImage = showInfo.ImageSource;
-            else
-                ModDetailImage = null;
+            ModDetailImage = showInfo.ImageSource;
             ModDetailName = showInfo.Name;
             ModDetailId = showInfo.Id;
             ModDetailModVersion = showInfo.Version;
@@ -989,7 +979,6 @@ namespace StarsectorTools.Pages.ModManager
             ModDetailAuthor = showInfo.Author;
             if (info.Dependencies is not null)
             {
-                ShowModDependencies = true;
                 ModDetailDependencies = string.Join(
                     "\n",
                     info.Dependencies.Select(
@@ -1000,7 +989,7 @@ namespace StarsectorTools.Pages.ModManager
                 );
             }
             else
-                ShowModDependencies = false;
+                ModDetailDependencies = string.Empty;
             ModDetailDescription = info.Description;
             ModDetailUserDescription = showInfo.UserDescription!;
             Logger.Record($"{I18nRes.ShowDetails} {id}", LogLevel.DEBUG);
@@ -1193,16 +1182,18 @@ namespace StarsectorTools.Pages.ModManager
             // 重命名分组
             MenuItemVM menuItem = new();
             menuItem.Header = I18nRes.RenameUserGroup;
-            menuItem.CommandEvent += (p) => {
-                //RenameUserGroup();
+            menuItem.CommandEvent += (p) =>
+            {
+                RenameUserGroup(listBoxItem);
             };
             contextMenu.Add(menuItem);
             Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
             // 删除分组
             menuItem = new();
             menuItem.Header = I18nRes.RemoveUserGroup;
-            menuItem.CommandEvent += (p) => {
-                //RemoveUserGroup();
+            menuItem.CommandEvent += (p) =>
+            {
+                RemoveUserGroup(listBoxItem);
             };
             contextMenu.Add(menuItem);
             Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
@@ -1320,14 +1311,14 @@ namespace StarsectorTools.Pages.ModManager
         }
 
         [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
-        private void RemindSave()
+        private async void RemindSave()
         {
             while (remindSaveThread.ThreadState is not ThreadState.Unstarted)
             {
                 IsRemindSave = true;
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
                 IsRemindSave = false;
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
             }
         }
 

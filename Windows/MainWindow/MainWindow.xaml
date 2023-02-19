@@ -53,36 +53,6 @@
         </DataTrigger>
       </Style.Triggers>
     </Style>
-    <Style
-      x:Key="ListBoxItemMVVM"
-      BasedOn="{StaticResource ListBoxItemBaseStyle}"
-      TargetType="ListBoxItem">
-      <Setter Property="Content" Value="{Binding Content}" />
-      <Setter Property="ToolTip" Value="{Binding ToolTip}" />
-      <Setter Property="Tag" Value="{Binding Tag}" />
-      <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-      <!--<Setter Property="pu:ListBoxItemHelper.Icon" Value="{Binding Icon}" />-->
-      <Setter Property="pu:ListBoxItemHelper.Icon" Value="{DynamicResource EmojiTextBlock}" />
-      <Setter Property="ContextMenu">
-        <Setter.Value>
-          <!--  绑定右键菜单  -->
-          <ContextMenu ItemsSource="{Binding ContextMenu.ItemsSource}" Style="{StaticResource ContextMenuBaseStyle}">
-            <i:Interaction.Triggers>
-              <i:EventTrigger EventName="Loaded">
-                <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
-              </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <ContextMenu.ItemContainerStyle>
-              <Style BasedOn="{StaticResource MenuItemBaseStyle}" TargetType="MenuItem">
-                <Setter Property="Icon" Value="{Binding Icon}" />
-                <Setter Property="Header" Value="{Binding Header}" />
-                <Setter Property="ToolTip" Value="{Binding ToolTip}" />
-              </Style>
-            </ContextMenu.ItemContainerStyle>
-          </ContextMenu>
-        </Setter.Value>
-      </Setter>
-    </Style>
   </Window.Resources>
   <Grid Style="{StaticResource WindowMainPanelStyle}">
     <Grid

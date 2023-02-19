@@ -48,11 +48,23 @@ namespace HKW.ViewModels.Controls
 
         /// <summary>
         /// 加载命令
+        /// <para>xaml示例 
+        /// <code><![CDATA[
+        /// <i:Interaction.Triggers>
+        ///   <!--  使用Loaded时,如果有多个未载入的菜单,使用右键挨个点击只会载入第一个,故使用Opened  -->
+        ///   <i:EventTrigger EventName = "Opened" >
+        ///     < i:InvokeCommandAction Command = "{Binding ContextMenu.LoadedCommand}" />
+        ///   </ i:EventTrigger>
+        /// </i:Interaction.Triggers>
+        /// ]]>
+        /// </code>
+        /// </para>
         /// </summary>
         /// <param name="parameter">参数</param>
         [RelayCommand]
         private void Loaded(object parameter)
         {
+            Libs.Log4Cs.Logger.Record($"菜单状态: {IsLoaded}");
             if (LoadedEvent is not null && IsLoaded is false)
             {
                 LoadedEvent(ItemsSource);

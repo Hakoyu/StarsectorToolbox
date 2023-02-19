@@ -34,14 +34,12 @@
       BasedOn="{StaticResource ButtonBaseStyle}"
       TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource ColorAqua2}" />
-      <Setter Property="Content" Value="{Binding I18n.I18nRes.Enabled}" />
-      <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.Enabled}" />
+      <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Enabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
       <Setter Property="Tag" Value="true" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsEnabled}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorRed2}" />
-          <Setter Property="Content" Value="{Binding I18n.I18nRes.Disabled}" />
-          <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.Disabled}" />
+          <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Disabled, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
           <Setter Property="Tag" Value="false" />
         </DataTrigger>
       </Style.Triggers>
@@ -51,14 +49,12 @@
       BasedOn="{StaticResource ButtonBaseStyle}"
       TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource ColorYellow2}" />
-      <Setter Property="Content" Value="{Binding I18n.I18nRes.Collected}" />
-      <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.Collected}" />
+      <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Collected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
       <Setter Property="Tag" Value="true" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsCollected}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
-          <Setter Property="Content" Value="{Binding I18n.I18nRes.UnCollected}" />
-          <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.UnCollected}" />
+          <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.UnCollected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
           <Setter Property="Tag" Value="false" />
         </DataTrigger>
       </Style.Triggers>
@@ -68,11 +64,11 @@
       BasedOn="{StaticResource CenterAlignmentStyle}"
       TargetType="TextBlock">
       <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
-      <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.SupportedVersionSameAsGameVersion}" />
+      <Setter Property="ToolTip" Value="{Binding DataContext.I18n.I18nRes.SupportedVersionSameAsGameVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsSameToGameVersion}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorYellow2}" />
-          <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.SupportedVersionNotSameAsGameVersion}" />
+          <Setter Property="ToolTip" Value="{Binding DataContext.I18n.I18nRes.SupportedVersionNotSameAsGameVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
         </DataTrigger>
       </Style.Triggers>
     </Style>
@@ -82,12 +78,12 @@
       TargetType="TextBlock">
       <Setter Property="Background" Value="{DynamicResource ColorBlue2}" />
       <Setter Property="Text" Value="✅" />
-      <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.IsUtilityMod}" />
+      <Setter Property="ToolTip" Value="{Binding DataContext.I18n.I18nRes.IsUtilityMod, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsUtility}" Value="False">
           <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
           <Setter Property="Text" Value="❎" />
-          <Setter Property="ToolTip" Value="{Binding I18n.I18nRes.NotUtilityMod}" />
+          <Setter Property="ToolTip" Value="{Binding DataContext.I18n.I18nRes.NotUtilityMod, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
         </DataTrigger>
       </Style.Triggers>
     </Style>
@@ -254,24 +250,45 @@
               CanUserAddRows="False"
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
-              ItemsSource="{Binding NowShowMods}"
+              ItemsSource="{Binding NowShowMods, IsAsync=True}"
               LostFocus="DataGrid_ModsShowList_LostFocus"
-              MouseLeftButtonDown="DataGrid_ModsShowList_MouseLeftButtonDown"
               RowDetailsVisibilityMode="Visible"
               RowHeight="50"
               Style="{StaticResource DataGridBaseStyle}"
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.VirtualizationMode="Recycling">
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                  <i:InvokeCommandAction Command="{Binding DataGridSelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid_ModsShowList}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                  <i:InvokeCommandAction Command="{Binding DataGridSelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid_ModsShowList}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
               <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
               </DataGrid.InputBindings>
               <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                   <Setter Property="Tag" Value="{Binding Id}" />
-                  <Setter Property="ContextMenu" Value="{Binding ContextMenu}" />
-                  <EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
+                  <Setter Property="ContextMenu">
+                    <Setter.Value>
+                      <ContextMenu
+                        ItemContainerStyle="{StaticResource MenuItemView}"
+                        ItemsSource="{Binding ContextMenu.ItemsSource}"
+                        Style="{StaticResource ContextMenuBaseStyle}">
+                        <i:Interaction.Triggers>
+                          <!--  使用Loaded时,如果有多个未载入的菜单,使用右键挨个点击只会载入第一个,故使用Opened  -->
+                          <i:EventTrigger EventName="Opened">
+                            <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
+                          </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                      </ContextMenu>
+                    </Setter.Value>
+                  </Setter>
+                  <!--<EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
                   <EventSetter Event="Selected" Handler="DataGridItem_Selected" />
-                  <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />
+                  <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />-->
                   <Style.Triggers>
                     <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                       <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -286,7 +303,7 @@
                       Background="{x:Null}"
                       FontSize="20"
                       Text="🌟"
-                      ToolTip="{Binding I18n.I18nRes.ShowModCollectState}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModCollectState, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -294,7 +311,7 @@
                         x:Name="Button_Collected"
                         Margin="0,5,0,5"
                         Padding="5,0,5,0"
-                        Click="Button_Collected_Click"
+                        Command="{Binding DataContext.CollectedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                         Style="{StaticResource CollectedStyle}" />
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
@@ -314,7 +331,7 @@
                         x:Name="Button_Enabled"
                         Margin="0,5,0,5"
                         Padding="5,0,5,0"
-                        Click="Button_Enabled_Click"
+                        Command="{Binding DataContext.EnabledCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                         Style="{StaticResource EnabledStyle}" />
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
@@ -430,9 +447,8 @@
                       x:Name="Button_EnableDependencies"
                       Margin="10,0,0,0"
                       Padding="5,0,5,0"
-                      Click="Button_EnableDependencies_Click"
-                      Content="{Binding I18n.I18nRes.EnableDependencies}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Command="{Binding DataContext.EnableDependenciesCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.EnableDependencies, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource ButtonBaseStyle}"
                       ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                     <Label
@@ -451,9 +467,15 @@
               Margin="0,0,120,0"
               VerticalAlignment="Top"
               Style="{StaticResource TextBoxBaseStyle}"
-              TextChanged="TextBox_SearchMods_TextChanged"
+              Text="{Binding ModFilterText, UpdateSourceTrigger=PropertyChanged}"
               TextWrapping="Wrap"
-              ToolTip="{Binding I18n.I18nRes.SearchMod}" />
+              ToolTip="{Binding I18n.I18nRes.SearchMod}">
+              <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                  <i:InvokeCommandAction Command="{Binding ModFilterTextChangedCommand}" CommandParameter="{Binding ModFilterText}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+            </TextBox>
             <!--  TextBox输入占位符  -->
             <Label
               Width="{Binding Width, ElementName=TextBox_SearchMods}"
@@ -515,21 +537,21 @@
                       x:Name="Button_OpenModDirectory"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_OpenModDirectory_Click"
+                      Command="{Binding OpenModDirectoryCommand}"
                       Content="{Binding I18n.I18nRes.OpenModsDirectory}"
                       Style="{StaticResource ButtonBaseStyle}" />
                     <Button
                       x:Name="Button_OpenBackupDirectory"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_OpenBackupDirectory_Click"
+                      Command="{Binding OpenBackupDirectoryCommand}"
                       Content="{Binding I18n.I18nRes.OpenBackupDirectory}"
                       Style="{StaticResource ButtonBaseStyle}" />
                     <Button
                       x:Name="Button_OpenSaveDirectory"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_OpenSaveDirectory_Click"
+                      Command="{Binding OpenSaveDirectoryCommand}"
                       Content="{Binding I18n.I18nRes.OpenSaveDirectory}"
                       Style="{StaticResource ButtonBaseStyle}" />
                   </StackPanel>
@@ -544,14 +566,14 @@
                       x:Name="Button_ImportUserData"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ImportUserData_Click"
+                      Command="{Binding ImportUserDataCommand}"
                       Content="{Binding I18n.I18nRes.ImportUserData}"
                       Style="{StaticResource ButtonBaseStyle}" />
                     <Button
                       x:Name="Button_ExportUserData"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ExportUserData_Click"
+                      Command="{Binding ExportUserDataCommand}"
                       Content="{Binding I18n.I18nRes.ExportUserData}"
                       Style="{StaticResource ButtonBaseStyle}" />
                   </StackPanel>
@@ -565,7 +587,7 @@
                       x:Name="Button_ImportUserGroup"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ImportUserGroup_Click"
+                      Command="{Binding ImportUserGroupCommand}"
                       Content="{Binding I18n.I18nRes.ImportUserGroup}"
                       Style="{StaticResource ButtonBaseStyle}" />
                     <ComboBox
@@ -573,18 +595,15 @@
                       Height="30"
                       Margin="0,0,0,5"
                       VerticalAlignment="Top"
+                      DisplayMemberPath="Content"
+                      ItemsSource="{Binding ComboBox_ExportUserGroup}"
                       SelectedIndex="0"
-                      Style="{StaticResource ComboBoxBaseStyle}">
-                      <ComboBoxItem
-                        Content="{Binding I18n.I18nRes.All}"
-                        Style="{StaticResource ComboBoxItemBaseStyle}"
-                        Tag="All" />
-                    </ComboBox>
+                      Style="{StaticResource ComboBoxBaseStyle}" />
                     <Button
                       x:Name="Button_ExportUserGroup"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ExportUserGroup_Click"
+                      Command="{Binding ExportUserGroupCommand}"
                       Content="{Binding I18n.I18nRes.ExportUserGroup}"
                       Style="{StaticResource ButtonBaseStyle}" />
                   </StackPanel>
@@ -598,21 +617,21 @@
                       x:Name="Button_ImportEnabledListFromSave"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ImportEnabledListFromSave_Click"
+                      Command="{Binding ImportEnabledListFromSaveCommand}"
                       Content="{Binding I18n.I18nRes.ImportFromSave}"
                       Style="{StaticResource ButtonBaseStyle}" />
                     <Button
                       x:Name="Button_ImportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ImportEnabledList_Click"
+                      Command="{Binding ImportEnabledListCommand}"
                       Content="{Binding I18n.I18nRes.ImportEnabledList}"
                       Style="{StaticResource ButtonBaseStyle}" />
                     <Button
                       x:Name="Button_ExportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_ExportEnabledList_Click"
+                      Command="{Binding ExportEnabledListCommand}"
                       Content="{Binding I18n.I18nRes.ExportEnabledList}"
                       Style="{StaticResource ButtonBaseStyle}" />
                   </StackPanel>
@@ -630,6 +649,7 @@
                         InputMethod.IsInputMethodEnabled="False"
                         PreviewTextInput="TextBox_NumberInput"
                         Style="{StaticResource TextBoxBaseStyle}"
+                        Text="{Binding MinRandomSize}"
                         ToolTip="{Binding I18n.I18nRes.MinRandomNumber}" />
                       <!--  TextBox输入占位符  -->
                       <Label
@@ -667,6 +687,7 @@
                         InputMethod.IsInputMethodEnabled="False"
                         PreviewTextInput="TextBox_NumberInput"
                         Style="{StaticResource TextBoxBaseStyle}"
+                        Text="{Binding MaxRandomSize}"
                         ToolTip="{Binding I18n.I18nRes.MaxRandomNumber}" />
                       <!--  TextBox输入占位符  -->
                       <Label
@@ -701,22 +722,9 @@
                       x:Name="Button_RandomMods"
                       Height="30"
                       Margin="0,0,0,5"
-                      Click="Button_RandomMods_Click"
-                      Content="{Binding I18n.I18nRes.RandomEnableMods}">
-                      <Button.Style>
-                        <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
-                          <Setter Property="IsEnabled" Value="True" />
-                          <Style.Triggers>
-                            <DataTrigger Binding="{Binding Text, ElementName=TextBox_MaxRandomSize}" Value="">
-                              <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Text, ElementName=TextBox_MinRandomSize}" Value="">
-                              <Setter Property="IsEnabled" Value="False" />
-                            </DataTrigger>
-                          </Style.Triggers>
-                        </Style>
-                      </Button.Style>
-                    </Button>
+                      Command="{Binding RandomEnableModsCommand}"
+                      Content="{Binding I18n.I18nRes.RandomEnableMods}"
+                      Style="{StaticResource ButtonBaseStyle}" />
                   </StackPanel>
                 </Expander>
               </StackPanel>
@@ -726,7 +734,7 @@
               Height="30"
               Margin="5,0,5,5"
               VerticalAlignment="Bottom"
-              Click="Button_Save_Click"
+              Command="{Binding SaveCommand}"
               Content="{Binding I18n.I18nRes.SaveConfig}"
               Style="{StaticResource RemindStyle}"
               Tag="False">
@@ -740,7 +748,18 @@
           x:Name="Grid_ModDetails"
           Width="360"
           HorizontalAlignment="Right"
-          Visibility="Hidden">
+          d:Tag="false"
+          Tag="{Binding IsShowModDetails}">
+          <Grid.Style>
+            <Style TargetType="Grid">
+              <Setter Property="Visibility" Value="Hidden" />
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                  <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </Grid.Style>
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="11*" />
             <ColumnDefinition Width="25*" MinWidth="200" />
@@ -771,7 +790,10 @@
             <ScrollViewer>
               <StackPanel>
                 <Grid Margin="0,0,0,5">
-                  <Image x:Name="Image_ModImage" MaxHeight="100" />
+                  <Image
+                    x:Name="Image_ModImage"
+                    MaxHeight="100"
+                    Source="{Binding ModDetailImage}" />
                 </Grid>
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <Label
@@ -780,18 +802,14 @@
                     HorizontalContentAlignment="Left"
                     Content="ID:"
                     Style="{StaticResource LabelBaseStyle}" />
-                  <Label
+                  <TextBox
                     x:Name="Label_ModId"
                     Height="30"
                     HorizontalContentAlignment="Left"
-                    Style="{StaticResource LabelBaseStyle}"
-                    ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
-                    <Label.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </Label.ContextMenu>
-                  </Label>
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailId}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <!--  TODO 需要解决冒号问题  -->
@@ -801,19 +819,15 @@
                     VerticalContentAlignment="Center"
                     Content="{Binding I18n.I18nRes.Name}"
                     Style="{StaticResource LabelBaseStyle}" />
-                  <Label
+                  <TextBox
                     x:Name="Label_ModName"
                     Height="30"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Style="{StaticResource LabelBaseStyle}"
-                    ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
-                    <Label.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </Label.ContextMenu>
-                  </Label>
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailName}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <Label
@@ -822,18 +836,14 @@
                     HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.Version}"
                     Style="{StaticResource LabelBaseStyle}" />
-                  <Label
+                  <TextBox
                     x:Name="Label_ModVersion"
                     Height="30"
                     HorizontalContentAlignment="Left"
-                    Style="{StaticResource LabelBaseStyle}"
-                    ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
-                    <Label.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </Label.ContextMenu>
-                  </Label>
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailId}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel
                   Margin="0,0,0,5"
@@ -845,18 +855,14 @@
                     HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.GameVersion}"
                     Style="{StaticResource LabelBaseStyle}" />
-                  <Label
+                  <TextBox
                     x:Name="Label_GameVersion"
                     Height="30"
                     HorizontalContentAlignment="Left"
-                    Style="{StaticResource LabelBaseStyle}"
-                    ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}">
-                    <Label.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="Lable_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </Label.ContextMenu>
-                  </Label>
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailGameVersion}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <Grid Margin="0,0,0,5">
                   <Button
@@ -879,58 +885,62 @@
                   Margin="0,0,0,5"
                   Header="{Binding I18n.I18nRes.Author}"
                   Style="{StaticResource GroupBoxBaseStyle}">
-                  <TextBlock
+                  <TextBox
                     x:Name="TextBlock_ModAuthor"
+                    Height="NaN"
                     VerticalAlignment="Top"
-                    Style="{StaticResource TextBlockBaseStyle}"
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailAuthor}"
                     TextWrapping="Wrap"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
-                    <TextBlock.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </TextBlock.ContextMenu>
-                  </TextBlock>
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
                 <GroupBox
                   x:Name="GroupBox_ModDependencies"
                   Margin="0,0,0,5"
+                  d:Tag=""
                   Header="{Binding I18n.I18nRes.Dependencies}"
-                  Style="{StaticResource GroupBoxBaseStyle}">
-                  <TextBlock
+                  Tag="{Binding Text, ElementName=TextBlock_ModDependencies}">
+                  <GroupBox.Style>
+                    <Style BasedOn="{StaticResource GroupBoxBaseStyle}" TargetType="GroupBox">
+                      <Setter Property="Visibility" Value="Visible" />
+                      <Style.Triggers>
+                        <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="">
+                          <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                      </Style.Triggers>
+                    </Style>
+                  </GroupBox.Style>
+                  <TextBox
                     x:Name="TextBlock_ModDependencies"
-                    Style="{StaticResource TextBlockBaseStyle}"
+                    Height="NaN"
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailDependencies}"
                     TextWrapping="Wrap"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
-                    <TextBlock.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </TextBlock.ContextMenu>
-                  </TextBlock>
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
                 <GroupBox
                   Margin="0,0,0,5"
                   Header="{Binding I18n.I18nRes.Description}"
                   Style="{StaticResource GroupBoxBaseStyle}">
-                  <TextBlock
+                  <TextBox
                     x:Name="TextBlock_ModDescription"
-                    Style="{StaticResource TextBlockBaseStyle}"
+                    Height="NaN"
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailDescription}"
                     TextWrapping="Wrap"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}">
-                    <TextBlock.ContextMenu>
-                      <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                        <MenuItem Click="TextBlock_CopyInfo_Click" Header="{Binding I18n.I18nRes.CopyInfo}" />
-                      </ContextMenu>
-                    </TextBlock.ContextMenu>
-                  </TextBlock>
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
                 <GroupBox Header="{Binding I18n.I18nRes.UserDescription}" Style="{StaticResource GroupBoxBaseStyle}">
                   <TextBox
                     x:Name="TextBox_UserDescription"
+                    Height="NaN"
                     KeyDown="TextBox_UserDescription_KeyDown"
                     LostFocus="TextBox_UserDescription_LostFocus"
                     Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding ModDetailUserDescription}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
