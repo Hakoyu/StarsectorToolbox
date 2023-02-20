@@ -973,7 +973,7 @@ namespace StarsectorTools.Pages.ModManager
             //Label_ModId.Content = showInfo.Id;
             //Label_ModVersion.Content = showInfo.Version;
             //Label_GameVersion.Content = showInfo.GameVersion;
-            Button_ModPath.Content = info.ModDirectory;
+            //Button_ModPath.Content = info.ModDirectory;
             TextBlock_ModAuthor.Text = showInfo.Author;
             if (info.Dependencies is not null)
             {

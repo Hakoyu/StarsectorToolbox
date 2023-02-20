@@ -18,6 +18,7 @@ using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialog;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
+using StarsectorTools.Resources;
 using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
 namespace StarsectorTools.Pages.ModManager
@@ -186,7 +187,7 @@ namespace StarsectorTools.Pages.ModManager
             CheckEnabledModsDependencies();
             CheckUserData();
             RefreshModsContextMenu();
-            RefreshCountOfListBoxItems();
+            RefreshGroupModCount();
             ResetRemindSaveThread();
             GC.Collect();
         }
@@ -456,13 +457,12 @@ namespace StarsectorTools.Pages.ModManager
 
         private void GetTypeGroup()
         {
-            // TODO: 使用了Syetem.Windows,需要移至外部
-            //using StreamReader sr = new(Application.GetResourceStream(modTypeGroupUri).Stream);
-            //TomlTable toml = TOML.Parse(sr);
-            //foreach (var kv in toml)
-            //    foreach (string id in kv.Value.AsTomlArray)
-            //        allModsTypeGroup.Add(id, kv.Key);
-            //Logger.Record(I18nRes.TypeGroupRetrievalCompleted);
+            using StreamReader sr = ResourceDictionary.GetResourceStream(ResourceDictionary.ModTypeGroup_toml); ;
+            TomlTable toml = TOML.Parse(sr);
+            foreach (var kv in toml)
+                foreach (string id in kv.Value.AsTomlArray)
+                    allModsTypeGroup.Add(id, kv.Key);
+            Logger.Record(I18nRes.TypeGroupRetrievalCompleted);
         }
 
         private string CheckTypeGroup(string id)
@@ -480,7 +480,14 @@ namespace StarsectorTools.Pages.ModManager
             //ListBox_ModsGroupMenu.SelectedIndex = 0;
         }
 
-        private void RefreshDataGrid()
+        private void CheckRefreshGroupAndMods(string group)
+        {
+            if (nowSelectedGroupName == group)
+                RefreshShowMods();
+            RefreshGroupModCount();
+        }
+
+        private void RefreshShowMods()
         {
             var text = ModFilterText;
             var type = ComboBox_ModFilterType.SelectedItem!.Tag!.ToString()!;
@@ -574,7 +581,7 @@ namespace StarsectorTools.Pages.ModManager
             }
         }
 
-        private void RefreshCountOfListBoxItems()
+        private void RefreshGroupModCount()
         {
             foreach (var item in allListBoxItems.Values)
             {
@@ -651,10 +658,10 @@ namespace StarsectorTools.Pages.ModManager
                                     $"{I18nRes.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18nRes.Path}: {path}\n"
                                 );
                                 RemoveMod(showInfo.Id);
-                                RefreshDataGrid();
+                                RefreshShowMods();
+                                RefreshGroupModCount();
                                 CloseModDetails();
                                 Utils.DeleteDirToRecycleBin(path);
-                                RefreshCountOfListBoxItems();
                                 StartRemindSaveThread();
                             }
                         };
@@ -729,7 +736,7 @@ namespace StarsectorTools.Pages.ModManager
             // 判断显示的数量与原来的数量是否一致
             if (conut != nowSelectedMods.Count)
                 CloseModDetails();
-            RefreshCountOfListBoxItems();
+            CheckRefreshGroupAndMods(group);
             StartRemindSaveThread();
         }
 
@@ -768,7 +775,7 @@ namespace StarsectorTools.Pages.ModManager
             // 判断显示的数量与原来的数量是否一致
             if (conut != nowSelectedMods.Count)
                 CloseModDetails();
-            RefreshCountOfListBoxItems();
+            CheckRefreshGroupAndMods(nameof(ModTypeGroup.Enabled));
             CheckEnabledModsDependencies();
             StartRemindSaveThread();
         }
@@ -843,7 +850,7 @@ namespace StarsectorTools.Pages.ModManager
             // 判断显示的数量与原来的数量是否一致
             if (conut != nowSelectedMods.Count)
                 CloseModDetails();
-            RefreshCountOfListBoxItems();
+            CheckRefreshGroupAndMods(nameof(ModTypeGroup.Collected));
             StartRemindSaveThread();
         }
 
@@ -1050,7 +1057,7 @@ namespace StarsectorTools.Pages.ModManager
                         );
                         RemoveMod(newModInfo.Id);
                         AddMod(newModInfo);
-                        RefreshCountOfListBoxItems();
+                        RefreshGroupModCount();
                         StartRemindSaveThread();
                         Logger.Record(
                             $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
@@ -1065,7 +1072,7 @@ namespace StarsectorTools.Pages.ModManager
                         );
                         RemoveMod(newModInfo.Id);
                         AddMod(newModInfo);
-                        RefreshCountOfListBoxItems();
+                        RefreshGroupModCount();
                         StartRemindSaveThread();
                         Logger.Record(
                             $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
@@ -1076,9 +1083,9 @@ namespace StarsectorTools.Pages.ModManager
                 {
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     AddMod(newModInfo);
-                    RefreshCountOfListBoxItems();
+                    RefreshGroupModCount();
                 }
-                RefreshDataGrid();
+                RefreshShowMods();
             }
             else
             {
@@ -1221,7 +1228,7 @@ namespace StarsectorTools.Pages.ModManager
                 ) is MessageBoxVM.Result.No
             )
                 return;
-            var name = listBoxItem.ToolTip.ToString()!;
+            var name = listBoxItem.Tag.ToString()!;
             if (nowSelectedGroup == listBoxItem)
                 ListBox_TypeGroupMenu.SelectedIndex = 0;
             ListBox_UserGroupMenu.Remove(listBoxItem);
@@ -1230,20 +1237,11 @@ namespace StarsectorTools.Pages.ModManager
             allModShowInfoGroups.Remove(name);
             RefreshModsContextMenu();
             StartRemindSaveThread();
-            ShowRandomEnable = true;
             // 删除导出用户分组下拉列表的此分组选择
-            for (int i = 0; i < ComboBox_ExportUserGroup.Count; i++)
+            if (ComboBox_ExportUserGroup.SelectedItem.Tag.ToString() == name)
             {
-                if (
-                    ComboBox_ExportUserGroup[i] is ComboBoxItemVM comboBoxItem
-                    && comboBoxItem.Content.ToString()! == name
-                )
-                {
-                    // 如果此选项正被选中,则选定到All
-                    if (ComboBox_ExportUserGroup.SelectedIndex == i)
-                        ComboBox_ExportUserGroup.SelectedIndex = 0;
-                    ComboBox_ExportUserGroup.RemoveAt(i);
-                }
+                ComboBox_ExportUserGroup.Remove(ComboBox_ExportUserGroup.SelectedItem);
+                ComboBox_ExportUserGroup.SelectedIndex = 0;
             }
         }
 
@@ -1251,7 +1249,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             string icon = listBoxItem.Icon.ToString()!;
             string name = listBoxItem.ToolTip.ToString()!;
-            // TODO: 使用了window 需移至外部0.
+            // TODO: 使用了window 需移至外部
             AddUserGroup window = new();
             window.TextBox_Icon.Text = icon;
             window.TextBox_Name.Text = name;
@@ -1292,7 +1290,7 @@ namespace StarsectorTools.Pages.ModManager
                     allListBoxItems.Add(_name, listBoxItem);
                     window.Close();
                     SetListBoxItemData(ref listBoxItem, _name);
-                    RefreshCountOfListBoxItems();
+                    RefreshGroupModCount();
                     RefreshModsContextMenu();
                     StartRemindSaveThread();
                 }

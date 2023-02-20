@@ -11,6 +11,7 @@ using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 using HKW.Libs.TomlParse;
+using StarsectorTools.Resources;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -68,12 +69,13 @@ namespace StarsectorTools.Windows.MainWindow
             //InitializeDirectories();
         }
 
-        public MainWindowViewModel(string configData)
+        public MainWindowViewModel(bool noop)
         {
             Instance = this;
             InitializeData();
             InitializeDirectories();
-            SetConfig(configData);
+            using System.IO.StreamReader sr = ResourceDictionary.GetResourceStream(ResourceDictionary.Config_toml);
+            SetConfig(sr.ReadToEnd());
             InitializeExtensionPages();
             InitializeExtensionDebugPage();
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceiv);

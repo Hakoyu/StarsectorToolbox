@@ -51,9 +51,9 @@ namespace StarsectorTools.Windows.MainWindow
             // 初始化ViewModel
             try
             {
-                using StreamReader sr =
-                    new(Application.GetResourceStream(resourcesConfigUri).Stream);
-                DataContext = new MainWindowViewModel(sr.ReadToEnd());
+                //using StreamReader sr =
+                //    new(Application.GetResourceStream(resourcesConfigUri).Stream);
+                DataContext = new MainWindowViewModel(true);
             }
             catch (Exception ex)
             {

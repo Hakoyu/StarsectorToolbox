@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,14 +73,16 @@ namespace StarsectorTools.Pages.ModManager
         private string modFilterText = string.Empty;
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
         private string minRandomSize;
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
         private string maxRandomSize;
 
         [ObservableProperty]
-        private bool showRandomEnable = false;
-        [ObservableProperty]
         private bool isRemindSave = false;
+        [ObservableProperty]
+        private bool nowSelectedIsUserGroup = false;
 
         [ObservableProperty]
         private ListBoxVM listBox_MainMenu =
@@ -227,9 +230,11 @@ namespace StarsectorTools.Pages.ModManager
         private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
         {
             nowSelectedGroup = item;
-            if (allUserGroups.ContainsKey(item.ToolTip!.ToString()!))
-                ShowRandomEnable = true;
-            RefreshDataGrid();
+            if (allUserGroups.ContainsKey(item.Tag!.ToString()!))
+                NowSelectedIsUserGroup = true;
+            else
+                NowSelectedIsUserGroup = false;
+            RefreshShowMods();
         }
 
         [RelayCommand]
@@ -281,13 +286,13 @@ namespace StarsectorTools.Pages.ModManager
                 Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
             }
             CheckEnabledModsDependencies();
-            RefreshCountOfListBoxItems();
+            RefreshGroupModCount();
             StartRemindSaveThread();
         }
         [RelayCommand]
         private void ModFilterTextChanged()
         {
-            RefreshDataGrid();
+            RefreshShowMods();
         }
 
         [RelayCommand]
@@ -307,8 +312,9 @@ namespace StarsectorTools.Pages.ModManager
         [RelayCommand]
         private void OpenBackupDirectory()
         {
-            if (Utils.DirectoryExists(backupDirectory))
-                Utils.OpenLink(backupDirectory);
+            if (!Directory.Exists(backupDirectory))
+                Directory.CreateDirectory(backupDirectory);
+            Utils.OpenLink(backupDirectory);
         }
         [RelayCommand]
         private void OpenSaveDirectory()
@@ -324,11 +330,11 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ImportUserData,
                 Filter = $"Toml {I18nRes.File}|*.toml"
             });
-            if (filesName?.First() is string fileName)
+            if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
             {
                 GetUserData(fileName);
                 RefreshModsContextMenu();
-                RefreshCountOfListBoxItems();
+                RefreshGroupModCount();
             }
         }
         [RelayCommand]
@@ -339,7 +345,7 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ImportUserData,
                 Filter = $"Toml {I18nRes.File}|*.toml"
             });
-            if (fileName is not null)
+            if (!string.IsNullOrEmpty(fileName))
             {
                 SaveUserData(fileName);
             }
@@ -352,11 +358,11 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ImportUserGroup,
                 Filter = $"Toml {I18nRes.File}|*.toml"
             });
-            if (filesName?.First() is string fileName)
+            if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
             {
                 GetUserGroup(fileName);
                 RefreshModsContextMenu();
-                RefreshCountOfListBoxItems();
+                RefreshGroupModCount();
                 StartRemindSaveThread();
             }
         }
@@ -368,7 +374,7 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ExportUserGroup,
                 Filter = $"Toml {I18nRes.File}|*.toml"
             });
-            if (fileName is not null)
+            if (!string.IsNullOrEmpty(fileName))
             {
                 SaveUserGroup(fileName, ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString()!);
             }
@@ -381,7 +387,7 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ImportFromSave,
                 Filter = $"Xml {I18nRes.File}|*.xml"
             });
-            if (filesName?.First() is not string fileName)
+            if (filesName?.FirstOrDefault(defaultValue: null) is not string fileName)
                 return;
             string filePath = $"{string.Join("\\", fileName.Split("\\")[..^1])}\\descriptor.xml";
             if (!Utils.FileExists(filePath))
@@ -433,10 +439,10 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ImportEnabledList,
                 Filter = $"Json {I18nRes.File}|*.json"
             });
-            if (filesName?.First() is string fileName)
+            if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
             {
                 GetEnabledMods(fileName, true);
-                RefreshCountOfListBoxItems();
+                RefreshGroupModCount();
             }
         }
         [RelayCommand]
@@ -447,7 +453,7 @@ namespace StarsectorTools.Pages.ModManager
                 Title = I18nRes.ExportEnabledList,
                 Filter = $"Json {I18nRes.File}|*.json"
             });
-            if (fileName is not null)
+            if (!string.IsNullOrEmpty(fileName))
             {
                 SaveEnabledMods(fileName);
             }
@@ -478,9 +484,15 @@ namespace StarsectorTools.Pages.ModManager
             foreach (int i in set)
                 ChangeModEnabled(allUserGroups[groupName].ElementAt(i));
             CheckEnabledModsDependencies();
-            RefreshCountOfListBoxItems();
+            RefreshGroupModCount();
         }
 
-        private bool RandomEnableModsCanExecute() => string.IsNullOrEmpty(MinRandomSize) || string.IsNullOrEmpty(MaxRandomSize);
+        private bool RandomEnableModsCanExecute() => !string.IsNullOrEmpty(MinRandomSize) && !string.IsNullOrEmpty(MaxRandomSize);
+
+        [RelayCommand]
+        private void OpenModPath(string path)
+        {
+            Utils.OpenLink(path);
+        }
     }
 }
