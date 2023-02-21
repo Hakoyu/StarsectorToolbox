@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
-using HKW.ViewModels.Dialog;
+using HKW.ViewModels.Dialogs;
 using Panuon.WPF.UI;
-using Panuon.WPF.UI.Configurations;
-using StarsectorTools.Libs.Utils;
 using StarsectorTools.Pages.GameSettings;
 using StarsectorTools.Pages.Info;
 using StarsectorTools.Pages.ModManager;
@@ -146,6 +143,34 @@ namespace StarsectorTools.Windows.MainWindow
             });
         }
 
+        private void RegisterPendingBox()
+        {
+            PendingBoxVM.InitializeHandler(
+                (m, c, cc) =>
+                {
+                    var handler = PendingBox.Show(m, c, cc);
+                    return new(
+                        () =>
+                        {
+                            handler.Show();
+                        },
+                        () =>
+                        {
+                            handler.Hide();
+                        },
+                        () =>
+                        {
+                            handler.Close();
+                        },
+                        (s) =>
+                        {
+                            handler.UpdateMessage(s);
+                        }
+                    );
+                }
+            );
+        }
+
         private void InitializePage()
         {
             // 添加页面
@@ -190,9 +215,13 @@ namespace StarsectorTools.Windows.MainWindow
         /// <summary>
         /// 设置模糊效果
         /// </summary>
-        private void SetBlurEffect()
+        private void SetBlurEffect(bool isEnabled = true)
         {
-            Dispatcher.Invoke(() => Effect = new System.Windows.Media.Effects.BlurEffect());
+            Dispatcher.Invoke(() =>
+            {
+                IsEnabled = isEnabled;
+                Effect = new System.Windows.Media.Effects.BlurEffect();
+            });
         }
 
         /// <summary>
@@ -200,7 +229,21 @@ namespace StarsectorTools.Windows.MainWindow
         /// </summary>
         private void RemoveBlurEffect()
         {
-            Dispatcher.Invoke(() => Effect = null);
+            Dispatcher.Invoke(() =>
+            {
+                IsEnabled = true;
+                Effect = null;
+            });
+        }
+
+        /// <summary>
+        /// 检测颜色是否为亮色调
+        /// </summary>
+        /// <param name="color">颜色</param>
+        /// <returns>是为<see langword="true"/>,不是为<see langword="false"/></returns>
+        private bool IsLightColor(Color color)
+        {
+            return (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255 > 0.5;
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -20,8 +15,8 @@ namespace HKW.ViewModels.Controls
         /// </summary>
         public ButtonVM()
         {
-
         }
+
         [ObservableProperty]
         private bool canExecute = true;
 
@@ -33,6 +28,7 @@ namespace HKW.ViewModels.Controls
         /// </summary>
         /// <param name="parameter">参数</param>
         public delegate void ViewModelHandler(object parameter);
+
         /// <summary>
         /// 选择改变事件
         /// </summary>

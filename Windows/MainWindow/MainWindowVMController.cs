@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Threading;
 using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialog;
+using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
@@ -128,8 +127,8 @@ namespace StarsectorTools.Windows.MainWindow
             if (vm?.Tag is not ISTPage page)
                 return;
             vm.Id = page.GetType().FullName;
-            vm.Content = page.NameI18n;
-            vm.ToolTip = page.DescriptionI18n;
+            vm.Content = page.GetNameI18n();
+            vm.ToolTip = page.GetDescriptionI18n();
             vm.ContextMenu = CreateItemContextMenu();
         }
 
@@ -480,72 +479,29 @@ namespace StarsectorTools.Windows.MainWindow
             if (isSelected)
                 ListBox_MainMenu.SelectedItem = deubgItem;
         }
+
         #region WindowEffect
 
         internal void RegisterChangeWindowEffectEvent(
-            ChangeWindowEffectHandler setHandler,
-            ChangeWindowEffectHandler removeHandler
+            SetWindowEffectHandler setHandler,
+            RemoveWindowEffectHandler removeHandler
         )
         {
             SetWindowEffectEvent += setHandler;
             RemoveWindowEffectEvent += removeHandler;
         }
 
-        internal void SetBlurEffect()
+        internal void SetBlurEffect(bool isEnabled)
         {
-            if (SetWindowEffectEvent is not null)
-                SetWindowEffectEvent();
+            SetWindowEffectEvent?.Invoke(isEnabled);
         }
 
         internal void RemoveBlurEffect()
         {
-            if (RemoveWindowEffectEvent is not null)
-                RemoveWindowEffectEvent();
-        }
-        #endregion
-
-        #region ChangeLanguageToPage
-        private void ChangeLanguageToAllPages()
-        {
-            ChangeLanguageToMainPages();
-            ChangeLanguageToExtensionPages();
+            RemoveWindowEffectEvent?.Invoke();
         }
 
-        private void ChangeLanguageToMainPages()
-        {
-            foreach (var item in ListBox_MainMenu)
-                ChangeLanguageToPage(item);
-        }
-
-        private void ChangeLanguageToExtensionPages()
-        {
-            foreach (var item in ListBox_ExtensionMenu)
-                ChangeLanguageToPage(item);
-        }
-
-        private void ChangeLanguageToPage(ListBoxItemVM vm)
-        {
-            if (vm.Tag is not ISTPage page)
-                return;
-            try
-            {
-                if (page.I18nSet.Contains(Thread.CurrentThread.CurrentCulture.Name))
-                    if (page.ChangeLanguage() is false)
-                        RefreshPage(vm);
-            }
-            catch (Exception ex)
-            {
-                var type = page.GetType();
-                Logger.Record($"{I18nRes.PageCloseError} {type.FullName}", ex);
-                MessageBoxVM.Show(
-                    new($"{I18nRes.PageCloseError} {type.FullName}\n{Logger.FilterException(ex)}")
-                    {
-                        Icon = MessageBoxVM.Icon.Error
-                    }
-                );
-            }
-        }
-        #endregion
+        #endregion WindowEffect
 
         #region ReminderSavePage
 
@@ -602,7 +558,7 @@ namespace StarsectorTools.Windows.MainWindow
             }
         }
 
-        #endregion CheckPageSave
+        #endregion ReminderSavePage
 
         #region SavePage
 
@@ -691,18 +647,23 @@ namespace StarsectorTools.Windows.MainWindow
         #endregion ClosePage
 
         /// <summary>
-        /// 改变窗口效果委托
+        /// 设置窗口效果委托
         /// </summary>
-        internal delegate void ChangeWindowEffectHandler();
+        internal delegate void SetWindowEffectHandler(bool isEnabled);
+
+        /// <summary>
+        /// 取消窗口效果委托
+        /// </summary>
+        internal delegate void RemoveWindowEffectHandler();
 
         /// <summary>
         /// 设置窗口效果事件
         /// </summary>
-        internal event ChangeWindowEffectHandler? SetWindowEffectEvent;
+        internal event SetWindowEffectHandler? SetWindowEffectEvent;
 
         /// <summary>
         /// 取消窗口效果事件
         /// </summary>
-        internal event ChangeWindowEffectHandler? RemoveWindowEffectEvent;
+        internal event RemoveWindowEffectHandler? RemoveWindowEffectEvent;
     }
 }

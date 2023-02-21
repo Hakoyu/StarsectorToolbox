@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -35,6 +34,7 @@ namespace HKW.Extension
             {
                 _dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
             }
+
             /// <inheritdoc/>
             public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
 
@@ -71,10 +71,10 @@ namespace HKW.Extension
         /// <![CDATA[
         /// Dictionary<int, List<int>> dic = new();
         /// var readOnlyDic = dic.AsReadOnly<int, List<int>, IReadOnlyCollection<int>>();
-        /// 
+        ///
         /// Dictionary<int, HashSet<int>> dic = new();
         /// var readOnlyDic = dic.AsReadOnly<int, HashSet<int>, IReadOnlySet<int>>();
-        /// 
+        ///
         /// Dictionary<int, Dictionary<int,int>> dic = new();
         /// var readOnlyDic = dic.AsReadOnly<int, Dictionary<int,int>, IReadOnlyDictionary<int,int>>();
         /// ]]>

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HKW.ViewModels
+﻿namespace HKW.ViewModels
 {
     /// <summary>
     /// 剪切板视图模型
@@ -14,7 +8,9 @@ namespace HKW.ViewModels
         /// <summary>
         /// 初始化
         /// </summary>
-        private ClipboardVM() { }
+        private ClipboardVM()
+        { }
+
         /// <summary>
         /// 初始化委托
         /// 单例模式,只能设置一次
@@ -40,6 +36,7 @@ namespace HKW.ViewModels
         /// 委托
         /// </summary>
         public delegate void ViewModelHandler(string str);
+
         /// <summary>
         /// 事件
         /// </summary>

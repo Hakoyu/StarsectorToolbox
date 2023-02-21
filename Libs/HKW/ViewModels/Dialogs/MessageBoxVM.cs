@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HKW.ViewModels.Dialog
+namespace HKW.ViewModels.Dialogs
 {
     /// <summary>
     /// 消息窗口模型
@@ -13,36 +13,51 @@ namespace HKW.ViewModels.Dialog
         public partial class Description : ObservableObject
         {
             #region CheckBox
+
             /// <summary>启用复选框</summary>
             [ObservableProperty]
             private bool showCheckBox = false;
+
             /// <summary>复选框信息</summary>
             [ObservableProperty]
             private string? checkBoxMessage;
+
             /// <summary>复选框被点击</summary>
             [ObservableProperty]
             private bool checkBoxIsChecked = false;
-            #endregion
+
+            #endregion CheckBox
+
             #region TextBox
+
             /// <summary>启用文本框</summary>
             [ObservableProperty]
             private bool showTextBox = false;
+
             /// <summary>文本框内容</summary>
             [ObservableProperty]
             private bool textBoxText = false;
-            #endregion
+
+            #endregion TextBox
+
             /// <summary>拥有者</summary>
             public object? Owner { get; set; }
+
             /// <summary>标记</summary>
             public object? Tag { get; set; }
+
             /// <summary>消息</summary>
             public string Message { get; private set; }
+
             /// <summary>标题</summary>
             public string? Caption { get; set; }
+
             /// <summary>图标</summary>
             public Icon? Icon { get; set; }
+
             /// <summary>按钮</summary>
             public Button? Button { get; set; }
+
             /// <summary>默认按钮</summary>
             public Button? DefaultButton { get; set; }
 
@@ -55,19 +70,25 @@ namespace HKW.ViewModels.Dialog
                 Message = message;
             }
         }
+
         /// <summary>模型图标</summary>
         public enum Icon
         {
             /// <summary>无</summary>
             None,
+
             /// <summary>信息</summary>
             Info,
+
             /// <summary>警告</summary>
             Warning,
+
             /// <summary>错误</summary>
             Error,
+
             /// <summary>成功</summary>
             Success,
+
             /// <summary>问题</summary>
             Question
         }
@@ -77,10 +98,13 @@ namespace HKW.ViewModels.Dialog
         {
             /// <summary>确认</summary>
             OK,
+
             /// <summary>确认和取消</summary>
             OKCancel,
+
             /// <summary>是和否</summary>
             YesNo,
+
             /// <summary>是否和取消</summary>
             YesNoCancel,
         }
@@ -90,19 +114,26 @@ namespace HKW.ViewModels.Dialog
         {
             /// <summary>空</summary>
             None,
+
             /// <summary>确认</summary>
             OK,
+
             /// <summary>取消</summary>
             Cancel,
+
             /// <summary>是</summary>
             Yes,
+
             /// <summary>否</summary>
             No
         }
+
         /// <summary>
         /// 初始化
         /// </summary>
-        private MessageBoxVM() { }
+        private MessageBoxVM()
+        { }
+
         /// <summary>
         /// 初始化委托
         /// 单例模式,只能设置一次
@@ -118,22 +149,21 @@ namespace HKW.ViewModels.Dialog
             }
             return false;
         }
+
         /// <summary>
         /// 显示消息窗口
         /// </summary>
         /// <param name="description">描述</param>
         /// <returns>结果</returns>
-        public static Result? Show(Description description)
-        {
-            if (ViewModelEvent is not null)
-                return ViewModelEvent(description);
-            return null;
-        }
+        public static Result? Show(Description description) =>
+            ViewModelEvent?.Invoke(description);
+
         /// <summary>
         /// 委托
         /// </summary>
         /// <param name="description">描述</param>
         public delegate Result ViewModelHandler(Description description);
+
         /// <summary>
         /// 事件
         /// </summary>

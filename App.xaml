@@ -4,7 +4,6 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorTools.Langs"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
-  xmlns:vm="clr-namespace:HKW.ViewModels.Dialog"
   StartupUri="Windows/MainWindow/MainWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>
@@ -23,13 +22,13 @@
             YesButtonContent="{x:Static I18n:MessageBoxXI18nRes.YES}">
             <pu:MessageBoxXSettings.WindowXStyle>
               <Style BasedOn="{StaticResource {ComponentResourceKey ResourceId=WindowXStyle, TypeInTargetAssembly={x:Type pu:MessageBoxX}}}" TargetType="pu:WindowX">
-                <Setter Property="SizeToContent" Value="WidthAndHeight" />
                 <Setter Property="Width" Value="NaN" />
                 <Setter Property="Height" Value="NaN" />
                 <Setter Property="MinWidth" Value="300" />
                 <Setter Property="MinHeight" Value="200" />
                 <Setter Property="MaxWidth" Value="1280" />
                 <Setter Property="MaxHeight" Value="720" />
+                <Setter Property="SizeToContent" Value="WidthAndHeight" />
                 <Setter Property="Background" Value="{DynamicResource ColorBG}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
                 <Setter Property="pu:WindowX.DisableDragMove" Value="True" />
@@ -105,6 +104,65 @@
               </DataTemplate>
             </pu:MessageBoxXSettings.ContentTemplate>
           </pu:MessageBoxXSettings>
+          <pu:PendingBoxSettings x:Key="pendingSettings">
+            <pu:PendingBoxSettings.WindowStyle>
+              <Style BasedOn="{StaticResource {x:Static pu:PendingBox.WindowStyle}}" TargetType="Window">
+                <Setter Property="Width" Value="NaN" />
+                <Setter Property="Height" Value="NaN" />
+                <Setter Property="MinWidth" Value="300" />
+                <Setter Property="MinHeight" Value="200" />
+                <Setter Property="MaxWidth" Value="1280" />
+                <Setter Property="MaxHeight" Value="720" />
+                <Setter Property="SizeToContent" Value="WidthAndHeight" />
+                <Setter Property="pu:WindowX.DisableDragMove" Value="True" />
+                <Setter Property="Background" Value="{DynamicResource ColorBG}" />
+                <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+                <Setter Property="pu:WindowXCaption.Height" Value="30" />
+                <Setter Property="pu:WindowXCaption.Buttons" Value="None" />
+                <Setter Property="pu:WindowXCaption.ShadowColor" Value="{DynamicResource ColorAqua}" />
+                <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource WindowGlassBrush}" />
+              </Style>
+            </pu:PendingBoxSettings.WindowStyle>
+            <pu:PendingBoxSettings.SpinStyle>
+              <Style BasedOn="{StaticResource {x:Static pu:PendingBox.SpinStyle}}" TargetType="pu:Spin">
+                <Setter Property="SpinStyle" Value="Ring2" />
+                <Setter Property="Width" Value="50" />
+                <Setter Property="Height" Value="50" />
+                <Setter Property="Margin" Value="0,0,0,20" />
+                <Setter Property="GlyphSize" Value="2" />
+                <Setter Property="GlyphBrush" Value="#1ABBEA" />
+              </Style>
+            </pu:PendingBoxSettings.SpinStyle>
+            <pu:PendingBoxSettings.ContentTemplate>
+              <DataTemplate>
+                <Grid VerticalAlignment="Center">
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
+                  <pu:Spin x:Name="PART_Spin" />
+                  <TextBlock
+                    x:Name="PART_CaptionTextBlock"
+                    Grid.Row="1"
+                    Margin="5,5,0,0"
+                    TextAlignment="Center" />
+                  <TextBlock
+                    x:Name="PART_MessageTextBlock"
+                    Grid.Row="2"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+                  <Button
+                    x:Name="PART_CancelButton"
+                    Grid.Row="3"
+                    HorizontalAlignment="Center"
+                    Style="{x:Null}"
+                    Visibility="Collapsed" />
+                </Grid>
+              </DataTemplate>
+            </pu:PendingBoxSettings.ContentTemplate>
+          </pu:PendingBoxSettings>
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>

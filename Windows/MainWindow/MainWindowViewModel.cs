@@ -1,17 +1,15 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Controls;
+using HKW.Libs.TomlParse;
 using HKW.ViewModels;
+using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
-using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
-using HKW.Libs.TomlParse;
 using StarsectorTools.Resources;
+using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Windows.MainWindow
 {
@@ -62,7 +60,7 @@ namespace StarsectorTools.Windows.MainWindow
         [ObservableProperty]
         private ListBoxVM listBox_ExtensionMenu = new();
 
-        #endregion
+        #endregion ListBox
 
         public MainWindowViewModel()
         {
@@ -80,11 +78,27 @@ namespace StarsectorTools.Windows.MainWindow
             InitializeExtensionDebugPage();
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceiv);
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(this, ExtensionDebugPathRequestReceive);
-            I18n.AddPropertyChangedAction(I18nAction);
+            I18n.AddPropertyChangedAction(I18nChangedAction);
         }
 
-        private void I18nAction()
+        private void I18nChangedAction()
         {
+            foreach (var item in ListBox_MainMenu)
+            {
+                if (item is ISTPage iPage)
+                {
+                    item.Content = iPage.GetNameI18n();
+                    item.ToolTip = iPage.GetDescriptionI18n();
+                }
+            }
+            foreach (var item in ListBox_ExtensionMenu)
+            {
+                if (item is ISTPage iPage)
+                {
+                    item.Content = iPage.GetNameI18n();
+                    item.ToolTip = iPage.GetDescriptionI18n();
+                }
+            }
         }
 
         private void InitializeData()
@@ -92,8 +106,6 @@ namespace StarsectorTools.Windows.MainWindow
             ListBox_MainMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
             ListBox_ExtensionMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
         }
-
-
 
         [RelayCommand]
         private void MenuExpand(object parameter) => MenuIsExpand = !MenuIsExpand;
@@ -159,6 +171,7 @@ namespace StarsectorTools.Windows.MainWindow
             selectedItem = item;
             ShowPage(item.Tag);
         }
+
         private void ExtensionDebugPathChangeReceiv(object recipient, ExtensionDebugPathChangeMessage message)
         {
             var toml = TOML.Parse(ST.ConfigTomlFile);
@@ -170,6 +183,7 @@ namespace StarsectorTools.Windows.MainWindow
                 deubgItemPath = message.Value;
             }
         }
+
         private void ExtensionDebugPathRequestReceive(object recipient, ExtensionDebugPathRequestMessage message)
         {
             message.Reply(deubgItemPath!);

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace HKW.WPF.Attach
@@ -14,7 +8,8 @@ namespace HKW.WPF.Attach
     /// </summary>
     public class AttackFrameworkElement
     {
-        static FrameworkElement fe = null!;
+        private static FrameworkElement fe = null!;
+
         /// <summary>
         /// 注册事件
         /// </summary>

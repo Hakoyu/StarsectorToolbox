@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Media;
+using System.Threading.Tasks;
 using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
+using HKW.Libs.Log4Cs;
 using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
@@ -25,6 +24,7 @@ namespace StarsectorTools.Libs.Utils
     {
         /// <summary>消息长度限制</summary>
         private static int messageLengthLimits = 8192;
+
         /// <summary>
         /// 检测文件是否存在
         /// </summary>
@@ -35,7 +35,7 @@ namespace StarsectorTools.Libs.Utils
         {
             bool isExists = File.Exists(file);
             if (!isExists && outputLog)
-                STLog.WriteLine($"{I18n.FileNotFound} {I18n.Path}: {file}", STLogLevel.WARN);
+                Logger.Record($"{I18n.FileNotFound} {I18n.Path}: {file}", LogLevel.WARN);
             return isExists;
         }
 
@@ -49,7 +49,10 @@ namespace StarsectorTools.Libs.Utils
         {
             bool exists = Directory.Exists(directory);
             if (!exists && outputLog)
-                STLog.WriteLine($"{I18n.DirectoryNotFound} {I18n.Path}: {directory}", STLogLevel.WARN);
+                Logger.Record(
+                    $"{I18n.DirectoryNotFound} {I18n.Path}: {directory}",
+                    LogLevel.WARN
+                );
             return exists;
         }
 
@@ -66,21 +69,30 @@ namespace StarsectorTools.Libs.Utils
             // 清除json中的注释
             jsonData = Regex.Replace(jsonData, @"(#|//)[\S ]*", "");
             // 清除json中不符合规定的逗号
-            jsonData = Regex.Replace(jsonData, @",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", "");
+            jsonData = Regex.Replace(
+                jsonData,
+                @",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z",
+                ""
+            );
             // 将异常格式 id:" 变为 "id":"
             jsonData = Regex.Replace(jsonData, @"id:""", @"""id"":""");
             JsonObject? jsonObject = null;
             try
             {
-                jsonObject = JsonNode.Parse(jsonData, documentOptions: new()
-                {
-                    AllowTrailingCommas = true,
-                    CommentHandling = System.Text.Json.JsonCommentHandling.Skip
-                })?.AsObject();
+                jsonObject = JsonNode
+                    .Parse(
+                        jsonData,
+                        documentOptions: new()
+                        {
+                            AllowTrailingCommas = true,
+                            CommentHandling = System.Text.Json.JsonCommentHandling.Skip
+                        }
+                    )
+                    ?.AsObject();
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.LoadError} {file}", ex);
+                Logger.Record($"{I18n.LoadError} {file}", ex);
             }
             return jsonObject;
         }
@@ -101,11 +113,13 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="jsonNode">json数据</param>
         /// <returns>格式化及无乱码的字符串</returns>
         public static string ToUTF8String(this JsonNode jsonNode) =>
-            jsonNode.ToJsonString(new()
-            {
-                WriteIndented = true,
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            });
+            jsonNode.ToJsonString(
+                new()
+                {
+                    WriteIndented = true,
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                }
+            );
 
         /// <summary>
         /// 复制文件夹至目标文件夹
@@ -117,12 +131,16 @@ namespace StarsectorTools.Libs.Utils
         {
             try
             {
-                FileSystem.CopyDirectory(sourceDirectory, $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}", UIOption.OnlyErrorDialogs);
+                FileSystem.CopyDirectory(
+                    sourceDirectory,
+                    $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}",
+                    UIOption.OnlyErrorDialogs
+                );
                 return true;
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.LoadError, ex);
+                Logger.Record(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -136,12 +154,16 @@ namespace StarsectorTools.Libs.Utils
         {
             try
             {
-                FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                FileSystem.DeleteFile(
+                    file,
+                    UIOption.OnlyErrorDialogs,
+                    RecycleOption.SendToRecycleBin
+                );
                 return true;
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.LoadError, ex);
+                Logger.Record(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -155,12 +177,16 @@ namespace StarsectorTools.Libs.Utils
         {
             try
             {
-                FileSystem.DeleteDirectory(directory, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                FileSystem.DeleteDirectory(
+                    directory,
+                    UIOption.OnlyErrorDialogs,
+                    RecycleOption.SendToRecycleBin
+                );
                 return true;
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.LoadError, ex);
+                Logger.Record(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -169,28 +195,21 @@ namespace StarsectorTools.Libs.Utils
         /// 获取所有文件(包括子目录)
         /// </summary>
         /// <param name="directory">目录</param>
-        /// <param name="fileInfos">文件信息(递归用)</param>
         /// <returns>所有文件信息</returns>
-        public static List<FileInfo>? GetAllSubFiles(string directory, List<FileInfo>? fileInfos = null)
+        public static List<FileInfo> GetAllSubFiles(string directory)
         {
-            if (!Directory.Exists(directory))
-                return null!;
-            var currentDirectoryInfo = new DirectoryInfo(directory);
-            fileInfos ??= new();
-            fileInfos.AddRange(currentDirectoryInfo.GetFiles());
-            foreach (var directoryInfo in currentDirectoryInfo.GetDirectories())
-                GetAllSubFiles(directoryInfo.FullName, fileInfos);
+            List<FileInfo> fileInfos = new();
+            GetSubFiles(directory, ref fileInfos);
             return fileInfos;
-        }
-
-        /// <summary>
-        /// 检测颜色是否为亮色调
-        /// </summary>
-        /// <param name="color">颜色</param>
-        /// <returns>是为<see langword="true"/>,不是为<see langword="false"/></returns>
-        public static bool IsLightColor(Color color)
-        {
-            return (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255 > 0.5;
+            void GetSubFiles(string directory, ref List<FileInfo> fileInfos)
+            {
+                if (!Directory.Exists(directory))
+                    return;
+                var currentDirectoryInfo = new DirectoryInfo(directory);
+                fileInfos.AddRange(currentDirectoryInfo.GetFiles());
+                foreach (var directoryInfo in currentDirectoryInfo.GetDirectories())
+                    GetSubFiles(directoryInfo.FullName, ref fileInfos);
+            }
         }
 
         /// <summary>
@@ -207,7 +226,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ProcessStartError} {link}", ex);
+                Logger.Record($"{I18n.ProcessStartError} {link}", ex);
                 return false;
             }
         }
@@ -226,7 +245,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ProcessStartError} {file}", ex);
+                Logger.Record($"{I18n.ProcessStartError} {file}", ex);
                 return false;
             }
         }
@@ -239,7 +258,11 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="destDirectory">输出目录</param>
         /// <param name="archiveName">压缩文件名</param>
         /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool ArchiveDirToDir(string sourceDirectory, string destDirectory, string? archiveName = null)
+        public static bool ArchiveDirToDir(
+            string sourceDirectory,
+            string destDirectory,
+            string? archiveName = null
+        )
         {
             if (!DirectoryExists(sourceDirectory))
                 return false;
@@ -249,15 +272,21 @@ namespace StarsectorTools.Libs.Utils
                 {
                     archive.AddAllFromDirectory(sourceDirectory);
                     if (archiveName is null)
-                        archive.SaveTo($"{destDirectory}\\{Path.GetFileName(sourceDirectory)}.zip", CompressionType.Deflate);
+                        archive.SaveTo(
+                            $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}.zip",
+                            CompressionType.Deflate
+                        );
                     else
-                        archive.SaveTo($"{destDirectory}\\{archiveName}.zip", CompressionType.Deflate);
+                        archive.SaveTo(
+                            $"{destDirectory}\\{archiveName}.zip",
+                            CompressionType.Deflate
+                        );
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectory}", ex);
+                Logger.Record($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectory}", ex);
                 return false;
             }
         }
@@ -269,7 +298,7 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="sourceFile">原始文件</param>
         /// <param name="destDirectory">输出目录</param>
         /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool UnArchiveFileToDir(string sourceFile, string destDirectory)
+        public static async Task<bool> UnArchiveFileToDir(string sourceFile, string destDirectory)
         {
             if (!FileExists(sourceFile))
                 return false;
@@ -281,33 +310,41 @@ namespace StarsectorTools.Libs.Utils
                 Directory.CreateDirectory(destDirectory);
             try
             {
-                if (head == "8075")//Zip文件
+                await Task.Run(() =>
                 {
-                    using (var archive = new Archive(sourceFile, new() { Encoding = Encoding.UTF8 }))
+                    if (head == "8075") //Zip文件
                     {
-                        archive.ExtractToDirectory(destDirectory);
+                        using (
+                            var archive = new Archive(
+                                sourceFile,
+                                new() { Encoding = Encoding.UTF8 }
+                            )
+                        )
+                        {
+                            archive.ExtractToDirectory(destDirectory);
+                        }
                     }
-                }
-                else if (head == "8297")//Rar文件
-                {
-                    using (var archive = new RarArchive(sourceFile))
+                    else if (head == "8297") //Rar文件
                     {
-                        archive.ExtractToDirectory(destDirectory);
+                        using (var archive = new RarArchive(sourceFile))
+                        {
+                            archive.ExtractToDirectory(destDirectory);
+                        }
                     }
-                }
-                else if (head == "55122")//7z文件
-                {
-                    using (var archive = new SevenZipArchive(sourceFile))
+                    else if (head == "55122") //7z文件
                     {
-                        archive.ExtractToDirectory(destDirectory);
+                        using (var archive = new SevenZipArchive(sourceFile))
+                        {
+                            archive.ExtractToDirectory(destDirectory);
+                        }
                     }
-                }
-                else
-                    throw new();
+                    else
+                        throw new("不支持的压缩文件");
+                });
             }
             catch (Exception ex)
             {
-                STLog.WriteLine($"{I18n.ZipFileError}  {I18n.Path}: {sourceFile}", ex);
+                Logger.Record($"{I18n.ZipFileError}  {I18n.Path}: {sourceFile}", ex);
                 if (DirectoryExists(destDirectory, false))
                     Directory.Delete(destDirectory);
                 return false;
@@ -315,111 +352,16 @@ namespace StarsectorTools.Libs.Utils
             return true;
         }
 
-        private static Panuon.WPF.UI.MessageBoxIcon GetMessageBoxIcon(STMessageBoxIcon icon) =>
-            icon switch
-            {
-                STMessageBoxIcon.None => Panuon.WPF.UI.MessageBoxIcon.None,
-                STMessageBoxIcon.Info => Panuon.WPF.UI.MessageBoxIcon.Info,
-                STMessageBoxIcon.Warning => Panuon.WPF.UI.MessageBoxIcon.Warning,
-                STMessageBoxIcon.Error => Panuon.WPF.UI.MessageBoxIcon.Error,
-                STMessageBoxIcon.Success => Panuon.WPF.UI.MessageBoxIcon.Success,
-                STMessageBoxIcon.Question => Panuon.WPF.UI.MessageBoxIcon.Question,
-                _ => Panuon.WPF.UI.MessageBoxIcon.None
-            };
-
-        /// <summary>
-        /// 弹出消息窗口
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="icon">显示的图标</param>
-        /// <param name="setBlurEffect">启用模糊效果</param>
-        /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message,
-                                                      STMessageBoxIcon icon = STMessageBoxIcon.Info,
-                                                      bool setBlurEffect = true)
-        {
-            return ShowMessageBox(message, " ", icon: icon, setBlurEffect: setBlurEffect);
-        }
-
-        /// <summary>
-        /// 弹出消息窗口
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="button">显示的按钮</param>
-        /// <param name="icon">显示的图标</param>
-        /// <param name="setBlurEffect">启用模糊效果</param>
-        /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message,
-                                                      MessageBoxButton button,
-                                                      STMessageBoxIcon icon,
-                                                      bool setBlurEffect = true)
-        {
-            return ShowMessageBox(message, " ", button, icon, setBlurEffect: setBlurEffect);
-        }
-
-        /// <summary>
-        /// 弹出消息窗口
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="caption">标头</param>
-        /// <param name="button">显示的按钮</param>
-        /// <param name="icon">显示的图片</param>
-        /// <param name="setBlurEffect">启用模糊效果</param>
-        /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-        public static MessageBoxResult ShowMessageBox(string message,
-                                                      string caption,
-                                                      MessageBoxButton button = MessageBoxButton.OK,
-                                                      STMessageBoxIcon icon = STMessageBoxIcon.Info,
-                                                      bool setBlurEffect = true)
-        {
-            if (message.Length > messageLengthLimits)
-                message = message[..messageLengthLimits] + $".........{I18n.ExcessivelyLongMessages}.........";
-            MessageBoxResult outResult;
-            if (setBlurEffect)
-            {
-                SetMainWindowBlurEffect();
-                outResult = Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, GetMessageBoxIcon(icon));
-                RemoveMainWindowBlurEffect();
-            }
-            else
-            {
-                outResult = Panuon.WPF.UI.MessageBoxX.Show(message, caption, button, GetMessageBoxIcon(icon));
-            }
-            if (message.Length == messageLengthLimits)
-                GC.Collect();
-            return outResult;
-        }
-
         /// <summary>
         /// 为主窗口设置模糊效果,用于聚焦弹窗
         /// </summary>
-        public static void SetMainWindowBlurEffect() => MainWindowViewModel.Instance.SetBlurEffect();
+        public static void SetMainWindowBlurEffect(bool isEnabled = true) =>
+            MainWindowViewModel.Instance.SetBlurEffect(isEnabled);
 
         /// <summary>
         /// 取消主窗口的模糊效果
         /// </summary>
-        public static void RemoveMainWindowBlurEffect() => MainWindowViewModel.Instance.RemoveBlurEffect();
-    }
-
-    /// <summary>弹窗图案</summary>
-    public enum STMessageBoxIcon
-    {
-        /// <summary>无</summary>
-        None,
-
-        /// <summary>信息</summary>
-        Info,
-
-        /// <summary>警告</summary>
-        Warning,
-
-        /// <summary>错误</summary>
-        Error,
-
-        /// <summary>成功</summary>
-        Success,
-
-        /// <summary>问题</summary>
-        Question
+        public static void RemoveMainWindowBlurEffect() =>
+            MainWindowViewModel.Instance.RemoveBlurEffect();
     }
 }

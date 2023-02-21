@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows;
+﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace HKW.ViewModels.Controls
 {
@@ -14,11 +11,14 @@ namespace HKW.ViewModels.Controls
     {
         [ObservableProperty]
         private string? group;
+
         [ObservableProperty]
         private bool isSelected = false;
+
         /// <summary>
         /// 初始化
         /// </summary>
-        public ListBoxItemVM() { }
+        public ListBoxItemVM()
+        { }
     }
 }

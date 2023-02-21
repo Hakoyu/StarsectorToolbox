@@ -3,8 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Dialog;
-using StarsectorTools.Libs.Utils;
+using HKW.ViewModels.Dialogs;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorTools.Libs.GameInfo
@@ -14,6 +13,7 @@ namespace StarsectorTools.Libs.GameInfo
     {
         /// <summary>游戏目录</summary>
         public static string BaseDirectory { get; private set; } = null!;
+
         /// <summary>游戏Core目录</summary>
         public static string CoreDirectory { get; private set; } = null!;
 

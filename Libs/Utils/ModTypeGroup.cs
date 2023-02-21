@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StarsectorTools.Libs.Utils
+﻿namespace StarsectorTools.Libs.Utils
 {
     /// <summary>模组分组类型</summary>
     public static class ModTypeGroup

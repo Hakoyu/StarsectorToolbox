@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs;
@@ -12,7 +10,7 @@ using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialog;
+using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
@@ -26,6 +24,7 @@ namespace StarsectorTools.Pages.GameSettings
 
         [ObservableProperty]
         private string gameVersion = GameInfo.Version;
+
         [ObservableProperty]
         private string gameMemory = string.Empty;
 
@@ -34,15 +33,19 @@ namespace StarsectorTools.Pages.GameSettings
 
         [ObservableProperty]
         private string resolutionWidth = string.Empty;
+
         [ObservableProperty]
         private string resolutionHeight = string.Empty;
+
         [ObservableProperty]
         private bool borderlessWindow = false;
+
         [ObservableProperty]
         private bool customResolutionCanReset = false;
 
         [ObservableProperty]
         private string gameKey = string.Empty;
+
         private string realGameKey = string.Empty;
         private string hideGameKey = string.Empty;
 
@@ -60,7 +63,8 @@ namespace StarsectorTools.Pages.GameSettings
         [ObservableProperty]
         private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
 
-        public GameSettingsPageViewModel() { }
+        public GameSettingsPageViewModel()
+        { }
 
         public GameSettingsPageViewModel(bool noop)
         {
@@ -218,6 +222,7 @@ namespace StarsectorTools.Pages.GameSettings
                 );
             }
         }
+
         [RelayCommand]
         private void ClearSave()
         {
@@ -234,6 +239,7 @@ namespace StarsectorTools.Pages.GameSettings
             Logger.Record(I18nRes.SaveCleanComplete);
             MessageBoxVM.Show(new(I18nRes.SaveCleanComplete));
         }
+
         [RelayCommand]
         private void OpenSaveDirectory()
         {

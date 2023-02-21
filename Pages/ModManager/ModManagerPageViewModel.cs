@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,7 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialog;
+using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
@@ -30,11 +28,11 @@ namespace StarsectorTools.Pages.ModManager
 
         /// <summary>当前选择的列表项</summary>
         private ListBoxItemVM nowSelectedGroup = null!;
+
         private string nowSelectedGroupName => nowSelectedGroup!.Tag!.ToString()!;
 
         [ObservableProperty]
         private ObservableCollection<ModShowInfo> nowShowMods = new();
-
 
         /// <summary>当前选择的模组</summary>
         private List<ModShowInfo> nowSelectedMods = new();
@@ -48,24 +46,34 @@ namespace StarsectorTools.Pages.ModManager
 
         [ObservableProperty]
         private bool showModDependencies = false;
+
         [ObservableProperty]
         private BitmapImage? modDetailImage;
+
         [ObservableProperty]
         private string? modDetailName;
+
         [ObservableProperty]
         private string? modDetailId;
+
         [ObservableProperty]
         private string? modDetailModVersion;
+
         [ObservableProperty]
         private string? modDetailGameVersion;
+
         [ObservableProperty]
         private string? modDetailPath;
+
         [ObservableProperty]
         private string? modDetailAuthor;
+
         [ObservableProperty]
         private string? modDetailDescription;
+
         [ObservableProperty]
         private string? modDetailDependencies;
+
         [ObservableProperty]
         private string? modDetailUserDescription;
 
@@ -75,12 +83,14 @@ namespace StarsectorTools.Pages.ModManager
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
         private string minRandomSize;
+
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
         private string maxRandomSize;
 
         [ObservableProperty]
         private bool isRemindSave = false;
+
         [ObservableProperty]
         private bool nowSelectedIsUserGroup = false;
 
@@ -192,7 +202,6 @@ namespace StarsectorTools.Pages.ModManager
 
         public ModManagerPageViewModel()
         {
-
         }
 
         public ModManagerPageViewModel(bool noop)
@@ -242,6 +251,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             GroupMenuIsExpand = !GroupMenuIsExpand;
         }
+
         [RelayCommand]
         private void DataGridSelectionChanged(IList items)
         {
@@ -256,6 +266,7 @@ namespace StarsectorTools.Pages.ModManager
                 return;
             ChangeSelectedModsCollected(!nowSelectedMod.IsCollected);
         }
+
         [RelayCommand]
         private void Enabled()
         {
@@ -283,12 +294,13 @@ namespace StarsectorTools.Pages.ModManager
             if (err != null)
             {
                 Logger.Record(err, LogLevel.WARN);
-                Utils.ShowMessageBox(err, STMessageBoxIcon.Warning);
+                MessageBoxVM.Show(new(err) { Icon = MessageBoxVM.Icon.Warning });
             }
             CheckEnabledModsDependencies();
             RefreshGroupModCount();
             StartRemindSaveThread();
         }
+
         [RelayCommand]
         private void ModFilterTextChanged()
         {
@@ -316,12 +328,14 @@ namespace StarsectorTools.Pages.ModManager
                 Directory.CreateDirectory(backupDirectory);
             Utils.OpenLink(backupDirectory);
         }
+
         [RelayCommand]
         private void OpenSaveDirectory()
         {
             if (Utils.DirectoryExists(GameInfo.SaveDirectory))
                 Utils.OpenLink(GameInfo.SaveDirectory);
         }
+
         [RelayCommand]
         private void ImportUserData()
         {
@@ -337,6 +351,7 @@ namespace StarsectorTools.Pages.ModManager
                 RefreshGroupModCount();
             }
         }
+
         [RelayCommand]
         private void ExportUserData()
         {
@@ -350,6 +365,7 @@ namespace StarsectorTools.Pages.ModManager
                 SaveUserData(fileName);
             }
         }
+
         [RelayCommand]
         private void ImportUserGroup()
         {
@@ -366,6 +382,7 @@ namespace StarsectorTools.Pages.ModManager
                 StartRemindSaveThread();
             }
         }
+
         [RelayCommand]
         private void ExportUserGroup()
         {
@@ -379,6 +396,7 @@ namespace StarsectorTools.Pages.ModManager
                 SaveUserGroup(fileName, ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString()!);
             }
         }
+
         [RelayCommand]
         private void ImportEnabledListFromSave()
         {
@@ -431,6 +449,7 @@ namespace StarsectorTools.Pages.ModManager
                 MessageBoxVM.Show(new(err) { Icon = MessageBoxVM.Icon.Warning });
             }
         }
+
         [RelayCommand]
         private void ImportEnabledList()
         {
@@ -445,6 +464,7 @@ namespace StarsectorTools.Pages.ModManager
                 RefreshGroupModCount();
             }
         }
+
         [RelayCommand]
         private void ExportEnabledList()
         {
@@ -458,6 +478,7 @@ namespace StarsectorTools.Pages.ModManager
                 SaveEnabledMods(fileName);
             }
         }
+
         [RelayCommand(CanExecute = nameof(RandomEnableModsCanExecute))]
         private void RandomEnableMods()
         {
@@ -493,6 +514,16 @@ namespace StarsectorTools.Pages.ModManager
         private void OpenModPath(string path)
         {
             Utils.OpenLink(path);
+        }
+
+        [RelayCommand]
+        private void CloseModDetailsButton()
+        {
+            CloseModDetails();
+        }
+
+        internal void DataGridDropFile(Array array)
+        {
         }
     }
 }

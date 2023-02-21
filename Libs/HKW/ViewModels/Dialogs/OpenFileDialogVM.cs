@@ -1,4 +1,4 @@
-﻿namespace HKW.ViewModels.Dialog
+﻿namespace HKW.ViewModels.Dialogs
 {
     /// <summary>
     /// 打开文件对话框
@@ -13,7 +13,10 @@
             /// <summary>多选</summary>
             public bool Multiselect { get; set; } = false;
         }
-        private OpenFileDialogVM() { }
+
+        private OpenFileDialogVM()
+        { }
+
         /// <summary>
         /// 初始化委托
         /// 单例模式,只能设置一次
@@ -29,6 +32,7 @@
             }
             return false;
         }
+
         /// <summary>
         /// 显示对话框
         /// </summary>
@@ -40,12 +44,14 @@
                 return ModelEvent(description);
             return null;
         }
+
         /// <summary>
         /// 委托
         /// </summary>
         /// <param name="description">描述</param>
         /// <returns>选中的文件(或文件夹)</returns>
         public delegate string[] ModelHandler(Description description);
+
         /// <summary>
         /// 事件
         /// </summary>

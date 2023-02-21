@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace HKW.ViewModels.Controls
@@ -20,6 +15,7 @@ namespace HKW.ViewModels.Controls
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(SelectedItem))]
         private int selectedIndex = -1;
+
         /// <summary>
         /// 选中项的值
         /// </summary>
@@ -34,7 +30,7 @@ namespace HKW.ViewModels.Controls
         [RelayCommand]
         private void SelectionChanged(TItem item) => SelectionChangedEvent?.Invoke(item);
 
-        partial void OnSelectedIndexChanged(int value)
+        private partial void OnSelectedIndexChanged(int value)
         {
             if (value < 0)
                 SelectedItem = default;
@@ -43,7 +39,7 @@ namespace HKW.ViewModels.Controls
             SelectionChangedCommand.Execute(SelectedItem);
         }
 
-        partial void OnSelectedItemChanged(TItem? value)
+        private partial void OnSelectedItemChanged(TItem? value)
         {
             if (value is null)
                 return;
@@ -56,6 +52,7 @@ namespace HKW.ViewModels.Controls
         /// </summary>
         /// <param name="item">参数</param>
         public delegate void ViewModelHandler(TItem item);
+
         /// <summary>
         /// 选中项选择改变事件
         /// </summary>

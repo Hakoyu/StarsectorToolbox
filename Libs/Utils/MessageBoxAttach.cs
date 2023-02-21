@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using Panuon.WPF.UI;
 using Panuon.WPF.UI.Configurations;
 
@@ -21,6 +16,7 @@ namespace StarsectorTools.Libs.Utils
             DependencyProperty.Register("CheckBoxIsChecked", typeof(bool), typeof(MessageBoxX));
 
         #region CheckBoxMessage
+
         public string CheckBoxMessage
         {
             get { return (string)GetValue(CheckBoxMessageProperty); }
@@ -30,6 +26,6 @@ namespace StarsectorTools.Libs.Utils
         public static readonly DependencyProperty CheckBoxMessageProperty =
             DependencyProperty.Register("CheckBoxMessage", typeof(string), typeof(MessageBoxX));
 
-        #endregion
+        #endregion CheckBoxMessage
     }
 }

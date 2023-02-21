@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.Extension;
 using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialog;
+using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Resources;
@@ -39,6 +36,8 @@ namespace StarsectorTools.Pages.ModManager
         private const string strUserDescription = "UserDescription";
         private const string strName = "Name";
         private const string strAuthor = "Author";
+
+        public bool NeedSave { get; private set; } = false;
 
         /// <summary>记录了模组类型的嵌入资源链接</summary>
         private static readonly Uri modTypeGroupUri =
@@ -585,7 +584,7 @@ namespace StarsectorTools.Pages.ModManager
         {
             foreach (var item in allListBoxItems.Values)
             {
-                int size = allModShowInfoGroups[item.Tag.ToString()!].Count;
+                int size = allModShowInfoGroups[item!.Tag!.ToString()!].Count;
                 item.Content = $"{item.ToolTip} ({size})";
                 Logger.Record($"{I18nRes.ModCountInGroupRefresh} {item.Content}", LogLevel.DEBUG);
             }
@@ -1002,10 +1001,10 @@ namespace StarsectorTools.Pages.ModManager
             Logger.Record($"{I18nRes.ShowDetails} {id}", LogLevel.DEBUG);
         }
 
-        private void DropFile(string filePath)
+        internal async Task DropFile(string filePath)
         {
             string tempPath = "Temp";
-            if (!Utils.UnArchiveFileToDir(filePath, tempPath))
+            if (!await Utils.UnArchiveFileToDir(filePath, tempPath))
             {
                 MessageBoxVM.Show(new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{filePath}"));
                 return;
@@ -1180,6 +1179,23 @@ namespace StarsectorTools.Pages.ModManager
             //NowShowModes;
         }
 
+        internal bool TryAddUserGroup(string icon, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && !allUserGroups.ContainsKey(name))
+            {
+                if (name == ModTypeGroup.Collected || name == strUserCustomData)
+                    MessageBoxVM.Show(new(string.Format(I18nRes.UserGroupCannotNamed, ModTypeGroup.Collected, strUserCustomData)) { Tag = false });
+                else
+                {
+                    AddUserGroup(icon, name);
+                    return true;
+                }
+            }
+            else
+                MessageBoxVM.Show(new(I18nRes.UserGroupNamingFailed));
+            return false;
+        }
+
         private void AddUserGroup(string icon, string name)
         {
             ListBoxItemVM listBoxItem = new();
@@ -1211,8 +1227,10 @@ namespace StarsectorTools.Pages.ModManager
             allUserGroups.Add(name, new());
             allListBoxItems.Add(name, listBoxItem);
             allModShowInfoGroups.Add(name, new());
+            ComboBox_ExportUserGroup.Add(new() { Content = name, Tag = name });
+            RefreshGroupModCount();
+            RefreshModsContextMenu();
             StartRemindSaveThread();
-            ComboBox_ExportUserGroup.Add(new() { Content = name });
             Logger.Record($"{I18nRes.AddUserGroup} {icon} {name}");
         }
 
@@ -1228,7 +1246,7 @@ namespace StarsectorTools.Pages.ModManager
                 ) is MessageBoxVM.Result.No
             )
                 return;
-            var name = listBoxItem.Tag.ToString()!;
+            var name = listBoxItem!.Tag!.ToString()!;
             if (nowSelectedGroup == listBoxItem)
                 ListBox_TypeGroupMenu.SelectedIndex = 0;
             ListBox_UserGroupMenu.Remove(listBoxItem);
@@ -1238,7 +1256,7 @@ namespace StarsectorTools.Pages.ModManager
             RefreshModsContextMenu();
             StartRemindSaveThread();
             // 删除导出用户分组下拉列表的此分组选择
-            if (ComboBox_ExportUserGroup.SelectedItem.Tag.ToString() == name)
+            if (ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString() == name)
             {
                 ComboBox_ExportUserGroup.Remove(ComboBox_ExportUserGroup.SelectedItem);
                 ComboBox_ExportUserGroup.SelectedIndex = 0;

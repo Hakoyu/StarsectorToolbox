@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
+using HKW.ViewModels;
 using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialog;
-using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
+using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
-using StarsectorTools.Windows.MainWindow;
-using HKW.ViewModels;
-using System.Collections.ObjectModel;
+using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
 
 namespace StarsectorTools.Pages.Settings
 {

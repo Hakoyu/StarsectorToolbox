@@ -1,12 +1,4 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using HKW.Libs.TomlParse;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.Windows.MainWindow;
-using I18n = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
+﻿using System.Windows.Controls;
 
 namespace StarsectorTools.Pages.Settings
 {
@@ -16,6 +8,7 @@ namespace StarsectorTools.Pages.Settings
     public partial class SettingsPage : Page
     {
         internal SettingsPageViewModel ViewModel => (SettingsPageViewModel)DataContext;
+
         internal SettingsPage()
         {
             InitializeComponent();

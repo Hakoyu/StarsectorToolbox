@@ -1,16 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.Mvvm.Messaging.Messages;
 using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Dialog;
-using Panuon.WPF.UI;
-using StarsectorTools.Libs.Messages;
+using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
@@ -42,9 +37,8 @@ namespace StarsectorTools.Windows.MainWindow
             // 根据主题色的明亮程度来设置字体颜色
             var color = (Color)
                 ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
-            if (Utils.IsLightColor(color))
+            if (IsLightColor(color))
                 Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
-
             // 注册数据
             RegisterData();
 
@@ -69,6 +63,8 @@ namespace StarsectorTools.Windows.MainWindow
                 Environment.Exit(-1);
                 return;
             }
+            // 注册主窗口模糊效果触发器
+            ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
             // 初始化页面
             InitializePage();
             //设置启动页

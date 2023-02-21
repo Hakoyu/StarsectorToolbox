@@ -37,6 +37,7 @@ namespace HKW.WPF.Attach
                 element.InputBindings.Clear();
                 element.InputBindings.AddRange((InputBindingCollection)e.NewValue);
             }));
+
         /// <summary>
         /// 获取输入绑定
         /// </summary>

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using I18nRes = StarsectorTools.Langs.Pages.Info.InfoPageI18nRes;
-using HKW.ViewModels;
 using CommunityToolkit.Mvvm.Input;
-using System.Text.RegularExpressions;
 using HKW.Libs.Log4Cs;
-using System.Net.Http;
+using HKW.ViewModels;
 using StarsectorTools.Libs.Utils;
+using I18nRes = StarsectorTools.Langs.Pages.Info.InfoPageI18nRes;
 
 namespace StarsectorTools.Pages.Info
 {
@@ -24,7 +20,6 @@ namespace StarsectorTools.Pages.Info
 
         public InfoPageViewModel()
         {
-
         }
 
         [RelayCommand]

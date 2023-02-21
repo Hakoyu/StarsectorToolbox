@@ -1868,6 +1868,7 @@ namespace HKW.Libs.TomlParse
                 throw ex;
             }
         }
+
         public static TomlTable Parse(string path)
         {
             try

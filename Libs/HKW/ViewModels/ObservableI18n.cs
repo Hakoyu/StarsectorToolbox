@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace HKW.ViewModels
 {
@@ -94,6 +91,7 @@ namespace HKW.ViewModels
         /// 本地化资源实例集合
         /// </summary>
         protected static Dictionary<string, object> ObservableI18nTSet => _observableI18nTSet;
+
         private static string _language = CultureInfo.CurrentCulture.Name;
 
         /// <summary>

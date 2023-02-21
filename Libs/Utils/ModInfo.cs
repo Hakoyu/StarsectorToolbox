@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
-using System.IO;
-using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
+using HKW.Libs.Log4Cs;
 using static HKW.Extension.SetExtension;
+using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorTools.Libs.Utils
 {
@@ -37,8 +37,10 @@ namespace StarsectorTools.Libs.Utils
         public string ModPlugin { get; private set; } = null!;
 
         private HashSet<ModInfo>? dependencies;
+
         /// <summary>前置模组</summary>
         public ReadOnlySet<ModInfo>? Dependencies { get; private set; }
+
         /// <summary>模组文件夹</summary>
         public string ModDirectory { get; private set; } = null!;
 
@@ -56,6 +58,7 @@ namespace StarsectorTools.Libs.Utils
             foreach (var kv in jsonNode.AsObject())
                 SetData(kv);
         }
+
         /// <summary>
         /// 解析 <see langword="mod_info.json"/> 并生成模组信息
         /// </summary>
@@ -71,7 +74,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.ModInfoError, ex);
+                Logger.Record(I18n.ModInfoError, ex);
                 return null;
             }
         }
@@ -90,7 +93,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                STLog.WriteLine(I18n.ModInfoError, ex);
+                Logger.Record(I18n.ModInfoError, ex);
                 return null;
             }
         }
@@ -147,6 +150,7 @@ namespace StarsectorTools.Libs.Utils
                     break;
             }
         }
+
         /// <summary>
         /// 转为字符串
         /// </summary>

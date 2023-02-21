@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Dialog;
+using HKW.ViewModels.Dialogs;
 using Microsoft.Win32;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
@@ -21,6 +17,7 @@ namespace StarsectorTools.Pages.GameSettings
             public string data;
             public string xmsx;
         }
+
         private VmparamsData vmparamsData = new();
 
         private void GetVmparamsData()
@@ -29,6 +26,7 @@ namespace StarsectorTools.Pages.GameSettings
             vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
             GameMemory = vmparamsData.xmsx;
         }
+
         private void GetGameKey()
         {
             var key = Registry.CurrentUser.OpenSubKey("Software\\JavaSoft\\Prefs\\com\\fs\\starfarer");
@@ -42,6 +40,7 @@ namespace StarsectorTools.Pages.GameSettings
                 }
             }
         }
+
         private void GetMissionsLoadouts()
         {
             string dirParh = $"{GameInfo.SaveDirectory}\\missions";
@@ -57,6 +56,7 @@ namespace StarsectorTools.Pages.GameSettings
                 });
             }
         }
+
         private int? CheckMemorySize(int size)
         {
             if (size < 1024)
@@ -71,6 +71,7 @@ namespace StarsectorTools.Pages.GameSettings
             }
             return null;
         }
+
         private void GetCustomResolution()
         {
             try

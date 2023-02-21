@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace HKW.ViewModels.Controls
@@ -16,9 +11,11 @@ namespace HKW.ViewModels.Controls
     {
         [ObservableProperty]
         private bool isSelected = false;
+
         /// <summary>
         /// 初始化
         /// </summary>
-        public ComboBoxItemVM() { }
+        public ComboBoxItemVM()
+        { }
     }
 }

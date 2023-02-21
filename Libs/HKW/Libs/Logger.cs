@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace HKW.Libs.Log4Cs
 {
@@ -25,6 +23,7 @@ namespace HKW.Libs.Log4Cs
         /// <summary>错误</summary>
         ERROR
     }
+
     /// <summary>
     /// 记录器
     /// </summary>
@@ -54,38 +53,47 @@ namespace HKW.Libs.Log4Cs
             /// 默认日志等级
             /// </summary>
             public LogLevel DefaultLevel { get; set; } = LogLevel.INFO;
+
             /// <summary>
             /// 默认附加
             /// </summary>
             public bool DefaultAppend { get; set; } = false;
+
             /// <summary>
             /// 默认过滤异常
             /// </summary>
             public bool DefaultFilterException { get; set; } = false;
+
             /// <summary>
             /// 默认显示方法名
             /// </summary>
             public bool DefaultShowMethod { get; set; } = true;
+
             /// <summary>
             /// 默认显示类名
             /// </summary>
             public bool DefaultShowClass { get; set; } = true;
+
             /// <summary>
             /// 默认显示命名空间
             /// </summary>
             public bool DefaultShowNameSpace { get; set; } = false;
+
             /// <summary>
             /// 默认显示线程Id
             /// </summary>
             public bool DefaultShowThreadId { get; set; } = false;
+
             /// <summary>
             /// 默认显示时间
             /// </summary>
             public bool DefaultShowTime { get; set; } = false;
+
             /// <summary>
             /// 默认显示日期
             /// </summary>
             public bool DefaultShowDate { get; set; } = false;
+
             /// <summary>
             /// 异常过滤器
             /// </summary>
@@ -98,7 +106,8 @@ namespace HKW.Libs.Log4Cs
             };
         }
 
-        private Logger() { }
+        private Logger()
+        { }
 
         /// <summary>
         /// 初始化
@@ -273,6 +282,7 @@ namespace HKW.Libs.Log4Cs
                 strs.Add(strMethod);
             return string.Join(".", strs);
         }
+
         /// <summary>
         /// 获取线程Id
         /// </summary>
@@ -281,6 +291,7 @@ namespace HKW.Libs.Log4Cs
         {
             return Options.DefaultShowThreadId ? Thread.CurrentThread.ManagedThreadId.ToString() : string.Empty;
         }
+
         /// <summary>
         /// 根据默认值获取日期时间
         /// </summary>

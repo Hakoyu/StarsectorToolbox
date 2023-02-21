@@ -1,8 +1,4 @@
-﻿using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using StarsectorTools.Libs.Utils;
+﻿using System.Windows.Controls;
 
 namespace StarsectorTools.Pages.Info
 {

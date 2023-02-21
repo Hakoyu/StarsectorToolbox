@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Controls;
+﻿using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -15,6 +12,7 @@ namespace HKW.ViewModels.Controls
     {
         [ObservableProperty]
         private object? icon;
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -23,6 +21,7 @@ namespace HKW.ViewModels.Controls
         {
             CommandEvent += handler;
         }
+
         [RelayCommand]
         private void MenuItem(object parameter) => CommandEvent?.Invoke(parameter);
 
@@ -31,6 +30,7 @@ namespace HKW.ViewModels.Controls
         /// </summary>
         /// <param name="parameter">参数</param>
         public delegate void CommandHandler(object parameter);
+
         /// <summary>
         /// 事件
         /// </summary>
