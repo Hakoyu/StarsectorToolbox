@@ -14,7 +14,7 @@ using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using StarsectorTools.Windows.MainWindow;
+using StarsectorTools.ViewModels.MainWindow;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorTools.Libs.Utils
