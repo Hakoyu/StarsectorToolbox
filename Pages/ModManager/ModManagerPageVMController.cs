@@ -7,7 +7,6 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.Extension;
 using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
@@ -46,66 +45,24 @@ namespace StarsectorTools.Pages.ModManager
         /// <summary>提醒保存配置的动画线程</summary>
         private Thread remindSaveThread = null!;
 
-        /// <summary>模组显示信息</summary>
-        internal partial class ModShowInfo : ObservableObject
-        {
-            /// <summary>ID</summary>
-            public string Id { get; set; } = null!;
-
-            /// <summary>名称</summary>
-            public string Name { get; set; } = null!;
-
-            /// <summary>作者</summary>
-            public string Author { get; set; } = null!;
-
-            /// <summary>是否启用</summary>
-            [ObservableProperty]
-            private bool isEnabled = false;
-
-            /// <summary>收藏状态</summary>
-            [ObservableProperty]
-            private bool isCollected = false;
-
-            /// <summary>模组版本</summary>
-            public string Version { get; set; } = null!;
-
-            /// <summary>模组支持的游戏版本</summary>
-            public string GameVersion { get; set; } = null!;
-
-            /// <summary>模组支持的游戏版本是否与当前游戏版本一至</summary>
-            public bool IsSameToGameVersion { get; set; } = false;
-
-            /// <summary>是否为功能性模组</summary>
-            public bool IsUtility { get; set; } = false;
-
-            /// <summary>图标资源</summary>
-            public BitmapImage? ImageSource { get; set; } = null!;
-
-            /// <summary>前置模组</summary>
-            [ObservableProperty]
-            private string? dependencies;
-
-            /// <summary>前置模组列表</summary>
-            public HashSet<string>? DependenciesSet { get; set; }
-
-            /// <summary>展开启用前置的按钮</summary>
-            [ObservableProperty]
-            private bool missDependencies;
-
-            /// <summary>用户描述</summary>
-            [ObservableProperty]
-            private string userDescription = string.Empty;
-
-            /// <summary>右键菜单</summary>
-            [ObservableProperty]
-            private ContextMenuVM contextMenu = null!;
-        }
-
         /// <summary>已启用的模组ID</summary>
         private HashSet<string> allEnabledModsId = new();
 
         /// <summary>已收藏的模组ID</summary>
         private HashSet<string> allCollectedModsId = new();
+
+        internal class IntegrationGroup
+        {
+            public string GroupName { get; set; }
+            public ListBoxItemVM ListBoxItem { get; set; }
+            public HashSet<ModShowInfo> ModShowInfos { get; set; }
+        }
+
+
+        internal class IntegrationModInfo
+        {
+
+        }
 
         /// <summary>
         /// <para>全部分组列表项</para>
@@ -540,21 +497,11 @@ namespace StarsectorTools.Pages.ModManager
 
         private ModShowInfo CreateModShowInfo(ModInfo info)
         {
-            return new ModShowInfo()
+            return new ModShowInfo(info)
             {
                 IsCollected = allCollectedModsId.Contains(info.Id),
                 IsEnabled = allEnabledModsId.Contains(info.Id),
-                IsUtility = info.IsUtility,
-                Name = info.Name,
-                Id = info.Id,
-                Author = info.Author.Trim(),
-                Version = info.Version,
-                GameVersion = info.GameVersion,
-                IsSameToGameVersion = info.GameVersion == GameInfo.Version,
                 MissDependencies = false,
-                DependenciesSet = info.Dependencies is not null
-                    ? new(info.Dependencies.Select(i => i.Id))
-                    : null!,
                 ImageSource = GetImage($"{info.ModDirectory}\\icon.ico"),
             };
             BitmapImage? GetImage(string filePath)
@@ -820,14 +767,14 @@ namespace StarsectorTools.Pages.ModManager
             {
                 if (showInfo.DependenciesSet != null)
                 {
-                    showInfo.Dependencies = string.Join(
+                    showInfo.MissDependenciesMessage = string.Join(
                         " , ",
-                        showInfo.DependenciesSet.Where(s => !allEnabledModsId.Contains(s))
+                        showInfo.DependenciesSet.Where(s => !allEnabledModsId.Contains(s.Id))
                     );
-                    if (showInfo.Dependencies.Length > 0)
+                    if (showInfo.DependenciesSet.Any())
                     {
                         Logger.Record(
-                            $"{showInfo.Id} {I18nRes.NotEnableDependencies} {showInfo.Dependencies}"
+                            $"{showInfo.Id} {I18nRes.NotEnableDependencies} {showInfo.DependenciesSet}"
                         );
                         showInfo.MissDependencies = true;
                     }
@@ -983,11 +930,11 @@ namespace StarsectorTools.Pages.ModManager
             ModDetailGameVersion = showInfo.GameVersion;
             ModDetailPath = info.ModDirectory;
             ModDetailAuthor = showInfo.Author;
-            if (info.Dependencies is not null)
+            if (info.DependenciesSet is not null)
             {
                 ModDetailDependencies = string.Join(
                     "\n",
-                    info.Dependencies.Select(
+                    info.DependenciesSet.Select(
                         i =>
                             $"{I18nRes.Name}: {i.Name} ID: {i.Id} "
                             + (i.Version is not null ? $"{I18nRes.Version} {i.Version}" : "")

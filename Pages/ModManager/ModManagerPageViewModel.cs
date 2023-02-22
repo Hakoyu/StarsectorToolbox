@@ -283,8 +283,8 @@ namespace StarsectorTools.Pages.ModManager
             string err = null!;
             foreach (var dependencie in nowSelectedMod.DependenciesSet!)
             {
-                if (allModInfos.ContainsKey(dependencie))
-                    ChangeModEnabled(dependencie, true);
+                if (allModInfos.ContainsKey(dependencie.Id))
+                    ChangeModEnabled(dependencie.Id, true);
                 else
                 {
                     err ??= $"{I18nRes.NotFoundDependencies}\n";

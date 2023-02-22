@@ -30,7 +30,7 @@ namespace HKW.ViewModels.Controls
         [RelayCommand]
         private void SelectionChanged(TItem item) => SelectionChangedEvent?.Invoke(item);
 
-        private partial void OnSelectedIndexChanged(int value)
+        partial void OnSelectedIndexChanged(int value)
         {
             if (value < 0)
                 SelectedItem = default;
@@ -39,7 +39,7 @@ namespace HKW.ViewModels.Controls
             SelectionChangedCommand.Execute(SelectedItem);
         }
 
-        private partial void OnSelectedItemChanged(TItem? value)
+        partial void OnSelectedItemChanged(TItem? value)
         {
             if (value is null)
                 return;

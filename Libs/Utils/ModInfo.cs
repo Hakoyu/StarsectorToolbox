@@ -1,48 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.Libs.Log4Cs;
+using StarsectorTools.Libs.GameInfo;
 using static HKW.Extension.SetExtension;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorTools.Libs.Utils
 {
     /// <summary>模组信息</summary>
-    public class ModInfo
+    [DebuggerDisplay("{Name},Version = {Version}")]
+    public class ModInfo : IModInfo
     {
-        /// <summary>ID</summary>
+        /// <inheritdoc/>
         public string Id { get; private set; } = null!;
 
-        /// <summary>名称</summary>
+        /// <inheritdoc/>
         public string Name { get; private set; } = null!;
 
-        /// <summary>作者</summary>
+        /// <inheritdoc/>
         public string Author { get; private set; } = null!;
 
-        /// <summary>版本</summary>
+        /// <inheritdoc/>
         public string Version { get; private set; } = null!;
 
-        /// <summary>是否为功能性模组</summary>
+        /// <inheritdoc/>
         public bool IsUtility { get; private set; } = false;
 
-        /// <summary>描述</summary>
+        /// <inheritdoc/>
         public string Description { get; private set; } = null!;
 
-        /// <summary>支持的游戏版本</summary>
+        /// <inheritdoc/>
         public string GameVersion { get; private set; } = null!;
 
-        /// <summary>模组信息</summary>
+        /// <inheritdoc/>
         public string ModPlugin { get; private set; } = null!;
 
-        private HashSet<ModInfo>? dependencies;
-
-        /// <summary>前置模组</summary>
-        public ReadOnlySet<ModInfo>? Dependencies { get; private set; }
-
-        /// <summary>模组文件夹</summary>
+        /// <inheritdoc/>
         public string ModDirectory { get; private set; } = null!;
+
+        /// <inheritdoc/>
+        public IReadOnlySet<ModInfo>? DependenciesSet { get; private set; } = null!;
+
+        /// <inheritdoc/>
+        public bool IsSameToGameVersion => GameVersion == GameInfo.GameInfo.Version;
 
         /// <summary>
         /// 从json数据中解析模组信息,可设置路径
@@ -140,13 +144,11 @@ namespace StarsectorTools.Libs.Utils
                     break;
 
                 case "dependencies":
-                    dependencies ??= new();
+                    HashSet<ModInfo> dependenciesSet = new();
                     foreach (var mod in kv.Value!.AsArray())
-                        dependencies.Add(new(mod!.AsObject()));
-                    if (dependencies.Count == 0)
-                        dependencies = null;
-                    else
-                        Dependencies = new(dependencies);
+                        dependenciesSet.Add(new(mod!.AsObject()));
+                    if (dependenciesSet.Any())
+                        DependenciesSet = dependenciesSet;
                     break;
             }
         }
