@@ -256,4 +256,8 @@
   <data name="Hide" xml:space="preserve">
     <value>Hide</value>
   </data>
+  <data name="GameSettingsDescription" xml:space="preserve">
+    <value>For setting up the game
+Can modify the game memory, clean up archives and campaign outfits, etc</value>
+  </data>
 </root>

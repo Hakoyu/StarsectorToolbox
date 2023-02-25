@@ -259,6 +259,16 @@ namespace StarsectorTools.Langs.Pages.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 用于对游戏进行设置
+        ///能修改游戏内存,清理存档和战役配装等 的本地化字符串。
+        /// </summary>
+        public static string GameSettingsDescription {
+            get {
+                return ResourceManager.GetString("GameSettingsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏版本 的本地化字符串。
         /// </summary>
         public static string GameVersion {

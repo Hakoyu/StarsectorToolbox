@@ -1,28 +1,27 @@
-﻿namespace StarsectorTools.Views.ModManagerPage
+﻿using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
+
+namespace StarsectorTools.Views.ModManagerPage
 {
     public partial class ModManagerPage
     {
         public void Save()
         {
+            ViewModel.Save();
         }
 
         public void Close()
         {
+
         }
 
         public string GetNameI18n()
         {
-            return "";
+            return I18nRes.ModManager;
         }
 
         public string GetDescriptionI18n()
         {
-            return "";
-        }
-
-        private void ClearDataGridSelected()
-        {
-            DataGrid_ModsShowList.UnselectAll();
+            return I18nRes.ModManagerDescription;
         }
     }
 }

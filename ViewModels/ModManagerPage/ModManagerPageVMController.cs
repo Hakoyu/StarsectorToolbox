@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -36,33 +37,15 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private const string strName = "Name";
         private const string strAuthor = "Author";
 
-        public bool NeedSave { get; private set; } = false;
-
         /// <summary>记录了模组类型的嵌入资源链接</summary>
         private static readonly Uri modTypeGroupUri =
             new("/Resources/ModTypeGroup.toml", UriKind.Relative);
-
-        /// <summary>提醒保存配置的动画线程</summary>
-        private Thread remindSaveThread = null!;
 
         /// <summary>已启用的模组ID</summary>
         private HashSet<string> allEnabledModsId = new();
 
         /// <summary>已收藏的模组ID</summary>
         private HashSet<string> allCollectedModsId = new();
-
-        internal class IntegrationGroup
-        {
-            public string GroupName { get; set; }
-            public ListBoxItemVM ListBoxItem { get; set; }
-            public HashSet<ModShowInfo> ModShowInfos { get; set; }
-        }
-
-
-        internal class IntegrationModInfo
-        {
-
-        }
 
         /// <summary>
         /// <para>全部分组列表项</para>
@@ -126,7 +109,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         /// </summary>
         private void InitializeData()
         {
-            remindSaveThread = new(RemindSave);
             ModsInfo.AllModsInfo = new(allModInfos);
             ModsInfo.AllEnabledModsId = new(allEnabledModsId);
             ModsInfo.AllCollectedModsId = new(allCollectedModsId);
@@ -144,7 +126,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             CheckUserData();
             RefreshModsContextMenu();
             RefreshGroupModCount();
-            ResetRemindSaveThread();
             GC.Collect();
         }
 
@@ -608,7 +589,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                                 RefreshGroupModCount();
                                 CloseModDetails();
                                 Utils.DeleteDirToRecycleBin(path);
-                                StartRemindSaveThread();
+                                IsRemindSave = true;
                             }
                         };
                         list.Add(menuItem);
@@ -683,7 +664,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (conut != nowSelectedMods.Count)
                 CloseModDetails();
             CheckRefreshGroupAndMods(group);
-            StartRemindSaveThread();
+            IsRemindSave = true;
         }
 
         private void ChangeModInUserGroup(string group, string id, bool isInGroup)
@@ -723,7 +704,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 CloseModDetails();
             CheckRefreshGroupAndMods(nameof(ModTypeGroup.Enabled));
             CheckEnabledModsDependencies();
-            StartRemindSaveThread();
+            IsRemindSave = true;
         }
 
         private void ClearAllEnabledMods()
@@ -797,7 +778,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (conut != nowSelectedMods.Count)
                 CloseModDetails();
             CheckRefreshGroupAndMods(nameof(ModTypeGroup.Collected));
-            StartRemindSaveThread();
+            IsRemindSave = true;
         }
 
         private void ChangeModCollected(string id, bool? collected = null)
@@ -820,7 +801,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 LogLevel.DEBUG
             );
         }
-
         private void SaveAllData()
         {
             SaveEnabledMods(GameInfo.EnabledModsJsonFile);
@@ -1004,7 +984,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         RemoveMod(newModInfo.Id);
                         AddMod(newModInfo);
                         RefreshGroupModCount();
-                        StartRemindSaveThread();
+                        IsRemindSave = true;
                         Logger.Record(
                             $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
                         );
@@ -1019,7 +999,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         RemoveMod(newModInfo.Id);
                         AddMod(newModInfo);
                         RefreshGroupModCount();
-                        StartRemindSaveThread();
+                        IsRemindSave = true;
                         Logger.Record(
                             $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
                         );
@@ -1121,11 +1101,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             Logger.Record($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}", LogLevel.DEBUG);
         }
 
-        private void ClearDataGridSelected()
-        {
-            //NowShowModes;
-        }
-
         internal bool TryAddUserGroup(string icon, string name)
         {
             if (!string.IsNullOrWhiteSpace(name) && !allUserGroups.ContainsKey(name))
@@ -1177,7 +1152,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             ComboBox_ExportUserGroup.Add(new() { Content = name, Tag = name });
             RefreshGroupModCount();
             RefreshModsContextMenu();
-            StartRemindSaveThread();
+            IsRemindSave = true;
             Logger.Record($"{I18nRes.AddUserGroup} {icon} {name}");
         }
 
@@ -1201,7 +1176,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             allListBoxItems.Remove(name);
             allModShowInfoGroups.Remove(name);
             RefreshModsContextMenu();
-            StartRemindSaveThread();
+            IsRemindSave = true;
             // 删除导出用户分组下拉列表的此分组选择
             if (ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString() == name)
             {
@@ -1212,8 +1187,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void RenameUserGroup(ListBoxItemVM listBoxItem)
         {
-            string icon = listBoxItem.Icon.ToString()!;
-            string name = listBoxItem.ToolTip.ToString()!;
+            string icon = listBoxItem.Icon!.ToString()!;
+            string name = listBoxItem.ToolTip!.ToString()!;
             // TODO: 使用了window 需移至外部
             Views.ModManagerPage.AddUserGroupWindow window = new();
             window.TextBox_Icon.Text = icon;
@@ -1257,7 +1232,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     SetListBoxItemData(ref listBoxItem, _name);
                     RefreshGroupModCount();
                     RefreshModsContextMenu();
-                    StartRemindSaveThread();
+                    IsRemindSave = true;
                 }
                 else
                     MessageBoxVM.Show(new(I18nRes.UserGroupNamingFailed));
@@ -1271,31 +1246,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             item.Content = name;
             item.ToolTip = name;
             item.Tag = name;
-        }
-
-        [MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
-        private async void RemindSave()
-        {
-            while (remindSaveThread.ThreadState is not ThreadState.Unstarted)
-            {
-                IsRemindSave = true;
-                await Task.Delay(1000);
-                IsRemindSave = false;
-                await Task.Delay(1000);
-            }
-        }
-
-        private void StartRemindSaveThread()
-        {
-            if (remindSaveThread.ThreadState is ThreadState.Unstarted)
-                remindSaveThread.Start();
-        }
-
-        private void ResetRemindSaveThread()
-        {
-            if (remindSaveThread.ThreadState is not ThreadState.Unstarted)
-                remindSaveThread.Join(1);
-            remindSaveThread = new(RemindSave);
         }
     }
 }

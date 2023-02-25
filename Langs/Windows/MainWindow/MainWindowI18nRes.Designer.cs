@@ -224,25 +224,6 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 游戏设置 的本地化字符串。
-        /// </summary>
-        public static string GameSettings {
-            get {
-                return ResourceManager.GetString("GameSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 用于对游戏进行设置
-        ///能修改游戏内存,清理存档和战役配装等 的本地化字符串。
-        /// </summary>
-        public static string GameSettingsToolTip {
-            get {
-                return ResourceManager.GetString("GameSettingsToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 全局异常 的本地化字符串。
         /// </summary>
         public static string GlobalException {
@@ -315,25 +296,6 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string InitializationError {
             get {
                 return ResourceManager.GetString("InitializationError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 模组管理器 的本地化字符串。
-        /// </summary>
-        public static string ModManager {
-            get {
-                return ResourceManager.GetString("ModManager", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 用于浏览并管理游戏模组
-        ///有启用禁用,收藏,设置用户分组等功能 的本地化字符串。
-        /// </summary>
-        public static string ModManagerToolTip {
-            get {
-                return ResourceManager.GetString("ModManagerToolTip", resourceCulture);
             }
         }
         

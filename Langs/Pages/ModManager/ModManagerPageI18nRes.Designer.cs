@@ -822,6 +822,16 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 用于浏览并管理游戏模组
+        ///有启用禁用,收藏,设置用户分组等功能 的本地化字符串。
+        /// </summary>
+        public static string ModManagerDescription {
+            get {
+                return ResourceManager.GetString("ModManagerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 模组显示信息设置成功 的本地化字符串。
         /// </summary>
         public static string ModShowInfoSetSuccess {

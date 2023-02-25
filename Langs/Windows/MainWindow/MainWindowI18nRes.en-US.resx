@@ -125,12 +125,6 @@ Please select the game launcher</value>
   <data name="AddPage" xml:space="preserve">
     <value>Add page</value>
   </data>
-  <data name="ModManager" xml:space="preserve">
-    <value>ModManager</value>
-  </data>
-  <data name="GameSettings" xml:space="preserve">
-    <value>GameSettings</value>
-  </data>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
   </data>
@@ -156,14 +150,6 @@ It may affect the normal operation of the software, it is recommended to check t
   </data>
   <data name="RefreshExtensionList" xml:space="preserve">
     <value>Refresh extension list</value>
-  </data>
-  <data name="ModManagerToolTip" xml:space="preserve">
-    <value>For browsing and managing game mod
-There are functions to enable and disable, favorite, set user groups, etc</value>
-  </data>
-  <data name="GameSettingsToolTip" xml:space="preserve">
-    <value>For setting up the game
-Can modify the game memory, clean up archives and campaign outfits, etc</value>
   </data>
   <data name="ExtensionLoadError" xml:space="preserve">
     <value>Extension load error</value>

@@ -15,7 +15,7 @@ namespace StarsectorTools.Views.ModManagerPage
     /// </summary>
     public partial class ModManagerPage : Page, ISTPage
     {
-        public bool NeedSave => ViewModel.NeedSave;
+        public bool NeedSave => ViewModel.IsRemindSave;
 
         internal ModManagerPageViewModel ViewModel => (ModManagerPageViewModel)DataContext;
 
@@ -50,7 +50,7 @@ namespace StarsectorTools.Views.ModManagerPage
         private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
         {
             if (sender is DataGrid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
-                ClearDataGridSelected();
+                DataGrid_ModsShowList.UnselectAll();
         }
 
         private async void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)

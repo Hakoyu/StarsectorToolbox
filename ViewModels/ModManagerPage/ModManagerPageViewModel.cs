@@ -298,7 +298,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
             CheckEnabledModsDependencies();
             RefreshGroupModCount();
-            StartRemindSaveThread();
+            IsRemindSave = true;
         }
 
         [RelayCommand]
@@ -308,10 +308,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         }
 
         [RelayCommand]
-        private void Save()
+        internal void Save()
         {
             SaveAllData();
-            ResetRemindSaveThread();
+            IsRemindSave = false;
         }
 
         [RelayCommand]
@@ -379,7 +379,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 GetUserGroup(fileName);
                 RefreshModsContextMenu();
                 RefreshGroupModCount();
-                StartRemindSaveThread();
+                IsRemindSave = true;
             }
         }
 

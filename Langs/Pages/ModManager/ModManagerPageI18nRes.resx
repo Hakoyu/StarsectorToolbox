@@ -534,4 +534,8 @@
   <data name="ListEmpty" xml:space="preserve">
     <value>列表为空</value>
   </data>
+  <data name="ModManagerDescription" xml:space="preserve">
+    <value>用于浏览并管理游戏模组
+有启用禁用,收藏,设置用户分组等功能</value>
+  </data>
 </root>

@@ -534,4 +534,8 @@ Cannot be removed midway</value>
   <data name="ListEmpty" xml:space="preserve">
     <value>List empty</value>
   </data>
+  <data name="ModManagerDescription" xml:space="preserve">
+    <value>For browsing and managing game mod
+There are functions to enable and disable, favorite, set user groups, etc</value>
+  </data>
 </root>
