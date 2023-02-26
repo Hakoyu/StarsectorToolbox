@@ -29,8 +29,6 @@ namespace StarsectorTools.Views.MainWindow
             // MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
             // 亚克力背景
             // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-            // 注册日志
-            Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
 
             // 全局异常捕获
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
@@ -47,8 +45,6 @@ namespace StarsectorTools.Views.MainWindow
             // 初始化ViewModel
             try
             {
-                //using StreamReader sr =
-                //    new(Application.GetResourceStream(resourcesConfigUri).Stream);
                 DataContext = new MainWindowViewModel(true);
             }
             catch (Exception ex)
@@ -119,8 +115,7 @@ namespace StarsectorTools.Views.MainWindow
         //最小化
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
-            //WindowState = WindowState.Minimized;
-            MessageBoxVM.Show(new("114514"));
+            WindowState = WindowState.Minimized;
         }
 
         //最大化

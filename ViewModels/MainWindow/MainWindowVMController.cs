@@ -11,6 +11,7 @@ using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
+using StarsectorTools.Resources;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.ViewModels.MainWindow
@@ -34,6 +35,14 @@ namespace StarsectorTools.ViewModels.MainWindow
             CloseAllPages();
         }
 
+        private void InitializeDirectories()
+        {
+            if (!Directory.Exists(ST.CoreDirectory))
+                Directory.CreateDirectory(ST.CoreDirectory);
+            if (!Directory.Exists(ST.ExtensionDirectories))
+                Directory.CreateDirectory(ST.ExtensionDirectories);
+        }
+        #region PageItem
         internal void AddMainPageItem(ListBoxItemVM vm)
         {
             DetectPageItemData(ref vm);
@@ -96,7 +105,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                 return null;
             }
         }
-
+        #endregion
+        #region CheckGameStartOption
         private void CheckGameStartOption()
         {
             if (clearGameLogOnStart)
@@ -110,119 +120,52 @@ namespace StarsectorTools.ViewModels.MainWindow
             File.Create(GameInfo.LogFile).Close();
             Logger.Record(I18nRes.GameLogCleanupCompleted);
         }
-
-        private void InitializeDirectories()
+        #endregion
+        #region ExtensionPage
+        private void InitializeExtensionPages()
         {
-            if (!Directory.Exists(ST.CoreDirectory))
-                Directory.CreateDirectory(ST.CoreDirectory);
-            if (!Directory.Exists(ST.ExtensionDirectories))
-                Directory.CreateDirectory(ST.ExtensionDirectories);
-        }
-
-        private bool SetConfig(string originalConfigData)
-        {
-            try
+            DirectoryInfo dirs = new(ST.ExtensionDirectories);
+            foreach (var dir in dirs.GetDirectories())
             {
-                if (Utils.FileExists(ST.ConfigTomlFile, false))
+                if (GetExtensionInfo(dir.FullName) is ExtensionInfo extensionInfo)
                 {
-                    // 读取设置
-                    var toml = TOML.Parse(ST.ConfigTomlFile);
-                    // 语言
-                    var cultureInfo = CultureInfo.GetCultureInfo(toml["Lang"].AsString);
-                    ObservableI18n.Language = cultureInfo.Name;
-                    // 日志等级
-                    Logger.Options.DefaultLevel = Logger.LogLevelConverter(
-                        toml["LogLevel"].AsString
-                    );
-                    // 游戏目录
-                    if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
-                    {
-                        if (
-                            (
-                                MessageBoxVM.Show(
-                                    new(I18nRes.GameNotFound_SelectAgain)
-                                    {
-                                        Button = MessageBoxVM.Button.YesNo,
-                                        Icon = MessageBoxVM.Icon.Question,
-                                    }
-                                ) is MessageBoxVM.Result.Yes
-                                && GameInfo.GetGameDirectory()
-                            ) is false
-                        )
+                    var page = extensionInfo.ExtensionPage;
+                    ListBox_ExtensionMenu.Add(
+                        new()
                         {
-                            MessageBoxVM.Show(
-                                new(I18nRes.GameNotFound_SoftwareExit)
-                                {
-                                    Icon = MessageBoxVM.Icon.Error
-                                }
-                            );
-                            return false;
+                            Id = extensionInfo.Id,
+                            Icon = extensionInfo.Icon,
+                            Content = extensionInfo.Name,
+                            ToolTip =
+                                $"Author: {extensionInfo.Author}\nDescription: {extensionInfo.Description}",
+                            Tag = page
                         }
-                        toml["Game"]["Path"] = GameInfo.BaseDirectory;
-                    }
-                    // 拓展调试目录
-                    string debugPath = toml["Extension"]["DebugPath"].AsString;
-                    if (
-                        !string.IsNullOrWhiteSpace(debugPath)
-                        && GetExtensionInfo(debugPath, true) is ExtensionInfo info
-                    )
-                    {
-                        deubgItemExtensionInfo = info;
-                        deubgItemPath = debugPath;
-                    }
-                    else
-                        toml["Extension"]["DebugPath"] = "";
-                    ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
-                    toml.SaveTo(ST.ConfigTomlFile);
-                }
-                else
-                {
-                    if (
-                        !(
-                            MessageBoxVM.Show(
-                                new(I18nRes.FirstStart)
-                                {
-                                    Button = MessageBoxVM.Button.YesNo,
-                                    Icon = MessageBoxVM.Icon.Question,
-                                }
-                            ) is MessageBoxVM.Result.Yes
-                            && GameInfo.GetGameDirectory()
-                        )
-                    )
-                    {
-                        MessageBoxVM.Show(
-                            new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
-                        );
-                        return false;
-                    }
-                    CreateConfigFile(originalConfigData);
-                    var toml = TOML.Parse(ST.ConfigTomlFile);
-                    toml["Game"]["Path"] = GameInfo.BaseDirectory;
-                    toml["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-                    toml.SaveTo(ST.ConfigTomlFile);
+                    );
                 }
             }
-            catch (Exception ex)
-            {
-                Logger.Record($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.ConfigTomlFile}", ex);
-                MessageBoxVM.Show(
-                    new($"{I18nRes.ConfigFileError}\n{I18nRes.Path}: {ST.ConfigTomlFile}")
-                    {
-                        Icon = MessageBoxVM.Icon.Error,
-                    }
-                );
-                CreateConfigFile(originalConfigData);
-            }
-            return true;
         }
 
-        /// <summary>
-        /// 创建配置文件
-        /// </summary>
-        private void CreateConfigFile(string configData)
+        private void InitializeExtensionDebugPage()
         {
-            File.WriteAllText(ST.ConfigTomlFile, configData);
-            Logger.Record($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}");
+            // 添加拓展调试页面
+            if (deubgItemExtensionInfo is not null)
+            {
+                deubgItem = new()
+                {
+                    Icon = deubgItemExtensionInfo.Icon,
+                    Tag = deubgItemExtensionInfo.ExtensionPage,
+                };
+                AddMainPageItem(deubgItem);
+            }
+        }
+
+        internal void RefreshExtensionDebugPage(string path)
+        {
+            var isSelected = ListBox_MainMenu.SelectedItem == deubgItem;
+            ListBox_MainMenu.Remove(deubgItem!);
+            InitializeExtensionDebugPage();
+            if (isSelected)
+                ListBox_MainMenu.SelectedItem = deubgItem;
         }
 
         private ExtensionInfo? GetExtensionInfo(string path, bool loadInMemory = false)
@@ -341,82 +284,149 @@ namespace StarsectorTools.ViewModels.MainWindow
                 return null;
             }
         }
-
-        internal void ChangeLanguage(bool changePages = false)
+        #endregion
+        #region InitializeConfig
+        private void InitializeConfig()
         {
-            Logger.Record($"{I18nRes.DisplayLanguageIs} {Thread.CurrentThread.CurrentUICulture.Name}");
-            //if (changePages)
-            //    ChangeLanguageToAllPages();
+            try
+            {
+                if (Utils.FileExists(ST.ConfigTomlFile, false))
+                    GetConfig();
+                else
+                    CreateConfig();
+            }
+            catch (Exception ex)
+            {
+                Logger.Record($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.ConfigTomlFile}", ex);
+                MessageBoxVM.Show(
+                    new($"{I18nRes.ConfigFileError}\n{I18nRes.Path}: {ST.ConfigTomlFile}")
+                    {
+                        Icon = MessageBoxVM.Icon.Error,
+                    }
+                );
+                CreateConfigFile();
+            }
+        }
+
+        private void GetConfig()
+        {
+            // 读取设置
             var toml = TOML.Parse(ST.ConfigTomlFile);
-            toml["Extras"]["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
+            // 语言
+            var cultureInfo = CultureInfo.GetCultureInfo(toml["Lang"].AsString);
+            ObservableI18n.Language = cultureInfo.Name;
+            // 日志等级
+            Logger.Options.DefaultLevel = Logger.LogLevelConverter(toml["LogLevel"].AsString);
+            // 游戏目录
+            if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
+            {
+                if (
+                    (
+                        MessageBoxVM.Show(
+                            new(I18nRes.GameNotFound_SelectAgain)
+                            {
+                                Button = MessageBoxVM.Button.YesNo,
+                                Icon = MessageBoxVM.Icon.Question,
+                            }
+                        ) is MessageBoxVM.Result.Yes
+                        && GameInfo.GetGameDirectory()
+                    )
+                    is false
+                )
+                {
+                    MessageBoxVM.Show(
+                        new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
+                    );
+                    return;
+                }
+                toml["Game"]["Path"] = GameInfo.BaseDirectory;
+            }
+            // 拓展调试目录
+            string debugPath = toml["Extension"]["DebugPath"].AsString;
+            if (
+                !string.IsNullOrWhiteSpace(debugPath)
+                && GetExtensionInfo(debugPath, true) is ExtensionInfo info
+            )
+            {
+                deubgItemExtensionInfo = info;
+                deubgItemPath = debugPath;
+            }
+            else
+                toml["Extension"]["DebugPath"] = "";
+            ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
             toml.SaveTo(ST.ConfigTomlFile);
         }
 
-        private void InitializeExtensionPages()
+        private void CreateConfig()
         {
-            DirectoryInfo dirs = new(ST.ExtensionDirectories);
-            foreach (var dir in dirs.GetDirectories())
-            {
-                if (GetExtensionInfo(dir.FullName) is ExtensionInfo extensionInfo)
-                {
-                    var page = extensionInfo.ExtensionPage;
-                    ListBox_ExtensionMenu.Add(
-                        new()
+            if (
+                !(
+                    MessageBoxVM.Show(
+                        new(I18nRes.FirstStart)
                         {
-                            Id = extensionInfo.Id,
-                            Icon = extensionInfo.Icon,
-                            Content = extensionInfo.Name,
-                            ToolTip =
-                                $"Author: {extensionInfo.Author}\nDescription: {extensionInfo.Description}",
-                            Tag = page
+                            Button = MessageBoxVM.Button.YesNo,
+                            Icon = MessageBoxVM.Icon.Question,
                         }
-                    );
-                }
-            }
-        }
-
-        private void InitializeExtensionDebugPage()
-        {
-            // 添加拓展调试页面
-            if (deubgItemExtensionInfo is not null)
+                    ) is MessageBoxVM.Result.Yes
+                    && GameInfo.GetGameDirectory()
+                )
+            )
             {
-                deubgItem = new()
-                {
-                    Icon = deubgItemExtensionInfo.Icon,
-                    Tag = deubgItemExtensionInfo.ExtensionPage,
-                };
-                AddMainPageItem(deubgItem);
+                MessageBoxVM.Show(
+                    new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
+                );
+                return;
             }
+            CreateConfigFile();
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Game"]["Path"] = GameInfo.BaseDirectory;
+            toml["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
+            toml.SaveTo(ST.ConfigTomlFile);
         }
 
-        internal void RefreshExtensionDebugPage(string path)
+        /// <summary>
+        /// 创建配置文件
+        /// </summary>
+        private void CreateConfigFile()
         {
-            var isSelected = ListBox_MainMenu.SelectedItem == deubgItem;
-            ListBox_MainMenu.Remove(deubgItem);
-            InitializeExtensionDebugPage();
-            if (isSelected)
-                ListBox_MainMenu.SelectedItem = deubgItem;
+            using StreamReader sr = ResourceDictionary.GetResourceStream(
+                ResourceDictionary.Config_toml
+            );
+            File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
+            Logger.Record(
+                $"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}"
+            );
         }
+        #endregion
 
         #region WindowEffect
 
+        /// <summary>
+        /// 设置窗口效果委托
+        /// </summary>
+        internal Action<bool> _setWindowEffectAction;
+        /// <summary>
+        /// 取消窗口效果委托
+        /// </summary>
+        internal Action _removeWindowEffectAction;
+
         internal void RegisterChangeWindowEffectEvent(
-            SetWindowEffectHandler setHandler,
-            RemoveWindowEffectHandler removeHandler
+            Action<bool> setWindowEffectAction,
+            Action removeWindowEffectAction
         )
         {
-            SetWindowEffectEvent += setHandler;
-            RemoveWindowEffectEvent += removeHandler;
+            _setWindowEffectAction = setWindowEffectAction;
+            _removeWindowEffectAction = removeWindowEffectAction;
         }
 
         internal void SetBlurEffect(bool isEnabled)
         {
-            SetWindowEffectEvent?.Invoke(isEnabled);
+            _setWindowEffectAction(isEnabled);
         }
 
         internal void RemoveBlurEffect()
         {
-            RemoveWindowEffectEvent?.Invoke();
+            _removeWindowEffectAction();
         }
 
         #endregion WindowEffect
@@ -563,25 +573,5 @@ namespace StarsectorTools.ViewModels.MainWindow
         }
 
         #endregion ClosePage
-
-        /// <summary>
-        /// 设置窗口效果委托
-        /// </summary>
-        internal delegate void SetWindowEffectHandler(bool isEnabled);
-
-        /// <summary>
-        /// 取消窗口效果委托
-        /// </summary>
-        internal delegate void RemoveWindowEffectHandler();
-
-        /// <summary>
-        /// 设置窗口效果事件
-        /// </summary>
-        internal event SetWindowEffectHandler? SetWindowEffectEvent;
-
-        /// <summary>
-        /// 取消窗口效果事件
-        /// </summary>
-        internal event RemoveWindowEffectHandler? RemoveWindowEffectEvent;
     }
 }

@@ -18,9 +18,10 @@ namespace StarsectorTools.ViewModels.MainWindow
     /// </summary>
     internal partial class MainWindowViewModel : ObservableObject
     {
-        /// <summary>
-        /// 主菜单展开状态
-        /// </summary>
+        #region ObservableProperty
+        [ObservableProperty]
+        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
+
         [ObservableProperty]
         private bool menuIsExpand = false;
 
@@ -33,8 +34,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         [ObservableProperty]
         private bool settingsButtonIsChecked = false;
 
-        [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
+        #endregion
 
         #region Page
 
@@ -72,11 +72,12 @@ namespace StarsectorTools.ViewModels.MainWindow
             Instance = this;
             InitializeData();
             InitializeDirectories();
-            using System.IO.StreamReader sr = ResourceDictionary.GetResourceStream(ResourceDictionary.Config_toml);
-            SetConfig(sr.ReadToEnd());
+            // 注册日志
+            Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
+            InitializeConfig();
             InitializeExtensionPages();
             InitializeExtensionDebugPage();
-            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceiv);
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceive);
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(this, ExtensionDebugPathRequestReceive);
             I18n.AddPropertyChangedAction(I18nChangedAction);
         }
@@ -106,6 +107,39 @@ namespace StarsectorTools.ViewModels.MainWindow
             ListBox_MainMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
             ListBox_ExtensionMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
         }
+        private void ListBox_SelectionChangedEvent(ListBoxItemVM item)
+        {
+            // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
+            if (item is null || selectedItem == item)
+            {
+                selectedItem = null;
+                return;
+            }
+            // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
+            if (selectedItem?.IsSelected is true)
+                selectedItem.IsSelected = false;
+            selectedItem = item;
+            ShowPage(item.Tag);
+        }
+
+        private void ExtensionDebugPathChangeReceive(object recipient, ExtensionDebugPathChangeMessage message)
+        {
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Extension"]["DebugPath"] = message.Value;
+            toml.SaveTo(ST.ConfigTomlFile);
+            if (GetExtensionInfo(message.Value, true) is ExtensionInfo info)
+            {
+                deubgItemExtensionInfo = info;
+                deubgItemPath = message.Value;
+            }
+        }
+
+        private void ExtensionDebugPathRequestReceive(object recipient, ExtensionDebugPathRequestMessage message)
+        {
+            message.Reply(deubgItemPath!);
+        }
+
+        #region RelayCommand
 
         [RelayCommand]
         private void MenuExpand(object parameter) => MenuIsExpand = !MenuIsExpand;
@@ -156,37 +190,6 @@ namespace StarsectorTools.ViewModels.MainWindow
             CloseExtensionPages();
             InitializeExtensionPages();
         }
-
-        private void ListBox_SelectionChangedEvent(ListBoxItemVM item)
-        {
-            // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
-            if (item is null || selectedItem == item)
-            {
-                selectedItem = null;
-                return;
-            }
-            // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (selectedItem?.IsSelected is true)
-                selectedItem.IsSelected = false;
-            selectedItem = item;
-            ShowPage(item.Tag);
-        }
-
-        private void ExtensionDebugPathChangeReceiv(object recipient, ExtensionDebugPathChangeMessage message)
-        {
-            var toml = TOML.Parse(ST.ConfigTomlFile);
-            toml["Extension"]["DebugPath"] = message.Value;
-            toml.SaveTo(ST.ConfigTomlFile);
-            if (GetExtensionInfo(message.Value, true) is ExtensionInfo info)
-            {
-                deubgItemExtensionInfo = info;
-                deubgItemPath = message.Value;
-            }
-        }
-
-        private void ExtensionDebugPathRequestReceive(object recipient, ExtensionDebugPathRequestMessage message)
-        {
-            message.Reply(deubgItemPath!);
-        }
+        #endregion
     }
 }

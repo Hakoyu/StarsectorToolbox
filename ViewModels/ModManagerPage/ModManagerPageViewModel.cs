@@ -20,16 +20,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 {
     internal partial class ModManagerPageViewModel : ObservableObject
     {
+        #region ObservableProperty
+
         [ObservableProperty]
         private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
 
         [ObservableProperty]
         private bool groupMenuIsExpand = false;
-
-        /// <summary>当前选择的列表项</summary>
-        private ListBoxItemVM nowSelectedGroup = null!;
-
-        private string nowSelectedGroupName => nowSelectedGroup!.Tag!.ToString()!;
 
         [ObservableProperty]
         private ObservableCollection<ModShowInfo> nowShowMods = new();
@@ -94,6 +91,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [ObservableProperty]
         private bool nowSelectedIsUserGroup = false;
 
+        #endregion
+
+        /// <summary>当前选择的列表项</summary>
+        private ListBoxItemVM nowSelectedGroup = null!;
+        private string nowSelectedGroupName => nowSelectedGroup!.Tag!.ToString()!;
+        #region ListBox
         [ObservableProperty]
         private ListBoxVM listBox_MainMenu =
             new()
@@ -183,7 +186,9 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     Tag = ModTypeGroup.Collected
                 },
             };
+        #endregion
 
+        #region ComboBox
         [ObservableProperty]
         private ComboBoxVM comboBox_ModFilterType =
             new()
@@ -199,7 +204,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             new(){Content = I18nRes.All ,Tag= nameof(I18nRes.All)}
         };
-
+        #endregion
         public ModManagerPageViewModel()
         {
         }
@@ -234,6 +239,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             ComboBox_ModFilterType[1].Content = I18nRes.Author;
             ComboBox_ModFilterType[2].Content = I18nRes.UserDescription;
             ComboBox_ExportUserGroup[0].Content = I18nRes.All;
+            RefreshGroupModCount();
+            RefreshModsContextMenu();
         }
 
         private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
@@ -243,9 +250,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 NowSelectedIsUserGroup = true;
             else
                 NowSelectedIsUserGroup = false;
-            RefreshShowMods();
+            CheckFilterAndRefreshShowMods();
+            Logger.Record("114514");
         }
-
+        #region RelayCommand
         [RelayCommand]
         private void GroupMenuExpand()
         {
@@ -304,7 +312,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void ModFilterTextChanged()
         {
-            RefreshShowMods();
+            CheckFilterAndRefreshShowMods();
         }
 
         [RelayCommand]
@@ -521,9 +529,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             CloseModDetails();
         }
-
-        internal void DataGridDropFile(Array array)
-        {
-        }
+        #endregion
     }
 }
