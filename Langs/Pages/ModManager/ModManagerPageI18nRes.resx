@@ -140,8 +140,8 @@
   <data name="LoadUserData" xml:space="preserve">
     <value>加载用户数据</value>
   </data>
-  <data name="LoadCollectedList" xml:space="preserve">
-    <value>加载收藏列表</value>
+  <data name="LoadCollectedModList" xml:space="preserve">
+    <value>加载已收藏模组列表</value>
   </data>
   <data name="LoadUserCustomData" xml:space="preserve">
     <value>加载用户自定义数据</value>
@@ -537,5 +537,11 @@
   <data name="ModManagerDescription" xml:space="preserve">
     <value>用于浏览并管理游戏模组
 有启用禁用,收藏,设置用户分组等功能</value>
+  </data>
+  <data name="CollectedModList" xml:space="preserve">
+    <value>已收藏模组列表</value>
+  </data>
+  <data name="UserCustomData" xml:space="preserve">
+    <value>用户自定义数据</value>
   </data>
 </root>

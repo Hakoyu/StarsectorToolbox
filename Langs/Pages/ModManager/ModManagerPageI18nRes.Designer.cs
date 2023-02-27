@@ -196,6 +196,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 已收藏模组列表 的本地化字符串。
+        /// </summary>
+        public static string CollectedModList {
+            get {
+                return ResourceManager.GetString("CollectedModList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 已收藏模组 的本地化字符串。
         /// </summary>
         public static string CollectedMods {
@@ -624,11 +633,11 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 加载收藏列表 的本地化字符串。
+        ///   查找类似 加载已收藏模组列表 的本地化字符串。
         /// </summary>
-        public static string LoadCollectedList {
+        public static string LoadCollectedModList {
             get {
-                return ResourceManager.GetString("LoadCollectedList", resourceCulture);
+                return ResourceManager.GetString("LoadCollectedModList", resourceCulture);
             }
         }
         
@@ -1263,6 +1272,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         public static string UnzipError {
             get {
                 return ResourceManager.GetString("UnzipError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 用户自定义数据 的本地化字符串。
+        /// </summary>
+        public static string UserCustomData {
+            get {
+                return ResourceManager.GetString("UserCustomData", resourceCulture);
             }
         }
         

@@ -103,7 +103,7 @@
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsRemindSave}" Value="True">
           <DataTrigger.EnterActions>
-            <BeginStoryboard>
+            <BeginStoryboard x:Name="RemindSaveStoryboard">
               <Storyboard RepeatBehavior="Forever">
                 <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Background.(Color)">
                   <!--  使用其它绑定方式设置值  -->
@@ -113,6 +113,9 @@
               </Storyboard>
             </BeginStoryboard>
           </DataTrigger.EnterActions>
+          <DataTrigger.ExitActions>
+            <RemoveStoryboard BeginStoryboardName="RemindSaveStoryboard" />
+          </DataTrigger.ExitActions>
         </DataTrigger>
       </Style.Triggers>
     </Style>

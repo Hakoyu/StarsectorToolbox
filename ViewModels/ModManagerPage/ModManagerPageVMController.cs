@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -133,28 +135,26 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void GetAllModsInfo()
         {
             int errSize = 0;
+            StringBuilder errSB = new();
             DirectoryInfo dirInfo = new(GameInfo.ModsDirectory);
-            string err = string.Empty;
             foreach (var dir in dirInfo.GetDirectories())
             {
-                if (ModInfo.Parse($"{dir.FullName}\\{modInfoFile}") is ModInfo info)
+                if (ModInfo.Parse($"{dir.FullName}\\{modInfoFile}") is not ModInfo info)
                 {
-                    allModInfos.Add(info.Id, info);
-                    Logger.Record($"{I18nRes.ModAddSuccess}: {dir.FullName}", LogLevel.DEBUG);
-                }
-                else
-                {
-                    err += $"{dir.FullName}\n";
                     errSize++;
+                    errSB.AppendLine(dir.FullName);
+                    continue;
                 }
+                allModInfos.Add(info.Id, info);
+                Logger.Record($"{I18nRes.ModAddSuccess}: {dir.FullName}", LogLevel.DEBUG);
             }
             Logger.Record(
                 string.Format(I18nRes.ModAddCompleted, allModInfos.Count, errSize),
                 LogLevel.INFO
             );
-            if (!string.IsNullOrWhiteSpace(err))
+            if (errSB.Length > 0)
                 MessageBoxVM.Show(
-                    new($"{I18nRes.ModAddFailed} {I18nRes.Size}: {errSize}\n{err}")
+                    new($"{I18nRes.ModAddFailed} {I18nRes.Size}: {errSize}\n{errSB}")
                     {
                         Icon = MessageBoxVM.Icon.Warning
                     }
@@ -164,12 +164,71 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void CheckEnabledMods()
         {
             if (Utils.FileExists(GameInfo.EnabledModsJsonFile))
-                GetEnabledMods(GameInfo.EnabledModsJsonFile);
+                TryGetEnabledMods(GameInfo.EnabledModsJsonFile);
             else
                 SaveEnabledMods(GameInfo.EnabledModsJsonFile);
         }
 
-        private void ImportMode()
+        private void TryGetEnabledMods(string filePath, bool importMode = false)
+        {
+            try
+            {
+                StringBuilder errSB = new();
+                if (Utils.JsonParse(filePath) is not JsonObject enabledModsJson)
+                    throw new ArgumentNullException();
+                if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(strEnabledMods))
+                    throw new ArgumentNullException();
+                if (importMode)
+                    EnabledModListImportMode();
+                if (
+                    enabledModsJson[strEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray
+                )
+                    throw new ArgumentNullException();
+                Logger.Record($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
+                if (GetEnabledMods(enabledModsJsonArray) is StringBuilder err)
+                {
+                    MessageBoxVM.Show(
+                        new($"{I18nRes.EnabledModsFile}: {filePath} {I18nRes.NotFoundMod}\n{err}")
+                        {
+                            Icon = MessageBoxVM.Icon.Warning
+                        }
+                    );
+                }
+                Logger.Record($"{I18nRes.EnableMod} {I18nRes.Size}: {allEnabledModsId.Count}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Record($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}", ex);
+                MessageBoxVM.Show(
+                    new($"{I18nRes.LoadError}\n{I18nRes.Path}: {filePath}")
+                    {
+                        Icon = MessageBoxVM.Icon.Error
+                    }
+                );
+            }
+        }
+
+        private StringBuilder? GetEnabledMods(JsonArray array)
+        {
+            StringBuilder err = new();
+            foreach (var modId in array)
+            {
+                var id = modId!.GetValue<string>();
+                if (string.IsNullOrWhiteSpace(id))
+                    continue;
+                if (!allModInfos.ContainsKey(id))
+                {
+                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    err.AppendLine(id);
+                    continue;
+                }
+                ChangeModEnabled(id, true);
+                Logger.Record($"{I18nRes.EnableMod} {id}", LogLevel.DEBUG);
+            }
+            return err.Length > 0 ? err : null;
+        }
+
+        private void EnabledModListImportMode()
         {
             var result = MessageBoxVM.Show(
                 new(I18nRes.SelectImportMode)
@@ -184,62 +243,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 return;
         }
 
-        private void GetEnabledMods(string filePath, bool importMode = false)
-        {
-            try
-            {
-                string err = string.Empty;
-                int errSize = 0;
-                JsonNode enabledModsJson = Utils.JsonParse(filePath)!;
-                if (enabledModsJson == null)
-                    throw new ArgumentNullException();
-                if (
-                    enabledModsJson.AsObject().Count != 1
-                    || enabledModsJson.AsObject().ElementAt(0).Key != strEnabledMods
-                )
-                    throw new ArgumentNullException();
-                if (importMode)
-                    ImportMode();
-                JsonArray enabledModsJsonArray = enabledModsJson[strEnabledMods]!.AsArray();
-                Logger.Record($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
-                foreach (var modId in enabledModsJsonArray)
-                {
-                    var id = modId!.GetValue<string>();
-                    if (string.IsNullOrWhiteSpace(id))
-                        continue;
-                    if (allModInfos.ContainsKey(id))
-                    {
-                        Logger.Record($"{I18nRes.EnableMod} {id}", LogLevel.DEBUG);
-                        ChangeModEnabled(id, true);
-                    }
-                    else
-                    {
-                        Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
-                        err += $"{id}\n";
-                        errSize++;
-                    }
-                }
-                Logger.Record($"{I18nRes.EnableMod} {I18nRes.Size}: {allEnabledModsId.Count}");
-                if (!string.IsNullOrWhiteSpace(err))
-                    MessageBoxVM.Show(
-                        new($"{I18nRes.NotFoundMod} {I18nRes.Size}: {errSize}\n{err}")
-                        {
-                            Icon = MessageBoxVM.Icon.Warning
-                        }
-                    );
-            }
-            catch (Exception ex)
-            {
-                Logger.Record($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}", ex);
-                MessageBoxVM.Show(
-                    new($"{I18nRes.LoadError}\n{I18nRes.Path}: {filePath}")
-                    {
-                        Icon = MessageBoxVM.Icon.Error
-                    }
-                );
-            }
-        }
-
         #region GetUserData
         private void CheckUserData()
         {
@@ -248,18 +251,17 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             else
                 SaveUserData(userDataFile);
             if (Utils.FileExists(userGroupFile))
-                GetUserGroup(userGroupFile);
+                GetAllUserGroup(userGroupFile);
             else
-                SaveUserGroup(userGroupFile);
+                SaveAllUserGroup(userGroupFile);
         }
 
-        private void GetUserGroup(string filePath)
+        private void GetAllUserGroup(string filePath)
         {
             Logger.Record($"{I18nRes.LoadUserGroup} {I18nRes.Path}: {filePath}");
             try
             {
-                string err = string.Empty;
-                int errSize = 0;
+                StringBuilder errSB = new();
                 TomlTable toml = TOML.Parse(filePath);
                 foreach (var kv in toml)
                 {
@@ -269,34 +271,18 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     if (allUserGroups.ContainsKey(group))
                     {
                         Logger.Record($"{I18nRes.DuplicateUserGroupName} {group}");
-                        err ??= $"{I18nRes.DuplicateUserGroupName} {group}";
+                        errSB.AppendLine($"{I18nRes.DuplicateUserGroupName} {group}");
                         continue;
                     }
                     AddUserGroup(kv.Value[strIcon]!, group);
-                    foreach (string id in kv.Value[strMods].AsTomlArray)
-                    {
-                        if (string.IsNullOrWhiteSpace(id))
-                            continue;
-                        if (allModsShowInfo.ContainsKey(id))
-                        {
-                            if (allUserGroups[group].Add(id))
-                                allModShowInfoGroups[group].Add(allModsShowInfo[id]);
-                        }
-                        else
-                        {
-                            Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
-                            err += $"{id}\n";
-                            errSize++;
-                        }
-                    }
+                    if (
+                        GetModsInUserGroup(group, kv.Value[strMods].AsTomlArray)
+                        is StringBuilder err
+                    )
+                        errSB.Append($"{I18nRes.UserGroup}: {group} {I18nRes.NotFoundMod}:\n{err}");
                 }
-                if (!string.IsNullOrWhiteSpace(err))
-                    MessageBoxVM.Show(
-                        new($"{I18nRes.NotFoundMod} {I18nRes.Size}: {errSize}\n{err}")
-                        {
-                            Icon = MessageBoxVM.Icon.Warning
-                        }
-                    );
+                if (errSB.Length > 0)
+                    MessageBoxVM.Show(new(errSB.ToString()) { Icon = MessageBoxVM.Icon.Warning });
             }
             catch (Exception ex)
             {
@@ -307,67 +293,52 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
         }
 
+        private StringBuilder? GetModsInUserGroup(string group, TomlArray array)
+        {
+            StringBuilder err = new();
+            foreach (string id in array)
+            {
+                if (string.IsNullOrWhiteSpace(id))
+                    continue;
+                if (!allModsShowInfo.ContainsKey(id))
+                {
+                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    err.AppendLine(id);
+                    continue;
+                }
+                if (allUserGroups[group].Add(id))
+                    allModShowInfoGroups[group].Add(allModsShowInfo[id]);
+            }
+            return err.Length > 0 ? err : null;
+        }
+
         private void GetUserData(string filePath)
         {
             Logger.Record($"{I18nRes.LoadUserData} {I18nRes.Path}: {filePath}");
             try
             {
-                string err = string.Empty;
-                int errSize = 0;
-                var toml = TOML.Parse(filePath);
-                Logger.Record(I18nRes.LoadCollectedList);
-                foreach (string id in toml[ModTypeGroup.Collected].AsTomlArray)
+                TomlTable toml = TOML.Parse(filePath);
+                if (
+                    GetUserCollectedMods(toml[ModTypeGroup.Collected].AsTomlArray)
+                    is StringBuilder err
+                )
                 {
-                    if (string.IsNullOrWhiteSpace(id))
-                        continue;
-                    if (allModsShowInfo.ContainsKey(id))
-                    {
-                        ChangeModCollected(id, true);
-                    }
-                    else
-                    {
-                        Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
-                        err += $"{id}\n";
-                    }
-                }
-                if (!string.IsNullOrWhiteSpace(err))
                     MessageBoxVM.Show(
-                        new(
-                            $"{I18nRes.LoadCollectedList} {I18nRes.NotFoundMod} {I18nRes.Size}: {errSize}\n{err}"
-                        )
+                        new($"{I18nRes.CollectedModList} {I18nRes.NotFoundMod}\n{err}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
                     );
-                err = string.Empty;
-                errSize = 0;
-                Logger.Record(I18nRes.LoadUserCustomData);
-                foreach (var dict in toml[strUserCustomData].AsTomlArray)
-                {
-                    var id = dict[strId].AsString;
-                    if (string.IsNullOrWhiteSpace(id))
-                        continue;
-                    if (allModsShowInfo.ContainsKey(id))
-                    {
-                        var info = allModsShowInfo[id];
-                        info.UserDescription = dict[strUserDescription];
-                    }
-                    else
-                    {
-                        Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
-                        err ??= $"{I18nRes.NotFoundMod}\n";
-                        err += $"{id}\n";
-                    }
                 }
-                if (!string.IsNullOrWhiteSpace(err))
+                if (GetUserCustomData(toml[strUserCustomData].AsTomlArray) is StringBuilder err1)
+                {
                     MessageBoxVM.Show(
-                        new(
-                            $"{I18nRes.LoadUserCustomData} {I18nRes.NotFoundMod} {I18nRes.Size}: {errSize}\n{err}"
-                        )
+                        new($"{I18nRes.UserCustomData} {I18nRes.NotFoundMod}\n{err1}")
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
                     );
+                }
             }
             catch (Exception ex)
             {
@@ -379,6 +350,46 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     }
                 );
             }
+        }
+
+        private StringBuilder? GetUserCollectedMods(TomlArray array)
+        {
+            Logger.Record(I18nRes.LoadCollectedModList);
+            StringBuilder err = new();
+            foreach (string id in array)
+            {
+                if (string.IsNullOrWhiteSpace(id))
+                    continue;
+                if (!allModsShowInfo.ContainsKey(id))
+                {
+                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    err.AppendLine(id);
+                    continue;
+                }
+                ChangeModCollected(id, true);
+            }
+            return err.Length > 0 ? err : null;
+        }
+
+        private StringBuilder? GetUserCustomData(TomlArray array)
+        {
+            Logger.Record(I18nRes.LoadUserCustomData);
+            StringBuilder err = new();
+            foreach (var dict in array)
+            {
+                var id = dict[strId].AsString;
+                if (string.IsNullOrWhiteSpace(id))
+                    continue;
+                if (!allModsShowInfo.ContainsKey(id))
+                {
+                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    err.AppendLine(id);
+                    continue;
+                }
+                var info = allModsShowInfo[id];
+                info.UserDescription = dict[strUserDescription];
+            }
+            return err.Length > 0 ? err : null;
         }
         #endregion
         private void GetAllListBoxItems()
@@ -430,6 +441,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         }
 
         private bool textChange = false;
+
         #region RefreshNowShowMods
         private void CheckFilterAndRefreshShowMods()
         {
@@ -451,6 +463,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             NowShowMods = infos;
         }
+
         //private CancellationTokenSource cts = null;
         //private async Task RefreshNowShowMods(IEnumerable<ModShowInfo> infos)
         //{
@@ -611,19 +624,18 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                                         Button = MessageBoxVM.Button.YesNo,
                                         Icon = MessageBoxVM.Icon.Warning
                                     }
-                                ) is MessageBoxVM.Result.Yes
+                                ) is not MessageBoxVM.Result.Yes
                             )
-                            {
-                                Logger.Record(
-                                    $"{I18nRes.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18nRes.Path}: {path}\n"
-                                );
-                                RemoveMod(showInfo.Id);
-                                CheckFilterAndRefreshShowMods();
-                                RefreshGroupModCount();
-                                CloseModDetails();
-                                Utils.DeleteDirToRecycleBin(path);
-                                IsRemindSave = true;
-                            }
+                                return;
+                            Logger.Record(
+                                $"{I18nRes.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18nRes.Path}: {path}\n"
+                            );
+                            RemoveMod(showInfo.Id);
+                            CheckFilterAndRefreshShowMods();
+                            RefreshGroupModCount();
+                            CloseModDetails();
+                            Utils.DeleteDirToRecycleBin(path);
+                            IsRemindSave = true;
                         };
                         list.Add(menuItem);
                         // 添加至用户分组
@@ -654,12 +666,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                             }
                         }
                         // 从用户分组中删除
-                        var groupWithMod = allUserGroups.Where(g => g.Value.Contains(showInfo.Id));
-                        if (groupWithMod.Count() > 0)
+                        var groupContainsMod = allUserGroups.Where(g => g.Value.Contains(showInfo.Id));
+                        if (groupContainsMod.Count() > 0)
                         {
                             menuItem = new();
                             menuItem.Header = I18nRes.RemoveFromUserGroup;
-                            foreach (var group in groupWithMod)
+                            foreach (var group in groupContainsMod)
                             {
                                 MenuItemVM groupItem = new();
                                 groupItem.Header = group.Key;
@@ -845,7 +857,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             SaveEnabledMods(GameInfo.EnabledModsJsonFile);
             SaveUserData(userDataFile);
-            SaveUserGroup(userGroupFile);
+            SaveAllUserGroup(userGroupFile);
         }
 
         private void SaveEnabledMods(string filePath)
@@ -885,7 +897,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             Logger.Record($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
         }
 
-        private void SaveUserGroup(string filePath, string group = strAll)
+        private void SaveAllUserGroup(string filePath, string group = strAll)
         {
             TomlTable toml = new();
             if (group == strAll)

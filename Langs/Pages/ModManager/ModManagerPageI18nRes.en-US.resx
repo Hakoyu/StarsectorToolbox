@@ -140,8 +140,8 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="LoadUserData" xml:space="preserve">
     <value>Loading user data</value>
   </data>
-  <data name="LoadCollectedList" xml:space="preserve">
-    <value>Loading collected list</value>
+  <data name="LoadCollectedModList" xml:space="preserve">
+    <value>Loading collected mod list</value>
   </data>
   <data name="LoadUserCustomData" xml:space="preserve">
     <value>Loading user custom data</value>
@@ -537,5 +537,11 @@ Cannot be removed midway</value>
   <data name="ModManagerDescription" xml:space="preserve">
     <value>For browsing and managing game mod
 There are functions to enable and disable, favorite, set user groups, etc</value>
+  </data>
+  <data name="CollectedModList" xml:space="preserve">
+    <value>Collected mod list</value>
+  </data>
+  <data name="UserCustomData" xml:space="preserve">
+    <value>User custom data</value>
   </data>
 </root>

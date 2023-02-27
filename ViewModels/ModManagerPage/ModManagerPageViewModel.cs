@@ -384,7 +384,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             });
             if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
             {
-                GetUserGroup(fileName);
+                GetAllUserGroup(fileName);
                 RefreshModsContextMenu();
                 RefreshGroupModCount();
                 IsRemindSave = true;
@@ -401,7 +401,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             });
             if (!string.IsNullOrEmpty(fileName))
             {
-                SaveUserGroup(fileName, ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString()!);
+                SaveAllUserGroup(fileName, ComboBox_ExportUserGroup.SelectedItem!.Tag!.ToString()!);
             }
         }
 
@@ -468,7 +468,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             });
             if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
             {
-                GetEnabledMods(fileName, true);
+                TryGetEnabledMods(fileName, true);
                 RefreshGroupModCount();
             }
         }
