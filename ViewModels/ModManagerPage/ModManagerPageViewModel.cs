@@ -245,7 +245,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
         {
-            // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
             if (item is null || nowSelectedGroup == item)
                 return;
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
