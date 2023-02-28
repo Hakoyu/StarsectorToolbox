@@ -535,7 +535,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         errSB.AppendLine($"{I18nRes.DuplicateUserGroupName} {group}");
                         continue;
                     }
-                    AddUserGroup(kv.Value[strIcon]!, group);
+                    AddUserGroup(kv.Value[strIcon]!, group, false);
                     if (
                         GetModsInUserGroup(group, kv.Value[strMods].AsTomlArray)
                         is StringBuilder err
@@ -760,13 +760,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             );
         }
         #endregion
-        #region ChangeModInUserGroup
+        #region ChangeUserGroupContainsSelectedMods
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count; )
+            for (int i = 0; i < nowSelectedMods.Count;)
             {
-                ChangeModInUserGroup(group, nowSelectedMods[i].Id, isInGroup);
+                ChangeUserGroupContainsSelectedMod(group, nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
                 if (count == nowSelectedMods.Count)
                     i++;
@@ -778,7 +778,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             IsRemindSave = true;
         }
 
-        private void ChangeModInUserGroup(string group, string id, bool isInGroup)
+        private void ChangeUserGroupContainsSelectedMod(string group, string id, bool isInGroup)
         {
             ModShowInfo showInfo = allModsShowInfo[id];
             if (isInGroup)
@@ -805,7 +805,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count; )
+            for (int i = 0; i < nowSelectedMods.Count;)
             {
                 ChangeModEnabled(nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -882,7 +882,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count; )
+            for (int i = 0; i < nowSelectedMods.Count;)
             {
                 ChangeModCollected(nowSelectedMods[i].Id, collected);
                 if (count == nowSelectedMods.Count)
@@ -1075,7 +1075,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             return false;
         }
 
-        private void AddUserGroup(string icon, string name)
+        private void AddUserGroup(string icon, string name, bool remindSave = true)
         {
             ListBoxItemVM listBoxItem = new();
             // 调用全局资源需要写全
@@ -1091,7 +1091,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             ComboBox_ExportUserGroup.Add(new() { Content = name, Tag = name });
             RefreshGroupModCount();
             RefreshModsContextMenu();
-            IsRemindSave = true;
+            if (remindSave)
+                IsRemindSave = true;
             Logger.Record($"{I18nRes.AddUserGroup} {icon} {name}");
 
             MenuItemVM RenameUserGroupMenuItemVM()

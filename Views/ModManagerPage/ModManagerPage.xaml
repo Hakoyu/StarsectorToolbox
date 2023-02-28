@@ -158,7 +158,6 @@
                 <ListBox
                   x:Name="ListBox_ModsGroupMenu"
                   HorizontalContentAlignment="Stretch"
-                  BorderThickness="0"
                   ItemContainerStyle="{StaticResource ListBoxItemView}"
                   ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
                   PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
@@ -199,7 +198,6 @@
                   <ListBox
                     x:Name="ListBox_UserGroup"
                     HorizontalContentAlignment="Stretch"
-                    pu:IconHelper.Margin="0,0,10,0"
                     ItemContainerStyle="{StaticResource ListBoxItemView}"
                     ItemsSource="{Binding ListBox_UserGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
