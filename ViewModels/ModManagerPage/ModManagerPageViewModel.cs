@@ -256,7 +256,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             else
                 NowSelectedIsUserGroup = false;
             CheckFilterAndRefreshShowMods();
-            Logger.Record("114514");
         }
         #region RelayCommand
         [RelayCommand]
