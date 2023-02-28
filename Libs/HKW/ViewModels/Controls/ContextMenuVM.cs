@@ -60,7 +60,6 @@ namespace HKW.ViewModels.Controls
         [RelayCommand]
         private void Loaded(object parameter)
         {
-            Libs.Log4Cs.Logger.Record($"菜单状态: {IsLoaded}");
             if (LoadedEvent is not null && IsLoaded is false)
             {
                 LoadedEvent(ItemsSource);

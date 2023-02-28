@@ -176,7 +176,7 @@
   <data name="AddContextMenu" xml:space="preserve">
     <value>添加右键菜单</value>
   </data>
-  <data name="EnabledSelectedMods" xml:space="preserve">
+  <data name="EnableSelectedMods" xml:space="preserve">
     <value>启用所选模组</value>
   </data>
   <data name="DisableSelectedMods" xml:space="preserve">
@@ -219,7 +219,7 @@
     <value>收藏状态修改为</value>
   </data>
   <data name="EnabledListSaveCompleted" xml:space="preserve">
-    <value>启用列表保存完毕</value>
+    <value>已启用列表保存完毕</value>
   </data>
   <data name="UserGroupSaveCompleted" xml:space="preserve">
     <value>用户分组保存完毕</value>
@@ -331,7 +331,7 @@
     <value>全部模组</value>
   </data>
   <data name="EnabledMods" xml:space="preserve">
-    <value>启用的模组</value>
+    <value>已启用的模组</value>
   </data>
   <data name="DisabledMods" xml:space="preserve">
     <value>禁用的模组</value>

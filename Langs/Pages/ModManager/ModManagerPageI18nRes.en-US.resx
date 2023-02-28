@@ -176,7 +176,7 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="AddContextMenu" xml:space="preserve">
     <value>Add context menu</value>
   </data>
-  <data name="EnabledSelectedMods" xml:space="preserve">
+  <data name="EnableSelectedMods" xml:space="preserve">
     <value>Enabled selected mods</value>
   </data>
   <data name="DisableSelectedMods" xml:space="preserve">

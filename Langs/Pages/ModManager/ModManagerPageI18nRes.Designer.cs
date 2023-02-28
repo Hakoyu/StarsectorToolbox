@@ -398,7 +398,7 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 启用列表保存完毕 的本地化字符串。
+        ///   查找类似 已启用列表保存完毕 的本地化字符串。
         /// </summary>
         public static string EnabledListSaveCompleted {
             get {
@@ -407,7 +407,7 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 启用的模组 的本地化字符串。
+        ///   查找类似 已启用的模组 的本地化字符串。
         /// </summary>
         public static string EnabledMods {
             get {
@@ -421,15 +421,6 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         public static string EnabledModsFile {
             get {
                 return ResourceManager.GetString("EnabledModsFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 启用所选模组 的本地化字符串。
-        /// </summary>
-        public static string EnabledSelectedMods {
-            get {
-                return ResourceManager.GetString("EnabledSelectedMods", resourceCulture);
             }
         }
         
@@ -448,6 +439,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         public static string EnableMod {
             get {
                 return ResourceManager.GetString("EnableMod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 启用所选模组 的本地化字符串。
+        /// </summary>
+        public static string EnableSelectedMods {
+            get {
+                return ResourceManager.GetString("EnableSelectedMods", resourceCulture);
             }
         }
         

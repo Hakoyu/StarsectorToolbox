@@ -112,9 +112,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         /// </summary>
         private void InitializeData()
         {
-            ModsInfo.AllModsInfo = new(allModInfos);
-            ModsInfo.AllEnabledModsId = new(allEnabledModsId);
-            ModsInfo.AllCollectedModsId = new(allCollectedModsId);
+            // 设置外部API
+            ModsInfo.AllModsInfo = allModInfos;
+            ModsInfo.AllEnabledModsId = allEnabledModsId;
+            ModsInfo.AllCollectedModsId = allCollectedModsId;
             ModsInfo.AllUserGroups = allUserGroups.AsReadOnly<
                 string,
                 HashSet<string>,
@@ -161,6 +162,266 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 );
         }
 
+        private void GetAllModsShowInfo()
+        {
+            foreach (var modInfo in allModInfos.Values)
+                AddModShowInfo(modInfo, false);
+            Logger.Record($"{I18nRes.ModShowInfoSetSuccess} {I18nRes.Size}: {allModInfos.Count}");
+            //ListBox_ModsGroupMenu.SelectedIndex = 0;
+        }
+
+        private ModShowInfo CreateModShowInfo(ModInfo info)
+        {
+            return new ModShowInfo(info)
+            {
+                IsCollected = allCollectedModsId.Contains(info.Id),
+                IsEnabled = allEnabledModsId.Contains(info.Id),
+                MissDependencies = false,
+                ImageSource = GetImage($"{info.ModDirectory}\\icon.ico"),
+            };
+            BitmapImage? GetImage(string filePath)
+            {
+                if (!File.Exists(filePath))
+                    return null;
+                try
+                {
+                    using Stream stream = new StreamReader(filePath).BaseStream;
+                    byte[] bytes = new byte[stream.Length];
+                    stream.Read(bytes);
+                    BitmapImage bitmap = new();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = new MemoryStream(bytes);
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Record($"{I18nRes.IconLoadError} {I18nRes.Path}: {filePath}", ex);
+                    return null;
+                }
+            }
+        }
+
+        #region AddMod
+
+
+        private void AddMod(ModInfo modInfo)
+        {
+            allModInfos.Add(modInfo.Id, modInfo);
+            AddModShowInfo(modInfo);
+            Logger.Record($"{I18nRes.RemoveMod} {modInfo.Id} {modInfo.Version}", LogLevel.DEBUG);
+        }
+
+        private void AddModShowInfo(ModInfo modInfo, bool createContextMenu = true)
+        {
+            if (allModsShowInfo.ContainsKey(modInfo.Id))
+                return;
+            ModShowInfo showInfo = CreateModShowInfo(modInfo);
+            // 添加至总分组
+            allModsShowInfo.Add(showInfo.Id, showInfo);
+            allModShowInfoGroups[ModTypeGroup.All].Add(showInfo);
+            // 添加至类型分组
+            allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
+            // 添加至已启用或已禁用分组
+            if (showInfo.IsEnabled)
+                allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);
+            else
+                allModShowInfoGroups[ModTypeGroup.Disabled].Add(showInfo);
+            // 添加至已收藏分组
+            if (showInfo.IsCollected)
+                allModShowInfoGroups[ModTypeGroup.Collected].Add(showInfo);
+            // 添加至用户分组
+            foreach (var userGroup in allUserGroups)
+            {
+                if (userGroup.Value.Contains(modInfo.Id))
+                {
+                    userGroup.Value.Add(modInfo.Id);
+                    allModShowInfoGroups[userGroup.Key].Add(showInfo);
+                }
+            }
+            if (createContextMenu)
+                showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
+            Logger.Record($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}", LogLevel.DEBUG);
+        }
+        #endregion
+        #region RemoveMod
+
+
+        private void RemoveMod(string id)
+        {
+            var modInfo = allModInfos[id];
+            allModInfos.Remove(id);
+            RemoveModShowInfo(id);
+            Logger.Record($"{I18nRes.RemoveMod} {id} {modInfo.Version}", LogLevel.DEBUG);
+        }
+
+        private void RemoveModShowInfo(string id)
+        {
+            var modShowInfo = allModsShowInfo[id];
+            // 从总分组中删除
+            allModsShowInfo.Remove(id);
+            allModShowInfoGroups[ModTypeGroup.All].Remove(modShowInfo);
+            // 从类型分组中删除
+            allModShowInfoGroups[CheckTypeGroup(id)].Remove(modShowInfo);
+            // 从已启用或已禁用分组中删除
+            if (modShowInfo.IsEnabled)
+            {
+                allEnabledModsId.Remove(id);
+                allModShowInfoGroups[ModTypeGroup.Enabled].Remove(modShowInfo);
+            }
+            else
+                allModShowInfoGroups[ModTypeGroup.Disabled].Remove(modShowInfo);
+            // 从已收藏中删除
+            if (modShowInfo.IsCollected)
+            {
+                allCollectedModsId.Remove(id);
+                allModShowInfoGroups[ModTypeGroup.Collected].Remove(modShowInfo);
+            }
+            // 从用户分组中删除
+            foreach (var userGroup in allUserGroups)
+            {
+                if (userGroup.Value.Contains(id))
+                {
+                    userGroup.Value.Remove(id);
+                    allModShowInfoGroups[userGroup.Key].Remove(modShowInfo);
+                }
+            }
+        }
+        #endregion
+        #region CreateModShowContextMenu
+        private ContextMenuVM CreateModShowContextMenu(ModShowInfo modShowInfo)
+        {
+            Logger.Record($"{modShowInfo.Id} {I18nRes.AddContextMenu}", LogLevel.DEBUG);
+            ContextMenuVM contextMenu =
+                new(
+                    (list) =>
+                    {
+                        list.Add(EnableOrDisableSelectedMods());
+                        list.Add(CollectOrUncollectSelectedMods());
+                        list.Add(OpenModDirectory());
+                        list.Add(DeleteMod());
+                        if (AddToUserGroup() is MenuItemVM menuItem1)
+                            list.Add(menuItem1);
+                        if (RemoveToUserGroup() is MenuItemVM menuItem2)
+                            list.Add(menuItem2);
+                    }
+                );
+            return contextMenu;
+            MenuItemVM EnableOrDisableSelectedMods()
+            {
+                // 启用或禁用
+                MenuItemVM menuItem = new();
+                menuItem.Header = modShowInfo.IsEnabled
+                    ? I18nRes.DisableSelectedMods
+                    : I18nRes.EnableSelectedMods;
+                menuItem.CommandEvent += (p) => ChangeSelectedModsEnabled();
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
+            MenuItemVM CollectOrUncollectSelectedMods()
+            {
+                // 收藏或取消收藏
+                MenuItemVM menuItem = new();
+                menuItem.Header = modShowInfo.IsCollected
+                    ? I18nRes.UncollectSelectedMods
+                    : I18nRes.CollectSelectedMods;
+                menuItem.CommandEvent += (p) => ChangeSelectedModsCollected();
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
+            MenuItemVM OpenModDirectory()
+            {
+                // 打开模组文件夹
+                MenuItemVM menuItem = new();
+                menuItem.Header = I18nRes.OpenModDirectory;
+                menuItem.CommandEvent += (p) =>
+                {
+                    Logger.Record(
+                        $"{I18nRes.OpenModDirectory} {I18nRes.Path}: {allModInfos[modShowInfo.Id].ModDirectory}"
+                    );
+                    Utils.OpenLink(allModInfos[modShowInfo.Id].ModDirectory);
+                };
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
+            MenuItemVM DeleteMod()
+            {
+                // 删除模组至回收站
+                MenuItemVM menuItem = new();
+                menuItem.Header = I18nRes.DeleteMod;
+                menuItem.CommandEvent += (p) =>
+                {
+                    string path = allModInfos[modShowInfo.Id].ModDirectory;
+                    if (
+                        MessageBoxVM.Show(
+                            new(
+                                $"{I18nRes.ConfirmModDeletion}?\nID: {modShowInfo.Id}\n{I18nRes.Path}: {path}\n"
+                            )
+                            {
+                                Button = MessageBoxVM.Button.YesNo,
+                                Icon = MessageBoxVM.Icon.Warning
+                            }
+                        )
+                        is not MessageBoxVM.Result.Yes
+                    )
+                        return;
+                    Logger.Record(
+                        $"{I18nRes.ConfirmModDeletion}?\nID: {modShowInfo.Id}\n{I18nRes.Path}: {path}\n"
+                    );
+                    RemoveMod(modShowInfo.Id);
+                    CheckFilterAndRefreshShowMods();
+                    RefreshGroupModCount();
+                    CloseModDetails();
+                    Utils.DeleteDirToRecycleBin(path);
+                    IsRemindSave = true;
+                };
+                return menuItem;
+            }
+            MenuItemVM? AddToUserGroup()
+            {
+                MenuItemVM? menuItem = null;
+                // 添加至用户分组
+                if (allUserGroups.Count == 0)
+                    return menuItem;
+                menuItem = new();
+                menuItem.Header = I18nRes.AddModToUserGroup;
+                foreach (var group in allUserGroups.Keys)
+                {
+                    if (allUserGroups[group].Contains(modShowInfo.Id))
+                        continue;
+                    MenuItemVM groupItem = new();
+                    groupItem.Header = group;
+                    groupItem.CommandEvent += (p) =>
+                        ChangeUserGroupContainsSelectedMods(group, true);
+                    menuItem.Add(groupItem);
+                }
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
+            MenuItemVM? RemoveToUserGroup()
+            {
+                MenuItemVM? menuItem = null;
+                // 从用户分组中删除
+                var groupContainsMod = allUserGroups.Where(g => g.Value.Contains(modShowInfo.Id));
+                if (!groupContainsMod.Any())
+                    return menuItem;
+                menuItem = new();
+                menuItem.Header = I18nRes.RemoveFromUserGroup;
+                foreach (var group in groupContainsMod)
+                {
+                    MenuItemVM groupItem = new();
+                    groupItem.Header = group.Key;
+                    groupItem.CommandEvent += (p) =>
+                        ChangeUserGroupContainsSelectedMods(group.Key, false);
+                    menuItem.Add(groupItem);
+                }
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
+        }
+
+        #endregion
+        #region CheckEnabledMods
         private void CheckEnabledMods()
         {
             if (Utils.FileExists(GameInfo.EnabledModsJsonFile))
@@ -242,7 +503,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             else if (result == MessageBoxVM.Result.Cancel)
                 return;
         }
-
+        #endregion
         #region GetUserData
         private void CheckUserData()
         {
@@ -424,23 +685,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 : ModTypeGroup.UnknownMods;
         }
         #endregion
-
-        private void GetAllModsShowInfo()
-        {
-            foreach (var modInfo in allModInfos.Values)
-                AddModShowInfo(modInfo, false);
-            Logger.Record($"{I18nRes.ModShowInfoSetSuccess} {I18nRes.Size}: {allModInfos.Count}");
-            //ListBox_ModsGroupMenu.SelectedIndex = 0;
-        }
-
         private void CheckRefreshGroupAndMods(string group)
         {
             if (nowSelectedGroupName == group)
                 CheckFilterAndRefreshShowMods();
             RefreshGroupModCount();
         }
-
-        private bool textChange = false;
 
         #region RefreshNowShowMods
         private void CheckFilterAndRefreshShowMods()
@@ -463,38 +713,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             NowShowMods = infos;
         }
-
-        //private CancellationTokenSource cts = null;
-        //private async Task RefreshNowShowMods(IEnumerable<ModShowInfo> infos)
-        //{
-        //    var newCts = new CancellationTokenSource();
-        //    var oldCts = Interlocked.Exchange(ref cts, newCts);
-        //    // 如果有旧的 CancellationTokenSource，就取消它
-        //    oldCts?.Cancel();
-        //    try
-        //    {
-        //        NowShowMods.Clear();
-        //        foreach (var info in infos)
-        //        {
-        //            // 使用延迟来逐个显示,一次性显示过多会导致卡顿
-        //            NowShowMods.Add(info);
-        //            await Task.Delay(5, newCts.Token);
-        //        }
-        //    }
-        //    catch (OperationCanceledException ex)
-        //    {
-        //        // 取消操作被请求了
-        //        // 这里可以处理取消操作被请求时的逻辑
-        //    }
-        //    finally
-        //    {
-        //        if (!newCts.IsCancellationRequested)
-        //        {
-        //            newCts.Dispose();
-        //            cts = null!;
-        //        }
-        //    }
-        //}
 
         private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
             new(
@@ -521,38 +739,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 }
             );
         #endregion
-        private ModShowInfo CreateModShowInfo(ModInfo info)
-        {
-            return new ModShowInfo(info)
-            {
-                IsCollected = allCollectedModsId.Contains(info.Id),
-                IsEnabled = allEnabledModsId.Contains(info.Id),
-                MissDependencies = false,
-                ImageSource = GetImage($"{info.ModDirectory}\\icon.ico"),
-            };
-            BitmapImage? GetImage(string filePath)
-            {
-                if (!File.Exists(filePath))
-                    return null;
-                try
-                {
-                    using Stream stream = new StreamReader(filePath).BaseStream;
-                    byte[] bytes = new byte[stream.Length];
-                    stream.Read(bytes);
-                    BitmapImage bitmap = new();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = new MemoryStream(bytes);
-                    bitmap.EndInit();
-                    return bitmap;
-                }
-                catch (Exception ex)
-                {
-                    Logger.Record($"{I18nRes.IconLoadError} {I18nRes.Path}: {filePath}", ex);
-                    return null;
-                }
-            }
-        }
-
         #region RefreshDisplayInfo
         private void RefreshGroupModCount()
         {
@@ -574,132 +760,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             );
         }
         #endregion
-        private ContextMenuVM CreateModShowContextMenu(ModShowInfo showInfo)
-        {
-            Logger.Record($"{showInfo.Id} {I18nRes.AddContextMenu}", LogLevel.DEBUG);
-            ContextMenuVM contextMenu =
-                new(
-                    (list) =>
-                    {
-                        // 启用或禁用
-                        MenuItemVM menuItem = new();
-                        menuItem.Header = showInfo.IsEnabled
-                            ? I18nRes.DisableSelectedMods
-                            : I18nRes.EnabledSelectedMods;
-                        menuItem.CommandEvent += (p) => ChangeSelectedModsEnabled();
-                        list.Add(menuItem);
-                        Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-                        // 收藏或取消收藏
-                        menuItem = new();
-                        menuItem.Header = showInfo.IsCollected
-                            ? I18nRes.UncollectSelectedMods
-                            : I18nRes.CollectSelectedMods;
-                        menuItem.CommandEvent += (p) => ChangeSelectedModsCollected();
-                        list.Add(menuItem);
-                        Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-                        // 打开模组文件夹
-                        menuItem = new();
-                        menuItem.Header = I18nRes.OpenModDirectory;
-                        menuItem.CommandEvent += (p) =>
-                        {
-                            Logger.Record(
-                                $"{I18nRes.OpenModDirectory} {I18nRes.Path}: {allModInfos[showInfo.Id].ModDirectory}"
-                            );
-                            Utils.OpenLink(allModInfos[showInfo.Id].ModDirectory);
-                        };
-                        list.Add(menuItem);
-                        Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-                        // 删除模组至回收站
-                        menuItem = new();
-                        menuItem.Header = I18nRes.DeleteMod;
-                        menuItem.CommandEvent += (p) =>
-                        {
-                            string path = allModInfos[showInfo.Id].ModDirectory;
-                            if (
-                                MessageBoxVM.Show(
-                                    new(
-                                        $"{I18nRes.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18nRes.Path}: {path}\n"
-                                    )
-                                    {
-                                        Button = MessageBoxVM.Button.YesNo,
-                                        Icon = MessageBoxVM.Icon.Warning
-                                    }
-                                ) is not MessageBoxVM.Result.Yes
-                            )
-                                return;
-                            Logger.Record(
-                                $"{I18nRes.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18nRes.Path}: {path}\n"
-                            );
-                            RemoveMod(showInfo.Id);
-                            CheckFilterAndRefreshShowMods();
-                            RefreshGroupModCount();
-                            CloseModDetails();
-                            Utils.DeleteDirToRecycleBin(path);
-                            IsRemindSave = true;
-                        };
-                        list.Add(menuItem);
-                        // 添加至用户分组
-                        if (allUserGroups.Count > 0)
-                        {
-                            menuItem = new();
-                            menuItem.Header = I18nRes.AddModToUserGroup;
-                            foreach (var group in allUserGroups.Keys)
-                            {
-                                if (!allUserGroups[group].Contains(showInfo.Id))
-                                {
-                                    MenuItemVM groupItem = new();
-                                    groupItem.Header = group;
-                                    groupItem.CommandEvent += (p) =>
-                                    {
-                                        ChangeSelectedModsInUserGroup(group, true);
-                                    };
-                                    menuItem.Add(groupItem);
-                                }
-                            }
-                            if (menuItem.Count > 0)
-                            {
-                                list.Add(menuItem);
-                                Logger.Record(
-                                    $"{I18nRes.AddMenuItem} {menuItem.Header}",
-                                    LogLevel.DEBUG
-                                );
-                            }
-                        }
-                        // 从用户分组中删除
-                        var groupContainsMod = allUserGroups.Where(g => g.Value.Contains(showInfo.Id));
-                        if (groupContainsMod.Count() > 0)
-                        {
-                            menuItem = new();
-                            menuItem.Header = I18nRes.RemoveFromUserGroup;
-                            foreach (var group in groupContainsMod)
-                            {
-                                MenuItemVM groupItem = new();
-                                groupItem.Header = group.Key;
-                                groupItem.CommandEvent += (p) =>
-                                {
-                                    ChangeSelectedModsInUserGroup(group.Key, false);
-                                };
-                                menuItem.Add(groupItem);
-                            }
-                            if (menuItem.Count > 0)
-                            {
-                                list.Add(menuItem);
-                                Logger.Record(
-                                    $"{I18nRes.AddMenuItem} {menuItem.Header}",
-                                    LogLevel.DEBUG
-                                );
-                            }
-                        }
-                    }
-                );
-            return contextMenu;
-        }
-
         #region ChangeModInUserGroup
-        private void ChangeSelectedModsInUserGroup(string group, bool isInGroup)
+        private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            for (int i = 0; i < nowSelectedMods.Count; )
             {
                 ChangeModInUserGroup(group, nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -740,7 +805,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            for (int i = 0; i < nowSelectedMods.Count; )
             {
                 ChangeModEnabled(nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -817,7 +882,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            for (int i = 0; i < nowSelectedMods.Count; )
             {
                 ChangeModCollected(nowSelectedMods[i].Id, collected);
                 if (count == nowSelectedMods.Count)
@@ -981,88 +1046,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             Logger.Record($"{I18nRes.ShowDetails} {id}", LogLevel.DEBUG);
         }
         #endregion
-        #region RemoveMod
-        private void RemoveMod(string id)
-        {
-            var modInfo = allModInfos[id];
-            allModInfos.Remove(id);
-            RemoveModShowInfo(id);
-            Logger.Record($"{I18nRes.RemoveMod} {id} {modInfo.Version}", LogLevel.DEBUG);
-        }
-
-        private void RemoveModShowInfo(string id)
-        {
-            var modShowInfo = allModsShowInfo[id];
-            // 从总分组中删除
-            allModsShowInfo.Remove(id);
-            allModShowInfoGroups[ModTypeGroup.All].Remove(modShowInfo);
-            // 从类型分组中删除
-            allModShowInfoGroups[CheckTypeGroup(id)].Remove(modShowInfo);
-            // 从已启用或已禁用分组中删除
-            if (modShowInfo.IsEnabled)
-            {
-                allEnabledModsId.Remove(id);
-                allModShowInfoGroups[ModTypeGroup.Enabled].Remove(modShowInfo);
-            }
-            else
-                allModShowInfoGroups[ModTypeGroup.Disabled].Remove(modShowInfo);
-            // 从已收藏中删除
-            if (modShowInfo.IsCollected)
-            {
-                allCollectedModsId.Remove(id);
-                allModShowInfoGroups[ModTypeGroup.Collected].Remove(modShowInfo);
-            }
-            // 从用户分组中删除
-            foreach (var userGroup in allUserGroups)
-            {
-                if (userGroup.Value.Contains(id))
-                {
-                    userGroup.Value.Remove(id);
-                    allModShowInfoGroups[userGroup.Key].Remove(modShowInfo);
-                }
-            }
-        }
-        #endregion
-        #region AddMod
-        private void AddMod(ModInfo modInfo)
-        {
-            allModInfos.Add(modInfo.Id, modInfo);
-            AddModShowInfo(modInfo);
-            Logger.Record($"{I18nRes.RemoveMod} {modInfo.Id} {modInfo.Version}", LogLevel.DEBUG);
-        }
-
-        private void AddModShowInfo(ModInfo modInfo, bool createContextMenu = true)
-        {
-            if (allModsShowInfo.ContainsKey(modInfo.Id))
-                return;
-            ModShowInfo showInfo = CreateModShowInfo(modInfo);
-            // 添加至总分组
-            allModsShowInfo.Add(showInfo.Id, showInfo);
-            allModShowInfoGroups[ModTypeGroup.All].Add(showInfo);
-            // 添加至类型分组
-            allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
-            // 添加至已启用或已禁用分组
-            if (showInfo.IsEnabled)
-                allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);
-            else
-                allModShowInfoGroups[ModTypeGroup.Disabled].Add(showInfo);
-            // 添加至已收藏分组
-            if (showInfo.IsCollected)
-                allModShowInfoGroups[ModTypeGroup.Collected].Add(showInfo);
-            // 添加至用户分组
-            foreach (var userGroup in allUserGroups)
-            {
-                if (userGroup.Value.Contains(modInfo.Id))
-                {
-                    userGroup.Value.Add(modInfo.Id);
-                    allModShowInfoGroups[userGroup.Key].Add(showInfo);
-                }
-            }
-            if (createContextMenu)
-                showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
-            Logger.Record($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}", LogLevel.DEBUG);
-        }
-        #endregion
         #region AddUserGroup
         internal bool TryAddUserGroup(string icon, string name)
         {
@@ -1097,26 +1080,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             ListBoxItemVM listBoxItem = new();
             // 调用全局资源需要写全
             SetListBoxItemData(ref listBoxItem, name);
-            ContextMenuVM contextMenu = new();
-            // 重命名分组
-            MenuItemVM menuItem = new();
-            menuItem.Header = I18nRes.RenameUserGroup;
-            menuItem.CommandEvent += (p) =>
-            {
-                RenameUserGroup(listBoxItem);
-            };
-            contextMenu.Add(menuItem);
-            Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-            // 删除分组
-            menuItem = new();
-            menuItem.Header = I18nRes.RemoveUserGroup;
-            menuItem.CommandEvent += (p) =>
-            {
-                RemoveUserGroup(listBoxItem);
-            };
-            contextMenu.Add(menuItem);
-            Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-
+            ContextMenuVM contextMenu =
+                new() { RenameUserGroupMenuItemVM(), RemoveUserGroupMenuItemVM() };
             listBoxItem.ContextMenu = contextMenu;
             listBoxItem.Icon = icon;
             ListBox_UserGroupMenu.Add(listBoxItem);
@@ -1128,6 +1093,26 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             RefreshModsContextMenu();
             IsRemindSave = true;
             Logger.Record($"{I18nRes.AddUserGroup} {icon} {name}");
+
+            MenuItemVM RenameUserGroupMenuItemVM()
+            {
+                // 重命名分组
+                MenuItemVM menuItem = new();
+                menuItem.Header = I18nRes.RenameUserGroup;
+                menuItem.CommandEvent += (p) => RenameUserGroup(listBoxItem);
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
+            MenuItemVM RemoveUserGroupMenuItemVM()
+            {
+                // 删除分组
+                MenuItemVM menuItem = new();
+                menuItem = new();
+                menuItem.Header = I18nRes.RemoveUserGroup;
+                menuItem.CommandEvent += (p) => RemoveUserGroup(listBoxItem);
+                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                return menuItem;
+            }
         }
 
         private void RemoveUserGroup(ListBoxItemVM listBoxItem)
@@ -1214,7 +1199,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
         }
-        #endregion
 
         private void SetListBoxItemData(ref ListBoxItemVM item, string name)
         {
@@ -1223,6 +1207,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             item.Tag = name;
         }
 
+        #endregion
         internal async Task DropFile(string filePath)
         {
             string tempPath = "Temp";

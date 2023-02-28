@@ -43,42 +43,44 @@ namespace StarsectorTools.ViewModels.MainWindow
                 Directory.CreateDirectory(ST.ExtensionDirectories);
         }
         #region PageItem
-        internal void AddMainPageItem(ListBoxItemVM vm)
+        internal void AddMainPageItem(ListBoxItemVM item)
         {
-            DetectPageItemData(ref vm);
-            ListBox_MainMenu.Add(vm);
+            DetectPageItemData(ref item);
+            ListBox_MainMenu.Add(item);
         }
 
-        private void DetectPageItemData(ref ListBoxItemVM vm)
+        private void DetectPageItemData(ref ListBoxItemVM item)
         {
-            if (vm?.Tag is not ISTPage page)
+            if (item?.Tag is not ISTPage page)
                 return;
-            vm.Id = page.GetType().FullName;
-            vm.Content = page.GetNameI18n();
-            vm.ToolTip = page.GetDescriptionI18n();
-            vm.ContextMenu = CreateItemContextMenu();
+            item.Id = page.GetType().FullName;
+            item.Content = page.GetNameI18n();
+            item.ToolTip = page.GetDescriptionI18n();
+            item.ContextMenu = CreateItemContextMenu();
         }
 
-        private ContextMenuVM CreateItemContextMenu() =>
-            new(
-                (list) =>
+        private ContextMenuVM CreateItemContextMenu()
+        {
+            ContextMenuVM contextMenu = new()
+            {
+                RefreshPageMenuItem()
+            };
+            return contextMenu;
+            MenuItemVM RefreshPageMenuItem()
+            {
+                MenuItemVM menuItem = new();
+                menuItem.Icon = "🔄";
+                menuItem.Header = I18nRes.RefreshPage;
+                menuItem.CommandEvent += (p) =>
                 {
-                    list.Add(
-                        new(
-                            (o) =>
-                            {
-                                if (o is not ListBoxItemVM vm)
-                                    return;
-                                RefreshPage(vm);
-                            }
-                        )
-                        {
-                            Icon = "🔄",
-                            Header = I18nRes.RefreshPage,
-                        }
-                    );
-                }
-            );
+                    if (p is not ListBoxItemVM vm)
+                        return;
+                    RefreshPage(vm);
+                    GC.Collect();
+                };
+                return menuItem;
+            }
+        }
 
         private void RefreshPage(ListBoxItemVM vm)
         {
