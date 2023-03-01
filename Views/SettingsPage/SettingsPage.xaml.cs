@@ -1,10 +1,10 @@
 ﻿using System.Windows.Controls;
 using StarsectorTools.ViewModels.SettingsPage;
 
-namespace StarsectorTools.Pages.Settings
+namespace StarsectorTools.Views.SettingsPage
 {
     /// <summary>
-    /// Settings.xaml 的交互逻辑
+    /// SettingsPage.xaml 的交互逻辑
     /// </summary>
     public partial class SettingsPage : Page
     {

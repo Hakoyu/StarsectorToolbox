@@ -142,6 +142,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 拓展包含的对象 的本地化字符串。
+        /// </summary>
+        public static string ExtensionContainedClass {
+            get {
+                return ResourceManager.GetString("ExtensionContainedClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 扩展文件错误 的本地化字符串。
         /// </summary>
         public static string ExtensionFileError {
@@ -165,6 +174,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string ExtensionLoadError {
             get {
                 return ResourceManager.GetString("ExtensionLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 扩展页面错误 的本地化字符串。
+        /// </summary>
+        public static string ExtensionPageError {
+            get {
+                return ResourceManager.GetString("ExtensionPageError", resourceCulture);
             }
         }
         
@@ -296,6 +314,15 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static string InitializationError {
             get {
                 return ResourceManager.GetString("InitializationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 未实现 ISTPage 接口 的本地化字符串。
+        /// </summary>
+        public static string NotImplementedISTPage {
+            get {
+                return ResourceManager.GetString("NotImplementedISTPage", resourceCulture);
             }
         }
         

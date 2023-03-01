@@ -42,6 +42,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             if (!Directory.Exists(ST.ExtensionDirectories))
                 Directory.CreateDirectory(ST.ExtensionDirectories);
         }
+
         #region PageItem
         internal void AddMainPageItem(ListBoxItemVM item)
         {
@@ -61,10 +62,7 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         private ContextMenuVM CreateItemContextMenu()
         {
-            ContextMenuVM contextMenu = new()
-            {
-                RefreshPageMenuItem()
-            };
+            ContextMenuVM contextMenu = new() { RefreshPageMenuItem() };
             return contextMenu;
             MenuItemVM RefreshPageMenuItem()
             {
@@ -131,7 +129,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             DirectoryInfo dirs = new(ST.ExtensionDirectories);
             foreach (var dir in dirs.GetDirectories())
             {
-                if (GetExtensionInfo(dir.FullName) is ExtensionInfo extensionInfo)
+                if (TryGetExtensionInfo(dir.FullName) is ExtensionInfo extensionInfo)
                 {
                     var page = extensionInfo.ExtensionPage;
                     ListBox_ExtensionMenu.Add(
@@ -149,6 +147,13 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
 
+        private void RefreshExtensionDebugPage()
+        {
+            ListBox_MainMenu.Remove(deubgItem!);
+            InitializeExtensionDebugPage();
+            ListBox_MainMenu.SelectedItem = deubgItem;
+        }
+
         private void InitializeExtensionDebugPage()
         {
             // 添加拓展调试页面
@@ -163,16 +168,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
 
-        internal void RefreshExtensionDebugPage(string path)
-        {
-            var isSelected = ListBox_MainMenu.SelectedItem == deubgItem;
-            ListBox_MainMenu.Remove(deubgItem!);
-            InitializeExtensionDebugPage();
-            if (isSelected)
-                ListBox_MainMenu.SelectedItem = deubgItem;
-        }
-
-        private ExtensionInfo? GetExtensionInfo(string path, bool loadInMemory = false)
+        private ExtensionInfo? TryGetExtensionInfo(string path, bool loadInMemory = false)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -182,37 +178,11 @@ namespace StarsectorTools.ViewModels.MainWindow
                 );
                 return null;
             }
-            string tomlFile = $"{path}\\{ST.ExtensionInfoFile}";
+            var tomlFile = $"{path}\\{ST.ExtensionInfoFile}";
             try
             {
-                // 判断文件存在性
-                if (!File.Exists(tomlFile))
-                {
-                    Logger.Warring(
-                        $"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}"
-                    );
-                    MessageBoxVM.Show(
-                        new($"{I18nRes.ExtensionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
-                        {
-                            Icon = MessageBoxVM.Icon.Warning
-                        }
-                    );
-                    return null;
-                }
                 var extensionInfo = new ExtensionInfo(TOML.Parse(tomlFile));
-                var assemblyFile = $"{path}\\{extensionInfo.ExtensionFile}";
-                // 检测是否有相同的拓展
-                if (allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
-                {
-                    Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
-                    MessageBoxVM.Show(
-                        new($"{I18nRes.ExtensionAlreadyExists}\n{I18nRes.Path}: {tomlFile}")
-                        {
-                            Icon = MessageBoxVM.Icon.Warning
-                        }
-                    );
-                    return null;
-                }
+                var assemblyFile = ParseExtensionInfo(path, tomlFile, ref extensionInfo);
                 // 判断组件文件是否存在
                 if (!File.Exists(assemblyFile))
                 {
@@ -225,36 +195,22 @@ namespace StarsectorTools.ViewModels.MainWindow
                     );
                     return null;
                 }
-                // 从内存或外部载入
-                if (loadInMemory)
-                {
-                    var bytes = File.ReadAllBytes(assemblyFile);
-                    var type = Assembly.Load(bytes).GetType(extensionInfo.ExtensionId)!;
-                    extensionInfo.ExtensionPage = type.Assembly.CreateInstance(type.FullName!)!;
-                }
-                else
-                {
-                    var type = Assembly.LoadFrom(assemblyFile).GetType(extensionInfo.ExtensionId)!;
-                    extensionInfo.ExtensionPage = type.Assembly.CreateInstance(type.FullName!)!;
-                }
-                // 判断是否成功创建了页面
-                if (extensionInfo.ExtensionPage is null)
-                {
-                    Logger.Warring($"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}");
-                    MessageBoxVM.Show(
-                        new($"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}")
-                        {
-                            Icon = MessageBoxVM.Icon.Warning
-                        }
-                    );
-                    return null;
-                }
+                extensionInfo.ExtensionPage = TryGetExtensionPage(
+                    tomlFile,
+                    assemblyFile,
+                    ref extensionInfo,
+                    loadInMemory
+                )!;
                 // 判断页面是否实现了接口
                 if (extensionInfo.ExtensionPage is not ISTPage)
                 {
-                    Logger.Warring($"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}");
+                    Logger.Warring(
+                        $"{I18nRes.ExtensionPageError}: {I18nRes.NotImplementedISTPage}\n{I18nRes.Path}: {tomlFile}"
+                    );
                     MessageBoxVM.Show(
-                        new($"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}")
+                        new(
+                            $"{I18nRes.ExtensionPageError}: {I18nRes.NotImplementedISTPage}\n{I18nRes.Path}: {tomlFile}"
+                        )
                         {
                             Icon = MessageBoxVM.Icon.Warning
                         }
@@ -274,7 +230,79 @@ namespace StarsectorTools.ViewModels.MainWindow
                 );
                 return null;
             }
+            string ParseExtensionInfo(string path, string tomlFile, ref ExtensionInfo extensionInfo)
+            {
+                // 判断文件存在性
+                if (!File.Exists(tomlFile))
+                {
+                    Logger.Warring(
+                        $"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}"
+                    );
+                    MessageBoxVM.Show(
+                        new($"{I18nRes.ExtensionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
+                        {
+                            Icon = MessageBoxVM.Icon.Warning
+                        }
+                    );
+                    return string.Empty;
+                }
+                var assemblyFile = $"{path}\\{extensionInfo.ExtensionFile}";
+                // 检测是否有相同的拓展
+                if (allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
+                {
+                    Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
+                    MessageBoxVM.Show(
+                        new($"{I18nRes.ExtensionAlreadyExists}\n{I18nRes.Path}: {tomlFile}")
+                        {
+                            Icon = MessageBoxVM.Icon.Warning
+                        }
+                    );
+                    return string.Empty;
+                }
+                return assemblyFile;
+            }
+            object? TryGetExtensionPage(
+                string tomlFile,
+                string assemblyFile,
+                ref ExtensionInfo extensionInfo,
+                bool loadInMemory
+            )
+            {
+                Type type;
+                Assembly assembly;
+                // 从内存或外部载入
+                if (loadInMemory)
+                {
+                    var bytes = File.ReadAllBytes(assemblyFile);
+                    assembly = Assembly.Load(bytes);
+                    type = assembly.GetType(extensionInfo.ExtensionId)!;
+                }
+                else
+                {
+                    assembly = Assembly.LoadFrom(assemblyFile);
+                    type = assembly.GetType(extensionInfo.ExtensionId)!;
+                }
+                // 判断是否成功获取了类型
+                if (type is null)
+                {
+                    var assemblyStr = string.Join("\t\n", assembly.ExportedTypes);
+                    Logger.Warring(
+                        $"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
+                    );
+                    MessageBoxVM.Show(
+                        new(
+                            $"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
+                        )
+                        {
+                            Icon = MessageBoxVM.Icon.Warning
+                        }
+                    );
+                    return null;
+                }
+                return type.Assembly.CreateInstance(type.FullName!)!;
+            }
         }
+
         #endregion
         #region InitializeConfig
         private void InitializeConfig()
@@ -336,7 +364,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             string debugPath = toml["Extension"]["DebugPath"].AsString;
             if (
                 !string.IsNullOrWhiteSpace(debugPath)
-                && GetExtensionInfo(debugPath, true) is ExtensionInfo info
+                && TryGetExtensionInfo(debugPath, true) is ExtensionInfo info
             )
             {
                 deubgItemExtensionInfo = info;
@@ -396,6 +424,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         /// 设置窗口效果委托
         /// </summary>
         internal Action<bool> _setWindowEffectAction;
+
         /// <summary>
         /// 取消窗口效果委托
         /// </summary>

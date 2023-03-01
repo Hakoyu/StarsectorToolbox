@@ -6,8 +6,8 @@ using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Messages;
 using StarsectorTools.Libs.Utils;
+using StarsectorTools.Models.Messages;
 using StarsectorTools.Resources;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
@@ -75,10 +75,19 @@ namespace StarsectorTools.ViewModels.MainWindow
             // 注册日志
             Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
             InitializeConfig();
+            var items = WeakReferenceMessenger.Default.Send<GetMainMenuItemsRequestMessage>();
+            foreach (var item in items.Response)
+                AddMainPageItem(item);
             InitializeExtensionPages();
-            InitializeExtensionDebugPage();
-            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(this, ExtensionDebugPathChangeReceive);
-            WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(this, ExtensionDebugPathRequestReceive);
+            RefreshExtensionDebugPage();
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(
+                this,
+                ExtensionDebugPathChangeReceive
+            );
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathRequestMessage>(
+                this,
+                ExtensionDebugPathRequestReceive
+            );
             I18n.AddPropertyChangedAction(I18nChangedAction);
         }
 
@@ -107,6 +116,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             ListBox_MainMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
             ListBox_ExtensionMenu.SelectionChangedEvent += ListBox_SelectionChangedEvent;
         }
+
         private void ListBox_SelectionChangedEvent(ListBoxItemVM item)
         {
             // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
@@ -119,19 +129,28 @@ namespace StarsectorTools.ViewModels.MainWindow
             ShowPage(item.Tag);
         }
 
-        private void ExtensionDebugPathChangeReceive(object recipient, ExtensionDebugPathChangeMessage message)
+        private void ExtensionDebugPathChangeReceive(
+            object recipient,
+            ExtensionDebugPathChangeMessage message
+        )
         {
+            if (TryGetExtensionInfo(message.Value, true) is not ExtensionInfo extensionInfo)
+            {
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathErrorMessage>(new(""));
+                return;
+            }
+            deubgItemExtensionInfo = extensionInfo;
+            deubgItemPath = message.Value;
+            RefreshExtensionDebugPage();
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Extension"]["DebugPath"] = message.Value;
             toml.SaveTo(ST.ConfigTomlFile);
-            if (GetExtensionInfo(message.Value, true) is ExtensionInfo info)
-            {
-                deubgItemExtensionInfo = info;
-                deubgItemPath = message.Value;
-            }
         }
 
-        private void ExtensionDebugPathRequestReceive(object recipient, ExtensionDebugPathRequestMessage message)
+        private void ExtensionDebugPathRequestReceive(
+            object recipient,
+            ExtensionDebugPathRequestMessage message
+        )
         {
             message.Reply(deubgItemPath!);
         }
@@ -152,12 +171,18 @@ namespace StarsectorTools.ViewModels.MainWindow
             if (page == infoPage)
             {
                 InfoButtonIsChecked = true;
-                ListBox_MainMenu.SelectedItem = ListBox_ExtensionMenu.SelectedItem = null;
+                selectedItem =
+                    ListBox_MainMenu.SelectedItem =
+                    ListBox_ExtensionMenu.SelectedItem =
+                        null;
             }
             else if (page == settingsPage)
             {
                 SettingsButtonIsChecked = true;
-                ListBox_MainMenu.SelectedItem = ListBox_ExtensionMenu.SelectedItem = null;
+                selectedItem =
+                    ListBox_MainMenu.SelectedItem =
+                    ListBox_ExtensionMenu.SelectedItem =
+                        null;
             }
             Logger.Info($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
         }

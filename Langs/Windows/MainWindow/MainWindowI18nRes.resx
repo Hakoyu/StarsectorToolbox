@@ -223,4 +223,13 @@
     <value>未保存
 确定保存吗?</value>
   </data>
+  <data name="ExtensionContainedClass" xml:space="preserve">
+    <value>拓展包含的对象</value>
+  </data>
+  <data name="ExtensionPageError" xml:space="preserve">
+    <value>扩展页面错误</value>
+  </data>
+  <data name="NotImplementedISTPage" xml:space="preserve">
+    <value>未实现 ISTPage 接口</value>
+  </data>
 </root>

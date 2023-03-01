@@ -223,4 +223,13 @@ It may affect the normal operation of the extension, so it is recommended to che
     <value>Not saved
 Sure to save?</value>
   </data>
+  <data name="ExtensionContainedClass" xml:space="preserve">
+    <value>Extension contained class</value>
+  </data>
+  <data name="ExtensionPageError" xml:space="preserve">
+    <value>Extension page error</value>
+  </data>
+  <data name="NotImplementedISTPage" xml:space="preserve">
+    <value>ISTPage interface not implemented</value>
+  </data>
 </root>

@@ -95,30 +95,6 @@
         </DataTrigger>
       </Style.Triggers>
     </Style>
-    <Style
-      x:Key="RemindStyle"
-      BasedOn="{StaticResource ButtonBaseStyle}"
-      TargetType="Button">
-      <Setter Property="Background" Value="{DynamicResource ColorLight3}" />
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding IsRemindSave}" Value="True">
-          <DataTrigger.EnterActions>
-            <BeginStoryboard x:Name="RemindSaveStoryboard">
-              <Storyboard RepeatBehavior="Forever">
-                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Background.(Color)">
-                  <!--  使用其它绑定方式设置值  -->
-                  <DiscreteColorKeyFrame KeyTime="0:0:1" Value="Aqua" />
-                  <DiscreteColorKeyFrame KeyTime="0:0:1.5" Value="White" />
-                </ColorAnimationUsingKeyFrames>
-              </Storyboard>
-            </BeginStoryboard>
-          </DataTrigger.EnterActions>
-          <DataTrigger.ExitActions>
-            <RemoveStoryboard BeginStoryboardName="RemindSaveStoryboard" />
-          </DataTrigger.ExitActions>
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
   </Page.Resources>
   <Grid>
     <GroupBox Header="{Binding I18n.I18nRes.ModManager}" Style="{StaticResource GroupBoxBaseStyle}">

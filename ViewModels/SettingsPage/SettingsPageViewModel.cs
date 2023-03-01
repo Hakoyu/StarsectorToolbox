@@ -8,9 +8,10 @@ using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.Libs.Messages;
+using StarsectorTools.Models.Messages;
 using StarsectorTools.Libs.Utils;
 using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
+using System;
 
 namespace StarsectorTools.ViewModels.SettingsPage
 {
@@ -49,7 +50,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
         {
             I18n.AddPropertyChangedAction(I18nChangedAction);
             ExtensionDebugPath =
-                WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>();
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>().Response;
             // 设置LogLevel初始值
             ComboBox_LogLevel.SelectedItem = ComboBox_LogLevel.First(
                 i => i.ToolTip is LogLevel level && level == Logger.Options.DefaultLevel
@@ -62,6 +63,12 @@ namespace StarsectorTools.ViewModels.SettingsPage
             // 注册事件
             ComboBox_LogLevel.SelectionChangedEvent += ComboBox_LogLevel_SelectionChangedEvent;
             ComboBox_Language.SelectionChangedEvent += ComboBox_Language_SelectionChangedEvent;
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathErrorMessage>(this, ExtensionDebugPathErrorReceive);
+        }
+
+        private void ExtensionDebugPathErrorReceive(object recipient, ExtensionDebugPathErrorMessage message)
+        {
+            ExtensionDebugPath = string.Empty;
         }
 
         private void I18nChangedAction()

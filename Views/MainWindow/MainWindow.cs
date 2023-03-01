@@ -6,11 +6,11 @@ using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Dialogs;
 using Panuon.WPF.UI;
-using StarsectorTools.Views.ModManagerPage;
-using StarsectorTools.Views.InfoPage;
-using StarsectorTools.Pages.Settings;
 using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 using StarsectorTools.ViewModels.MainWindow;
+using CommunityToolkit.Mvvm.Messaging;
+using StarsectorTools.Models.Messages;
+using System.Collections.Generic;
 
 namespace StarsectorTools.Views.MainWindow
 {
@@ -37,6 +37,30 @@ namespace StarsectorTools.Views.MainWindow
 
             // 注册主窗口模糊效果触发器
             ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
+
+            // 注册页面初始化消息
+            WeakReferenceMessenger.Default.Register<GetMainMenuItemsRequestMessage>(
+                this,
+                GetMainMenuItemsRequestReceive
+            );
+        }
+
+        private void GetMainMenuItemsRequestReceive(
+            object recipient,
+            GetMainMenuItemsRequestMessage message
+        )
+        {
+            message.Reply(
+                new()
+                {
+                    new() { Icon = "🌐", Tag = CreatePage(typeof(ModManagerPage.ModManagerPage)), },
+                    new()
+                    {
+                        Icon = "⚙",
+                        Tag = CreatePage(typeof(GameSettingsPage.GameSettingsPage))
+                    }
+                }
+            );
         }
 
         private void RegisterMessageBox()
@@ -173,22 +197,7 @@ namespace StarsectorTools.Views.MainWindow
         {
             // 添加页面
             ViewModel.InfoPage = new InfoPage.InfoPage();
-            ViewModel.SettingsPage = new SettingsPage();
-            // 主界面必须在View中生成,拓展及调试拓展可以在ViewModel中使用反射
-            InitializeMainPage();
-            //InitializeExtensionPages();
-            //InitializeExtensionDebugPage();
-        }
-
-        private void InitializeMainPage()
-        {
-            //添加主要页面
-            ViewModel.AddMainPageItem(
-                new() { Icon = "🌐", Tag = CreatePage(typeof(ModManagerPage.ModManagerPage)), }
-            );
-            ViewModel.AddMainPageItem(
-                new() { Icon = "⚙", Tag = CreatePage(typeof(GameSettingsPage.GameSettingsPage)) }
-            );
+            ViewModel.SettingsPage = new SettingsPage.SettingsPage();
         }
 
         private Page? CreatePage(Type type)

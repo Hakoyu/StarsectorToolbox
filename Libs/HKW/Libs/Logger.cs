@@ -62,7 +62,7 @@ namespace HKW.Libs.Log4Cs
             /// <summary>
             /// 默认过滤异常
             /// </summary>
-            public bool DefaultFilterException { get; set; } = false;
+            public bool DefaultFilterException { get; set; } = true;
 
             /// <summary>
             /// 默认显示命名空间
@@ -102,17 +102,17 @@ namespace HKW.Libs.Log4Cs
             /// <summary>
             /// 异常过滤器
             /// </summary>
-            public List<string> ExceptionFilter { get; set; } = new()
-            {
-                "at System.",
-                "at MS.",
-                "at Microsoft.",
-                "End of inner exception stack trace",
-            };
+            public List<string> ExceptionFilter { get; set; } =
+                new()
+                {
+                    "at System.",
+                    "at MS.",
+                    "at Microsoft.",
+                    "End of inner exception stack trace",
+                };
         }
 
-        private Logger()
-        { }
+        private Logger() { }
 
         /// <summary>
         /// 初始化
@@ -120,7 +120,11 @@ namespace HKW.Libs.Log4Cs
         /// <param name="baseNamespce">基命名空间</param>
         /// <param name="logFile">日志文件</param>
         /// <param name="initializeOptions">初始化设置</param>
-        public static void Initialize(string baseNamespce, string logFile, InitializeOptions? initializeOptions = null)
+        public static void Initialize(
+            string baseNamespce,
+            string logFile,
+            InitializeOptions? initializeOptions = null
+        )
         {
             Options = initializeOptions ?? new();
             LogFile = logFile;
@@ -149,28 +153,28 @@ namespace HKW.Libs.Log4Cs
         /// </summary>
         /// <param name="message">消息</param>
         public static void Debug(string message) =>
-            RecordBase(message, LogLevel.DEBUG, null, null);
+            RecordBase(message, LogLevel.DEBUG, null, Options.DefaultFilterException);
 
         /// <summary>
         /// 记录信息日志
         /// </summary>
         /// <param name="message">消息</param>
         public static void Info(string message) =>
-            RecordBase(message, LogLevel.INFO, null, null);
+            RecordBase(message, LogLevel.INFO, null, Options.DefaultFilterException);
 
         /// <summary>
         /// 记录警告日志
         /// </summary>
         /// <param name="message">消息</param>
         public static void Warring(string message) =>
-            RecordBase(message, LogLevel.WARN, null, null);
+            RecordBase(message, LogLevel.WARN, null, Options.DefaultFilterException);
 
         /// <summary>
         /// 记录错误日志
         /// </summary>
         /// <param name="message">消息</param>
         public static void Error(string message) =>
-            RecordBase(message, LogLevel.ERROR, null, null);
+            RecordBase(message, LogLevel.ERROR, null, Options.DefaultFilterException);
 
         /// <summary>
         /// 记录错误日志
@@ -178,7 +182,7 @@ namespace HKW.Libs.Log4Cs
         /// <param name="message">消息</param>
         /// <param name="ex">异常</param>
         public static void Error(string message, Exception ex) =>
-            RecordBase(message, LogLevel.ERROR, ex, null);
+            RecordBase(message, LogLevel.ERROR, ex, Options.DefaultFilterException);
 
         /// <summary>
         /// 记录错误日志
@@ -196,7 +200,12 @@ namespace HKW.Libs.Log4Cs
         /// <param name="logLevel">日志等级</param>
         /// <param name="ex">异常</param>
         /// <param name="filterException">过滤器</param>
-        private static void RecordBase(string message, LogLevel logLevel, Exception? ex, bool? filterException)
+        private static void RecordBase(
+            string message,
+            LogLevel logLevel,
+            Exception? ex,
+            bool filterException
+        )
         {
             rwLockS.EnterWriteLock();
             try
@@ -223,7 +232,9 @@ namespace HKW.Libs.Log4Cs
         /// <returns>线程Id</returns>
         private static string GetThreadId()
         {
-            return Options.DefaultShowThreadId ? Thread.CurrentThread.ManagedThreadId.ToString() : string.Empty;
+            return Options.DefaultShowThreadId
+                ? Thread.CurrentThread.ManagedThreadId.ToString()
+                : string.Empty;
         }
 
         /// <summary>
@@ -247,7 +258,12 @@ namespace HKW.Libs.Log4Cs
             if (logLevel is LogLevel.DEBUG || logLevel is LogLevel.ERROR)
                 origin = GetOrigin(true, false, true, true);
             else
-                origin = GetOrigin(Options.DefaultShowNamespace, Options.DefaultOnlyBaseNamespace, Options.DefaultShowClass, Options.DefaultShowMethod);
+                origin = GetOrigin(
+                    Options.DefaultShowNamespace,
+                    Options.DefaultOnlyBaseNamespace,
+                    Options.DefaultShowClass,
+                    Options.DefaultShowMethod
+                );
             return origin;
         }
 
@@ -259,13 +275,25 @@ namespace HKW.Libs.Log4Cs
         /// <param name="getClass">获取类</param>
         /// <param name="getMethod">获取方法</param>
         /// <returns>源信息</returns>
-        private static string GetOrigin(bool getNamespace, bool onlyBaseNamespace, bool getClass, bool getMethod)
+        private static string GetOrigin(
+            bool getNamespace,
+            bool onlyBaseNamespace,
+            bool getClass,
+            bool getMethod
+        )
         {
-            var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(Logger))?.GetMethod();
+            var method = new StackTrace()
+                .GetFrames()
+                .First(f => f.GetMethod()?.DeclaringType?.Name != nameof(Logger))
+                ?.GetMethod();
             var strs = new List<string>();
             if (getNamespace && method?.DeclaringType?.Namespace is string strNamespace)
             {
-                if (onlyBaseNamespace && strNamespace.Split(".")?.FirstOrDefault(defaultValue: null) is string baseNamespace)
+                if (
+                    onlyBaseNamespace
+                    && strNamespace.Split(".")?.FirstOrDefault(defaultValue: null)
+                        is string baseNamespace
+                )
                     strNamespace = baseNamespace;
                 strs.Add(strNamespace);
             }
@@ -292,7 +320,7 @@ namespace HKW.Libs.Log4Cs
             return threadId;
         }
 
-        private static string GetExceptionMessage(Exception? ex, bool? filterException)
+        private static string GetExceptionMessage(Exception? ex, bool filterException)
         {
             if (ex is null)
                 return string.Empty;
@@ -310,7 +338,7 @@ namespace HKW.Libs.Log4Cs
             }
             if (!string.IsNullOrWhiteSpace(exMessage))
                 exMessage = $"\n{exMessage}";
-            return exMessage;
+            return FilterPath(exMessage);
         }
 
         /// <summary>
@@ -320,9 +348,19 @@ namespace HKW.Libs.Log4Cs
         /// <returns></returns>
         public static string FilterException(Exception ex)
         {
-            var list = ex.ToString().Split("\r\n").Where(s => !Options.ExceptionFilter.Any(f => s.Contains(f)));
-            return Regex.Replace(string.Join("\r\n", list), @$"[\S]+(?=. {BaseNamespace})", "");
+            var list = ex.ToString()
+                .Split("\r\n")
+                .Where(s => !Options.ExceptionFilter.Any(f => s.Contains(f)));
+            return string.Join("\r\n", list);
         }
+
+        /// <summary>
+        /// 过滤路径信息,<see cref="BaseNamespace"/>必须与工程文件夹一致
+        /// </summary>
+        /// <param name="exMessage">错误信息</param>
+        /// <returns>过滤后的数据</returns>
+        public static string FilterPath(string exMessage) =>
+            Regex.Replace(exMessage, @$"[\S]+(?=. {BaseNamespace})", "");
 
         /// <summary>关闭</summary>
         private static void Close()
