@@ -79,7 +79,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 Author = modInfo.Author;
                 Version = modInfo.Version;
                 IsUtility = modInfo.IsUtility;
-                Description = modInfo.Description.Trim();
+                Description = modInfo.Description;
                 GameVersion = modInfo.GameVersion;
                 ModPlugin = modInfo.ModPlugin;
                 ModDirectory = modInfo.ModDirectory;
