@@ -65,9 +65,14 @@ namespace HKW.Libs.Log4Cs
             public bool DefaultFilterException { get; set; } = false;
 
             /// <summary>
-            /// 默认显示方法名
+            /// 默认显示命名空间
             /// </summary>
-            public bool DefaultShowMethod { get; set; } = true;
+            public bool DefaultShowNamespace { get; set; } = true;
+
+            /// <summary>
+            /// 默认只显示基命名空间
+            /// </summary>
+            public bool DefaultOnlyBaseNamespace { get; set; } = true;
 
             /// <summary>
             /// 默认显示类名
@@ -75,9 +80,9 @@ namespace HKW.Libs.Log4Cs
             public bool DefaultShowClass { get; set; } = true;
 
             /// <summary>
-            /// 默认显示命名空间
+            /// 默认显示方法名
             /// </summary>
-            public bool DefaultShowNameSpace { get; set; } = false;
+            public bool DefaultShowMethod { get; set; } = false;
 
             /// <summary>
             /// 默认显示线程Id
@@ -213,26 +218,6 @@ namespace HKW.Libs.Log4Cs
         }
 
         /// <summary>
-        /// 获取源信息
-        /// </summary>
-        /// <param name="getClass">获取类</param>
-        /// <param name="getNamespace">获取命名空间</param>
-        /// <param name="getMethod">获取方法</param>
-        /// <returns>源信息</returns>
-        private static string GetOrigin(bool getClass, bool getNamespace, bool getMethod)
-        {
-            var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(Logger))?.GetMethod();
-            var strs = new List<string>();
-            if (getNamespace && method?.DeclaringType?.Namespace is string strNamespace)
-                strs.Add(strNamespace);
-            if (getClass && method?.DeclaringType?.Name is string strClass)
-                strs.Add(strClass);
-            if (getMethod && method?.Name is string strMethod)
-                strs.Add(strMethod);
-            return string.Join(".", strs);
-        }
-
-        /// <summary>
         /// 获取线程Id
         /// </summary>
         /// <returns>线程Id</returns>
@@ -259,11 +244,36 @@ namespace HKW.Libs.Log4Cs
         private static string GetOriginMessage(LogLevel logLevel)
         {
             string origin;
-            if (logLevel == LogLevel.DEBUG)
-                origin = GetOrigin(true, true, true);
+            if (logLevel is LogLevel.DEBUG || logLevel is LogLevel.ERROR)
+                origin = GetOrigin(true, false, true, true);
             else
-                origin = GetOrigin(Options.DefaultShowClass, Options.DefaultShowNameSpace, Options.DefaultShowMethod);
+                origin = GetOrigin(Options.DefaultShowNamespace, Options.DefaultOnlyBaseNamespace, Options.DefaultShowClass, Options.DefaultShowMethod);
             return origin;
+        }
+
+        /// <summary>
+        /// 获取源信息
+        /// </summary>
+        /// <param name="getNamespace">获取命名空间</param>
+        /// <param name="onlyBaseNamespace">只要基命名空间</param>
+        /// <param name="getClass">获取类</param>
+        /// <param name="getMethod">获取方法</param>
+        /// <returns>源信息</returns>
+        private static string GetOrigin(bool getNamespace, bool onlyBaseNamespace, bool getClass, bool getMethod)
+        {
+            var method = new StackTrace().GetFrames().First(f => f.GetMethod()?.DeclaringType?.Name != nameof(Logger))?.GetMethod();
+            var strs = new List<string>();
+            if (getNamespace && method?.DeclaringType?.Namespace is string strNamespace)
+            {
+                if (onlyBaseNamespace && strNamespace.Split(".")?.FirstOrDefault(defaultValue: null) is string baseNamespace)
+                    strNamespace = baseNamespace;
+                strs.Add(strNamespace);
+            }
+            if (getClass && method?.DeclaringType?.Name is string strClass)
+                strs.Add(strClass);
+            if (getMethod && method?.Name is string strMethod)
+                strs.Add(strMethod);
+            return string.Join(".", strs);
         }
 
         private static string GetDataTimeMessage()

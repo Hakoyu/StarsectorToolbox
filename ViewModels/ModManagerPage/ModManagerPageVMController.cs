@@ -128,7 +128,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             CheckEnabledMods();
             CheckEnabledModsDependencies();
             CheckUserData();
-            RefreshModsContextMenu();
+            //RefreshModsContextMenu();
             RefreshGroupModCount();
             GC.Collect();
         }
@@ -1061,7 +1061,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                             )
                         )
                         {
-                            Tag = false
+                            ShowMainWindowBlurEffect = false
                         }
                     );
                 else
@@ -1089,11 +1089,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             allListBoxItems.Add(name, listBoxItem);
             allModShowInfoGroups.Add(name, new());
             ComboBox_ExportUserGroup.Add(new() { Content = name, Tag = name });
+            Logger.Info($"{I18nRes.AddUserGroup} {icon} {name}");
             RefreshGroupModCount();
             RefreshModsContextMenu();
             if (remindSave)
                 IsRemindSave = true;
-            Logger.Info($"{I18nRes.AddUserGroup} {icon} {name}");
 
             MenuItemVM RenameUserGroupMenuItemVM()
             {
@@ -1169,7 +1169,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         )
                         {
                             Icon = MessageBoxVM.Icon.Warning,
-                            Tag = true
+                            ShowMainWindowBlurEffect = false
                         }
                     );
                     return;

@@ -46,6 +46,9 @@ namespace HKW.ViewModels.Dialogs
             /// <summary>标记</summary>
             public object? Tag { get; set; }
 
+            /// <summary>标记</summary>
+            public bool ShowMainWindowBlurEffect { get; set; } = true;
+
             /// <summary>消息</summary>
             public string Message { get; private set; }
 

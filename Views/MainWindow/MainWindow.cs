@@ -53,7 +53,7 @@ namespace StarsectorTools.Views.MainWindow
                     var button = ButtonConverter(d.Button);
                     var icon = IconConverter(d.Icon);
                     MessageBoxResult result;
-                    if (d.Tag is true)
+                    if (d.ShowMainWindowBlurEffect is true)
                     {
                         SetBlurEffect();
                         result = MessageBoxX.Show(message, d.Caption, button, icon);

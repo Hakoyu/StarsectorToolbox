@@ -84,9 +84,11 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         private void RefreshPage(ListBoxItemVM vm)
         {
-            vm.Tag = CreatePage(vm.Tag!.GetType());
+            var type = vm.Tag!.GetType();
+            vm.Tag = CreatePage(type);
             if (vm.IsSelected)
                 ShowPage(vm.Tag);
+            Logger.Info($"{I18nRes.RefreshPage}: {type.FullName}");
         }
 
         private object? CreatePage(Type type)
