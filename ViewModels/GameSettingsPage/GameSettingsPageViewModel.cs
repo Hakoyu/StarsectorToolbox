@@ -137,7 +137,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             }
             vmparamsData.xmsx = $"{memory}{unit}";
             File.WriteAllText($"{GameInfo.BaseDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
-            Logger.Record($"{I18nRes.VmparamsMemorySet}: {vmparamsData.xmsx}");
+            Logger.Info($"{I18nRes.VmparamsMemorySet}: {vmparamsData.xmsx}");
             MessageBoxVM.Show(new(I18nRes.VmparamsMemorySetComplete));
         }
 
@@ -155,7 +155,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             if (Utils.FileExists(GameInfo.LogFile, false))
                 Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
             File.Create(GameInfo.LogFile).Close();
-            Logger.Record(I18nRes.GameLogCleanupCompleted);
+            Logger.Info(I18nRes.GameLogCleanupCompleted);
         }
 
         [RelayCommand]
@@ -188,9 +188,8 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 }
                 if (!Utils.DeleteDirToRecycleBin(selected))
                 {
-                    Logger.Record(
-                        $"{I18nRes.MissionsLoadoutsNotExist} {I18nRes.Path}: {selected}",
-                        LogLevel.WARN
+                    Logger.Warring(
+                        $"{I18nRes.MissionsLoadoutsNotExist} {I18nRes.Path}: {selected}"
                     );
                     MessageBoxVM.Show(
                         new($"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {selected}")
@@ -201,7 +200,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 }
                 ComboBox_MissionsLoadouts.Remove(ComboBox_MissionsLoadouts.SelectedItem!);
             }
-            Logger.Record(I18nRes.MissionsLoadoutsClearCompleted);
+            Logger.Info(I18nRes.MissionsLoadoutsClearCompleted);
             MessageBoxVM.Show(new(I18nRes.MissionsLoadoutsClearCompleted));
         }
 
@@ -236,7 +235,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             int count = string.IsNullOrEmpty(RetainRecentSaveCount) ? 0 : dirsPath.Count - int.Parse(RetainRecentSaveCount);
             for (int i = 0; i < count; i++)
                 Utils.DeleteDirToRecycleBin(list.ElementAt(i).Key);
-            Logger.Record(I18nRes.SaveCleanComplete);
+            Logger.Info(I18nRes.SaveCleanComplete);
             MessageBoxVM.Show(new(I18nRes.SaveCleanComplete));
         }
 
@@ -247,7 +246,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 Utils.OpenLink(GameInfo.SaveDirectory);
             else
             {
-                Logger.Record($"{I18nRes.SaveNotExist} {I18nRes.Path}: {GameInfo.SaveDirectory}", LogLevel.WARN);
+                Logger.Warring($"{I18nRes.SaveNotExist} {I18nRes.Path}: {GameInfo.SaveDirectory}");
                 MessageBoxVM.Show(new($"{I18nRes.SaveNotExist}\n{I18nRes.Path}: {GameInfo.SaveDirectory}") { Icon = MessageBoxVM.Icon.Warning });
             }
         }
@@ -270,12 +269,12 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 data = Regex.Replace(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",", @$"""resolutionOverride"":""{ResolutionWidth}x{ResolutionHeight}"",");
                 File.WriteAllText(GameInfo.SettingsFile, data);
                 CustomResolutionCanReset = true;
-                Logger.Record($"{I18nRes.CustomResolutionSetComplete} {ResolutionWidth}x{ResolutionHeight}");
+                Logger.Info($"{I18nRes.CustomResolutionSetComplete} {ResolutionWidth}x{ResolutionHeight}");
                 MessageBoxVM.Show(new($"{I18nRes.CustomResolutionSetComplete}\n{I18nRes.CustomResolutionHelp}"));
             }
             catch (Exception ex)
             {
-                Logger.Record(I18nRes.CustomResolutionSetupError, ex);
+                Logger.Error(I18nRes.CustomResolutionSetupError, ex);
                 MessageBoxVM.Show(new(I18nRes.CustomResolutionSetupError) { Icon = MessageBoxVM.Icon.Error });
             }
         }
@@ -295,12 +294,12 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 CustomResolutionCanReset = false;
                 ResolutionWidth = string.Empty;
                 ResolutionHeight = string.Empty;
-                Logger.Record(I18nRes.ResetSuccessful);
+                Logger.Info(I18nRes.ResetSuccessful);
                 MessageBoxVM.Show(new(I18nRes.ResetSuccessful));
             }
             catch (Exception ex)
             {
-                Logger.Record(I18nRes.CustomResolutionResetError, ex);
+                Logger.Error(I18nRes.CustomResolutionResetError, ex);
                 MessageBoxVM.Show(new(I18nRes.CustomResolutionResetError) { Icon = MessageBoxVM.Icon.Error });
             }
         }

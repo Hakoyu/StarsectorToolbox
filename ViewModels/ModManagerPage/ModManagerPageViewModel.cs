@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -292,20 +293,20 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             if (nowSelectedMod is null)
                 return;
-            string err = null!;
+            StringBuilder errSB = new();
             foreach (var dependencie in nowSelectedMod.DependenciesSet!)
             {
-                if (allModInfos.ContainsKey(dependencie.Id))
-                    ChangeModEnabled(dependencie.Id, true);
-                else
+                if (!allModInfos.ContainsKey(dependencie.Id))
                 {
-                    err ??= $"{I18nRes.NotFoundDependencies}\n";
-                    err += $"{dependencie}\n";
+                    errSB.AppendLine(dependencie.ToString());
+                    continue;
                 }
+                ChangeModEnabled(dependencie.Id, true);
             }
-            if (err != null)
+            if (errSB.Length > 0)
             {
-                Logger.Record(err, LogLevel.WARN);
+                string err = errSB.ToString();
+                Logger.Warring(err);
                 MessageBoxVM.Show(new(err) { Icon = MessageBoxVM.Icon.Warning });
             }
             CheckEnabledModsDependencies();
@@ -422,7 +423,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             string filePath = $"{string.Join("\\", fileName.Split("\\")[..^1])}\\descriptor.xml";
             if (!Utils.FileExists(filePath))
                 return;
-            string? err = null;
+            StringBuilder errSB = new();
             IEnumerable<string> list = null!;
             try
             {
@@ -431,7 +432,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
+                Logger.Error($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
                 MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}\n") { Icon = MessageBoxVM.Icon.Question });
                 return;
             }
@@ -446,19 +447,18 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 return;
             foreach (string id in list)
             {
-                if (allModInfos.ContainsKey(id))
-                    ChangeModEnabled(id, true);
-                else
+                if (!allModInfos.ContainsKey(id))
                 {
-                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
-                    err ??= $"{I18nRes.NotFoundMod}\n";
-                    err += $"{id}\n";
+                    Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                    errSB.AppendLine(id);
+                    continue;
                 }
+                ChangeModEnabled(id, true);
             }
-            if (err != null)
+            if (errSB.Length > 0)
             {
-                Logger.Record(err, LogLevel.WARN);
-                MessageBoxVM.Show(new(err) { Icon = MessageBoxVM.Icon.Warning });
+                Logger.Warring($"{I18nRes.NotFoundMod}\n{errSB}");
+                MessageBoxVM.Show(new($"{I18nRes.NotFoundMod}\n{errSB}") { Icon = MessageBoxVM.Icon.Warning });
             }
         }
 
@@ -510,12 +510,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
             foreach (var info in allUserGroups[groupName])
                 ChangeModEnabled(info, false);
-            int needSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
-            HashSet<int> set = new();
-            while (set.Count < needSize)
-                set.Add(new Random(Guid.NewGuid().GetHashCode()).Next(0, count));
-            foreach (int i in set)
-                ChangeModEnabled(allUserGroups[groupName].ElementAt(i));
+            int requestSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
+            var randomList = allUserGroups[groupName].OrderBy(s => new Random(Guid.NewGuid().GetHashCode()).Next());
+            foreach (var id in randomList.Take(requestSize))
+                ChangeModEnabled(id, true);
             CheckEnabledModsDependencies();
             RefreshGroupModCount();
         }

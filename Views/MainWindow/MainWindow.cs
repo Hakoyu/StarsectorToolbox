@@ -199,7 +199,7 @@ namespace StarsectorTools.Views.MainWindow
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18n.PageInitializeError}: {type.FullName}", ex);
+                Logger.Error($"{I18n.PageInitializeError}: {type.FullName}", ex);
                 MessageBoxVM.Show(
                     new($"{I18n.PageInitializeError}:\n{type.FullName}")
                     {

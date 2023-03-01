@@ -159,7 +159,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 SettingsButtonIsChecked = true;
                 ListBox_MainMenu.SelectedItem = ListBox_ExtensionMenu.SelectedItem = null;
             }
-            Logger.Record($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
+            Logger.Info($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
         }
 
         [RelayCommand]

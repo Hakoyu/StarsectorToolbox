@@ -82,7 +82,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Lang"] = ObservableI18n.Language;
             toml.SaveTo(ST.ConfigTomlFile);
-            Logger.Record($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
+            Logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
         }
 
         private void ComboBox_LogLevel_SelectionChangedEvent(object parameter)
@@ -96,7 +96,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
             toml["LogLevel"] = level;
             toml.SaveTo(ST.ConfigTomlFile);
             Logger.Options.DefaultLevel = Logger.LogLevelConverter(level);
-            Logger.Record($"{I18nRes.LogLevelSwitch}: {Logger.Options.DefaultLevel}");
+            Logger.Info($"{I18nRes.LogLevelSwitch}: {Logger.Options.DefaultLevel}");
         }
 
         [RelayCommand]
@@ -126,7 +126,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
                     new(ExtensionDebugPath)
                 );
-                Logger.Record($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
+                Logger.Info($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
             }
         }
 
@@ -147,7 +147,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
                     new(ExtensionDebugPath)
                 );
-                Logger.Record($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
+                Logger.Info($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
             }
         }
 

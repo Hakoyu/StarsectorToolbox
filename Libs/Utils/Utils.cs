@@ -35,7 +35,7 @@ namespace StarsectorTools.Libs.Utils
         {
             bool isExists = File.Exists(file);
             if (!isExists && outputLog)
-                Logger.Record($"{I18n.FileNotFound} {I18n.Path}: {file}", LogLevel.WARN);
+                Logger.Warring($"{I18n.FileNotFound} {I18n.Path}: {file}");
             return isExists;
         }
 
@@ -49,10 +49,7 @@ namespace StarsectorTools.Libs.Utils
         {
             bool exists = Directory.Exists(directory);
             if (!exists && outputLog)
-                Logger.Record(
-                    $"{I18n.DirectoryNotFound} {I18n.Path}: {directory}",
-                    LogLevel.WARN
-                );
+                Logger.Warring($"{I18n.DirectoryNotFound} {I18n.Path}: {directory}");
             return exists;
         }
 
@@ -92,7 +89,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18n.LoadError} {file}", ex);
+                Logger.Error($"{I18n.LoadError} {file}", ex);
             }
             return jsonObject;
         }
@@ -140,7 +137,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record(I18n.LoadError, ex);
+                Logger.Error(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -163,7 +160,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record(I18n.LoadError, ex);
+                Logger.Error(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -186,7 +183,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record(I18n.LoadError, ex);
+                Logger.Error(I18n.LoadError, ex);
                 return false;
             }
         }
@@ -226,7 +223,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18n.ProcessStartError} {link}", ex);
+                Logger.Error($"{I18n.ProcessStartError} {link}", ex);
                 return false;
             }
         }
@@ -245,7 +242,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18n.ProcessStartError} {file}", ex);
+                Logger.Error($"{I18n.ProcessStartError} {file}", ex);
                 return false;
             }
         }
@@ -258,7 +255,7 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="destDirectory">输出目录</param>
         /// <param name="archiveName">压缩文件名</param>
         /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool ArchiveDirToDir(
+        public async static Task<bool> ArchiveDirToDir(
             string sourceDirectory,
             string destDirectory,
             string? archiveName = null
@@ -268,25 +265,28 @@ namespace StarsectorTools.Libs.Utils
                 return false;
             try
             {
-                using (var archive = ZipArchive.Create())
+                await Task.Run(() =>
                 {
-                    archive.AddAllFromDirectory(sourceDirectory);
-                    if (archiveName is null)
-                        archive.SaveTo(
-                            $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}.zip",
-                            CompressionType.Deflate
-                        );
-                    else
-                        archive.SaveTo(
-                            $"{destDirectory}\\{archiveName}.zip",
-                            CompressionType.Deflate
-                        );
-                }
+                    using (var archive = ZipArchive.Create())
+                    {
+                        archive.AddAllFromDirectory(sourceDirectory);
+                        if (archiveName is null)
+                            archive.SaveTo(
+                                $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}.zip",
+                                CompressionType.Deflate
+                            );
+                        else
+                            archive.SaveTo(
+                                $"{destDirectory}\\{archiveName}.zip",
+                                CompressionType.Deflate
+                            );
+                    }
+                });
                 return true;
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectory}", ex);
+                Logger.Error($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectory}", ex);
                 return false;
             }
         }
@@ -344,7 +344,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18n.ZipFileError}  {I18n.Path}: {sourceFile}", ex);
+                Logger.Error($"{I18n.ZipFileError}  {I18n.Path}: {sourceFile}", ex);
                 if (DirectoryExists(destDirectory, false))
                     Directory.Delete(destDirectory);
                 return false;

@@ -40,13 +40,13 @@ namespace StarsectorTools.ViewModels.InfoPage
                 var tagName = Regex.Match(releases, @"(?<=""name"": "")[^""]+").Value;
                 if (!string.IsNullOrWhiteSpace(tagName))
                 {
-                    Logger.Record($"获取成功\n{tagName}");
+                    Logger.Info($"获取成功\n{tagName}");
                     //Utils.ShowMessageBox($"获取成功\n最新版本: {tagName}");
                     CheckUpdateIcon = "✅";
                 }
                 else
                 {
-                    Logger.Record($"获取失败\n{releases}", LogLevel.WARN);
+                    Logger.Warring($"获取失败\n{releases}");
                     //Utils.ShowMessageBox($"获取失败\n{releases}", MessageBoxImage.Warning);
                     CheckUpdateIcon = "❎";
                 }

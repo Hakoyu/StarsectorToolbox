@@ -78,7 +78,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record(I18n.ModInfoError, ex);
+                Logger.Error(I18n.ModInfoError, ex);
                 return null;
             }
         }
@@ -97,7 +97,7 @@ namespace StarsectorTools.Libs.Utils
             }
             catch (Exception ex)
             {
-                Logger.Record(I18n.ModInfoError, ex);
+                Logger.Error(I18n.ModInfoError, ex);
                 return null;
             }
         }

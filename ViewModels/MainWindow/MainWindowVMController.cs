@@ -97,7 +97,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.PageInitializeError}: {type.FullName}", ex);
+                Logger.Error($"{I18nRes.PageInitializeError}: {type.FullName}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.PageInitializeError}:\n{type.FullName}")
                     {
@@ -120,7 +120,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             if (File.Exists(GameInfo.LogFile))
                 Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
             File.Create(GameInfo.LogFile).Close();
-            Logger.Record(I18nRes.GameLogCleanupCompleted);
+            Logger.Info(I18nRes.GameLogCleanupCompleted);
         }
         #endregion
         #region ExtensionPage
@@ -174,7 +174,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         {
             if (string.IsNullOrWhiteSpace(path))
             {
-                Logger.Record(I18nRes.ExtensionPathIsEmpty, LogLevel.WARN);
+                Logger.Warring(I18nRes.ExtensionPathIsEmpty);
                 MessageBoxVM.Show(
                     new(I18nRes.ExtensionPathIsEmpty) { Icon = MessageBoxVM.Icon.Warning }
                 );
@@ -186,9 +186,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                 // 判断文件存在性
                 if (!File.Exists(tomlFile))
                 {
-                    Logger.Record(
-                        $"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}",
-                        LogLevel.WARN
+                    Logger.Warring(
+                        $"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}"
                     );
                     MessageBoxVM.Show(
                         new($"{I18nRes.ExtensionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
@@ -203,10 +202,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 // 检测是否有相同的拓展
                 if (allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
                 {
-                    Logger.Record(
-                        $"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}",
-                        LogLevel.WARN
-                    );
+                    Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
                     MessageBoxVM.Show(
                         new($"{I18nRes.ExtensionAlreadyExists}\n{I18nRes.Path}: {tomlFile}")
                         {
@@ -218,10 +214,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 // 判断组件文件是否存在
                 if (!File.Exists(assemblyFile))
                 {
-                    Logger.Record(
-                        $"{I18nRes.ExtensionFileError} {I18nRes.Path}: {tomlFile}",
-                        LogLevel.WARN
-                    );
+                    Logger.Warring($"{I18nRes.ExtensionFileError} {I18nRes.Path}: {tomlFile}");
                     MessageBoxVM.Show(
                         new($"{I18nRes.ExtensionFileError}\n{I18nRes.Path}: {tomlFile}")
                         {
@@ -245,10 +238,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 // 判断是否成功创建了页面
                 if (extensionInfo.ExtensionPage is null)
                 {
-                    Logger.Record(
-                        $"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}",
-                        LogLevel.WARN
-                    );
+                    Logger.Warring($"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}");
                     MessageBoxVM.Show(
                         new($"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}")
                         {
@@ -260,10 +250,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 // 判断页面是否实现了接口
                 if (extensionInfo.ExtensionPage is not ISTPage)
                 {
-                    Logger.Record(
-                        $"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}",
-                        LogLevel.WARN
-                    );
+                    Logger.Warring($"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}");
                     MessageBoxVM.Show(
                         new($"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}")
                         {
@@ -276,7 +263,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.ExtensionLoadError} {I18nRes.Path}: {tomlFile}", ex);
+                Logger.Error($"{I18nRes.ExtensionLoadError} {I18nRes.Path}: {tomlFile}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}")
                     {
@@ -299,7 +286,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.ConfigTomlFile}", ex);
+                Logger.Error($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.ConfigTomlFile}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.ConfigFileError}\n{I18nRes.Path}: {ST.ConfigTomlFile}")
                     {
@@ -395,7 +382,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 ResourceDictionary.Config_toml
             );
             File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
-            Logger.Record(
+            Logger.Info(
                 $"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}"
             );
         }
@@ -478,7 +465,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             catch (Exception ex)
             {
                 var type = page.GetType();
-                Logger.Record($"{I18nRes.PageSaveError} {type.FullName}", ex);
+                Logger.Error($"{I18nRes.PageSaveError} {type.FullName}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.PageSaveError} {type.FullName}\n{Logger.FilterException(ex)}")
                     {
@@ -521,7 +508,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             catch (Exception ex)
             {
                 var type = page.GetType();
-                Logger.Record($"{I18nRes.PageSaveError} {type.FullName}", ex);
+                Logger.Error($"{I18nRes.PageSaveError} {type.FullName}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.PageSaveError} {type.FullName}\n{Logger.FilterException(ex)}")
                     {
@@ -564,7 +551,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             catch (Exception ex)
             {
                 var type = page.GetType();
-                Logger.Record($"{I18nRes.PageCloseError} {type.FullName}", ex);
+                Logger.Error($"{I18nRes.PageCloseError} {type.FullName}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.PageCloseError} {type.FullName}\n{Logger.FilterException(ex)}")
                     {

@@ -46,7 +46,7 @@ namespace StarsectorTools.Libs.GameInfo
         {
             if (string.IsNullOrWhiteSpace(directoryName))
             {
-                Logger.Record(I18n.GameDirectoryIsEmpty, LogLevel.ERROR);
+                Logger.Error(I18n.GameDirectoryIsEmpty);
                 MessageBoxVM.Show(new(I18n.GameDirectoryIsEmpty) { Icon = MessageBoxVM.Icon.Error });
                 return false;
             }
@@ -68,12 +68,12 @@ namespace StarsectorTools.Libs.GameInfo
                 }
                 catch (Exception ex)
                 {
-                    Logger.Record($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
+                    Logger.Error($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
                 }
             }
             else
             {
-                Logger.Record($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}", LogLevel.ERROR);
+                Logger.Error($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}");
                 MessageBoxVM.Show(new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error });
             }
             return false;
@@ -94,7 +94,7 @@ namespace StarsectorTools.Libs.GameInfo
                 string directory = Path.GetDirectoryName(fileName)!;
                 if (SetGameData(directory))
                 {
-                    Logger.Record($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
+                    Logger.Info($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
                     return true;
                 }
             }

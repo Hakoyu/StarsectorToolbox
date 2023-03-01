@@ -49,7 +49,7 @@ namespace StarsectorTools.Views.MainWindow
             }
             catch (Exception ex)
             {
-                Logger.Record(
+                Logger.Error(
                     $"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}",
                     ex,
                     false
@@ -69,7 +69,7 @@ namespace StarsectorTools.Views.MainWindow
             ViewModel.ListBox_MainMenu.SelectedItem = ViewModel.ListBox_MainMenu[0];
             ViewModel.NowPage = ViewModel.ListBox_MainMenu.SelectedItem.Tag;
 
-            Logger.Record(I18nRes.InitializationCompleted);
+            Logger.Info(I18nRes.InitializationCompleted);
         }
 
         private void OnDispatcherUnhandledException(
@@ -79,7 +79,7 @@ namespace StarsectorTools.Views.MainWindow
         {
             if (e.Exception.Source is nameof(StarsectorTools))
             {
-                Logger.Record(I18nRes.GlobalException, e.Exception, false);
+                Logger.Error(I18nRes.GlobalException, e.Exception, false);
                 MessageBoxVM.Show(
                     new($"{I18nRes.GlobalExceptionMessage}\n\n{Logger.FilterException(e.Exception)}")
                     {
@@ -89,7 +89,7 @@ namespace StarsectorTools.Views.MainWindow
             }
             else
             {
-                Logger.Record(
+                Logger.Error(
                     $"{I18nRes.GlobalExtensionException}: {e.Exception.Source}",
                     e.Exception,
                     false

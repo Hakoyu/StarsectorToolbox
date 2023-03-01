@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using HKW.Libs.Log4Cs;
@@ -90,9 +91,9 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                     ResolutionHeight = resolution.Last();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                Logger.Record(I18nRes.CustomResolutionGetFailed, LogLevel.ERROR);
+                Logger.Error(I18nRes.CustomResolutionGetFailed, ex);
                 MessageBoxVM.Show(new(I18nRes.CustomResolutionGetFailed) { Icon = MessageBoxVM.Icon.Error });
             }
         }

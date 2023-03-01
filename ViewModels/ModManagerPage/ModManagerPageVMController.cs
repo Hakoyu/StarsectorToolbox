@@ -147,11 +147,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     continue;
                 }
                 allModInfos.Add(info.Id, info);
-                Logger.Record($"{I18nRes.ModAddSuccess}: {dir.FullName}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.ModAddSuccess}: {dir.FullName}");
             }
-            Logger.Record(
-                string.Format(I18nRes.ModAddCompleted, allModInfos.Count, errSize),
-                LogLevel.INFO
+            Logger.Info(
+                string.Format(I18nRes.ModAddCompleted, allModInfos.Count, errSize)
             );
             if (errSB.Length > 0)
                 MessageBoxVM.Show(
@@ -166,7 +165,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             foreach (var modInfo in allModInfos.Values)
                 AddModShowInfo(modInfo, false);
-            Logger.Record($"{I18nRes.ModShowInfoSetSuccess} {I18nRes.Size}: {allModInfos.Count}");
+            Logger.Info($"{I18nRes.ModShowInfoSetSuccess} {I18nRes.Size}: {allModInfos.Count}");
             //ListBox_ModsGroupMenu.SelectedIndex = 0;
         }
 
@@ -196,7 +195,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 }
                 catch (Exception ex)
                 {
-                    Logger.Record($"{I18nRes.IconLoadError} {I18nRes.Path}: {filePath}", ex);
+                    Logger.Error($"{I18nRes.IconLoadError} {I18nRes.Path}: {filePath}", ex);
                     return null;
                 }
             }
@@ -209,7 +208,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             allModInfos.Add(modInfo.Id, modInfo);
             AddModShowInfo(modInfo);
-            Logger.Record($"{I18nRes.RemoveMod} {modInfo.Id} {modInfo.Version}", LogLevel.DEBUG);
+            Logger.Debug($"{I18nRes.RemoveMod} {modInfo.Id} {modInfo.Version}");
         }
 
         private void AddModShowInfo(ModInfo modInfo, bool createContextMenu = true)
@@ -241,7 +240,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
             if (createContextMenu)
                 showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
-            Logger.Record($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}", LogLevel.DEBUG);
+            Logger.Debug($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}");
         }
         #endregion
         #region RemoveMod
@@ -252,7 +251,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             var modInfo = allModInfos[id];
             allModInfos.Remove(id);
             RemoveModShowInfo(id);
-            Logger.Record($"{I18nRes.RemoveMod} {id} {modInfo.Version}", LogLevel.DEBUG);
+            Logger.Debug($"{I18nRes.RemoveMod} {id} {modInfo.Version}");
         }
 
         private void RemoveModShowInfo(string id)
@@ -291,7 +290,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region CreateModShowContextMenu
         private ContextMenuVM CreateModShowContextMenu(ModShowInfo modShowInfo)
         {
-            Logger.Record($"{modShowInfo.Id} {I18nRes.AddContextMenu}", LogLevel.DEBUG);
+            Logger.Debug($"{modShowInfo.Id} {I18nRes.AddContextMenu}");
             ContextMenuVM contextMenu =
                 new(
                     (list) =>
@@ -315,7 +314,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     ? I18nRes.DisableSelectedMods
                     : I18nRes.EnableSelectedMods;
                 menuItem.CommandEvent += (p) => ChangeSelectedModsEnabled();
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
             MenuItemVM CollectOrUncollectSelectedMods()
@@ -326,7 +325,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     ? I18nRes.UncollectSelectedMods
                     : I18nRes.CollectSelectedMods;
                 menuItem.CommandEvent += (p) => ChangeSelectedModsCollected();
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
             MenuItemVM OpenModDirectory()
@@ -336,12 +335,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 menuItem.Header = I18nRes.OpenModDirectory;
                 menuItem.CommandEvent += (p) =>
                 {
-                    Logger.Record(
+                    Logger.Info(
                         $"{I18nRes.OpenModDirectory} {I18nRes.Path}: {allModInfos[modShowInfo.Id].ModDirectory}"
                     );
                     Utils.OpenLink(allModInfos[modShowInfo.Id].ModDirectory);
                 };
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
             MenuItemVM DeleteMod()
@@ -365,7 +364,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         is not MessageBoxVM.Result.Yes
                     )
                         return;
-                    Logger.Record(
+                    Logger.Info(
                         $"{I18nRes.ConfirmModDeletion}?\nID: {modShowInfo.Id}\n{I18nRes.Path}: {path}\n"
                     );
                     RemoveMod(modShowInfo.Id);
@@ -375,6 +374,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     Utils.DeleteDirToRecycleBin(path);
                     IsRemindSave = true;
                 };
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
             MenuItemVM? AddToUserGroup()
@@ -385,6 +385,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     return menuItem;
                 menuItem = new();
                 menuItem.Header = I18nRes.AddModToUserGroup;
+                menuItem.ItemsSource = new();
                 foreach (var group in allUserGroups.Keys)
                 {
                     if (allUserGroups[group].Contains(modShowInfo.Id))
@@ -395,8 +396,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         ChangeUserGroupContainsSelectedMods(group, true);
                     menuItem.Add(groupItem);
                 }
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-                return menuItem;
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+                return menuItem.Any() ? menuItem : null; ;
             }
             MenuItemVM? RemoveToUserGroup()
             {
@@ -407,6 +408,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     return menuItem;
                 menuItem = new();
                 menuItem.Header = I18nRes.RemoveFromUserGroup;
+                menuItem.ItemsSource = new();
                 foreach (var group in groupContainsMod)
                 {
                     MenuItemVM groupItem = new();
@@ -415,8 +417,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         ChangeUserGroupContainsSelectedMods(group.Key, false);
                     menuItem.Add(groupItem);
                 }
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
-                return menuItem;
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+                return menuItem.Any() ? menuItem : null;
             }
         }
 
@@ -445,7 +447,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     enabledModsJson[strEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray
                 )
                     throw new ArgumentNullException();
-                Logger.Record($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
+                Logger.Info($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
                 if (GetEnabledMods(enabledModsJsonArray) is StringBuilder err)
                 {
                     MessageBoxVM.Show(
@@ -455,11 +457,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         }
                     );
                 }
-                Logger.Record($"{I18nRes.EnableMod} {I18nRes.Size}: {allEnabledModsId.Count}");
+                Logger.Info($"{I18nRes.EnableMod} {I18nRes.Size}: {allEnabledModsId.Count}");
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}", ex);
+                Logger.Error($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.LoadError}\n{I18nRes.Path}: {filePath}")
                     {
@@ -479,12 +481,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     continue;
                 if (!allModInfos.ContainsKey(id))
                 {
-                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    Logger.Warring($"{I18nRes.NotFoundMod} {id}");
                     err.AppendLine(id);
                     continue;
                 }
                 ChangeModEnabled(id, true);
-                Logger.Record($"{I18nRes.EnableMod} {id}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.EnableMod} {id}");
             }
             return err.Length > 0 ? err : null;
         }
@@ -519,7 +521,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void GetAllUserGroup(string filePath)
         {
-            Logger.Record($"{I18nRes.LoadUserGroup} {I18nRes.Path}: {filePath}");
+            Logger.Info($"{I18nRes.LoadUserGroup} {I18nRes.Path}: {filePath}");
             try
             {
                 StringBuilder errSB = new();
@@ -531,7 +533,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     string group = kv.Key;
                     if (allUserGroups.ContainsKey(group))
                     {
-                        Logger.Record($"{I18nRes.DuplicateUserGroupName} {group}");
+                        Logger.Info($"{I18nRes.DuplicateUserGroupName} {group}");
                         errSB.AppendLine($"{I18nRes.DuplicateUserGroupName} {group}");
                         continue;
                     }
@@ -547,7 +549,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.FileError} {filePath}", ex);
+                Logger.Error($"{I18nRes.FileError} {filePath}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.FileError} {filePath}") { Icon = MessageBoxVM.Icon.Error }
                 );
@@ -563,7 +565,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     continue;
                 if (!allModsShowInfo.ContainsKey(id))
                 {
-                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    Logger.Warring($"{I18nRes.NotFoundMod} {id}");
                     err.AppendLine(id);
                     continue;
                 }
@@ -575,7 +577,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void GetUserData(string filePath)
         {
-            Logger.Record($"{I18nRes.LoadUserData} {I18nRes.Path}: {filePath}");
+            Logger.Info($"{I18nRes.LoadUserData} {I18nRes.Path}: {filePath}");
             try
             {
                 TomlTable toml = TOML.Parse(filePath);
@@ -603,7 +605,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
             catch (Exception ex)
             {
-                Logger.Record($"{I18nRes.UserDataLoadError} {I18nRes.Path}: {filePath}", ex);
+                Logger.Error($"{I18nRes.UserDataLoadError} {I18nRes.Path}: {filePath}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.UserDataLoadError}\n{I18nRes.Path}: {filePath}")
                     {
@@ -615,26 +617,26 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private StringBuilder? GetUserCollectedMods(TomlArray array)
         {
-            Logger.Record(I18nRes.LoadCollectedModList);
-            StringBuilder err = new();
+            Logger.Info(I18nRes.LoadCollectedModList);
+            StringBuilder errSB = new();
             foreach (string id in array)
             {
                 if (string.IsNullOrWhiteSpace(id))
                     continue;
                 if (!allModsShowInfo.ContainsKey(id))
                 {
-                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
-                    err.AppendLine(id);
+                    Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                    errSB.AppendLine(id);
                     continue;
                 }
                 ChangeModCollected(id, true);
             }
-            return err.Length > 0 ? err : null;
+            return errSB.Length > 0 ? errSB : null;
         }
 
         private StringBuilder? GetUserCustomData(TomlArray array)
         {
-            Logger.Record(I18nRes.LoadUserCustomData);
+            Logger.Info(I18nRes.LoadUserCustomData);
             StringBuilder err = new();
             foreach (var dict in array)
             {
@@ -643,7 +645,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     continue;
                 if (!allModsShowInfo.ContainsKey(id))
                 {
-                    Logger.Record($"{I18nRes.NotFoundMod} {id}", LogLevel.WARN);
+                    Logger.Warring($"{I18nRes.NotFoundMod} {id}");
                     err.AppendLine(id);
                     continue;
                 }
@@ -661,7 +663,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 allListBoxItems.Add(item.Tag!.ToString()!, item);
             foreach (var item in ListBox_UserGroupMenu)
                 allListBoxItems.Add(item.Tag!.ToString()!, item);
-            Logger.Record(I18nRes.ListBoxItemsRetrievalCompleted);
+            Logger.Info(I18nRes.ListBoxItemsRetrievalCompleted);
         }
 
         #region TypeGroup
@@ -675,7 +677,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             foreach (var kv in toml)
                 foreach (string id in kv.Value.AsTomlArray)
                     allModsTypeGroup.Add(id, kv.Key);
-            Logger.Record(I18nRes.TypeGroupRetrievalCompleted);
+            Logger.Info(I18nRes.TypeGroupRetrievalCompleted);
         }
 
         private string CheckTypeGroup(string id)
@@ -699,13 +701,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             var type = ComboBox_ModFilterType.SelectedItem!.Tag!.ToString()!;
             if (!string.IsNullOrWhiteSpace(text))
             {
-                RefreshNowShowMods(GetSearchModsShowInfo(text, type));
-                Logger.Record($"{I18nRes.SearchMod} {text}");
+                RefreshNowShowMods(GetFilterModsShowInfo(text, type));
+                Logger.Info($"{I18nRes.SearchMod} {text}");
             }
             else
             {
                 RefreshNowShowMods(allModShowInfoGroups[nowSelectedGroupName]);
-                Logger.Record($"{I18nRes.ShowGroup} {nowSelectedGroupName}");
+                Logger.Info($"{I18nRes.ShowGroup} {nowSelectedGroupName}");
             }
         }
 
@@ -714,7 +716,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             NowShowMods = infos;
         }
 
-        private ObservableCollection<ModShowInfo> GetSearchModsShowInfo(string text, string type) =>
+        private ObservableCollection<ModShowInfo> GetFilterModsShowInfo(string text, string type) =>
             new(
                 type switch
                 {
@@ -746,16 +748,16 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 int size = allModShowInfoGroups[item!.Tag!.ToString()!].Count;
                 item.Content = $"{item.ToolTip} ({size})";
-                Logger.Record($"{I18nRes.ModCountInGroupRefresh} {item.Content}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.ModCountInGroupRefresh} {item.Content}");
             }
-            Logger.Record(I18nRes.ModCountInGroupRefreshCompleted);
+            Logger.Debug(I18nRes.ModCountInGroupRefreshCompleted);
         }
 
         private void RefreshModsContextMenu()
         {
             foreach (var showInfo in allModsShowInfo.Values)
                 showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
-            Logger.Record(
+            Logger.Info(
                 $"{I18nRes.ContextMenuRefreshCompleted} {I18nRes.Size}: {allModsShowInfo.Values.Count}"
             );
         }
@@ -786,7 +788,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 if (allUserGroups[group].Add(id))
                 {
                     allModShowInfoGroups[group].Add(allModsShowInfo[id]);
-                    Logger.Record($"{id} {I18nRes.AddModToUserGroup} {group}", LogLevel.DEBUG);
+                    Logger.Debug($"{id} {I18nRes.AddModToUserGroup} {group}");
                 }
             }
             else
@@ -794,7 +796,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 if (allUserGroups[group].Remove(id))
                 {
                     allModShowInfoGroups[group].Remove(allModsShowInfo[id]);
-                    Logger.Record($"{id} {I18nRes.RemoveFromUserGroup} {group}", LogLevel.DEBUG);
+                    Logger.Debug($"{id} {I18nRes.RemoveFromUserGroup} {group}");
                 }
             }
             showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
@@ -824,7 +826,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             while (allEnabledModsId.Count > 0)
                 ChangeModEnabled(allEnabledModsId.ElementAt(0), false);
-            Logger.Record(I18nRes.DisableAllEnabledMods);
+            Logger.Info(I18nRes.DisableAllEnabledMods);
         }
 
         private void ChangeModEnabled(string id, bool? enabled = null)
@@ -849,9 +851,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     showInfo.MissDependencies = false;
                 }
             }
-            Logger.Record(
-                $"{id} {I18nRes.ChangeEnabledStateTo} {showInfo.IsEnabled}",
-                LogLevel.DEBUG
+            Logger.Debug(
+                $"{id} {I18nRes.ChangeEnabledStateTo} {showInfo.IsEnabled}"
             );
         }
         #endregion
@@ -867,7 +868,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     );
                     if (showInfo.DependenciesSet.Any())
                     {
-                        Logger.Record(
+                        Logger.Info(
                             $"{showInfo.Id} {I18nRes.NotEnableDependencies} {showInfo.DependenciesSet}"
                         );
                         showInfo.MissDependencies = true;
@@ -910,9 +911,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 if (allCollectedModsId.Remove(showInfo.Id))
                     allModShowInfoGroups[ModTypeGroup.Collected].Remove(showInfo);
             }
-            Logger.Record(
-                $"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}",
-                LogLevel.DEBUG
+            Logger.Debug(
+                $"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}"
             );
         }
         #endregion
@@ -931,7 +931,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             foreach (var mod in allEnabledModsId)
                 jsonObject[strEnabledMods]!.AsArray().Add(mod);
             jsonObject.SaveTo(filePath);
-            Logger.Record($"{I18nRes.EnabledListSaveCompleted} {I18nRes.Path}: {filePath}");
+            Logger.Info($"{I18nRes.EnabledListSaveCompleted} {I18nRes.Path}: {filePath}");
         }
 
         private void SaveUserData(string filePath)
@@ -959,7 +959,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 }
             }
             toml.SaveTo(filePath);
-            Logger.Record($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
+            Logger.Info($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
         }
 
         private void SaveAllUserGroup(string filePath, string group = strAll)
@@ -975,7 +975,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 Save(group);
             }
             toml.SaveTo(filePath);
-            Logger.Record($"{I18nRes.UserGroupSaveCompleted} {I18nRes.Path}: {filePath}");
+            Logger.Info($"{I18nRes.UserGroupSaveCompleted} {I18nRes.Path}: {filePath}");
             void Save(string name)
             {
                 var mods = allUserGroups[name];
@@ -1014,7 +1014,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             IsShowModDetails = false;
             ModDetailUserDescription = string.Empty;
-            Logger.Record($"{I18nRes.CloseDetails}", LogLevel.DEBUG);
+            Logger.Debug($"{I18nRes.CloseDetails}");
         }
 
         private void SetModDetails(string id)
@@ -1043,7 +1043,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 ModDetailDependencies = string.Empty;
             ModDetailDescription = info.Description;
             ModDetailUserDescription = showInfo.UserDescription!;
-            Logger.Record($"{I18nRes.ShowDetails} {id}", LogLevel.DEBUG);
+            Logger.Debug($"{I18nRes.ShowDetails} {id}");
         }
         #endregion
         #region AddUserGroup
@@ -1093,7 +1093,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             RefreshModsContextMenu();
             if (remindSave)
                 IsRemindSave = true;
-            Logger.Record($"{I18nRes.AddUserGroup} {icon} {name}");
+            Logger.Info($"{I18nRes.AddUserGroup} {icon} {name}");
 
             MenuItemVM RenameUserGroupMenuItemVM()
             {
@@ -1101,7 +1101,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 MenuItemVM menuItem = new();
                 menuItem.Header = I18nRes.RenameUserGroup;
                 menuItem.CommandEvent += (p) => RenameUserGroup(listBoxItem);
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
             MenuItemVM RemoveUserGroupMenuItemVM()
@@ -1111,7 +1111,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 menuItem = new();
                 menuItem.Header = I18nRes.RemoveUserGroup;
                 menuItem.CommandEvent += (p) => RemoveUserGroup(listBoxItem);
-                Logger.Record($"{I18nRes.AddMenuItem} {menuItem.Header}", LogLevel.DEBUG);
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
         }
@@ -1226,7 +1226,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 )
             )
             {
-                Logger.Record($"{I18nRes.ZipFileError} {I18nRes.Path}: {filePath}");
+                Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {filePath}");
                 MessageBoxVM.Show(new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {filePath}"));
                 return;
             }
@@ -1266,7 +1266,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     $"{backupModsDirectory}\\{tempPath}"
                 );
                 string tempDirectory = $"{backupModsDirectory}\\{tempPath}";
-                Utils.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
+                await Utils.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
                 Directory.Delete(tempDirectory, true);
                 Directory.Delete(originalModInfo.ModDirectory, true);
                 Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
@@ -1274,7 +1274,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 AddMod(newModInfo);
                 RefreshGroupModCount();
                 IsRemindSave = true;
-                Logger.Record(
+                Logger.Info(
                     $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
                 );
             }
@@ -1286,7 +1286,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 AddMod(newModInfo);
                 RefreshGroupModCount();
                 IsRemindSave = true;
-                Logger.Record(
+                Logger.Info(
                     $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
                 );
             }

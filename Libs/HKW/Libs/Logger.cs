@@ -188,57 +188,6 @@ namespace HKW.Libs.Log4Cs
         /// 记录日志
         /// </summary>
         /// <param name="message">消息</param>
-        public static void Record(string message) =>
-            RecordBase(message, Options.DefaultLevel, null, null);
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="logLevel">日志等级</param>
-        public static void Record(string message, LogLevel logLevel) =>
-            RecordBase(message, logLevel, null, null);
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="ex">异常</param>
-        public static void Record(string message, Exception ex) =>
-            RecordBase(message, LogLevel.ERROR, ex, null);
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="ex">异常</param>
-        /// <param name="filterException">过滤器</param>
-        public static void Record(string message, Exception ex, bool filterException) =>
-            RecordBase(message, LogLevel.ERROR, ex, filterException);
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="logLevel">日志等级</param>
-        /// <param name="ex">异常</param>
-        public static void Record(string message, LogLevel logLevel, Exception ex) =>
-            RecordBase(message, logLevel, ex, null);
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
-        /// <param name="logLevel">日志等级</param>
-        /// <param name="ex">异常</param>
-        /// <param name="filterException">过滤器</param>
-        public static void Record(string message, LogLevel logLevel, Exception ex, bool filterException) =>
-            RecordBase(message, logLevel, ex, filterException);
-
-        /// <summary>
-        /// 记录日志
-        /// </summary>
-        /// <param name="message">消息</param>
         /// <param name="logLevel">日志等级</param>
         /// <param name="ex">异常</param>
         /// <param name="filterException">过滤器</param>
