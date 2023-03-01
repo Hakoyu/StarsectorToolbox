@@ -437,7 +437,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             try
             {
                 StringBuilder errSB = new();
-                if (Utils.JsonParse(filePath) is not JsonObject enabledModsJson)
+                if (Utils.JsonParse2Object(filePath) is not JsonObject enabledModsJson)
                     throw new ArgumentNullException();
                 if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(strEnabledMods))
                     throw new ArgumentNullException();
@@ -1233,7 +1233,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
             if (
                 ModInfo.Parse(
-                    Utils.JsonParse(jsonPath)!,
+                    Utils.JsonParse2Object(jsonPath)!,
                     $"{GameInfo.ModsDirectory}\\{directoryName}"
                 )
                 is not ModInfo newModInfo

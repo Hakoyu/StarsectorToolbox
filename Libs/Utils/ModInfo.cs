@@ -56,7 +56,7 @@ namespace StarsectorTools.Libs.Utils
         private ModInfo(JsonNode jsonNode, string? jsonPath = null)
         {
             if (!string.IsNullOrWhiteSpace(jsonPath)
-                && Utils.FileExists(jsonPath, false)
+                && File.Exists(jsonPath)
                 && Path.GetDirectoryName(jsonPath) is string directoryPath)
                 ModDirectory = directoryPath;
             foreach (var kv in jsonNode.AsObject())
@@ -72,7 +72,7 @@ namespace StarsectorTools.Libs.Utils
         {
             try
             {
-                if (Utils.JsonParse(jsonPath) is not JsonNode jsonNode)
+                if (Utils.JsonParse2Object(jsonPath) is not JsonNode jsonNode)
                     return null;
                 return new(jsonNode, jsonPath);
             }

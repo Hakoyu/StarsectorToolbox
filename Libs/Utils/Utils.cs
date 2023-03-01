@@ -54,11 +54,11 @@ namespace StarsectorTools.Libs.Utils
         }
 
         /// <summary>
-        /// 从json文件中读取数据并格式化,去除掉注释以及不合规的逗号
+        /// 从Json文件中读取数据并格式化,去除掉注释以及不合规的逗号
         /// </summary>
-        /// <param name="file">Json文件</param>
+        /// <param name="file">文件</param>
         /// <returns>格式化后的数据</returns>
-        public static JsonObject? JsonParse(string file)
+        public static string? JsonParse2String(string file)
         {
             if (!FileExists(file))
                 return null;
@@ -73,6 +73,18 @@ namespace StarsectorTools.Libs.Utils
             );
             // 将异常格式 id:" 变为 "id":"
             jsonData = Regex.Replace(jsonData, @"id:""", @"""id"":""");
+            return jsonData;
+        }
+
+        /// <summary>
+        /// 从Json文件中读取数据并格式化,去除掉注释以及不合规的逗号
+        /// </summary>
+        /// <param name="file">Json文件</param>
+        /// <returns>格式化后的Json对象</returns>
+        public static JsonObject? JsonParse2Object(string file)
+        {
+            if (JsonParse2String(file) is not string jsonData)
+                return null;
             JsonObject? jsonObject = null;
             try
             {
