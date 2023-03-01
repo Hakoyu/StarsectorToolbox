@@ -132,7 +132,7 @@ namespace StarsectorTools.Libs.Utils
                     break;
 
                 case "description":
-                    Description = kv.Value!.GetValue<string>();
+                    Description = kv.Value!.GetValue<string>().Trim();
                     break;
 
                 case "gameVersion":
