@@ -194,10 +194,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private ComboBoxVM comboBox_ModFilterType =
             new()
             {
-                new() { Content = I18nRes.Name ,Tag = nameof(I18nRes.Name) },
-                new() { Content = "Id",ToolTip = "Id", Tag = "Id" },
-                new() { Content = I18nRes.Author, Tag = nameof(I18nRes.Author) },
-                new() { Content = I18nRes.UserDescription, Tag = nameof(I18nRes.UserDescription) },
+                new() { Content = I18nRes.Name ,Tag = nameof(ModShowInfo.Name) },
+                new() { Content = nameof(ModShowInfo.Id), Tag = nameof(ModShowInfo.Id) },
+                new() { Content = I18nRes.Author, Tag = nameof(ModShowInfo.Author) },
+                new() { Content = I18nRes.UserDescription, Tag = nameof(ModShowInfo.UserDescription) },
             };
 
         [ObservableProperty]

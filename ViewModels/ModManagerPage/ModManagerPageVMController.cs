@@ -36,9 +36,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private const string strIcon = "Icon";
         private const string strMods = "Mods";
         private const string strUserCustomData = "UserCustomData";
-        private const string strUserDescription = "UserDescription";
-        private const string strName = "Name";
-        private const string strAuthor = "Author";
 
         /// <summary>记录了模组类型的嵌入资源链接</summary>
         private static readonly Uri modTypeGroupUri =
@@ -650,7 +647,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     continue;
                 }
                 var info = allModsShowInfo[id];
-                info.UserDescription = dict[strUserDescription];
+                info.UserDescription = dict[nameof(ModShowInfo.UserDescription)];
             }
             return err.Length > 0 ? err : null;
         }
@@ -720,19 +717,19 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             new(
                 type switch
                 {
-                    strName
+                    nameof(ModShowInfo.Name)
                         => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i => i.Name.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
-                    strId
+                    nameof(ModShowInfo.Id)
                         => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i => i.Id.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
-                    strAuthor
+                    nameof(ModShowInfo.Author)
                         => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i => i.Author.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
-                    strUserDescription
+                    nameof(ModShowInfo.UserDescription)
                         => allModShowInfoGroups[nowSelectedGroupName].Where(
                             i =>
                                 i.UserDescription.Contains(text, StringComparison.OrdinalIgnoreCase)
@@ -951,8 +948,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     toml[strUserCustomData].Add(
                         new TomlTable()
                         {
-                            [strId] = info.Id,
-                            [strUserDescription] =
+                            [nameof(ModShowInfo.Id)] = info.Id,
+                            [nameof(ModShowInfo.UserDescription)] =
                                 info.UserDescription!.Length > 0 ? info.UserDescription : "",
                         }
                     );
