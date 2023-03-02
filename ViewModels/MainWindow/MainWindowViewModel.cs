@@ -74,11 +74,15 @@ namespace StarsectorTools.ViewModels.MainWindow
             InitializeDirectories();
             // 注册日志
             Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
+            // 初始化设置
             InitializeConfig();
+            // 获取主页面
             var items = WeakReferenceMessenger.Default.Send<GetMainMenuItemsRequestMessage>();
             foreach (var item in items.Response)
                 AddMainPageItem(item);
+            // 初始化拓展页面
             InitializeExtensionPages();
+            // 初始化拓展调试页面
             RefreshExtensionDebugPage();
             WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangedMessage>(
                 this,
@@ -89,6 +93,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                 ExtensionDebugPathRequestReceive
             );
             I18n.AddPropertyChangedAction(I18nChangedAction);
+            if (ListBox_MainMenu.SelectedIndex == -1)
+                ListBox_MainMenu.SelectedIndex = 0;
         }
 
         private void I18nChangedAction()

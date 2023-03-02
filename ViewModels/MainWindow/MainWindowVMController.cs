@@ -108,6 +108,45 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
         #endregion
+
+        #region DebugPageItem
+        private void AddDebugMainPageItem(ListBoxItemVM item)
+        {
+            DetectDebugPageItemData(ref item);
+            ListBox_MainMenu.Add(item);
+        }
+        private void DetectDebugPageItemData(ref ListBoxItemVM item)
+        {
+            if (item?.Tag is not ISTPage page)
+                return;
+            item.Id = page.GetType().FullName;
+            item.Content = page.GetNameI18n();
+            item.ToolTip = page.GetDescriptionI18n();
+            item.ContextMenu = CreateDebugItemContextMenu();
+        }
+        private ContextMenuVM CreateDebugItemContextMenu()
+        {
+            ContextMenuVM contextMenu = new() { RefreshDebugPageMenuItem() };
+            return contextMenu;
+            MenuItemVM RefreshDebugPageMenuItem()
+            {
+                MenuItemVM menuItem = new();
+                menuItem.Icon = "🔄";
+                menuItem.Header = I18nRes.RefreshPage;
+                menuItem.CommandEvent += (p) =>
+                {
+                    if (p is not ListBoxItemVM vm)
+                        return;
+                    if (TryGetExtensionInfo(deubgItemPath!, true) is not ExtensionInfo extensionInfo)
+                        return;
+                    deubgItemExtensionInfo = extensionInfo;
+                    RefreshExtensionDebugPage();
+                    GC.Collect();
+                };
+                return menuItem;
+            }
+        }
+        #endregion
         #region CheckGameStartOption
         private void CheckGameStartOption()
         {
@@ -152,6 +191,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             ListBox_MainMenu.Remove(deubgItem!);
             InitializeExtensionDebugPage();
             ListBox_MainMenu.SelectedItem = deubgItem;
+            NowPage = deubgItem?.Tag;
         }
 
         private void InitializeExtensionDebugPage()
@@ -164,7 +204,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                     Icon = deubgItemExtensionInfo.Icon,
                     Tag = deubgItemExtensionInfo.ExtensionPage,
                 };
-                AddMainPageItem(deubgItem);
+                AddDebugMainPageItem(deubgItem);
             }
         }
 

@@ -65,9 +65,6 @@ namespace StarsectorTools.Views.MainWindow
             ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
             // 初始化页面
             InitializePage();
-            //设置启动页
-            ViewModel.ListBox_MainMenu.SelectedItem = ViewModel.ListBox_MainMenu[0];
-            ViewModel.NowPage = ViewModel.ListBox_MainMenu.SelectedItem.Tag;
 
             Logger.Info(I18nRes.InitializationCompleted);
         }
