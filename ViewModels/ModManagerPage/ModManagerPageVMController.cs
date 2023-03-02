@@ -1127,7 +1127,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 return;
             var name = listBoxItem!.Tag!.ToString()!;
             if (nowSelectedGroup == listBoxItem)
-                ListBox_TypeGroupMenu.SelectedIndex = 0;
+                ListBox_MainMenu.SelectedIndex = 0;
             ListBox_UserGroupMenu.Remove(listBoxItem);
             allUserGroups.Remove(name);
             allListBoxItems.Remove(name);

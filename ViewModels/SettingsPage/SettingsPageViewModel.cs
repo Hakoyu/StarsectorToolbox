@@ -130,7 +130,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
                 ) is MessageBoxVM.Result.Yes
             )
             {
-                WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangedMessage>(
                     new(ExtensionDebugPath)
                 );
                 Logger.Info($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
@@ -151,7 +151,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
                 ) is MessageBoxVM.Result.Yes
             )
             {
-                WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangeMessage>(
+                WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangedMessage>(
                     new(ExtensionDebugPath)
                 );
                 Logger.Info($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");

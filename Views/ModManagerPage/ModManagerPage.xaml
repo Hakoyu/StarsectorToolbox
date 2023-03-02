@@ -149,7 +149,7 @@
                 <Expander
                   Padding="0"
                   Header="{Binding I18n.I18nRes.GroupedByModType}"
-                  Style="{StaticResource ExpanderBaseStyle}">
+                  Style="{StaticResource ExpanderSelectedItem}">
                   <ListBox
                     x:Name="ListBox_ModTypeGroup"
                     HorizontalContentAlignment="Stretch"
@@ -170,7 +170,7 @@
                   Padding="0"
                   Header="{Binding I18n.I18nRes.UserGroup}"
                   IsExpanded="True"
-                  Style="{StaticResource ExpanderBaseStyle}">
+                  Style="{StaticResource ExpanderSelectedItem}">
                   <ListBox
                     x:Name="ListBox_UserGroup"
                     HorizontalContentAlignment="Stretch"

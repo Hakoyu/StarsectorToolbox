@@ -145,4 +145,15 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
+  <Style
+    x:Key="ExpanderSelectedItem"
+    BasedOn="{StaticResource ExpanderBaseStyle}"
+    TargetType="Expander">
+    <Setter Property="Background" Value="{DynamicResource ColorAqua1}" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding Content.SelectedIndex, RelativeSource={RelativeSource Mode=Self}}" Value="-1">
+        <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
 </ResourceDictionary>

@@ -531,6 +531,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             CloseModDetails();
         }
+
+        [RelayCommand]
+        private void AddUserGroup()
+        {
+
+        }
         #endregion
     }
 }

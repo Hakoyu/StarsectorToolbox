@@ -80,7 +80,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 AddMainPageItem(item);
             InitializeExtensionPages();
             RefreshExtensionDebugPage();
-            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangeMessage>(
+            WeakReferenceMessenger.Default.Register<ExtensionDebugPathChangedMessage>(
                 this,
                 ExtensionDebugPathChangeReceive
             );
@@ -131,7 +131,7 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         private void ExtensionDebugPathChangeReceive(
             object recipient,
-            ExtensionDebugPathChangeMessage message
+            ExtensionDebugPathChangedMessage message
         )
         {
             if (TryGetExtensionInfo(message.Value, true) is not ExtensionInfo extensionInfo)
