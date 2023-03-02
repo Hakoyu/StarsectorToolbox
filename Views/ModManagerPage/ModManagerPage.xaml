@@ -238,7 +238,6 @@
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
               ItemsSource="{Binding NowShowMods, IsAsync=True}"
-              LostFocus="DataGrid_ModsShowList_LostFocus"
               RowDetailsVisibilityMode="Visible"
               RowHeight="50"
               Style="{StaticResource DataGridBaseStyle}"
@@ -251,6 +250,9 @@
                 <i:EventTrigger EventName="MouseLeftButtonDown">
                   <i:InvokeCommandAction Command="{Binding DataGridSelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid_ModsShowList}" />
                 </i:EventTrigger>
+                <i:EventTrigger EventName="LostFocus">
+                  <i:InvokeCommandAction Command="{Binding DataGridLostFocusCommand}" />
+                </i:EventTrigger>
               </i:Interaction.Triggers>
               <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
@@ -258,6 +260,7 @@
               <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                   <Setter Property="Tag" Value="{Binding Id}" />
+                  <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                   <Setter Property="ContextMenu">
                     <Setter.Value>
                       <ContextMenu
@@ -762,7 +765,7 @@
             <ColumnDefinition Width="25*" MinWidth="200" />
           </Grid.ColumnDefinitions>
           <GridSplitter
-            Width="3"
+            Width="5"
             Margin="0,0,0,0"
             Background="{DynamicResource ColorFG}"
             Foreground="{x:Null}" />
@@ -778,12 +781,20 @@
             Content="》"
             Style="{StaticResource ButtonBaseStyle}" />
           <GroupBox
-            x:Name="GroupBox_ModInfo"
+            x:Name="GroupBox_ModDetails"
             Grid.Column="1"
             Margin="9,0,0,0"
             Background="{DynamicResource ColorBG}"
             Header="{Binding I18n.I18nRes.ModInfo}"
             Style="{StaticResource GroupBoxBaseStyle}">
+            <i:Interaction.Triggers>
+              <i:DataTrigger Binding="{Binding IsMouseOver, ElementName=GroupBox_ModDetails, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                <i:InvokeCommandAction Command="{Binding ModDetailsMouseOverCommand}" CommandParameter="{Binding IsMouseOver, ElementName=GroupBox_ModDetails}" />
+              </i:DataTrigger>
+              <i:DataTrigger Binding="{Binding IsMouseOver, ElementName=GroupBox_ModDetails, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                <i:InvokeCommandAction Command="{Binding ModDetailsMouseOverCommand}" CommandParameter="{Binding IsMouseOver, ElementName=GroupBox_ModDetails}" />
+              </i:DataTrigger>
+            </i:Interaction.Triggers>
             <ScrollViewer>
               <StackPanel>
                 <Grid Margin="0,0,0,5">

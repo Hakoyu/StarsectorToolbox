@@ -146,9 +146,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 allModInfos.Add(info.Id, info);
                 Logger.Debug($"{I18nRes.ModAddSuccess}: {dir.FullName}");
             }
-            Logger.Info(
-                string.Format(I18nRes.ModAddCompleted, allModInfos.Count, errSize)
-            );
+            Logger.Info(string.Format(I18nRes.ModAddCompleted, allModInfos.Count, errSize));
             if (errSB.Length > 0)
                 MessageBoxVM.Show(
                     new($"{I18nRes.ModAddFailed} {I18nRes.Size}: {errSize}\n{errSB}")
@@ -394,7 +392,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     menuItem.Add(groupItem);
                 }
                 Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
-                return menuItem.Any() ? menuItem : null; ;
+                return menuItem.Any() ? menuItem : null;
+                ;
             }
             MenuItemVM? RemoveToUserGroup()
             {
@@ -763,7 +762,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            for (int i = 0; i < nowSelectedMods.Count; )
             {
                 ChangeUserGroupContainsSelectedMod(group, nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -804,7 +803,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            for (int i = 0; i < nowSelectedMods.Count; )
             {
                 ChangeModEnabled(nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -848,30 +847,29 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     showInfo.MissDependencies = false;
                 }
             }
-            Logger.Debug(
-                $"{id} {I18nRes.ChangeEnabledStateTo} {showInfo.IsEnabled}"
-            );
+            Logger.Debug($"{id} {I18nRes.ChangeEnabledStateTo} {showInfo.IsEnabled}");
         }
         #endregion
         private void CheckEnabledModsDependencies()
         {
             foreach (var showInfo in allModShowInfoGroups[ModTypeGroup.Enabled])
             {
-                if (showInfo.DependenciesSet != null)
+                if (showInfo.DependenciesSet is null)
+                    continue;
+                showInfo.MissDependenciesMessage = string.Join(
+                    " , ",
+                    showInfo.DependenciesSet
+                        .Where(s => !allEnabledModsId.Contains(s.Id))
+                        .Select(s => s.Name)
+                );
+                if (string.IsNullOrWhiteSpace(showInfo.MissDependenciesMessage))
+                    showInfo.MissDependencies = false;
+                else
                 {
-                    showInfo.MissDependenciesMessage = string.Join(
-                        " , ",
-                        showInfo.DependenciesSet.Where(s => !allEnabledModsId.Contains(s.Id))
+                    Logger.Info(
+                        $"{showInfo.Id} {I18nRes.NotEnableDependencies} {showInfo.DependenciesSet}"
                     );
-                    if (showInfo.DependenciesSet.Any())
-                    {
-                        Logger.Info(
-                            $"{showInfo.Id} {I18nRes.NotEnableDependencies} {showInfo.DependenciesSet}"
-                        );
-                        showInfo.MissDependencies = true;
-                    }
-                    else
-                        showInfo.MissDependencies = false;
+                    showInfo.MissDependencies = true;
                 }
             }
         }
@@ -880,7 +878,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            for (int i = 0; i < nowSelectedMods.Count; )
             {
                 ChangeModCollected(nowSelectedMods[i].Id, collected);
                 if (count == nowSelectedMods.Count)
@@ -908,9 +906,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 if (allCollectedModsId.Remove(showInfo.Id))
                     allModShowInfoGroups[ModTypeGroup.Collected].Remove(showInfo);
             }
-            Logger.Debug(
-                $"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}"
-            );
+            Logger.Debug($"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}");
         }
         #endregion
 

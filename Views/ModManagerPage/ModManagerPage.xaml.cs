@@ -26,11 +26,7 @@ namespace StarsectorTools.Views.ModManagerPage
         {
             InitializeComponent();
             DataContext = new ModManagerPageViewModel(true);
-        }
 
-        public bool ChangeLanguage()
-        {
-            return false;
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
@@ -45,12 +41,6 @@ namespace StarsectorTools.Views.ModManagerPage
             };
             window.Button_Cancel.Click += (s, e) => window.Close();
             window.ShowDialog();
-        }
-
-        private void DataGrid_ModsShowList_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is DataGrid && GroupBox_ModInfo.IsMouseOver == false && DataGrid_ModsShowList.IsMouseOver == false)
-                DataGrid_ModsShowList.UnselectAll();
         }
 
         private async void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)

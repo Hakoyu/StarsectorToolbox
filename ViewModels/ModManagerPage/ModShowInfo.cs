@@ -56,6 +56,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             [ObservableProperty]
             private bool isCollected = false;
 
+            /// <summary>已选中</summary>
+            [ObservableProperty]
+            private bool isSelected = false;
+
             /// <summary>缺少前置</summary>
             [ObservableProperty]
             private bool missDependencies = false;

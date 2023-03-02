@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,9 +42,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         /// <summary>模组详情的展开状态</summary>
         [ObservableProperty]
         private bool isShowModDetails = false;
-
-        [ObservableProperty]
-        private bool showModDependencies = false;
 
         [ObservableProperty]
         private BitmapImage? modDetailImage;
@@ -121,7 +119,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     Tag = ModTypeGroup.Disabled
                 },
             };
-
         [ObservableProperty]
         private ListBoxVM listBox_TypeGroupMenu =
             new()
@@ -265,11 +262,39 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             GroupMenuIsExpand = !GroupMenuIsExpand;
         }
 
+        bool nowClearSelectedMods = false;
         [RelayCommand]
         private void DataGridSelectionChanged(IList items)
         {
-            nowSelectedMods = new(items.OfType<ModShowInfo>());
-            ChangeShowModDetails(nowSelectedMods.LastOrDefault(defaultValue: null!));
+            if (nowClearSelectedMods)
+                return;
+            List<ModShowInfo> tempSelectedMods = new(items.OfType<ModShowInfo>());
+            if (nowSelectedMods.SequenceEqual(tempSelectedMods))
+            {
+                ClearSelectedMods(ref nowSelectedMods);
+            }
+            else
+            {
+                nowSelectedMods = tempSelectedMods;
+                ChangeShowModDetails(nowSelectedMods.LastOrDefault(defaultValue: null!));
+            }
+        }
+        [RelayCommand]
+        private void DataGridLostFocus()
+        {
+            ClearSelectedMods(ref nowSelectedMods);
+        }
+
+        private void ClearSelectedMods(ref List<ModShowInfo> list)
+        {
+            if (modDetailsIsMouseOver)
+                return;
+            nowClearSelectedMods = true;
+            foreach (var item in list)
+                item.IsSelected = false;
+            list.Clear();
+            CloseModDetails();
+            nowClearSelectedMods = false;
         }
 
         [RelayCommand]
@@ -537,6 +562,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
 
         }
+
+        private bool modDetailsIsMouseOver = false;
+
+        [RelayCommand]
+        private void ModDetailsMouseOver(bool value) =>
+            modDetailsIsMouseOver = value;
         #endregion
     }
 }
