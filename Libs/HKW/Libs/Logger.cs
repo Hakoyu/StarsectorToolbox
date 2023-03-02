@@ -32,9 +32,6 @@ namespace HKW.Libs.Log4Cs
         /// <summary>日志文件</summary>
         public static string LogFile { get; private set; } = string.Empty;
 
-        /// <summary>基命名空间</summary>
-        public static string BaseNamespace { get; private set; } = string.Empty;
-
         /// <summary>设置</summary>
         public static InitializeOptions Options { get; set; } = null!;
 
@@ -128,7 +125,6 @@ namespace HKW.Libs.Log4Cs
         {
             Options = initializeOptions ?? new();
             LogFile = logFile;
-            BaseNamespace = baseNamespce;
             sw?.Close();
             sw = new(LogFile, Options.DefaultAppend);
         }
@@ -338,7 +334,7 @@ namespace HKW.Libs.Log4Cs
             }
             if (!string.IsNullOrWhiteSpace(exMessage))
                 exMessage = $"\n{exMessage}";
-            return FilterPath(exMessage);
+            return FilterPath(exMessage, GetOrigin(true, true, false, false));
         }
 
         /// <summary>
@@ -355,12 +351,13 @@ namespace HKW.Libs.Log4Cs
         }
 
         /// <summary>
-        /// 过滤路径信息,<see cref="BaseNamespace"/>必须与工程文件夹一致
+        /// 过滤路径信息
         /// </summary>
         /// <param name="exMessage">错误信息</param>
+        /// <param name="baseNamespace">基命名空间</param>
         /// <returns>过滤后的数据</returns>
-        public static string FilterPath(string exMessage) =>
-            Regex.Replace(exMessage, @$"[\S]+(?=. {BaseNamespace})", "");
+        public static string FilterPath(string exMessage, string baseNamespace) =>
+            Regex.Replace(exMessage, @$"[\S]:[\S]+(?={baseNamespace})", "");
 
         /// <summary>关闭</summary>
         private static void Close()
