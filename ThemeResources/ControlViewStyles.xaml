@@ -103,7 +103,6 @@
     <Setter Property="Content" Value="{Binding Content}" />
     <Setter Property="ToolTip" Value="{Binding ToolTip}" />
     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-    <Setter Property="pu:ListBoxItemHelper.Icon" Value="{DynamicResource EmojiTextBlock}" />
     <Setter Property="ContextMenu">
       <Setter.Value>
         <ContextMenu
@@ -119,6 +118,13 @@
         </ContextMenu>
       </Setter.Value>
     </Setter>
+    <Setter Property="pu:ListBoxItemHelper.Icon" Value="{DynamicResource EmojiTextBlock}" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding Icon}" Value="{x:Null}">
+        <Setter Property="pu:ListBoxItemHelper.Icon" Value="{x:Null}" />
+        <Setter Property="Padding" Value="5" />
+      </DataTrigger>
+    </Style.Triggers>
   </Style>
   <Style
     x:Key="ComboBoxItemView"
