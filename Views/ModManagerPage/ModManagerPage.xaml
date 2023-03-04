@@ -310,10 +310,9 @@
                   <DataGridTemplateColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.EnabledState}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.EnabledState, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowModEnableState}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModEnableState, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -330,10 +329,9 @@
                   <DataGridTemplateColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.Icon}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.Icon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowModIcon}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModIcon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -349,10 +347,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.Name}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.Name, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowModName}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModName, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -364,10 +361,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.Author}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.Author, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowModAuthor}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModAuthor, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -378,10 +374,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.Version}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.Version, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowModVersion}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -392,10 +387,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.GameVersion}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.GameVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowGameVersion}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowGameVersion, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -405,10 +399,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.Utility}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.Utility, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowUtility}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowUtility, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -423,10 +416,9 @@
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
-                      Content="{Binding I18n.I18nRes.UserDescription}"
-                      DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Content="{Binding DataContext.I18n.I18nRes.UserDescription, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
                       Style="{StaticResource LabelBaseStyle}"
-                      ToolTip="{Binding I18n.I18nRes.ShowUserDescription}" />
+                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowUserDescription, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
               </DataGrid.Columns>

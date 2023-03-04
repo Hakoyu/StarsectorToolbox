@@ -82,6 +82,9 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         private void RefreshPage(ListBoxItemVM vm)
         {
+            if (vm.Tag is not ISTPage page)
+                return;
+            page.Close();
             var type = vm.Tag!.GetType();
             vm.Tag = CreatePage(type);
             if (vm.IsSelected)
@@ -137,6 +140,9 @@ namespace StarsectorTools.ViewModels.MainWindow
                 {
                     if (p is not ListBoxItemVM vm)
                         return;
+                    if (vm.Tag is not ISTPage page)
+                        return;
+                    page.Close();
                     if (TryGetExtensionInfo(deubgItemPath!, true) is not ExtensionInfo extensionInfo)
                         return;
                     deubgItemExtensionInfo = extensionInfo;
@@ -314,12 +320,12 @@ namespace StarsectorTools.ViewModels.MainWindow
                 if (loadInMemory)
                 {
                     var bytes = File.ReadAllBytes(assemblyFile);
-                    assembly = Assembly.Load(bytes);
+                    assembly = Assembly.Load(bytes, bytes);
                     type = assembly.GetType(extensionInfo.ExtensionId)!;
                 }
                 else
                 {
-                    assembly = Assembly.LoadFrom(assemblyFile);
+                    assembly = Assembly.LoadFile(assemblyFile);
                     type = assembly.GetType(extensionInfo.ExtensionId)!;
                 }
                 // 判断是否成功获取了类型

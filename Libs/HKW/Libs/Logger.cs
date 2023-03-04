@@ -105,7 +105,6 @@ namespace HKW.Libs.Log4Cs
                     "at System.",
                     "at MS.",
                     "at Microsoft.",
-                    "End of inner exception stack trace",
                 };
         }
 
@@ -114,11 +113,9 @@ namespace HKW.Libs.Log4Cs
         /// <summary>
         /// 初始化
         /// </summary>
-        /// <param name="baseNamespce">基命名空间</param>
         /// <param name="logFile">日志文件</param>
         /// <param name="initializeOptions">初始化设置</param>
         public static void Initialize(
-            string baseNamespce,
             string logFile,
             InitializeOptions? initializeOptions = null
         )
@@ -323,18 +320,9 @@ namespace HKW.Libs.Log4Cs
             string exMessage;
             if (filterException is true)
                 exMessage = FilterException(ex);
-            else if (filterException is false)
-                exMessage = ex.ToString();
             else
-            {
-                if (Options.DefaultFilterException)
-                    exMessage = FilterException(ex);
-                else
-                    exMessage = ex.ToString();
-            }
-            if (!string.IsNullOrWhiteSpace(exMessage))
-                exMessage = $"\n{exMessage}";
-            return FilterPath(exMessage, GetOrigin(true, true, false, false));
+                exMessage = FilterPath(ex.ToString(), GetOrigin(true, true, false, false));
+            return "\n" + exMessage;
         }
 
         /// <summary>
@@ -347,7 +335,7 @@ namespace HKW.Libs.Log4Cs
             var list = ex.ToString()
                 .Split("\r\n")
                 .Where(s => !Options.ExceptionFilter.Any(f => s.Contains(f)));
-            return string.Join("\r\n", list);
+            return FilterPath(string.Join("\r\n", list), GetOrigin(true, true, false, false));
         }
 
         /// <summary>

@@ -61,7 +61,7 @@
     <Setter Property="Header" Value="{Binding Header}" />
     <Setter Property="ToolTip" Value="{Binding ToolTip}" />
     <Setter Property="Command" Value="{Binding MenuItemCommand}" />
-    <Setter Property="CommandParameter" Value="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+    <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}" />
     <Setter Property="ItemsSource" Value="{Binding ItemsSource}" />
     <Setter Property="ItemContainerStyle">
       <Setter.Value>
@@ -71,7 +71,7 @@
           <Setter Property="Header" Value="{Binding Header}" />
           <Setter Property="ToolTip" Value="{Binding ToolTip}" />
           <Setter Property="Command" Value="{Binding MenuItemCommand}" />
-          <Setter Property="CommandParameter" Value="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+          <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}" />
           <Setter Property="ItemsSource" Value="{Binding ItemsSource}" />
           <Setter Property="ItemContainerStyle">
             <Setter.Value>
@@ -81,7 +81,7 @@
                 <Setter Property="Header" Value="{Binding Header}" />
                 <Setter Property="ToolTip" Value="{Binding ToolTip}" />
                 <Setter Property="Command" Value="{Binding MenuItemCommand}" />
-                <Setter Property="CommandParameter" Value="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
+                <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBoxItem}}" />
                 <Setter Property="ItemsSource" Value="{Binding ItemsSource}" />
               </Style>
             </Setter.Value>

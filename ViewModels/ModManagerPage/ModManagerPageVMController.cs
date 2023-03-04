@@ -762,7 +762,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count; )
+            for (int i = 0; i < nowSelectedMods.Count;)
             {
                 ChangeUserGroupContainsSelectedMod(group, nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -803,7 +803,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count; )
+            for (int i = 0; i < nowSelectedMods.Count;)
             {
                 ChangeModEnabled(nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -878,7 +878,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count; )
+            for (int i = 0; i < nowSelectedMods.Count;)
             {
                 ChangeModCollected(nowSelectedMods[i].Id, collected);
                 if (count == nowSelectedMods.Count)
@@ -1202,89 +1202,94 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         }
 
         #endregion
-        internal async Task DropFile(string filePath)
+        #region DropFile
+        internal async Task DropFile(Array array)
         {
             string tempPath = "Temp";
-            if (!await Utils.UnArchiveFileToDir(filePath, tempPath))
-            {
-                MessageBoxVM.Show(new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{filePath}"));
-                return;
-            }
             DirectoryInfo dirs = new(tempPath);
-            var filesInfo = dirs.GetFiles(modInfoFile, SearchOption.AllDirectories);
-            if (
-                !(
-                    filesInfo.FirstOrDefault(defaultValue: null) is FileInfo fileInfo
-                    && fileInfo.FullName is string jsonPath
-                )
-            )
+            foreach (string filePath in array)
             {
-                Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {filePath}");
-                MessageBoxVM.Show(new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {filePath}"));
-                return;
-            }
-            string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
-            if (
-                ModInfo.Parse(
-                    Utils.JsonParse2Object(jsonPath)!,
-                    $"{GameInfo.ModsDirectory}\\{directoryName}"
-                )
-                is not ModInfo newModInfo
-            )
-            {
-                MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}"));
-                return;
-            }
-            if (!allModInfos.ContainsKey(newModInfo.Id))
-            {
-                Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                AddMod(newModInfo);
-                RefreshGroupModCount();
-                return;
-            }
-            var originalModInfo = allModInfos[newModInfo.Id];
-            var result = MessageBoxVM.Show(
-                new(
-                    $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}"
+                if (!await Utils.UnArchiveFileToDir(filePath, tempPath))
+                {
+                    MessageBoxVM.Show(new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{filePath}"));
+                    return;
+                }
+                var filesInfo = dirs.GetFiles(modInfoFile, SearchOption.AllDirectories);
+                if (
+                    !(
+                        filesInfo.FirstOrDefault(defaultValue: null) is FileInfo fileInfo
+                        && fileInfo.FullName is string jsonPath
+                    )
                 )
                 {
-                    Button = MessageBoxVM.Button.YesNoCancel,
-                    Icon = MessageBoxVM.Icon.Question,
+                    Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {filePath}");
+                    MessageBoxVM.Show(new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {filePath}"));
+                    return;
                 }
-            );
-            if (result == MessageBoxVM.Result.Yes)
-            {
-                Utils.CopyDirectory(
-                    originalModInfo.ModDirectory,
-                    $"{backupModsDirectory}\\{tempPath}"
+                string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
+                if (
+                    ModInfo.Parse(
+                        Utils.JsonParse2Object(jsonPath)!,
+                        $"{GameInfo.ModsDirectory}\\{directoryName}"
+                    )
+                    is not ModInfo newModInfo
+                )
+                {
+                    MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}"));
+                    return;
+                }
+                if (!allModInfos.ContainsKey(newModInfo.Id))
+                {
+                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                    AddMod(newModInfo);
+                    RefreshGroupModCount();
+                    return;
+                }
+                var originalModInfo = allModInfos[newModInfo.Id];
+                var result = MessageBoxVM.Show(
+                    new(
+                        $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}"
+                    )
+                    {
+                        Button = MessageBoxVM.Button.YesNoCancel,
+                        Icon = MessageBoxVM.Icon.Question,
+                    }
                 );
-                string tempDirectory = $"{backupModsDirectory}\\{tempPath}";
-                await Utils.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
-                Directory.Delete(tempDirectory, true);
-                Directory.Delete(originalModInfo.ModDirectory, true);
-                Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                RemoveMod(newModInfo.Id);
-                AddMod(newModInfo);
-                RefreshGroupModCount();
-                IsRemindSave = true;
-                Logger.Info(
-                    $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
-                );
-            }
-            else if (result == MessageBoxVM.Result.No)
-            {
-                Utils.DeleteDirToRecycleBin(originalModInfo.ModDirectory);
-                Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                RemoveMod(newModInfo.Id);
-                AddMod(newModInfo);
-                RefreshGroupModCount();
-                IsRemindSave = true;
-                Logger.Info(
-                    $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
-                );
+                if (result == MessageBoxVM.Result.Yes)
+                {
+                    Utils.CopyDirectory(
+                        originalModInfo.ModDirectory,
+                        $"{backupModsDirectory}\\{tempPath}"
+                    );
+                    string tempDirectory = $"{backupModsDirectory}\\{tempPath}";
+                    await Utils.ArchiveDirToDir(tempDirectory, backupModsDirectory, directoryName);
+                    Directory.Delete(tempDirectory, true);
+                    Directory.Delete(originalModInfo.ModDirectory, true);
+                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                    RemoveMod(newModInfo.Id);
+                    AddMod(newModInfo);
+                    RefreshGroupModCount();
+                    IsRemindSave = true;
+                    Logger.Info(
+                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
+                    );
+                }
+                else if (result == MessageBoxVM.Result.No)
+                {
+                    Utils.DeleteDirToRecycleBin(originalModInfo.ModDirectory);
+                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                    RemoveMod(newModInfo.Id);
+                    AddMod(newModInfo);
+                    RefreshGroupModCount();
+                    IsRemindSave = true;
+                    Logger.Info(
+                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
+                    );
+                }
             }
             CheckFilterAndRefreshShowMods();
             dirs.Delete(true);
         }
+        #endregion
     }
 }

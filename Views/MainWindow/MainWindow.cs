@@ -79,7 +79,7 @@ namespace StarsectorTools.Views.MainWindow
                     MessageBoxResult result;
                     if (d.ShowMainWindowBlurEffect is true)
                     {
-                        SetBlurEffect();
+                        SetBlurEffect(false);
                         result = MessageBoxX.Show(message, d.Caption, button, icon);
                         RemoveBlurEffect();
                     }
@@ -222,7 +222,7 @@ namespace StarsectorTools.Views.MainWindow
         /// <summary>
         /// 设置模糊效果
         /// </summary>
-        private void SetBlurEffect(bool isEnabled = true)
+        private void SetBlurEffect(bool isEnabled)
         {
             Dispatcher.Invoke(() =>
             {

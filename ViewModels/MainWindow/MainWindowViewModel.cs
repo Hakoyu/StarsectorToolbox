@@ -73,7 +73,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             InitializeData();
             InitializeDirectories();
             // 注册日志
-            Logger.Initialize(nameof(StarsectorTools), ST.LogFile);
+            Logger.Initialize(ST.LogFile);
             // 初始化设置
             InitializeConfig();
             // 获取主页面
