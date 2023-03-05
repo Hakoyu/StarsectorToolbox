@@ -16,7 +16,7 @@ namespace StarsectorTools.ViewModels.InfoPage
         private string checkUpdateIcon = "✅";
 
         [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
+        private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
         public InfoPageViewModel()
         {

@@ -18,13 +18,13 @@ namespace StarsectorTools.ViewModels.SettingsPage
     internal partial class SettingsPageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
+        private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
         [ObservableProperty]
-        private string? extensionDebugPath;
+        private string? _extensionDebugPath;
 
         [ObservableProperty]
-        private ComboBoxVM comboBox_LogLevel =
+        private ComboBoxVM _comboBox_LogLevel =
             new()
             {
                 new() { Content = I18nRes.LogLevel_DEBUG, ToolTip = LogLevel.DEBUG },
@@ -33,7 +33,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
             };
 
         [ObservableProperty]
-        private ComboBoxVM comboBox_Language =
+        private ComboBoxVM _comboBox_Language =
             new()
             {
                 new() { Content = "English", ToolTip = "en-US" },

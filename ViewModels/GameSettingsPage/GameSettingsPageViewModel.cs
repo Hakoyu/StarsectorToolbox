@@ -20,48 +20,48 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
     internal partial class GameSettingsPageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string gamePath = GameInfo.BaseDirectory;
+        private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
         [ObservableProperty]
-        private string gameVersion = GameInfo.Version;
+        private string _gamePath = GameInfo.BaseDirectory;
 
         [ObservableProperty]
-        private string gameMemory = string.Empty;
+        private string _gameVersion = GameInfo.Version;
 
         [ObservableProperty]
-        private string retainRecentSaveCount = "5";
+        private string _gameMemory = string.Empty;
 
         [ObservableProperty]
-        private string resolutionWidth = string.Empty;
+        private string _retainRecentSaveCount = "5";
 
         [ObservableProperty]
-        private string resolutionHeight = string.Empty;
+        private string _resolutionWidth = string.Empty;
 
         [ObservableProperty]
-        private bool borderlessWindow = false;
+        private string _resolutionHeight = string.Empty;
 
         [ObservableProperty]
-        private bool customResolutionCanReset = false;
+        private bool _borderlessWindow = false;
 
         [ObservableProperty]
-        private string gameKey = string.Empty;
-
-        private string realGameKey = string.Empty;
-        private string hideGameKey = string.Empty;
-
-        private string missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
-
-        private int systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
+        private bool _customResolutionCanReset = false;
 
         [ObservableProperty]
-        private ComboBoxVM comboBox_MissionsLoadouts =
+        private string _gameKey = string.Empty;
+
+        private string _realGameKey = string.Empty;
+        private string _hideGameKey = string.Empty;
+
+        private string _missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
+
+        private int _systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
+
+        [ObservableProperty]
+        private ComboBoxVM _comboBox_MissionsLoadouts =
             new()
             {
                 new() { Content = I18nRes.All, ToolTip = nameof(I18nRes.All) }
             };
-
-        [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
 
         public GameSettingsPageViewModel()
         { }
@@ -112,7 +112,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
         [RelayCommand(CanExecute = nameof(ShowGameKeyCanExecute))]
         private void ShowGameKey()
         {
-            GameKey = GameKey == hideGameKey ? realGameKey : hideGameKey;
+            GameKey = GameKey == _hideGameKey ? _realGameKey : _hideGameKey;
         }
 
         private bool ShowGameKeyCanExecute() => !string.IsNullOrWhiteSpace(GameKey);
@@ -123,7 +123,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             if (!Regex.IsMatch(GameMemory, "^[0-9]+[mg]$"))
             {
                 MessageBoxVM.Show(new(I18nRes.FormatError) { Icon = MessageBoxVM.Icon.Warning });
-                GameMemory = vmparamsData.xmsx;
+                GameMemory = _vmparamsData.xmsx;
                 return;
             }
             string unit = GameMemory.Last().ToString();
@@ -135,9 +135,9 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 GameMemory = $"{size}{unit}";
                 return;
             }
-            vmparamsData.xmsx = $"{memory}{unit}";
-            File.WriteAllText($"{GameInfo.BaseDirectory}\\vmparams", Regex.Replace(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", vmparamsData.xmsx, RegexOptions.IgnoreCase));
-            Logger.Info($"{I18nRes.VmparamsMemorySet}: {vmparamsData.xmsx}");
+            _vmparamsData.xmsx = $"{memory}{unit}";
+            File.WriteAllText($"{GameInfo.BaseDirectory}\\vmparams", Regex.Replace(_vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", _vmparamsData.xmsx, RegexOptions.IgnoreCase));
+            Logger.Info($"{I18nRes.VmparamsMemorySet}: {_vmparamsData.xmsx}");
             MessageBoxVM.Show(new(I18nRes.VmparamsMemorySetComplete));
         }
 
@@ -166,19 +166,19 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 return;
             if (selected is nameof(I18nRes.All))
             {
-                if (Utils.DirectoryExists(missionsLoadoutsDirectory))
+                if (Utils.DirectoryExists(_missionsLoadoutsDirectory))
                 {
-                    Utils.DeleteDirToRecycleBin(missionsLoadoutsDirectory);
-                    Directory.CreateDirectory(missionsLoadoutsDirectory);
+                    Utils.DeleteDirToRecycleBin(_missionsLoadoutsDirectory);
+                    Directory.CreateDirectory(_missionsLoadoutsDirectory);
                 }
             }
             else
             {
-                if (!Utils.DirectoryExists(missionsLoadoutsDirectory))
+                if (!Utils.DirectoryExists(_missionsLoadoutsDirectory))
                 {
                     MessageBoxVM.Show(
                         new(
-                            $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {missionsLoadoutsDirectory}"
+                            $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {_missionsLoadoutsDirectory}"
                         )
                         {
                             Icon = MessageBoxVM.Icon.Warning
@@ -207,13 +207,13 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
         [RelayCommand]
         private void OpenMissionsLoadoutsDirectory()
         {
-            if (Utils.DirectoryExists(missionsLoadoutsDirectory))
-                Utils.OpenLink(missionsLoadoutsDirectory);
+            if (Utils.DirectoryExists(_missionsLoadoutsDirectory))
+                Utils.OpenLink(_missionsLoadoutsDirectory);
             else
             {
                 MessageBoxVM.Show(
                     new(
-                        $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {missionsLoadoutsDirectory}"
+                        $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {_missionsLoadoutsDirectory}"
                     )
                     {
                         Icon = MessageBoxVM.Icon.Warning

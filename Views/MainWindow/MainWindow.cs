@@ -19,12 +19,7 @@ namespace StarsectorTools.Views.MainWindow
         /// <summary>
         /// 消息长度限制
         /// </summary>
-        private int messageLengthLimits = 8192;
-
-        /// <summary>StarsectorTools配置文件资源链接</summary>
-        private static readonly Uri resourcesConfigUri =
-            new("\\Resources\\Config.toml", UriKind.Relative);
-
+        private int _messageLengthLimits = 8192;
         private void RegisterData()
         {
             // 注册消息窗口
@@ -70,9 +65,9 @@ namespace StarsectorTools.Views.MainWindow
                 (d) =>
                 {
                     var message =
-                        d.Message.Length < messageLengthLimits
+                        d.Message.Length < _messageLengthLimits
                             ? d.Message
-                            : d.Message[..messageLengthLimits]
+                            : d.Message[.._messageLengthLimits]
                                 + $".........{I18n.ExcessivelyLongMessages}.........";
                     var button = ButtonConverter(d.Button);
                     var icon = IconConverter(d.Icon);
@@ -87,7 +82,7 @@ namespace StarsectorTools.Views.MainWindow
                     {
                         result = MessageBoxX.Show(message, d.Caption, button, icon);
                     }
-                    if (message.Length == messageLengthLimits)
+                    if (message.Length == _messageLengthLimits)
                         GC.Collect();
                     return ResultConverter(result);
                 }

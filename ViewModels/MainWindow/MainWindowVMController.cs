@@ -23,11 +23,11 @@ namespace StarsectorTools.ViewModels.MainWindow
         /// </summary>
         public static MainWindowViewModel Instance { get; private set; } = null!;
 
-        private Dictionary<string, ExtensionInfo> allExtensionsInfo = new();
-        private ListBoxItemVM? selectedItem;
-        private ExtensionInfo? deubgItemExtensionInfo;
-        private ListBoxItemVM? deubgItem;
-        private string? deubgItemPath;
+        private Dictionary<string, ExtensionInfo> _allExtensionsInfo = new();
+        private ListBoxItemVM? _selectedItem;
+        private ExtensionInfo? _deubgItemExtensionInfo;
+        private ListBoxItemVM? _deubgItem;
+        private string? _deubgItemPath;
 
         internal void Close()
         {
@@ -118,6 +118,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             DetectDebugPageItemData(ref item);
             ListBox_MainMenu.Add(item);
         }
+
         private void DetectDebugPageItemData(ref ListBoxItemVM item)
         {
             if (item?.Tag is not ISTPage page)
@@ -127,6 +128,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             item.ToolTip = page.GetDescriptionI18n();
             item.ContextMenu = CreateDebugItemContextMenu();
         }
+
         private ContextMenuVM CreateDebugItemContextMenu()
         {
             ContextMenuVM contextMenu = new() { RefreshDebugPageMenuItem() };
@@ -143,9 +145,11 @@ namespace StarsectorTools.ViewModels.MainWindow
                     if (vm.Tag is not ISTPage page)
                         return;
                     page.Close();
-                    if (TryGetExtensionInfo(deubgItemPath!, true) is not ExtensionInfo extensionInfo)
+                    if (
+                        TryGetExtensionInfo(_deubgItemPath!, true) is not ExtensionInfo extensionInfo
+                    )
                         return;
-                    deubgItemExtensionInfo = extensionInfo;
+                    _deubgItemExtensionInfo = extensionInfo;
                     RefreshExtensionDebugPage();
                     GC.Collect();
                 };
@@ -156,7 +160,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         #region CheckGameStartOption
         private void CheckGameStartOption()
         {
-            if (clearGameLogOnStart)
+            if (_clearGameLogOnStart)
                 ClearGameLogFile();
         }
 
@@ -194,23 +198,23 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         private void RefreshExtensionDebugPage()
         {
-            ListBox_MainMenu.Remove(deubgItem!);
+            ListBox_MainMenu.Remove(_deubgItem!);
             InitializeExtensionDebugPage();
-            ListBox_MainMenu.SelectedItem = deubgItem;
-            NowPage = deubgItem?.Tag;
+            ListBox_MainMenu.SelectedItem = _deubgItem;
+            NowPage = _deubgItem!.Tag!;
         }
 
         private void InitializeExtensionDebugPage()
         {
             // 添加拓展调试页面
-            if (deubgItemExtensionInfo is not null)
+            if (_deubgItemExtensionInfo is not null)
             {
-                deubgItem = new()
+                _deubgItem = new()
                 {
-                    Icon = deubgItemExtensionInfo.Icon,
-                    Tag = deubgItemExtensionInfo.ExtensionPage,
+                    Icon = _deubgItemExtensionInfo.Icon,
+                    Tag = _deubgItemExtensionInfo.ExtensionPage,
                 };
-                AddDebugMainPageItem(deubgItem);
+                AddDebugMainPageItem(_deubgItem);
             }
         }
 
@@ -294,7 +298,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 }
                 var assemblyFile = $"{path}\\{extensionInfo.ExtensionFile}";
                 // 检测是否有相同的拓展
-                if (allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
+                if (_allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
                 {
                     Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
                     MessageBoxVM.Show(
@@ -413,8 +417,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                 && TryGetExtensionInfo(debugPath, true) is ExtensionInfo info
             )
             {
-                deubgItemExtensionInfo = info;
-                deubgItemPath = debugPath;
+                _deubgItemExtensionInfo = info;
+                _deubgItemPath = debugPath;
             }
             else
                 toml["Extension"]["DebugPath"] = "";

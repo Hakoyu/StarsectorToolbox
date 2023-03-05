@@ -96,7 +96,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         /// <summary>当前选择的列表项</summary>
         private ListBoxItemVM _nowSelectedGroup = null!;
-        private string nowSelectedGroupName => _nowSelectedGroup!.Tag!.ToString()!;
+        private string NowSelectedGroupName => _nowSelectedGroup!.Tag!.ToString()!;
         #region ListBox
         [ObservableProperty]
         private ListBoxVM _listBox_MainMenu =
@@ -251,7 +251,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (_nowSelectedGroup?.IsSelected is true)
                 _nowSelectedGroup.IsSelected = false;
             _nowSelectedGroup = item;
-            if (allUserGroups.ContainsKey(item.Tag!.ToString()!))
+            if (_allUserGroups.ContainsKey(item.Tag!.ToString()!))
                 NowSelectedIsUserGroup = true;
             else
                 NowSelectedIsUserGroup = false;
@@ -323,7 +323,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             StringBuilder errSB = new();
             foreach (var dependencie in _nowSelectedMod.DependenciesSet!)
             {
-                if (!allModInfos.ContainsKey(dependencie.Id))
+                if (!_allModInfos.ContainsKey(dependencie.Id))
                 {
                     errSB.AppendLine(dependencie.ToString());
                     continue;
@@ -358,9 +358,9 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void OpenBackupDirectory()
         {
-            if (!Directory.Exists(backupDirectory))
-                Directory.CreateDirectory(backupDirectory);
-            Utils.OpenLink(backupDirectory);
+            if (!Directory.Exists(_BackupDirectory))
+                Directory.CreateDirectory(_BackupDirectory);
+            Utils.OpenLink(_BackupDirectory);
         }
 
         [RelayCommand]
@@ -468,7 +468,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 return;
             foreach (string id in list)
             {
-                if (!allModInfos.ContainsKey(id))
+                if (!_allModInfos.ContainsKey(id))
                 {
                     Logger.Warring($"{I18nRes.NotFoundMod} {id}");
                     errSB.AppendLine(id);
@@ -515,10 +515,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand(CanExecute = nameof(RandomEnableModsCanExecute))]
         private void RandomEnableMods()
         {
-            string groupName = nowSelectedGroupName;
+            string groupName = NowSelectedGroupName;
             int minSize = int.Parse(MinRandomSize);
             int maxSize = int.Parse(MaxRandomSize);
-            int count = allUserGroups[groupName].Count;
+            int count = _allUserGroups[groupName].Count;
             if (maxSize > count)
             {
                 MessageBoxVM.Show(new(I18nRes.RandomNumberCannotGreaterTotal) { Icon = MessageBoxVM.Icon.Warning });
@@ -529,10 +529,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 MessageBoxVM.Show(new(I18nRes.MinRandomNumberCannotBeGreaterMaxRandomNumber) { Icon = MessageBoxVM.Icon.Warning });
                 return;
             }
-            foreach (var info in allUserGroups[groupName])
+            foreach (var info in _allUserGroups[groupName])
                 ChangeModEnabled(info, false);
             int requestSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
-            var randomList = allUserGroups[groupName].OrderBy(s => new Random(Guid.NewGuid().GetHashCode()).Next());
+            var randomList = _allUserGroups[groupName].OrderBy(s => new Random(Guid.NewGuid().GetHashCode()).Next());
             foreach (var id in randomList.Take(requestSize))
                 ChangeModEnabled(id, true);
             CheckEnabledModsDependencies();

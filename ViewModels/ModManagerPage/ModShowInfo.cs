@@ -50,31 +50,31 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
             /// <summary>已启用</summary>
             [ObservableProperty]
-            private bool isEnabled = false;
+            private bool _isEnabled = false;
 
             /// <summary>已收藏</summary>
             [ObservableProperty]
-            private bool isCollected = false;
+            private bool _isCollected = false;
 
             /// <summary>已选中</summary>
             [ObservableProperty]
-            private bool isSelected = false;
+            private bool _isSelected = false;
 
             /// <summary>缺少前置</summary>
             [ObservableProperty]
-            private bool missDependencies = false;
+            private bool _missDependencies = false;
 
             /// <summary>缺少前置的信息</summary>
             [ObservableProperty]
-            private string missDependenciesMessage = string.Empty;
+            private string _missDependenciesMessage = string.Empty;
 
             /// <summary>用户描述</summary>
             [ObservableProperty]
-            private string userDescription = string.Empty;
+            private string _userDescription = string.Empty;
 
             /// <summary>右键菜单</summary>
             [ObservableProperty]
-            private ContextMenuVM contextMenu = null!;
+            private ContextMenuVM _contextMenu = null!;
 
             internal ModShowInfo(IModInfo modInfo)
             {

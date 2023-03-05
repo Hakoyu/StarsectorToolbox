@@ -20,45 +20,45 @@ namespace StarsectorTools.ViewModels.MainWindow
     {
         #region ObservableProperty
         [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
+        private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
         [ObservableProperty]
-        private bool menuIsExpand = false;
+        private bool _menuIsExpand = false;
 
         [ObservableProperty]
-        private bool clearGameLogOnStart = true;
+        private bool _clearGameLogOnStart = true;
 
         [ObservableProperty]
-        private bool infoButtonIsChecked = false;
+        private bool _infoButtonIsChecked = false;
 
         [ObservableProperty]
-        private bool settingsButtonIsChecked = false;
+        private bool _settingsButtonIsChecked = false;
 
         #endregion
 
         #region Page
 
         [ObservableProperty]
-        private object? nowPage;
+        private object? _nowPage;
 
         [ObservableProperty]
-        private object? infoPage;
+        private object? _infoPage;
 
         [ObservableProperty]
-        private object? settingsPage;
+        private object? _settingsPage;
 
         [ObservableProperty]
-        private object? extensionDebugPage;
+        private object? _extensionDebugPage;
 
         #endregion Page
 
         #region ListBox
 
         [ObservableProperty]
-        private ListBoxVM listBox_MainMenu = new();
+        private ListBoxVM _listBox_MainMenu = new();
 
         [ObservableProperty]
-        private ListBoxVM listBox_ExtensionMenu = new();
+        private ListBoxVM _listBox_ExtensionMenu = new();
 
         #endregion ListBox
 
@@ -126,12 +126,12 @@ namespace StarsectorTools.ViewModels.MainWindow
         private void ListBox_SelectionChangedEvent(ListBoxItemVM item)
         {
             // 在对ListBoxVM.SelectedItem赋值触发此命令时,item并非ListBoxVM.SelectedItem,原因未知
-            if (item is null || selectedItem == item)
+            if (item is null || _selectedItem == item)
                 return;
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (selectedItem?.IsSelected is true)
-                selectedItem.IsSelected = false;
-            selectedItem = item;
+            if (_selectedItem?.IsSelected is true)
+                _selectedItem.IsSelected = false;
+            _selectedItem = item;
             ShowPage(item.Tag);
         }
 
@@ -145,8 +145,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                 WeakReferenceMessenger.Default.Send<ExtensionDebugPathErrorMessage>(new(""));
                 return;
             }
-            deubgItemExtensionInfo = extensionInfo;
-            deubgItemPath = message.Value;
+            _deubgItemExtensionInfo = extensionInfo;
+            _deubgItemPath = message.Value;
             RefreshExtensionDebugPage();
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Extension"]["DebugPath"] = message.Value;
@@ -158,7 +158,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             ExtensionDebugPathRequestMessage message
         )
         {
-            message.Reply(deubgItemPath!);
+            message.Reply(_deubgItemPath!);
         }
 
         #region RelayCommand
@@ -174,18 +174,18 @@ namespace StarsectorTools.ViewModels.MainWindow
             InfoButtonIsChecked = false;
             SettingsButtonIsChecked = false;
             // 设置选中状态
-            if (page == infoPage)
+            if (page == _infoPage)
             {
                 InfoButtonIsChecked = true;
-                selectedItem =
+                _selectedItem =
                     ListBox_MainMenu.SelectedItem =
                     ListBox_ExtensionMenu.SelectedItem =
                         null;
             }
-            else if (page == settingsPage)
+            else if (page == _settingsPage)
             {
                 SettingsButtonIsChecked = true;
-                selectedItem =
+                _selectedItem =
                     ListBox_MainMenu.SelectedItem =
                     ListBox_ExtensionMenu.SelectedItem =
                         null;

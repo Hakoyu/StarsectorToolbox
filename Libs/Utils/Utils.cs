@@ -22,9 +22,6 @@ namespace StarsectorTools.Libs.Utils
     /// <summary>通用方法</summary>
     public static class Utils
     {
-        /// <summary>消息长度限制</summary>
-        private static int messageLengthLimits = 8192;
-
         /// <summary>
         /// 检测文件是否存在
         /// </summary>

@@ -19,13 +19,13 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             public string xmsx;
         }
 
-        private VmparamsData vmparamsData = new();
+        private VmparamsData _vmparamsData = new();
 
         private void GetVmparamsData()
         {
-            vmparamsData.data = File.ReadAllText($"{GameInfo.BaseDirectory}\\vmparams");
-            vmparamsData.xmsx = Regex.Match(vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
-            GameMemory = vmparamsData.xmsx;
+            _vmparamsData.data = File.ReadAllText($"{GameInfo.BaseDirectory}\\vmparams");
+            _vmparamsData.xmsx = Regex.Match(_vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", RegexOptions.IgnoreCase).Value;
+            GameMemory = _vmparamsData.xmsx;
         }
 
         private void GetGameKey()
@@ -36,8 +36,8 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 var serialKey = key.GetValue("serial") as string;
                 if (!string.IsNullOrWhiteSpace(serialKey))
                 {
-                    realGameKey = serialKey.Replace("/", "");
-                    GameKey = hideGameKey = new string('*', 23);
+                    _realGameKey = serialKey.Replace("/", "");
+                    GameKey = _hideGameKey = new string('*', 23);
                 }
             }
         }
@@ -65,10 +65,10 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                 MessageBoxVM.Show(new($"{I18nRes.MinMemoryConnotLowThan} 1024") { Icon = MessageBoxVM.Icon.Warning });
                 return 1024;
             }
-            else if (size > systemTotalMemory)
+            else if (size > _systemTotalMemory)
             {
-                MessageBoxVM.Show(new($"{I18nRes.MaxMemoryConnotExceed} {systemTotalMemory}") { Icon = MessageBoxVM.Icon.Warning });
-                return systemTotalMemory;
+                MessageBoxVM.Show(new($"{I18nRes.MaxMemoryConnotExceed} {_systemTotalMemory}") { Icon = MessageBoxVM.Icon.Warning });
+                return _systemTotalMemory;
             }
             return null;
         }
