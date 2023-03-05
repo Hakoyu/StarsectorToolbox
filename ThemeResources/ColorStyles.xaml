@@ -19,6 +19,8 @@
   <SolidColorBrush x:Key="ColorAqua1" Color="#1901FFFF" />
   <SolidColorBrush x:Key="ColorAqua2" Color="#3301FFFF" />
   <SolidColorBrush x:Key="ColorAqua3" Color="#4C01FFFF" />
+  <SolidColorBrush x:Key="ColorAqua4" Color="#6601FFFF" />
+  <SolidColorBrush x:Key="ColorAqua5" Color="#7F01FFFF" />
   <SolidColorBrush x:Key="ColorYellow1" Color="#19FFFF10" />
   <SolidColorBrush x:Key="ColorYellow2" Color="#33FFFF10" />
   <SolidColorBrush x:Key="ColorYellow3" Color="#4CFFFF10" />

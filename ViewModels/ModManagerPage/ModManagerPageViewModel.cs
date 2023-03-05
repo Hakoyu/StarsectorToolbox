@@ -25,79 +25,81 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region ObservableProperty
 
         [ObservableProperty]
-        private ObservableI18n<I18nRes> i18n = ObservableI18n<I18nRes>.Create(new());
+        private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
         [ObservableProperty]
-        private bool groupMenuIsExpand = false;
+        private bool _groupMenuIsExpand = false;
 
         [ObservableProperty]
-        private ObservableCollection<ModShowInfo> nowShowMods = new();
+        private ObservableCollection<ModShowInfo> _nowShowMods = new();
 
         /// <summary>当前选择的模组</summary>
-        private List<ModShowInfo> nowSelectedMods = new();
+        private List<ModShowInfo> _nowSelectedMods = new();
 
         /// <summary>当前选择的模组</summary>
-        private ModShowInfo? nowSelectedMod;
+        private ModShowInfo? _nowSelectedMod;
 
         /// <summary>模组详情的展开状态</summary>
         [ObservableProperty]
-        private bool isShowModDetails = false;
+        private bool _isShowModDetails = false;
 
         [ObservableProperty]
-        private BitmapImage? modDetailImage;
+        private BitmapImage? _modDetailImage;
 
         [ObservableProperty]
-        private string? modDetailName;
+        private string? _modDetailName;
 
         [ObservableProperty]
-        private string? modDetailId;
+        private string? _modDetailId;
 
         [ObservableProperty]
-        private string? modDetailModVersion;
+        private string? _modDetailModVersion;
 
         [ObservableProperty]
-        private string? modDetailGameVersion;
+        private string? _modDetailGameVersion;
 
         [ObservableProperty]
-        private string? modDetailPath;
+        private string? _modDetailPath;
 
         [ObservableProperty]
-        private string? modDetailAuthor;
+        private string? _modDetailAuthor;
 
         [ObservableProperty]
-        private string? modDetailDescription;
+        private string? _modDetailDescription;
 
         [ObservableProperty]
-        private string? modDetailDependencies;
+        private string? _modDetailDependencies;
 
         [ObservableProperty]
-        private string? modDetailUserDescription;
+        private string? _modDetailUserDescription;
 
         [ObservableProperty]
-        private string modFilterText = string.Empty;
+        private string _modFilterText = string.Empty;
+
+        partial void OnModFilterTextChanged(string value) => CheckFilterAndRefreshShowMods();
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
-        private string minRandomSize;
+        private string _minRandomSize;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
-        private string maxRandomSize;
+        private string _maxRandomSize;
 
         [ObservableProperty]
-        private bool isRemindSave = false;
+        private bool _isRemindSave = false;
 
         [ObservableProperty]
-        private bool nowSelectedIsUserGroup = false;
+        private bool _nowSelectedIsUserGroup = false;
 
         #endregion
 
         /// <summary>当前选择的列表项</summary>
-        private ListBoxItemVM nowSelectedGroup = null!;
-        private string nowSelectedGroupName => nowSelectedGroup!.Tag!.ToString()!;
+        private ListBoxItemVM _nowSelectedGroup = null!;
+        private string nowSelectedGroupName => _nowSelectedGroup!.Tag!.ToString()!;
         #region ListBox
         [ObservableProperty]
-        private ListBoxVM listBox_MainMenu =
+        private ListBoxVM _listBox_MainMenu =
             new()
             {
                 new()
@@ -120,7 +122,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 },
             };
         [ObservableProperty]
-        private ListBoxVM listBox_TypeGroupMenu =
+        private ListBoxVM _listBox_TypeGroupMenu =
             new()
             {
                 new()
@@ -174,7 +176,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             };
 
         [ObservableProperty]
-        private ListBoxVM listBox_UserGroupMenu =
+        private ListBoxVM _listBox_UserGroupMenu =
             new()
             {
                 new()
@@ -188,7 +190,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         #region ComboBox
         [ObservableProperty]
-        private ComboBoxVM comboBox_ModFilterType =
+        private ComboBoxVM _comboBox_ModFilterType =
             new()
             {
                 new() { Content = I18nRes.Name ,Tag = nameof(ModShowInfo.Name) },
@@ -198,7 +200,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             };
 
         [ObservableProperty]
-        private ComboBoxVM comboBox_ExportUserGroup = new()
+        private ComboBoxVM _comboBox_ExportUserGroup = new()
         {
             new(){Content = I18nRes.All ,Tag= nameof(I18nRes.All)}
         };
@@ -243,12 +245,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
         {
-            if (item is null || nowSelectedGroup == item)
+            if (item is null || _nowSelectedGroup == item)
                 return;
             // 若切换选择,可取消原来的选中状态,以此达到多列表互斥
-            if (nowSelectedGroup?.IsSelected is true)
-                nowSelectedGroup.IsSelected = false;
-            nowSelectedGroup = item;
+            if (_nowSelectedGroup?.IsSelected is true)
+                _nowSelectedGroup.IsSelected = false;
+            _nowSelectedGroup = item;
             if (allUserGroups.ContainsKey(item.Tag!.ToString()!))
                 NowSelectedIsUserGroup = true;
             else
@@ -269,20 +271,20 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (nowClearSelectedMods)
                 return;
             List<ModShowInfo> tempSelectedMods = new(items.OfType<ModShowInfo>());
-            if (nowSelectedMods.SequenceEqual(tempSelectedMods))
+            if (_nowSelectedMods.SequenceEqual(tempSelectedMods))
             {
-                ClearSelectedMods(ref nowSelectedMods);
+                ClearSelectedMods(ref _nowSelectedMods);
             }
             else
             {
-                nowSelectedMods = tempSelectedMods;
-                ChangeShowModDetails(nowSelectedMods.LastOrDefault(defaultValue: null!));
+                _nowSelectedMods = tempSelectedMods;
+                ChangeShowModDetails(_nowSelectedMods.LastOrDefault(defaultValue: null!));
             }
         }
         [RelayCommand]
         private void DataGridLostFocus()
         {
-            ClearSelectedMods(ref nowSelectedMods);
+            ClearSelectedMods(ref _nowSelectedMods);
         }
 
         private void ClearSelectedMods(ref List<ModShowInfo> list)
@@ -300,26 +302,26 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void Collected()
         {
-            if (nowSelectedMod is null)
+            if (_nowSelectedMod is null)
                 return;
-            ChangeSelectedModsCollected(!nowSelectedMod.IsCollected);
+            ChangeSelectedModsCollected(!_nowSelectedMod.IsCollected);
         }
 
         [RelayCommand]
         private void Enabled()
         {
-            if (nowSelectedMod is null)
+            if (_nowSelectedMod is null)
                 return;
-            ChangeSelectedModsEnabled(!nowSelectedMod.IsEnabled);
+            ChangeSelectedModsEnabled(!_nowSelectedMod.IsEnabled);
         }
 
         [RelayCommand]
         private void EnableDependencies()
         {
-            if (nowSelectedMod is null)
+            if (_nowSelectedMod is null)
                 return;
             StringBuilder errSB = new();
-            foreach (var dependencie in nowSelectedMod.DependenciesSet!)
+            foreach (var dependencie in _nowSelectedMod.DependenciesSet!)
             {
                 if (!allModInfos.ContainsKey(dependencie.Id))
                 {
@@ -337,12 +339,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             CheckEnabledModsDependencies();
             RefreshGroupModCount();
             IsRemindSave = true;
-        }
-
-        [RelayCommand]
-        private void ModFilterTextChanged()
-        {
-            CheckFilterAndRefreshShowMods();
         }
 
         [RelayCommand]

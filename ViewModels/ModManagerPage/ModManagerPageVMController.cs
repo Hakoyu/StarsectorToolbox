@@ -761,16 +761,16 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region ChangeUserGroupContainsSelectedMods
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
-            int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            int count = _nowSelectedMods.Count;
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
-                ChangeUserGroupContainsSelectedMod(group, nowSelectedMods[i].Id, isInGroup);
+                ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
-                if (count == nowSelectedMods.Count)
+                if (count == _nowSelectedMods.Count)
                     i++;
             }
             // 判断显示的数量与原来的数量是否一致
-            if (count != nowSelectedMods.Count)
+            if (count != _nowSelectedMods.Count)
                 CloseModDetails();
             CheckRefreshGroupAndMods(group);
             IsRemindSave = true;
@@ -802,16 +802,16 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region ChangeModEnabled
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
-            int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            int count = _nowSelectedMods.Count;
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
-                ChangeModEnabled(nowSelectedMods[i].Id, enabled);
+                ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
-                if (count == nowSelectedMods.Count)
+                if (count == _nowSelectedMods.Count)
                     i++;
             }
             // 判断显示的数量与原来的数量是否一致
-            if (count != nowSelectedMods.Count)
+            if (count != _nowSelectedMods.Count)
                 CloseModDetails();
             CheckRefreshGroupAndMods(nameof(ModTypeGroup.Enabled));
             CheckEnabledModsDependencies();
@@ -877,15 +877,15 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region ChangeModCollected
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
-            int count = nowSelectedMods.Count;
-            for (int i = 0; i < nowSelectedMods.Count;)
+            int count = _nowSelectedMods.Count;
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
-                ChangeModCollected(nowSelectedMods[i].Id, collected);
-                if (count == nowSelectedMods.Count)
+                ChangeModCollected(_nowSelectedMods[i].Id, collected);
+                if (count == _nowSelectedMods.Count)
                     i++;
             }
             // 判断显示的数量与原来的数量是否一致
-            if (count != nowSelectedMods.Count)
+            if (count != _nowSelectedMods.Count)
                 CloseModDetails();
             CheckRefreshGroupAndMods(nameof(ModTypeGroup.Collected));
             IsRemindSave = true;
@@ -990,11 +990,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             if (info is null)
                 CloseModDetails();
-            else if (IsShowModDetails && nowSelectedMod?.Id == info.Id)
+            else if (IsShowModDetails && _nowSelectedMod?.Id == info.Id)
                 CloseModDetails();
             else
                 ShowModDetails(info.Id);
-            nowSelectedMod = info;
+            _nowSelectedMod = info;
         }
 
         private void ShowModDetails(string id)
@@ -1122,7 +1122,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             )
                 return;
             var name = listBoxItem!.Tag!.ToString()!;
-            if (nowSelectedGroup == listBoxItem)
+            if (_nowSelectedGroup == listBoxItem)
                 ListBox_MainMenu.SelectedIndex = 0;
             ListBox_UserGroupMenu.Remove(listBoxItem);
             allUserGroups.Remove(name);

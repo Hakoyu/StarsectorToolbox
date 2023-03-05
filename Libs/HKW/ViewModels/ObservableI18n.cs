@@ -11,7 +11,7 @@ namespace HKW.ViewModels
     /// <para>创建实例:<code><![CDATA[    public partial class MainWindowViewModel : ObservableObject
     /// {
     ///     [ObservableProperty]
-    ///     public ObservableI18n<MainWindowI18nRes> i18n = ObservableI18n<MainWindowI18nRes>.Create(new());
+    ///     public ObservableI18n<MainWindowI18nRes> _i18n = ObservableI18n<MainWindowI18nRes>.Create(new());
     /// }
     /// ]]></code></para>
     /// <para>在xaml中使用:<code><![CDATA[    <Window.DataContext>

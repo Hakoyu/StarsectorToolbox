@@ -49,39 +49,9 @@ namespace StarsectorTools.Views.ModManagerPage
             {
                 Logger.Info($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {fileArray.Length}");
                 Utils.SetMainWindowBlurEffect();
+                // TODO:需要在ViewModel内部实现
                 await ViewModel.DropFile(fileArray);
                 Utils.RemoveMainWindowBlurEffect();
-                // TODO:需要在ViewModel内部实现
-                //ViewModel.DataGridDropFile(fileArray);
-                //new Task(() =>
-                //{
-                //    int total = fileArray.Length;
-                //    int completed = 0;
-                //    ModArchiveingWindow window = null!;
-                //    Dispatcher.InvokeAsync(() =>
-                //    {
-                //        window = new();
-                //        window.Label_Total.Content = total;
-                //        window.Label_Completed.Content = completed;
-                //        window.Label_Incomplete.Content = total;
-                //    });
-                //    foreach (string file in fileArray)
-                //    {
-                //        if (Utils.FileExists(file))
-                //        {
-                //            Dispatcher.InvokeAsync(() =>
-                //            {
-                //                ViewModel.DropFile(file);
-                //                window.Label_Progress.Content = file;
-                //                window.ShowDialog();
-                //                window.Label_Completed.Content = ++completed;
-                //                window.Label_Incomplete.Content = total - completed;
-                //            });
-                //        }
-                //    }
-                //    Dispatcher.InvokeAsync(() => window.Close());
-                //    GC.Collect();
-                //}).Start();
             }
         }
 

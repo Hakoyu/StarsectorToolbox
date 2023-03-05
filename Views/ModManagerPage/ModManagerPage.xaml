@@ -451,13 +451,7 @@
               Style="{StaticResource TextBoxBaseStyle}"
               Text="{Binding ModFilterText, UpdateSourceTrigger=PropertyChanged}"
               TextWrapping="Wrap"
-              ToolTip="{Binding I18n.I18nRes.SearchMod}">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="TextChanged">
-                  <i:InvokeCommandAction Command="{Binding ModFilterTextChangedCommand}" CommandParameter="{Binding ModFilterText}" />
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </TextBox>
+              ToolTip="{Binding I18n.I18nRes.SearchMod}" />
             <!--  TextBox输入占位符  -->
             <Label
               Width="{Binding Width, ElementName=TextBox_SearchMods}"

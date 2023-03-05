@@ -111,6 +111,12 @@
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
   <Style
+    x:Key="ListBoxItemHighLightStyle"
+    BasedOn="{StaticResource ListBoxItemBaseStyle}"
+    TargetType="ListBoxItem">
+    <Setter Property="pu:ListBoxItemHelper.SelectedBackground" Value="{DynamicResource ColorAqua3}" />
+  </Style>
+  <Style
     x:Key="ComboBoxBaseStyle"
     BasedOn="{StaticResource {x:Type ComboBox}}"
     TargetType="ComboBox">
