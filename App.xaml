@@ -32,7 +32,9 @@
                 <Setter Property="SizeToContent" Value="WidthAndHeight" />
                 <Setter Property="Background" Value="{DynamicResource ColorBG}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
-                <Setter Property="pu:WindowX.DisableDragMove" Value="True" />
+                <Setter Property="pu:WindowX.BorderThickness" Value="1" />
+                <Setter Property="pu:WindowX.BorderBrush" Value="{DynamicResource ColorAqua0}" />
+                <Setter Property="pu:WindowX.DisableDragMove" Value="False" />
                 <Setter Property="pu:WindowXModalDialog.ButtonPanelHorizontalAlignment" Value="Center" />
                 <Setter Property="pu:WindowXCaption.Height" Value="30" />
                 <Setter Property="pu:WindowXCaption.Buttons" Value="None" />
@@ -114,14 +116,10 @@
                 <Setter Property="MinHeight" Value="200" />
                 <Setter Property="MaxWidth" Value="1280" />
                 <Setter Property="MaxHeight" Value="720" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ColorAqua0}" />
                 <Setter Property="SizeToContent" Value="WidthAndHeight" />
-                <Setter Property="pu:WindowX.DisableDragMove" Value="True" />
                 <Setter Property="Background" Value="{DynamicResource ColorBG}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
-                <Setter Property="pu:WindowXCaption.Height" Value="30" />
-                <Setter Property="pu:WindowXCaption.Buttons" Value="None" />
-                <Setter Property="pu:WindowXCaption.ShadowColor" Value="{DynamicResource ColorAqua}" />
-                <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource WindowGlassBrush}" />
               </Style>
             </pu:PendingBoxSettings.WindowStyle>
             <pu:PendingBoxSettings.SpinStyle>
@@ -129,9 +127,9 @@
                 <Setter Property="SpinStyle" Value="Ring2" />
                 <Setter Property="Width" Value="50" />
                 <Setter Property="Height" Value="50" />
-                <Setter Property="Margin" Value="0,0,0,20" />
-                <Setter Property="GlyphSize" Value="2" />
-                <Setter Property="GlyphBrush" Value="#1ABBEA" />
+                <Setter Property="Margin" Value="0,0,0,10" />
+                <Setter Property="GlyphSize" Value="6" />
+                <Setter Property="GlyphBrush" Value="{DynamicResource ColorAqua0}" />
               </Style>
             </pu:PendingBoxSettings.SpinStyle>
             <pu:PendingBoxSettings.ContentTemplate>
@@ -147,22 +145,36 @@
                   <TextBlock
                     x:Name="PART_CaptionTextBlock"
                     Grid.Row="1"
-                    Margin="5,5,0,0"
+                    Margin="0,5,0,0"
                     TextAlignment="Center" />
                   <TextBlock
                     x:Name="PART_MessageTextBlock"
                     Grid.Row="2"
+                    Margin="10,5,10,0"
                     TextAlignment="Center"
                     TextWrapping="Wrap" />
                   <Button
                     x:Name="PART_CancelButton"
                     Grid.Row="3"
+                    Margin="0,10,0,0"
                     HorizontalAlignment="Center"
                     Style="{x:Null}"
                     Visibility="Collapsed" />
                 </Grid>
               </DataTemplate>
             </pu:PendingBoxSettings.ContentTemplate>
+            <pu:PendingBoxSettings.CancelButtonStyle>
+              <Style TargetType="Button">
+                <Setter Property="Background" Value="{DynamicResource ColorLight3}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />
+                <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+                <Setter Property="Width" Value="60" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Padding" Value="5,0,5,0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+              </Style>
+            </pu:PendingBoxSettings.CancelButtonStyle>
           </pu:PendingBoxSettings>
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>

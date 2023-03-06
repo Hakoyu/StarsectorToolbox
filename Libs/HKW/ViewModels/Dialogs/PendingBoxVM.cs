@@ -3,6 +3,9 @@ using System.ComponentModel;
 
 namespace HKW.ViewModels.Dialogs
 {
+    /// <summary>
+    /// 等待消息弹窗
+    /// </summary>
     public class PendingBoxVM
     {
         private PendingBoxVM()
@@ -71,14 +74,17 @@ namespace HKW.ViewModels.Dialogs
         private static event ViewModelHandler? ViewModelEvent;
     }
 
-    public class PendingVMHandler
+    /// <summary>
+    /// 等待消息弹窗处理器
+    /// </summary>
+    public class PendingVMHandler : IDisposable
     {
-        public Action _showAction;
-        public Action _hideAction;
-        public Action _closeAction;
-        public Action<string> _updateMessageAction;
+        private Action _showAction;
+        private Action _hideAction;
+        private Action _closeAction;
+        private Action<string> _updateMessageAction;
 
-        public PendingVMHandler(Action showAction, Action hideAction, Action closeAction, Action<string> updateMessageAction)
+        internal PendingVMHandler(Action showAction, Action hideAction, Action closeAction, Action<string> updateMessageAction)
         {
             _showAction = showAction;
             _hideAction = hideAction;
@@ -86,28 +92,55 @@ namespace HKW.ViewModels.Dialogs
             _updateMessageAction = updateMessageAction;
         }
 
+        /// <summary>
+        /// 显示窗口
+        /// </summary>
         public void Show()
         {
             _showAction();
         }
 
+        /// <summary>
+        /// 隐藏窗口
+        /// </summary>
         public void Hide()
         {
             _hideAction();
         }
 
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
         public void Close()
         {
             _closeAction();
         }
 
+        /// <summary>
+        /// 更新消息
+        /// </summary>
+        /// <param name="message">消息</param>
         public void UpdateMessage(string message)
         {
             _updateMessageAction(message);
         }
 
-        public event CancelEventHandler Cancelling;
+        /// <summary>
+        /// 回收
+        /// </summary>
+        public void Dispose()
+        {
+            Close();
+        }
 
-        public event EventHandler Closed;
+        ///// <summary>
+        ///// 取消事件
+        ///// </summary>
+        //public event CancelEventHandler? Cancelling;
+
+        ///// <summary>
+        ///// 关闭事件
+        ///// </summary>
+        //public event EventHandler? Closed;
     }
 }

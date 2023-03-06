@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
+using Panuon.WPF.UI;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.ViewModels.MainWindow;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
@@ -18,6 +20,7 @@ namespace StarsectorTools.Views.MainWindow
     public partial class MainWindow : Window
     {
         internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
+
         /// <summary>
         ///
         /// </summary>
@@ -30,8 +33,6 @@ namespace StarsectorTools.Views.MainWindow
             // 亚克力背景
             // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
 
-            // 全局异常捕获
-            Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
             // 获取系统主题色
             Application.Current.Resources["WindowGlassBrush"] = SystemParameters.WindowGlassBrush;
             // 根据主题色的明亮程度来设置字体颜色
@@ -54,10 +55,12 @@ namespace StarsectorTools.Views.MainWindow
                     ex,
                     false
                 );
-                MessageBoxVM.Show(new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
-                {
-                    Icon = MessageBoxVM.Icon.Error
-                });
+                MessageBoxVM.Show(
+                    new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
+                    {
+                        Icon = MessageBoxVM.Icon.Error
+                    }
+                );
                 Environment.Exit(-1);
                 return;
             }
@@ -67,40 +70,6 @@ namespace StarsectorTools.Views.MainWindow
             InitializePage();
 
             Logger.Info(I18nRes.InitializationCompleted);
-        }
-
-        private void OnDispatcherUnhandledException(
-            object sender,
-            DispatcherUnhandledExceptionEventArgs e
-        )
-        {
-            if (e.Exception.Source is nameof(StarsectorTools))
-            {
-                Logger.Error(I18nRes.GlobalException, e.Exception, false);
-                MessageBoxVM.Show(
-                    new($"{I18nRes.GlobalExceptionMessage}\n\n{Logger.FilterException(e.Exception)}")
-                    {
-                        Icon = MessageBoxVM.Icon.Error,
-                    }
-                );
-            }
-            else
-            {
-                Logger.Error(
-                    $"{I18nRes.GlobalExtensionException}: {e.Exception.Source}",
-                    e.Exception,
-                    false
-                );
-                MessageBoxVM.Show(
-                    new(
-                        $"{string.Format(I18nRes.GlobalExtensionExceptionMessage, e.Exception.Source)}\n\n{Logger.FilterException(e.Exception)}"
-                    )
-                    {
-                        Icon = MessageBoxVM.Icon.Error,
-                    }
-                );
-            }
-            e.Handled = true;
         }
 
         //窗体移动

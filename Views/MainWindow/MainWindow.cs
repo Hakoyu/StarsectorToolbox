@@ -20,18 +20,17 @@ namespace StarsectorTools.Views.MainWindow
         /// 消息长度限制
         /// </summary>
         private int _messageLengthLimits = 8192;
+
         private void RegisterData()
         {
             // 注册消息窗口
             RegisterMessageBox();
+            // 注册等待窗口
+            RegisterPendingBox();
             // 注册打开文件对话框
             RegisterOpenFileDialog();
             // 注册保存文件对话框
             RegisterSaveFileDialog();
-            // 注册剪切板视图模型
-
-            // 注册主窗口模糊效果触发器
-            ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
 
             // 注册页面初始化消息
             WeakReferenceMessenger.Default.Register<GetMainMenuItemsRequestMessage>(
@@ -165,7 +164,8 @@ namespace StarsectorTools.Views.MainWindow
             PendingBoxVM.InitializeHandler(
                 (m, c, cc) =>
                 {
-                    var handler = PendingBox.Show(m, c, cc);
+                    SetBlurEffect(false);
+                    var handler = PendingBox.Show(this, m, c, cc);
                     return new(
                         () =>
                         {
@@ -178,6 +178,7 @@ namespace StarsectorTools.Views.MainWindow
                         () =>
                         {
                             handler.Close();
+                            RemoveBlurEffect();
                         },
                         (s) =>
                         {
@@ -214,6 +215,9 @@ namespace StarsectorTools.Views.MainWindow
             }
         }
 
+        System.Windows.Media.Effects.Effect _blurEffect =
+            new System.Windows.Media.Effects.BlurEffect();
+
         /// <summary>
         /// 设置模糊效果
         /// </summary>
@@ -222,7 +226,7 @@ namespace StarsectorTools.Views.MainWindow
             Dispatcher.Invoke(() =>
             {
                 IsEnabled = isEnabled;
-                Effect = new System.Windows.Media.Effects.BlurEffect();
+                Effect = _blurEffect;
             });
         }
 

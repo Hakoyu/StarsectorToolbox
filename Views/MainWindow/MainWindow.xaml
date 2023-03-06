@@ -26,9 +26,9 @@
   WindowStyle="None"
   mc:Ignorable="d">
   <!--  使用SystemParameters中的MaximizedPrimaryScreenWidth和MaximizedPrimaryScreenHeight来指定最大化范围,不然会覆盖任务栏  -->
-  <Window.DataContext>
+  <d:Window.DataContext>
     <vm:MainWindowViewModel />
-  </Window.DataContext>
+  </d:Window.DataContext>
   <WindowChrome.WindowChrome>
     <WindowChrome
       CaptionHeight="0"

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using StarsectorTools.ViewModels.InfoPage;
 
 namespace StarsectorTools.Views.InfoPage
 {
@@ -7,9 +8,11 @@ namespace StarsectorTools.Views.InfoPage
     /// </summary>
     public partial class InfoPage : Page
     {
+        internal InfoPageViewModel ViewModel => (InfoPageViewModel)DataContext;
         internal InfoPage()
         {
             InitializeComponent();
+            DataContext = new InfoPageViewModel();
         }
     }
 }

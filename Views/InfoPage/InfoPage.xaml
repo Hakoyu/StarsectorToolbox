@@ -12,9 +12,9 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-  <Page.DataContext>
+  <d:Page.DataContext>
     <vm:InfoPageViewModel />
-  </Page.DataContext>
+  </d:Page.DataContext>
   <Grid>
     <GroupBox Header="{Binding I18n.I18nRes.Info}" Style="{StaticResource GroupBoxBaseStyle}">
       <StackPanel HorizontalAlignment="Center">

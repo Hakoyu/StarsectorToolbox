@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using HKW.Libs.Log4Cs;
@@ -74,6 +75,8 @@ namespace StarsectorTools.ViewModels.MainWindow
             InitializeDirectories();
             // 注册日志
             Logger.Initialize(ST.LogFile);
+            // 设置全局异常捕获
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             // 初始化设置
             InitializeConfig();
             // 获取主页面

@@ -433,10 +433,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     throw new ArgumentNullException();
                 if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(_StrEnabledMods))
                     throw new ArgumentNullException();
-                if (importMode)
-                    EnabledModListImportMode();
+                if (importMode && EnabledModListImportMode() is false)
+                    return;
                 if (
-                    enabledModsJson[_StrEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray
+                    enabledModsJson[_StrEnabledMods]?.AsArray()
+                    is not JsonArray enabledModsJsonArray
                 )
                     throw new ArgumentNullException();
                 Logger.Info($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
@@ -483,7 +484,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             return err.Length > 0 ? err : null;
         }
 
-        private void EnabledModListImportMode()
+        private bool EnabledModListImportMode()
         {
             var result = MessageBoxVM.Show(
                 new(I18nRes.SelectImportMode)
@@ -492,10 +493,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     Icon = MessageBoxVM.Icon.Question
                 }
             );
-            if (result == MessageBoxVM.Result.Yes)
+            if (result is MessageBoxVM.Result.Yes)
                 ClearAllEnabledMods();
-            else if (result == MessageBoxVM.Result.Cancel)
-                return;
+            else if (result is MessageBoxVM.Result.Cancel)
+                return false;
+            return true;
         }
         #endregion
         #region GetUserData
@@ -758,7 +760,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -799,7 +801,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -874,7 +876,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1201,16 +1203,81 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region DropFile
         internal async Task DropFile(Array array)
         {
-            string tempPath = "Temp";
-            DirectoryInfo dirs = new(tempPath);
-            foreach (string filePath in array)
+            using var pendingHandler = PendingBoxVM.Show($"检测到 {array.Length} 个拖入项");
+            var tempPath = "Temp";
+            var tempDirectoryInfo = new DirectoryInfo(tempPath);
+            foreach (string path in array)
+            {
+                pendingHandler.UpdateMessage($"正在解析\n{path}");
+                if (Directory.Exists(path))
+                {
+                    var files = Utils.GetAllSubFiles(path);
+                    foreach (var subFile in files)
+                    {
+                        pendingHandler.UpdateMessage($"正在解压\n{subFile}");
+                        await AddModFromFile(subFile.FullName, tempDirectoryInfo);
+                    }
+                }
+                else
+                {
+                    pendingHandler.UpdateMessage($"正在解压\n{path}");
+                    await AddModFromFile(path, tempDirectoryInfo);
+                }
+            }
+            CheckFilterAndRefreshShowMods();
+            tempDirectoryInfo.Delete(true);
+        }
+
+        private async Task AddModFromFile(string file, DirectoryInfo tempDirectoryInfo)
+        {
+            if (
+                await TryGetModInfoPath(file, tempDirectoryInfo.Name, tempDirectoryInfo)
+                is not
+                (string jsonPath, string directoryName)
+            )
+                return;
+            if (
+                ModInfo.Parse(
+                    Utils.JsonParse2Object(jsonPath)!,
+                    $"{GameInfo.ModsDirectory}\\{directoryName}"
+                )
+                is not ModInfo newModInfo
+            )
+            {
+                MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {file}"));
+                return;
+            }
+            if (!_allModInfos.ContainsKey(newModInfo.Id))
+            {
+                Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                AddMod(newModInfo);
+                RefreshGroupModCount();
+                return;
+            }
+            await TryOverwriteMod(
+                jsonPath,
+                directoryName,
+                _allModInfos[newModInfo.Id],
+                newModInfo,
+                tempDirectoryInfo
+            );
+            return;
+
+            static async Task<(string jsonPath, string directoryName)?> TryGetModInfoPath(
+                string filePath,
+                string tempPath,
+                DirectoryInfo tempDirectoryInfo
+            )
             {
                 if (!await Utils.UnArchiveFileToDir(filePath, tempPath))
                 {
                     MessageBoxVM.Show(new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{filePath}"));
-                    return;
+                    return null;
                 }
-                var filesInfo = dirs.GetFiles(_ModInfoFile, SearchOption.AllDirectories);
+                var filesInfo = tempDirectoryInfo.GetFiles(
+                    _ModInfoFile,
+                    SearchOption.AllDirectories
+                );
                 if (
                     !(
                         filesInfo.FirstOrDefault(defaultValue: null) is FileInfo fileInfo
@@ -1220,28 +1287,19 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 {
                     Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {filePath}");
                     MessageBoxVM.Show(new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {filePath}"));
-                    return;
+                    return null;
                 }
                 string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
-                if (
-                    ModInfo.Parse(
-                        Utils.JsonParse2Object(jsonPath)!,
-                        $"{GameInfo.ModsDirectory}\\{directoryName}"
-                    )
-                    is not ModInfo newModInfo
-                )
-                {
-                    MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}"));
-                    return;
-                }
-                if (!_allModInfos.ContainsKey(newModInfo.Id))
-                {
-                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                    AddMod(newModInfo);
-                    RefreshGroupModCount();
-                    return;
-                }
-                var originalModInfo = _allModInfos[newModInfo.Id];
+                return (jsonPath, directoryName);
+            }
+            async Task TryOverwriteMod(
+                string jsonPath,
+                string directoryName,
+                ModInfo originalModInfo,
+                ModInfo newModInfo,
+                DirectoryInfo tempDirectoryInfo
+            )
+            {
                 var result = MessageBoxVM.Show(
                     new(
                         $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}"
@@ -1251,13 +1309,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         Icon = MessageBoxVM.Icon.Question,
                     }
                 );
-                if (result == MessageBoxVM.Result.Yes)
+                if (result is MessageBoxVM.Result.Yes)
                 {
                     Utils.CopyDirectory(
                         originalModInfo.ModDirectory,
-                        $"{_BackupModsDirectory}\\{tempPath}"
+                        $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}"
                     );
-                    string tempDirectory = $"{_BackupModsDirectory}\\{tempPath}";
+                    string tempDirectory = $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}";
                     await Utils.ArchiveDirToDir(tempDirectory, _BackupModsDirectory, directoryName);
                     Directory.Delete(tempDirectory, true);
                     Directory.Delete(originalModInfo.ModDirectory, true);
@@ -1270,7 +1328,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
                     );
                 }
-                else if (result == MessageBoxVM.Result.No)
+                else if (result is MessageBoxVM.Result.No)
                 {
                     Utils.DeleteDirToRecycleBin(originalModInfo.ModDirectory);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
@@ -1283,8 +1341,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     );
                 }
             }
-            CheckFilterAndRefreshShowMods();
-            dirs.Delete(true);
         }
         #endregion
     }

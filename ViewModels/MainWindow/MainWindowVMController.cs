@@ -146,7 +146,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                         return;
                     page.Close();
                     if (
-                        TryGetExtensionInfo(_deubgItemPath!, true) is not ExtensionInfo extensionInfo
+                        TryGetExtensionInfo(_deubgItemPath!, true)
+                        is not ExtensionInfo extensionInfo
                     )
                         return;
                     _deubgItemExtensionInfo = extensionInfo;
@@ -201,7 +202,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             ListBox_MainMenu.Remove(_deubgItem!);
             InitializeExtensionDebugPage();
             ListBox_MainMenu.SelectedItem = _deubgItem;
-            NowPage = _deubgItem!.Tag!;
+            NowPage = _deubgItem?.Tag;
         }
 
         private void InitializeExtensionDebugPage()
@@ -643,5 +644,34 @@ namespace StarsectorTools.ViewModels.MainWindow
         }
 
         #endregion ClosePage
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var ex = (Exception)e.ExceptionObject;
+            if (ex.InnerException is not null)
+                ex = ex.InnerException;
+            if (ex.Source is nameof(StarsectorTools))
+            {
+                Logger.Error(I18nRes.GlobalException, ex, false);
+                MessageBoxVM.Show(
+                    new($"{I18nRes.GlobalExceptionMessage}\n\n{Logger.FilterException(ex)}")
+                    {
+                        Icon = MessageBoxVM.Icon.Error,
+                    }
+                );
+            }
+            else
+            {
+                Logger.Error($"{I18nRes.GlobalExtensionException}: {ex.Source}", ex, false);
+                MessageBoxVM.Show(
+                    new(
+                        $"{string.Format(I18nRes.GlobalExtensionExceptionMessage, ex.Source)}\n\n{Logger.FilterException(ex)}"
+                    )
+                    {
+                        Icon = MessageBoxVM.Icon.Error,
+                    }
+                );
+            }
+        }
     }
 }

@@ -16,9 +16,9 @@
   d:DesignWidth="800"
   FontSize="16"
   mc:Ignorable="d">
-  <Page.DataContext>
+  <d:Page.DataContext>
     <vm:ModManagerPageViewModel />
-  </Page.DataContext>
+  </d:Page.DataContext>
   <Page.Resources>
     <Style
       x:Key="CenterAlignmentStyle"
