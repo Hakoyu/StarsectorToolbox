@@ -968,6 +968,24 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 解析文件夹 的本地化字符串。
+        /// </summary>
+        public static string ParseDirectory {
+            get {
+                return ResourceManager.GetString("ParseDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 解析文件 的本地化字符串。
+        /// </summary>
+        public static string ParseFile {
+            get {
+                return ResourceManager.GetString("ParseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 位置 的本地化字符串。
         /// </summary>
         public static string Path {
@@ -1236,6 +1254,18 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         public static string TypeGroupRetrievalCompleted {
             get {
                 return ResourceManager.GetString("TypeGroupRetrievalCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 文件总数: {0} 已完成: {1} 未完成: {2}
+        ///
+        ///正在解压:
+        ///{3} 的本地化字符串。
+        /// </summary>
+        public static string UnArchiveFileMessage {
+            get {
+                return ResourceManager.GetString("UnArchiveFileMessage", resourceCulture);
             }
         }
         

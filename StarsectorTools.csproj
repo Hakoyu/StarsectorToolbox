@@ -25,13 +25,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="新文件夹1\**" />
-    <EmbeddedResource Remove="新文件夹1\**" />
-    <None Remove="新文件夹1\**" />
-    <Page Remove="新文件夹1\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Resources\ModTypeGroup.toml" />
     <EmbeddedResource Include="Resources\Config.toml" />
   </ItemGroup>

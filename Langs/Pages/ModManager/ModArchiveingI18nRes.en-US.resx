@@ -117,16 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UnzipNow" xml:space="preserve">
-    <value>Unzip now</value>
-  </data>
-  <data name="TotalFileNumber" xml:space="preserve">
-    <value>Total number of files</value>
-  </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Completed</value>
-  </data>
-  <data name="Incomplete" xml:space="preserve">
-    <value>Incomplete</value>
-  </data>
 </root>

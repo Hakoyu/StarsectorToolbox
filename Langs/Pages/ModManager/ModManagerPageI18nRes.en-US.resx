@@ -544,4 +544,16 @@ There are functions to enable and disable, favorite, set user groups, etc</value
   <data name="UserCustomData" xml:space="preserve">
     <value>User custom data</value>
   </data>
+  <data name="UnArchiveFileMessage" xml:space="preserve">
+    <value>Total number of files: {0} Completed: {1} Incomplete: {2}
+
+Decompressing:
+{3}</value>
+  </data>
+  <data name="ParseFile" xml:space="preserve">
+    <value>Parse file</value>
+  </data>
+  <data name="ParseDirectory" xml:space="preserve">
+    <value>Parse directory</value>
+  </data>
 </root>

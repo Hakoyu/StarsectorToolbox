@@ -25,10 +25,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 {
     internal partial class ModManagerPageViewModel
     {
-        private static string _UserDataFile = $"{ST.CoreDirectory}\\UserData.toml";
-        private static string _UserGroupFile = $"{ST.CoreDirectory}\\UserGroup.toml";
-        private static string _BackupDirectory = $"{ST.CoreDirectory}\\Backup";
-        private static string _BackupModsDirectory = $"{_BackupDirectory}\\Mods";
+        private readonly static string _UserDataFile = $"{ST.CoreDirectory}\\UserData.toml";
+        private readonly static string _UserGroupFile = $"{ST.CoreDirectory}\\UserGroup.toml";
+        private readonly static string _BackupDirectory = $"{ST.CoreDirectory}\\Backup";
+        private readonly static string _BackupModsDirectory = $"{_BackupDirectory}\\Mods";
         private const string _ModInfoFile = "mod_info.json";
         private const string _StrEnabledMods = "enabledMods";
         private const string _StrAll = "All";
@@ -38,52 +38,55 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private const string _StrUserCustomData = "UserCustomData";
 
         /// <summary>已启用的模组ID</summary>
-        private HashSet<string> _allEnabledModsId = new();
+        private readonly HashSet<string> _allEnabledModsId = new();
 
         /// <summary>已收藏的模组ID</summary>
-        private HashSet<string> _allCollectedModsId = new();
+        private readonly HashSet<string> _allCollectedModsId = new();
 
         /// <summary>
         /// <para>全部分组列表项</para>
         /// <para><see langword="Key"/>: 列表项Tag或ModGroupType</para>
         /// <para><see langword="Value"/>: 列表项</para>
         /// </summary>
-        private Dictionary<string, ListBoxItemVM> _allListBoxItems = new();
+        private readonly Dictionary<string, ListBoxItemVM> _allListBoxItems = new();
 
         /// <summary>
         /// <para>全部模组信息</para>
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 模组信息</para>
         /// </summary>
-        private Dictionary<string, ModInfo> _allModInfos = new();
+        private readonly Dictionary<string, ModInfo> _allModInfos = new();
 
         /// <summary>
         /// <para>全部模组显示信息</para>
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 模组显示信息</para>
         /// </summary>
-        private Dictionary<string, ModShowInfo> _allModsShowInfo = new();
+        private readonly Dictionary<string, ModShowInfo> _allModsShowInfo = new();
 
         /// <summary>
         /// <para>全部模组所在的类型分组</para>
         /// <para><see langword="Key"/>: 模组ID</para>
         /// <para><see langword="Value"/>: 所在分组</para>
         /// </summary>
-        private Dictionary<string, string> _allModsTypeGroup = new();
+        private readonly Dictionary<string, string> _allModsTypeGroup = new();
 
         /// <summary>
         /// <para>全部用户分组</para>
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组</para>
         /// </summary>
-        private Dictionary<string, HashSet<string>> _allUserGroups = new();
+        private readonly Dictionary<string, HashSet<string>> _allUserGroups = new();
 
         /// <summary>
         /// <para>全部分组包含的模组显示信息列表</para>
         /// <para><see langword="Key"/>: 分组名称</para>
         /// <para><see langword="Value"/>: 包含的模组显示信息的列表</para>
         /// </summary>
-        private Dictionary<string, ObservableCollection<ModShowInfo>> _allModShowInfoGroups =
+        private readonly Dictionary<
+            string,
+            ObservableCollection<ModShowInfo>
+        > _allModShowInfoGroups =
             new()
             {
                 [ModTypeGroup.All] = new(),
@@ -169,7 +172,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 MissDependencies = false,
                 ImageSource = GetImage($"{info.ModDirectory}\\icon.ico"),
             };
-            BitmapImage? GetImage(string filePath)
+            static BitmapImage? GetImage(string filePath)
             {
                 if (!File.Exists(filePath))
                     return null;
@@ -199,7 +202,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             _allModInfos.Add(modInfo.Id, modInfo);
             AddModShowInfo(modInfo);
-            Logger.Debug($"{I18nRes.RemoveMod} {modInfo.Id} {modInfo.Version}");
+            Logger.Debug($"{I18nRes.AddMod} {modInfo.Id} {modInfo.Version}");
         }
 
         private void AddModShowInfo(ModInfo modInfo, bool createContextMenu = true)
@@ -430,16 +433,16 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 StringBuilder errSB = new();
                 if (Utils.JsonParse2Object(filePath) is not JsonObject enabledModsJson)
-                    throw new ArgumentNullException();
+                    throw new();
                 if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(_StrEnabledMods))
-                    throw new ArgumentNullException();
+                    throw new();
                 if (importMode && EnabledModListImportMode() is false)
                     return;
                 if (
                     enabledModsJson[_StrEnabledMods]?.AsArray()
                     is not JsonArray enabledModsJsonArray
                 )
-                    throw new ArgumentNullException();
+                    throw new();
                 Logger.Info($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
                 if (GetEnabledMods(enabledModsJsonArray) is StringBuilder err)
                 {
@@ -452,9 +455,9 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 }
                 Logger.Info($"{I18nRes.EnableMod} {I18nRes.Size}: {_allEnabledModsId.Count}");
             }
-            catch (Exception ex)
+            catch
             {
-                Logger.Error($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}", ex);
+                Logger.Error($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.LoadError}\n{I18nRes.Path}: {filePath}")
                     {
@@ -681,14 +684,23 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 : ModTypeGroup.UnknownMods;
         }
         #endregion
-        private void CheckRefreshGroupAndMods(string group)
+
+        #region RefreshDisplayData
+        private void CheckAndRefreshDisplayData(string group = "")
         {
-            if (NowSelectedGroupName == group)
+            if (!string.IsNullOrWhiteSpace(group))
+            {
+                if (NowSelectedGroupName == group)
+                    CheckFilterAndRefreshShowMods();
+                RefreshGroupModCount();
+            }
+            else
+            {
                 CheckFilterAndRefreshShowMods();
-            RefreshGroupModCount();
+                RefreshGroupModCount();
+            }
         }
 
-        #region RefreshNowShowMods
         private void CheckFilterAndRefreshShowMods()
         {
             var text = ModFilterText;
@@ -734,8 +746,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     _ => null!
                 }
             );
-        #endregion
-        #region RefreshDisplayInfo
+
         private void RefreshGroupModCount()
         {
             foreach (var item in _allListBoxItems.Values)
@@ -747,6 +758,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             Logger.Debug(I18nRes.ModCountInGroupRefreshCompleted);
         }
 
+        #endregion
         private void RefreshModsContextMenu()
         {
             foreach (var showInfo in _allModsShowInfo.Values)
@@ -755,7 +767,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 $"{I18nRes.ContextMenuRefreshCompleted} {I18nRes.Size}: {_allModsShowInfo.Values.Count}"
             );
         }
-        #endregion
+
         #region ChangeUserGroupContainsSelectedMods
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
@@ -770,7 +782,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             // 判断显示的数量与原来的数量是否一致
             if (count != _nowSelectedMods.Count)
                 CloseModDetails();
-            CheckRefreshGroupAndMods(group);
+            CheckAndRefreshDisplayData(group);
             IsRemindSave = true;
         }
 
@@ -811,7 +823,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             // 判断显示的数量与原来的数量是否一致
             if (count != _nowSelectedMods.Count)
                 CloseModDetails();
-            CheckRefreshGroupAndMods(nameof(ModTypeGroup.Enabled));
+            CheckAndRefreshDisplayData(nameof(ModTypeGroup.Enabled));
             CheckEnabledModsDependencies();
             IsRemindSave = true;
         }
@@ -885,7 +897,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             // 判断显示的数量与原来的数量是否一致
             if (count != _nowSelectedMods.Count)
                 CloseModDetails();
-            CheckRefreshGroupAndMods(nameof(ModTypeGroup.Collected));
+            CheckAndRefreshDisplayData(nameof(ModTypeGroup.Collected));
             IsRemindSave = true;
         }
 
@@ -1070,7 +1082,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             ListBoxItemVM listBoxItem = new();
             // 调用全局资源需要写全
-            SetListBoxItemData(ref listBoxItem, name);
+            SetListBoxItemData(listBoxItem, name);
             ContextMenuVM contextMenu =
                 new() { RenameUserGroupMenuItemVM(), RemoveUserGroupMenuItemVM() };
             listBoxItem.ContextMenu = contextMenu;
@@ -1180,7 +1192,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     _allListBoxItems.Remove(name);
                     _allListBoxItems.Add(_name, listBoxItem);
                     window.Close();
-                    SetListBoxItemData(ref listBoxItem, _name);
+                    SetListBoxItemData(listBoxItem, _name);
                     RefreshGroupModCount();
                     RefreshModsContextMenu();
                     IsRemindSave = true;
@@ -1192,7 +1204,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             window.ShowDialog();
         }
 
-        private void SetListBoxItemData(ref ListBoxItemVM item, string name)
+        private static void SetListBoxItemData(ListBoxItemVM item, string name)
         {
             item.Content = name;
             item.ToolTip = name;
@@ -1203,33 +1215,59 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         #region DropFile
         internal async Task DropFile(Array array)
         {
-            using var pendingHandler = PendingBoxVM.Show($"检测到 {array.Length} 个拖入项");
+            var count = array.Length;
             var tempPath = "Temp";
             var tempDirectoryInfo = new DirectoryInfo(tempPath);
+            var completed = 0;
+            Logger.Info($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {count}");
+            using var pendingHandler = PendingBoxVM.Show(
+                string.Format(I18nRes.UnArchiveFileMessage, count, completed, count - completed, "")
+            );
             foreach (string path in array)
             {
-                pendingHandler.UpdateMessage($"正在解析\n{path}");
+                await Task.Delay(1);
                 if (Directory.Exists(path))
                 {
+                    Logger.Info($"{I18nRes.ParseDirectory} {path}");
                     var files = Utils.GetAllSubFiles(path);
+                    count += files.Count;
                     foreach (var subFile in files)
                     {
-                        pendingHandler.UpdateMessage($"正在解压\n{subFile}");
+                        pendingHandler.UpdateMessage(
+                            string.Format(
+                                I18nRes.UnArchiveFileMessage,
+                                count,
+                                completed,
+                                count - completed,
+                                subFile
+                            )
+                        );
                         await AddModFromFile(subFile.FullName, tempDirectoryInfo);
+                        count++;
                     }
                 }
                 else
                 {
-                    pendingHandler.UpdateMessage($"正在解压\n{path}");
+                    pendingHandler.UpdateMessage(
+                        string.Format(
+                            I18nRes.UnArchiveFileMessage,
+                            count,
+                            completed,
+                            count - completed,
+                            path
+                        )
+                    );
                     await AddModFromFile(path, tempDirectoryInfo);
+                    count++;
                 }
             }
-            CheckFilterAndRefreshShowMods();
+            CheckAndRefreshDisplayData();
             tempDirectoryInfo.Delete(true);
         }
 
         private async Task AddModFromFile(string file, DirectoryInfo tempDirectoryInfo)
         {
+            Logger.Info($"{I18nRes.ParseFile} {file}");
             if (
                 await TryGetModInfoPath(file, tempDirectoryInfo.Name, tempDirectoryInfo)
                 is not
@@ -1251,7 +1289,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                 AddMod(newModInfo);
-                RefreshGroupModCount();
                 return;
             }
             await TryOverwriteMod(
@@ -1322,7 +1359,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
-                    RefreshGroupModCount();
                     IsRemindSave = true;
                     Logger.Info(
                         $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
@@ -1334,7 +1370,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
-                    RefreshGroupModCount();
                     IsRemindSave = true;
                     Logger.Info(
                         $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"

@@ -59,41 +59,5 @@ namespace StarsectorTools.Langs.Pages.ModManager {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   查找类似 已完成 的本地化字符串。
-        /// </summary>
-        public static string Completed {
-            get {
-                return ResourceManager.GetString("Completed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 未完成 的本地化字符串。
-        /// </summary>
-        public static string Incomplete {
-            get {
-                return ResourceManager.GetString("Incomplete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 文件总数 的本地化字符串。
-        /// </summary>
-        public static string TotalFileNumber {
-            get {
-                return ResourceManager.GetString("TotalFileNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 正在解压 的本地化字符串。
-        /// </summary>
-        public static string UnzipNow {
-            get {
-                return ResourceManager.GetString("UnzipNow", resourceCulture);
-            }
-        }
     }
 }

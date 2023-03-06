@@ -47,7 +47,6 @@ namespace StarsectorTools.Views.ModManagerPage
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array fileArray)
             {
-                Logger.Info($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {fileArray.Length}");
                 Utils.SetMainWindowBlurEffect();
                 // TODO:需要在ViewModel内部实现
                 await ViewModel.DropFile(fileArray);
