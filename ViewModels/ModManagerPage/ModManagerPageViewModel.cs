@@ -22,6 +22,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 {
     internal partial class ModManagerPageViewModel : ObservableObject
     {
+        [ObservableProperty]
+        private AddUserGroupWindowViewMode _addUserGroupWindow;
+        partial void OnAddUserGroupWindowChanged(AddUserGroupWindowViewMode value)
+        {
+            InitializeAddUserGroupWindowViewMode(value);
+        }
+
         #region ObservableProperty
 
         [ObservableProperty]
@@ -553,17 +560,18 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             CloseModDetails();
         }
 
-        [RelayCommand]
-        private void AddUserGroup()
-        {
-
-        }
-
         private bool modDetailsIsMouseOver = false;
 
         [RelayCommand]
         private void ModDetailsMouseOver(bool value) =>
             modDetailsIsMouseOver = value;
+
+        [RelayCommand]
+        private void AddUserGroup()
+        {
+            _addUserGroupWindow.ShowDialog();
+        }
         #endregion
+
     }
 }

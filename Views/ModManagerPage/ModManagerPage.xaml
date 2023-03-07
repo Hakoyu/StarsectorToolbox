@@ -219,7 +219,7 @@
               VerticalAlignment="Bottom"
               HorizontalContentAlignment="Left"
               pu:ButtonHelper.Icon="➕"
-              Click="Button_AddUserGroup_Click"
+              Command="{Binding AddUserGroupCommand}"
               Content="{Binding I18n.I18nRes.AddUserGroup}"
               Style="{StaticResource ButtonBaseStyle}" />
           </Grid>

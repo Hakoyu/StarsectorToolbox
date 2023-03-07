@@ -1195,7 +1195,8 @@ namespace HKW.Libs.TomlParse
          * <newline>
          *     ==>  1_0_0_0 # This is a comment
          *     ^                                                  ^
-         */
+         * </newline>
+         **/
 
         private TomlNode ReadTomlValue()
         {

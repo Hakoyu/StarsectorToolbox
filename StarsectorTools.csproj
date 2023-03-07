@@ -22,6 +22,13 @@
   <PropertyGroup>
     <NoWarn>0068,0229</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
+    <Title>$(AssemblyName)</Title>
+    <Authors>HKW</Authors>
+    <FileVersion>0.8.0.0</FileVersion>
+    <AssemblyVersion>0.8.0.0</AssemblyVersion>
+    <Copyright>Copyright ©2022-2023 HKW</Copyright>
+    <RepositoryType>https://github.com/Hakoyu/StarsectorTools</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace StarsectorTools.Views.ModManagerPage
 
         public void Close()
         {
-
+            ViewModel.Close();
         }
 
         public string GetNameI18n()

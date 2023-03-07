@@ -772,7 +772,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -813,7 +813,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -888,7 +888,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1050,7 +1050,25 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         }
         #endregion
         #region AddUserGroup
-        internal bool TryAddUserGroup(string icon, string name)
+
+        private void InitializeAddUserGroupWindowViewMode(AddUserGroupWindowViewMode viewModel)
+        {
+            viewModel.OKEvent += () =>
+            {
+                var icon = viewModel.UserGroupIcon;
+                var name = viewModel.UserGroupName;
+                if (!viewModel.IsRename && TryAddUserGroup(icon, name))
+                    viewModel.Hide();
+                else if (TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name))
+                    viewModel.Hide();
+            };
+            viewModel.CancelEvent += () =>
+            {
+                viewModel.Hide();
+            };
+        }
+
+        private bool TryAddUserGroup(string icon, string name)
         {
             if (!string.IsNullOrWhiteSpace(name) && !_allUserGroups.ContainsKey(name))
             {
@@ -1103,7 +1121,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 // 重命名分组
                 MenuItemVM menuItem = new();
                 menuItem.Header = I18nRes.RenameUserGroup;
-                menuItem.CommandEvent += (p) => RenameUserGroup(listBoxItem);
+                menuItem.CommandEvent += (p) => PrepareRenameUserGroup(listBoxItem);
                 Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
@@ -1148,60 +1166,65 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
         }
 
-        private void RenameUserGroup(ListBoxItemVM listBoxItem)
+        private void PrepareRenameUserGroup(ListBoxItemVM listBoxItem)
         {
             string icon = listBoxItem.Icon!.ToString()!;
             string name = listBoxItem.ToolTip!.ToString()!;
-            // TODO: 使用了window 需移至外部
-            Views.ModManagerPage.AddUserGroupWindow window = new();
-            window.TextBox_Icon.Text = icon;
-            window.TextBox_Name.Text = name;
-            window.Button_Yes.Click += (s, e) =>
+            AddUserGroupWindow.IsRename = true;
+            AddUserGroupWindow.UserGroupIcon = icon;
+            AddUserGroupWindow.UserGroupName = name;
+            AddUserGroupWindow.BaseListBoxItem = listBoxItem;
+            AddUserGroupWindow.ShowDialog();
+        }
+
+        private bool TryRenameUserGroup(ListBoxItemVM listBoxItem, string newIcon, string newName)
+        {
+            if (newName == ModTypeGroup.Collected || newName == _StrUserCustomData)
             {
-                string _icon = window.TextBox_Icon.Text;
-                string _name = window.TextBox_Name.Text;
-                if (_name == ModTypeGroup.Collected || _name == _StrUserCustomData)
-                {
-                    MessageBoxVM.Show(
-                        new(
-                            string.Format(
-                                I18nRes.UserGroupCannotNamed,
-                                ModTypeGroup.Collected,
-                                _StrUserCustomData
-                            )
+                MessageBoxVM.Show(
+                    new(
+                        string.Format(
+                            I18nRes.UserGroupCannotNamed,
+                            ModTypeGroup.Collected,
+                            _StrUserCustomData
                         )
-                        {
-                            Icon = MessageBoxVM.Icon.Warning,
-                            ShowMainWindowBlurEffect = false
-                        }
-                    );
-                    return;
-                }
-                if (name == _name || !_allUserGroups.ContainsKey(_name))
-                {
-                    listBoxItem.Icon = _icon;
-                    // 重命名组名称
-                    var temp = _allUserGroups[name];
-                    _allUserGroups.Remove(name);
-                    _allUserGroups.Add(_name, temp);
-                    // 重命名组名称
-                    var _temp = _allModShowInfoGroups[name];
-                    _allModShowInfoGroups.Remove(name);
-                    _allModShowInfoGroups.Add(_name, _temp);
-                    // 重命名列表项
-                    _allListBoxItems.Remove(name);
-                    _allListBoxItems.Add(_name, listBoxItem);
-                    window.Close();
-                    SetListBoxItemData(listBoxItem, _name);
-                    RefreshGroupModCount();
-                    RefreshModsContextMenu();
-                    IsRemindSave = true;
-                }
-                else
-                    MessageBoxVM.Show(new(I18nRes.UserGroupNamingFailed));
-            };
-            window.Button_Cancel.Click += (s, e) => window.Close();
-            window.ShowDialog();
+                    )
+                    {
+                        Icon = MessageBoxVM.Icon.Warning,
+                        ShowMainWindowBlurEffect = false
+                    }
+                );
+                return false;
+            }
+            if (_allUserGroups.ContainsKey(newName))
+            {
+                MessageBoxVM.Show(new(I18nRes.UserGroupNamingFailed));
+                return false;
+            }
+            RenameUserGroup(listBoxItem, newIcon, newName);
+            return true;
+        }
+
+        private void RenameUserGroup(ListBoxItemVM listBoxItem, string newIcon, string newName)
+        {
+            string name = listBoxItem.ToolTip!.ToString()!;
+            // 重命名图标
+            listBoxItem.Icon = newIcon;
+            SetListBoxItemData(listBoxItem, newName);
+            // 重命名组名称
+            var tempUserGroup = _allUserGroups[name];
+            _allUserGroups.Remove(name);
+            _allUserGroups.Add(newName, tempUserGroup);
+            // 重命名组名称
+            var tempShowInfos = _allModShowInfoGroups[name];
+            _allModShowInfoGroups.Remove(name);
+            _allModShowInfoGroups.Add(newName, tempShowInfos);
+            // 重命名列表项
+            _allListBoxItems.Remove(name);
+            _allListBoxItems.Add(newName, listBoxItem);
+            RefreshGroupModCount();
+            RefreshModsContextMenu();
+            IsRemindSave = true;
         }
 
         private static void SetListBoxItemData(ListBoxItemVM item, string name)
@@ -1213,7 +1236,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         #endregion
         #region DropFile
-        internal async Task DropFile(Array array)
+        internal async Task DropFiles(Array array)
         {
             var count = array.Length;
             var tempPath = "Temp";
@@ -1378,5 +1401,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
         }
         #endregion
+
+        internal void Close()
+        {
+            AddUserGroupWindow.Close();
+        }
     }
 }

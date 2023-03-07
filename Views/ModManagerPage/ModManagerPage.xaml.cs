@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using HKW.Libs.Log4Cs;
+using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.ViewModels.ModManagerPage;
 using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
@@ -26,31 +27,17 @@ namespace StarsectorTools.Views.ModManagerPage
         {
             InitializeComponent();
             DataContext = new ModManagerPageViewModel(true);
-
+            ViewModel.AddUserGroupWindow = new AddUserGroupWindowViewMode(new AddUserGroupWindow());
         }
 
         private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
-
-        private void Button_AddUserGroup_Click(object sender, RoutedEventArgs e)
-        {
-            AddUserGroupWindow window = new();
-            window.Button_Yes.Click += (s, e) =>
-            {
-                if (ViewModel.TryAddUserGroup(window.TextBox_Icon.Text, window.TextBox_Name.Text))
-                    window.Close();
-            };
-            window.Button_Cancel.Click += (s, e) => window.Close();
-            window.ShowDialog();
-        }
 
         private async void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetData(DataFormats.FileDrop) is Array fileArray)
             {
-                Utils.SetMainWindowBlurEffect();
                 // TODO:需要在ViewModel内部实现
-                await ViewModel.DropFile(fileArray);
-                Utils.RemoveMainWindowBlurEffect();
+                await ViewModel.DropFiles(fileArray);
             }
         }
 
