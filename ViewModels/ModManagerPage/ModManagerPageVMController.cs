@@ -772,7 +772,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -813,7 +813,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -888,7 +888,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1101,9 +1101,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             ListBoxItemVM listBoxItem = new();
             // 调用全局资源需要写全
             SetListBoxItemData(listBoxItem, name);
-            ContextMenuVM contextMenu =
-                new() { RenameUserGroupMenuItemVM(), RemoveUserGroupMenuItemVM() };
-            listBoxItem.ContextMenu = contextMenu;
+            listBoxItem.ContextMenu = CreateuserGroupItemContextMenu(listBoxItem);
             listBoxItem.Icon = icon;
             ListBox_UserGroupMenu.Add(listBoxItem);
             _allUserGroups.Add(name, new());
@@ -1115,8 +1113,55 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             RefreshModsContextMenu();
             if (remindSave)
                 IsRemindSave = true;
+        }
 
-            MenuItemVM RenameUserGroupMenuItemVM()
+        private ContextMenuVM CreateuserGroupItemContextMenu(ListBoxItemVM listBoxItem)
+        {
+            return new(
+                (list) =>
+                {
+                    list.Add(EnableAllUserGroupModsMenuItem(listBoxItem));
+                    list.Add(DisableAllUserGroupModsMenuItem(listBoxItem));
+                    list.Add(RenameUserGroupMenuItemVM(listBoxItem));
+                    list.Add(RemoveUserGroupMenuItemVM(listBoxItem));
+                }
+            );
+
+            MenuItemVM EnableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
+            {
+                // 启用所有用户分组内模组
+                MenuItemVM menuItem = new();
+                menuItem.Header = I18nRes.EnableAllMods;
+                menuItem.Icon = "✅";
+                menuItem.CommandEvent += (p) =>
+                {
+                    var modIds = _allUserGroups[listBoxItem.ToolTip!.ToString()!];
+                    foreach (var id in modIds)
+                        ChangeModEnabled(id, true);
+                    CheckAndRefreshDisplayData();
+                    IsRemindSave = true;
+                };
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+                return menuItem;
+            }
+            MenuItemVM DisableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
+            {
+                // 禁用所有用户分组内模组
+                MenuItemVM menuItem = new();
+                menuItem.Header = I18nRes.DisableAllMods;
+                menuItem.Icon = "❎";
+                menuItem.CommandEvent += (p) =>
+                {
+                    var modIds = _allUserGroups[listBoxItem.ToolTip!.ToString()!];
+                    foreach (var id in modIds)
+                        ChangeModEnabled(id, false);
+                    CheckAndRefreshDisplayData();
+                    IsRemindSave = true;
+                };
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+                return menuItem;
+            }
+            MenuItemVM RenameUserGroupMenuItemVM(ListBoxItemVM listBoxItem)
             {
                 // 重命名分组
                 MenuItemVM menuItem = new();
@@ -1125,7 +1170,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
-            MenuItemVM RemoveUserGroupMenuItemVM()
+            MenuItemVM RemoveUserGroupMenuItemVM(ListBoxItemVM listBoxItem)
             {
                 // 删除分组
                 MenuItemVM menuItem = new();

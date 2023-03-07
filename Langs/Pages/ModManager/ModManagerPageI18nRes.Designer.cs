@@ -331,6 +331,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 禁用所有模组 的本地化字符串。
+        /// </summary>
+        public static string DisableAllMods {
+            get {
+                return ResourceManager.GetString("DisableAllMods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 已禁用 的本地化字符串。
         /// </summary>
         public static string Disabled {
@@ -376,6 +385,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         public static string DuplicateUserGroupName {
             get {
                 return ResourceManager.GetString("DuplicateUserGroupName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 启用所有模组 的本地化字符串。
+        /// </summary>
+        public static string EnableAllMods {
+            get {
+                return ResourceManager.GetString("EnableAllMods", resourceCulture);
             }
         }
         

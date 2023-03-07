@@ -81,11 +81,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AddUserGroupI18nRes.resx</DependentUpon>
     </Compile>
-    <Compile Update="Langs\Pages\ModManager\ModArchiveingI18nRes.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ModArchiveingI18nRes.resx</DependentUpon>
-    </Compile>
     <Compile Update="Langs\Pages\ModManager\ModManagerPageI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -126,10 +121,6 @@
     <EmbeddedResource Update="Langs\Pages\ModManager\AddUserGroupI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AddUserGroupI18nRes.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Langs\Pages\ModManager\ModArchiveingI18nRes.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ModArchiveingI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Pages\ModManager\ModManagerPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -556,4 +556,10 @@ Decompressing:
   <data name="ParseDirectory" xml:space="preserve">
     <value>Parse directory</value>
   </data>
+  <data name="EnableAllMods" xml:space="preserve">
+    <value>Enable all mods</value>
+  </data>
+  <data name="DisableAllMods" xml:space="preserve">
+    <value>Disable all mods</value>
+  </data>
 </root>

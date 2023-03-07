@@ -291,7 +291,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void DataGridLostFocus()
         {
-            ClearSelectedMods(ref _nowSelectedMods);
+            //ClearSelectedMods(ref _nowSelectedMods);
         }
 
         private void ClearSelectedMods(ref List<ModShowInfo> list)

@@ -556,4 +556,10 @@
   <data name="ParseDirectory" xml:space="preserve">
     <value>解析文件夹</value>
   </data>
+  <data name="EnableAllMods" xml:space="preserve">
+    <value>启用所有模组</value>
+  </data>
+  <data name="DisableAllMods" xml:space="preserve">
+    <value>禁用所有模组</value>
+  </data>
 </root>
