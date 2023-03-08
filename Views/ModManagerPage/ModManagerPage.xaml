@@ -238,9 +238,11 @@
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
               ItemsSource="{Binding NowShowMods, IsAsync=True}"
+              LoadingRow="DataGrid_ModsShowList_LoadingRow"
               RowDetailsVisibilityMode="Visible"
               RowHeight="50"
               Style="{StaticResource DataGridBaseStyle}"
+              UnloadingRow="DataGrid_ModsShowList_UnloadingRow"
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.VirtualizationMode="Recycling">
               <i:Interaction.Triggers>
@@ -443,6 +445,12 @@
                 </DataTemplate>
               </DataGrid.RowDetailsTemplate>
             </DataGrid>
+            <pu:Spin
+              x:Name="Spin"
+              Width="100"
+              Height="100"
+              Style="{StaticResource SpinBaseStyle}"
+              Tag="{Binding ShowSpin}" />
             <TextBox
               x:Name="TextBox_SearchMods"
               Height="30"

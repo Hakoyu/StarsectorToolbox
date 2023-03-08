@@ -40,6 +40,15 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [ObservableProperty]
         private ObservableCollection<ModShowInfo> _nowShowMods = new();
 
+        [ObservableProperty]
+        private bool _showSpin = true;
+
+        partial void OnShowSpinChanged(bool value)
+        {
+            if(NowShowMods.Count is 0)
+                _showSpin = false;
+        }
+
         /// <summary>当前选择的模组</summary>
         private List<ModShowInfo> _nowSelectedMods = new();
 

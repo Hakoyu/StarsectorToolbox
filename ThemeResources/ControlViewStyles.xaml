@@ -7,6 +7,22 @@
   <ResourceDictionary.MergedDictionaries>
     <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlStyles.xaml" />
   </ResourceDictionary.MergedDictionaries>
+  <Style x:Key="SpinBaseStyle" TargetType="pu:Spin">
+    <Setter Property="SpinStyle" Value="Ring2" />
+    <Setter Property="Margin" Value="0,0,0,10" />
+    <Setter Property="GlyphSize" Value="6" />
+    <Setter Property="GlyphBrush" Value="{DynamicResource ColorAqua0}" />
+    <Setter Property="Visibility" Value="Hidden" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="true">
+        <Setter Property="Visibility" Value="Visible" />
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
+  <pu:Spin
+    x:Key="Spin"
+    x:Shared="false"
+    Style="{StaticResource SpinBaseStyle}" />
   <emoji:TextBlock
     x:Key="EmojiTextBlock"
     x:Shared="false"

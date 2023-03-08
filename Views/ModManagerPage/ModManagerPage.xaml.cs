@@ -58,5 +58,15 @@ namespace StarsectorTools.Views.ModManagerPage
                 ui.RaiseEvent(eventArg);
             e.Handled = true;
         }
+
+        private void DataGrid_ModsShowList_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            ViewModel.ShowSpin = false;
+        }
+
+        private void DataGrid_ModsShowList_UnloadingRow(object sender, DataGridRowEventArgs e)
+        {
+            ViewModel.ShowSpin = true;
+        }
     }
 }
