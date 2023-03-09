@@ -19,6 +19,7 @@
   MaxWidth="{x:Static sys:SystemParameters.MaximizedPrimaryScreenWidth}"
   MaxHeight="{x:Static sys:SystemParameters.MaximizedPrimaryScreenHeight}"
   Padding="5"
+  x:ClassModifier="internal"
   FontFamily="Consolas"
   MouseLeftButtonDown="Window_MouseLeftButtonDown"
   Style="{StaticResource WindowBaseStyle}"

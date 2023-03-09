@@ -41,7 +41,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="Panuon.WPF.UI" Version="1.1.8.1" />
+    <PackageReference Include="Panuon.WPF.UI" Version="1.1.8.4" />
     <PackageReference Include="SharpCompress" Version="0.32.2" />
   </ItemGroup>
 

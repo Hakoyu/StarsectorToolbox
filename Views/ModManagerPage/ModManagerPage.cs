@@ -2,7 +2,7 @@
 
 namespace StarsectorTools.Views.ModManagerPage
 {
-    public partial class ModManagerPage
+    internal partial class ModManagerPage
     {
         public void Save()
         {

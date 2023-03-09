@@ -19,10 +19,6 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
-  <pu:Spin
-    x:Key="Spin"
-    x:Shared="false"
-    Style="{StaticResource SpinBaseStyle}" />
   <emoji:TextBlock
     x:Key="EmojiTextBlock"
     x:Shared="false"
@@ -143,16 +139,6 @@
     </Style.Triggers>
   </Style>
   <Style
-    x:Key="ComboBoxItemView"
-    BasedOn="{StaticResource ComboBoxItemBaseStyle}"
-    TargetType="ComboBoxItem">
-    <Setter Property="Tag" Value="{Binding Tag}" />
-    <Setter Property="Content" Value="{Binding Content}" />
-    <Setter Property="ToolTip" Value="{Binding ToolTip}" />
-    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-    <Setter Property="pu:ListBoxItemHelper.Icon" Value="{DynamicResource EmojiTextBlock}" />
-  </Style>
-  <Style
     x:Key="RemindStyle"
     BasedOn="{StaticResource ButtonBaseStyle}"
     TargetType="Button">
@@ -187,4 +173,20 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
+  <Style
+    x:Key="ComboBoxView"
+    BasedOn="{StaticResource ComboBoxBaseStyle}"
+    TargetType="ComboBox">
+    <Setter Property="DisplayMemberPath" Value="Content" />
+  </Style>
+  <!--<Style
+    x:Key="ComboBoxItemView"
+    BasedOn="{StaticResource ComboBoxItemBaseStyle}"
+    TargetType="ComboBoxItem">
+    <Setter Property="Tag" Value="{Binding Tag}" />
+    <Setter Property="Content" Value="{Binding Content}" />
+    <Setter Property="ToolTip" Value="{Binding ToolTip}" />
+    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+    <Setter Property="pu:ListBoxItemHelper.Icon" Value="{DynamicResource EmojiTextBlock}" />
+  </Style>-->
 </ResourceDictionary>

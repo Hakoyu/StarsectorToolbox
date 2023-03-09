@@ -772,7 +772,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -813,7 +813,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -888,7 +888,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1057,9 +1057,9 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 var icon = viewModel.UserGroupIcon;
                 var name = viewModel.UserGroupName;
-                if (!viewModel.IsRename && TryAddUserGroup(icon, name))
+                if (viewModel.IsRename && TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name))
                     viewModel.Hide();
-                else if (TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name))
+                else if (TryAddUserGroup(icon, name))
                     viewModel.Hide();
             };
             viewModel.CancelEvent += () =>
@@ -1099,7 +1099,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void AddUserGroup(string icon, string name, bool remindSave = true)
         {
             ListBoxItemVM listBoxItem = new();
-            // 调用全局资源需要写全
             SetListBoxItemData(listBoxItem, name);
             listBoxItem.ContextMenu = CreateuserGroupItemContextMenu(listBoxItem);
             listBoxItem.Icon = icon;

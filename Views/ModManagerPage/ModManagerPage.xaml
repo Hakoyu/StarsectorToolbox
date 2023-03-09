@@ -14,6 +14,7 @@
   Title="ModManager"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  x:ClassModifier="internal"
   FontSize="16"
   mc:Ignorable="d">
   <d:Page.DataContext>
@@ -495,10 +496,9 @@
               Height="30"
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
-              DisplayMemberPath="Content"
               ItemsSource="{Binding ComboBox_ModFilterType.ItemsSource}"
               SelectedItem="{Binding ComboBox_ModFilterType.SelectedItem}"
-              Style="{StaticResource ComboBoxBaseStyle}">
+              Style="{StaticResource ComboBoxView}">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                   <i:InvokeCommandAction Command="{Binding ComboBox_ModFilterType.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_ModFilterType.SelectedItem}" />

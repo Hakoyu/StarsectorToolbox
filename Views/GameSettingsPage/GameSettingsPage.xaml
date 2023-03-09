@@ -10,6 +10,7 @@
   Title="GameSettings"
   d:DesignHeight="450"
   d:DesignWidth="800"
+  x:ClassModifier="internal"
   mc:Ignorable="d">
   <d:Page.DataContext>
     <vm:GameSettingsPageViewModel />
@@ -201,11 +202,10 @@
                 <ComboBox
                   x:Name="ComboBox_MissionsLoadouts"
                   Margin="0,0,0,5"
-                  DisplayMemberPath="Content"
                   ItemsSource="{Binding ComboBox_MissionsLoadouts.ItemsSource}"
                   SelectedIndex="{Binding ComboBox_MissionsLoadouts.SelectedIndex}"
                   SelectedItem="{Binding ComboBox_MissionsLoadouts.SelectedItem}"
-                  Style="{StaticResource ComboBoxBaseStyle}" />
+                  Style="{StaticResource ComboBoxView}" />
                 <Button
                   x:Name="Button_ClearMissionsLoadouts"
                   Margin="0,0,0,5"

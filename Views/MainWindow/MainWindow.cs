@@ -14,12 +14,12 @@ using System.Collections.Generic;
 
 namespace StarsectorTools.Views.MainWindow
 {
-    public partial class MainWindow
+    internal partial class MainWindow
     {
         /// <summary>
         /// 消息长度限制
         /// </summary>
-        private int _messageLengthLimits = 8192;
+        private const int _messageLengthLimits = 8192;
 
         private void RegisterData()
         {
@@ -74,12 +74,12 @@ namespace StarsectorTools.Views.MainWindow
                     if (d.ShowMainWindowBlurEffect is true)
                     {
                         SetBlurEffect(false);
-                        result = MessageBoxX.Show(message, d.Caption, button, icon);
+                        result = MessageBoxX.Show(this, message, d.Caption, button, icon);
                         RemoveBlurEffect();
                     }
                     else
                     {
-                        result = MessageBoxX.Show(message, d.Caption, button, icon);
+                        result = MessageBoxX.Show(this, message, d.Caption, button, icon);
                     }
                     if (message.Length == _messageLengthLimits)
                         GC.Collect();
@@ -118,7 +118,7 @@ namespace StarsectorTools.Views.MainWindow
                 };
         }
 
-        private void RegisterOpenFileDialog()
+        private static void RegisterOpenFileDialog()
         {
             OpenFileDialogVM.InitializeHandler(
                 (d) =>
@@ -135,7 +135,7 @@ namespace StarsectorTools.Views.MainWindow
             );
         }
 
-        private void RegisterSaveFileDialog()
+        private static void RegisterSaveFileDialog()
         {
             SaveFileDialogVM.InitializeHandler(
                 (d) =>
@@ -151,7 +151,7 @@ namespace StarsectorTools.Views.MainWindow
             );
         }
 
-        private void RegisterClipboard()
+        private static void RegisterClipboard()
         {
             ClipboardVM.InitializeHandler(s =>
             {
@@ -196,7 +196,7 @@ namespace StarsectorTools.Views.MainWindow
             ViewModel.SettingsPage = new SettingsPage.SettingsPage();
         }
 
-        private Page? CreatePage(Type type)
+        private static Page? CreatePage(Type type)
         {
             try
             {
@@ -215,8 +215,8 @@ namespace StarsectorTools.Views.MainWindow
             }
         }
 
-        System.Windows.Media.Effects.Effect _blurEffect =
-            new System.Windows.Media.Effects.BlurEffect();
+        private readonly System.Windows.Media.Effects.Effect _blurEffect =
+             new System.Windows.Media.Effects.BlurEffect();
 
         /// <summary>
         /// 设置模糊效果
@@ -247,7 +247,7 @@ namespace StarsectorTools.Views.MainWindow
         /// </summary>
         /// <param name="color">颜色</param>
         /// <returns>是为<see langword="true"/>,不是为<see langword="false"/></returns>
-        private bool IsLightColor(Color color)
+        private static bool IsLightColor(Color color)
         {
             return (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255 > 0.5;
         }

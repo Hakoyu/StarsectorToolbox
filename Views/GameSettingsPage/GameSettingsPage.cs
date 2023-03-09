@@ -1,6 +1,6 @@
 ﻿namespace StarsectorTools.Views.GameSettingsPage
 {
-    public partial class GameSettingsPage
+    internal partial class GameSettingsPage
     {
     }
 }

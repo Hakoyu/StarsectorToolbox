@@ -14,7 +14,7 @@ namespace StarsectorTools.Views.ModManagerPage
     /// <summary>
     /// ModManagerPage.xaml 的交互逻辑
     /// </summary>
-    public partial class ModManagerPage : Page, ISTPage
+    internal partial class ModManagerPage : Page, ISTPage
     {
         public bool NeedSave => ViewModel.IsRemindSave;
 

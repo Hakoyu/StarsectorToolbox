@@ -6,7 +6,7 @@ namespace StarsectorTools.Views.SettingsPage
     /// <summary>
     /// SettingsPage.xaml 的交互逻辑
     /// </summary>
-    public partial class SettingsPage : Page
+    internal partial class SettingsPage : Page
     {
         internal SettingsPageViewModel ViewModel => (SettingsPageViewModel)DataContext;
 

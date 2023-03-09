@@ -11,6 +11,7 @@
   Title="AddUserGroup"
   Width="400"
   Height="270"
+  x:ClassModifier="internal"
   ResizeMode="NoResize"
   Style="{StaticResource WindowBaseStyle}"
   WindowStartupLocation="CenterScreen"

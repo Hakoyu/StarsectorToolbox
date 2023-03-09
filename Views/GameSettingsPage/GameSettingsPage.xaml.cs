@@ -10,7 +10,7 @@ namespace StarsectorTools.Views.GameSettingsPage
     /// <summary>
     /// GameSettingsPage.xaml 的交互逻辑
     /// </summary>
-    public partial class GameSettingsPage : Page, ISTPage
+    internal partial class GameSettingsPage : Page, ISTPage
     {
         internal GameSettingsPageViewModel ViewModel => (GameSettingsPageViewModel)DataContext;
 

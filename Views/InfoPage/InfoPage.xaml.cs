@@ -6,7 +6,7 @@ namespace StarsectorTools.Views.InfoPage
     /// <summary>
     /// Description.xaml 的交互逻辑
     /// </summary>
-    public partial class InfoPage : Page
+    internal partial class InfoPage : Page
     {
         internal InfoPageViewModel ViewModel => (InfoPageViewModel)DataContext;
         internal InfoPage()

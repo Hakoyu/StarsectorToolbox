@@ -23,6 +23,7 @@
             YesButtonContent="{x:Static I18n:MessageBoxXI18nRes.YES}">
             <pu:MessageBoxXSettings.WindowXStyle>
               <Style BasedOn="{StaticResource {ComponentResourceKey ResourceId=WindowXStyle, TypeInTargetAssembly={x:Type pu:MessageBoxX}}}" TargetType="pu:WindowX">
+                <Setter Property="Topmost" Value="True" />
                 <Setter Property="Width" Value="NaN" />
                 <Setter Property="Height" Value="NaN" />
                 <Setter Property="MinWidth" Value="300" />
