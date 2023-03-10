@@ -71,15 +71,32 @@ namespace StarsectorTools.Views.MainWindow
                     var button = ButtonConverter(d.Button);
                     var icon = IconConverter(d.Icon);
                     MessageBoxResult result;
-                    if (d.ShowMainWindowBlurEffect is true)
+                    if (IsLoaded)
                     {
-                        SetBlurEffect(false);
-                        result = MessageBoxX.Show(this, message, d.Caption, button, icon);
-                        RemoveBlurEffect();
+                        if (d.ShowMainWindowBlurEffect is true)
+                        {
+                            SetBlurEffect(false);
+                            result = MessageBoxX.Show(this, message, d.Caption, button, icon);
+                            RemoveBlurEffect();
+                        }
+                        else
+                        {
+                            result = MessageBoxX.Show(this, message, d.Caption, button, icon);
+                        }
                     }
                     else
                     {
-                        result = MessageBoxX.Show(this, message, d.Caption, button, icon);
+                        if (d.ShowMainWindowBlurEffect is true)
+                        {
+                            SetBlurEffect(false);
+                            result = MessageBoxX.Show(message, d.Caption, button, icon);
+                            RemoveBlurEffect();
+                        }
+                        else
+                        {
+                            result = MessageBoxX.Show(message, d.Caption, button, icon);
+                        }
+
                     }
                     if (message.Length == _messageLengthLimits)
                         GC.Collect();

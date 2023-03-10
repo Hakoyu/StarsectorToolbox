@@ -1057,7 +1057,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 var icon = viewModel.UserGroupIcon;
                 var name = viewModel.UserGroupName;
-                if (viewModel.IsRename && TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name))
+                if (viewModel.BaseListBoxItem is not null && TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name))
                     viewModel.Hide();
                 else if (TryAddUserGroup(icon, name))
                     viewModel.Hide();
@@ -1214,7 +1214,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             string icon = listBoxItem.Icon!.ToString()!;
             string name = listBoxItem.ToolTip!.ToString()!;
-            AddUserGroupWindow.IsRename = true;
             AddUserGroupWindow.UserGroupIcon = icon;
             AddUserGroupWindow.UserGroupName = name;
             AddUserGroupWindow.BaseListBoxItem = listBoxItem;

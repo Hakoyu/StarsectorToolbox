@@ -13,8 +13,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [ObservableProperty]
         private string _userGroupName = string.Empty;
 
-        public bool IsRename { get; set; } = false;
-
         public ListBoxItemVM? BaseListBoxItem;
 
         public AddUserGroupWindowViewMode() { }
@@ -28,7 +26,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 UserGroupIcon = string.Empty;
                 UserGroupName = string.Empty;
-                IsRename = false;
                 BaseListBoxItem = null;
                 Utils.RemoveMainWindowBlurEffect();
             };
