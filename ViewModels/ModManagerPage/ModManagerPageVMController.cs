@@ -691,7 +691,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (!string.IsNullOrWhiteSpace(group))
             {
                 if (NowSelectedGroupName == group)
+                {
                     CheckFilterAndRefreshShowMods();
+                    ShowSpin = false;
+                }
                 RefreshGroupModCount();
             }
             else
