@@ -272,7 +272,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
             catch (Exception ex)
             {
-                Logger.Error($"{I18nRes.ExtensionLoadError} {I18nRes.Path}: {tomlFile}", ex);
+                Logger.Error($"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}", ex);
                 MessageBoxVM.Show(
                     new($"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}")
                     {
