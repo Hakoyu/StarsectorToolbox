@@ -201,7 +201,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         {
             if (Utils.FileExists(GameInfo.ExeFile))
             {
-                SaveAllPages();
+                ReminderSaveAllPages();
                 CheckGameStartOption();
                 using System.Diagnostics.Process process = new();
                 process.StartInfo.FileName = "cmd";

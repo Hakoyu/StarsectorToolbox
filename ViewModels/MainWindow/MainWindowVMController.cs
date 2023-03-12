@@ -600,7 +600,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
 
-        #endregion SavePage
+        #endregion
 
         #region ClosePage
 
