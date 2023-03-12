@@ -232,4 +232,7 @@
   <data name="NotImplementedISTPage" xml:space="preserve">
     <value>未实现 ISTPage 接口</value>
   </data>
+  <data name="Saving" xml:space="preserve">
+    <value>正在保存</value>
+  </data>
 </root>

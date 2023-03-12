@@ -145,10 +145,14 @@ namespace StarsectorTools.Views.MainWindow
                     {
                         Title = d.Title,
                         Filter = d.Filter,
+                        FileName = d.FileName,
+                        InitialDirectory = d.InitialDirectory,
                         Multiselect = d.Multiselect,
                     };
-                    openFileDialog.ShowDialog();
-                    return openFileDialog.FileNames;
+                    if (openFileDialog.ShowDialog() is true)
+                        return openFileDialog.FileNames;
+                    else
+                        return Array.Empty<string>();
                 }
             );
         }
@@ -162,9 +166,13 @@ namespace StarsectorTools.Views.MainWindow
                     {
                         Title = d.Title,
                         Filter = d.Filter,
+                        InitialDirectory = d.InitialDirectory,
+                        FileName = d.FileName,
                     };
-                    saveFileDialog.ShowDialog();
-                    return saveFileDialog.FileName;
+                    if (saveFileDialog.ShowDialog() is true)
+                        return saveFileDialog.FileName;
+                    else
+                        return string.Empty;
                 }
             );
         }

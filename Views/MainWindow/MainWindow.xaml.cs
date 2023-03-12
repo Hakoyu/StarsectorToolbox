@@ -81,7 +81,6 @@ namespace StarsectorTools.Views.MainWindow
         //最小化
         private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
         {
-            Utils.CopyDirectory("C:\\Users\\HKW\\Desktop\\OpenAI", "C:\\Users\\HKW\\Desktop\\测试肖像文件夹");
             WindowState = WindowState.Minimized;
         }
 

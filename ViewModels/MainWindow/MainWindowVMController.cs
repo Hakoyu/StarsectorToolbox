@@ -35,12 +35,10 @@ namespace StarsectorTools.ViewModels.MainWindow
             CloseAllPages();
         }
 
-        private void InitializeDirectories()
+        private static void InitializeDirectories()
         {
-            if (!Directory.Exists(ST.CoreDirectory))
-                Directory.CreateDirectory(ST.CoreDirectory);
-            if (!Directory.Exists(ST.ExtensionDirectories))
-                Directory.CreateDirectory(ST.ExtensionDirectories);
+            Directory.CreateDirectory(ST.CoreDirectory);
+            Directory.CreateDirectory(ST.ExtensionDirectories);
         }
 
         #region PageItem
@@ -92,7 +90,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             Logger.Info($"{I18nRes.RefreshPage}: {type.FullName}");
         }
 
-        private object? CreatePage(Type type)
+        private static object? CreatePage(Type type)
         {
             try
             {
@@ -506,6 +504,7 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         private void ReminderSaveAllPages()
         {
+            using var handler = PendingBoxVM.Show(I18nRes.Saving);
             ReminderSaveMainPages();
             ReminderSaveExtensionPages();
         }

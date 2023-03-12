@@ -232,4 +232,7 @@ Sure to save?</value>
   <data name="NotImplementedISTPage" xml:space="preserve">
     <value>ISTPage interface not implemented</value>
   </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Saving</value>
+  </data>
 </root>

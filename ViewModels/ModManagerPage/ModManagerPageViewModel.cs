@@ -387,14 +387,14 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         }
 
         [RelayCommand]
-        private void OpenModDirectory()
+        private static void OpenModDirectory()
         {
             if (Utils.DirectoryExists(GameInfo.ModsDirectory))
                 Utils.OpenLink(GameInfo.ModsDirectory);
         }
 
         [RelayCommand]
-        private void OpenBackupDirectory()
+        private static void OpenBackupDirectory()
         {
             if (!Directory.Exists(_BackupDirectory))
                 Directory.CreateDirectory(_BackupDirectory);
@@ -402,7 +402,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         }
 
         [RelayCommand]
-        private void OpenSaveDirectory()
+        private static void OpenSaveDirectory()
         {
             if (Utils.DirectoryExists(GameInfo.SaveDirectory))
                 Utils.OpenLink(GameInfo.SaveDirectory);
@@ -411,10 +411,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void ImportUserData()
         {
-            var filesName = OpenFileDialogVM.Show(
+            var fileNames = OpenFileDialogVM.Show(
                 new() { Title = I18nRes.ImportUserData, Filter = $"Toml {I18nRes.File}|*.toml" }
             );
-            if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
+            if (fileNames?.FirstOrDefault(defaultValue: null) is string fileName)
             {
                 GetUserData(fileName);
                 RefreshModsContextMenu();
@@ -437,10 +437,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void ImportUserGroup()
         {
-            var filesName = OpenFileDialogVM.Show(
+            var fileNames = OpenFileDialogVM.Show(
                 new() { Title = I18nRes.ImportUserGroup, Filter = $"Toml {I18nRes.File}|*.toml" }
             );
-            if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
+            if (fileNames?.FirstOrDefault(defaultValue: null) is string fileName)
             {
                 GetAllUserGroup(fileName);
                 RefreshModsContextMenu();
@@ -464,10 +464,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void ImportEnabledListFromSave()
         {
-            var filesName = OpenFileDialogVM.Show(
+            var fileNames = OpenFileDialogVM.Show(
                 new() { Title = I18nRes.ImportFromSave, Filter = $"Xml {I18nRes.File}|*.xml" }
             );
-            if (filesName?.FirstOrDefault(defaultValue: null) is not string fileName)
+            if (fileNames?.FirstOrDefault(defaultValue: null) is not string fileName)
                 return;
             string filePath = $"{string.Join("\\", fileName.Split("\\")[..^1])}\\descriptor.xml";
             if (!Utils.FileExists(filePath))
@@ -525,10 +525,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void ImportEnabledList()
         {
-            var filesName = OpenFileDialogVM.Show(
+            var fileNames = OpenFileDialogVM.Show(
                 new() { Title = I18nRes.ImportEnabledList, Filter = $"Json {I18nRes.File}|*.json" }
             );
-            if (filesName?.FirstOrDefault(defaultValue: null) is string fileName)
+            if (fileNames?.FirstOrDefault(defaultValue: null) is string fileName)
             {
                 TryGetEnabledMods(fileName, true);
                 RefreshGroupModCount();
@@ -587,7 +587,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             !string.IsNullOrEmpty(MinRandomSize) && !string.IsNullOrEmpty(MaxRandomSize);
 
         [RelayCommand]
-        private void OpenModPath(string path)
+        private static void OpenModPath(string path)
         {
             Utils.OpenLink(path);
         }

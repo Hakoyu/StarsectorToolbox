@@ -34,5 +34,8 @@
 
         /// <summary>起始目录</summary>
         public string InitialDirectory { get; set; } = string.Empty;
+
+        /// <summary>文件名</summary>
+        public string FileName { get; set; } = string.Empty;
     }
 }
