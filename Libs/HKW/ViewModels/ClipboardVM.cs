@@ -27,6 +27,10 @@
             return false;
         }
 
+        /// <summary>
+        /// 设置文本
+        /// </summary>
+        /// <param name="text">文本</param>
         public static void SetText(string text)
         {
             ViewModelEvent?.Invoke(text);

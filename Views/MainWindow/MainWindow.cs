@@ -11,6 +11,7 @@ using StarsectorTools.ViewModels.MainWindow;
 using CommunityToolkit.Mvvm.Messaging;
 using StarsectorTools.Models.Messages;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StarsectorTools.Views.MainWindow
 {
@@ -184,8 +185,9 @@ namespace StarsectorTools.Views.MainWindow
                     SetBlurEffect(false);
                     var handler = PendingBox.Show(this, m, c, cc);
                     return new(
-                        () =>
+                        async () =>
                         {
+                            await Task.Delay(1);
                             handler.Show();
                         },
                         () =>

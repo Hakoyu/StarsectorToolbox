@@ -1375,7 +1375,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 DirectoryInfo tempDirectoryInfo
             )
             {
-                if (!await Utils.UnArchiveFileToDir(filePath, tempPath))
+                if (!await Utils.UnArchiveFileToDirectory(filePath, tempPath))
                 {
                     MessageBoxVM.Show(new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{filePath}"));
                     return null;
@@ -1422,7 +1422,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}"
                     );
                     string tempDirectory = $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}";
-                    await Utils.ArchiveDirToDir(tempDirectory, _BackupModsDirectory, directoryName);
+                    await Utils.ArchiveDirectoryToFile(tempDirectory, _BackupModsDirectory, directoryName);
                     Directory.Delete(tempDirectory, true);
                     Directory.Delete(originalModInfo.ModDirectory, true);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace HKW.ViewModels.Controls
 {
@@ -14,7 +15,8 @@ namespace HKW.ViewModels.Controls
         /// <summary>
         /// 项目资源
         /// </summary>
-        public ObservableCollection<T> ItemsSource { get; set; } = null!;
+        [ObservableProperty]
+        private ObservableCollection<T> _itemsSource = null!;
 
         /// <inheritdoc/>
         public T this[int index] { get => ItemsSource[index]; set => ItemsSource[index] = value; }

@@ -474,12 +474,12 @@ namespace StarsectorTools.ViewModels.MainWindow
         /// <summary>
         /// 设置窗口效果委托
         /// </summary>
-        internal Action<bool> _setWindowEffectAction;
+        internal Action<bool> _setWindowEffectAction = null!;
 
         /// <summary>
         /// 取消窗口效果委托
         /// </summary>
-        internal Action _removeWindowEffectAction;
+        internal Action _removeWindowEffectAction = null!;
 
         internal void RegisterChangeWindowEffectEvent(
             Action<bool> setWindowEffectAction,

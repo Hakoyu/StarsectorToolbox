@@ -23,7 +23,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
     internal partial class ModManagerPageViewModel : ObservableObject
     {
         [ObservableProperty]
-        private AddUserGroupWindowViewMode _addUserGroupWindow;
+        private AddUserGroupWindowViewMode _addUserGroupWindow = null!;
 
         partial void OnAddUserGroupWindowChanged(AddUserGroupWindowViewMode value)
         {
@@ -54,7 +54,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private List<ModShowInfo> _nowSelectedMods = new();
 
         /// <summary>当前选择的模组</summary>
-        private ModShowInfo? _nowSelectedMod;
+        private ModShowInfo? _nowSelectedMod = null;
 
         /// <summary>模组详情的展开状态</summary>
         [ObservableProperty]
@@ -97,11 +97,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
-        private string _minRandomSize;
+        private string _minRandomSize = string.Empty;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]
-        private string _maxRandomSize;
+        private string _maxRandomSize = string.Empty;
 
         [ObservableProperty]
         private bool _isRemindSave = false;
@@ -319,11 +319,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             }
         }
 
-        [RelayCommand]
-        private void DataGridLostFocus()
-        {
-            //ClearSelectedMods(ref _nowSelectedMods);
-        }
+        //[RelayCommand]
+        //private void DataGridLostFocus()
+        //{
+        //    //ClearSelectedMods(ref _nowSelectedMods);
+        //}
 
         private void ClearSelectedMods(List<ModShowInfo> list)
         {
