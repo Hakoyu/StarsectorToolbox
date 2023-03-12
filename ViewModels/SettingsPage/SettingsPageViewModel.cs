@@ -20,6 +20,7 @@ namespace StarsectorTools.ViewModels.SettingsPage
         private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(ClearExtensionDebugPathCommand))]
         private string? _extensionDebugPath;
 
         [ObservableProperty]
@@ -157,10 +158,10 @@ namespace StarsectorTools.ViewModels.SettingsPage
             }
         }
 
-        private bool ClearButtonCanExecute() => string.IsNullOrWhiteSpace(ExtensionDebugPath);
+        private bool ClearButtonCanExecute() => !string.IsNullOrWhiteSpace(ExtensionDebugPath);
 
         [RelayCommand]
-        private void OpenLogFile()
+        private static void OpenLogFile()
         {
             Utils.OpenLink(Logger.LogFile);
         }

@@ -12,7 +12,7 @@ namespace HKW.ViewModels.Controls
         [ObservableProperty]
         private object? _dataContext;
 
-        private partial void OnDataContextChanged(object? value)
+        partial void OnDataContextChanged(object? value)
         {
             _dataContextProperty?.SetValue(_window, value);
         }

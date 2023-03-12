@@ -114,12 +114,6 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         #region DebugPageItem
 
-        private void AddDebugMainPageItem(ListBoxItemVM item)
-        {
-            DetectDebugPageItemData(ref item);
-            ListBox_MainMenu.Add(item);
-        }
-
         private void DetectDebugPageItemData(ref ListBoxItemVM item)
         {
             if (item?.Tag is not ISTPage page)
@@ -127,10 +121,10 @@ namespace StarsectorTools.ViewModels.MainWindow
             item.Id = page.GetType().FullName;
             item.Content = page.GetNameI18n();
             item.ToolTip = page.GetDescriptionI18n();
-            item.ContextMenu = CreateDebugItemContextMenu();
+            item.ContextMenu = CreateExtensionDebugItemContextMenu();
         }
 
-        private ContextMenuVM CreateDebugItemContextMenu()
+        private ContextMenuVM CreateExtensionDebugItemContextMenu()
         {
             ContextMenuVM contextMenu = new() { RefreshDebugPageMenuItem() };
             return contextMenu;
@@ -158,8 +152,30 @@ namespace StarsectorTools.ViewModels.MainWindow
                 return menuItem;
             }
         }
+        private void RefreshExtensionDebugPage()
+        {
+            ListBox_MainMenu.Remove(_deubgItem!);
+            if (TryGetExtensionDebugItem() is not ListBoxItemVM item)
+                return;
+            DetectDebugPageItemData(ref item);
+            _deubgItem = item;
+            ListBox_MainMenu.Add(item);
+            ListBox_MainMenu.SelectedItem = _deubgItem;
+            NowPage = _deubgItem?.Tag;
+        }
 
-        #endregion DebugPageItem
+        private ListBoxItemVM? TryGetExtensionDebugItem()
+        {
+            // 添加拓展调试页面
+            if (_deubgItemExtensionInfo is null)
+                return null;
+            return new()
+            {
+                Icon = _deubgItemExtensionInfo.Icon,
+                Tag = _deubgItemExtensionInfo.ExtensionPage,
+            };
+        }
+        #endregion 
 
         #region CheckGameStartOption
 
@@ -186,43 +202,49 @@ namespace StarsectorTools.ViewModels.MainWindow
             DirectoryInfo dirs = new(ST.ExtensionDirectories);
             foreach (var dir in dirs.GetDirectories())
             {
-                if (TryGetExtensionInfo(dir.FullName) is ExtensionInfo extensionInfo)
-                {
-                    var page = extensionInfo.ExtensionPage;
-                    ListBox_ExtensionMenu.Add(
-                        new()
-                        {
-                            Id = extensionInfo.Id,
-                            Icon = extensionInfo.Icon,
-                            Content = extensionInfo.Name,
-                            ToolTip =
-                                $"Author: {extensionInfo.Author}\nDescription: {extensionInfo.Description}",
-                            Tag = page
-                        }
-                    );
-                }
+                if (TryGetExtensionInfo(dir.FullName) is not ExtensionInfo extensionInfo)
+                    continue;
+                var page = extensionInfo.ExtensionPage;
+                ListBox_ExtensionMenu.Add(
+                    new()
+                    {
+                        Id = extensionInfo.Id,
+                        Icon = extensionInfo.Icon,
+                        Content = extensionInfo.Name,
+                        ToolTip =
+                            $"Author: {extensionInfo.Author}\nDescription: {extensionInfo.Description}",
+                        Tag = page,
+                        ContextMenu = CreateExtensionItemContextMenu()
+                    }
+                ); ;
             }
         }
-
-        private void RefreshExtensionDebugPage()
+        private ContextMenuVM CreateExtensionItemContextMenu()
         {
-            ListBox_MainMenu.Remove(_deubgItem!);
-            InitializeExtensionDebugPage();
-            ListBox_MainMenu.SelectedItem = _deubgItem;
-            NowPage = _deubgItem?.Tag;
-        }
-
-        private void InitializeExtensionDebugPage()
-        {
-            // 添加拓展调试页面
-            if (_deubgItemExtensionInfo is not null)
+            ContextMenuVM contextMenu = new() { RefreshExtensionPageMenuItem() };
+            return contextMenu;
+            MenuItemVM RefreshExtensionPageMenuItem()
             {
-                _deubgItem = new()
+                MenuItemVM menuItem = new();
+                menuItem.Icon = "🔄";
+                menuItem.Header = I18nRes.RefreshPage;
+                menuItem.CommandEvent += (p) =>
                 {
-                    Icon = _deubgItemExtensionInfo.Icon,
-                    Tag = _deubgItemExtensionInfo.ExtensionPage,
+                    if (p is not ListBoxItemVM vm)
+                        return;
+                    if (vm.Tag is not ISTPage page)
+                        return;
+                    page.Close();
+                    var type = vm.Tag!.GetType();
+                    var extensionInfo = _allExtensionsInfo[type.FullName!];
+                    extensionInfo.ExtensionPage = vm.Tag = CreatePage(type)!;
+                    vm.Tag = extensionInfo.ExtensionPage;
+                    if (vm.IsSelected)
+                        ShowPage(vm.Tag);
+                    Logger.Info($"{I18nRes.RefreshPage}: {extensionInfo.Id}");
+                    GC.Collect();
                 };
-                AddDebugMainPageItem(_deubgItem);
+                return menuItem;
             }
         }
 

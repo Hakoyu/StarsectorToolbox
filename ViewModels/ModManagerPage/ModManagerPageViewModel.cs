@@ -24,7 +24,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [ObservableProperty]
         private AddUserGroupWindowViewMode _addUserGroupWindow = null!;
 
-        private partial void OnAddUserGroupWindowChanged(AddUserGroupWindowViewMode value)
+        partial void OnAddUserGroupWindowChanged(AddUserGroupWindowViewMode value)
         {
             InitializeAddUserGroupWindowViewMode(value);
         }
@@ -43,7 +43,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [ObservableProperty]
         private bool _showSpin = true;
 
-        private partial void OnShowSpinChanged(bool value)
+        partial void OnShowSpinChanged(bool value)
         {
             if (NowShowMods.Count is 0)
                 _showSpin = false;
@@ -92,7 +92,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [ObservableProperty]
         private string _modFilterText = string.Empty;
 
-        private partial void OnModFilterTextChanged(string value) => CheckFilterAndRefreshShowMods();
+        partial void OnModFilterTextChanged(string value) => CheckFilterAndRefreshShowMods();
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(RandomEnableModsCommand))]

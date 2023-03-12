@@ -143,13 +143,21 @@ namespace StarsectorTools.ViewModels.MainWindow
             ExtensionDebugPathChangedMessage message
         )
         {
-            if (TryGetExtensionInfo(message.Value, true) is not ExtensionInfo extensionInfo)
+            if (string.IsNullOrEmpty(message.Value))
             {
-                WeakReferenceMessenger.Default.Send<ExtensionDebugPathErrorMessage>(new(""));
-                return;
+                _deubgItemExtensionInfo = null;
+                _deubgItemPath = string.Empty;
             }
-            _deubgItemExtensionInfo = extensionInfo;
-            _deubgItemPath = message.Value;
+            else
+            {
+                if (TryGetExtensionInfo(message.Value, true) is not ExtensionInfo extensionInfo)
+                {
+                    WeakReferenceMessenger.Default.Send<ExtensionDebugPathErrorMessage>(new(""));
+                    return;
+                }
+                _deubgItemExtensionInfo = extensionInfo;
+                _deubgItemPath = message.Value;
+            }
             RefreshExtensionDebugPage();
             var toml = TOML.Parse(ST.ConfigTomlFile);
             toml["Extension"]["DebugPath"] = message.Value;
