@@ -108,7 +108,8 @@ namespace HKW.Libs.Log4Cs
                 };
         }
 
-        private Logger() { }
+        private Logger()
+        { }
 
         /// <summary>
         /// 初始化

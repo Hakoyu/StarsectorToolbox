@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Threading;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
-using Panuon.WPF.UI;
-using StarsectorTools.Libs.Utils;
 using StarsectorTools.ViewModels.MainWindow;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 

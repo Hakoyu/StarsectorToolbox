@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using StarsectorTools.Libs.Utils;
 
 namespace StarsectorTools.Views.ModManagerPage
 {

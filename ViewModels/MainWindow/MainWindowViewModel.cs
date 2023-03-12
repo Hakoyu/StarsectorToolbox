@@ -9,7 +9,6 @@ using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.Models.Messages;
-using StarsectorTools.Resources;
 using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.ViewModels.MainWindow
@@ -20,6 +19,7 @@ namespace StarsectorTools.ViewModels.MainWindow
     internal partial class MainWindowViewModel : ObservableObject
     {
         #region ObservableProperty
+
         [ObservableProperty]
         private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
@@ -35,7 +35,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         [ObservableProperty]
         private bool _settingsButtonIsChecked = false;
 
-        #endregion
+        #endregion ObservableProperty
 
         #region Page
 
@@ -221,6 +221,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             CloseExtensionPages();
             InitializeExtensionPages();
         }
-        #endregion
+
+        #endregion RelayCommand
     }
 }

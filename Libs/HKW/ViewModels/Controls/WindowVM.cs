@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 namespace HKW.ViewModels.Controls
 {
@@ -16,7 +11,8 @@ namespace HKW.ViewModels.Controls
     {
         [ObservableProperty]
         private object? _dataContext;
-        partial void OnDataContextChanged(object? value)
+
+        private partial void OnDataContextChanged(object? value)
         {
             _dataContextProperty?.SetValue(_window, value);
         }
@@ -44,7 +40,8 @@ namespace HKW.ViewModels.Controls
         /// <summary>
         /// 构造
         /// </summary>
-        protected WindowVM() { }
+        protected WindowVM()
+        { }
 
         /// <summary>
         /// 构造
@@ -122,6 +119,5 @@ namespace HKW.ViewModels.Controls
         /// 关闭事件
         /// </summary>
         public event ViewModelHandler? CloseEvent;
-
     }
 }

@@ -6,7 +6,6 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-  xmlns:local="clr-namespace:StarsectorTools.Views.ModManagerPage"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:vm="clr-namespace:StarsectorTools.ViewModels.ModManagerPage"

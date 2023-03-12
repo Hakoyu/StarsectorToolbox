@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static HKW.Extension.SetExtension;
+﻿using System.Collections.Generic;
 
 namespace StarsectorTools.Libs.Utils
 {

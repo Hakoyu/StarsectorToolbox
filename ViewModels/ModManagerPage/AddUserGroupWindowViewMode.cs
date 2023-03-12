@@ -15,7 +15,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         public ListBoxItemVM? BaseListBoxItem;
 
-        public AddUserGroupWindowViewMode() { }
+        public AddUserGroupWindowViewMode()
+        { }
 
         public AddUserGroupWindowViewMode(object window)
             : base(window)

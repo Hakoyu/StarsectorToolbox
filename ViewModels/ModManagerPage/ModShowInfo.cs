@@ -76,7 +76,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             [ObservableProperty]
             private ContextMenuVM _contextMenu = null!;
 
-            internal ModShowInfo() { }
+            internal ModShowInfo()
+            { }
 
             internal ModShowInfo(IModInfo modInfo)
             {

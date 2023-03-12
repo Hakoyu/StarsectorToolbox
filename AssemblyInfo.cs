@@ -1,7 +1,4 @@
-using System.Reflection;
 using System.Windows;
-using System.Windows.Markup;
-using StarsectorTools.Libs.Utils;
 
 // 程序信息
 //[assembly: AssemblyTitle(nameof(StarsectorTools))]

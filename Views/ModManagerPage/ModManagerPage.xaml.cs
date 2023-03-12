@@ -3,11 +3,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.Utils;
 using StarsectorTools.ViewModels.ModManagerPage;
-using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
 namespace StarsectorTools.Views.ModManagerPage
 {

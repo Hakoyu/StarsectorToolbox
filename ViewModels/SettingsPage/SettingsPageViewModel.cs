@@ -8,10 +8,9 @@ using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.Models.Messages;
 using StarsectorTools.Libs.Utils;
+using StarsectorTools.Models.Messages;
 using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
-using System;
 
 namespace StarsectorTools.ViewModels.SettingsPage
 {

@@ -1,17 +1,15 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using CommunityToolkit.Mvvm.Messaging;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Dialogs;
 using Panuon.WPF.UI;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
-using StarsectorTools.ViewModels.MainWindow;
-using CommunityToolkit.Mvvm.Messaging;
 using StarsectorTools.Models.Messages;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorTools.Views.MainWindow
 {
@@ -97,7 +95,6 @@ namespace StarsectorTools.Views.MainWindow
                         {
                             result = MessageBoxX.Show(message, d.Caption, button, icon);
                         }
-
                     }
                     if (message.Length == _messageLengthLimits)
                         GC.Collect();

@@ -42,6 +42,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         }
 
         #region PageItem
+
         internal void AddMainPageItem(ListBoxItemVM item)
         {
             DetectPageItemData(ref item);
@@ -108,9 +109,11 @@ namespace StarsectorTools.ViewModels.MainWindow
                 return null;
             }
         }
-        #endregion
+
+        #endregion PageItem
 
         #region DebugPageItem
+
         private void AddDebugMainPageItem(ListBoxItemVM item)
         {
             DetectDebugPageItemData(ref item);
@@ -155,8 +158,11 @@ namespace StarsectorTools.ViewModels.MainWindow
                 return menuItem;
             }
         }
-        #endregion
+
+        #endregion DebugPageItem
+
         #region CheckGameStartOption
+
         private void CheckGameStartOption()
         {
             if (_clearGameLogOnStart)
@@ -170,8 +176,11 @@ namespace StarsectorTools.ViewModels.MainWindow
             File.Create(GameInfo.LogFile).Close();
             Logger.Info(I18nRes.GameLogCleanupCompleted);
         }
-        #endregion
+
+        #endregion CheckGameStartOption
+
         #region ExtensionPage
+
         private void InitializeExtensionPages()
         {
             DirectoryInfo dirs = new(ST.ExtensionDirectories);
@@ -352,8 +361,10 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
 
-        #endregion
+        #endregion ExtensionPage
+
         #region InitializeConfig
+
         private void InitializeConfig()
         {
             try
@@ -465,7 +476,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                 $"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}"
             );
         }
-        #endregion
+
+        #endregion InitializeConfig
 
         #region WindowEffect
 
@@ -599,7 +611,7 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
 
-        #endregion
+        #endregion SavePage
 
         #region ClosePage
 

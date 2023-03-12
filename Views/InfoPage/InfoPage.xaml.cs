@@ -9,6 +9,7 @@ namespace StarsectorTools.Views.InfoPage
     internal partial class InfoPage : Page
     {
         internal InfoPageViewModel ViewModel => (InfoPageViewModel)DataContext;
+
         internal InfoPage()
         {
             InitializeComponent();

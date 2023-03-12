@@ -29,12 +29,10 @@ namespace StarsectorTools.Views.GameSettingsPage
 
         public void Save()
         {
-
         }
 
         public void Close()
         {
-
         }
 
         public string GetNameI18n() => I18nRes.GameSettings;

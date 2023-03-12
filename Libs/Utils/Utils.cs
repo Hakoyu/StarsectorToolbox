@@ -289,7 +289,7 @@ namespace StarsectorTools.Libs.Utils
         /// <param name="destDirectory">输出目录</param>
         /// <param name="fileName">压缩文件名</param>
         /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public async static Task<bool> ArchiveDirectoryToFile(
+        public static async Task<bool> ArchiveDirectoryToFile(
             string sourceDirectory,
             string destDirectory,
             string? fileName = null

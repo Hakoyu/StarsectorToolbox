@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.Libs.Log4Cs;
-using StarsectorTools.Libs.GameInfo;
-using static HKW.Extension.SetExtension;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorTools.Libs.Utils
