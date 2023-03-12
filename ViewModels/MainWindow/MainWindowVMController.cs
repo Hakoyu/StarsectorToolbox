@@ -205,6 +205,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                 if (TryGetExtensionInfo(dir.FullName) is not ExtensionInfo extensionInfo)
                     continue;
                 var page = extensionInfo.ExtensionPage;
+                _allExtensionsInfo.Add(extensionInfo.Id, extensionInfo);
                 ListBox_ExtensionMenu.Add(
                     new()
                     {
@@ -235,10 +236,8 @@ namespace StarsectorTools.ViewModels.MainWindow
                     if (vm.Tag is not ISTPage page)
                         return;
                     page.Close();
-                    var type = vm.Tag!.GetType();
-                    var extensionInfo = _allExtensionsInfo[type.FullName!];
-                    extensionInfo.ExtensionPage = vm.Tag = CreatePage(type)!;
-                    vm.Tag = extensionInfo.ExtensionPage;
+                    var extensionInfo = _allExtensionsInfo[vm.Id!];
+                    extensionInfo.ExtensionPage = vm.Tag = CreatePage(extensionInfo.ExtensionType)!;
                     if (vm.IsSelected)
                         ShowPage(vm.Tag);
                     Logger.Info($"{I18nRes.RefreshPage}: {extensionInfo.Id}");
@@ -275,12 +274,15 @@ namespace StarsectorTools.ViewModels.MainWindow
                     );
                     return null;
                 }
-                extensionInfo.ExtensionPage = TryGetExtensionPage(
+                if (TryGetExtensionPage(
                     tomlFile,
                     assemblyFile,
-                    ref extensionInfo,
+                    extensionInfo,
                     loadInMemory
-                )!;
+                ) is not (object page, Type type))
+                    return null;
+                extensionInfo.ExtensionPage = page;
+                extensionInfo.ExtensionType = type;
                 // 判断页面是否实现了接口
                 if (extensionInfo.ExtensionPage is not ISTPage)
                 {
@@ -341,10 +343,10 @@ namespace StarsectorTools.ViewModels.MainWindow
                 }
                 return assemblyFile;
             }
-            object? TryGetExtensionPage(
+            (object?, Type?) TryGetExtensionPage(
                 string tomlFile,
                 string assemblyFile,
-                ref ExtensionInfo extensionInfo,
+                ExtensionInfo extensionInfo,
                 bool loadInMemory
             )
             {
@@ -377,9 +379,9 @@ namespace StarsectorTools.ViewModels.MainWindow
                             Icon = MessageBoxVM.Icon.Warning
                         }
                     );
-                    return null;
+                    return (null, null);
                 }
-                return type.Assembly.CreateInstance(type.FullName!)!;
+                return (CreatePage(type), type);
             }
         }
 

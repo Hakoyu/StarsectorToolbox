@@ -1,4 +1,5 @@
-﻿using HKW.Libs.TomlParse;
+﻿using System;
+using HKW.Libs.TomlParse;
 
 namespace StarsectorTools.ViewModels.MainWindow
 {
@@ -31,6 +32,9 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         /// <summary>拓展文件</summary>
         public string ExtensionFile { get; private set; } = null!;
+
+        /// <summary>拓展类型</summary>
+        public Type ExtensionType { get; set; } = null!;
 
         /// <summary>拓展页面</summary>
         public object ExtensionPage { get; set; } = null!;
