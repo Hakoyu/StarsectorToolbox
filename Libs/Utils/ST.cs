@@ -20,7 +20,7 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>拓展信息文件</summary>
         public static string ExtensionInfoFile => "Extension.toml";
 
-        /// <summary>游戏版本</summary>
+        /// <summary>工具箱版本</summary>
         public static string Version => Assembly.GetEntryAssembly()!.GetName().Version!.ToString();
     }
 }

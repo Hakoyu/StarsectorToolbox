@@ -28,6 +28,9 @@
 
 ## 插件列表
 
+**插件的使用方式:**
+将插件压缩包解压至 **STExtension** 文件夹即可
+
 ### [肖像管理器](https://github.com/Hakoyu/StarsectorToolsExtension.PortraitsManager/README.md) 
 
 ![](https://s2.loli.net/2023/03/14/Xw8GhgVZHr6CNTn.png)

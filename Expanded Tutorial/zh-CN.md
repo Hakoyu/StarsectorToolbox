@@ -68,12 +68,9 @@ ExtensionFile = "WpfLibrary1.dll"
 public Page1()
 {
     InitializeComponent();
-    STLog.WriteLine(GetType().ToString());
+    Logger.Info(GetType().ToString());
 }
 ```
-
-如果你无法使用 `using StarsectorTools.Libs.Utils;`  
-那可能是引用不正确
 
 然后使用 StarsectorTools 的拓展调试功能定位拓展的路径即可载入  
 ![](https://s2.loli.net/2023/01/10/AMEHKxvF4ukg7On.png)
@@ -82,7 +79,7 @@ public Page1()
 
 ### 测试断点调试
 
-在`STLog`处打上断点  
+在`Logger`处打上断点  
 在 VS2022 **调试->附加到进程** 中选择 **StarsectorTools.exe**  
 也可以通过选择窗口来指定 **StarsectorTools.exe**  
 ![](https://s2.loli.net/2023/01/10/ypz32rQKxX6eu1S.png)
@@ -104,227 +101,6 @@ public Page1()
 
 ### [StarsectorTools.Libs.Utils](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils)
 
-存放一些全局可用的资源
-
-#### [StarsectorTools.Libs.Utils.GameInfo](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils/GameInfo.cs)
-
-```csharp
-/// <summary>游戏信息</summary>
-class GameInfo
-{
-    /// <summary>游戏目录</summary>
-    string GameDirectory
-    /// <summary>游戏exe文件</summary>
-    string ExeFile
-    /// <summary>游戏模组文件夹</summary>
-    string ModsDirectory
-    /// <summary>游戏版本</summary>
-    string Version
-    /// <summary>游戏存档文件夹</summary>
-    string SaveDirectory
-    /// <summary>游戏已启用模组文件</summary>
-    string EnabledModsJsonFile
-    /// <summary>游戏日志文件</summary>
-    string LogFile
-}
-```
-
-#### [StarsectorTools.Libs.Utils.ModInfo](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils/ModInfo.cs)
-
-```csharp
-/// <summary>模组信息</summary>
-class ModInfo
-{
-    /// <summary>ID</summary>
-    string Id
-    /// <summary>名称</summary>
-    string Name
-    /// <summary>作者</summary>
-    string Author
-    /// <summary>版本</summary>
-    string Version
-    /// <summary>是否为功能性模组</summary>
-    bool IsUtility
-    /// <summary>描述</summary>
-    string Description
-    /// <summary>支持的游戏版本</summary>
-    string GameVersion
-    /// <summary>模组信息</summary>
-    string ModPlugin
-    /// <summary>前置</summary>
-    HashSet<ModInfo>? Dependencies
-    /// <summary>本地路径</summary>
-    string Path
-}
-```
-
-#### [StarsectorTools.Libs.Utils.STLog](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils/STLog.cs)
-
-```csharp
-/// <summary>StarsectorTools日志等级</summary>
-enum STLogLevel
-{
-    /// <summary>调试</summary>
-    DEBUG
-    /// <summary>提示</summary>
-    INFO
-    /// <summary>警告</summary>
-    WARN
-    /// <summary>错误</summary>
-    ERROR
-}
-```
-
-```csharp
-/// <summary>StarsectorTools日志</summary>
-class STLog
-{
-    /// <summary>日志目录</summary>
-    string LogFile
-    /// <summary>
-    /// 字符串转换成日志等级
-    /// </summary>
-    /// <param name="str">字符串</param>
-    /// <returns>日志等级</returns>
-    STLogLevel Str2STLogLevel(string str)
-    /// <summary>
-    /// 写入日志
-    /// </summary>
-    /// <param name="message">消息</param>
-    /// <param name="logLevel">日志等级</param>
-    void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO)
-    /// <summary>
-    /// 写入日志
-    /// </summary>
-    /// <param name="message">消息</param>
-    /// <param name="logLevel">日志等级</param>
-    /// <param name="keys">插入的对象</param>
-    void WriteLine(string message, STLogLevel logLevel = STLogLevel.INFO, params object[] args)
-    /// <summary>
-    /// 写入捕获的异常
-    /// </summary>
-    /// <param name="message">消息</param>
-    /// <param name="ex">错误</param>
-    /// <param name="args">插入的对象</param>
-    void WriteLine(string message, Exception ex, params object[] args)
-     /// <summary>
-    /// Exception解析 用来精简异常的堆栈输出
-    /// </summary>
-    /// <param name="ex">Exception</param>
-    /// <returns></returns>
-    string ExceptionParse(Exception ex)
-}
-```
-
-#### [StarsectorTools.Libs.Utils.Utils](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils/Utils.cs)
-
-```csharp
-/// <summary>StarsectorTools全局工具</summary>
-class Utils
-{
-    /// <summary>
-    /// 检测文件是否存在
-    /// </summary>
-    /// <param name="file">文件路径</param>
-    /// <param name="outputLog">输出日志</param>
-    /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
-    bool FileExists(string file, bool outputLog = true)
-    /// <summary>
-    /// 检测文件夹是否存在
-    /// </summary>
-    /// <param name="directory">目录路径</param>
-    /// <param name="outputLog">输出日志</param>
-    /// <returns>存在为<see langword="true"/>,不存在为<see langword="false"/></returns>
-    bool DirectoryExists(string directory, bool outputLog = true)
-    /// <summary>
-    /// 格式化Json数据,去除掉注释以及不合规的逗号
-    /// </summary>
-    /// <param name="jsonData">Json数据</param>
-    /// <returns>格式化后的数据</returns>
-    string JsonParse(string jsonData)
-    /// <summary>
-    /// 复制文件夹至目标文件夹
-    /// </summary>
-    /// <param name="sourceDirectory">原始路径</param>
-    /// <param name="destinationDirectory">目标路径</param>
-    /// <returns>复制成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    bool CopyDirectory(string sourceDirectory, string destinationDirectory)
-    /// <summary>
-    /// 删除文件至回收站
-    /// </summary>
-    /// <param name="file"></param>
-    /// <returns>删除成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    bool DeleteFileToRecycleBin(string file)
-    /// <summary>
-    /// 删除文件夹至回收站
-    /// </summary>
-    /// <param name="directory">文件夹</param>
-    /// <returns>删除成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    bool DeleteDirToRecycleBin(string directory)
-    /// <summary>
-    /// 使用系统默认打开方式打开链接,文件或文件夹
-    /// </summary>
-    /// <param name="link">链接</param>
-    /// <returns>打开成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    bool OpenLink(string link)
-    /// <summary>
-    /// <para>压缩文件夹至Zip文件并输出到目录</para>
-    /// <para>若不输入压缩文件名,则以原始目录的文件夹名称来命名</para>
-    /// </summary>
-    /// <param name="sourceDirectory">原始目录</param>
-    /// <param name="destinationDirectory">输出目录</param>
-    /// <param name="archiveName">压缩文件名</param>
-    /// <returns>压缩成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    bool ArchiveDirToDir(string sourceDirectory, string destinationDirectory, string? archiveName = null)
-    /// <summary>
-    /// <para>解压压缩文件至目录</para>
-    /// <para>支持: <see langword="Zip"/> <see langword="Rar"/> <see langword="7z"/></para>
-    /// </summary>
-    /// <param name="sourceFile">原始文件</param>
-    /// <param name="destinationDirectory">输出目录</param>
-    /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    bool UnArchiveFileToDir(string sourceFile, string destinationDirectory)
-    /// <summary>
-    /// 弹出消息窗口
-    /// </summary>
-    /// <param name="message">消息</param>
-    /// <param name="image">显示的图标</param>
-    /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-    MessageBoxResult ShowMessageBox(string message, IMessageBoxIcon.icon = IMessageBoxIcon.Info, bool setBlurEffect = true)
-    /// <summary>
-    /// 弹出消息窗口
-    /// </summary>
-    /// <param name="message">消息</param>
-    /// <param name="button">显示的按钮</param>
-    /// <param name="image">显示的图标</param>
-    /// <returns>按钮结果: <see cref="MessageBoxResult"/></returns>
-    MessageBoxResult ShowMessageBox(string message, MessageBoxButton button, IMessageBoxIcon.icon, bool setBlurEffect = true)
-}
-```
-
-### [StarsectorTools.Libs.Utils.ModsInfo](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils/ModsInfo.cs)
-
-```csharp
-class ModsInfo
-{
-    /// <summary>
-    /// <para>全部模组信息</para>
-    /// <para><see langword="Key"/>: 模组ID</para>
-    /// <para><see langword="Value"/>: 模组信息</para>
-    /// </summary>
-    ReadOnlyDictionary<string, ModInfo> AllModsInfo
-    /// <summary>已启用的模组ID</summary>
-    ReadOnlySet<string> AllEnabledModsId
-    /// <summary>已收藏的模组ID</summary>
-    ReadOnlySet<string> AllCollectedModsId
-    /// <summary>
-    /// <para>全部用户分组</para>
-    /// <para><see langword="Key"/>: 分组名称</para>
-    /// <para><see langword="Value"/>: 包含的模组</para>
-    /// </summary>
-    ReadOnlyDictionary<string, ReadOnlySet<string>> AllUserGroups
-}
-```
 
 ## 其它事项
 
@@ -333,8 +109,8 @@ class ModsInfo
 #### 标准信息使用默认输出
 
 ```csharp
-STLog.WriteLine(message);
-Utils.ShowMessageBox(message);
+Logger.Info(message);
+MessageBoxVM.Show(new(message));
 ```
 
 #### 使用 `ifelse` 筛选的信息以 `Warn` 等级输出
@@ -346,8 +122,8 @@ if(isTrue == true)
 }
 else
 {
-    STLog.WriteLine(message, STLogLevel.WARNING);
-    Utils.ShowMessageBox(message, IMessageBoxIcon.Warning);
+    Logger.Warn(message);
+    MessageBoxVM.Show(new(message) {Icon = MessageBoxVM.Icon.Warning});
 }
 ```
 
@@ -360,8 +136,8 @@ try
 }
 catch (Exception ex)
 {
-    STLog.WriteLine(message, ex);
-    Utils.ShowMessageBox(message, IMessageBoxIcon.Error);
+    Logger.Error(message, ex);
+    MessageBoxVM.Show(new(message) {Icon = MessageBoxVM.Icon.Error});
 }
 ```
 
@@ -371,26 +147,7 @@ catch (Exception ex)
 下面将演示拓展页面中如何引用及使用本体风格  
 _注: xaml 设计器中显示的内容可能与实际显示有误差_
 
-**在页面资源(`Page.Resources`)中添加引用本体风格**
-
-```xaml
-  <Page.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlsStyle.xaml" />
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ColorStyle.xaml" />
-      </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-  </Page.Resources>
-```
-
 **引用本体风格**
-
-```xaml
-<Button Content="Button" Style="{StaticResource ButtonBaseStyle}" />
-```
-
-**完整示例**
 
 ```xaml
 <Page
@@ -407,8 +164,9 @@ _注: xaml 设计器中显示的内容可能与实际显示有误差_
   <Page.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlsStyle.xaml" />
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/BlackStyle.xaml" />
+        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlStyles.xaml" />
+        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlViewStyles.xaml" />
+        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ColorStyles.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Page.Resources>
@@ -418,45 +176,6 @@ _注: xaml 设计器中显示的内容可能与实际显示有误差_
       Style="{StaticResource ButtonBaseStyle}" />
   </Grid>
 </Page>
-```
-
-### 长任务线程处理
-
-如果要在`Page`中使用**长任务线程**  
-请为`Page`添加`public void Close()`方法  
-并在里面销毁创建的所有线程  
-当程序被关闭时会尝试调用此方法,以确保程序的正常关闭  
-若未销毁线程,则会导致程序无法正常关闭,此时请使用任务管理器结束任务  
-_除了销毁线程之外,同样可以在此方法中进行资源回收,设置保存等关闭前操作_
-
-**示例:**
-
-```csharp
-namespace WpfLibrary1
-{
-    public partial class Page1 : Page
-    {
-        private Thread thread;
-        public Page1()
-        {
-            InitializeComponent();
-            thread = new(LongTasks);
-            thread.Start();
-        }
-        public void Close()
-        {
-            if (thread.ThreadState != ThreadState.Unstarted)
-                thread.Join(1);
-        }
-        private void LongTasks()
-        {
-            while(thread.ThreadState != ThreadState.Unstarted)
-            {
-                ...
-            }
-        }
-    }
-}
 ```
 
 ## 打包
