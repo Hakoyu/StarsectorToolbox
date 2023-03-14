@@ -28,6 +28,12 @@ namespace StarsectorTools.ViewModels.MainWindow
 
         [ObservableProperty]
         private bool _clearGameLogOnStart = true;
+        partial void OnClearGameLogOnStartChanged(bool value)
+        {
+            var toml = TOML.Parse(ST.ConfigTomlFile);
+            toml["Extension"]["ClearLogOnStart"] = value;
+            toml.SaveTo(ST.ConfigTomlFile);
+        }
 
         [ObservableProperty]
         private bool _infoButtonIsChecked = false;

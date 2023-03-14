@@ -34,7 +34,7 @@
         Height="30"
         Margin="0,0,0,5"
         Style="{StaticResource TextBoxBaseStyle}"
-        Text="{Binding UserGroupIcon}" />
+        Text="{Binding UserGroupIcon, UpdateSourceTrigger=PropertyChanged}" />
       <Label
         Height="30"
         Margin="0,0,0,5"
@@ -47,7 +47,7 @@
         Height="30"
         Margin="0,0,0,5"
         Style="{StaticResource TextBoxBaseStyle}"
-        Text="{Binding UserGroupName}" />
+        Text="{Binding UserGroupName, UpdateSourceTrigger=PropertyChanged}" />
       <Grid Margin="0,0,0,5">
         <StackPanel Orientation="Horizontal">
           <Label
