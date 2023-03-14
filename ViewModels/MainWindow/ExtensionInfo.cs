@@ -33,6 +33,9 @@ namespace StarsectorTools.ViewModels.MainWindow
         /// <summary>拓展文件</summary>
         public string ExtensionFile { get; private set; } = null!;
 
+        /// <summary>源位置</summary>
+        public string FileFullName { get; set; } = null!;
+
         /// <summary>拓展类型</summary>
         public Type ExtensionType { get; set; } = null!;
 

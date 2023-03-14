@@ -203,7 +203,7 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         /// <param name="directory">文件夹</param>
         /// <returns>删除成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool DeleteDirToRecycleBin(string directory)
+        public static bool DeleteDirectoryToRecycleBin(string directory)
         {
             try
             {
@@ -303,13 +303,17 @@ namespace StarsectorTools.Libs.Utils
                 {
                     using var archive = ZipArchive.Create();
                     archive.AddAllFromDirectory(sourceDirectory);
+                    var archiveFile = string.Empty;
                     if (string.IsNullOrWhiteSpace(fileName))
-                        archive.SaveTo(
-                            $"{destDirectory}\\{Path.GetFileName(sourceDirectory)}.zip",
-                            CompressionType.Deflate
+                        archiveFile = Path.Combine(
+                            destDirectory,
+                            Path.GetFileName(sourceDirectory)
                         );
                     else
-                        archive.SaveTo($"{destDirectory}\\{fileName}.zip", CompressionType.Deflate);
+                        archiveFile = Path.Combine(destDirectory, fileName);
+                    if (!archiveFile.EndsWith(".zip"))
+                        archiveFile += ".zip";
+                    archive.SaveTo(archiveFile, CompressionType.Deflate);
                 });
                 return true;
             }

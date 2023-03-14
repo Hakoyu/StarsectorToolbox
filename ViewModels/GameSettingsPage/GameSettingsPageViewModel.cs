@@ -168,7 +168,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             {
                 if (Utils.DirectoryExists(_missionsLoadoutsDirectory))
                 {
-                    Utils.DeleteDirToRecycleBin(_missionsLoadoutsDirectory);
+                    Utils.DeleteDirectoryToRecycleBin(_missionsLoadoutsDirectory);
                     Directory.CreateDirectory(_missionsLoadoutsDirectory);
                 }
             }
@@ -186,7 +186,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
                     );
                     return;
                 }
-                if (!Utils.DeleteDirToRecycleBin(selected))
+                if (!Utils.DeleteDirectoryToRecycleBin(selected))
                 {
                     Logger.Warring(
                         $"{I18nRes.MissionsLoadoutsNotExist} {I18nRes.Path}: {selected}"
@@ -234,7 +234,7 @@ namespace StarsectorTools.ViewModels.GameSettingsPage
             var list = dirsPath.OrderBy(kv => kv.Value);
             int count = string.IsNullOrEmpty(RetainRecentSaveCount) ? 0 : dirsPath.Count - int.Parse(RetainRecentSaveCount);
             for (int i = 0; i < count; i++)
-                Utils.DeleteDirToRecycleBin(list.ElementAt(i).Key);
+                Utils.DeleteDirectoryToRecycleBin(list.ElementAt(i).Key);
             Logger.Info(I18nRes.SaveCleanComplete);
             MessageBoxVM.Show(new(I18nRes.SaveCleanComplete));
         }

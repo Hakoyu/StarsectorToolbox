@@ -76,12 +76,10 @@
       x:Key="UtilityStyle"
       BasedOn="{StaticResource CenterAlignmentStyle}"
       TargetType="TextBlock">
-      <Setter Property="Background" Value="{DynamicResource ColorBlue2}" />
       <Setter Property="Text" Value="✅" />
       <Setter Property="ToolTip" Value="{Binding DataContext.I18n.I18nRes.IsUtilityMod, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding IsUtility}" Value="False">
-          <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
           <Setter Property="Text" Value="❎" />
           <Setter Property="ToolTip" Value="{Binding DataContext.I18n.I18nRes.NotUtilityMod, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
         </DataTrigger>

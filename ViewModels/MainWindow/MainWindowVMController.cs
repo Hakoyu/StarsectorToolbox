@@ -204,8 +204,11 @@ namespace StarsectorTools.ViewModels.MainWindow
             {
                 if (TryGetExtensionInfo(dir.FullName) is not ExtensionInfo extensionInfo)
                     continue;
-                var page = extensionInfo.ExtensionPage;
-                _allExtensionsInfo.Add(extensionInfo.Id, extensionInfo);
+                if (!_allExtensionsInfo.TryAdd(extensionInfo.Id, extensionInfo))
+                {
+                    var originalExtensionInfo = _allExtensionsInfo[extensionInfo.Id];
+                    MessageBoxVM.Show(new($"已存在相同的拓展\n原始文件位置: {originalExtensionInfo.ExtensionFile}\n 再次导入的文件位置{extensionInfo.FileFullName}"));
+                }
                 ListBox_ExtensionMenu.Add(
                     new()
                     {
@@ -214,7 +217,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                         Content = extensionInfo.Name,
                         ToolTip =
                             $"Author: {extensionInfo.Author}\nDescription: {extensionInfo.Description}",
-                        Tag = page,
+                        Tag = extensionInfo.ExtensionPage,
                         ContextMenu = CreateExtensionItemContextMenu()
                     }
                 ); ;
@@ -247,9 +250,9 @@ namespace StarsectorTools.ViewModels.MainWindow
             }
         }
 
-        private ExtensionInfo? TryGetExtensionInfo(string path, bool loadInMemory = false)
+        private ExtensionInfo? TryGetExtensionInfo(string file, bool loadInMemory = false)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(file))
             {
                 Logger.Warring(I18nRes.ExtensionPathIsEmpty);
                 MessageBoxVM.Show(
@@ -257,11 +260,11 @@ namespace StarsectorTools.ViewModels.MainWindow
                 );
                 return null;
             }
-            var tomlFile = $"{path}\\{ST.ExtensionInfoFile}";
+            var tomlFile = $"{file}\\{ST.ExtensionInfoFile}";
             try
             {
                 var extensionInfo = new ExtensionInfo(TOML.Parse(tomlFile));
-                var assemblyFile = ParseExtensionInfo(path, tomlFile, ref extensionInfo);
+                var assemblyFile = ParseExtensionInfo(file, tomlFile, ref extensionInfo);
                 // 判断组件文件是否存在
                 if (!File.Exists(assemblyFile))
                 {
@@ -281,6 +284,7 @@ namespace StarsectorTools.ViewModels.MainWindow
                     loadInMemory
                 ) is not (object page, Type type))
                     return null;
+                extensionInfo.FileFullName = file;
                 extensionInfo.ExtensionPage = page;
                 extensionInfo.ExtensionType = type;
                 // 判断页面是否实现了接口

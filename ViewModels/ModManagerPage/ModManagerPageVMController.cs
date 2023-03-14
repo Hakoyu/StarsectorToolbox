@@ -364,7 +364,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     CheckFilterAndRefreshShowMods();
                     RefreshGroupModCount();
                     CloseModDetails();
-                    Utils.DeleteDirToRecycleBin(path);
+                    Utils.DeleteDirectoryToRecycleBin(path);
                     IsRemindSave = true;
                 };
                 Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
@@ -1460,7 +1460,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 }
                 else if (result is MessageBoxVM.Result.No)
                 {
-                    Utils.DeleteDirToRecycleBin(originalModInfo.ModDirectory);
+                    Utils.DeleteDirectoryToRecycleBin(originalModInfo.ModDirectory);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
