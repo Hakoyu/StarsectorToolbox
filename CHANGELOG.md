@@ -1,5 +1,12 @@
 ﻿# StarsectorToolsChangeLog
 
+## 0.8.6.0
+
+### 全局
+
+后台修改为MVVM模式
+修复大量问题
+
 ## 0.8.0.0
 
 ### 全局
