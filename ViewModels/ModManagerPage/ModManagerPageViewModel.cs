@@ -291,12 +291,17 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (_nowSelectedGroup?.IsSelected is true)
                 _nowSelectedGroup.IsSelected = false;
             _nowSelectedGroup = item;
-            if (_allUserGroups.ContainsKey(item.Tag!.ToString()!))
+            var group = item.Tag!.ToString()!;
+            if (_allUserGroups.ContainsKey(group))
                 NowSelectedIsUserGroup = true;
             else
                 NowSelectedIsUserGroup = false;
             ClearSelectedMods(_nowSelectedMods);
             CheckFilterAndRefreshShowMods();
+            if (group == nameof(ModTypeGroup.UnknownMods) && _allModShowInfoGroups[group].Count > 0)
+            {
+                MessageBoxVM.Show(new(string.Format(I18nRes.UnknownModsMessage, _allModShowInfoGroups[group].Count)));
+            }
         }
 
         #region RelayCommand

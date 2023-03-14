@@ -1315,6 +1315,18 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 您打开了未知模组分类
+        ///其中存在 {0} 个未知模组
+        ///希望您前往 https://github.com/Hakoyu/StarsectorTools/issues
+        ///提交 issue 中提供其 ID 及应该在的分类 的本地化字符串。
+        /// </summary>
+        public static string UnknownModsMessage {
+            get {
+                return ResourceManager.GetString("UnknownModsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 解压错误 的本地化字符串。
         /// </summary>
         public static string UnzipError {

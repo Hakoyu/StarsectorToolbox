@@ -562,4 +562,10 @@ Decompressing:
   <data name="DisableAllMods" xml:space="preserve">
     <value>Disable all mods</value>
   </data>
+  <data name="UnknownModsMessage" xml:space="preserve">
+    <value>You have opened the Unknown Modules category
+There are {0} unknown modules
+I would like you to go to https://github.com/Hakoyu/StarsectorTools/issues
+Submit the issue with its ID and the category it should be in</value>
+  </data>
 </root>
