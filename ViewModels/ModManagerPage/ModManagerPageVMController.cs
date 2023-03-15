@@ -786,7 +786,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -829,7 +829,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -907,7 +907,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1083,7 +1083,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             {
                 var icon = viewModel.UserGroupIcon;
                 var name = viewModel.UserGroupName;
-                if (viewModel.BaseListBoxItem is not null && TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name))
+                if (
+                    viewModel.BaseListBoxItem is not null
+                    && TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name)
+                )
                     viewModel.Hide();
                 else if (TryAddUserGroup(icon, name))
                     viewModel.Hide();
@@ -1337,7 +1340,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                             )
                         );
                         await AddModFromFile(subFile.FullName, tempDirectoryInfo);
-                        count++;
+                        completed++;
                     }
                 }
                 else
@@ -1352,7 +1355,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         )
                     );
                     await AddModFromFile(path, tempDirectoryInfo);
-                    count++;
+                    completed++;
                 }
             }
             CheckAndRefreshDisplayData();
@@ -1364,45 +1367,55 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             Logger.Info($"{I18nRes.ParseFile} {file}");
             if (
                 await TryGetModInfoPath(file, tempDirectoryInfo.Name, tempDirectoryInfo)
-                is not
-                (string jsonPath, string directoryName)
+                is not string jsonFile
             )
                 return;
+            var jsonFileName = Path.GetFileName(jsonFile);
+            var directoryName = Path.GetFileName(Path.GetDirectoryName(jsonFile)!);
+            var modDirectory = Path.Combine(GameInfo.ModsDirectory, directoryName);
             if (
                 ModInfo.Parse(
-                    Utils.JsonParse2Object(jsonPath)!,
-                    $"{GameInfo.ModsDirectory}\\{directoryName}"
+                    Utils.JsonParse2Object(jsonFile)!,
+                    Path.Combine(modDirectory, jsonFileName)
                 )
                 is not ModInfo newModInfo
             )
             {
-                MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {file}"));
+                MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {file}")
+                {
+                    ShowMainWindowBlurEffect = false
+                });
                 return;
             }
             if (!_allModInfos.ContainsKey(newModInfo.Id))
             {
-                Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                Utils.CopyDirectory(Path.GetDirectoryName(jsonFile)!, GameInfo.ModsDirectory);
                 AddMod(newModInfo);
                 return;
             }
             await TryOverwriteMod(
-                jsonPath,
-                directoryName,
+                jsonFile,
+                modDirectory,
                 _allModInfos[newModInfo.Id],
                 newModInfo,
                 tempDirectoryInfo
             );
-            return;
+            Directory.Delete(Path.Combine(tempDirectoryInfo.FullName, directoryName), true);
 
-            static async Task<(string jsonPath, string directoryName)?> TryGetModInfoPath(
-                string filePath,
-                string tempPath,
+            static async Task<string?> TryGetModInfoPath(
+                string file,
+                string tempDirectory,
                 DirectoryInfo tempDirectoryInfo
             )
             {
-                if (!await Utils.UnArchiveFileToDirectory(filePath, tempPath))
+                if (!await Utils.UnArchiveFileToDirectory(file, tempDirectory))
                 {
-                    MessageBoxVM.Show(new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{filePath}"));
+                    MessageBoxVM.Show(
+                        new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{file}")
+                        {
+                            ShowMainWindowBlurEffect = false
+                        }
+                    );
                     return null;
                 }
                 var filesInfo = tempDirectoryInfo.GetFiles(
@@ -1412,16 +1425,20 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 if (
                     !(
                         filesInfo.FirstOrDefault(defaultValue: null) is FileInfo fileInfo
-                        && fileInfo.FullName is string jsonPath
+                        && fileInfo.FullName is string jsonFile
                     )
                 )
                 {
-                    Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {filePath}");
-                    MessageBoxVM.Show(new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {filePath}"));
+                    Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {file}");
+                    MessageBoxVM.Show(
+                        new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {file}")
+                        {
+                            ShowMainWindowBlurEffect = false
+                        }
+                    );
                     return null;
                 }
-                string directoryName = Path.GetFileName(fileInfo.DirectoryName)!;
-                return (jsonPath, directoryName);
+                return jsonFile;
             }
             async Task TryOverwriteMod(
                 string jsonPath,
@@ -1438,6 +1455,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     {
                         Button = MessageBoxVM.Button.YesNoCancel,
                         Icon = MessageBoxVM.Icon.Question,
+                        ShowMainWindowBlurEffect = false,
                     }
                 );
                 if (result is MessageBoxVM.Result.Yes)
@@ -1447,7 +1465,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}"
                     );
                     string tempDirectory = $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}";
-                    await Utils.ArchiveDirectoryToFile(tempDirectory, _BackupModsDirectory, directoryName);
+                    await Utils.ArchiveDirectoryToFile(
+                        tempDirectory,
+                        _BackupModsDirectory,
+                        directoryName
+                    );
                     Directory.Delete(tempDirectory, true);
                     Directory.Delete(originalModInfo.ModDirectory, true);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);

@@ -50,13 +50,10 @@ namespace StarsectorTools.Libs.Utils
         /// 从json数据中解析模组信息,可设置路径
         /// </summary>
         /// <param name="jsonNode">json数据</param>
-        /// <param name="jsonPath">json文件路径</param>
-        private ModInfo(JsonNode jsonNode, string? jsonPath = null)
+        /// <param name="jsonFile">json文件路径</param>
+        private ModInfo(JsonNode jsonNode, string? jsonFile = null)
         {
-            if (!string.IsNullOrWhiteSpace(jsonPath)
-                && File.Exists(jsonPath)
-                && Path.GetDirectoryName(jsonPath) is string directoryPath)
-                ModDirectory = directoryPath;
+            ModDirectory = Path.GetDirectoryName(jsonFile)!;
             foreach (var kv in jsonNode.AsObject())
                 SetData(kv);
         }
@@ -64,15 +61,15 @@ namespace StarsectorTools.Libs.Utils
         /// <summary>
         /// 解析 <see langword="mod_info.json"/> 并生成模组信息
         /// </summary>
-        /// <param name="jsonPath">json文件路径</param>
+        /// <param name="jsonFile">json文件路径</param>
         /// <returns>解析成功返回 <see cref="ModInfo"/> ,失败返回 <see langword="null"/></returns>
-        public static ModInfo? Parse(string jsonPath)
+        public static ModInfo? Parse(string jsonFile)
         {
             try
             {
-                if (Utils.JsonParse2Object(jsonPath) is not JsonNode jsonNode)
+                if (Utils.JsonParse2Object(jsonFile) is not JsonNode jsonNode)
                     return null;
-                return new(jsonNode, jsonPath);
+                return new(jsonNode, jsonFile);
             }
             catch (Exception ex)
             {
@@ -85,13 +82,13 @@ namespace StarsectorTools.Libs.Utils
         /// 从json数据中解析模组信息,可设置路径
         /// </summary>
         /// <param name="jsonNode">json数据</param>
-        /// <param name="jsonPath">json文件路径</param>
+        /// <param name="jsonFile">json文件路径</param>
         /// <returns>解析成功返回 <see cref="ModInfo"/> ,失败返回 <see langword="null"/></returns>
-        public static ModInfo? Parse(JsonNode jsonNode, string? jsonPath = null)
+        public static ModInfo? Parse(JsonNode jsonNode, string? jsonFile = null)
         {
             try
             {
-                return new(jsonNode, jsonPath);
+                return new(jsonNode, jsonFile);
             }
             catch (Exception ex)
             {
