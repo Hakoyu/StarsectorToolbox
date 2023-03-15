@@ -317,6 +317,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void DataGridSelectionChanged(IList items)
         {
+            // TODO: 选择操作时会有部分模组没被选中的问题
             if (nowClearSelectedMods)
                 return;
             List<ModShowInfo> tempSelectedMods = new(items.OfType<ModShowInfo>());

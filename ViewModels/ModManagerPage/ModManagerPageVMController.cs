@@ -786,7 +786,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -829,7 +829,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -907,7 +907,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1443,14 +1443,14 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             async Task TryOverwriteMod(
                 string jsonPath,
                 string directoryName,
-                ModInfo originalModInfo,
+                ModInfo ModInfo,
                 ModInfo newModInfo,
                 DirectoryInfo tempDirectoryInfo
             )
             {
                 var result = MessageBoxVM.Show(
                     new(
-                        $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, originalModInfo.Version, newModInfo.Version)}"
+                        $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, ModInfo.Version, newModInfo.Version)}"
                     )
                     {
                         Button = MessageBoxVM.Button.YesNoCancel,
@@ -1458,10 +1458,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         ShowMainWindowBlurEffect = false,
                     }
                 );
+                var showInfo = _allModsShowInfo[ModInfo.Id];
+                var isCollected = showInfo.IsCollected;
+                var isEnabled = showInfo.IsEnabled;
                 if (result is MessageBoxVM.Result.Yes)
                 {
                     Utils.CopyDirectory(
-                        originalModInfo.ModDirectory,
+                        ModInfo.ModDirectory,
                         $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}"
                     );
                     string tempDirectory = $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}";
@@ -1471,26 +1474,28 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         directoryName
                     );
                     Directory.Delete(tempDirectory, true);
-                    Directory.Delete(originalModInfo.ModDirectory, true);
+                    Directory.Delete(ModInfo.ModDirectory, true);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
                     IsRemindSave = true;
                     Logger.Info(
-                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
+                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {ModInfo.Version} => {newModInfo.Version}"
                     );
                 }
                 else if (result is MessageBoxVM.Result.No)
                 {
-                    Utils.DeleteDirectoryToRecycleBin(originalModInfo.ModDirectory);
+                    Utils.DeleteDirectoryToRecycleBin(ModInfo.ModDirectory);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
                     IsRemindSave = true;
                     Logger.Info(
-                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {originalModInfo.Version} => {newModInfo.Version}"
+                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {ModInfo.Version} => {newModInfo.Version}"
                     );
                 }
+                ChangeModEnabled(newModInfo.Id, isEnabled);
+                ChangeModCollected(newModInfo.Id, isCollected);
             }
         }
 
