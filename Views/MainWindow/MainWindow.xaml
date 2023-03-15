@@ -239,7 +239,7 @@
             <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
               <CheckBox
                 Content="{Binding I18n.I18nRes.ClearGameLogOnStart}"
-                IsChecked="{Binding ClearGameLogOnStart}"
+                IsChecked="{Binding ClearGameLogOnStart, UpdateSourceTrigger=PropertyChanged}"
                 Style="{StaticResource CheckBoxBaseStyle}" />
             </ContextMenu>
           </Button.ContextMenu>

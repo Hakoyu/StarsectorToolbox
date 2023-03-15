@@ -31,7 +31,7 @@ namespace StarsectorTools.ViewModels.MainWindow
         partial void OnClearGameLogOnStartChanged(bool value)
         {
             var toml = TOML.Parse(ST.ConfigTomlFile);
-            toml["Extension"]["ClearLogOnStart"] = value;
+            toml["Game"]["ClearLogOnStart"] = value;
             toml.SaveTo(ST.ConfigTomlFile);
         }
 
