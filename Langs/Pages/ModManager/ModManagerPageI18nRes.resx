@@ -568,4 +568,7 @@
 希望您前往 https://github.com/Hakoyu/StarsectorTools/issues
 提交 issue 中提供其 ID 及应该在的分类</value>
   </data>
+  <data name="CleanAllMods" xml:space="preserve">
+    <value>清除所有模组</value>
+  </data>
 </root>

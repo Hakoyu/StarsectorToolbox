@@ -1150,7 +1150,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 {
                     list.Add(EnableAllUserGroupModsMenuItem(listBoxItem));
                     list.Add(DisableAllUserGroupModsMenuItem(listBoxItem));
-                    // TODO: 清空模组
+                    list.Add(CleanAllModsMenuItem(listBoxItem));
                     list.Add(RenameUserGroupMenuItem(listBoxItem));
                     list.Add(RemoveUserGroupMenuItem(listBoxItem));
                 }
@@ -1184,6 +1184,23 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     var modIds = _allUserGroups[listBoxItem.ToolTip!.ToString()!];
                     foreach (var id in modIds)
                         ChangeModEnabled(id, false);
+                    CheckAndRefreshDisplayData();
+                    IsRemindSave = true;
+                };
+                Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+                return menuItem;
+            }
+            MenuItemVM CleanAllModsMenuItem(ListBoxItemVM listBoxItem)
+            {
+                // 清空所有模组
+                MenuItemVM menuItem = new();
+                menuItem.Header = I18nRes.CleanAllMods;
+                menuItem.Icon = "🗑";
+                menuItem.CommandEvent += (p) =>
+                {
+                    var name = listBoxItem.ToolTip!.ToString()!;
+                    _allUserGroups[name].Clear();
+                    _allModShowInfoGroups[name].Clear();
                     CheckAndRefreshDisplayData();
                     IsRemindSave = true;
                 };

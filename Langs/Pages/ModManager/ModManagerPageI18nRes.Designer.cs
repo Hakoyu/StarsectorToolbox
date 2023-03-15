@@ -178,6 +178,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 清除所有模组 的本地化字符串。
+        /// </summary>
+        public static string CleanAllMods {
+            get {
+                return ResourceManager.GetString("CleanAllMods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 关闭详情 的本地化字符串。
         /// </summary>
         public static string CloseDetails {
