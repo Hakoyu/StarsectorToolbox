@@ -788,7 +788,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -831,7 +831,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -909,7 +909,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count;)
+            for (int i = 0; i < _nowSelectedMods.Count; )
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1401,10 +1401,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 is not ModInfo newModInfo
             )
             {
-                MessageBoxVM.Show(new($"{I18nRes.FileError}\n{I18nRes.Path}: {file}")
-                {
-                    ShowMainWindowBlurEffect = false
-                });
+                MessageBoxVM.Show(
+                    new($"{I18nRes.FileError}\n{I18nRes.Path}: {file}")
+                    {
+                        ShowMainWindowBlurEffect = false
+                    }
+                );
                 return;
             }
             if (!_allModInfos.ContainsKey(newModInfo.Id))
@@ -1461,7 +1463,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 return jsonFile;
             }
             async Task TryOverwriteMod(
-                string jsonPath,
+                string jsonFile,
                 string directoryName,
                 ModInfo modInfo,
                 ModInfo newModInfo,
@@ -1495,8 +1497,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                     );
                     Directory.Delete(tempDirectory, true);
                     Directory.Delete(modInfo.ModDirectory, true);
-                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
-                    // TODO: ReplaceMod
+                    Utils.CopyDirectory(Path.GetDirectoryName(jsonFile)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
                     IsRemindSave = true;
@@ -1507,7 +1508,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 else if (result is MessageBoxVM.Result.No)
                 {
                     Utils.DeleteDirectoryToRecycleBin(modInfo.ModDirectory);
-                    Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                    Utils.CopyDirectory(Path.GetDirectoryName(jsonFile)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
                     IsRemindSave = true;
