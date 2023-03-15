@@ -241,8 +241,8 @@
   </data>
   <data name="DuplicateModExists" xml:space="preserve">
     <value>已存在相同模组 请选择操作:
-是: 覆盖并备份原模组
-否: 覆盖但不备份原模组
+是: 替换并备份原模组
+否: 替换但不备份原模组
 取消: 取消导入
 原始版本: {0} =&gt; 新增版本: {1}</value>
   </data>

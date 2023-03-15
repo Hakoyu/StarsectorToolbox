@@ -127,6 +127,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void GetAllModsInfo()
         {
+            // TODO: 获取模组文件夹的最近更新日期,显示到DataGrid中
+            // TODO: 可以保存游戏版本,启用列表以及模组本体的完全备份包
             int errSize = 0;
             StringBuilder errSB = new();
             DirectoryInfo dirInfo = new(GameInfo.ModsDirectory);
@@ -1461,14 +1463,14 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             async Task TryOverwriteMod(
                 string jsonPath,
                 string directoryName,
-                ModInfo ModInfo,
+                ModInfo modInfo,
                 ModInfo newModInfo,
                 DirectoryInfo tempDirectoryInfo
             )
             {
                 var result = MessageBoxVM.Show(
                     new(
-                        $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, ModInfo.Version, newModInfo.Version)}"
+                        $"{newModInfo.Id}\n{string.Format(I18nRes.DuplicateModExists, modInfo.Version, newModInfo.Version)}"
                     )
                     {
                         Button = MessageBoxVM.Button.YesNoCancel,
@@ -1476,13 +1478,13 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         ShowMainWindowBlurEffect = false,
                     }
                 );
-                var showInfo = _allModsShowInfo[ModInfo.Id];
+                var showInfo = _allModsShowInfo[modInfo.Id];
                 var isCollected = showInfo.IsCollected;
                 var isEnabled = showInfo.IsEnabled;
                 if (result is MessageBoxVM.Result.Yes)
                 {
                     Utils.CopyDirectory(
-                        ModInfo.ModDirectory,
+                        modInfo.ModDirectory,
                         $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}"
                     );
                     string tempDirectory = $"{_BackupModsDirectory}\\{tempDirectoryInfo.Name}";
@@ -1492,24 +1494,25 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         directoryName
                     );
                     Directory.Delete(tempDirectory, true);
-                    Directory.Delete(ModInfo.ModDirectory, true);
+                    Directory.Delete(modInfo.ModDirectory, true);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
+                    // TODO: ReplaceMod
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
                     IsRemindSave = true;
                     Logger.Info(
-                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {ModInfo.Version} => {newModInfo.Version}"
+                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {modInfo.Version} => {newModInfo.Version}"
                     );
                 }
                 else if (result is MessageBoxVM.Result.No)
                 {
-                    Utils.DeleteDirectoryToRecycleBin(ModInfo.ModDirectory);
+                    Utils.DeleteDirectoryToRecycleBin(modInfo.ModDirectory);
                     Utils.CopyDirectory(Path.GetDirectoryName(jsonPath)!, GameInfo.ModsDirectory);
                     RemoveMod(newModInfo.Id);
                     AddMod(newModInfo);
                     IsRemindSave = true;
                     Logger.Info(
-                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {ModInfo.Version} => {newModInfo.Version}"
+                        $"{I18nRes.ReplaceMod} {newModInfo.Id} {modInfo.Version} => {newModInfo.Version}"
                     );
                 }
                 ChangeModEnabled(newModInfo.Id, isEnabled);
