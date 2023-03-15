@@ -29,9 +29,9 @@
     <AssemblyVersion>0.8.0.0</AssemblyVersion>
     <Copyright>Copyright ©2022-2023 HKW</Copyright>
     <RepositoryType>https://github.com/Hakoyu/StarsectorTools</RepositoryType>
-    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSymbols>False</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
