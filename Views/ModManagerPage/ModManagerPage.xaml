@@ -380,7 +380,7 @@
                   CanUserSort="True"
                   ElementStyle="{StaticResource GameVersionStyle}"
                   IsReadOnly="True"
-                  SortMemberPath="GameVersion">
+                  SortMemberPath="IsSameToGameVersion">
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"

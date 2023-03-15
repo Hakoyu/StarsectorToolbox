@@ -130,6 +130,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 },
                 new()
                 {
+                    // TODO: 右键菜单:添加所有模组至用户分组
                     Icon = "✅",
                     Content = I18nRes.EnabledMods,
                     ToolTip = I18nRes.EnabledMods,

@@ -1150,8 +1150,9 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 {
                     list.Add(EnableAllUserGroupModsMenuItem(listBoxItem));
                     list.Add(DisableAllUserGroupModsMenuItem(listBoxItem));
-                    list.Add(RenameUserGroupMenuItemVM(listBoxItem));
-                    list.Add(RemoveUserGroupMenuItemVM(listBoxItem));
+                    // TODO: 清空模组
+                    list.Add(RenameUserGroupMenuItem(listBoxItem));
+                    list.Add(RemoveUserGroupMenuItem(listBoxItem));
                 }
             );
 
@@ -1189,7 +1190,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
-            MenuItemVM RenameUserGroupMenuItemVM(ListBoxItemVM listBoxItem)
+            MenuItemVM RenameUserGroupMenuItem(ListBoxItemVM listBoxItem)
             {
                 // 重命名分组
                 MenuItemVM menuItem = new();
@@ -1198,7 +1199,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
                 return menuItem;
             }
-            MenuItemVM RemoveUserGroupMenuItemVM(ListBoxItemVM listBoxItem)
+            MenuItemVM RemoveUserGroupMenuItem(ListBoxItemVM listBoxItem)
             {
                 // 删除分组
                 MenuItemVM menuItem = new();
