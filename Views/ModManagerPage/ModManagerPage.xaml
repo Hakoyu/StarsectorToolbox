@@ -833,7 +833,7 @@
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailId}"
+                    Text="{Binding ModDetailModVersion}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel
