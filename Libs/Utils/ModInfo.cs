@@ -116,7 +116,7 @@ namespace StarsectorTools.Libs.Utils
                     break;
 
                 case "version":
-                    if (kv.Value! is JsonValue)
+                    if (kv.Value is JsonValue)
                         Version = kv.Value!.GetValue<string>();
                     else
                         Version = string.Join(".", kv.Value!.AsObject().Select(kv => kv.Value!.ToString()));

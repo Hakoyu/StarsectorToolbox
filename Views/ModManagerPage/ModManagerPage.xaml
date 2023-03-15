@@ -276,9 +276,6 @@
                       </ContextMenu>
                     </Setter.Value>
                   </Setter>
-                  <!--<EventSetter Event="MouseDown" Handler="DataGridItem_MouseDown" />
-                  <EventSetter Event="Selected" Handler="DataGridItem_Selected" />
-                  <EventSetter Event="GotFocus" Handler="DataGridItem_GotFocus" />-->
                   <Style.Triggers>
                     <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=Self}}" Value="True">
                       <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
@@ -287,7 +284,7 @@
                 </Style>
               </DataGrid.RowStyle>
               <DataGrid.Columns>
-                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Collected">
+                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="IsCollected">
                   <DataGridTemplateColumn.Header>
                     <emoji:TextBlock
                       Background="{x:Null}"
@@ -306,7 +303,7 @@
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="Enabled">
+                <DataGridTemplateColumn CanUserSort="True" SortMemberPath="IsEnabled">
                   <DataGridTemplateColumn.Header>
                     <Label
                       Background="{x:Null}"
@@ -341,6 +338,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn
                   Binding="{Binding Name}"
+                  CanUserSort="True"
                   ElementStyle="{StaticResource CenterAlignmentStyle}"
                   IsReadOnly="True"
                   SortMemberPath="Name">
@@ -356,8 +354,7 @@
                   Width="100"
                   Binding="{Binding Author}"
                   ElementStyle="{StaticResource CenterAlignmentStyle}"
-                  IsReadOnly="True"
-                  SortMemberPath="Author">
+                  IsReadOnly="True">
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
@@ -369,8 +366,7 @@
                 <DataGridTextColumn
                   Binding="{Binding Version}"
                   ElementStyle="{StaticResource CenterAlignmentStyle}"
-                  IsReadOnly="True"
-                  SortMemberPath="Version">
+                  IsReadOnly="True">
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
@@ -381,6 +377,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn
                   Binding="{Binding GameVersion}"
+                  CanUserSort="True"
                   ElementStyle="{StaticResource GameVersionStyle}"
                   IsReadOnly="True"
                   SortMemberPath="GameVersion">
@@ -393,9 +390,10 @@
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
+                  CanUserSort="True"
                   ElementStyle="{StaticResource UtilityStyle}"
                   IsReadOnly="True"
-                  SortMemberPath="Utility">
+                  SortMemberPath="IsUtility">
                   <DataGridTextColumn.Header>
                     <Label
                       Background="{x:Null}"
@@ -404,10 +402,7 @@
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowUtility, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
-                <DataGridTextColumn
-                  Binding="{Binding UserDescription}"
-                  IsReadOnly="True"
-                  SortMemberPath="UserDescription">
+                <DataGridTextColumn Binding="{Binding UserDescription}" IsReadOnly="True">
                   <DataGridTextColumn.ElementStyle>
                     <Style BasedOn="{StaticResource CenterAlignmentStyle}" TargetType="TextBlock">
                       <Setter Property="ToolTip" Value="{x:Null}" />
