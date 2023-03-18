@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StarsectorTools.Models;
 
 namespace StarsectorTools.Libs.Utils
 {

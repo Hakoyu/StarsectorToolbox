@@ -571,4 +571,7 @@
   <data name="CleanAllMods" xml:space="preserve">
     <value>清除所有模组</value>
   </data>
+  <data name="LastUpdateTime" xml:space="preserve">
+    <value>最后更新时间</value>
+  </data>
 </root>

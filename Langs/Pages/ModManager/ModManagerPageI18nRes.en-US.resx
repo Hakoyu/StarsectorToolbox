@@ -571,4 +571,7 @@ Submit the issue with its ID and the category it should be in</value>
   <data name="CleanAllMods" xml:space="preserve">
     <value>Clean all mods</value>
   </data>
+  <data name="LastUpdateTime" xml:space="preserve">
+    <value>Last update time</value>
+  </data>
 </root>

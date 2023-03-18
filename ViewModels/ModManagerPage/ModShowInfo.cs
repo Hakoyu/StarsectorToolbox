@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.ViewModels.Controls;
 using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
+using StarsectorTools.Models;
 
 namespace StarsectorTools.ViewModels.ModManagerPage
 {
@@ -13,31 +14,31 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         internal partial class ModShowInfo : ObservableObject, IModInfo
         {
             /// <inheritdoc/>
-            public string Id { get; private set; } = null!;
+            public string Id { get; private set; }
 
             /// <inheritdoc/>
-            public string Name { get; private set; } = null!;
+            public string Name { get; private set; }
 
             /// <inheritdoc/>
-            public string Author { get; private set; } = null!;
+            public string Author { get; private set; }
 
             /// <inheritdoc/>
-            public string Version { get; private set; } = null!;
+            public string Version { get; private set; }
 
             /// <inheritdoc/>
-            public bool IsUtility { get; private set; } = false;
+            public bool IsUtility { get; private set; }
 
             /// <inheritdoc/>
-            public string Description { get; private set; } = null!;
+            public string Description { get; private set; }
 
             /// <inheritdoc/>
-            public string GameVersion { get; private set; } = null!;
+            public string GameVersion { get; private set; }
 
             /// <inheritdoc/>
-            public string ModPlugin { get; private set; } = null!;
+            public string ModPlugin { get; private set; }
 
             /// <inheritdoc/>
-            public string ModDirectory { get; private set; } = null!;
+            public string ModDirectory { get; private set; }
 
             /// <inheritdoc/>
             public bool IsSameToGameVersion => GameVersion == GameInfo.Version;
@@ -47,6 +48,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
             /// <summary>图标资源</summary>
             public BitmapImage? ImageSource { get; set; } = null!;
+
+            /// <inheritdoc/>
+            public DateTime LastUpdateTime { get; private set; }
+
+            public string LastUpdateTimeString { get; private set; }
 
             /// <summary>已启用</summary>
             [ObservableProperty]
@@ -59,6 +65,10 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             /// <summary>已选中</summary>
             [ObservableProperty]
             private bool _isSelected = false;
+
+            /// <summary>前置信息</summary>
+            [ObservableProperty]
+            private string _dependenciesMessage = string.Empty;
 
             /// <summary>缺少前置</summary>
             [ObservableProperty]
@@ -76,9 +86,6 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             [ObservableProperty]
             private ContextMenuVM _contextMenu = null!;
 
-            internal ModShowInfo()
-            { }
-
             internal ModShowInfo(IModInfo modInfo)
             {
                 Id = modInfo.Id;
@@ -91,6 +98,8 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 ModPlugin = modInfo.ModPlugin;
                 ModDirectory = modInfo.ModDirectory;
                 DependenciesSet = modInfo.DependenciesSet;
+                LastUpdateTime = modInfo.LastUpdateTime;
+                LastUpdateTimeString = modInfo.LastUpdateTime.ToShortDateString();
             }
         }
     }

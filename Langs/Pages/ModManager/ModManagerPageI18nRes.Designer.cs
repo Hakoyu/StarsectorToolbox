@@ -633,6 +633,15 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 最后更新时间 的本地化字符串。
+        /// </summary>
+        public static string LastUpdateTime {
+            get {
+                return ResourceManager.GetString("LastUpdateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 前置模组 的本地化字符串。
         /// </summary>
         public static string Libraries {

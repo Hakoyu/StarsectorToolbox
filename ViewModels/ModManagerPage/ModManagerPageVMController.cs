@@ -14,6 +14,7 @@ using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
+using StarsectorTools.Models;
 using StarsectorTools.Resources;
 using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
@@ -127,14 +128,15 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private void GetAllModsInfo()
         {
-            // TODO: 获取模组文件夹的最近更新日期,显示到DataGrid中
             // TODO: 可以保存游戏版本,启用列表以及模组本体的完全备份包
             int errSize = 0;
             StringBuilder errSB = new();
             DirectoryInfo dirInfo = new(GameInfo.ModsDirectory);
+
             foreach (var dir in dirInfo.GetDirectories())
             {
-                if (ModInfo.Parse($"{dir.FullName}\\{_ModInfoFile}") is not ModInfo info)
+                var lastWriteTime = Directory.GetLastWriteTime(dir.FullName);
+                if (ModInfo.Parse(Path.Combine(dir.FullName, _ModInfoFile)) is not ModInfo info)
                 {
                     errSize++;
                     errSB.AppendLine(dir.FullName);
@@ -163,11 +165,24 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         private ModShowInfo CreateModShowInfo(ModInfo info)
         {
+            var dependenciesMessage = string.Empty;
+            if (info.DependenciesSet is not null)
+            {
+                dependenciesMessage = string.Join(
+                    "\n",
+                    info.DependenciesSet?.Select(
+                        i =>
+                            $"{I18nRes.Name}: {i.Name} ID: {i.Id} "
+                            + (i.Version is not null ? $"{I18nRes.Version} {i.Version}" : "")
+                    )!
+                );
+            }
             return new ModShowInfo(info)
             {
                 IsCollected = _allCollectedModsId.Contains(info.Id),
                 IsEnabled = _allEnabledModsId.Contains(info.Id),
                 MissDependencies = false,
+                DependenciesMessage = dependenciesMessage,
                 ImageSource = GetImage($"{info.ModDirectory}\\icon.ico"),
             };
             static BitmapImage? GetImage(string filePath)
@@ -752,6 +767,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                         => _allModShowInfoGroups[NowSelectedGroupName].Where(
                             i => i.Author.Contains(text, StringComparison.OrdinalIgnoreCase)
                         ),
+                    nameof(ModShowInfo.Description)
+                        => _allModShowInfoGroups[NowSelectedGroupName].Where(
+                            i =>
+                                i.Description.Contains(text, StringComparison.OrdinalIgnoreCase)
+                        ),
                     nameof(ModShowInfo.UserDescription)
                         => _allModShowInfoGroups[NowSelectedGroupName].Where(
                             i =>
@@ -788,7 +808,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeUserGroupContainsSelectedMods(string group, bool isInGroup)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeUserGroupContainsSelectedMod(group, _nowSelectedMods[i].Id, isInGroup);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -831,7 +851,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsEnabled(bool? enabled = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModEnabled(_nowSelectedMods[i].Id, enabled);
                 // 如果已选择数量没有变化,则继续下一个选项
@@ -909,7 +929,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private void ChangeSelectedModsCollected(bool? collected = null)
         {
             int count = _nowSelectedMods.Count;
-            for (int i = 0; i < _nowSelectedMods.Count; )
+            for (int i = 0; i < _nowSelectedMods.Count;)
             {
                 ChangeModCollected(_nowSelectedMods[i].Id, collected);
                 if (count == _nowSelectedMods.Count)
@@ -1026,53 +1046,22 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         {
             if (info is null)
                 CloseModDetails();
-            else if (IsShowModDetails && _nowSelectedMod?.Id == info.Id)
+            else if (IsShowModDetails && NowSelectedMod?.Id == info.Id)
                 CloseModDetails();
             else
-                ShowModDetails(info.Id);
-            _nowSelectedMod = info;
+                ShowModDetails(info);
         }
 
-        private void ShowModDetails(string id)
+        private void ShowModDetails(ModShowInfo showInfo)
         {
             IsShowModDetails = true;
-            SetModDetails(id);
+            Logger.Debug($"{I18nRes.ShowDetails} {showInfo.Id}");
         }
 
         private void CloseModDetails()
         {
             IsShowModDetails = false;
-            ModDetailUserDescription = string.Empty;
             Logger.Debug($"{I18nRes.CloseDetails}");
-        }
-
-        private void SetModDetails(string id)
-        {
-            var info = _allModInfos[id];
-            var showInfo = _allModsShowInfo[id];
-            ModDetailImage = showInfo.ImageSource;
-            ModDetailName = showInfo.Name;
-            ModDetailId = showInfo.Id;
-            ModDetailModVersion = showInfo.Version;
-            ModDetailGameVersion = showInfo.GameVersion;
-            ModDetailPath = info.ModDirectory;
-            ModDetailAuthor = showInfo.Author;
-            if (info.DependenciesSet is not null)
-            {
-                ModDetailDependencies = string.Join(
-                    "\n",
-                    info.DependenciesSet.Select(
-                        i =>
-                            $"{I18nRes.Name}: {i.Name} ID: {i.Id} "
-                            + (i.Version is not null ? $"{I18nRes.Version} {i.Version}" : "")
-                    )!
-                );
-            }
-            else
-                ModDetailDependencies = string.Empty;
-            ModDetailDescription = info.Description;
-            ModDetailUserDescription = showInfo.UserDescription!;
-            Logger.Debug($"{I18nRes.ShowDetails} {id}");
         }
 
         #endregion ModDetails
@@ -1346,7 +1335,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 if (Directory.Exists(path))
                 {
                     Logger.Info($"{I18nRes.ParseDirectory} {path}");
-                    var files = Utils.GetAllSubFiles(path);
+                    var files = Utils.GetAllSubFiles(path)!;
                     count += files.Count;
                     foreach (var subFile in files)
                     {
@@ -1396,6 +1385,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             if (
                 ModInfo.Parse(
                     Utils.JsonParse2Object(jsonFile)!,
+                    Directory.GetLastWriteTime(tempDirectoryInfo.FullName),
                     Path.Combine(modDirectory, jsonFileName)
                 )
                 is not ModInfo newModInfo

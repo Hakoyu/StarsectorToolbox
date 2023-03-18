@@ -5,9 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.Libs.Log4Cs;
+using StarsectorTools.Libs.GameInfo;
+using StarsectorTools.Libs.Utils;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorTools.Libs.Utils
+namespace StarsectorTools.Models
 {
     /// <summary>模组信息</summary>
     [DebuggerDisplay("{Name},Version = {Version}")]
@@ -44,15 +46,20 @@ namespace StarsectorTools.Libs.Utils
         public IReadOnlySet<ModInfo>? DependenciesSet { get; private set; } = null!;
 
         /// <inheritdoc/>
-        public bool IsSameToGameVersion => GameVersion == GameInfo.GameInfo.Version;
+        public bool IsSameToGameVersion => GameVersion == GameInfo.Version;
+
+        /// <inheritdoc/>
+        public DateTime LastUpdateTime { get; private set; }
 
         /// <summary>
         /// 从json数据中解析模组信息,可设置路径
         /// </summary>
         /// <param name="jsonNode">json数据</param>
+        /// <param name="lastWriteTime">最后更新时间</param>
         /// <param name="jsonFile">json文件路径</param>
-        private ModInfo(JsonNode jsonNode, string? jsonFile = null)
+        private ModInfo(JsonNode jsonNode, DateTime? lastWriteTime = null, string? jsonFile = null)
         {
+            LastUpdateTime = lastWriteTime ?? default;
             ModDirectory = Path.GetDirectoryName(jsonFile)!;
             foreach (var kv in jsonNode.AsObject())
                 SetData(kv);
@@ -69,7 +76,11 @@ namespace StarsectorTools.Libs.Utils
             {
                 if (Utils.JsonParse2Object(jsonFile) is not JsonNode jsonNode)
                     return null;
-                return new(jsonNode, jsonFile);
+                // TODO: 复杂度略高
+                var lastWriteTime = Utils
+                    .GetAllSubFiles(Path.GetDirectoryName(jsonFile)!)
+                    ?.Max(d => d.LastWriteTime);
+                return new(jsonNode, lastWriteTime, jsonFile);
             }
             catch (Exception ex)
             {
@@ -82,13 +93,18 @@ namespace StarsectorTools.Libs.Utils
         /// 从json数据中解析模组信息,可设置路径
         /// </summary>
         /// <param name="jsonNode">json数据</param>
+        /// <param name="lastWriteTime">最后更新时间</param>
         /// <param name="jsonFile">json文件路径</param>
         /// <returns>解析成功返回 <see cref="ModInfo"/> ,失败返回 <see langword="null"/></returns>
-        public static ModInfo? Parse(JsonNode jsonNode, string? jsonFile = null)
+        public static ModInfo? Parse(
+            JsonNode jsonNode,
+            DateTime lastWriteTime,
+            string? jsonFile = null
+        )
         {
             try
             {
-                return new(jsonNode, jsonFile);
+                return new(jsonNode, lastWriteTime, jsonFile);
             }
             catch (Exception ex)
             {
@@ -119,7 +135,10 @@ namespace StarsectorTools.Libs.Utils
                     if (kv.Value is JsonValue)
                         Version = kv.Value!.GetValue<string>();
                     else
-                        Version = string.Join(".", kv.Value!.AsObject().Select(kv => kv.Value!.ToString()));
+                        Version = string.Join(
+                            ".",
+                            kv.Value!.AsObject().Select(kv => kv.Value!.ToString())
+                        );
                     break;
 
                 case "utility":

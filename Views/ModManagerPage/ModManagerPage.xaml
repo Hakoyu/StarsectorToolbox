@@ -244,15 +244,15 @@
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.VirtualizationMode="Recycling">
               <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                  <i:InvokeCommandAction Command="{Binding DataGridDoubleClickCommand}" />
+                </i:EventTrigger>
                 <i:EventTrigger EventName="SelectionChanged">
                   <i:InvokeCommandAction Command="{Binding DataGridSelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid_ModsShowList}" />
                 </i:EventTrigger>
-                <i:EventTrigger EventName="MouseLeftButtonDown">
-                  <i:InvokeCommandAction Command="{Binding DataGridSelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid_ModsShowList}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="LostFocus">
+                <!--<i:EventTrigger EventName="LostFocus">
                   <i:InvokeCommandAction Command="{Binding DataGridLostFocusCommand}" />
-                </i:EventTrigger>
+                </i:EventTrigger>-->
               </i:Interaction.Triggers>
               <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
@@ -402,6 +402,24 @@
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowUtility, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
+                <DataGridTextColumn
+                  Binding="{Binding LastUpdateTimeString}"
+                  CanUserSort="True"
+                  IsReadOnly="True"
+                  SortMemberPath="LastUpdateTime">
+                  <DataGridTextColumn.ElementStyle>
+                    <Style BasedOn="{StaticResource CenterAlignmentStyle}" TargetType="TextBlock">
+                      <Setter Property="ToolTip" Value="{x:Null}" />
+                    </Style>
+                  </DataGridTextColumn.ElementStyle>
+                  <DataGridTextColumn.Header>
+                    <Label
+                      Background="{x:Null}"
+                      Content="{Binding DataContext.I18n.I18nRes.LastUpdateTime, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}"
+                      Style="{StaticResource LabelBaseStyle}"
+                      ToolTip="{Binding DataContext.I18n.I18nRes.LastUpdateTime, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Page}}" />
+                  </DataGridTextColumn.Header>
+                </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding UserDescription}" IsReadOnly="True">
                   <DataGridTextColumn.ElementStyle>
                     <Style BasedOn="{StaticResource CenterAlignmentStyle}" TargetType="TextBlock">
@@ -438,12 +456,13 @@
                 </DataTemplate>
               </DataGrid.RowDetailsTemplate>
             </DataGrid>
-            <pu:Spin
+            <!--  有问题 暂时不用  -->
+            <!--<pu:Spin
               x:Name="Spin"
               Width="100"
               Height="100"
               Style="{StaticResource SpinBaseStyle}"
-              Tag="{Binding ShowSpin}" />
+              Tag="{Binding ShowSpin}" />-->
             <TextBox
               x:Name="TextBox_SearchMods"
               Height="30"
@@ -502,7 +521,7 @@
             x:Name="Grid_RightSide"
             Grid.Column="2"
             MinWidth="120">
-            <ScrollViewer Margin="0,0,0,80" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer Margin="0,0,0,45" VerticalScrollBarVisibility="Auto">
               <StackPanel>
                 <Expander
                   Margin="0,0,0,5"
@@ -784,7 +803,7 @@
                   <Image
                     x:Name="Image_ModImage"
                     MaxHeight="100"
-                    Source="{Binding ModDetailImage}" />
+                    Source="{Binding NowSelectedMod.ImageSource}" />
                 </Grid>
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <Label
@@ -799,7 +818,7 @@
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailId}"
+                    Text="{Binding NowSelectedMod.Id, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
@@ -817,7 +836,7 @@
                     VerticalContentAlignment="Center"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailName}"
+                    Text="{Binding NowSelectedMod.Name, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
@@ -833,7 +852,7 @@
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailModVersion}"
+                    Text="{Binding NowSelectedMod.Version, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <StackPanel
@@ -852,18 +871,18 @@
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailGameVersion}"
+                    Text="{Binding NowSelectedMod.GameVersion, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <Button
                   x:Name="Button_ModPath"
                   Height="30"
                   Margin="0,0,0,5"
-                  Padding="5,0,0,0"
+                  Padding="5,0,5,0"
                   HorizontalContentAlignment="Left"
                   Command="{Binding OpenModPathCommand}"
-                  CommandParameter="{Binding ModDetailPath}"
-                  Content="{Binding ModDetailPath}"
+                  CommandParameter="{Binding NowSelectedMod.ModDirectory}"
+                  Content="{Binding NowSelectedMod.ModDirectory, Mode=OneWay}"
                   Cursor="Hand"
                   Style="{StaticResource ButtonBaseStyle}"
                   ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
@@ -877,7 +896,7 @@
                     VerticalAlignment="Top"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailAuthor}"
+                    Text="{Binding NowSelectedMod.Author, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
@@ -902,7 +921,7 @@
                     Height="NaN"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailDependencies}"
+                    Text="{Binding NowSelectedMod.DependenciesMessage, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
@@ -915,7 +934,7 @@
                     Height="NaN"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailDescription}"
+                    Text="{Binding NowSelectedMod.Description, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
@@ -924,7 +943,7 @@
                     x:Name="TextBox_UserDescription"
                     Height="NaN"
                     Style="{StaticResource TextBoxBaseStyle}"
-                    Text="{Binding ModDetailUserDescription, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding NowSelectedMod.UserDescription, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>

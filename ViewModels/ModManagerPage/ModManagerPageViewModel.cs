@@ -15,6 +15,7 @@ using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
 using StarsectorTools.Libs.GameInfo;
 using StarsectorTools.Libs.Utils;
+using StarsectorTools.Models;
 using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
 namespace StarsectorTools.ViewModels.ModManagerPage
@@ -53,41 +54,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private List<ModShowInfo> _nowSelectedMods = new();
 
         /// <summary>当前选择的模组</summary>
+        [ObservableProperty]
         private ModShowInfo? _nowSelectedMod = null;
 
         /// <summary>模组详情的展开状态</summary>
         [ObservableProperty]
         private bool _isShowModDetails = false;
-
-        [ObservableProperty]
-        private BitmapImage? _modDetailImage;
-
-        [ObservableProperty]
-        private string? _modDetailName;
-
-        [ObservableProperty]
-        private string? _modDetailId;
-
-        [ObservableProperty]
-        private string? _modDetailModVersion;
-
-        [ObservableProperty]
-        private string? _modDetailGameVersion;
-
-        [ObservableProperty]
-        private string? _modDetailPath;
-
-        [ObservableProperty]
-        private string? _modDetailAuthor;
-
-        [ObservableProperty]
-        private string? _modDetailDescription;
-
-        [ObservableProperty]
-        private string? _modDetailDependencies;
-
-        [ObservableProperty]
-        private string? _modDetailUserDescription;
 
         [ObservableProperty]
         private string _modFilterText = string.Empty;
@@ -233,6 +205,11 @@ namespace StarsectorTools.ViewModels.ModManagerPage
                 new() { Content = I18nRes.Author, Tag = nameof(ModShowInfo.Author) },
                 new()
                 {
+                    Content = I18nRes.Description,
+                    Tag = nameof(ModShowInfo.Description)
+                },
+                new()
+                {
                     Content = I18nRes.UserDescription,
                     Tag = nameof(ModShowInfo.UserDescription)
                 },
@@ -316,6 +293,12 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         private bool nowClearSelectedMods = false;
 
         [RelayCommand]
+        private void DataGridDoubleClick()
+        {
+            ChangeShowModDetails(NowSelectedMod);
+        }
+
+        [RelayCommand]
         private void DataGridSelectionChanged(IList items)
         {
             // TODO: 选择操作时会有部分模组没被选中的问题
@@ -324,12 +307,15 @@ namespace StarsectorTools.ViewModels.ModManagerPage
             List<ModShowInfo> tempSelectedMods = new(items.OfType<ModShowInfo>());
             if (_nowSelectedMods.SequenceEqual(tempSelectedMods))
             {
+                NowSelectedMod = null;
                 ClearSelectedMods(_nowSelectedMods);
             }
             else
             {
                 _nowSelectedMods = tempSelectedMods;
-                ChangeShowModDetails(_nowSelectedMods.LastOrDefault(defaultValue: null!));
+                NowSelectedMod = _nowSelectedMods.LastOrDefault(defaultValue: null!);
+                if (IsShowModDetails && NowSelectedMod is not null)
+                    ShowModDetails(NowSelectedMod);
             }
         }
 
@@ -354,26 +340,26 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void Collected()
         {
-            if (_nowSelectedMod is null)
+            if (NowSelectedMod is null)
                 return;
-            ChangeSelectedModsCollected(!_nowSelectedMod.IsCollected);
+            ChangeSelectedModsCollected(!NowSelectedMod.IsCollected);
         }
 
         [RelayCommand]
         private void Enabled()
         {
-            if (_nowSelectedMod is null)
+            if (NowSelectedMod is null)
                 return;
-            ChangeSelectedModsEnabled(!_nowSelectedMod.IsEnabled);
+            ChangeSelectedModsEnabled(!NowSelectedMod.IsEnabled);
         }
 
         [RelayCommand]
         private void EnableDependencies()
         {
-            if (_nowSelectedMod is null)
+            if (NowSelectedMod is null)
                 return;
             StringBuilder errSB = new();
-            foreach (var dependencie in _nowSelectedMod.DependenciesSet!)
+            foreach (var dependencie in NowSelectedMod.DependenciesSet!)
             {
                 if (!_allModInfos.ContainsKey(dependencie.Id))
                 {

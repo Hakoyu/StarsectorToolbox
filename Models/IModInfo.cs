@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace StarsectorTools.Libs.Utils
+namespace StarsectorTools.Models
 {
     /// <summary>
     /// 模组信息接口
@@ -36,6 +37,9 @@ namespace StarsectorTools.Libs.Utils
 
         /// <summary>模组文件夹</summary>
         public string ModDirectory { get; }
+
+        /// <summary>最后更新时间</summary>
+        public DateTime LastUpdateTime { get; }
 
         /// <summary>前置模组</summary>
         public IReadOnlySet<ModInfo>? DependenciesSet { get; }

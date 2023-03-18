@@ -226,20 +226,19 @@ namespace StarsectorTools.Libs.Utils
         /// </summary>
         /// <param name="directory">目录</param>
         /// <returns>所有文件信息</returns>
-        public static List<FileInfo> GetAllSubFiles(string directory)
+        public static List<FileInfo>? GetAllSubFiles(string directory)
         {
-            List<FileInfo> fileInfos = new();
-            GetSubFiles(directory, ref fileInfos);
+            if (!Directory.Exists(directory))
+                return null!;
+            var fileInfos = new List<FileInfo>();
+            GetSubFiles(new DirectoryInfo(directory), fileInfos);
             return fileInfos;
 
-            static void GetSubFiles(string directory, ref List<FileInfo> fileInfos)
+            static void GetSubFiles(DirectoryInfo directory, List<FileInfo> fileInfos)
             {
-                if (!Directory.Exists(directory))
-                    return;
-                var currentDirectoryInfo = new DirectoryInfo(directory);
-                fileInfos.AddRange(currentDirectoryInfo.GetFiles());
-                foreach (var directoryInfo in currentDirectoryInfo.GetDirectories())
-                    GetSubFiles(directoryInfo.FullName, ref fileInfos);
+                fileInfos.AddRange(directory.GetFiles());
+                foreach (var directoryInfo in directory.GetDirectories())
+                    GetSubFiles(new(directoryInfo.FullName), fileInfos);
             }
         }
 
