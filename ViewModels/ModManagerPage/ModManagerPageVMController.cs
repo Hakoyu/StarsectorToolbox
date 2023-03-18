@@ -1042,7 +1042,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
 
         #region ModDetails
 
-        private void ChangeShowModDetails(ModShowInfo? info)
+        private void TryShowModDetails(ModShowInfo? info)
         {
             if (info is null)
                 CloseModDetails();

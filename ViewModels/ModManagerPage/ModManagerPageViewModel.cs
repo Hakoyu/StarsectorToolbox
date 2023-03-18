@@ -295,7 +295,7 @@ namespace StarsectorTools.ViewModels.ModManagerPage
         [RelayCommand]
         private void DataGridDoubleClick()
         {
-            ChangeShowModDetails(NowSelectedMod);
+            TryShowModDetails(NowSelectedMod);
         }
 
         [RelayCommand]
