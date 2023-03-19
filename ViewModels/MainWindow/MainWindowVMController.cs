@@ -202,7 +202,7 @@ internal partial class MainWindowViewModel
         {
             if (TryGetExtensionInfo(dir.FullName) is not ExtensionInfo extensionInfo)
                 continue;
-            if (!_allExtensionsInfo.TryAdd(extensionInfo.Id, extensionInfo))
+            if (_allExtensionsInfo.TryAdd(extensionInfo.Id, extensionInfo) is false)
             {
                 var originalExtensionInfo = _allExtensionsInfo[extensionInfo.Id];
                 MessageBoxVM.Show(
@@ -270,7 +270,7 @@ internal partial class MainWindowViewModel
             var extensionInfo = new ExtensionInfo(TOML.Parse(tomlFile));
             var assemblyFile = ParseExtensionInfo(file, tomlFile, ref extensionInfo);
             // 判断组件文件是否存在
-            if (!File.Exists(assemblyFile))
+            if (File.Exists(assemblyFile) is false)
             {
                 Logger.Warring($"{I18nRes.ExtensionFileError} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
@@ -322,7 +322,7 @@ internal partial class MainWindowViewModel
         string ParseExtensionInfo(string path, string tomlFile, ref ExtensionInfo extensionInfo)
         {
             // 判断文件存在性
-            if (!File.Exists(tomlFile))
+            if (File.Exists(tomlFile) is false)
             {
                 Logger.Warring($"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
@@ -427,7 +427,7 @@ internal partial class MainWindowViewModel
         // 日志等级
         Logger.Options.DefaultLevel = Logger.LogLevelConverter(toml["LogLevel"].AsString);
         // 游戏目录
-        if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
+        if (GameInfo.SetGameData(toml["Game"]["Path"].AsString) is false)
         {
             if (
                 MessageBoxVM.Show(

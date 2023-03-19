@@ -45,7 +45,7 @@ internal partial class GameSettingsPageViewModel
     private void GetMissionsLoadouts()
     {
         string dirParh = $"{GameInfo.SaveDirectory}\\missions";
-        if (!Utils.DirectoryExists(dirParh))
+        if (Utils.DirectoryExists(dirParh) is false)
             return;
         DirectoryInfo dirs = new(dirParh);
         foreach (var dir in dirs.GetDirectories())
