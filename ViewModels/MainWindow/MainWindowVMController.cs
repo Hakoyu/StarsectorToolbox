@@ -140,10 +140,7 @@ internal partial class MainWindowViewModel
                 if (vm.Tag is not ISTPage page)
                     return;
                 page.Close();
-                if (
-                    TryGetExtensionInfo(_deubgItemPath!, true)
-                    is not ExtensionInfo extensionInfo
-                )
+                if (TryGetExtensionInfo(_deubgItemPath!, true) is not ExtensionInfo extensionInfo)
                     return;
                 _deubgItemExtensionInfo = extensionInfo;
                 RefreshExtensionDebugPage();
@@ -152,6 +149,7 @@ internal partial class MainWindowViewModel
             return menuItem;
         }
     }
+
     private void RefreshExtensionDebugPage()
     {
         ListBox_MainMenu.Remove(_deubgItem!);
@@ -175,7 +173,7 @@ internal partial class MainWindowViewModel
             Tag = _deubgItemExtensionInfo.ExtensionPage,
         };
     }
-    #endregion 
+    #endregion
 
     #region CheckGameStartOption
 
@@ -185,7 +183,7 @@ internal partial class MainWindowViewModel
             ClearGameLogFile();
     }
 
-    private void ClearGameLogFile()
+    private static void ClearGameLogFile()
     {
         if (File.Exists(GameInfo.LogFile))
             Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
@@ -207,7 +205,11 @@ internal partial class MainWindowViewModel
             if (!_allExtensionsInfo.TryAdd(extensionInfo.Id, extensionInfo))
             {
                 var originalExtensionInfo = _allExtensionsInfo[extensionInfo.Id];
-                MessageBoxVM.Show(new($"已存在相同的拓展\n原始文件位置: {originalExtensionInfo.ExtensionFile}\n 再次导入的文件位置{extensionInfo.FileFullName}"));
+                MessageBoxVM.Show(
+                    new(
+                        $"已存在相同的拓展\n原始文件位置: {originalExtensionInfo.ExtensionFile}\n 再次导入的文件位置{extensionInfo.FileFullName}"
+                    )
+                );
             }
             ListBox_ExtensionMenu.Add(
                 new()
@@ -220,9 +222,11 @@ internal partial class MainWindowViewModel
                     Tag = extensionInfo.ExtensionPage,
                     ContextMenu = CreateExtensionItemContextMenu()
                 }
-            ); ;
+            );
+            ;
         }
     }
+
     private ContextMenuVM CreateExtensionItemContextMenu()
     {
         ContextMenuVM contextMenu = new() { RefreshExtensionPageMenuItem() };
@@ -277,12 +281,11 @@ internal partial class MainWindowViewModel
                 );
                 return null;
             }
-            if (TryGetExtensionPage(
-                tomlFile,
-                assemblyFile,
-                extensionInfo,
-                loadInMemory
-            ) is not (object page, Type type))
+            if (
+                TryGetExtensionPage(tomlFile, assemblyFile, extensionInfo, loadInMemory)
+                is not
+                (object page, Type type)
+            )
                 return null;
             extensionInfo.FileFullName = file;
             extensionInfo.ExtensionPage = page;
@@ -321,9 +324,7 @@ internal partial class MainWindowViewModel
             // 判断文件存在性
             if (!File.Exists(tomlFile))
             {
-                Logger.Warring(
-                    $"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}"
-                );
+                Logger.Warring($"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.ExtensionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
                     {
@@ -393,14 +394,14 @@ internal partial class MainWindowViewModel
 
     #region InitializeConfig
 
-    private void InitializeConfig()
+    private bool InitializeConfig()
     {
         try
         {
             if (Utils.FileExists(ST.ConfigTomlFile, false))
-                GetConfig();
+                return GetConfig();
             else
-                CreateConfig();
+                return CreateConfig();
         }
         catch (Exception ex)
         {
@@ -412,10 +413,11 @@ internal partial class MainWindowViewModel
                 }
             );
             CreateConfigFile();
+            return true;
         }
     }
 
-    private void GetConfig()
+    private bool GetConfig()
     {
         // 读取设置
         var toml = TOML.Parse(ST.ConfigTomlFile);
@@ -428,23 +430,20 @@ internal partial class MainWindowViewModel
         if (!GameInfo.SetGameData(toml["Game"]["Path"].AsString))
         {
             if (
-                (
-                    MessageBoxVM.Show(
-                        new(I18nRes.GameNotFound_SelectAgain)
-                        {
-                            Button = MessageBoxVM.Button.YesNo,
-                            Icon = MessageBoxVM.Icon.Question,
-                        }
-                    ) is MessageBoxVM.Result.Yes
-                    && GameInfo.GetGameDirectory()
-                )
-                is false
+                MessageBoxVM.Show(
+                    new(I18nRes.GameNotFound_SelectAgain)
+                    {
+                        Button = MessageBoxVM.Button.YesNo,
+                        Icon = MessageBoxVM.Icon.Question,
+                    }
+                ) is MessageBoxVM.Result.No
+                || GameInfo.GetGameDirectory() is false
             )
             {
                 MessageBoxVM.Show(
                     new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
                 );
-                return;
+                return false;
             }
             toml["Game"]["Path"] = GameInfo.BaseDirectory;
         }
@@ -462,47 +461,45 @@ internal partial class MainWindowViewModel
             toml["Extension"]["DebugPath"] = "";
         ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
         toml.SaveTo(ST.ConfigTomlFile);
+        return true;
     }
 
-    private void CreateConfig()
+    private static bool CreateConfig()
     {
         if (
-            !(
-                MessageBoxVM.Show(
-                    new(I18nRes.FirstStart)
-                    {
-                        Button = MessageBoxVM.Button.YesNo,
-                        Icon = MessageBoxVM.Icon.Question,
-                    }
-                ) is MessageBoxVM.Result.Yes
-                && GameInfo.GetGameDirectory()
-            )
+            MessageBoxVM.Show(
+                new(I18nRes.FirstStart)
+                {
+                    Button = MessageBoxVM.Button.YesNo,
+                    Icon = MessageBoxVM.Icon.Question,
+                }
+            ) is MessageBoxVM.Result.No
+            || GameInfo.GetGameDirectory() is false
         )
         {
             MessageBoxVM.Show(
                 new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
             );
-            return;
+            return false;
         }
         CreateConfigFile();
         var toml = TOML.Parse(ST.ConfigTomlFile);
         toml["Game"]["Path"] = GameInfo.BaseDirectory;
         toml["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
         toml.SaveTo(ST.ConfigTomlFile);
+        return true;
     }
 
     /// <summary>
     /// 创建配置文件
     /// </summary>
-    private void CreateConfigFile()
+    private static void CreateConfigFile()
     {
         using StreamReader sr = ResourceDictionary.GetResourceStream(
             ResourceDictionary.Config_toml
         );
         File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
-        Logger.Info(
-            $"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}"
-        );
+        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}");
     }
 
     #endregion InitializeConfig
@@ -561,26 +558,25 @@ internal partial class MainWindowViewModel
             ReminderSavePage(item);
     }
 
-    private void ReminderSavePage(ListBoxItemVM vm)
+    private static void ReminderSavePage(ListBoxItemVM vm)
     {
         if (vm.Tag is not ISTPage page)
             return;
         try
         {
-            if (page.NeedSave)
+            if (page.NeedSave is false)
+                return;
+            if (
+                MessageBoxVM.Show(
+                    new($"{I18nRes.Page}: {vm.Content} {I18nRes.PageCheckSave}")
+                    {
+                        Icon = MessageBoxVM.Icon.Question,
+                        Button = MessageBoxVM.Button.YesNo
+                    }
+                ) is MessageBoxVM.Result.Yes
+            )
             {
-                if (
-                    MessageBoxVM.Show(
-                        new($"{I18nRes.Page}: {vm.Content} {I18nRes.PageCheckSave}")
-                        {
-                            Icon = MessageBoxVM.Icon.Question,
-                            Button = MessageBoxVM.Button.YesNo
-                        }
-                    ) is MessageBoxVM.Result.Yes
-                )
-                {
-                    SavePage(vm);
-                }
+                SavePage(vm);
             }
         }
         catch (Exception ex)
@@ -618,7 +614,7 @@ internal partial class MainWindowViewModel
             SavePage(item);
     }
 
-    private void SavePage(ListBoxItemVM vm)
+    private static void SavePage(ListBoxItemVM vm)
     {
         if (vm.Tag is not ISTPage page)
             return;
@@ -661,7 +657,7 @@ internal partial class MainWindowViewModel
             ClosePage(page);
     }
 
-    private void ClosePage(ListBoxItemVM vm)
+    private static void ClosePage(ListBoxItemVM vm)
     {
         if (vm.Tag is not ISTPage page)
             return;

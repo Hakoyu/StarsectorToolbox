@@ -51,12 +51,12 @@ internal partial class MainWindow : Window
                 ex,
                 false
             );
-            MessageBoxVM.Show(
-                new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
-                {
-                    Icon = MessageBoxVM.Icon.Error
-                }
-            );
+            //MessageBoxVM.Show(
+            //    new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
+            //    {
+            //        Icon = MessageBoxVM.Icon.Error
+            //    }
+            //);
             Environment.Exit(-1);
             return;
         }

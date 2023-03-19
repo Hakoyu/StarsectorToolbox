@@ -84,7 +84,8 @@ internal partial class MainWindowViewModel : ObservableObject
         // 设置全局异常捕获
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         // 初始化设置
-        InitializeConfig();
+        if (InitializeConfig() is false)
+            throw new(I18nRes.GameNotFound_SoftwareExit);
         // 获取主页面
         var items = WeakReferenceMessenger.Default.Send<GetMainMenuItemsRequestMessage>();
         foreach (var item in items.Response)

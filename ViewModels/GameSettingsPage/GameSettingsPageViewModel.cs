@@ -52,9 +52,9 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     private string _realGameKey = string.Empty;
     private string _hideGameKey = string.Empty;
 
-    private string _missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
+    private static string _missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
 
-    private int _systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
+    private static int _systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_MissionsLoadouts =
@@ -84,10 +84,13 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [RelayCommand]
     private void SetGameDirectory()
     {
-        while (!GameInfo.GetGameDirectory())
+        if (GameInfo.GetGameDirectory() is false)
+        {
             MessageBoxVM.Show(
                 new(I18nRes.GameNotFound_SelectAgain) { Icon = MessageBoxVM.Icon.Warning }
             );
+            return;
+        }
         var toml = TOML.Parse(ST.ConfigTomlFile);
         toml["Game"]["Path"] = GameInfo.BaseDirectory;
         toml.SaveTo(ST.ConfigTomlFile);
@@ -120,7 +123,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [RelayCommand]
     private void SetMemory()
     {
-        if (!Regex.IsMatch(GameMemory, "^[0-9]+[mg]$"))
+        if (Regex.IsMatch(GameMemory, "^[0-9]+[mg]$") is false)
         {
             MessageBoxVM.Show(new(I18nRes.FormatError) { Icon = MessageBoxVM.Icon.Warning });
             GameMemory = _vmparamsData.xmsx;
@@ -144,7 +147,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [RelayCommand]
     private void OpenGameLogFile()
     {
-        if (!Utils.FileExists(GameInfo.LogFile, false))
+        if (Utils.FileExists(GameInfo.LogFile, false) is false)
             File.Create(GameInfo.LogFile).Close();
         Utils.OpenLink(GameInfo.LogFile);
     }
@@ -174,7 +177,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
         }
         else
         {
-            if (!Utils.DirectoryExists(_missionsLoadoutsDirectory))
+            if (Utils.DirectoryExists(_missionsLoadoutsDirectory) is false)
             {
                 MessageBoxVM.Show(
                     new(
@@ -186,7 +189,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
                 );
                 return;
             }
-            if (!Utils.DeleteDirectoryToRecycleBin(selected))
+            if (Utils.DeleteDirectoryToRecycleBin(selected) is false)
             {
                 Logger.Warring(
                     $"{I18nRes.MissionsLoadoutsNotExist} {I18nRes.Path}: {selected}"
@@ -225,7 +228,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [RelayCommand]
     private void ClearSave()
     {
-        if (!Utils.DirectoryExists(GameInfo.SaveDirectory))
+        if (Utils.DirectoryExists(GameInfo.SaveDirectory) is false)
             return;
         Dictionary<string, DateTime> dirsPath = new();
         foreach (var dir in new DirectoryInfo(GameInfo.SaveDirectory).GetDirectories())
