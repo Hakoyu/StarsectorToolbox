@@ -55,31 +55,29 @@ public static class GameInfo
             return false;
         }
         var exeFile = Path.Combine(directoryName, "starsector.exe");
-        if (File.Exists(exeFile))
-        {
-            ExeFile = exeFile;
-            BaseDirectory = directoryName;
-            ModsDirectory = Path.Combine(directoryName, "mods");
-            SaveDirectory = Path.Combine(directoryName, "saves");
-            CoreDirectory = Path.Combine(directoryName, "starsector-core");
-            EnabledModsJsonFile = Path.Combine(ModsDirectory, "enabled_mods.json");
-            LogFile = Path.Combine(CoreDirectory, "starsector.log");
-            SettingsFile = Path.Combine(CoreDirectory, "data", "config", "settings.json");
-            Version = TryGetgameVersion(LogFile);
-            if (string.IsNullOrWhiteSpace(Version))
-            {
-                Logger.Info(I18n.GameVersionAccessFailed);
-                MessageBoxVM.Show(new(I18n.GameVersionAccessFailedMessage));
-            }
-        }
-        else
+        if (File.Exists(exeFile) is false)
         {
             Logger.Error($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}");
             MessageBoxVM.Show(
                 new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error }
             );
+            return false;
         }
-        return false;
+        ExeFile = exeFile;
+        BaseDirectory = directoryName;
+        ModsDirectory = Path.Combine(directoryName, "mods");
+        SaveDirectory = Path.Combine(directoryName, "saves");
+        CoreDirectory = Path.Combine(directoryName, "starsector-core");
+        EnabledModsJsonFile = Path.Combine(ModsDirectory, "enabled_mods.json");
+        LogFile = Path.Combine(CoreDirectory, "starsector.log");
+        SettingsFile = Path.Combine(CoreDirectory, "data", "config", "settings.json");
+        Version = TryGetgameVersion(LogFile);
+        if (string.IsNullOrWhiteSpace(Version))
+        {
+            Logger.Info(I18n.GameVersionAccessFailed);
+            MessageBoxVM.Show(new(I18n.GameVersionAccessFailedMessage));
+        }
+        return true;
     }
 
     private static string TryGetgameVersion(string logFile)

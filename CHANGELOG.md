@@ -1,5 +1,10 @@
 ﻿# StarsectorToolsChangeLog
 
+## 0.8.7.1
+
+修复获取游戏版本失败时会判
+使用读取Log文件的方式获取游戏版本
+
 ## 0.8.7.0
 
 ### ModManager
