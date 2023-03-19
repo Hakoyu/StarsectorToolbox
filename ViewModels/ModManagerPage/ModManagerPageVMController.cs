@@ -1216,7 +1216,7 @@ internal partial class ModManagerPageViewModel
     {
         ListBoxItemVM listBoxItem = new();
         SetListBoxItemData(listBoxItem, group);
-        listBoxItem.ContextMenu = CreateuserGroupItemContextMenu(listBoxItem);
+        listBoxItem.ContextMenu = CreateUserGroupItemContextMenu(listBoxItem);
         listBoxItem.Icon = icon;
         ListBox_UserGroupMenu.Add(listBoxItem);
         _allUserGroups.Add(group, new());
@@ -1228,7 +1228,7 @@ internal partial class ModManagerPageViewModel
         RefreshAllGroupItemContextMenus();
     }
 
-    private ContextMenuVM CreateuserGroupItemContextMenu(ListBoxItemVM listBoxItem)
+    private ContextMenuVM CreateUserGroupItemContextMenu(ListBoxItemVM listBoxItem)
     {
         return new(
             (list) =>
