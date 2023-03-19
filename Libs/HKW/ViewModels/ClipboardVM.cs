@@ -1,49 +1,48 @@
-﻿namespace HKW.ViewModels
+﻿namespace HKW.ViewModels;
+
+/// <summary>
+/// 剪切板视图模型
+/// </summary>
+public class ClipboardVM
 {
     /// <summary>
-    /// 剪切板视图模型
+    /// 初始化
     /// </summary>
-    public class ClipboardVM
+    private ClipboardVM()
+    { }
+
+    /// <summary>
+    /// 初始化委托
+    /// 单例模式,只能设置一次
+    /// </summary>
+    /// <param name="handler">委托</param>
+    /// <returns>设置成功为<see langword="true"/>,失败为<see langword="false"/></returns>
+    public static bool InitializeHandler(ViewModelHandler handler)
     {
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        private ClipboardVM()
-        { }
-
-        /// <summary>
-        /// 初始化委托
-        /// 单例模式,只能设置一次
-        /// </summary>
-        /// <param name="handler">委托</param>
-        /// <returns>设置成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-        public static bool InitializeHandler(ViewModelHandler handler)
+        if (ViewModelEvent is null)
         {
-            if (ViewModelEvent is null)
-            {
-                ViewModelEvent += handler;
-                return true;
-            }
-            return false;
+            ViewModelEvent += handler;
+            return true;
         }
-
-        /// <summary>
-        /// 设置文本
-        /// </summary>
-        /// <param name="text">文本</param>
-        public static void SetText(string text)
-        {
-            ViewModelEvent?.Invoke(text);
-        }
-
-        /// <summary>
-        /// 委托
-        /// </summary>
-        public delegate void ViewModelHandler(string str);
-
-        /// <summary>
-        /// 事件
-        /// </summary>
-        private static event ViewModelHandler? ViewModelEvent;
+        return false;
     }
+
+    /// <summary>
+    /// 设置文本
+    /// </summary>
+    /// <param name="text">文本</param>
+    public static void SetText(string text)
+    {
+        ViewModelEvent?.Invoke(text);
+    }
+
+    /// <summary>
+    /// 委托
+    /// </summary>
+    public delegate void ViewModelHandler(string str);
+
+    /// <summary>
+    /// 事件
+    /// </summary>
+    private static event ViewModelHandler? ViewModelEvent;
 }

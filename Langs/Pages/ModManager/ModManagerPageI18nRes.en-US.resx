@@ -197,9 +197,6 @@ Yes:Replace No:Merge Cancel:Cancel</value>
   <data name="ConfirmModDeletion" xml:space="preserve">
     <value>Confirm mod deletion</value>
   </data>
-  <data name="AddModToUserGroup" xml:space="preserve">
-    <value>Add mod to user group</value>
-  </data>
   <data name="RemoveFromUserGroup" xml:space="preserve">
     <value>Remove from user group</value>
   </data>

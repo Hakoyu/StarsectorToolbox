@@ -1,6 +1,5 @@
-﻿namespace StarsectorTools.Views.SettingsPage
+﻿namespace StarsectorTools.Views.SettingsPage;
+
+internal partial class SettingsPage
 {
-    internal partial class SettingsPage
-    {
-    }
 }

@@ -197,9 +197,6 @@
   <data name="ConfirmModDeletion" xml:space="preserve">
     <value>确认删除模组</value>
   </data>
-  <data name="AddModToUserGroup" xml:space="preserve">
-    <value>添加模组至用户分组</value>
-  </data>
   <data name="RemoveFromUserGroup" xml:space="preserve">
     <value>从用户分组中删除</value>
   </data>

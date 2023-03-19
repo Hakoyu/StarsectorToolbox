@@ -1,11 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Messaging.Messages;
 
-namespace StarsectorTools.Models.Messages
+namespace StarsectorTools.Models.Messages;
+
+internal class ExtensionDebugPathErrorMessage : ValueChangedMessage<string>
 {
-    internal class ExtensionDebugPathErrorMessage : ValueChangedMessage<string>
+    public ExtensionDebugPathErrorMessage(string value) : base(value)
     {
-        public ExtensionDebugPathErrorMessage(string value) : base(value)
-        {
-        }
     }
 }

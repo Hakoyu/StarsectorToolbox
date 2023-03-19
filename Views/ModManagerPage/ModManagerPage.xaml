@@ -805,23 +805,27 @@
                     MaxHeight="100"
                     Source="{Binding NowSelectedMod.ImageSource}" />
                 </Grid>
-                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                <StackPanel
+                  Height="30"
+                  Margin="0,0,0,5"
+                  Orientation="Horizontal">
                   <Label
-                    Height="30"
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
                     Content="ID:"
                     Style="{StaticResource LabelBaseStyle}" />
                   <TextBox
                     x:Name="Label_ModId"
-                    Height="30"
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Id, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
-                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                <StackPanel
+                  Height="30"
+                  Margin="0,0,0,5"
+                  Orientation="Horizontal">
                   <!--  TODO 需要解决冒号问题  -->
                   <Label
                     Margin="0,0,5,0"
@@ -831,7 +835,6 @@
                     Style="{StaticResource LabelBaseStyle}" />
                   <TextBox
                     x:Name="Label_ModName"
-                    Height="30"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     IsReadOnly="True"
@@ -839,26 +842,24 @@
                     Text="{Binding NowSelectedMod.Name, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
-                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
+                <StackPanel
+                  Height="30"
+                  Margin="0,0,0,5"
+                  Orientation="Horizontal">
                   <Label
-                    Height="30"
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.Version}"
                     Style="{StaticResource LabelBaseStyle}" />
                   <TextBox
                     x:Name="Label_ModVersion"
-                    Height="30"
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Version, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
-                <StackPanel
-                  Margin="0,0,0,5"
-                  Cursor=""
-                  Orientation="Horizontal">
+                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <Label
                     Height="30"
                     Margin="0,0,5,0"
@@ -872,6 +873,22 @@
                     IsReadOnly="True"
                     Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.GameVersion, Mode=OneWay}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                </StackPanel>
+                <StackPanel
+                  Height="30"
+                  Margin="0,0,0,5"
+                  Orientation="Horizontal">
+                  <Label
+                    Margin="0,0,5,0"
+                    HorizontalContentAlignment="Left"
+                    Content="{Binding I18n.I18nRes.LastUpdateTime}"
+                    Style="{StaticResource LabelBaseStyle}" />
+                  <TextBox
+                    HorizontalContentAlignment="Left"
+                    IsReadOnly="True"
+                    Style="{StaticResource TextBoxBaseStyle}"
+                    Text="{Binding NowSelectedMod.LastUpdateTimeString, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
                 <Button

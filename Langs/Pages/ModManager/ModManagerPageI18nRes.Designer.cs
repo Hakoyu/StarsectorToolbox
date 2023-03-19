@@ -88,15 +88,6 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 添加模组至用户分组 的本地化字符串。
-        /// </summary>
-        public static string AddModToUserGroup {
-            get {
-                return ResourceManager.GetString("AddModToUserGroup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 添加至用户分组 的本地化字符串。
         /// </summary>
         public static string AddToUserGroup {
