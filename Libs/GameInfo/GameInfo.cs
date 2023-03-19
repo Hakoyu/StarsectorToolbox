@@ -83,7 +83,10 @@ public static class GameInfo
     private static string TryGetgameVersion(string logFile)
     {
         if (File.Exists(logFile) is false)
+        {
             File.Create(logFile).Close();
+            return string.Empty;
+        }
         using var sr = new StreamReader(logFile);
         if (sr.ReadLine() is string line)
             return Regex.Match(line, @"[0-9]+.[0-9]+[^ ]*").Value;
