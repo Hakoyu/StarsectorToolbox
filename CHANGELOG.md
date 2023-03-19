@@ -1,10 +1,21 @@
 ﻿# StarsectorToolsChangeLog
 
+## 0.8.7.0
+
+### ModManager
+
+所有非用户分组项添加右键菜单:
+
+- 添加组内模组至用户分组
+- 删除用户分组中包含的组内模组
+
+修改用户模组删除机制为: 仅位于用户分组时才显示删除用户分组项
+
 ## 0.8.6.0
 
 ### 全局
 
-后台修改为MVVM模式
+后台修改为 MVVM 模式
 修复大量问题
 
 ## 0.8.0.0
@@ -33,9 +44,9 @@
 修改:
 
 - 更新弹窗样式,现在弹出窗口将匹配本体样式并在弹出时为主窗口添加模糊效果
-- 添加json拓展方法
-- 添加ReadOnlySet类,用来设置只读的HashSet
-- 添加ReadOnlyDictionaryWrapper类,用来设置套娃只读字典
+- 添加 json 拓展方法
+- 添加 ReadOnlySet 类,用来设置只读的 HashSet
+- 添加 ReadOnlyDictionaryWrapper 类,用来设置套娃只读字典
 
 ### STLog
 
