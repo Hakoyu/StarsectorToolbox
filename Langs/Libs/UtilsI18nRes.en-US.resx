@@ -153,4 +153,11 @@
   <data name="ExcessivelyLongMessages" xml:space="preserve">
     <value>Excessively long messages</value>
   </data>
+  <data name="GameVersionAccessFailed" xml:space="preserve">
+    <value>Game version access failed</value>
+  </data>
+  <data name="GameVersionAccessFailedMessage" xml:space="preserve">
+    <value>Game version access failed
+Please restart the toolbox after starting the game once</value>
+  </data>
 </root>

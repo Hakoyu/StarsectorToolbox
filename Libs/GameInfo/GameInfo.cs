@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
 using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
@@ -61,22 +65,31 @@ public static class GameInfo
             EnabledModsJsonFile = Path.Combine(ModsDirectory, "enabled_mods.json");
             LogFile = Path.Combine(CoreDirectory, "starsector.log");
             SettingsFile = Path.Combine(CoreDirectory, "data", "config", "settings.json");
-            try
+            Version = TryGetgameVersion(LogFile);
+            if (string.IsNullOrWhiteSpace(Version))
             {
-                Version = JsonNode.Parse(File.ReadAllText(Path.Combine(CoreDirectory, "localization_version.json")))!.AsObject()["game_version"]!.GetValue<string>();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"{I18n.LoadError} {I18n.Path}: {directoryName}", ex);
+                Logger.Info(I18n.GameVersionAccessFailed);
+                MessageBoxVM.Show(new(I18n.GameVersionAccessFailedMessage));
             }
         }
         else
         {
             Logger.Error($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}");
-            MessageBoxVM.Show(new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error });
+            MessageBoxVM.Show(
+                new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error }
+            );
         }
         return false;
+    }
+
+    private static string TryGetgameVersion(string logFile)
+    {
+        if (File.Exists(logFile) is false)
+            File.Create(logFile).Close();
+        using var sr = new StreamReader(logFile);
+        if (sr.ReadLine() is string line)
+            return Regex.Match(line, @"[0-9]+.[0-9]+[^ ]*").Value;
+        return string.Empty;
     }
 
     /// <summary>
@@ -85,10 +98,9 @@ public static class GameInfo
     /// <returns>获取成功为<see langword="true"/>,失败为<see langword="false"/></returns>
     internal static bool GetGameDirectory()
     {
-        var fileNames = OpenFileDialogVM.Show(new()
-        {
-            Filter = $"Exe {I18n.File}|starsector.exe"
-        })!;
+        var fileNames = OpenFileDialogVM.Show(
+            new() { Filter = $"Exe {I18n.File}|starsector.exe" }
+        )!;
         if (fileNames.Any() && fileNames.First() is string fileName)
         {
             string directory = Path.GetDirectoryName(fileName)!;

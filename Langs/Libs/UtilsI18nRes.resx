@@ -133,4 +133,11 @@
   <data name="ExcessivelyLongMessages" xml:space="preserve">
     <value>过长的消息</value>
   </data>
+  <data name="GameVersionAccessFailed" xml:space="preserve">
+    <value>游戏版本获取失败</value>
+  </data>
+  <data name="GameVersionAccessFailedMessage" xml:space="preserve">
+    <value>游戏版本获取失败
+请启动一次游戏后重启工具箱</value>
+  </data>
 </root>

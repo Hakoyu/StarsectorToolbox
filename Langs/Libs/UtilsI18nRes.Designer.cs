@@ -124,6 +124,25 @@ namespace StarsectorTools.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 游戏版本获取失败 的本地化字符串。
+        /// </summary>
+        public static string GameVersionAccessFailed {
+            get {
+                return ResourceManager.GetString("GameVersionAccessFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 游戏版本获取失败
+        ///请启动一次游戏后重启工具箱 的本地化字符串。
+        /// </summary>
+        public static string GameVersionAccessFailedMessage {
+            get {
+                return ResourceManager.GetString("GameVersionAccessFailedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 载入错误 的本地化字符串。
         /// </summary>
         public static string LoadError {
