@@ -61,7 +61,9 @@ public static class Utils
             return null;
         string jsonData = File.ReadAllText(file);
         // 清除json中的注释
-        jsonData = Regex.Replace(jsonData, @"(#|//)[\S ]*", "");
+        jsonData = Regex.Replace(jsonData, @"[\t ]*(#|//)[\S ]*", "");
+        // 将单引号转换成双引号
+        jsonData = Regex.Replace(jsonData, @"'([\S]*)'", "$1");
         // 清除json中不符合规定的逗号
         jsonData = Regex.Replace(
             jsonData,
