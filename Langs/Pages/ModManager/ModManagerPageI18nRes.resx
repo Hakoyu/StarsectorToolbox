@@ -571,4 +571,16 @@
   <data name="LastUpdateTime" xml:space="preserve">
     <value>最后更新时间</value>
   </data>
+  <data name="ModIsContainsMessage" xml:space="preserve">
+    <value>存在相同的模组
+游戏只会加载按文件夹名称正序的首个为此Id的模组并忽视后面的同Id模组
+请检查你的模组, 并删除多余的同Id模组
+首次载入位置: {0}
+再次载入位置: {1}</value>
+  </data>
+  <data name="ModIsContains" xml:space="preserve">
+    <value>存在相同的模组
+首次载入位置: {0}
+再次载入位置: {1}</value>
+  </data>
 </root>

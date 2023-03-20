@@ -99,7 +99,7 @@ public class WindowAccent
     /// <summary>
     /// 设置高斯模糊
     /// </summary>
-    /// <param name="window">主窗口(MainWindow)</param>
+    /// <param name="window">主窗口(Main)</param>
     /// <param name="argb">背景颜色(ARGB)</param>
     public static void SetBlurBehind(Window window, uint argb)
     {
@@ -109,7 +109,7 @@ public class WindowAccent
     /// <summary>
     /// 设置高斯模糊
     /// </summary>
-    /// <param name="window">主窗口(MainWindow)</param>
+    /// <param name="window">主窗口(Main)</param>
     /// <param name="color">背景颜色</param>
     public static void SetBlurBehind(Window window, Color color)
     {
@@ -119,7 +119,7 @@ public class WindowAccent
     /// <summary>
     /// 设置亚克力模糊
     /// </summary>
-    /// <param name="window">主窗口(MainWindow)</param>
+    /// <param name="window">主窗口(Main)</param>
     /// <param name="argb">背景颜色(ARGB)</param>
     public static void SetAcrylicBlurBehind(Window window, uint argb)
     {
@@ -129,7 +129,7 @@ public class WindowAccent
     /// <summary>
     /// 设置亚克力模糊
     /// </summary>
-    /// <param name="window">主窗口(MainWindow)</param>
+    /// <param name="window">主窗口(Main)</param>
     /// <param name="color">背景颜色</param>
     public static void SetAcrylicBlurBehind(Window window, Color color)
     {
@@ -139,7 +139,7 @@ public class WindowAccent
     /// <summary>
     /// 设置窗口强调类型
     /// </summary>
-    /// <param name="window">主窗口(MainWindow)</param>
+    /// <param name="window">主窗口(Main)</param>
     /// <param name="state">强调状态</param>
     /// <param name="argb">背景颜色(ARGB)</param>
     public static void SetWindowAccent(Window window, AccentState state, uint argb)
@@ -150,7 +150,7 @@ public class WindowAccent
     /// <summary>
     /// 设置窗口强调类型
     /// </summary>
-    /// <param name="window">主窗口(MainWindow)</param>
+    /// <param name="window">主窗口(Main)</param>
     /// <param name="state">强调状态</param>
     /// <param name="color">背景颜色</param>
     public static void SetWindowAccent(Window window, AccentState state, Color color)

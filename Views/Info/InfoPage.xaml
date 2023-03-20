@@ -1,0 +1,76 @@
+﻿<Page
+  x:Class="StarsectorTools.Views.Info.InfoPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages.Info"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+  xmlns:local="clr-namespace:StarsectorTools.Views.Info"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:vm="clr-namespace:StarsectorTools.ViewModels.Info"
+  Title="Info"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  x:ClassModifier="internal"
+  mc:Ignorable="d">
+  <d:Page.DataContext>
+    <vm:InfoPageViewModel />
+  </d:Page.DataContext>
+  <Grid>
+    <GroupBox Header="{Binding I18n.I18nRes.Info}" Style="{StaticResource GroupBoxBaseStyle}">
+      <StackPanel HorizontalAlignment="Center">
+        <Label
+          Height="NaN"
+          Margin="0,0,0,5"
+          Background="{x:Null}"
+          Content="Starsector Tools"
+          FontSize="24"
+          Style="{StaticResource LabelBaseStyle}" />
+        <StackPanel
+          Margin="0,0,0,5"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Orientation="Horizontal">
+          <Label
+            Height="NaN"
+            Background="{x:Null}"
+            Content="{Binding I18n.I18nRes.Version}"
+            Style="{StaticResource LabelBaseStyle}" />
+          <Label
+            Height="NaN"
+            Background="{x:Null}"
+            Content="0.8.0"
+            Style="{StaticResource LabelBaseStyle}" />
+          <Button
+            x:Name="Button_CheckUpdate"
+            Padding="5,0,5,0"
+            Command="{Binding CheckUpdateCommand}"
+            Content="{Binding I18n.I18nRes.CheckUpdate}"
+            Style="{StaticResource ButtonBaseStyle}" />
+          <emoji:TextBlock
+            x:Name="TextBlock_CheckUpdateIcon"
+            Margin="5,0,0,0"
+            VerticalAlignment="Center"
+            FontSize="16"
+            Text="{Binding CheckUpdateIcon}" />
+        </StackPanel>
+        <StackPanel
+          Margin="0,0,0,5"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center"
+          Orientation="Horizontal">
+          <Label
+            Height="NaN"
+            Background="{x:Null}"
+            Content="Github:"
+            Style="{StaticResource LabelBaseStyle}" />
+          <Label Background="{x:Null}" Style="{StaticResource LabelBaseStyle}">
+            <Hyperlink Command="{Binding OpenGitHubCommand}">
+              https://github.com/Hakoyu/StarsectorTools
+            </Hyperlink>
+          </Label>
+        </StackPanel>
+      </StackPanel>
+    </GroupBox>
+  </Grid>
+</Page>

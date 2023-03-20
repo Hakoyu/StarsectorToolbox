@@ -301,7 +301,7 @@ public class Logger
     private static string GetDataTimeMessage()
     {
         string dateTime = GetDataTime();
-        if (!string.IsNullOrWhiteSpace(dateTime))
+        if (string.IsNullOrWhiteSpace(dateTime) is false)
             dateTime += " ";
         return dateTime;
     }
@@ -309,7 +309,7 @@ public class Logger
     private static string GetThreadIdMessage()
     {
         string threadId = GetThreadId();
-        if (!string.IsNullOrWhiteSpace(threadId))
+        if (string.IsNullOrWhiteSpace(threadId) is false)
             threadId = $":{threadId}";
         return threadId;
     }
