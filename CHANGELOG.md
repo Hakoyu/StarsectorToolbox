@@ -1,5 +1,9 @@
 ﻿# StarsectorToolsChangeLog
 
+## 0.8.7.3
+
+修复 json 中单引号的问题
+
 ## 0.8.7.2
 
 添加mods存在同Id模组的检测

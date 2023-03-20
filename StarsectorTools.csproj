@@ -25,8 +25,8 @@
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <Title>$(AssemblyName)</Title>
     <Authors>HKW</Authors>
-    <FileVersion>0.8.7.2</FileVersion>
-    <AssemblyVersion>0.8.7.2</AssemblyVersion>
+    <FileVersion>0.8.7.3</FileVersion>
+    <AssemblyVersion>0.8.7.3</AssemblyVersion>
     <Copyright>Copyright ©2022-2023 HKW</Copyright>
     <RepositoryType>https://github.com/Hakoyu/StarsectorTools</RepositoryType>
     <IncludeSymbols>False</IncludeSymbols>
