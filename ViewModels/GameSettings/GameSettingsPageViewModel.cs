@@ -145,7 +145,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenGameLogFile()
+    private static void OpenGameLogFile()
     {
         if (Utils.FileExists(GameInfo.LogFile, false) is false)
             File.Create(GameInfo.LogFile).Close();
@@ -153,7 +153,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ClearGameLogFile()
+    private static void ClearGameLogFile()
     {
         if (Utils.FileExists(GameInfo.LogFile, false))
             Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
@@ -243,7 +243,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenSaveDirectory()
+    private static void OpenSaveDirectory()
     {
         if (Utils.DirectoryExists(GameInfo.SaveDirectory))
             Utils.OpenLink(GameInfo.SaveDirectory);
@@ -265,9 +265,8 @@ internal partial class GameSettingsPageViewModel : ObservableObject
         try
         {
             string data = File.ReadAllText(GameInfo.SettingsFile);
-            // 启用无边框
-            if (BorderlessWindow)
-                data = Regex.Replace(data, @"(?<=undecoratedWindow"":)(?:false|true)", "true");
+            // 设置无边框
+            data = Regex.Replace(data, @"(?<=undecoratedWindow"":)(?:false|true)", BorderlessWindow.ToString().ToLower());
             // 设置自定义分辨率
             data = Regex.Replace(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",", @$"""resolutionOverride"":""{ResolutionWidth}x{ResolutionHeight}"",");
             File.WriteAllText(GameInfo.SettingsFile, data);

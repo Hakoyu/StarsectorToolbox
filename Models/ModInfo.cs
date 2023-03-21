@@ -76,7 +76,7 @@ public class ModInfo : IModInfo
         {
             if (Utils.JsonParse2Object(jsonFile) is not JsonNode jsonNode)
                 return null;
-            // TODO: 复杂度略高
+            // 获取所有文件的修改时间,取最近的
             var lastWriteTime = Utils
                 .GetAllSubFiles(Path.GetDirectoryName(jsonFile)!)
                 ?.Max(d => d.LastWriteTime);

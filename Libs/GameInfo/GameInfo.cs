@@ -42,6 +42,9 @@ public static class GameInfo
     /// <summary>游戏设置文件</summary>
     public static string SettingsFile { get; private set; } = null!;
 
+    private static readonly Regex _checkLauncher = new(@"Starting Starsector [^ ]+ launcher");
+    private static readonly Regex _checkVersion = new(@"[0-9]+.[0-9]+[^ ]*");
+
     /// <summary>
     /// 设置游戏信息
     /// </summary>
@@ -87,25 +90,17 @@ public static class GameInfo
             File.Create(logFile).Close();
             return string.Empty;
         }
-        var checkLauncher = new Regex(@"Starting Starsector [^ ]+ launcher");
-        var checkVersion = new Regex(@"[0-9]+.[0-9]+[^ ]*");
         try
         {
-            using (var sr = new StreamReader(new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-            {
-                if (sr.ReadLine() is string s && checkLauncher.IsMatch(s))
-                    return checkVersion.Match(s).Value;
-            };
+            if (CheckGameVersion(logFile) is string version)
+                return version;
             for (int i = 1; i < 10; i++)
             {
                 var gFile = $"{LogFile}.{i}";
                 if (File.Exists(gFile) is false)
                     continue;
-                using (var sr = new StreamReader(new FileStream(gFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-                {
-                    if (sr.ReadLine() is string s && checkLauncher.IsMatch(s))
-                        return checkVersion.Match(s).Value;
-                };
+                if (CheckGameVersion(gFile) is string versionG)
+                    return versionG;
             }
         }
         catch (Exception ex)
@@ -113,6 +108,29 @@ public static class GameInfo
             Logger.Error("", ex);
         }
         return string.Empty;
+
+        static string? CheckGameVersion(string logFile)
+        {
+            // 因为游戏可能会处于运行状态,所以使用只读打开日志文件
+            using (
+                var sr = new StreamReader(
+                    logFile,
+                    new FileStreamOptions()
+                    {
+                        Access = FileAccess.Read,
+                        Mode = FileMode.Open,
+                        Share = FileShare.ReadWrite
+                    }
+                )
+            )
+            {
+                var data = sr.ReadToEnd();
+                if (_checkLauncher.Match(data).Value is string launcherData)
+                    return _checkVersion.Match(launcherData).Value;
+            }
+            ;
+            return null;
+        }
     }
 
     /// <summary>
