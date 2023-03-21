@@ -71,7 +71,7 @@ public static class GameInfo
         EnabledModsJsonFile = Path.Combine(ModsDirectory, "enabled_mods.json");
         LogFile = Path.Combine(CoreDirectory, "starsector.log");
         SettingsFile = Path.Combine(CoreDirectory, "data", "config", "settings.json");
-        Version = TryGetgameVersion(LogFile);
+        Version = TryGetGameVersion(LogFile);
         if (string.IsNullOrWhiteSpace(Version))
         {
             Logger.Info(I18n.GameVersionAccessFailed);
@@ -80,16 +80,38 @@ public static class GameInfo
         return true;
     }
 
-    private static string TryGetgameVersion(string logFile)
+    private static string TryGetGameVersion(string logFile)
     {
         if (File.Exists(logFile) is false)
         {
             File.Create(logFile).Close();
             return string.Empty;
         }
-        using var sr = new StreamReader(logFile);
-        if (sr.ReadLine() is string line)
-            return Regex.Match(line, @"[0-9]+.[0-9]+[^ ]*").Value;
+        var checkLauncher = new Regex(@"Starting Starsector [^ ]+ launcher");
+        var checkVersion = new Regex(@"[0-9]+.[0-9]+[^ ]*");
+        try
+        {
+            using (var sr = new StreamReader(new FileStream(logFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            {
+                if (sr.ReadLine() is string s && checkLauncher.IsMatch(s))
+                    return checkVersion.Match(s).Value;
+            };
+            for (int i = 1; i < 10; i++)
+            {
+                var gFile = $"{LogFile}.{i}";
+                if (File.Exists(gFile) is false)
+                    continue;
+                using (var sr = new StreamReader(new FileStream(gFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                {
+                    if (sr.ReadLine() is string s && checkLauncher.IsMatch(s))
+                        return checkVersion.Match(s).Value;
+                };
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("", ex);
+        }
         return string.Empty;
     }
 
