@@ -125,8 +125,8 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     {
         if (Regex.IsMatch(GameMemory, "^[0-9]+[mg]$") is false)
         {
-            MessageBoxVM.Show(new(I18nRes.FormatError) { Icon = MessageBoxVM.Icon.Warning });
             GameMemory = _vmparamsData.xmsx;
+            MessageBoxVM.Show(new(I18nRes.FormatError) { Icon = MessageBoxVM.Icon.Warning });
             return;
         }
         string unit = GameMemory.Last().ToString();

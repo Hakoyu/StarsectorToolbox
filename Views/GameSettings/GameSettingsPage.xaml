@@ -90,6 +90,7 @@
               Margin="0,0,50,0"
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
+              Command="{Binding SetMemoryCommand}"
               Content="{Binding I18n.I18nRes.Used}"
               Style="{StaticResource ButtonBaseStyle}" />
             <Button
