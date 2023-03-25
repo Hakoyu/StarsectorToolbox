@@ -562,7 +562,7 @@ Decompressing:
   <data name="UnknownModsMessage" xml:space="preserve">
     <value>You have opened the Unknown Modules category
 There are {0} unknown modules
-I would like you to go to https://github.com/Hakoyu/StarsectorTools/issues
+I would like you to go to https://github.com/Hakoyu/StarsectorToolbox/issues
 Submit the issue with its ID and the category it should be in</value>
   </data>
   <data name="CleanAllMods" xml:space="preserve">

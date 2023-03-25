@@ -1,6 +1,6 @@
-﻿using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
+﻿using I18nRes = StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
-namespace StarsectorTools.Views.ModManager;
+namespace StarsectorToolbox.Views.ModManager;
 
 internal partial class ModManagerPage
 {

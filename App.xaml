@@ -1,8 +1,8 @@
 ﻿<Application
-  x:Class="StarsectorTools.App"
+  x:Class="StarsectorToolbox.App"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorTools.Langs"
+  xmlns:I18n="clr-namespace:StarsectorToolbox.Langs"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   StartupUri="Views/Main/MainWindow.xaml">
   <Application.Resources>

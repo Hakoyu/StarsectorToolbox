@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Pages.ModManager {
+namespace StarsectorToolbox.Langs.Pages.ModManager {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes", typeof(ModManagerPageI18nRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes", typeof(ModManagerPageI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -1350,7 +1350,7 @@ namespace StarsectorTools.Langs.Pages.ModManager {
         /// <summary>
         ///   查找类似 您打开了未知模组分类
         ///其中存在 {0} 个未知模组
-        ///希望您前往 https://github.com/Hakoyu/StarsectorTools/issues
+        ///希望您前往 https://github.com/Hakoyu/StarsectorToolbox/issues
         ///提交 issue 中提供其 ID 及应该在的分类 的本地化字符串。
         /// </summary>
         public static string UnknownModsMessage {

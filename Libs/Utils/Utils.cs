@@ -14,10 +14,10 @@ using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
-using StarsectorTools.ViewModels.Main;
-using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
+using StarsectorToolbox.ViewModels.Main;
+using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorTools.Libs.Utils;
+namespace StarsectorToolbox.Libs.Utils;
 
 /// <summary>通用方法</summary>
 public static class Utils
@@ -220,27 +220,6 @@ public static class Utils
         {
             Logger.Error(I18n.LoadError, ex);
             return false;
-        }
-    }
-
-    /// <summary>
-    /// 获取所有文件(包括子目录)
-    /// </summary>
-    /// <param name="directory">目录</param>
-    /// <returns>所有文件信息</returns>
-    public static List<FileInfo>? GetAllSubFiles(string directory)
-    {
-        if (!Directory.Exists(directory))
-            return null!;
-        var fileInfos = new List<FileInfo>();
-        GetSubFiles(new DirectoryInfo(directory), fileInfos);
-        return fileInfos;
-
-        static void GetSubFiles(DirectoryInfo directory, List<FileInfo> fileInfos)
-        {
-            fileInfos.AddRange(directory.GetFiles());
-            foreach (var directoryInfo in directory.GetDirectories())
-                GetSubFiles(new(directoryInfo.FullName), fileInfos);
         }
     }
 

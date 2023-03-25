@@ -12,13 +12,13 @@ using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.Models;
-using StarsectorTools.Resources;
-using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Models;
+using StarsectorToolbox.Resources;
+using I18nRes = StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
-namespace StarsectorTools.ViewModels.ModManager;
+namespace StarsectorToolbox.ViewModels.ModManager;
 
 internal partial class ModManagerPageViewModel
 {
@@ -1456,8 +1456,8 @@ internal partial class ModManagerPageViewModel
             if (Directory.Exists(path))
             {
                 Logger.Info($"{I18nRes.ParseDirectory} {path}");
-                var files = Utils.GetAllSubFiles(path)!;
-                count += files.Count;
+                var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)!;
+                count += files.Length;
                 foreach (var subFile in files)
                 {
                     pendingHandler.UpdateMessage(
@@ -1469,7 +1469,7 @@ internal partial class ModManagerPageViewModel
                             subFile
                         )
                     );
-                    await AddModFromFile(subFile.FullName, tempDirectoryInfo);
+                    await AddModFromFile(subFile, tempDirectoryInfo);
                     completed++;
                 }
             }

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace StarsectorTools
+namespace StarsectorToolbox
 {
     /// <summary>
     /// Interaction logic for App.xaml

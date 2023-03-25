@@ -5,7 +5,7 @@
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI">
   <ResourceDictionary.MergedDictionaries>
-    <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlStyles.xaml" />
+    <ResourceDictionary Source="/StarsectorToolbox;component/ThemeResources/ControlStyles.xaml" />
   </ResourceDictionary.MergedDictionaries>
   <Style x:Key="SpinBaseStyle" TargetType="pu:Spin">
     <Setter Property="SpinStyle" Value="Ring2" />

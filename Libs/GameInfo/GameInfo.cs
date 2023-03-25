@@ -8,9 +8,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
-using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
+using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorTools.Libs.GameInfo;
+namespace StarsectorToolbox.Libs.GameInfo;
 
 /// <summary>游戏信息</summary>
 public static class GameInfo

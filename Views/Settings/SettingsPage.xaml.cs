@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
-using StarsectorTools.ViewModels.Settings;
+using StarsectorToolbox.ViewModels.Settings;
 
-namespace StarsectorTools.Views.Settings;
+namespace StarsectorToolbox.Views.Settings;
 
 /// <summary>
 /// Settings.xaml 的交互逻辑

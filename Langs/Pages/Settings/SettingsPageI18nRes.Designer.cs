@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Pages.Settings {
+namespace StarsectorToolbox.Langs.Pages.Settings {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Pages.Settings {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes", typeof(SettingsPageI18nRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorToolbox.Langs.Pages.Settings.SettingsPageI18nRes", typeof(SettingsPageI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

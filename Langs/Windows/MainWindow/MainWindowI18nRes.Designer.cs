@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs.Windows.MainWindow {
+namespace StarsectorToolbox.Langs.Windows.MainWindow {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes", typeof(MainWindowI18nRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes", typeof(MainWindowI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -447,9 +447,9 @@ namespace StarsectorTools.Langs.Windows.MainWindow {
         /// <summary>
         ///   查找类似 远行星号工具箱 的本地化字符串。
         /// </summary>
-        public static string StarsectorTools {
+        public static string StarsectorToolbox {
             get {
-                return ResourceManager.GetString("StarsectorTools", resourceCulture);
+                return ResourceManager.GetString("StarsectorToolbox", resourceCulture);
             }
         }
         

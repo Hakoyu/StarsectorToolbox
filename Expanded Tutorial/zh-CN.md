@@ -10,8 +10,8 @@
 
 ## 创建项目
 
-[最小演示 Demo](https://github.com/Hakoyu/StarsectorTools/blob/master/Expanded%20Tutorial/WpfLibrary1.7z)  
-[基础演示 Demo](https://github.com/Hakoyu/StarsectorToolsExtensionDemo)
+[最小演示 Demo](https://github.com/Hakoyu/StarsectorToolbox/blob/master/Expanded%20Tutorial/WpfLibrary1.7z)  
+[基础演示 Demo](https://github.com/Hakoyu/StarsectorToolboxExtensionDemo)
 
 ### 设置项目
 
@@ -23,9 +23,9 @@
    原来的**Class1.cs**可以自行选择删除或保留  
    ![](https://s2.loli.net/2023/01/09/y4YUb2EQX9r1RGl.png)
 
-3. 为项目添加引用 **StarsectorTools.dll**  
-   你可以在 **[Releases](https://github.com/Hakoyu/StarsectorTools/releases)** 中下载到  
-   此外 **StarsectorTools.xml** 文件提供了注释,以便在 IDE 中更好的使用 API,可自行选择下载,与 **StarsectorTools.dll** 放同一目录即可
+3. 为项目添加引用 **StarsectorToolbox.dll**  
+   你可以在 **[Releases](https://github.com/Hakoyu/StarsectorToolbox/releases)** 中下载到  
+   此外 **StarsectorToolbox.xml** 文件提供了注释,以便在 IDE 中更好的使用 API,可自行选择下载,与 **StarsectorToolbox.dll** 放同一目录即可
 
 ### 设置拓展信息
 
@@ -54,7 +54,7 @@ ExtensionId = "WpfLibrary1.Page1"
 ExtensionFile = "WpfLibrary1.dll"
 ```
 
-工具箱版本可查看 https://github.com/Hakoyu/StarsectorTools/releases
+工具箱版本可查看 https://github.com/Hakoyu/StarsectorToolbox/releases
 
 ## 测试项目
 
@@ -72,19 +72,19 @@ public Page1()
 }
 ```
 
-然后使用 StarsectorTools 的拓展调试功能定位拓展的路径即可载入  
+然后使用 StarsectorToolbox 的拓展调试功能定位拓展的路径即可载入  
 ![](https://s2.loli.net/2023/01/10/AMEHKxvF4ukg7On.png)
 
-如果操作正确,此时 **StarsectorTools.log** 中会输出 `[Page1] INFO WpfLibrary1.Page1`
+如果操作正确,此时 **StarsectorToolbox.log** 中会输出 `[Page1] INFO WpfLibrary1.Page1`
 
 ### 测试断点调试
 
 在`Logger`处打上断点  
-在 VS2022 **调试->附加到进程** 中选择 **StarsectorTools.exe**  
-也可以通过选择窗口来指定 **StarsectorTools.exe**  
+在 VS2022 **调试->附加到进程** 中选择 **StarsectorToolbox.exe**  
+也可以通过选择窗口来指定 **StarsectorToolbox.exe**  
 ![](https://s2.loli.net/2023/01/10/ypz32rQKxX6eu1S.png)
 
-完成后在 StarsectorTools 中右键拓展项,点击 **刷新页面**  
+完成后在 StarsectorToolbox 中右键拓展项,点击 **刷新页面**  
 如果操作正确,此时会命中断点  
 ![](https://s2.loli.net/2023/01/10/SgXsTzUmwOaW3tN.gif)
 
@@ -97,9 +97,9 @@ public Page1()
 
 ## 基础 API 一览
 
-**StarsectorTools.dll** 所提供的 API
+**StarsectorToolbox.dll** 所提供的 API
 
-### [StarsectorTools.Libs.Utils](https://github.com/Hakoyu/StarsectorTools/blob/master/Libs/Utils)
+### [StarsectorToolbox.Libs.Utils](https://github.com/Hakoyu/StarsectorToolbox/blob/master/Libs/Utils)
 
 
 ## 其它事项
@@ -164,9 +164,9 @@ _注: xaml 设计器中显示的内容可能与实际显示有误差_
   <Page.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlStyles.xaml" />
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ControlViewStyles.xaml" />
-        <ResourceDictionary Source="/StarsectorTools;component/ThemeResources/ColorStyles.xaml" />
+        <ResourceDictionary Source="/StarsectorToolbox;component/ThemeResources/ControlStyles.xaml" />
+        <ResourceDictionary Source="/StarsectorToolbox;component/ThemeResources/ControlViewStyles.xaml" />
+        <ResourceDictionary Source="/StarsectorToolbox;component/ThemeResources/ColorStyles.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Page.Resources>

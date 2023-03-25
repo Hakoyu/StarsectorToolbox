@@ -5,10 +5,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
-using StarsectorTools.Libs.Utils;
-using I18nRes = StarsectorTools.Langs.Pages.Info.InfoPageI18nRes;
+using StarsectorToolbox.Libs.Utils;
+using I18nRes = StarsectorToolbox.Langs.Pages.Info.InfoPageI18nRes;
 
-namespace StarsectorTools.ViewModels.Info;
+namespace StarsectorToolbox.ViewModels.Info;
 
 internal partial class InfoPageViewModel : ObservableObject
 {
@@ -25,7 +25,7 @@ internal partial class InfoPageViewModel : ObservableObject
     [RelayCommand]
     private void OpenGitHub()
     {
-        Utils.OpenLink("https://github.com/Hakoyu/StarsectorTools");
+        Utils.OpenLink("https://github.com/Hakoyu/StarsectorToolbox");
     }
 
     [RelayCommand]
@@ -35,7 +35,7 @@ internal partial class InfoPageViewModel : ObservableObject
         using (var httpClient = new HttpClient())
         {
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
-            var response = await httpClient.GetAsync("https://api.github.com/repos/Hakoyu/StarsectorTools/releases/latest");
+            var response = await httpClient.GetAsync("https://api.github.com/repos/Hakoyu/StarsectorToolbox/releases/latest");
             var releases = await response.Content.ReadAsStringAsync();
             var tagName = Regex.Match(releases, @"(?<=""name"": "")[^""]+").Value;
             if (string.IsNullOrWhiteSpace(tagName) is false)

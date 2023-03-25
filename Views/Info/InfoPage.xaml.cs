@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
-using StarsectorTools.ViewModels.Info;
+using StarsectorToolbox.ViewModels.Info;
 
-namespace StarsectorTools.Views.Info;
+namespace StarsectorToolbox.Views.Info;
 
 /// <summary>
 /// Description.xaml 的交互逻辑

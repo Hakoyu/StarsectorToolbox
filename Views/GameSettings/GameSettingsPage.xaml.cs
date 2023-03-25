@@ -1,11 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.ViewModels.GameSettings;
-using I18nRes = StarsectorTools.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.ViewModels.GameSettings;
+using I18nRes = StarsectorToolbox.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
 
-namespace StarsectorTools.Views.GameSettings;
+namespace StarsectorToolbox.Views.GameSettings;
 
 /// <summary>
 /// GameSettings.xaml 的交互逻辑

@@ -8,11 +8,11 @@ using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.Models.Messages;
-using I18nRes = StarsectorTools.Langs.Pages.Settings.SettingsPageI18nRes;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Models.Messages;
+using I18nRes = StarsectorToolbox.Langs.Pages.Settings.SettingsPageI18nRes;
 
-namespace StarsectorTools.ViewModels.Settings;
+namespace StarsectorToolbox.ViewModels.Settings;
 
 internal partial class SettingsPageViewModel : ObservableObject
 {

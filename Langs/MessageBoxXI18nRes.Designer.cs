@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StarsectorTools.Langs {
+namespace StarsectorToolbox.Langs {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StarsectorTools.Langs {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorTools.Langs.MessageBoxXI18nRes", typeof(MessageBoxXI18nRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StarsectorToolbox.Langs.MessageBoxXI18nRes", typeof(MessageBoxXI18nRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

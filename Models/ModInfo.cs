@@ -5,11 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.Libs.Log4Cs;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
-using I18n = StarsectorTools.Langs.Libs.UtilsI18nRes;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Libs.Utils;
+using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorTools.Models;
+namespace StarsectorToolbox.Models;
 
 /// <summary>模组信息</summary>
 [DebuggerDisplay("{Name},Version = {Version}")]
@@ -77,9 +77,9 @@ public class ModInfo : IModInfo
             if (Utils.JsonParse2Object(jsonFile) is not JsonNode jsonNode)
                 return null;
             // 获取所有文件的修改时间,取最近的
-            var lastWriteTime = Utils
-                .GetAllSubFiles(Path.GetDirectoryName(jsonFile)!)
-                ?.Max(d => d.LastWriteTime);
+            var lastWriteTime = Directory
+                .EnumerateFiles(Path.GetDirectoryName(jsonFile)!, "*", SearchOption.AllDirectories)
+                ?.Max(f => new FileInfo(f).LastWriteTime);
             return new(jsonNode, lastWriteTime, jsonFile);
         }
         catch (Exception ex)
@@ -96,11 +96,7 @@ public class ModInfo : IModInfo
     /// <param name="lastWriteTime">最后更新时间</param>
     /// <param name="jsonFile">json文件路径</param>
     /// <returns>解析成功返回 <see cref="ModInfo"/> ,失败返回 <see langword="null"/></returns>
-    public static ModInfo? Parse(
-        JsonNode jsonNode,
-        DateTime lastWriteTime,
-        string? jsonFile = null
-    )
+    public static ModInfo? Parse(JsonNode jsonNode, DateTime lastWriteTime, string? jsonFile = null)
     {
         try
         {

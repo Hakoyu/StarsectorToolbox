@@ -1,11 +1,11 @@
 using System.Windows;
 
 // 程序信息
-//[assembly: AssemblyTitle(nameof(StarsectorTools))]
-//[assembly: AssemblyDescription(nameof(StarsectorTools))]
+//[assembly: AssemblyTitle(nameof(StarsectorToolbox))]
+//[assembly: AssemblyDescription(nameof(StarsectorToolbox))]
 //[assembly: AssemblyConfiguration("")]
 //[assembly: AssemblyCompany("")]
-//[assembly: AssemblyProduct(nameof(StarsectorTools))]
+//[assembly: AssemblyProduct(nameof(StarsectorToolbox))]
 //[assembly: AssemblyCopyright("Copyright ©2022-2023 HKW")]
 //[assembly: AssemblyTrademark("")]
 //[assembly: AssemblyCulture("")]

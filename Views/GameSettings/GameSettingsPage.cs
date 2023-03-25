@@ -1,4 +1,4 @@
-﻿namespace StarsectorTools.Views.GameSettings;
+﻿namespace StarsectorToolbox.Views.GameSettings;
 
 internal partial class GameSettingsPage
 {

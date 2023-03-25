@@ -1,7 +1,7 @@
 ﻿using System;
 using HKW.Libs.TomlParse;
 
-namespace StarsectorTools.ViewModels.Main;
+namespace StarsectorToolbox.ViewModels.Main;
 
 /// <summary>拓展信息</summary>
 internal class ExtensionInfo

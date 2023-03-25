@@ -3,10 +3,10 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.ViewModels.ModManager;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.ViewModels.ModManager;
 
-namespace StarsectorTools.Views.ModManager;
+namespace StarsectorToolbox.Views.ModManager;
 
 /// <summary>
 /// ModManager.xaml 的交互逻辑

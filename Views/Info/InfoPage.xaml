@@ -1,13 +1,13 @@
 ﻿<Page
-  x:Class="StarsectorTools.Views.Info.InfoPage"
+  x:Class="StarsectorToolbox.Views.Info.InfoPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorTools.Langs.Pages.Info"
+  xmlns:I18n="clr-namespace:StarsectorToolbox.Langs.Pages.Info"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
-  xmlns:local="clr-namespace:StarsectorTools.Views.Info"
+  xmlns:local="clr-namespace:StarsectorToolbox.Views.Info"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:vm="clr-namespace:StarsectorTools.ViewModels.Info"
+  xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.Info"
   Title="Info"
   d:DesignHeight="450"
   d:DesignWidth="800"
@@ -66,7 +66,7 @@
             Style="{StaticResource LabelBaseStyle}" />
           <Label Background="{x:Null}" Style="{StaticResource LabelBaseStyle}">
             <Hyperlink Command="{Binding OpenGitHubCommand}">
-              https://github.com/Hakoyu/StarsectorTools
+              https://github.com/Hakoyu/StarsectorToolbox
             </Hyperlink>
           </Label>
         </StackPanel>

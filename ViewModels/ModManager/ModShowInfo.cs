@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.ViewModels.Controls;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Models;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Models;
 
-namespace StarsectorTools.ViewModels.ModManager;
+namespace StarsectorToolbox.ViewModels.ModManager;
 
 internal partial class ModManagerPageViewModel
 {

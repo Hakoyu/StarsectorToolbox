@@ -1,4 +1,4 @@
-﻿namespace StarsectorTools.Models;
+﻿namespace StarsectorToolbox.Models;
 
 /// <summary>模组分组类型</summary>
 public static class ModTypeGroup

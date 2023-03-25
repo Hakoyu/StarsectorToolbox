@@ -1,4 +1,4 @@
-﻿# StarsectorToolsChangeLog
+﻿# StarsectorToolboxChangeLog
 
 ## 0.8.7.3
 

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace StarsectorTools.Views.ModManager;
+namespace StarsectorToolbox.Views.ModManager;
 
 /// <summary>
 /// _addUserGroupWindow.xaml 的交互逻辑

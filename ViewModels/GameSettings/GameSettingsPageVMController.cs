@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
 using Microsoft.Win32;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
-using I18nRes = StarsectorTools.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Libs.Utils;
+using I18nRes = StarsectorToolbox.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
 
-namespace StarsectorTools.ViewModels.GameSettings;
+namespace StarsectorToolbox.ViewModels.GameSettings;
 
 internal partial class GameSettingsPageViewModel
 {

@@ -13,12 +13,12 @@ using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.Models;
-using I18nRes = StarsectorTools.Langs.Pages.ModManager.ModManagerPageI18nRes;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Models;
+using I18nRes = StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
-namespace StarsectorTools.ViewModels.ModManager;
+namespace StarsectorToolbox.ViewModels.ModManager;
 
 internal partial class ModManagerPageViewModel : ObservableObject
 {

@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-namespace StarsectorTools.Libs.Utils;
+namespace StarsectorToolbox.Libs.Utils;
 
-/// <summary>StarsectorTools数据</summary>
+/// <summary>StarsectorToolbox数据</summary>
 public static class ST
 {
     /// <summary>核心文件夹</summary>
@@ -15,7 +15,7 @@ public static class ST
     public static string ConfigTomlFile => $"{CoreDirectory}\\Config.toml";
 
     /// <summary>日志文件</summary>
-    public static string LogFile => $"{CoreDirectory}\\{nameof(StarsectorTools)}.log";
+    public static string LogFile => $"{CoreDirectory}\\{nameof(StarsectorToolbox)}.log";
 
     /// <summary>拓展信息文件</summary>
     public static string ExtensionInfoFile => "Extension.toml";

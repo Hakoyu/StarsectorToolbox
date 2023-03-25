@@ -5,10 +5,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.ViewModels.Main;
-using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using StarsectorToolbox.ViewModels.Main;
+using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
-namespace StarsectorTools.Views.Main;
+namespace StarsectorToolbox.Views.Main;
 
 /// <summary>
 /// Interaction logic for Main.xaml

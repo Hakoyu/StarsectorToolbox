@@ -562,7 +562,7 @@
   <data name="UnknownModsMessage" xml:space="preserve">
     <value>您打开了未知模组分类
 其中存在 {0} 个未知模组
-希望您前往 https://github.com/Hakoyu/StarsectorTools/issues
+希望您前往 https://github.com/Hakoyu/StarsectorToolbox/issues
 提交 issue 中提供其 ID 及应该在的分类</value>
   </data>
   <data name="CleanAllMods" xml:space="preserve">

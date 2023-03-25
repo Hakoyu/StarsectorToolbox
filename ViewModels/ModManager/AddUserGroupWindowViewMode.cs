@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.ViewModels.Controls;
-using StarsectorTools.Libs.Utils;
+using StarsectorToolbox.Libs.Utils;
 
-namespace StarsectorTools.ViewModels.ModManager;
+namespace StarsectorToolbox.ViewModels.ModManager;
 
 internal partial class AddUserGroupWindowViewMode : WindowVM
 {

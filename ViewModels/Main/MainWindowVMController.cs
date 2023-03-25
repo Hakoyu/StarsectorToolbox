@@ -9,12 +9,12 @@ using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.Resources;
-using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Resources;
+using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
-namespace StarsectorTools.ViewModels.Main;
+namespace StarsectorToolbox.ViewModels.Main;
 
 internal partial class MainWindowViewModel
 {
@@ -685,7 +685,7 @@ internal partial class MainWindowViewModel
         var ex = (Exception)e.ExceptionObject;
         if (ex.InnerException is not null)
             ex = ex.InnerException;
-        if (ex.Source is nameof(StarsectorTools))
+        if (ex.Source is nameof(StarsectorToolbox))
         {
             Logger.Error(I18nRes.GlobalException, ex, false);
             MessageBoxVM.Show(

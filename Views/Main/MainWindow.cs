@@ -8,10 +8,10 @@ using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Dialogs;
 using Panuon.WPF.UI;
-using StarsectorTools.Models.Messages;
-using I18n = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using StarsectorToolbox.Models.Messages;
+using I18n = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
-namespace StarsectorTools.Views.Main;
+namespace StarsectorToolbox.Views.Main;
 
 internal partial class MainWindow
 {

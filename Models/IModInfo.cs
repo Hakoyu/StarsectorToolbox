@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StarsectorTools.Models;
+namespace StarsectorToolbox.Models;
 
 /// <summary>
 /// 模组信息接口

@@ -6,12 +6,12 @@ using HKW.Libs.Log4Cs;
 using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
-using StarsectorTools.Libs.GameInfo;
-using StarsectorTools.Libs.Utils;
-using StarsectorTools.Models.Messages;
-using I18nRes = StarsectorTools.Langs.Windows.MainWindow.MainWindowI18nRes;
+using StarsectorToolbox.Libs.GameInfo;
+using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Models.Messages;
+using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
-namespace StarsectorTools.ViewModels.Main;
+namespace StarsectorToolbox.ViewModels.Main;
 
 /// <summary>
 /// 主窗口视图模型
