@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -36,7 +35,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
     [ObservableProperty]
-    private bool _groupMenuIsExpand = true;
+    private bool _groupMenuIsExpand = false;
 
     [ObservableProperty]
     private ObservableCollection<ModShowInfo> _nowShowMods = new();

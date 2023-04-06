@@ -250,9 +250,6 @@
                 <i:EventTrigger EventName="SelectionChanged">
                   <i:InvokeCommandAction Command="{Binding DataGridSelectionChangedCommand}" CommandParameter="{Binding SelectedItems, ElementName=DataGrid_ModsShowList}" />
                 </i:EventTrigger>
-                <!--<i:EventTrigger EventName="LostFocus">
-                  <i:InvokeCommandAction Command="{Binding DataGridLostFocusCommand}" />
-                </i:EventTrigger>-->
               </i:Interaction.Triggers>
               <DataGrid.InputBindings>
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
