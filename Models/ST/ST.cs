@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
 
-namespace StarsectorToolbox.Libs.Utils;
+namespace StarsectorToolbox.Models.ST;
 
 /// <summary>StarsectorToolbox数据</summary>
-public static class ST
+public class ST
 {
     /// <summary>核心文件夹</summary>
     public static string CoreDirectory => "STCore";

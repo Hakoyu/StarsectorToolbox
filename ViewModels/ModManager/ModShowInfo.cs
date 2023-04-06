@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using HKW.ViewModels.Controls;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Models;
+using StarsectorToolbox.Models.GameInfo;
+using StarsectorToolbox.Models.ModInfo;
 
 namespace StarsectorToolbox.ViewModels.ModManager;
 

@@ -33,98 +33,89 @@ public class Logger
     public static string LogFile { get; private set; } = string.Empty;
 
     /// <summary>设置</summary>
-    public static InitializeOptions Options { get; set; } = null!;
+    public static Options DefaultOptions { get; set; } = null!;
 
     /// <summary>写入流</summary>
     private static StreamWriter sw = null!;
 
     /// <summary>读写锁</summary>
-    private static ReaderWriterLockSlim rwLockS = new();
+    private static readonly ReaderWriterLockSlim rwLockS = new();
 
     /// <summary>
     /// 初始化设置
     /// </summary>
-    public class InitializeOptions
+    public class Options
     {
         /// <summary>
         /// 默认日志等级
         /// </summary>
-        public LogLevel DefaultLevel { get; set; } = LogLevel.INFO;
+        public LogLevel Level { get; set; } = LogLevel.INFO;
 
         /// <summary>
         /// 默认附加
         /// </summary>
-        public bool DefaultAppend { get; set; } = false;
+        public bool Append { get; set; } = false;
 
         /// <summary>
         /// 默认过滤异常
         /// </summary>
-        public bool DefaultFilterException { get; set; } = true;
+        public bool FilterException { get; set; } = true;
 
         /// <summary>
         /// 默认显示命名空间
         /// </summary>
-        public bool DefaultShowNamespace { get; set; } = true;
+        public bool ShowNamespace { get; set; } = true;
 
         /// <summary>
         /// 默认只显示基命名空间
         /// </summary>
-        public bool DefaultOnlyBaseNamespace { get; set; } = true;
+        public bool OnlyBaseNamespace { get; set; } = true;
 
         /// <summary>
         /// 默认显示类名
         /// </summary>
-        public bool DefaultShowClass { get; set; } = true;
+        public bool ShowClass { get; set; } = true;
 
         /// <summary>
         /// 默认显示方法名
         /// </summary>
-        public bool DefaultShowMethod { get; set; } = false;
+        public bool ShowMethod { get; set; } = false;
 
         /// <summary>
         /// 默认显示线程Id
         /// </summary>
-        public bool DefaultShowThreadId { get; set; } = false;
+        public bool ShowThreadId { get; set; } = false;
 
         /// <summary>
         /// 默认显示时间
         /// </summary>
-        public bool DefaultShowTime { get; set; } = false;
+        public bool ShowTime { get; set; } = false;
 
         /// <summary>
         /// 默认显示日期
         /// </summary>
-        public bool DefaultShowDate { get; set; } = false;
+        public bool ShowDate { get; set; } = false;
 
         /// <summary>
         /// 异常过滤器
         /// </summary>
         public List<string> ExceptionFilter { get; set; } =
-            new()
-            {
-                "at System.",
-                "at MS.",
-                "at Microsoft.",
-            };
+            new() { "at System.", "at MS.", "at Microsoft.", };
     }
 
-    private Logger()
-    { }
+    private Logger() { }
 
     /// <summary>
     /// 初始化
     /// </summary>
     /// <param name="logFile">日志文件</param>
     /// <param name="initializeOptions">初始化设置</param>
-    public static void Initialize(
-        string logFile,
-        InitializeOptions? initializeOptions = null
-    )
+    public static void Initialize(string logFile, Options? initializeOptions = null)
     {
-        Options = initializeOptions ?? new();
+        DefaultOptions = initializeOptions ?? new();
         LogFile = logFile;
         sw?.Close();
-        sw = new(LogFile, Options.DefaultAppend);
+        sw = new(LogFile, DefaultOptions.Append);
     }
 
     /// <summary>
@@ -147,28 +138,28 @@ public class Logger
     /// </summary>
     /// <param name="message">消息</param>
     public static void Debug(string message) =>
-        RecordBase(message, LogLevel.DEBUG, null, Options.DefaultFilterException);
+        RecordBase(message, LogLevel.DEBUG, null, DefaultOptions.FilterException);
 
     /// <summary>
     /// 记录信息日志
     /// </summary>
     /// <param name="message">消息</param>
     public static void Info(string message) =>
-        RecordBase(message, LogLevel.INFO, null, Options.DefaultFilterException);
+        RecordBase(message, LogLevel.INFO, null, DefaultOptions.FilterException);
 
     /// <summary>
     /// 记录警告日志
     /// </summary>
     /// <param name="message">消息</param>
     public static void Warring(string message) =>
-        RecordBase(message, LogLevel.WARN, null, Options.DefaultFilterException);
+        RecordBase(message, LogLevel.WARN, null, DefaultOptions.FilterException);
 
     /// <summary>
     /// 记录错误日志
     /// </summary>
     /// <param name="message">消息</param>
     public static void Error(string message) =>
-        RecordBase(message, LogLevel.ERROR, null, Options.DefaultFilterException);
+        RecordBase(message, LogLevel.ERROR, null, DefaultOptions.FilterException);
 
     /// <summary>
     /// 记录错误日志
@@ -176,7 +167,7 @@ public class Logger
     /// <param name="message">消息</param>
     /// <param name="ex">异常</param>
     public static void Error(string message, Exception ex) =>
-        RecordBase(message, LogLevel.ERROR, ex, Options.DefaultFilterException);
+        RecordBase(message, LogLevel.ERROR, ex, DefaultOptions.FilterException);
 
     /// <summary>
     /// 记录错误日志
@@ -204,7 +195,7 @@ public class Logger
         rwLockS.EnterWriteLock();
         try
         {
-            if (logLevel >= Options.DefaultLevel)
+            if (logLevel >= DefaultOptions.Level)
             {
                 string origin = GetOriginMessage(logLevel);
                 string dateTime = GetDataTimeMessage();
@@ -226,8 +217,8 @@ public class Logger
     /// <returns>线程Id</returns>
     private static string GetThreadId()
     {
-        return Options.DefaultShowThreadId
-            ? Thread.CurrentThread.ManagedThreadId.ToString()
+        return DefaultOptions.ShowThreadId
+            ? Environment.CurrentManagedThreadId.ToString()
             : string.Empty;
     }
 
@@ -239,9 +230,9 @@ public class Logger
     {
         string dateTime = string.Empty;
         var nowDateTime = DateTime.Now;
-        if (Options.DefaultShowDate)
+        if (DefaultOptions.ShowDate)
             dateTime += $"{nowDateTime.Year}/{nowDateTime.Month}/{nowDateTime.Day} ";
-        if (Options.DefaultShowTime)
+        if (DefaultOptions.ShowTime)
             dateTime += nowDateTime.TimeOfDay.ToString();
         return dateTime;
     }
@@ -253,10 +244,10 @@ public class Logger
             origin = GetOrigin(true, false, true, true);
         else
             origin = GetOrigin(
-                Options.DefaultShowNamespace,
-                Options.DefaultOnlyBaseNamespace,
-                Options.DefaultShowClass,
-                Options.DefaultShowMethod
+                DefaultOptions.ShowNamespace,
+                DefaultOptions.OnlyBaseNamespace,
+                DefaultOptions.ShowClass,
+                DefaultOptions.ShowMethod
             );
         return origin;
     }
@@ -335,7 +326,7 @@ public class Logger
     {
         var list = ex.ToString()
             .Split("\r\n")
-            .Where(s => !Options.ExceptionFilter.Any(f => s.Contains(f)));
+            .Where(s => !DefaultOptions.ExceptionFilter.Any(f => s.Contains(f)));
         return FilterPath(string.Join("\r\n", list), GetOrigin(true, true, false, false));
     }
 

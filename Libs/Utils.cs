@@ -14,10 +14,11 @@ using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
+using StarsectorToolbox.Libs;
 using StarsectorToolbox.ViewModels.Main;
 using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorToolbox.Libs.Utils;
+namespace StarsectorToolbox.Libs;
 
 /// <summary>通用方法</summary>
 public static class Utils

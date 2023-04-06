@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Models.ST;
 using StarsectorToolbox.ViewModels.ModManager;
 
 namespace StarsectorToolbox.Views.ModManager;

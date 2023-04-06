@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using StarsectorToolbox.Models;
 
-namespace StarsectorToolbox.Libs.Utils;
+namespace StarsectorToolbox.Models.ModInfo;
 
 /// <summary>所有模组信息</summary>
 public static class ModInfos

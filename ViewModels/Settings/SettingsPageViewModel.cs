@@ -4,12 +4,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using HKW.Libs.Log4Cs;
-using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.Messages;
+using StarsectorToolbox.Models.ST;
 using I18nRes = StarsectorToolbox.Langs.Pages.Settings.SettingsPageI18nRes;
 
 namespace StarsectorToolbox.ViewModels.Settings;
@@ -53,7 +53,7 @@ internal partial class SettingsPageViewModel : ObservableObject
             WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>().Response;
         // 设置LogLevel初始值
         ComboBox_LogLevel.SelectedItem = ComboBox_LogLevel.First(
-            i => i.ToolTip is LogLevel level && level == Logger.Options.DefaultLevel
+            i => i.ToolTip is LogLevel level && level == Logger.DefaultOptions.Level
         );
         // 设置Language初始值
         ComboBox_Language.SelectedItem = ComboBox_Language.FirstOrDefault(
@@ -86,9 +86,8 @@ internal partial class SettingsPageViewModel : ObservableObject
         if (ObservableI18n.Language == language)
             return;
         ObservableI18n.Language = item.ToolTip!.ToString()!;
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        toml["Lang"] = ObservableI18n.Language;
-        toml.SaveTo(ST.ConfigTomlFile);
+        STSettings.Instance.Language = ObservableI18n.Language;
+        STSettings.Save();
         Logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
     }
 
@@ -97,13 +96,12 @@ internal partial class SettingsPageViewModel : ObservableObject
         if (parameter is not ComboBoxItemVM item)
             return;
         var level = item.ToolTip!.ToString()!;
-        if (Logger.Options.DefaultLevel.ToString() == level)
+        if (Logger.DefaultOptions.Level.ToString() == level)
             return;
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        toml["LogLevel"] = level;
-        toml.SaveTo(ST.ConfigTomlFile);
-        Logger.Options.DefaultLevel = Logger.LogLevelConverter(level);
-        Logger.Info($"{I18nRes.LogLevelSwitch}: {Logger.Options.DefaultLevel}");
+        STSettings.Instance.LogLevel = level;
+        STSettings.Save();
+        Logger.DefaultOptions.Level = Logger.LogLevelConverter(level);
+        Logger.Info($"{I18nRes.LogLevelSwitch}: {Logger.DefaultOptions.Level}");
     }
 
     [RelayCommand]

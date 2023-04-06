@@ -10,10 +10,10 @@ using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
 using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorToolbox.Libs.GameInfo;
+namespace StarsectorToolbox.Models.GameInfo;
 
 /// <summary>游戏信息</summary>
-public static class GameInfo
+public class GameInfo
 {
     /// <summary>游戏目录</summary>
     public static string BaseDirectory { get; private set; } = null!;
@@ -112,23 +112,24 @@ public static class GameInfo
         static string? CheckGameVersion(string logFile)
         {
             // 因为游戏可能会处于运行状态,所以使用只读打开日志文件
-            using (
-                var sr = new StreamReader(
-                    logFile,
-                    new FileStreamOptions()
-                    {
-                        Access = FileAccess.Read,
-                        Mode = FileMode.Open,
-                        Share = FileShare.ReadWrite
-                    }
-                )
-            )
+            using var sr = new StreamReader(
+                logFile,
+                new FileStreamOptions()
+                {
+                    Access = FileAccess.Read,
+                    Mode = FileMode.Open,
+                    Share = FileShare.ReadWrite
+                }
+            );
+            var line = string.Empty;
+            while ((line = sr.ReadLine()) is not null)
             {
-                var data = sr.ReadToEnd();
-                if (_checkLauncher.Match(data).Value is string launcherData)
+                if (
+                    _checkLauncher.Match(line).Value is string launcherData
+                    && string.IsNullOrWhiteSpace(launcherData) is false
+                )
                     return _checkVersion.Match(launcherData).Value;
             }
-            ;
             return null;
         }
     }

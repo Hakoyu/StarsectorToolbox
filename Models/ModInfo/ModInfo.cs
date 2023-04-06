@@ -5,11 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Text.Json.Nodes;
 using HKW.Libs.Log4Cs;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
 using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-namespace StarsectorToolbox.Models;
+namespace StarsectorToolbox.Models.ModInfo;
 
 /// <summary>模组信息</summary>
 [DebuggerDisplay("{Name},Version = {Version}")]
@@ -46,7 +45,7 @@ public class ModInfo : IModInfo
     public IReadOnlySet<ModInfo>? DependenciesSet { get; private set; } = null!;
 
     /// <inheritdoc/>
-    public bool IsSameToGameVersion => GameVersion == GameInfo.Version;
+    public bool IsSameToGameVersion => GameVersion == GameInfo.GameInfo.Version;
 
     /// <inheritdoc/>
     public DateTime LastUpdateTime { get; private set; }

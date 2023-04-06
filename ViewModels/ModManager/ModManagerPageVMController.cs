@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using HKW.Extension;
 using HKW.Libs.Log4Cs;
-using HKW.Libs.TomlParse;
+using HKW.TOML;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
-using StarsectorToolbox.Models;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
+using StarsectorToolbox.Models.ModInfo;
+using StarsectorToolbox.Models.ST;
 using StarsectorToolbox.Resources;
 using I18nRes = StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
@@ -568,7 +569,7 @@ internal partial class ModManagerPageViewModel
         try
         {
             StringBuilder errSB = new();
-            TomlTable toml = TOML.Parse(filePath);
+            TomlTable toml = TOML.ParseFromFile(filePath);
             foreach (var kv in toml)
             {
                 if (kv.Key == ModTypeGroup.Collected || kv.Key == _StrUserCustomData)
@@ -620,7 +621,7 @@ internal partial class ModManagerPageViewModel
         Logger.Info($"{I18nRes.LoadUserData} {I18nRes.Path}: {filePath}");
         try
         {
-            TomlTable toml = TOML.Parse(filePath);
+            TomlTable toml = TOML.ParseFromFile(filePath);
             if (GetUserCollectedMods(toml[ModTypeGroup.Collected].AsTomlArray) is StringBuilder err)
             {
                 MessageBoxVM.Show(
@@ -709,7 +710,7 @@ internal partial class ModManagerPageViewModel
 
     private void GetTypeGroup()
     {
-        using StreamReader sr = ResourceDictionary.GetResourceStream(
+        using var sr = ResourceDictionary.GetResourceStream(
             ResourceDictionary.ModTypeGroup_toml
         );
         ;
@@ -1093,7 +1094,7 @@ internal partial class ModManagerPageViewModel
 
     private void SaveUserData(string filePath)
     {
-        TomlTable toml =
+        TomlTable table =
             new()
             {
                 [ModTypeGroup.Collected] = new TomlArray(),
@@ -1102,10 +1103,10 @@ internal partial class ModManagerPageViewModel
         foreach (var info in _allModsShowInfo.Values)
         {
             if (info.IsCollected is true)
-                toml[ModTypeGroup.Collected].Add(info.Id);
+                table[ModTypeGroup.Collected].Add(info.Id);
             if (info.UserDescription!.Length > 0)
             {
-                toml[_StrUserCustomData].Add(
+                table[_StrUserCustomData].Add(
                     new TomlTable()
                     {
                         [nameof(ModShowInfo.Id)] = info.Id,
@@ -1115,13 +1116,13 @@ internal partial class ModManagerPageViewModel
                 );
             }
         }
-        toml.SaveTo(filePath);
+        table.SaveToFile(filePath);
         Logger.Info($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
     }
 
     private void SaveAllUserGroup(string filePath, string group = _StrAll)
     {
-        TomlTable toml = new();
+        TomlTable table = new();
         if (group == _StrAll)
         {
             foreach (var groupData in _allUserGroups)
@@ -1131,12 +1132,12 @@ internal partial class ModManagerPageViewModel
         {
             Save(group);
         }
-        toml.SaveTo(filePath);
+        table.SaveToFile(filePath);
         Logger.Info($"{I18nRes.UserGroupSaveCompleted} {I18nRes.Path}: {filePath}");
         void Save(string name)
         {
             var mods = _allUserGroups[name];
-            toml.Add(
+            table.Add(
                 name,
                 new TomlTable()
                 {
@@ -1145,7 +1146,7 @@ internal partial class ModManagerPageViewModel
                 }
             );
             foreach (var id in mods)
-                toml[name][_StrMods].Add(id);
+                table[name][_StrMods].Add(id);
         }
     }
 

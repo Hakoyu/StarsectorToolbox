@@ -3,12 +3,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using HKW.Libs.Log4Cs;
-using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.Messages;
+using StarsectorToolbox.Models.ST;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorToolbox.ViewModels.Main;
@@ -30,9 +30,8 @@ internal partial class MainWindowViewModel : ObservableObject
     private bool _clearGameLogOnStart = true;
     partial void OnClearGameLogOnStartChanged(bool value)
     {
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        toml["Game"]["ClearLogOnStart"] = value;
-        toml.SaveTo(ST.ConfigTomlFile);
+        STSettings.Instance.Game.ClearLogOnStart = value;
+        STSettings.Save();
     }
 
     [ObservableProperty]
@@ -166,9 +165,8 @@ internal partial class MainWindowViewModel : ObservableObject
             _deubgItemPath = message.Value;
         }
         RefreshExtensionDebugPage();
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        toml["Extension"]["DebugPath"] = message.Value;
-        toml.SaveTo(ST.ConfigTomlFile);
+        STSettings.Instance.Extension.DebugPath = message.Value;
+        STSettings.Save();
     }
 
     private void ExtensionDebugPathRequestReceive(

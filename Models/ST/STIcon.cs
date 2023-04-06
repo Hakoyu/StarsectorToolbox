@@ -1,4 +1,4 @@
-﻿namespace StarsectorToolbox.Libs.Utils;
+﻿namespace StarsectorToolbox.Models.ST;
 
 /// <summary>
 /// 全局图标

@@ -66,6 +66,7 @@ internal partial class MainWindow : Window
         InitializePage();
 
         Logger.Info(I18nRes.InitializationCompleted);
+        GC.Collect();
     }
 
     //窗体移动

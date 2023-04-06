@@ -5,12 +5,13 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using HKW.Libs.Log4Cs;
-using HKW.Libs.TomlParse;
+using HKW.TOML;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
+using StarsectorToolbox.Models.ST;
 using StarsectorToolbox.Resources;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
@@ -267,8 +268,8 @@ internal partial class MainWindowViewModel
         var tomlFile = $"{file}\\{ST.ExtensionInfoFile}";
         try
         {
-            var extensionInfo = new ExtensionInfo(TOML.Parse(tomlFile));
-            var assemblyFile = ParseExtensionInfo(file, tomlFile, ref extensionInfo);
+            var extensionInfo = TomlDeserializer.DeserializeFromFile<ExtensionInfo>(tomlFile);
+            var assemblyFile = ParseExtensionInfo(file, tomlFile, extensionInfo);
             // 判断组件文件是否存在
             if (File.Exists(assemblyFile) is false)
             {
@@ -319,7 +320,7 @@ internal partial class MainWindowViewModel
             );
             return null;
         }
-        string ParseExtensionInfo(string path, string tomlFile, ref ExtensionInfo extensionInfo)
+        string ParseExtensionInfo(string path, string tomlFile, ExtensionInfo extensionInfo)
         {
             // 判断文件存在性
             if (File.Exists(tomlFile) is false)
@@ -335,7 +336,7 @@ internal partial class MainWindowViewModel
             }
             var assemblyFile = $"{path}\\{extensionInfo.ExtensionFile}";
             // 检测是否有相同的拓展
-            if (_allExtensionsInfo.ContainsKey(extensionInfo.ExtensionId))
+            if (_allExtensionsInfo.ContainsKey(extensionInfo.ExtensionPublic))
             {
                 Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
@@ -362,23 +363,23 @@ internal partial class MainWindowViewModel
             {
                 var bytes = File.ReadAllBytes(assemblyFile);
                 assembly = Assembly.Load(bytes, bytes);
-                type = assembly.GetType(extensionInfo.ExtensionId)!;
+                type = assembly.GetType(extensionInfo.ExtensionPublic)!;
             }
             else
             {
                 assembly = Assembly.LoadFile(assemblyFile);
-                type = assembly.GetType(extensionInfo.ExtensionId)!;
+                type = assembly.GetType(extensionInfo.ExtensionPublic)!;
             }
             // 判断是否成功获取了类型
             if (type is null)
             {
                 var assemblyStr = string.Join("\t\n", assembly.ExportedTypes);
                 Logger.Warring(
-                    $"{I18nRes.ExtensionIdError} {I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
+                    $"{I18nRes.ExtensionPublicError} {I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
                 );
                 MessageBoxVM.Show(
                     new(
-                        $"{I18nRes.ExtensionIdError}\n{I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
+                        $"{I18nRes.ExtensionPublicError}\n{I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
                     )
                     {
                         Icon = MessageBoxVM.Icon.Warning
@@ -398,10 +399,11 @@ internal partial class MainWindowViewModel
     {
         try
         {
+            STSettings.Initialize(ST.ConfigTomlFile);
             if (Utils.FileExists(ST.ConfigTomlFile, false))
                 return GetConfig();
             else
-                return CreateConfig();
+                return FirstCreateConfig();
         }
         catch (Exception ex)
         {
@@ -419,15 +421,12 @@ internal partial class MainWindowViewModel
 
     private bool GetConfig()
     {
-        // 读取设置
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        // 语言
-        var cultureInfo = CultureInfo.GetCultureInfo(toml["Lang"].AsString);
-        ObservableI18n.Language = cultureInfo.Name;
-        // 日志等级
-        Logger.Options.DefaultLevel = Logger.LogLevelConverter(toml["LogLevel"].AsString);
-        // 游戏目录
-        if (GameInfo.SetGameData(toml["Game"]["Path"].AsString) is false)
+        // 设置语言
+        ObservableI18n.Language = STSettings.Instance.Language;
+        // 设置日志等级
+        Logger.DefaultOptions.Level = Logger.LogLevelConverter(STSettings.Instance.LogLevel);
+        // 设置游戏目录
+        if (GameInfo.SetGameData(STSettings.Instance.Game.Path) is false)
         {
             if (
                 MessageBoxVM.Show(
@@ -445,10 +444,10 @@ internal partial class MainWindowViewModel
                 );
                 return false;
             }
-            toml["Game"]["Path"] = GameInfo.BaseDirectory;
+            STSettings.Instance.Game.Path = GameInfo.BaseDirectory;
         }
-        // 拓展调试目录
-        string debugPath = toml["Extension"]["DebugPath"].AsString;
+        // 设置拓展调试目录
+        string debugPath = STSettings.Instance.Extension.DebugPath;
         if (
             !string.IsNullOrWhiteSpace(debugPath)
             && TryGetExtensionInfo(debugPath, true) is ExtensionInfo info
@@ -458,13 +457,58 @@ internal partial class MainWindowViewModel
             _deubgItemPath = debugPath;
         }
         else
-            toml["Extension"]["DebugPath"] = "";
-        ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
-        toml.SaveTo(ST.ConfigTomlFile);
+            STSettings.Instance.Extension.DebugPath = string.Empty;
+
+        ClearGameLogOnStart = STSettings.Instance.Game.ClearLogOnStart;
+        STSettings.Save();
         return true;
+
+        //// 读取设置
+        //var toml = TOML.ParseFromFile(ST.ConfigTomlFile);
+        //// 语言
+        //var cultureInfo = CultureInfo.GetCultureInfo(toml["Lang"].AsString);
+        //ObservableI18n.Language = cultureInfo.Name;
+        //// 日志等级
+        //Logger.DefaultOptions.Level = Logger.LogLevelConverter(toml["LogLevel"].AsString);
+        //// 游戏目录
+        //if (GameInfo.SetGameData(toml["Game"]["Path"].AsString) is false)
+        //{
+        //    if (
+        //        MessageBoxVM.Show(
+        //            new(I18nRes.GameNotFound_SelectAgain)
+        //            {
+        //                Button = MessageBoxVM.Button.YesNo,
+        //                Icon = MessageBoxVM.Icon.Question,
+        //            }
+        //        ) is MessageBoxVM.Result.No
+        //        || GameInfo.GetGameDirectory() is false
+        //    )
+        //    {
+        //        MessageBoxVM.Show(
+        //            new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
+        //        );
+        //        return false;
+        //    }
+        //    toml["Game"]["Path"] = GameInfo.BaseDirectory;
+        //}
+        //// 拓展调试目录
+        //string debugPath = toml["Extension"]["DebugPath"].AsString;
+        //if (
+        //    !string.IsNullOrWhiteSpace(debugPath)
+        //    && TryGetExtensionInfo(debugPath, true) is ExtensionInfo info
+        //)
+        //{
+        //    _deubgItemExtensionInfo = info;
+        //    _deubgItemPath = debugPath;
+        //}
+        //else
+        //    toml["Extension"]["DebugPath"] = "";
+        //ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
+        //toml.SaveTo(ST.ConfigTomlFile);
+        //return true;
     }
 
-    private static bool CreateConfig()
+    private static bool FirstCreateConfig()
     {
         if (
             MessageBoxVM.Show(
@@ -482,11 +526,9 @@ internal partial class MainWindowViewModel
             );
             return false;
         }
-        CreateConfigFile();
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        toml["Game"]["Path"] = GameInfo.BaseDirectory;
-        toml["Lang"] = Thread.CurrentThread.CurrentUICulture.Name;
-        toml.SaveTo(ST.ConfigTomlFile);
+        STSettings.Reset();
+        STSettings.Instance.Game.Path = GameInfo.BaseDirectory;
+        STSettings.Save();
         return true;
     }
 

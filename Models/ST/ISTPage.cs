@@ -1,4 +1,4 @@
-﻿namespace StarsectorToolbox.Libs.Utils;
+﻿namespace StarsectorToolbox.Models.ST;
 
 /// <summary>
 /// ST页面接口

@@ -166,8 +166,8 @@
   <data name="PageInitializeError" xml:space="preserve">
     <value>页面初始化错误</value>
   </data>
-  <data name="ExtensionIdError" xml:space="preserve">
-    <value>扩展ID错误</value>
+  <data name="ExtensionPublicError" xml:space="preserve">
+    <value>扩展接口错误</value>
   </data>
   <data name="ExtensionFileError" xml:space="preserve">
     <value>扩展文件错误</value>

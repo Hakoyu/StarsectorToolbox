@@ -160,15 +160,6 @@ namespace StarsectorToolbox.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 扩展ID错误 的本地化字符串。
-        /// </summary>
-        public static string ExtensionIdError {
-            get {
-                return ResourceManager.GetString("ExtensionIdError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 扩展加载错误 的本地化字符串。
         /// </summary>
         public static string ExtensionLoadError {
@@ -192,6 +183,15 @@ namespace StarsectorToolbox.Langs.Windows.MainWindow {
         public static string ExtensionPathIsEmpty {
             get {
                 return ResourceManager.GetString("ExtensionPathIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 扩展接口错误 的本地化字符串。
+        /// </summary>
+        public static string ExtensionPublicError {
+            get {
+                return ResourceManager.GetString("ExtensionPublicError", resourceCulture);
             }
         }
         

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Input;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Models.ST;
 using StarsectorToolbox.ViewModels.GameSettings;
 using I18nRes = StarsectorToolbox.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
 

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using I18n = StarsectorToolbox.Langs.Libs.GameInfoI18nRes;
 
-namespace StarsectorToolbox.Libs.GameInfo;
+namespace StarsectorToolbox.Models.GameInfo;
 
 /// <summary>
 /// 原版派系

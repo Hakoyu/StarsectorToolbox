@@ -2,7 +2,7 @@
   x:Class="StarsectorToolbox.Views.ModManager.ModManagerPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Utils="clr-namespace:StarsectorToolbox.Libs.Utils"
+  xmlns:ST="clr-namespace:StarsectorToolbox.Models.ST"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -199,10 +199,10 @@
                 <emoji:TextBlock FontSize="16">
                   <TextBlock.Style>
                     <Style TargetType="emoji:TextBlock">
-                      <Setter Property="Text" Value="{x:Static Utils:STIcon.MenuCloseIcon}" />
+                      <Setter Property="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
                       <Style.Triggers>
                         <DataTrigger Binding="{Binding Tag, ElementName=Grid_GroupMenu}" Value="True">
-                          <Setter Property="Text" Value="{x:Static Utils:STIcon.MenuOpenIcon}" />
+                          <Setter Property="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
                         </DataTrigger>
                       </Style.Triggers>
                     </Style>

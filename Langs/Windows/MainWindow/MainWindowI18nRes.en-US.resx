@@ -166,8 +166,8 @@ It may affect the normal operation of the software, it is recommended to check t
   <data name="PageInitializeError" xml:space="preserve">
     <value>Page initialize error</value>
   </data>
-  <data name="ExtensionIdError" xml:space="preserve">
-    <value>ExtensionId Error</value>
+  <data name="ExtensionPublicError" xml:space="preserve">
+    <value>Extension public Error</value>
   </data>
   <data name="ExtensionFileError" xml:space="preserve">
     <value>ExtensionFile Error</value>

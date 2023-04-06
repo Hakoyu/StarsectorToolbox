@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
 using I18nRes = StarsectorToolbox.Langs.Pages.Info.InfoPageI18nRes;
 
 namespace StarsectorToolbox.ViewModels.Info;

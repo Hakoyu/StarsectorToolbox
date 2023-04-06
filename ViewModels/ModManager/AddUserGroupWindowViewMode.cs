@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.ViewModels.Controls;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
 
 namespace StarsectorToolbox.ViewModels.ModManager;
 

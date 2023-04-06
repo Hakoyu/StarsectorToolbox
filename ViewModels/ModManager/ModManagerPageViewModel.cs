@@ -13,9 +13,9 @@ using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
-using StarsectorToolbox.Models;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
+using StarsectorToolbox.Models.ModInfo;
 using I18nRes = StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes;
 
 namespace StarsectorToolbox.ViewModels.ModManager;
@@ -36,7 +36,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
     [ObservableProperty]
-    private bool _groupMenuIsExpand = false;
+    private bool _groupMenuIsExpand = true;
 
     [ObservableProperty]
     private ObservableCollection<ModShowInfo> _nowShowMods = new();

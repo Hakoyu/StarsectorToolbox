@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
 using Microsoft.Win32;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
 using I18nRes = StarsectorToolbox.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
 
 namespace StarsectorToolbox.ViewModels.GameSettings;

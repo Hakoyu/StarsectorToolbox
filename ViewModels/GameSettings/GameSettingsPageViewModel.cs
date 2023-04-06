@@ -7,12 +7,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.Libs;
 using HKW.Libs.Log4Cs;
-using HKW.Libs.TomlParse;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
-using StarsectorToolbox.Libs.GameInfo;
-using StarsectorToolbox.Libs.Utils;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
+using StarsectorToolbox.Models.ST;
 using I18nRes = StarsectorToolbox.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
 
 namespace StarsectorToolbox.ViewModels.GameSettings;
@@ -91,10 +91,8 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             );
             return;
         }
-        var toml = TOML.Parse(ST.ConfigTomlFile);
-        toml["Game"]["Path"] = GameInfo.BaseDirectory;
-        toml.SaveTo(ST.ConfigTomlFile);
-        GamePath = GameInfo.BaseDirectory;
+        STSettings.Instance.Game.Path = GameInfo.BaseDirectory;
+        STSettings.Save();
     }
 
     [RelayCommand]
