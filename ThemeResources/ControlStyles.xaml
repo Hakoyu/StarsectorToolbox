@@ -255,6 +255,17 @@
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
   </Style>
+  <Style
+    x:Key="WindowXBaseStyle"
+    BasedOn="{StaticResource {x:Type pu:WindowX}}"
+    TargetType="pu:WindowX">
+    <Setter Property="Background" Value="{DynamicResource ColorBG}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />
+    <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBG}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
+  </Style>
   <Style x:Key="GridBaseStyle" TargetType="Grid">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
   </Style>

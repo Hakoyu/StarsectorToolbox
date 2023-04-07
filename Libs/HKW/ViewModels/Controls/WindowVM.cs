@@ -40,12 +40,6 @@ public partial class WindowVM : ObservableObject
     /// <summary>
     /// 构造
     /// </summary>
-    protected WindowVM()
-    { }
-
-    /// <summary>
-    /// 构造
-    /// </summary>
     /// <param name="window">窗口</param>
     public WindowVM(object window)
     {

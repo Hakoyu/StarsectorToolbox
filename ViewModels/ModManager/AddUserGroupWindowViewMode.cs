@@ -15,9 +15,6 @@ internal partial class AddUserGroupWindowViewMode : WindowVM
 
     public ListBoxItemVM? BaseListBoxItem;
 
-    public AddUserGroupWindowViewMode()
-    { }
-
     public AddUserGroupWindowViewMode(object window)
         : base(window)
     {

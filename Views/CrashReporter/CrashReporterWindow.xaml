@@ -1,0 +1,55 @@
+﻿<pu:WindowX
+  x:Class="StarsectorToolbox.Views.CrashReporter.CrashReporterWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:StarsectorToolbox.Views.CrashReporter"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  xmlns:vm="clr-namespace:StarsectorToolbox.Views.CrashReporter"
+  Title="CrashReporterWindow"
+  Width="800"
+  Height="450"
+  x:ClassModifier="internal"
+  Style="{StaticResource WindowXBaseStyle}"
+  mc:Ignorable="d">
+  <d:Window.DataContext>
+    <vm:CrashReporterWindow />
+  </d:Window.DataContext>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="50" />
+    </Grid.RowDefinitions>
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+      <TextBox
+        Grid.Row="0"
+        Width="NaN"
+        Height="NaN"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Top"
+        AcceptsReturn="True"
+        FontSize="16"
+        Style="{StaticResource TextBoxBaseStyle}"
+        TextWrapping="Wrap" />
+    </ScrollViewer>
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Button
+        Grid.Column="0"
+        Height="NaN"
+        Margin="50,5,50,5"
+        Content="打开游戏日志"
+        Style="{StaticResource ButtonBaseStyle}" />
+      <Button
+        Grid.Column="1"
+        Height="NaN"
+        Margin="50,5,50,5"
+        Content="复制错误信息"
+        Style="{StaticResource ButtonBaseStyle}" />
+    </Grid>
+  </Grid>
+</pu:WindowX>

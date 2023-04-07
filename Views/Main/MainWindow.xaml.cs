@@ -5,7 +5,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
+using StarsectorToolbox.ViewModels.CrashReporter;
 using StarsectorToolbox.ViewModels.Main;
+using StarsectorToolbox.Views.CrashReporter;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorToolbox.Views.Main;
@@ -15,6 +17,7 @@ namespace StarsectorToolbox.Views.Main;
 /// </summary>
 internal partial class MainWindow : Window
 {
+    private CrashReporterWindowViewModel crashReporterWindow = new(new CrashReporterWindow());
     internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
     /// <summary>
@@ -51,12 +54,12 @@ internal partial class MainWindow : Window
                 ex,
                 false
             );
-            //MessageBoxVM.Show(
-            //    new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
-            //    {
-            //        Icon = MessageBoxVM.Icon.Error
-            //    }
-            //);
+            MessageBoxVM.Show(
+                new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
+                {
+                    Icon = MessageBoxVM.Icon.Error
+                }
+            );
             Environment.Exit(-1);
             return;
         }
@@ -78,7 +81,8 @@ internal partial class MainWindow : Window
     //最小化
     private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
     {
-        WindowState = WindowState.Minimized;
+        crashReporterWindow.Show();
+        //WindowState = WindowState.Minimized;
     }
 
     //最大化
@@ -94,6 +98,7 @@ internal partial class MainWindow : Window
     //关闭
     private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
     {
+        crashReporterWindow.Close();
         ViewModel.Close();
         Close();
     }

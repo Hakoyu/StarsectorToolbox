@@ -11,6 +11,7 @@
   xmlns:sys="clr-namespace:System.Windows;assembly=PresentationFramework"
   xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.Main"
   x:Name="Window_MainWindow"
+  Title="StarsectorToolbox"
   Width="1000"
   Height="500"
   MinWidth="800"

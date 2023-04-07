@@ -32,6 +32,7 @@
     <IncludeSymbols>False</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,9 +44,9 @@
     <PackageReference Include="Aspose.Zip" Version="23.3.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
-    <PackageReference Include="HKWToml" Version="1.0.8" />
+    <PackageReference Include="HKWToml" Version="1.0.10" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="Panuon.WPF.UI" Version="1.1.8.5" />
+    <PackageReference Include="Panuon.WPF.UI" Version="1.1.9.2" />
     <PackageReference Include="SharpCompress" Version="0.33.0" />
   </ItemGroup>
 
