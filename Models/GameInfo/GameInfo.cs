@@ -16,31 +16,40 @@ namespace StarsectorToolbox.Models.GameInfo;
 public class GameInfo
 {
     /// <summary>游戏目录</summary>
-    public static string BaseDirectory { get; private set; } = null!;
+    public static string BaseDirectory { get; private set; } = string.Empty;
 
     /// <summary>游戏Core目录</summary>
-    public static string CoreDirectory { get; private set; } = null!;
+    public static string CoreDirectory { get; private set; } = string.Empty;
 
     /// <summary>游戏exe文件</summary>
-    public static string ExeFile { get; private set; } = null!;
+    public static string ExeFile { get; private set; } = string.Empty;
 
     /// <summary>游戏模组文件夹</summary>
-    public static string ModsDirectory { get; private set; } = null!;
+    public static string ModsDirectory { get; private set; } = string.Empty;
 
     /// <summary>游戏存档文件夹</summary>
-    public static string SaveDirectory { get; private set; } = null!;
+    public static string SaveDirectory { get; private set; } = string.Empty;
 
     /// <summary>游戏已启用模组文件</summary>
-    public static string EnabledModsJsonFile { get; private set; } = null!;
+    public static string EnabledModsJsonFile { get; private set; } = string.Empty;
 
     /// <summary>游戏日志文件</summary>
-    public static string LogFile { get; private set; } = null!;
+    public static string LogFile { get; private set; } = string.Empty;
 
     /// <summary>游戏版本</summary>
-    public static string Version { get; private set; } = null!;
+    public static string Version { get; private set; } = string.Empty;
 
     /// <summary>游戏设置文件</summary>
-    public static string SettingsFile { get; private set; } = null!;
+    public static string SettingsFile { get; private set; } = string.Empty;
+
+    /// <summary>虚拟机参数文件</summary>
+    public static string VmparamsFile { get; private set; } = string.Empty;
+
+    /// <summary>爪洼文件</summary>
+    public static string JavaFile { get; private set; } = string.Empty;
+
+    /// <summary>爪洼版本</summary>
+    public static string JaveVersion { get; private set; } = string.Empty;
 
     private static readonly Regex _checkLauncher = new(@"Starting Starsector [^ ]+ launcher");
     private static readonly Regex _checkVersion = new(@"[0-9]+.[0-9]+[^ ]*");
@@ -48,29 +57,25 @@ public class GameInfo
     /// <summary>
     /// 设置游戏信息
     /// </summary>
-    /// <param name="directoryName">游戏目录</param>
-    internal static bool SetGameData(string directoryName)
+    /// <param name="gameDirectory">游戏目录</param>
+    internal static bool SetGameData(string gameDirectory)
     {
-        if (string.IsNullOrWhiteSpace(directoryName))
+        if (CheckGameDirectory(gameDirectory, out var exeFile) is false)
         {
-            Logger.Error(I18n.GameDirectoryIsEmpty);
-            MessageBoxVM.Show(new(I18n.GameDirectoryIsEmpty) { Icon = MessageBoxVM.Icon.Error });
-            return false;
-        }
-        var exeFile = Path.Combine(directoryName, "starsector.exe");
-        if (File.Exists(exeFile) is false)
-        {
-            Logger.Error($"{I18n.GameDirectoryError} {I18n.Path}: {directoryName}");
+            Logger.Error($"{I18n.GameDirectoryError} {I18n.Path}: {gameDirectory}");
             MessageBoxVM.Show(
                 new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error }
             );
             return false;
         }
         ExeFile = exeFile;
-        BaseDirectory = directoryName;
-        ModsDirectory = Path.Combine(directoryName, "mods");
-        SaveDirectory = Path.Combine(directoryName, "saves");
-        CoreDirectory = Path.Combine(directoryName, "starsector-core");
+        JavaFile = TryGetJavaFile(gameDirectory);
+        JaveVersion = TryGetJaveVersion(JavaFile);
+        VmparamsFile = Path.Combine(gameDirectory, "vmparams");
+        BaseDirectory = gameDirectory;
+        ModsDirectory = Path.Combine(gameDirectory, "mods");
+        SaveDirectory = Path.Combine(gameDirectory, "saves");
+        CoreDirectory = Path.Combine(gameDirectory, "starsector-core");
         EnabledModsJsonFile = Path.Combine(ModsDirectory, "enabled_mods.json");
         LogFile = Path.Combine(CoreDirectory, "starsector.log");
         SettingsFile = Path.Combine(CoreDirectory, "data", "config", "settings.json");
@@ -80,6 +85,17 @@ public class GameInfo
             Logger.Info(I18n.GameVersionAccessFailed);
             MessageBoxVM.Show(new(I18n.GameVersionAccessFailedMessage));
         }
+        return true;
+    }
+
+    private static bool CheckGameDirectory(string gameDirectory, out string exeFile)
+    {
+        exeFile = string.Empty;
+        if (string.IsNullOrWhiteSpace(gameDirectory))
+            return false;
+        exeFile = Path.Combine(gameDirectory, "starsector.exe");
+        if (File.Exists(exeFile) is false)
+            return false;
         return true;
     }
 
@@ -153,5 +169,31 @@ public class GameInfo
             }
         }
         return false;
+    }
+
+    private static string TryGetJavaFile(string baseDirectory)
+    {
+        string javeFile = Path.Combine(baseDirectory, "jre", "bin", "java.exe");
+        if (File.Exists(javeFile))
+            return javeFile;
+        return string.Empty;
+    }
+
+    private static string TryGetJaveVersion(string javaFile)
+    {
+        if (string.IsNullOrWhiteSpace(javaFile))
+            return string.Empty;
+        var psi = new ProcessStartInfo();
+        psi.FileName = javaFile;
+        psi.CreateNoWindow = true;
+        psi.RedirectStandardError = true;
+        psi.Arguments = "-version";
+        using var p = Process.Start(psi);
+        if (p is null)
+            return string.Empty;
+        var message = p.StandardError.ReadToEnd();
+        var version = Regex.Match(message, @"(?<=java version "")[^""]*").Value;
+        p.WaitForExit();
+        return version;
     }
 }

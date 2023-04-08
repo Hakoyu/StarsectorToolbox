@@ -269,6 +269,14 @@
   <Style x:Key="GridBaseStyle" TargetType="Grid">
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
   </Style>
+  <Style x:Key="WindowPanelStyle" TargetType="{x:Type Panel}">
+    <Setter Property="Margin" Value="0" />
+    <Style.Triggers>
+      <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="Maximized">
+        <Setter Property="Margin" Value="8" />
+      </DataTrigger>
+    </Style.Triggers>
+  </Style>
   <Style
     x:Key="CheckBoxBaseStyle"
     BasedOn="{StaticResource {x:Type CheckBox}}"

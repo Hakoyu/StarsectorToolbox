@@ -52,9 +52,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     private string _realGameKey = string.Empty;
     private string _hideGameKey = string.Empty;
 
-    private static string _missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
-
-    private static int _systemTotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
+    private static readonly string _missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_MissionsLoadouts =
@@ -82,7 +80,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void SetGameDirectory()
+    private static void SetGameDirectory()
     {
         if (GameInfo.GetGameDirectory() is false)
         {

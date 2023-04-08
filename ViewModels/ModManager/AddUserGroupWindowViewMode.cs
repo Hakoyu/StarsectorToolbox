@@ -14,7 +14,7 @@ internal partial class AddUserGroupWindowViewMode : WindowVM
     private string _userGroupName = string.Empty;
 
     public ListBoxItemVM? BaseListBoxItem;
-
+    public AddUserGroupWindowViewMode() : base(new()) { }
     public AddUserGroupWindowViewMode(object window)
         : base(window)
     {

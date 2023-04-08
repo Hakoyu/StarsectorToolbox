@@ -14,7 +14,7 @@ public partial class WindowVM : ObservableObject
 
     partial void OnDataContextChanged(object? value)
     {
-        _dataContextProperty?.SetValue(_window, value);
+        r_dataContextProperty?.SetValue(r_window, value);
     }
 
     [ObservableProperty]
@@ -23,19 +23,19 @@ public partial class WindowVM : ObservableObject
     [ObservableProperty]
     private object? _tag;
 
-    private readonly object? _window;
+    private readonly object? r_window;
 
-    private readonly Type? _windowType;
+    private readonly Type? r_windowType;
 
-    private readonly PropertyInfo? _dataContextProperty;
+    private readonly PropertyInfo? r_dataContextProperty;
 
-    private readonly MethodInfo? _showMethod;
+    private readonly MethodInfo? r_showMethod;
 
-    private readonly MethodInfo? _showDialogMethod;
+    private readonly MethodInfo? r_showDialogMethod;
 
-    private readonly MethodInfo? _hideMethod;
+    private readonly MethodInfo? r_hideMethod;
 
-    private readonly MethodInfo? _closeMethod;
+    private readonly MethodInfo? r_closeMethod;
 
     /// <summary>
     /// 构造
@@ -43,14 +43,14 @@ public partial class WindowVM : ObservableObject
     /// <param name="window">窗口</param>
     public WindowVM(object window)
     {
-        _window = window;
+        r_window = window;
         // 通过反射获取window的数据
-        _windowType = window.GetType();
-        _dataContextProperty = _windowType.GetProperty(nameof(DataContext));
-        _showMethod = _windowType.GetMethod(nameof(Show));
-        _showDialogMethod = _windowType.GetMethod(nameof(ShowDialog));
-        _hideMethod = _windowType.GetMethod(nameof(Hide));
-        _closeMethod = _windowType.GetMethod(nameof(Close));
+        r_windowType = window.GetType();
+        r_dataContextProperty = r_windowType.GetProperty(nameof(DataContext));
+        r_showMethod = r_windowType.GetMethod(nameof(Show));
+        r_showDialogMethod = r_windowType.GetMethod(nameof(ShowDialog));
+        r_hideMethod = r_windowType.GetMethod(nameof(Hide));
+        r_closeMethod = r_windowType.GetMethod(nameof(Close));
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public partial class WindowVM : ObservableObject
     public void Show()
     {
         ShowEvent?.Invoke();
-        _showMethod?.Invoke(_window, null);
+        r_showMethod?.Invoke(r_window, null);
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public partial class WindowVM : ObservableObject
     public void ShowDialog()
     {
         ShowDialogEvent?.Invoke();
-        _showDialogMethod?.Invoke(_window, null);
+        r_showDialogMethod?.Invoke(r_window, null);
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public partial class WindowVM : ObservableObject
     public void Hide()
     {
         HideEvent?.Invoke();
-        _hideMethod?.Invoke(_window, null);
+        r_hideMethod?.Invoke(r_window, null);
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public partial class WindowVM : ObservableObject
     public void Close()
     {
         CloseEvent?.Invoke();
-        _closeMethod?.Invoke(_window, null);
+        r_closeMethod?.Invoke(r_window, null);
     }
 
     /// <summary>

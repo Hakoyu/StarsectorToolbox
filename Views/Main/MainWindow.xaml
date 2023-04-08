@@ -37,14 +37,6 @@
       ResizeBorderThickness="5" />
   </WindowChrome.WindowChrome>
   <Window.Resources>
-    <Style x:Key="WindowMainPanelStyle" TargetType="{x:Type Panel}">
-      <Setter Property="Margin" Value="0" />
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Value="Maximized">
-          <Setter Property="Margin" Value="8" />
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
     <Style
       x:Key="ButtonPressed"
       BasedOn="{StaticResource ButtonBaseStyle}"
@@ -56,7 +48,7 @@
       </Style.Triggers>
     </Style>
   </Window.Resources>
-  <Grid Style="{StaticResource WindowMainPanelStyle}">
+  <Grid Style="{StaticResource WindowPanelStyle}">
     <Grid
       x:Name="Grid_TitleBar"
       VerticalAlignment="Top"

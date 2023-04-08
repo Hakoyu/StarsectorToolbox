@@ -28,12 +28,12 @@ internal partial class ModManagerPageViewModel
     private static readonly string _BackupDirectory = $"{ST.CoreDirectory}\\Backup";
     private static readonly string _BackupModsDirectory = $"{_BackupDirectory}\\Mods";
     private const string _ModInfoFile = "mod_info.json";
-    private const string _StrEnabledMods = "enabledMods";
-    private const string _StrAll = "All";
-    private const string _StrId = "Id";
-    private const string _StrIcon = "Icon";
-    private const string _StrMods = "Mods";
-    private const string _StrUserCustomData = "UserCustomData";
+    private const string c_strEnabledMods = "enabledMods";
+    private const string c_strAll = "All";
+    private const string c_strId = "Id";
+    private const string c_strIcon = "Icon";
+    private const string c_strMods = "Mods";
+    private const string c_strUserCustomData = "UserCustomData";
 
     /// <summary>已启用的模组ID</summary>
     private readonly HashSet<string> _allEnabledModsId = new();
@@ -481,11 +481,11 @@ internal partial class ModManagerPageViewModel
             StringBuilder errSB = new();
             if (Utils.JsonParse2Object(filePath) is not JsonObject enabledModsJson)
                 throw new();
-            if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(_StrEnabledMods))
+            if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(c_strEnabledMods))
                 throw new();
             if (importMode && EnabledModListImportMode() is false)
                 return;
-            if (enabledModsJson[_StrEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray)
+            if (enabledModsJson[c_strEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray)
                 throw new();
             Logger.Info($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
             if (GetEnabledMods(enabledModsJsonArray) is StringBuilder err)
@@ -572,7 +572,7 @@ internal partial class ModManagerPageViewModel
             TomlTable toml = TOML.ParseFromFile(filePath);
             foreach (var kv in toml)
             {
-                if (kv.Key == ModTypeGroup.Collected || kv.Key == _StrUserCustomData)
+                if (kv.Key == ModTypeGroup.Collected || kv.Key == c_strUserCustomData)
                     continue;
                 string group = kv.Key;
                 if (_allUserGroups.ContainsKey(group))
@@ -581,8 +581,8 @@ internal partial class ModManagerPageViewModel
                     errSB.AppendLine($"{I18nRes.DuplicateUserGroupName} {group}");
                     continue;
                 }
-                AddUserGroup(kv.Value[_StrIcon]!, group, false);
-                if (GetModsInUserGroup(group, kv.Value[_StrMods].AsTomlArray) is StringBuilder err)
+                AddUserGroup(kv.Value[c_strIcon]!, group, false);
+                if (GetModsInUserGroup(group, kv.Value[c_strMods].AsTomlArray) is StringBuilder err)
                     errSB.Append($"{I18nRes.UserGroup}: {group} {I18nRes.NotFoundMod}:\n{err}");
             }
             if (errSB.Length > 0)
@@ -631,7 +631,7 @@ internal partial class ModManagerPageViewModel
                     }
                 );
             }
-            if (GetUserCustomData(toml[_StrUserCustomData].AsTomlArray) is StringBuilder err1)
+            if (GetUserCustomData(toml[c_strUserCustomData].AsTomlArray) is StringBuilder err1)
             {
                 MessageBoxVM.Show(
                     new($"{I18nRes.UserCustomData} {I18nRes.NotFoundMod}\n{err1}")
@@ -678,7 +678,7 @@ internal partial class ModManagerPageViewModel
         StringBuilder err = new();
         foreach (var dict in array)
         {
-            var id = dict[_StrId].AsString;
+            var id = dict[c_strId].AsString;
             if (string.IsNullOrWhiteSpace(id))
                 continue;
             if (_allModsShowInfo.ContainsKey(id) is false)
@@ -1085,9 +1085,9 @@ internal partial class ModManagerPageViewModel
 
     private void SaveEnabledMods(string filePath)
     {
-        JsonObject jsonObject = new() { [_StrEnabledMods] = new JsonArray() };
+        JsonObject jsonObject = new() { [c_strEnabledMods] = new JsonArray() };
         foreach (var mod in _allEnabledModsId)
-            jsonObject[_StrEnabledMods]!.AsArray().Add(mod);
+            jsonObject[c_strEnabledMods]!.AsArray().Add(mod);
         jsonObject.SaveTo(filePath);
         Logger.Info($"{I18nRes.EnabledListSaveCompleted} {I18nRes.Path}: {filePath}");
     }
@@ -1098,7 +1098,7 @@ internal partial class ModManagerPageViewModel
             new()
             {
                 [ModTypeGroup.Collected] = new TomlArray(),
-                [_StrUserCustomData] = new TomlArray(),
+                [c_strUserCustomData] = new TomlArray(),
             };
         foreach (var info in _allModsShowInfo.Values)
         {
@@ -1106,7 +1106,7 @@ internal partial class ModManagerPageViewModel
                 table[ModTypeGroup.Collected].Add(info.Id);
             if (info.UserDescription!.Length > 0)
             {
-                table[_StrUserCustomData].Add(
+                table[c_strUserCustomData].Add(
                     new TomlTable()
                     {
                         [nameof(ModShowInfo.Id)] = info.Id,
@@ -1120,10 +1120,10 @@ internal partial class ModManagerPageViewModel
         Logger.Info($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
     }
 
-    private void SaveAllUserGroup(string filePath, string group = _StrAll)
+    private void SaveAllUserGroup(string filePath, string group = c_strAll)
     {
         TomlTable table = new();
-        if (group == _StrAll)
+        if (group == c_strAll)
         {
             foreach (var groupData in _allUserGroups)
                 Save(groupData.Key);
@@ -1141,12 +1141,12 @@ internal partial class ModManagerPageViewModel
                 name,
                 new TomlTable()
                 {
-                    [_StrIcon] = _allListBoxItems[name].Icon!.ToString()!,
-                    [_StrMods] = new TomlArray(),
+                    [c_strIcon] = _allListBoxItems[name].Icon!.ToString()!,
+                    [c_strMods] = new TomlArray(),
                 }
             );
             foreach (var id in mods)
-                table[name][_StrMods].Add(id);
+                table[name][c_strMods].Add(id);
         }
     }
 
@@ -1204,13 +1204,13 @@ internal partial class ModManagerPageViewModel
     {
         if (string.IsNullOrWhiteSpace(group) is false && _allUserGroups.ContainsKey(group) is false)
         {
-            if (group == ModTypeGroup.Collected || group == _StrUserCustomData)
+            if (group == ModTypeGroup.Collected || group == c_strUserCustomData)
                 MessageBoxVM.Show(
                     new(
                         string.Format(
                             I18nRes.UserGroupCannotNamed,
                             ModTypeGroup.Collected,
-                            _StrUserCustomData
+                            c_strUserCustomData
                         )
                     )
                     {
@@ -1362,14 +1362,14 @@ internal partial class ModManagerPageViewModel
 
     private bool TryRenameUserGroup(ListBoxItemVM listBoxItem, string newIcon, string newName)
     {
-        if (newName == ModTypeGroup.Collected || newName == _StrUserCustomData)
+        if (newName == ModTypeGroup.Collected || newName == c_strUserCustomData)
         {
             MessageBoxVM.Show(
                 new(
                     string.Format(
                         I18nRes.UserGroupCannotNamed,
                         ModTypeGroup.Collected,
-                        _StrUserCustomData
+                        c_strUserCustomData
                     )
                 )
                 {

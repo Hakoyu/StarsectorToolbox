@@ -6,7 +6,7 @@
   xmlns:local="clr-namespace:StarsectorToolbox.Views.CrashReporter"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
-  xmlns:vm="clr-namespace:StarsectorToolbox.Views.CrashReporter"
+  xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.CrashReporter"
   Title="CrashReporterWindow"
   Width="800"
   Height="450"
@@ -14,9 +14,9 @@
   Style="{StaticResource WindowXBaseStyle}"
   mc:Ignorable="d">
   <d:Window.DataContext>
-    <vm:CrashReporterWindow />
+    <vm:CrashReporterWindowViewModel />
   </d:Window.DataContext>
-  <Grid>
+  <Grid Style="{StaticResource WindowPanelStyle}">
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
       <RowDefinition Height="50" />
@@ -29,8 +29,10 @@
         HorizontalContentAlignment="Stretch"
         VerticalContentAlignment="Top"
         AcceptsReturn="True"
+        FontFamily="Consolas"
         FontSize="16"
         Style="{StaticResource TextBoxBaseStyle}"
+        Text="{Binding CrashReport}"
         TextWrapping="Wrap" />
     </ScrollViewer>
     <Grid Grid.Row="1">
@@ -42,12 +44,14 @@
         Grid.Column="0"
         Height="NaN"
         Margin="50,5,50,5"
+        Command="{Binding OpenGameLogCommand}"
         Content="打开游戏日志"
         Style="{StaticResource ButtonBaseStyle}" />
       <Button
         Grid.Column="1"
         Height="NaN"
         Margin="50,5,50,5"
+        Command="{Binding CopyCrashReportCommand}"
         Content="复制错误信息"
         Style="{StaticResource ButtonBaseStyle}" />
     </Grid>

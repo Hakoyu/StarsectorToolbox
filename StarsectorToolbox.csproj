@@ -48,6 +48,7 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Panuon.WPF.UI" Version="1.1.9.2" />
     <PackageReference Include="SharpCompress" Version="0.33.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -90,6 +91,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ModManagerPageI18nRes.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Langs\Windows\CrashReporter\CrashReporterI18nRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CrashReporterI18nRes.resx</DependentUpon>
     </Compile>
     <Compile Update="Langs\Windows\MainWindow\MainWindowI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -135,6 +141,10 @@
     <EmbeddedResource Update="Langs\Pages\ModManager\ModManagerPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ModManagerPageI18nRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Windows\CrashReporter\CrashReporterI18nRes.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>CrashReporterI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Windows\MainWindow\MainWindowI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

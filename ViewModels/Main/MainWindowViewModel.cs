@@ -9,6 +9,7 @@ using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.Messages;
 using StarsectorToolbox.Models.ST;
+using StarsectorToolbox.Models.System;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorToolbox.ViewModels.Main;
@@ -76,6 +77,7 @@ internal partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel(bool noop)
     {
         Instance = this;
+        SystemInfo.Initialize();
         InitializeData();
         InitializeDirectories();
         // 注册日志

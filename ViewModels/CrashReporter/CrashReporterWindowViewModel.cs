@@ -5,26 +5,40 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using HKW.ViewModels;
 using HKW.ViewModels.Controls;
+using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
 
 namespace StarsectorToolbox.ViewModels.CrashReporter;
 
-internal class CrashReporterWindowViewModel : WindowVM
+internal partial class CrashReporterWindowViewModel : WindowVM
 {
+    [ObservableProperty]
+    private string _crashReport = string.Empty;
+    public CrashReporterWindowViewModel() : base(new()) { }
     public CrashReporterWindowViewModel(object window) : base(window)
     {
-        ListeningProcess();
+        DataContext = this;
+        //ListeningProcess();
+        SetCrashReport();
+    }
+    [RelayCommand]
+    private void SetCrashReport()
+    {
+        CrashReport = CreateCrashReport();
+    }
+    [RelayCommand]
+    private static void OpenGameLog()
+    {
+        Utils.OpenLink(GameInfo.LogFile);
     }
 
-    public void ListeningProcess()
+    [RelayCommand]
+    private void CopyCrashReport()
     {
-        var process = Process.GetProcessesByName("java").FirstOrDefault(p => p.MainModule?.FileName == @"D:\Games\Starsector\jre\bin\java.exe");
-        if (process is null)
-            return;
-        process.EnableRaisingEvents = true;
-        process.Exited += (s, e) =>
-        {
-            var exitCode = process.ExitCode;
-        };
+        ClipboardVM.SetText(CrashReport);
     }
 }
