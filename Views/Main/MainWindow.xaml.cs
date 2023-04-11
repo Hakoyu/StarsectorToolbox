@@ -17,7 +17,6 @@ namespace StarsectorToolbox.Views.Main;
 /// </summary>
 internal partial class MainWindow : Window
 {
-    private CrashReporterWindowViewModel _crashReporterWindow;
     internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
     /// <summary>
@@ -68,6 +67,7 @@ internal partial class MainWindow : Window
         // 初始化页面
         InitializePage();
 
+        ViewModel.CrashReporterWindow = new(new CrashReporterWindow());
         Logger.Info(I18nRes.InitializationCompleted);
         GC.Collect();
     }
@@ -81,9 +81,7 @@ internal partial class MainWindow : Window
     //最小化
     private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
     {
-        _crashReporterWindow ??= new(new CrashReporterWindow());
-        _crashReporterWindow.Show();
-        //WindowState = WindowState.Minimized;
+        WindowState = WindowState.Minimized;
     }
 
     //最大化
@@ -99,7 +97,6 @@ internal partial class MainWindow : Window
     //关闭
     private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
     {
-        _crashReporterWindow.Close();
         ViewModel.Close();
         Close();
     }

@@ -47,11 +47,7 @@ internal partial class MainWindow
             new()
             {
                 new() { Icon = "🌐", Tag = CreatePage(typeof(ModManager.ModManagerPage)), },
-                new()
-                {
-                    Icon = "⚙",
-                    Tag = CreatePage(typeof(GameSettings.GameSettingsPage))
-                }
+                new() { Icon = "⚙", Tag = CreatePage(typeof(GameSettings.GameSettingsPage)) }
             }
         );
     }
@@ -240,7 +236,7 @@ internal partial class MainWindow
     }
 
     private readonly System.Windows.Media.Effects.Effect _blurEffect =
-         new System.Windows.Media.Effects.BlurEffect();
+        new System.Windows.Media.Effects.BlurEffect();
 
     /// <summary>
     /// 设置模糊效果

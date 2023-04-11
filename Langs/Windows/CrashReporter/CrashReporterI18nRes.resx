@@ -148,4 +148,10 @@
   <data name="No" xml:space="preserve">
     <value>否</value>
   </data>
+  <data name="EnabledModNotInstalled" xml:space="preserve">
+    <value>以下模组存在于已启用列表中但未被安装</value>
+  </data>
+  <data name="GameAbnormalExit" xml:space="preserve">
+    <value>游戏非正常退出, 需要启用异常信息收集工具吗?</value>
+  </data>
 </root>

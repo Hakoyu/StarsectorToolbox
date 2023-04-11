@@ -49,6 +49,7 @@
     <PackageReference Include="Panuon.WPF.UI" Version="1.1.9.2" />
     <PackageReference Include="SharpCompress" Version="0.33.0" />
     <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,8 +5,11 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
+using HKW.ViewModels;
+using HKW.ViewModels.Dialogs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
 using StarsectorToolbox.Models.System;
@@ -16,34 +19,75 @@ namespace StarsectorToolbox.ViewModels.CrashReporter;
 
 internal partial class CrashReporterWindowViewModel
 {
-    public void ListeningProcess()
+    private Process? _gameProcess = null;
+    private static int _idMaxLength;
+    private static Dictionary<
+        string,
+        (int IdLength, int NameLength, int VersionLength)
+    > s_ModsBytesLength = null!;
+    private static int _nameMaxLength = 0;
+    private static int _versionMaxLength = 0;
+
+    public async Task ListeningGameAsync()
     {
-        var process = GetGameProcess();
-        if (process is null)
+        if (_gameProcess is not null)
             return;
-        process.EnableRaisingEvents = true;
-        process.Exited += (s, e) =>
+        _gameProcess ??= GetGameProcess();
+        if (_gameProcess is null)
+            return;
+        _gameProcess.EnableRaisingEvents = true;
+        var exitCode = 0;
+        _gameProcess.Exited += (s, e) =>
         {
-            var exitCode = process.ExitCode;
+            exitCode = _gameProcess.ExitCode;
         };
+        await _gameProcess.WaitForExitAsync();
+        GameExited(exitCode);
+        _gameProcess = null;
+    }
+    private void GameExited(int exitCode)
+    {
+        if (exitCode is 0)
+            return;
+        if (
+            MessageBoxVM.Show(
+                new(I18nRes.GameAbnormalExit)
+                {
+                    Icon = MessageBoxVM.Icon.Question,
+                    Button = MessageBoxVM.Button.YesNo
+                }
+            ) is MessageBoxVM.Result.No
+        )
+            return;
+        SetCrashReport();
+        Show();
+    }
+
+    private void SetCrashReport()
+    {
+        CrashReport = CreateCrashReport();
+        LastLog = GetLastLog();
     }
 
     private static Process? GetGameProcess()
     {
         try
         {
-            return Process.GetProcessesByName("java").FirstOrDefault(p => p.MainModule?.FileName == GameInfo.JavaFile);
+            return Process
+                .GetProcessesByName("java")
+                .FirstOrDefault(p => p.MainModule?.FileName == GameInfo.JavaFile);
         }
         catch
         {
             return null;
         }
     }
+
     private static string CreateCrashReport()
     {
         var sb = new StringBuilder();
         sb.AppendLine($"[{I18nRes.GameInfo}]");
-        sb.AppendLine($"{I18nRes.GameVersion}:    {GameInfo.Version}");
+        sb.AppendLine($"{I18nRes.GameVersion}: {GameInfo.Version}");
         sb.AppendLine();
         sb.AppendLine($"[{I18nRes.SystemInfo}]");
         sb.AppendLine($"{I18nRes.Platform}: {SystemInfo.PlatformName}");
@@ -56,42 +100,163 @@ internal partial class CrashReporterWindowViewModel
         sb.AppendLine($"{I18nRes.JavaPath}: {GameInfo.JavaFile}");
         sb.AppendLine();
         sb.AppendLine($"[{I18nRes.ModsInfo}]");
-        sb.AppendLine(CreateModsInfo());
+        sb.Append(CreateModsInfo(ModInfos.AllModInfos, ModInfos.GetCurrentEnabledModIds()));
+        sb.AppendLine();
         return sb.ToString();
     }
 
-    private static string CreateModsInfo()
+    private static StringBuilder CreateModsInfo(
+        IReadOnlyDictionary<string, ModInfo> allModInfos,
+        IEnumerable<string>? enabledModIds
+    )
     {
-        if (ModInfos.GetCurrentEnabledModIds() is not string[] modIdsArray)
-            return string.Empty;
-        var modIds = modIdsArray.ToHashSet();
-        // 获取内容宽度
-        var idMaxLength = ModInfos.AllModInfos.Keys.Max(s => Encoding.UTF8.GetBytes(s).Length);
-        var nameMaxLength = ModInfos.AllModInfos.Values.Max(info => Encoding.UTF8.GetBytes(info.Name).Length);
-        var versionMaxLength = ModInfos.AllModInfos.Values.Max(info => Encoding.UTF8.GetBytes(info.Version).Length);
-        var sb = new StringBuilder("");
+        if (enabledModIds is null)
+            return null!;
+        var enabledModIdSet = enabledModIds.ToHashSet();
+        TryGetBytesLength(allModInfos.Values);
 
-        sb.Append(string.Format($"{{0,-{nameMaxLength}}}", I18nRes.ModName));
+        var sb = new StringBuilder();
+        sb.Append(CheckModContains(allModInfos, enabledModIds));
+        sb.Append(GetModInfoHead());
+
+        // 排序: 已启用,名称
+        foreach (
+            var modInfo in allModInfos.Values
+                .OrderByDescending(info => enabledModIdSet.Contains(info.Id))
+                .ThenBy(info => info.Name)
+        )
+        {
+            // 拼接模组信息
+            sb.Append(
+                string.Format(
+                    $"{{0,-{_nameMaxLength - 4 - (s_ModsBytesLength[modInfo.Id].NameLength - modInfo.Name.Length) / 2}}}",
+                    modInfo.Name
+                )
+            );
+            sb.Append(" | ");
+            sb.Append(
+                string.Format(
+                    $"{{0,-{_idMaxLength - (s_ModsBytesLength[modInfo.Id].IdLength - modInfo.Id.Length) / 2}}}",
+                    modInfo.Id
+                )
+            );
+            sb.Append(" | ");
+            sb.Append(
+                string.Format(
+                    $"{{0,-{_versionMaxLength - (s_ModsBytesLength[modInfo.Id].VersionLength - modInfo.Version.Length) / 2}}}",
+                    modInfo.Version
+                )
+            );
+            sb.Append(" | ");
+            sb.Append(enabledModIdSet.Contains(modInfo.Id) ? I18nRes.Yes : I18nRes.No);
+            sb.AppendLine();
+        }
+        return sb;
+    }
+
+    private static StringBuilder? CheckModContains(
+        IReadOnlyDictionary<string, ModInfo> allModInfos,
+        IEnumerable<string> enabledModIds
+    )
+    {
+        var sb = new StringBuilder();
+        foreach (var id in enabledModIds)
+        {
+            if (allModInfos.ContainsKey(id) is false)
+                sb.Append(id + ", ");
+        }
+        if (sb.Length > 0)
+        {
+            sb.Remove(sb.Length - 2, 2);
+            sb.Insert(0, I18nRes.EnabledModNotInstalled + ":\n");
+            sb.AppendLine();
+            sb.AppendLine();
+            return sb;
+        }
+        return null;
+    }
+
+    private static StringBuilder GetModInfoHead()
+    {
+        var sb = new StringBuilder();
+        // 表头
+        sb.Append(
+            string.Format(
+                $"{{0,-{_nameMaxLength - 4 - (Encoding.UTF8.GetBytes(I18nRes.ModName).Length - I18nRes.ModName.Length) / 2}}}",
+                I18nRes.ModName
+            )
+        );
         sb.Append(" | ");
-        sb.Append(string.Format($"{{0,-{idMaxLength}}}", I18nRes.ModId));
+        sb.Append(
+            string.Format(
+                $"{{0,-{_idMaxLength - (Encoding.UTF8.GetBytes(I18nRes.ModId).Length - I18nRes.ModId.Length) / 2}}}",
+                I18nRes.ModId
+            )
+        );
         sb.Append(" | ");
-        sb.Append(string.Format($"{{0,-{versionMaxLength}}}", I18nRes.ModVersion));
+        sb.Append(
+            string.Format(
+                $"{{0,-{_versionMaxLength - (Encoding.UTF8.GetBytes(I18nRes.ModVersion).Length - I18nRes.ModVersion.Length) / 2}}}",
+                I18nRes.ModVersion
+            )
+        );
         sb.Append(" | ");
         sb.Append(I18nRes.ModIsEnabled);
         sb.AppendLine();
-        sb.AppendLine(new string('=', idMaxLength + nameMaxLength + versionMaxLength + 9));
+        sb.AppendLine(new string('=', _idMaxLength + _nameMaxLength + _versionMaxLength + 16));
+        return sb;
+    }
 
-        foreach (var modInfo in ModInfos.AllModInfos.Values)
+    private static void TryGetBytesLength(IEnumerable<ModInfo> allModInfos)
+    {
+        if (
+            s_ModsBytesLength is null
+            || s_ModsBytesLength.Count != allModInfos.Count()
+            || s_ModsBytesLength.Keys.Except(allModInfos.Select(i => i.Id)).Count() is not 0
+        )
         {
-            sb.Append(string.Format($"{{0,-{nameMaxLength - (Encoding.UTF8.GetBytes(modInfo.Name).Length - modInfo.Name.Length) / 2}}}", modInfo.Name));
-            sb.Append(" | ");
-            sb.Append(string.Format($"{{0,-{idMaxLength - (Encoding.UTF8.GetBytes(modInfo.Id).Length - modInfo.Id.Length) / 2}}}", modInfo.Id));
-            sb.Append(" | ");
-            sb.Append(string.Format($"{{0,-{versionMaxLength - (Encoding.UTF8.GetBytes(modInfo.Version).Length - modInfo.Version.Length) / 2}}}", modInfo.Version));
-            sb.Append(" | ");
-            sb.Append(modIds.Contains(modInfo.Id) ? I18nRes.Yes : I18nRes.No);
-            sb.AppendLine();
+            GetBytesLength(allModInfos);
         }
-        return sb.ToString().Trim();
+    }
+
+    private static void GetBytesLength(IEnumerable<ModInfo> allModInfos)
+    {
+        s_ModsBytesLength = allModInfos.ToDictionary(
+            info => info.Id,
+            info =>
+                (
+                    Encoding.UTF8.GetBytes(info.Id).Length,
+                    Encoding.UTF8.GetBytes(info.Name).Length,
+                    Encoding.UTF8.GetBytes(info.Version).Length
+                )
+        );
+        _idMaxLength = s_ModsBytesLength.Values.Max(i => i.IdLength);
+        _nameMaxLength = s_ModsBytesLength.Values.Max(i => i.NameLength);
+        _versionMaxLength = s_ModsBytesLength.Values.Max(i => i.VersionLength);
+    }
+
+    private static string GetLastLog()
+    {
+        var lines = GetLines().ToArray();
+        if (lines.Length < 100)
+            return string.Join("\n", lines);
+        else
+            return string.Join("\n", lines[^100..]);
+    }
+
+    private static IEnumerable<string> GetLines()
+    {
+        if (ObservableI18n.Language is "zh-CN")
+        {
+            var EncodingGBK = Encoding.GetEncoding("GBK");
+            var lines = File.ReadAllLines(GameInfo.LogFile, EncodingGBK);
+            return lines.Select(s =>
+            {
+                var bytes = Encoding.Convert(EncodingGBK, Encoding.UTF8, EncodingGBK.GetBytes(s));
+                return Encoding.UTF8.GetString(bytes);
+            });
+        }
+        else
+            return File.ReadLines(GameInfo.LogFile);
     }
 }

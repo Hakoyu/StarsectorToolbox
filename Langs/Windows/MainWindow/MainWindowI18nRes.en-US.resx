@@ -235,4 +235,7 @@ Sure to save?</value>
   <data name="Saving" xml:space="preserve">
     <value>Saving</value>
   </data>
+  <data name="CrashReporter" xml:space="preserve">
+    <value>Crash reporter</value>
+  </data>
 </root>

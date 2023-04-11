@@ -201,16 +201,8 @@ internal partial class ModManagerPageViewModel : ObservableObject
             new() { Content = I18nRes.Name, Tag = nameof(ModShowInfo.Name) },
             new() { Content = nameof(ModShowInfo.Id), Tag = nameof(ModShowInfo.Id) },
             new() { Content = I18nRes.Author, Tag = nameof(ModShowInfo.Author) },
-            new()
-            {
-                Content = I18nRes.Description,
-                Tag = nameof(ModShowInfo.Description)
-            },
-            new()
-            {
-                Content = I18nRes.UserDescription,
-                Tag = nameof(ModShowInfo.UserDescription)
-            },
+            new() { Content = I18nRes.Description, Tag = nameof(ModShowInfo.Description) },
+            new() { Content = I18nRes.UserDescription, Tag = nameof(ModShowInfo.UserDescription) },
         };
 
     [ObservableProperty]
@@ -222,8 +214,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
 
     #endregion ComboBox
 
-    public ModManagerPageViewModel()
-    { }
+    public ModManagerPageViewModel() { }
 
     public ModManagerPageViewModel(bool noop)
     {
@@ -277,7 +268,9 @@ internal partial class ModManagerPageViewModel : ObservableObject
         RefreshAllModsContextMenu();
         if (group == nameof(ModTypeGroup.UnknownMods) && _allModShowInfoGroups[group].Count > 0)
         {
-            MessageBoxVM.Show(new(string.Format(I18nRes.UnknownModsMessage, _allModShowInfoGroups[group].Count)));
+            MessageBoxVM.Show(
+                new(string.Format(I18nRes.UnknownModsMessage, _allModShowInfoGroups[group].Count))
+            );
         }
     }
 
@@ -566,8 +559,8 @@ internal partial class ModManagerPageViewModel : ObservableObject
             );
             return;
         }
-        foreach (var info in _allUserGroups[groupName])
-            ChangeModEnabled(info, false);
+        foreach (var id in _allUserGroups[groupName])
+            ChangeModEnabled(id, false);
         int requestSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
         var randomList = _allUserGroups[groupName].OrderBy(
             s => new Random(Guid.NewGuid().GetHashCode()).Next()
@@ -603,6 +596,5 @@ internal partial class ModManagerPageViewModel : ObservableObject
     {
         _addUserGroupWindow.ShowDialog();
     }
-
     #endregion RelayCommand
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -10,6 +12,7 @@ using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.Messages;
 using StarsectorToolbox.Models.ST;
 using StarsectorToolbox.Models.System;
+using StarsectorToolbox.ViewModels.CrashReporter;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorToolbox.ViewModels.Main;
@@ -23,6 +26,9 @@ internal partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
+
+    [ObservableProperty]
+    private CrashReporterWindowViewModel _crashReporterWindow = null!;
 
     [ObservableProperty]
     private bool _menuIsExpand = false;
@@ -77,6 +83,7 @@ internal partial class MainWindowViewModel : ObservableObject
     public MainWindowViewModel(bool noop)
     {
         Instance = this;
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         SystemInfo.Initialize();
         InitializeData();
         InitializeDirectories();
@@ -212,21 +219,22 @@ internal partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void StartGame()
+    private async Task StartGame()
     {
-        if (Utils.FileExists(GameInfo.ExeFile))
+        if (Utils.FileExists(GameInfo.ExeFile) is false)
+            return;
+        ReminderSaveAllPages();
+        CheckGameStartOption();
+        using System.Diagnostics.Process process = new();
+        process.StartInfo.FileName = "cmd";
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.RedirectStandardInput = true;
+        if (process.Start())
         {
-            ReminderSaveAllPages();
-            CheckGameStartOption();
-            using System.Diagnostics.Process process = new();
-            process.StartInfo.FileName = "cmd";
-            process.StartInfo.CreateNoWindow = true;
-            process.StartInfo.RedirectStandardInput = true;
-            if (process.Start())
-            {
-                process.StandardInput.WriteLine($"cd /d {GameInfo.BaseDirectory}");
-                process.StandardInput.WriteLine($"starsector.exe");
-            }
+            process.StandardInput.WriteLine($"cd /d {GameInfo.BaseDirectory}");
+            process.StandardInput.WriteLine($"starsector.exe");
+            await Task.Delay(3000);
+            await CrashReporterWindow.ListeningGameAsync();
         }
     }
 
@@ -237,5 +245,10 @@ internal partial class MainWindowViewModel : ObservableObject
         InitializeExtensionPages();
     }
 
+    [RelayCommand]
+    private void ShowCrashReporter()
+    {
+        _crashReporterWindow.Show();
+    }
     #endregion RelayCommand
 }

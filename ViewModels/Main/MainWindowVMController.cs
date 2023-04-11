@@ -24,7 +24,7 @@ internal partial class MainWindowViewModel
     /// </summary>
     public static MainWindowViewModel Instance { get; private set; } = null!;
 
-    private Dictionary<string, ExtensionInfo> _allExtensionsInfo = new();
+    private readonly Dictionary<string, ExtensionInfo> r_allExtensionsInfo = new();
     private ListBoxItemVM? _selectedItem;
     private ExtensionInfo? _deubgItemExtensionInfo;
     private ListBoxItemVM? _deubgItem;
@@ -32,6 +32,7 @@ internal partial class MainWindowViewModel
 
     internal void Close()
     {
+        CrashReporterWindow.ForcedClose();
         ReminderSaveAllPages();
         CloseAllPages();
     }
@@ -203,9 +204,9 @@ internal partial class MainWindowViewModel
         {
             if (TryGetExtensionInfo(dir.FullName) is not ExtensionInfo extensionInfo)
                 continue;
-            if (_allExtensionsInfo.TryAdd(extensionInfo.Id, extensionInfo) is false)
+            if (r_allExtensionsInfo.TryAdd(extensionInfo.Id, extensionInfo) is false)
             {
-                var originalExtensionInfo = _allExtensionsInfo[extensionInfo.Id];
+                var originalExtensionInfo = r_allExtensionsInfo[extensionInfo.Id];
                 MessageBoxVM.Show(
                     new(
                         $"已存在相同的拓展\n原始文件位置: {originalExtensionInfo.ExtensionFile}\n 再次导入的文件位置{extensionInfo.FileFullName}"
@@ -244,7 +245,7 @@ internal partial class MainWindowViewModel
                 if (vm.Tag is not ISTPage page)
                     return;
                 page.Close();
-                var extensionInfo = _allExtensionsInfo[vm.Id!];
+                var extensionInfo = r_allExtensionsInfo[vm.Id!];
                 extensionInfo.ExtensionPage = vm.Tag = CreatePage(extensionInfo.ExtensionType)!;
                 if (vm.IsSelected)
                     ShowPage(vm.Tag);
@@ -336,7 +337,7 @@ internal partial class MainWindowViewModel
             }
             var assemblyFile = $"{path}\\{extensionInfo.ExtensionFile}";
             // 检测是否有相同的拓展
-            if (_allExtensionsInfo.ContainsKey(extensionInfo.ExtensionPublic))
+            if (r_allExtensionsInfo.ContainsKey(extensionInfo.ExtensionPublic))
             {
                 Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
@@ -462,50 +463,6 @@ internal partial class MainWindowViewModel
         ClearGameLogOnStart = STSettings.Instance.Game.ClearLogOnStart;
         STSettings.Save();
         return true;
-
-        //// 读取设置
-        //var toml = TOML.ParseFromFile(ST.ConfigTomlFile);
-        //// 语言
-        //var cultureInfo = CultureInfo.GetCultureInfo(toml["Lang"].AsString);
-        //ObservableI18n.Language = cultureInfo.Name;
-        //// 日志等级
-        //Logger.DefaultOptions.Level = Logger.LogLevelConverter(toml["LogLevel"].AsString);
-        //// 游戏目录
-        //if (GameInfo.SetGameData(toml["Game"]["Path"].AsString) is false)
-        //{
-        //    if (
-        //        MessageBoxVM.Show(
-        //            new(I18nRes.GameNotFound_SelectAgain)
-        //            {
-        //                Button = MessageBoxVM.Button.YesNo,
-        //                Icon = MessageBoxVM.Icon.Question,
-        //            }
-        //        ) is MessageBoxVM.Result.No
-        //        || GameInfo.GetGameDirectory() is false
-        //    )
-        //    {
-        //        MessageBoxVM.Show(
-        //            new(I18nRes.GameNotFound_SoftwareExit) { Icon = MessageBoxVM.Icon.Error }
-        //        );
-        //        return false;
-        //    }
-        //    toml["Game"]["Path"] = GameInfo.BaseDirectory;
-        //}
-        //// 拓展调试目录
-        //string debugPath = toml["Extension"]["DebugPath"].AsString;
-        //if (
-        //    !string.IsNullOrWhiteSpace(debugPath)
-        //    && TryGetExtensionInfo(debugPath, true) is ExtensionInfo info
-        //)
-        //{
-        //    _deubgItemExtensionInfo = info;
-        //    _deubgItemPath = debugPath;
-        //}
-        //else
-        //    toml["Extension"]["DebugPath"] = "";
-        //ClearGameLogOnStart = toml["Game"]["ClearLogOnStart"].AsBoolean;
-        //toml.SaveTo(ST.ConfigTomlFile);
-        //return true;
     }
 
     private static bool FirstCreateConfig()

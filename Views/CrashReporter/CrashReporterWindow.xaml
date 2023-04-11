@@ -11,33 +11,65 @@
   Width="800"
   Height="450"
   x:ClassModifier="internal"
+  FontFamily="Consolas"
   Style="{StaticResource WindowXBaseStyle}"
+  WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
+  <pu:WindowXCaption.CloseButtonStyle>
+    <Style BasedOn="{StaticResource {x:Static pu:WindowXCaption.CloseButtonStyle}}" TargetType="Button">
+      <Setter Property="Command" Value="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=pu:WindowX}}" />
+    </Style>
+  </pu:WindowXCaption.CloseButtonStyle>
   <d:Window.DataContext>
     <vm:CrashReporterWindowViewModel />
   </d:Window.DataContext>
   <Grid Style="{StaticResource WindowPanelStyle}">
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
+      <RowDefinition Height="5" />
+      <RowDefinition Height="*" />
       <RowDefinition Height="50" />
     </Grid.RowDefinitions>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <ScrollViewer
+      Grid.Row="0"
+      HorizontalScrollBarVisibility="Auto"
+      VerticalScrollBarVisibility="Auto">
       <TextBox
-        Grid.Row="0"
         Width="NaN"
         Height="NaN"
         HorizontalContentAlignment="Stretch"
         VerticalContentAlignment="Top"
         AcceptsReturn="True"
-        FontFamily="Consolas"
         FontSize="16"
         Style="{StaticResource TextBoxBaseStyle}"
         Text="{Binding CrashReport}"
         TextWrapping="Wrap" />
     </ScrollViewer>
-    <Grid Grid.Row="1">
+    <GridSplitter
+      Grid.Row="1"
+      Margin="0,0,0,0"
+      HorizontalAlignment="Stretch"
+      Background="{DynamicResource ColorBB}"
+      Foreground="{x:Null}" />
+    <ScrollViewer
+      Grid.Row="2"
+      HorizontalScrollBarVisibility="Auto"
+      VerticalScrollBarVisibility="Auto">
+      <TextBox
+        Width="NaN"
+        Height="NaN"
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Top"
+        AcceptsReturn="True"
+        FontSize="16"
+        Style="{StaticResource TextBoxBaseStyle}"
+        Text="{Binding LastLog}"
+        TextWrapping="Wrap" />
+    </ScrollViewer>
+    <Grid Grid.Row="3">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
       <Button
@@ -49,6 +81,14 @@
         Style="{StaticResource ButtonBaseStyle}" />
       <Button
         Grid.Column="1"
+        Width="100"
+        Height="NaN"
+        Margin="10,5,10,5"
+        Command="{Binding RefreshCrashReportCommand}"
+        Content="刷新"
+        Style="{StaticResource ButtonBaseStyle}" />
+      <Button
+        Grid.Column="2"
         Height="NaN"
         Margin="50,5,50,5"
         Command="{Binding CopyCrashReportCommand}"

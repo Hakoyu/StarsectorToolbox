@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace HKW.ViewModels.Controls;
 
@@ -36,7 +38,11 @@ public partial class WindowVM : ObservableObject
     private readonly MethodInfo? r_hideMethod;
 
     private readonly MethodInfo? r_closeMethod;
+    private readonly MethodInfo? r_closingMethod;
+    private readonly MethodInfo? r_closedMethod;
 
+    private readonly EventInfo? r_closingEvent;
+    private readonly EventInfo? r_closedEvent;
     /// <summary>
     /// 构造
     /// </summary>
@@ -46,11 +52,18 @@ public partial class WindowVM : ObservableObject
         r_window = window;
         // 通过反射获取window的数据
         r_windowType = window.GetType();
+        // Property
         r_dataContextProperty = r_windowType.GetProperty(nameof(DataContext));
+        // Method
         r_showMethod = r_windowType.GetMethod(nameof(Show));
         r_showDialogMethod = r_windowType.GetMethod(nameof(ShowDialog));
         r_hideMethod = r_windowType.GetMethod(nameof(Hide));
         r_closeMethod = r_windowType.GetMethod(nameof(Close));
+        // Event
+        r_closingEvent = r_windowType.GetEvent(nameof(Closing));
+        r_closingMethod = r_closingEvent?.GetRaiseMethod();
+        r_closedEvent = r_windowType.GetEvent(nameof(Closed));
+        r_closedMethod = r_closedEvent?.GetRaiseMethod();
     }
 
     /// <summary>
@@ -83,11 +96,63 @@ public partial class WindowVM : ObservableObject
     /// <summary>
     /// 关闭
     /// </summary>
+    [RelayCommand]
     public void Close()
     {
-        CloseEvent?.Invoke();
+        CancelEventArgs cancelEventArgs = new();
+        OnClosing(cancelEventArgs);
+        if (cancelEventArgs.Cancel)
+            return;
         r_closeMethod?.Invoke(r_window, null);
+        EventArgs eventArgs = new();
+        OnClosed(eventArgs);
     }
+    #region Close
+    /// <summary>
+    /// 关闭时
+    /// </summary>
+    /// <param name="e">事件参数</param>
+    protected virtual void OnClosing(CancelEventArgs e) { }
+
+    /// <summary>
+    /// 关闭后
+    /// </summary>
+    protected virtual void OnClosed(EventArgs e) { }
+    private event CancelEventHandler? ClosingEvent;
+    /// <summary>
+    /// 关闭时事件
+    /// </summary>
+    public event CancelEventHandler? Closing
+    {
+        add
+        {
+            ClosingEvent += value;
+            r_closingEvent?.AddEventHandler(r_window, ClosingEvent);
+        }
+        remove
+        {
+            r_closingEvent?.RemoveEventHandler(r_window, ClosingEvent);
+            ClosingEvent -= value;
+        }
+    }
+    private event EventHandler? ClosedEvent;
+    /// <summary>
+    /// 关闭后事件
+    /// </summary>
+    public event EventHandler? Closed
+    {
+        add
+        {
+            ClosedEvent += value;
+            r_closedEvent?.AddEventHandler(r_window, ClosedEvent);
+        }
+        remove
+        {
+            r_closedEvent?.RemoveEventHandler(r_window, ClosedEvent);
+            ClosedEvent -= value;
+        }
+    }
+    #endregion
 
     /// <summary>
     /// 委托
@@ -108,9 +173,4 @@ public partial class WindowVM : ObservableObject
     /// 隐藏事件
     /// </summary>
     public event ViewModelHandler? HideEvent;
-
-    /// <summary>
-    /// 关闭事件
-    /// </summary>
-    public event ViewModelHandler? CloseEvent;
 }

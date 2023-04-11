@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,4 +25,11 @@ internal partial class CrashReporterWindow : WindowX
     {
         InitializeComponent();
     }
+    //protected override void OnClosing(CancelEventArgs e)
+    //{
+    //    if (CloseToHide is false)
+    //        return;
+    //    e.Cancel = true;
+    //    Hide();
+    //}
 }

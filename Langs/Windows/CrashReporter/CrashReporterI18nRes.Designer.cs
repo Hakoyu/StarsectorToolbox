@@ -61,6 +61,24 @@ namespace StarsectorToolbox.Langs.Windows.CrashReporter {
         }
         
         /// <summary>
+        ///   查找类似 以下模组存在于已启用列表中但未被安装 的本地化字符串。
+        /// </summary>
+        internal static string EnabledModNotInstalled {
+            get {
+                return ResourceManager.GetString("EnabledModNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 游戏非正常退出, 需要启用异常信息收集工具吗? 的本地化字符串。
+        /// </summary>
+        internal static string GameAbnormalExit {
+            get {
+                return ResourceManager.GetString("GameAbnormalExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏信息 的本地化字符串。
         /// </summary>
         internal static string GameInfo {

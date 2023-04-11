@@ -44,7 +44,7 @@ public class ModInfos
     /// 获取当前的已启用模组的Id(从enabled_mods.json)
     /// </summary>
     /// <returns></returns>
-    public static string[]? GetCurrentEnabledModIds()
+    public static IEnumerable<string>? GetCurrentEnabledModIds()
     {
         if (File.Exists(GameInfo.GameInfo.EnabledModsJsonFile) is false)
             return null;
@@ -63,8 +63,7 @@ public class ModInfos
             return enabledModsJsonArray
                 .Select(i => i!.GetValue<string>())
                 .Where(s => string.IsNullOrWhiteSpace(s) is false)
-                .Distinct()
-                .ToArray();
+                .Distinct();
         }
         catch (Exception ex)
         {

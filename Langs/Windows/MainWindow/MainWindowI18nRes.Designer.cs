@@ -106,6 +106,15 @@ namespace StarsectorToolbox.Langs.Windows.MainWindow {
         }
         
         /// <summary>
+        ///   查找类似 异常信息收集 的本地化字符串。
+        /// </summary>
+        public static string CrashReporter {
+            get {
+                return ResourceManager.GetString("CrashReporter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 显示语言为 的本地化字符串。
         /// </summary>
         public static string DisplayLanguageIs {

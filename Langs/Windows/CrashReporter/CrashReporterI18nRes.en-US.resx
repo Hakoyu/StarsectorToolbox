@@ -168,4 +168,10 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="EnabledModNotInstalled" xml:space="preserve">
+    <value>The following mod exist in the enabled list but are not installed</value>
+  </data>
+  <data name="GameAbnormalExit" xml:space="preserve">
+    <value>The game quit abnormally, need to enable exception information collection tool?</value>
+  </data>
 </root>
