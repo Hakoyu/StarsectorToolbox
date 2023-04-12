@@ -124,6 +124,15 @@ namespace StarsectorToolbox.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 游戏日志清理完成 的本地化字符串。
+        /// </summary>
+        public static string GameLogCleanupCompleted {
+            get {
+                return ResourceManager.GetString("GameLogCleanupCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏版本获取失败 的本地化字符串。
         /// </summary>
         public static string GameVersionAccessFailed {
@@ -175,6 +184,15 @@ namespace StarsectorToolbox.Langs.Libs {
         public static string ProcessStartError {
             get {
                 return ResourceManager.GetString("ProcessStartError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 不支持的压缩文件 的本地化字符串。
+        /// </summary>
+        public static string UnsupportedCompressedFiles {
+            get {
+                return ResourceManager.GetString("UnsupportedCompressedFiles", resourceCulture);
             }
         }
         

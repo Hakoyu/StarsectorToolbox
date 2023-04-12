@@ -20,13 +20,13 @@ namespace StarsectorToolbox.ViewModels.CrashReporter;
 internal partial class CrashReporterWindowViewModel
 {
     private Process? _gameProcess = null;
-    private static int _idMaxLength;
+    private static int s_idMaxLength;
     private static Dictionary<
         string,
         (int IdLength, int NameLength, int VersionLength)
     > s_ModsBytesLength = null!;
-    private static int _nameMaxLength = 0;
-    private static int _versionMaxLength = 0;
+    private static int s_nameMaxLength = 0;
+    private static int s_versionMaxLength = 0;
 
     public async Task ListeningGameAsync()
     {
@@ -129,21 +129,21 @@ internal partial class CrashReporterWindowViewModel
             // 拼接模组信息
             sb.Append(
                 string.Format(
-                    $"{{0,-{_nameMaxLength - 4 - (s_ModsBytesLength[modInfo.Id].NameLength - modInfo.Name.Length) / 2}}}",
+                    $"{{0,-{s_nameMaxLength - 4 - (s_ModsBytesLength[modInfo.Id].NameLength - modInfo.Name.Length) / 2}}}",
                     modInfo.Name
                 )
             );
             sb.Append(" | ");
             sb.Append(
                 string.Format(
-                    $"{{0,-{_idMaxLength - (s_ModsBytesLength[modInfo.Id].IdLength - modInfo.Id.Length) / 2}}}",
+                    $"{{0,-{s_idMaxLength - (s_ModsBytesLength[modInfo.Id].IdLength - modInfo.Id.Length) / 2}}}",
                     modInfo.Id
                 )
             );
             sb.Append(" | ");
             sb.Append(
                 string.Format(
-                    $"{{0,-{_versionMaxLength - (s_ModsBytesLength[modInfo.Id].VersionLength - modInfo.Version.Length) / 2}}}",
+                    $"{{0,-{s_versionMaxLength - (s_ModsBytesLength[modInfo.Id].VersionLength - modInfo.Version.Length) / 2}}}",
                     modInfo.Version
                 )
             );
@@ -182,28 +182,28 @@ internal partial class CrashReporterWindowViewModel
         // 表头
         sb.Append(
             string.Format(
-                $"{{0,-{_nameMaxLength - 4 - (Encoding.UTF8.GetBytes(I18nRes.ModName).Length - I18nRes.ModName.Length) / 2}}}",
+                $"{{0,-{s_nameMaxLength - 4 - (Encoding.UTF8.GetBytes(I18nRes.ModName).Length - I18nRes.ModName.Length) / 2}}}",
                 I18nRes.ModName
             )
         );
         sb.Append(" | ");
         sb.Append(
             string.Format(
-                $"{{0,-{_idMaxLength - (Encoding.UTF8.GetBytes(I18nRes.ModId).Length - I18nRes.ModId.Length) / 2}}}",
+                $"{{0,-{s_idMaxLength - (Encoding.UTF8.GetBytes(I18nRes.ModId).Length - I18nRes.ModId.Length) / 2}}}",
                 I18nRes.ModId
             )
         );
         sb.Append(" | ");
         sb.Append(
             string.Format(
-                $"{{0,-{_versionMaxLength - (Encoding.UTF8.GetBytes(I18nRes.ModVersion).Length - I18nRes.ModVersion.Length) / 2}}}",
+                $"{{0,-{s_versionMaxLength - (Encoding.UTF8.GetBytes(I18nRes.ModVersion).Length - I18nRes.ModVersion.Length) / 2}}}",
                 I18nRes.ModVersion
             )
         );
         sb.Append(" | ");
         sb.Append(I18nRes.ModIsEnabled);
         sb.AppendLine();
-        sb.AppendLine(new string('=', _idMaxLength + _nameMaxLength + _versionMaxLength + 16));
+        sb.AppendLine(new string('=', s_idMaxLength + s_nameMaxLength + s_versionMaxLength + 16));
         return sb;
     }
 
@@ -230,9 +230,9 @@ internal partial class CrashReporterWindowViewModel
                     Encoding.UTF8.GetBytes(info.Version).Length
                 )
         );
-        _idMaxLength = s_ModsBytesLength.Values.Max(i => i.IdLength);
-        _nameMaxLength = s_ModsBytesLength.Values.Max(i => i.NameLength);
-        _versionMaxLength = s_ModsBytesLength.Values.Max(i => i.VersionLength);
+        s_idMaxLength = s_ModsBytesLength.Values.Max(i => i.IdLength);
+        s_nameMaxLength = s_ModsBytesLength.Values.Max(i => i.NameLength);
+        s_versionMaxLength = s_ModsBytesLength.Values.Max(i => i.VersionLength);
     }
 
     private static string GetLastLog()

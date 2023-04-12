@@ -182,15 +182,7 @@ internal partial class MainWindowViewModel
     private void CheckGameStartOption()
     {
         if (_clearGameLogOnStart)
-            ClearGameLogFile();
-    }
-
-    private static void ClearGameLogFile()
-    {
-        if (File.Exists(GameInfo.LogFile))
-            Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
-        File.Create(GameInfo.LogFile).Close();
-        Logger.Info(I18nRes.GameLogCleanupCompleted);
+            Utils.ClearGameLog();
     }
 
     #endregion CheckGameStartOption

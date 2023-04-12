@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using I18n = StarsectorToolbox.Langs.Libs.GameInfoI18nRes;
+using I18nRes = StarsectorToolbox.Langs.Libs.GameInfoI18nRes;
 
 namespace StarsectorToolbox.Models.GameInfo;
 
@@ -67,26 +67,60 @@ public static class VanillaFactions
     public const string Tritachyon = "tritachyon";
 
     /// <summary>所有势力及其I18n</summary>
-    public static ReadOnlyDictionary<string, string> AllVanillaFactionsI18n = new(new Dictionary<string, string>()
+    public static ReadOnlyDictionary<string, string> AllVanillaFactionsI18n { get; private set; } =
+        new(
+            new Dictionary<string, string>()
+            {
+                [Derelict] = I18nRes.Derelict,
+                [Hegemony] = I18nRes.Hegemony,
+                [Independent] = I18nRes.Independent,
+                [KnightsOfLudd] = I18nRes.KnightsOfLudd,
+                [LionsGuard] = I18nRes.LionsGuard,
+                [LuddicChurch] = I18nRes.LuddicChurch,
+                [LuddicPath] = I18nRes.LuddicPath,
+                [Mercenary] = I18nRes.Mercenary,
+                [Neutral] = I18nRes.Neutral,
+                [Omega] = I18nRes.Omega,
+                [PerseanLeague] = I18nRes.PerseanLeague,
+                [Pirates] = I18nRes.Pirates,
+                [Player] = I18nRes.Player,
+                [Poor] = I18nRes.Poor,
+                [Remnants] = I18nRes.Remnants,
+                [Scavengers] = I18nRes.Scavengers,
+                [SindrianDiktat] = I18nRes.SindrianDiktat,
+                [Sleeper] = I18nRes.Sleeper,
+                [Tritachyon] = I18nRes.Tritachyon
+            }
+        );
+
+    /// <summary>
+    /// 刷新势力的I18n资源
+    /// </summary>
+    public static void RefreshI18n()
     {
-        [Derelict] = I18n.Derelict,
-        [Hegemony] = I18n.Hegemony,
-        [Independent] = I18n.Independent,
-        [KnightsOfLudd] = I18n.KnightsOfLudd,
-        [LionsGuard] = I18n.LionsGuard,
-        [LuddicChurch] = I18n.LuddicChurch,
-        [LuddicPath] = I18n.LuddicPath,
-        [Mercenary] = I18n.Mercenary,
-        [Neutral] = I18n.Neutral,
-        [Omega] = I18n.Omega,
-        [PerseanLeague] = I18n.PerseanLeague,
-        [Pirates] = I18n.Pirates,
-        [Player] = I18n.Player,
-        [Poor] = I18n.Poor,
-        [Remnants] = I18n.Remnants,
-        [Scavengers] = I18n.Scavengers,
-        [SindrianDiktat] = I18n.SindrianDiktat,
-        [Sleeper] = I18n.Sleeper,
-        [Tritachyon] = I18n.Tritachyon
-    });
+        AllVanillaFactionsI18n = new(
+            new Dictionary<string, string>()
+            {
+                [Derelict] = I18nRes.Derelict,
+                [Hegemony] = I18nRes.Hegemony,
+                [Independent] = I18nRes.Independent,
+                [KnightsOfLudd] = I18nRes.KnightsOfLudd,
+                [LionsGuard] = I18nRes.LionsGuard,
+                [LuddicChurch] = I18nRes.LuddicChurch,
+                [LuddicPath] = I18nRes.LuddicPath,
+                [Mercenary] = I18nRes.Mercenary,
+                [Neutral] = I18nRes.Neutral,
+                [Omega] = I18nRes.Omega,
+                [PerseanLeague] = I18nRes.PerseanLeague,
+                [Pirates] = I18nRes.Pirates,
+                [Player] = I18nRes.Player,
+                [Poor] = I18nRes.Poor,
+                [Remnants] = I18nRes.Remnants,
+                [Scavengers] = I18nRes.Scavengers,
+                [SindrianDiktat] = I18nRes.SindrianDiktat,
+                [Sleeper] = I18nRes.Sleeper,
+                [Tritachyon] = I18nRes.Tritachyon
+            }
+        );
+    }
 }

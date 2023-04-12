@@ -68,6 +68,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>MessageBoxXI18nRes.resx</DependentUpon>
     </Compile>
+    <Compile Update="Langs\Models\ModelsI18nRes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ModelsI18nRes.resx</DependentUpon>
+    </Compile>
     <Compile Update="Langs\Pages\Info\InfoPageI18nRes.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -122,6 +127,10 @@
     <EmbeddedResource Update="Langs\MessageBoxXI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>MessageBoxXI18nRes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Models\ModelsI18nRes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ModelsI18nRes.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Langs\Pages\Info\InfoPageI18nRes.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -104,7 +104,7 @@ internal partial class ModManagerPageViewModel
     private void InitializeData()
     {
         // 设置外部API
-        ModInfos.AllModInfos = _allModInfos;
+        ModInfos.AllModInfos = new(_allModInfos);
         ModInfos.AllEnabledModIds = _allEnabledModsId;
         ModInfos.AllCollectedModIds = _allCollectedModsId;
         ModInfos.AllUserGroups = _allUserGroups.AsReadOnly<
@@ -112,6 +112,7 @@ internal partial class ModManagerPageViewModel
             HashSet<string>,
             IReadOnlySet<string>
         >();
+        // TODO: 优化启动速度
         GetAllModInfos();
         GetAllListBoxItems();
         GetTypeGroup();

@@ -12,8 +12,11 @@ namespace StarsectorToolbox.ViewModels.Info;
 
 internal partial class InfoPageViewModel : ObservableObject
 {
+    private const string c_noIcon = "❎";
+    private const string c_yesIcon = "✅";
+    private const string c_runIcon = "💫";
     [ObservableProperty]
-    private string checkUpdateIcon = "✅";
+    private string checkUpdateIcon = c_yesIcon;
 
     [ObservableProperty]
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
@@ -31,7 +34,7 @@ internal partial class InfoPageViewModel : ObservableObject
     [RelayCommand]
     private async Task CheckUpdate()
     {
-        CheckUpdateIcon = "💫";
+        CheckUpdateIcon = c_runIcon;
         using (var httpClient = new HttpClient())
         {
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
@@ -42,13 +45,13 @@ internal partial class InfoPageViewModel : ObservableObject
             {
                 Logger.Info($"获取成功\n{tagName}");
                 //Utils.ShowMessageBox($"获取成功\n最新版本: {tagName}");
-                CheckUpdateIcon = "✅";
+                CheckUpdateIcon = c_yesIcon;
             }
             else
             {
                 Logger.Warring($"获取失败\n{releases}");
                 //Utils.ShowMessageBox($"获取失败\n{releases}", MessageBoxImage.Warning);
-                CheckUpdateIcon = "❎";
+                CheckUpdateIcon = c_noIcon;
             }
             //var downloadUrl = Regex.Match(releases, @"(?<=""browser_download_url"": "")[^""]+").Value;
             //var fileResponse = await httpClient.GetAsync(downloadUrl);

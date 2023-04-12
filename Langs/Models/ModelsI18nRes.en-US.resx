@@ -117,53 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Path" xml:space="preserve">
-    <value>Path</value>
-  </data>
-  <data name="GameDirectoryError" xml:space="preserve">
-    <value>Game directory error</value>
-  </data>
-  <data name="File" xml:space="preserve">
-    <value>File</value>
-  </data>
-  <data name="ZipFileError" xml:space="preserve">
-    <value>Zip file error</value>
-  </data>
-  <data name="LoadError" xml:space="preserve">
-    <value>Load error</value>
-  </data>
-  <data name="GameDirectorySetCompleted" xml:space="preserve">
-    <value>Game directory set completed</value>
-  </data>
-  <data name="ProcessStartError" xml:space="preserve">
-    <value>Process start error</value>
-  </data>
-  <data name="ModInfoError" xml:space="preserve">
-    <value>Mod info error</value>
-  </data>
-  <data name="FileNotFound" xml:space="preserve">
-    <value>File not found</value>
-  </data>
-  <data name="DirectoryNotFound" xml:space="preserve">
-    <value>Directory not found</value>
-  </data>
-  <data name="GameDirectoryIsEmpty" xml:space="preserve">
-    <value>Game directory is empty</value>
-  </data>
-  <data name="ExcessivelyLongMessages" xml:space="preserve">
-    <value>Excessively long messages</value>
-  </data>
-  <data name="GameVersionAccessFailed" xml:space="preserve">
-    <value>Game version access failed</value>
-  </data>
-  <data name="GameVersionAccessFailedMessage" xml:space="preserve">
-    <value>Game version access failed
-Please restart the toolbox after starting the game once</value>
-  </data>
-  <data name="GameLogCleanupCompleted" xml:space="preserve">
-    <value>Game log cleanup completed</value>
-  </data>
-  <data name="UnsupportedCompressedFiles" xml:space="preserve">
-    <value>Unsupported compressed files</value>
+  <data name="SystemInfoAcquisitionFailed" xml:space="preserve">
+    <value>System information acquisition failed</value>
   </data>
 </root>

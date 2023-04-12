@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HKW.Libs;
 using HKW.Libs.Log4Cs;
+using I18nRes = StarsectorToolbox.Langs.Models.ModelsI18nRes;
 
 namespace StarsectorToolbox.Models.System;
 
@@ -62,7 +63,7 @@ public class SystemInfo
         }
         catch (Exception ex)
         {
-            Logger.Error("", ex);
+            Logger.Error(I18nRes.SystemInfoAcquisitionFailed, ex);
             return;
         }
     }

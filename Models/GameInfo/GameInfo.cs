@@ -13,7 +13,7 @@ using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 namespace StarsectorToolbox.Models.GameInfo;
 
 /// <summary>游戏信息</summary>
-public class GameInfo
+public static class GameInfo
 {
     /// <summary>游戏目录</summary>
     public static string BaseDirectory { get; private set; } = string.Empty;
@@ -51,8 +51,10 @@ public class GameInfo
     /// <summary>爪洼版本</summary>
     public static string JaveVersion { get; private set; } = string.Empty;
 
-    private static readonly Regex _checkLauncher = new(@"Starting Starsector [^ ]+ launcher");
-    private static readonly Regex _checkVersion = new(@"[0-9]+.[0-9]+[^ ]*");
+    private static readonly Regex s_checkLauncher =
+        new(@"Starting Starsector [^ ]+ launcher", RegexOptions.Compiled);
+    private static readonly Regex s_checkVersion =
+        new(@"[0-9]+.[0-9]+[^ ]*", RegexOptions.Compiled);
 
     /// <summary>
     /// 设置游戏信息
@@ -141,10 +143,10 @@ public class GameInfo
             while ((line = sr.ReadLine()) is not null)
             {
                 if (
-                    _checkLauncher.Match(line).Value is string launcherData
+                    s_checkLauncher.Match(line).Value is string launcherData
                     && string.IsNullOrWhiteSpace(launcherData) is false
                 )
-                    return _checkVersion.Match(launcherData).Value;
+                    return s_checkVersion.Match(launcherData).Value;
             }
             return null;
         }
@@ -158,8 +160,8 @@ public class GameInfo
     {
         var fileNames = OpenFileDialogVM.Show(
             new() { Filter = $"Exe {I18n.File}|starsector.exe" }
-        )!;
-        if (fileNames.Any() && fileNames.First() is string fileName)
+        );
+        if (fileNames?.Any() is true && fileNames.First() is string fileName)
         {
             string directory = Path.GetDirectoryName(fileName)!;
             if (SetGameData(directory))

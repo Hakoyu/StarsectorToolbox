@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,8 @@ public class ModInfos
     /// <para><see langword="Key"/>: 模组ID</para>
     /// <para><see langword="Value"/>: 模组信息</para>
     /// </summary>
-    public static IReadOnlyDictionary<string, ModInfo> AllModInfos { get; internal set; } =
-        new Dictionary<string, ModInfo>();
+    public static ReadOnlyDictionary<string, ModInfo> AllModInfos { get; internal set; } =
+        new(new Dictionary<string, ModInfo>());
 
     /// <summary>已启用的模组ID</summary>
     public static IReadOnlySet<string> AllEnabledModIds { get; internal set; } =
@@ -34,11 +35,11 @@ public class ModInfos
     /// <para><see langword="Key"/>: 分组名称</para>
     /// <para><see langword="Value"/>: 包含的模组</para>
     /// </summary>
-    public static IReadOnlyDictionary<string, IReadOnlySet<string>> AllUserGroups
+    public static ReadOnlyDictionary<string, IReadOnlySet<string>> AllUserGroups
     {
         get;
         internal set;
-    } = new Dictionary<string, IReadOnlySet<string>>();
+    } = new(new Dictionary<string, IReadOnlySet<string>>());
 
     /// <summary>
     /// 获取当前的已启用模组的Id(从enabled_mods.json)
@@ -56,7 +57,7 @@ public class ModInfos
                 is not JsonObject enabledModsJson
             )
                 return null;
-            if (enabledModsJson.Count != 1 || !enabledModsJson.ContainsKey(c_strEnabledMods))
+            if (enabledModsJson.Count is not 1 || !enabledModsJson.ContainsKey(c_strEnabledMods))
                 return null;
             if (enabledModsJson[c_strEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray)
                 return null;
@@ -65,7 +66,7 @@ public class ModInfos
                 .Where(s => string.IsNullOrWhiteSpace(s) is false)
                 .Distinct();
         }
-        catch (Exception ex)
+        catch
         {
             return null;
         }

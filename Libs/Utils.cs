@@ -15,8 +15,9 @@ using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
 using SharpCompress.Common;
 using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.ViewModels.Main;
-using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
+using I18nRes = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorToolbox.Libs;
 
@@ -32,8 +33,8 @@ public static class Utils
     public static bool FileExists(string file, bool outputLog = true)
     {
         bool isExists = File.Exists(file);
-        if (!isExists && outputLog)
-            Logger.Warring($"{I18n.FileNotFound} {I18n.Path}: {file}");
+        if (isExists is false && outputLog)
+            Logger.Warring($"{I18nRes.FileNotFound} {I18nRes.Path}: {file}");
         return isExists;
     }
 
@@ -46,8 +47,8 @@ public static class Utils
     public static bool DirectoryExists(string directory, bool outputLog = true)
     {
         bool exists = Directory.Exists(directory);
-        if (!exists && outputLog)
-            Logger.Warring($"{I18n.DirectoryNotFound} {I18n.Path}: {directory}");
+        if (exists is false && outputLog)
+            Logger.Warring($"{I18nRes.DirectoryNotFound} {I18nRes.Path}: {directory}");
         return exists;
     }
 
@@ -58,7 +59,7 @@ public static class Utils
     /// <returns>格式化后的数据</returns>
     public static string? JsonParse2String(string file)
     {
-        if (!FileExists(file))
+        if (FileExists(file) is false)
             return null;
         string jsonData = File.ReadAllText(file);
         // 清除json中的注释
@@ -66,11 +67,7 @@ public static class Utils
         // 将单引号转换成双引号
         jsonData = Regex.Replace(jsonData, @"'([\S]*)'", "$1");
         // 清除json中不符合规定的逗号
-        jsonData = Regex.Replace(
-            jsonData,
-            @",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z",
-            ""
-        );
+        jsonData = Regex.Replace(jsonData, @",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", "");
         // 将异常格式 id:" 变为 "id":"
         jsonData = Regex.Replace(jsonData, @"id:""", @"""id"":""");
         return jsonData;
@@ -101,7 +98,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18n.LoadError} {file}", ex);
+            Logger.Error($"{I18nRes.LoadError} {file}", ex);
         }
         return jsonObject;
     }
@@ -149,7 +146,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18n.LoadError, ex);
+            Logger.Error(I18nRes.LoadError, ex);
             return false;
         }
     }
@@ -173,7 +170,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18n.LoadError, ex);
+            Logger.Error(I18nRes.LoadError, ex);
             return false;
         }
     }
@@ -187,16 +184,12 @@ public static class Utils
     {
         try
         {
-            FileSystem.DeleteFile(
-                file,
-                UIOption.OnlyErrorDialogs,
-                RecycleOption.SendToRecycleBin
-            );
+            FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
             return true;
         }
         catch (Exception ex)
         {
-            Logger.Error(I18n.LoadError, ex);
+            Logger.Error(I18nRes.LoadError, ex);
             return false;
         }
     }
@@ -219,7 +212,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18n.LoadError, ex);
+            Logger.Error(I18nRes.LoadError, ex);
             return false;
         }
     }
@@ -238,7 +231,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18n.ProcessStartError} {link}", ex);
+            Logger.Error($"{I18nRes.ProcessStartError} {link}", ex);
             return false;
         }
     }
@@ -257,7 +250,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18n.ProcessStartError} {file}", ex);
+            Logger.Error($"{I18nRes.ProcessStartError} {file}", ex);
             return false;
         }
     }
@@ -286,10 +279,7 @@ public static class Utils
                 archive.AddAllFromDirectory(sourceDirectory);
                 var archiveFile = string.Empty;
                 if (string.IsNullOrWhiteSpace(fileName))
-                    archiveFile = Path.Combine(
-                        destDirectory,
-                        Path.GetFileName(sourceDirectory)
-                    );
+                    archiveFile = Path.Combine(destDirectory, Path.GetFileName(sourceDirectory));
                 else
                     archiveFile = Path.Combine(destDirectory, fileName);
                 if (!archiveFile.EndsWith(".zip"))
@@ -300,7 +290,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18n.ZipFileError} {I18n.Path}: {sourceDirectory}", ex);
+            Logger.Error($"{I18nRes.ZipFileError} {I18nRes.Path}: {sourceDirectory}", ex);
             return false;
         }
     }
@@ -312,10 +302,7 @@ public static class Utils
     /// <param name="sourceFile">原始文件</param>
     /// <param name="destDirectory">输出目录</param>
     /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
-    public static async Task<bool> UnArchiveFileToDirectory(
-        string sourceFile,
-        string destDirectory
-    )
+    public static async Task<bool> UnArchiveFileToDirectory(string sourceFile, string destDirectory)
     {
         if (!FileExists(sourceFile))
             return false;
@@ -323,18 +310,19 @@ public static class Utils
         using StreamReader sr = new(sourceFile);
         string head = $"{sr.Read()}{sr.Read()}";
         sr.Close();
-        if (!DirectoryExists(destDirectory, false))
+        var destDirectoryExists = true;
+        if (Directory.Exists(destDirectory) is false)
+        {
+            destDirectoryExists = false;
             Directory.CreateDirectory(destDirectory);
+        }
         try
         {
             await Task.Run(() =>
             {
                 if (head == "8075") //Zip文件
                 {
-                    using var archive = new Archive(
-                        sourceFile,
-                        new() { Encoding = Encoding.UTF8 }
-                    );
+                    using var archive = new Archive(sourceFile, new() { Encoding = Encoding.UTF8 });
                     archive.ExtractToDirectory(destDirectory);
                 }
                 else if (head == "8297") //Rar文件
@@ -348,17 +336,42 @@ public static class Utils
                     archive.ExtractToDirectory(destDirectory);
                 }
                 else
-                    throw new("不支持的压缩文件");
+                    throw new(I18nRes.UnsupportedCompressedFiles);
             });
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18n.ZipFileError}  {I18n.Path}: {sourceFile}", ex);
-            if (DirectoryExists(destDirectory, false))
+            Logger.Error($"{I18nRes.ZipFileError}  {I18nRes.Path}: {sourceFile}", ex);
+            if (destDirectoryExists is false && Directory.Exists(destDirectory))
                 Directory.Delete(destDirectory);
             return false;
         }
         return true;
+    }
+
+    /// <summary>
+    /// 清理游戏日志
+    /// </summary>
+    /// <param name="toRecycleBin">至回收站</param>
+    /// <param name="gFileCount">额外日志文件数量</param>
+    public static void ClearGameLog(bool toRecycleBin = true, int gFileCount = 10)
+    {
+        var logFile = GameInfo.LogFile;
+        if (File.Exists(logFile))
+        {
+            if (toRecycleBin)
+                DeleteFileToRecycleBin(logFile);
+            else
+                File.Delete(logFile);
+        }
+        File.Create(logFile).Close();
+        for (int i = 1; i < gFileCount; i++)
+        {
+            var gFile = $"{logFile}.{i}";
+            if (File.Exists(gFile))
+                File.Delete(gFile);
+        }
+        Logger.Info(I18nRes.GameLogCleanupCompleted);
     }
 
     /// <summary>

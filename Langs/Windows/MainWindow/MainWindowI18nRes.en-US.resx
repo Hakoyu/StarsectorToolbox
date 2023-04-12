@@ -204,9 +204,6 @@ It may affect the normal operation of the extension, so it is recommended to che
   <data name="ClearGameLogOnStart" xml:space="preserve">
     <value>Clear game log files on start</value>
   </data>
-  <data name="GameLogCleanupCompleted" xml:space="preserve">
-    <value>Game log cleanup completed</value>
-  </data>
   <data name="PageCloseError" xml:space="preserve">
     <value>Page close error</value>
   </data>

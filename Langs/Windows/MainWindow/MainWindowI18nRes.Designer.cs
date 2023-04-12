@@ -224,15 +224,6 @@ namespace StarsectorToolbox.Langs.Windows.MainWindow {
         }
         
         /// <summary>
-        ///   查找类似 游戏日志清理完成 的本地化字符串。
-        /// </summary>
-        public static string GameLogCleanupCompleted {
-            get {
-                return ResourceManager.GetString("GameLogCleanupCompleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 未确认游戏启动程序, 请重新选择 的本地化字符串。
         /// </summary>
         public static string GameNotFound_SelectAgain {

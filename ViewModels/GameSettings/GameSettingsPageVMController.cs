@@ -57,7 +57,7 @@ internal partial class GameSettingsPageViewModel
         }
     }
 
-    private int? CheckMemorySize(int size)
+    private static int? CheckMemorySize(int size)
     {
         if (size < 1024)
         {

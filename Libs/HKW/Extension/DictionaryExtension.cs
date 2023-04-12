@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -18,12 +19,13 @@ public static class DictionaryExtension
     /// <typeparam name="TKey">键</typeparam>
     /// <typeparam name="TValue">值</typeparam>
     /// <typeparam name="TReadOnlyValue">只读值</typeparam>
-    [DebuggerDisplay("Count= {Count}")]
-    public class ReadOnlyDictionaryWrapper<TKey, TValue, TReadOnlyValue> : IReadOnlyDictionary<TKey, TReadOnlyValue>
-            where TKey : notnull
-            where TValue : TReadOnlyValue
+    [DebuggerDisplay("Count = {Count}")]
+    public class ReadOnlyDictionaryWrapper<TKey, TValue, TReadOnlyValue>
+        : IDictionary<TKey, TReadOnlyValue>
+        where TKey : notnull
+        where TValue : TReadOnlyValue
     {
-        private IDictionary<TKey, TValue> _dictionary;
+        private readonly IDictionary<TKey, TValue> r_dictionary;
 
         /// <summary>
         /// 构造只读字典
@@ -32,36 +34,73 @@ public static class DictionaryExtension
         /// <exception cref="ArgumentNullException">输入为null</exception>
         public ReadOnlyDictionaryWrapper(IDictionary<TKey, TValue> dictionary)
         {
-            _dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
+            r_dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
         }
 
         /// <inheritdoc/>
-        public bool ContainsKey(TKey key) => _dictionary.ContainsKey(key);
+        public int Count => r_dictionary.Count;
 
         /// <inheritdoc/>
-        public IEnumerable<TKey> Keys => _dictionary.Keys;
+        ICollection<TKey> IDictionary<TKey, TReadOnlyValue>.Keys => r_dictionary.Keys;
+
+        /// <inheritdoc/>
+        ICollection<TReadOnlyValue> IDictionary<TKey, TReadOnlyValue>.Values =>
+            r_dictionary.Values.Cast<TReadOnlyValue>().ToList();
+
+        /// <inheritdoc/>
+        public bool IsReadOnly => true;
+
+        TReadOnlyValue IDictionary<TKey, TReadOnlyValue>.this[TKey key]
+        {
+            get => r_dictionary[key];
+            set => throw new Exception("Is ReadOnly");
+        }
+
+        /// <inheritdoc/>
+        public IEnumerator<KeyValuePair<TKey, TReadOnlyValue>> GetEnumerator() =>
+            r_dictionary
+                .Select(x => new KeyValuePair<TKey, TReadOnlyValue>(x.Key, x.Value))
+                .GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <inheritdoc/>
+        public void Add(TKey key, TReadOnlyValue value) => throw new Exception("Is ReadOnly");
+
+        /// <inheritdoc/>
+        public bool Remove(TKey key) => throw new Exception("Is ReadOnly");
+
+        /// <inheritdoc/>
+        public void Add(KeyValuePair<TKey, TReadOnlyValue> item) =>
+            throw new Exception("Is ReadOnly");
+
+        /// <inheritdoc/>
+        public void Clear() => throw new Exception("Is ReadOnly");
+
+        /// <inheritdoc/>
+        public bool Remove(KeyValuePair<TKey, TReadOnlyValue> item) =>
+            throw new Exception("Is ReadOnly");
+
+        /// <inheritdoc/>
+        public bool ContainsKey(TKey key) => r_dictionary.ContainsKey(key);
+
+        /// <inheritdoc/>
+        public bool Contains(KeyValuePair<TKey, TReadOnlyValue> item) =>
+            r_dictionary.ContainsKey(item.Key);
 
         /// <inheritdoc/>
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TReadOnlyValue value)
         {
-            var r = _dictionary.TryGetValue(key, out var v);
+            var r = r_dictionary.TryGetValue(key, out var v);
             value = v!;
             return r;
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TReadOnlyValue> Values => _dictionary.Values.Cast<TReadOnlyValue>();
-
-        /// <inheritdoc/>
-        public TReadOnlyValue this[TKey key] => _dictionary[key];
-
-        /// <inheritdoc/>
-        public int Count => _dictionary.Count;
-
-        /// <inheritdoc/>
-        public IEnumerator<KeyValuePair<TKey, TReadOnlyValue>> GetEnumerator() => _dictionary.Select(x => new KeyValuePair<TKey, TReadOnlyValue>(x.Key, x.Value)).GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public void CopyTo(KeyValuePair<TKey, TReadOnlyValue>[] array, int arrayIndex) =>
+            array = r_dictionary
+                .ToDictionary(kv => kv.Key, kv => (TReadOnlyValue)kv.Value)
+                .ToArray()[arrayIndex..];
     }
 
     /// <summary>
@@ -86,10 +125,12 @@ public static class DictionaryExtension
     /// <typeparam name="TReadOnlyValue">只读值</typeparam>
     /// <param name="this">此字典</param>
     /// <returns>只读字典</returns>
-    public static IReadOnlyDictionary<TKey, TReadOnlyValue> AsReadOnly<TKey, TValue, TReadOnlyValue>(this IDictionary<TKey, TValue> @this)
+    public static ReadOnlyDictionary<TKey, TReadOnlyValue> AsReadOnly<TKey, TValue, TReadOnlyValue>(
+        this IDictionary<TKey, TValue> @this
+    )
         where TKey : notnull
         where TValue : TReadOnlyValue
     {
-        return new ReadOnlyDictionaryWrapper<TKey, TValue, TReadOnlyValue>(@this);
+        return new(new ReadOnlyDictionaryWrapper<TKey, TValue, TReadOnlyValue>(@this));
     }
 }

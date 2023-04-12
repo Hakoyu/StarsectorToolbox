@@ -52,7 +52,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     private string _realGameKey = string.Empty;
     private string _hideGameKey = string.Empty;
 
-    private static readonly string _missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
+    private static readonly string sr_missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_MissionsLoadouts =
@@ -143,7 +143,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [RelayCommand]
     private static void OpenGameLogFile()
     {
-        if (Utils.FileExists(GameInfo.LogFile, false) is false)
+        if (File.Exists(GameInfo.LogFile) is false)
             File.Create(GameInfo.LogFile).Close();
         Utils.OpenLink(GameInfo.LogFile);
     }
@@ -151,10 +151,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [RelayCommand]
     private static void ClearGameLogFile()
     {
-        if (Utils.FileExists(GameInfo.LogFile, false))
-            Utils.DeleteFileToRecycleBin(GameInfo.LogFile);
-        File.Create(GameInfo.LogFile).Close();
-        Logger.Info(I18nRes.GameLogCleanupCompleted);
+        Utils.ClearGameLog();
     }
 
     [RelayCommand]
@@ -165,19 +162,19 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             return;
         if (selected is nameof(I18nRes.All))
         {
-            if (Utils.DirectoryExists(_missionsLoadoutsDirectory))
+            if (Utils.DirectoryExists(sr_missionsLoadoutsDirectory))
             {
-                Utils.DeleteDirectoryToRecycleBin(_missionsLoadoutsDirectory);
-                Directory.CreateDirectory(_missionsLoadoutsDirectory);
+                Utils.DeleteDirectoryToRecycleBin(sr_missionsLoadoutsDirectory);
+                Directory.CreateDirectory(sr_missionsLoadoutsDirectory);
             }
         }
         else
         {
-            if (Utils.DirectoryExists(_missionsLoadoutsDirectory) is false)
+            if (Utils.DirectoryExists(sr_missionsLoadoutsDirectory) is false)
             {
                 MessageBoxVM.Show(
                     new(
-                        $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {_missionsLoadoutsDirectory}"
+                        $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {sr_missionsLoadoutsDirectory}"
                     )
                     {
                         Icon = MessageBoxVM.Icon.Warning
@@ -204,15 +201,15 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void OpenMissionsLoadoutsDirectory()
+    private static void OpenMissionsLoadoutsDirectory()
     {
-        if (Utils.DirectoryExists(_missionsLoadoutsDirectory))
-            Utils.OpenLink(_missionsLoadoutsDirectory);
+        if (Utils.DirectoryExists(sr_missionsLoadoutsDirectory))
+            Utils.OpenLink(sr_missionsLoadoutsDirectory);
         else
         {
             MessageBoxVM.Show(
                 new(
-                    $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {_missionsLoadoutsDirectory}"
+                    $"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {sr_missionsLoadoutsDirectory}"
                 )
                 {
                     Icon = MessageBoxVM.Icon.Warning

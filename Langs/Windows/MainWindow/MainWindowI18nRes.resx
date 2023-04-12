@@ -204,9 +204,6 @@
   <data name="ClearGameLogOnStart" xml:space="preserve">
     <value>启动时清理游戏日志文件</value>
   </data>
-  <data name="GameLogCleanupCompleted" xml:space="preserve">
-    <value>游戏日志清理完成</value>
-  </data>
   <data name="PageCloseError" xml:space="preserve">
     <value>页面关闭错误</value>
   </data>
