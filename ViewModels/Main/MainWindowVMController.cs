@@ -411,8 +411,7 @@ internal partial class MainWindowViewModel
                     Icon = MessageBoxVM.Icon.Error,
                 }
             );
-            CreateConfigFile();
-            return true;
+            return FirstCreateConfig(ST.SettingsTomlFile);
         }
     }
 
@@ -484,18 +483,6 @@ internal partial class MainWindowViewModel
         STSettings.Instance.Game.Path = GameInfo.BaseDirectory;
         STSettings.Save();
         return true;
-    }
-
-    /// <summary>
-    /// 创建配置文件
-    /// </summary>
-    private static void CreateConfigFile()
-    {
-        using StreamReader sr = ResourceDictionary.GetResourceStream(
-            ResourceDictionary.Config_toml
-        );
-        File.WriteAllText(ST.SettingsTomlFile, sr.ReadToEnd());
-        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.SettingsTomlFile}");
     }
 
     #endregion InitializeConfig
