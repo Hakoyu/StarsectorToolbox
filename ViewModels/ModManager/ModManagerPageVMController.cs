@@ -135,7 +135,9 @@ internal partial class ModManagerPageViewModel
         var dirInfo = new DirectoryInfo(GameInfo.ModsDirectory);
         var dirs = dirInfo.GetDirectories();
         // 使用并行循环提高性能
-        var allModInfo = dirs.AsParallel().AsOrdered().Select(dir => (dir, ModInfo.Parse(Path.Combine(dir.FullName, c_modInfoFile)))).ToArray();
+        var allModInfo = dirs.AsParallel()
+            .AsOrdered()
+            .Select(dir => (dir, ModInfo.Parse(Path.Combine(dir.FullName, c_modInfoFile))));
         foreach ((var dir, var info) in allModInfo)
         {
             if (info is null)
@@ -148,7 +150,9 @@ internal partial class ModManagerPageViewModel
             {
                 repeatSize++;
                 var modInfo = r_allModInfos[info.Id];
-                Logger.Warring(string.Format(I18nRes.ModIsContains, modInfo.ModDirectory, info.ModDirectory));
+                Logger.Warring(
+                    string.Format(I18nRes.ModIsContains, modInfo.ModDirectory, info.ModDirectory)
+                );
                 errRepeat.AppendJoin(", ", info.Id);
             }
         }
@@ -156,10 +160,7 @@ internal partial class ModManagerPageViewModel
         if (repeatSize is not 0)
         {
             MessageBoxVM.Show(
-                new(I18nRes.ModIsContainsMessage)
-                {
-                    Icon = MessageBoxVM.Icon.Warning
-                }
+                new(I18nRes.ModIsContainsMessage) { Icon = MessageBoxVM.Icon.Warning }
             );
         }
         Logger.Info(string.Format(I18nRes.ModAddCompleted, r_allModInfos.Count, errSize));
@@ -209,9 +210,10 @@ internal partial class ModManagerPageViewModel
                 return null;
             try
             {
-                using Stream stream = new StreamReader(filePath).BaseStream;
+                using var stream = new StreamReader(filePath).BaseStream;
                 byte[] bytes = new byte[stream.Length];
                 stream.Read(bytes);
+
                 BitmapImage bitmap = new();
                 bitmap.BeginInit();
                 bitmap.StreamSource = new MemoryStream(bytes);
@@ -374,7 +376,11 @@ internal partial class ModManagerPageViewModel
                 userGroupMenuItem.CommandEvent += (p) =>
                 {
                     var userGroupName = userGroup.Key;
-                    ChangeUserGroupContainsMods(r_allModShowInfoGroups[group], userGroupName, false);
+                    ChangeUserGroupContainsMods(
+                        r_allModShowInfoGroups[group],
+                        userGroupName,
+                        false
+                    );
                     CheckAndRefreshDisplayData(userGroupName);
                 };
                 menuItem.Add(userGroupMenuItem);
@@ -721,9 +727,7 @@ internal partial class ModManagerPageViewModel
 
     private void GetTypeGroup()
     {
-        using var sr = ResourceDictionary.GetResourceStream(
-            ResourceDictionary.ModTypeGroup_toml
-        );
+        using var sr = ResourceDictionary.GetResourceStream(ResourceDictionary.ModTypeGroup_toml);
         ;
         TomlTable toml = TOML.Parse(sr);
         foreach (var kv in toml)
@@ -734,7 +738,9 @@ internal partial class ModManagerPageViewModel
 
     private string CheckTypeGroup(string id)
     {
-        return r_allModsTypeGroup.ContainsKey(id) ? r_allModsTypeGroup[id] : ModTypeGroup.UnknownMods;
+        return r_allModsTypeGroup.ContainsKey(id)
+            ? r_allModsTypeGroup[id]
+            : ModTypeGroup.UnknownMods;
     }
 
     #endregion TypeGroup
@@ -934,7 +940,7 @@ internal partial class ModManagerPageViewModel
     )
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count;)
+        for (int i = 0; i < mods.Count; )
         {
             ChangeUserGroupContainsMod(userGroup, mods[i].Id, isInGroup);
             // 如果已选择数量没有变化,则继续下一个选项
@@ -976,7 +982,7 @@ internal partial class ModManagerPageViewModel
     private void ChangeModsEnabled(IList<ModShowInfo> mods, bool? enabled = null)
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count;)
+        for (int i = 0; i < mods.Count; )
         {
             ChangeModEnabled(mods[i].Id, enabled);
             // 如果已选择数量没有变化,则继续下一个选项
@@ -1053,7 +1059,7 @@ internal partial class ModManagerPageViewModel
     private void ChangeModsCollected(IList<ModShowInfo> mods, bool? collected = null)
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count;)
+        for (int i = 0; i < mods.Count; )
         {
             ChangeModCollected(mods[i].Id, collected);
             if (count == mods.Count)
@@ -1213,7 +1219,9 @@ internal partial class ModManagerPageViewModel
 
     private bool TryAddUserGroup(string icon, string group)
     {
-        if (string.IsNullOrWhiteSpace(group) is false && r_allUserGroups.ContainsKey(group) is false)
+        if (
+            string.IsNullOrWhiteSpace(group) is false && r_allUserGroups.ContainsKey(group) is false
+        )
         {
             if (group == ModTypeGroup.Collected || group == c_strUserCustomData)
                 MessageBoxVM.Show(
@@ -1465,27 +1473,33 @@ internal partial class ModManagerPageViewModel
         foreach (string path in array)
         {
             await Task.Delay(1);
-            if (Directory.Exists(path))
-            {
-                Logger.Info($"{I18nRes.ParseDirectory} {path}");
-                var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)!;
-                count += files.Length;
-                foreach (var subFile in files)
-                {
-                    pendingHandler.UpdateMessage(
-                        string.Format(
-                            I18nRes.UnArchiveFileMessage,
-                            count,
-                            completed,
-                            count - completed,
-                            subFile
-                        )
-                    );
-                    await AddModFromFile(subFile, tempDirectoryInfo);
-                    completed++;
-                }
-            }
-            else
+            completed += await ParseDropFile(
+                path,
+                count,
+                completed,
+                pendingHandler,
+                tempDirectoryInfo
+            );
+        }
+        CheckAndRefreshDisplayData();
+        tempDirectoryInfo.Delete(true);
+    }
+
+    private async Task<int> ParseDropFile(
+        string path,
+        int count,
+        int completed,
+        PendingVMHandler pendingHandler,
+        DirectoryInfo tempDirectoryInfo
+    )
+    {
+        await Task.Delay(1);
+        if (Directory.Exists(path))
+        {
+            Logger.Info($"{I18nRes.ParseDirectory} {path}");
+            var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)!;
+            count += files.Length;
+            foreach (var subFile in files)
             {
                 pendingHandler.UpdateMessage(
                     string.Format(
@@ -1493,15 +1507,28 @@ internal partial class ModManagerPageViewModel
                         count,
                         completed,
                         count - completed,
-                        path
+                        subFile
                     )
                 );
-                await AddModFromFile(path, tempDirectoryInfo);
+                await AddModFromFile(subFile, tempDirectoryInfo);
                 completed++;
             }
         }
-        CheckAndRefreshDisplayData();
-        tempDirectoryInfo.Delete(true);
+        else
+        {
+            pendingHandler.UpdateMessage(
+                string.Format(
+                    I18nRes.UnArchiveFileMessage,
+                    count,
+                    completed,
+                    count - completed,
+                    path
+                )
+            );
+            await AddModFromFile(path, tempDirectoryInfo);
+            completed++;
+        }
+        return completed;
     }
 
     private async Task AddModFromFile(string file, DirectoryInfo tempDirectoryInfo)
