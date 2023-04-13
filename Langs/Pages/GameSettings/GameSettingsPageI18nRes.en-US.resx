@@ -260,4 +260,7 @@
     <value>For setting up the game
 Can modify the game memory, clean up archives and campaign outfits, etc</value>
   </data>
+  <data name="CrashReporter" xml:space="preserve">
+    <value>Crash reporter</value>
+  </data>
 </root>

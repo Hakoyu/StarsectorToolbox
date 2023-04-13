@@ -24,7 +24,7 @@ internal partial class ModManagerPage : Page, ISTPage
     {
         InitializeComponent();
         DataContext = new ModManagerPageViewModel(true);
-        ViewModel.AddUserGroupWindow = new AddUserGroupWindowViewMode(new AddUserGroupWindow());
+        ViewModel.AddUserGroupWindow = new AddUserGroupWindowViewModel(new AddUserGroupWindow());
     }
 
     private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");

@@ -22,9 +22,9 @@ namespace StarsectorToolbox.ViewModels.ModManager;
 internal partial class ModManagerPageViewModel : ObservableObject
 {
     [ObservableProperty]
-    private AddUserGroupWindowViewMode _addUserGroupWindow = null!;
+    private AddUserGroupWindowViewModel _addUserGroupWindow = null!;
 
-    partial void OnAddUserGroupWindowChanged(AddUserGroupWindowViewMode value)
+    partial void OnAddUserGroupWindowChanged(AddUserGroupWindowViewModel value)
     {
         InitializeAddUserGroupWindowViewMode(value);
     }
@@ -246,7 +246,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         ComboBox_ModFilterType[1].Content = I18nRes.Author;
         ComboBox_ModFilterType[2].Content = I18nRes.UserDescription;
         ComboBox_ExportUserGroup[0].Content = I18nRes.All;
-        RefreshGroupModCount();
+        RefreshGroupModCount(false);
         RefreshModsContextMenuI18n();
     }
 

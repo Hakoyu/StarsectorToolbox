@@ -34,7 +34,6 @@ internal partial class CrashReporterWindowViewModel : WindowVM
             e.Cancel = true;
             Hide();
         };
-        SetCrashReport();
     }
 
     public void ForcedClose()
@@ -44,7 +43,7 @@ internal partial class CrashReporterWindowViewModel : WindowVM
     }
 
     [RelayCommand]
-    private void RefreshCrashReport()
+    public void RefreshCrashReport()
     {
         SetCrashReport();
         //CrashReport = CreateModsInfo(ModInfos.AllModInfos.OrderBy(

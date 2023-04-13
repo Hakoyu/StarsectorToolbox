@@ -81,15 +81,15 @@ internal partial class MainWindowViewModel
         }
     }
 
-    private void RefreshPage(ListBoxItemVM vm)
+    private void RefreshPage(ListBoxItemVM item)
     {
-        if (vm.Tag is not ISTPage page)
+        if (item.Tag is not ISTPage page)
             return;
         page.Close();
-        var type = vm.Tag!.GetType();
-        vm.Tag = CreatePage(type);
-        if (vm.IsSelected)
-            ShowPage(vm.Tag);
+        var type = item.Tag!.GetType();
+        item.Tag = CreatePage(type);
+        if (item.IsSelected)
+            ShowPage(item.Tag);
         Logger.Info($"{I18nRes.RefreshPage}: {type.FullName}");
     }
 
@@ -116,7 +116,7 @@ internal partial class MainWindowViewModel
 
     #region DebugPageItem
 
-    private void DetectDebugPageItemData(ref ListBoxItemVM item)
+    private void DetectDebugPageItemData(ListBoxItemVM item)
     {
         if (item?.Tag is not ISTPage page)
             return;
@@ -157,7 +157,7 @@ internal partial class MainWindowViewModel
         ListBox_MainMenu.Remove(_deubgItem!);
         if (TryGetExtensionDebugItem() is not ListBoxItemVM item)
             return;
-        DetectDebugPageItemData(ref item);
+        DetectDebugPageItemData(item);
         _deubgItem = item;
         ListBox_MainMenu.Add(item);
         ListBox_MainMenu.SelectedItem = _deubgItem;

@@ -63,9 +63,17 @@ public class ObservableI18n<TI18nRes> : ObservableI18n
     public static ObservableI18n<TI18nRes> Create(TI18nRes i18nRes)
     {
         var resName = i18nRes.GetType().FullName!;
-        return ObservableI18nTSet.TryGetValue(resName, out var value)
+        return ObservableI18ns.TryGetValue(resName, out var value)
             ? (ObservableI18n<TI18nRes>)value
             : new(i18nRes, resName);
+    }
+
+    /// <summary>
+    /// 刷新I18n资源
+    /// </summary>
+    public void Refresh()
+    {
+        Refresh(ResName);
     }
 }
 
@@ -90,7 +98,7 @@ public class ObservableI18n : INotifyPropertyChanged
     /// <summary>
     /// 本地化资源实例集合
     /// </summary>
-    protected static Dictionary<string, object> ObservableI18nTSet => _observableI18nTSet;
+    protected static Dictionary<string, object> ObservableI18ns => _observableI18nTSet;
 
     private static string _language = CultureInfo.CurrentCulture.Name;
 
@@ -109,13 +117,24 @@ public class ObservableI18n : INotifyPropertyChanged
             CultureInfo.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentCulture = cultureInfo;
             Thread.CurrentThread.CurrentUICulture = cultureInfo;
-            foreach (var observableI18nT in ObservableI18nTSet)
+            foreach (var observableI18n in ObservableI18ns)
             {
-                if (observableI18nT.Value is not ObservableI18n observableI18n)
+                if (observableI18n.Value is not ObservableI18n i18n)
                     return;
-                observableI18n.PropertyChanged?.Invoke(observableI18n, new(null));
+                i18n.PropertyChanged?.Invoke(i18n, new(null));
             }
         }
+    }
+
+    /// <summary>
+    /// 刷新I18n资源
+    /// </summary>
+    /// <param name="resName">资源名称</param>
+    protected static void Refresh(string resName)
+    {
+        if (ObservableI18ns[resName] is not ObservableI18n observableI18n)
+            return;
+        observableI18n.PropertyChanged?.Invoke(observableI18n, new(null));
     }
 
     /// <summary>
@@ -127,7 +146,7 @@ public class ObservableI18n : INotifyPropertyChanged
     {
         _i18nRes = i18nRes;
         _resName = resName;
-        ObservableI18nTSet.TryAdd(resName, this);
+        ObservableI18ns.TryAdd(resName, this);
     }
 
     /// <summary>

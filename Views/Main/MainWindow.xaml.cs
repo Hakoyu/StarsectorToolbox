@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
-using StarsectorToolbox.ViewModels.CrashReporter;
 using StarsectorToolbox.ViewModels.Main;
 using StarsectorToolbox.Views.CrashReporter;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;

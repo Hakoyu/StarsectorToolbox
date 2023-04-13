@@ -940,7 +940,7 @@ internal partial class ModManagerPageViewModel
     )
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count; )
+        for (int i = 0; i < mods.Count;)
         {
             ChangeUserGroupContainsMod(userGroup, mods[i].Id, isInGroup);
             // 如果已选择数量没有变化,则继续下一个选项
@@ -982,7 +982,7 @@ internal partial class ModManagerPageViewModel
     private void ChangeModsEnabled(IList<ModShowInfo> mods, bool? enabled = null)
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count; )
+        for (int i = 0; i < mods.Count;)
         {
             ChangeModEnabled(mods[i].Id, enabled);
             // 如果已选择数量没有变化,则继续下一个选项
@@ -1059,7 +1059,7 @@ internal partial class ModManagerPageViewModel
     private void ChangeModsCollected(IList<ModShowInfo> mods, bool? collected = null)
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count; )
+        for (int i = 0; i < mods.Count;)
         {
             ChangeModCollected(mods[i].Id, collected);
             if (count == mods.Count)

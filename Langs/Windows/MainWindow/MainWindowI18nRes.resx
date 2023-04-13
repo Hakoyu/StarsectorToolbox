@@ -232,7 +232,4 @@
   <data name="Saving" xml:space="preserve">
     <value>正在保存</value>
   </data>
-  <data name="CrashReporter" xml:space="preserve">
-    <value>异常信息收集</value>
-  </data>
 </root>

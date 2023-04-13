@@ -35,6 +35,7 @@ internal partial class MainWindowViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _clearGameLogOnStart = true;
+
     partial void OnClearGameLogOnStartChanged(bool value)
     {
         STSettings.Instance.Game.ClearLogOnStart = value;
@@ -94,6 +95,15 @@ internal partial class MainWindowViewModel : ObservableObject
         // 初始化设置
         if (InitializeConfig() is false)
             throw new(I18nRes.GameNotFound_SoftwareExit);
+        // 初始化消息
+        InitializeMessenger();
+        I18n.AddPropertyChangedAction(I18nChangedAction);
+        if (ListBox_MainMenu.SelectedIndex == -1)
+            ListBox_MainMenu.SelectedIndex = 0;
+    }
+
+    private void InitializeMessenger()
+    {
         // 获取主页面
         var items = WeakReferenceMessenger.Default.Send<GetMainMenuItemsRequestMessage>();
         foreach (var item in items.Response)
@@ -110,9 +120,10 @@ internal partial class MainWindowViewModel : ObservableObject
             this,
             ExtensionDebugPathRequestReceive
         );
-        I18n.AddPropertyChangedAction(I18nChangedAction);
-        if (ListBox_MainMenu.SelectedIndex == -1)
-            ListBox_MainMenu.SelectedIndex = 0;
+        WeakReferenceMessenger.Default.Register<ShowCrashReporterMessage>(
+            this,
+            ShowCrashReporterWindowReceive
+        );
     }
 
     private void I18nChangedAction()
@@ -153,6 +164,7 @@ internal partial class MainWindowViewModel : ObservableObject
         ShowPage(item.Tag);
     }
 
+    #region Message
     private void ExtensionDebugPathChangeReceive(
         object recipient,
         ExtensionDebugPathChangedMessage message
@@ -186,6 +198,12 @@ internal partial class MainWindowViewModel : ObservableObject
         message.Reply(_deubgItemPath!);
     }
 
+    private void ShowCrashReporterWindowReceive(object recipient, ShowCrashReporterMessage message)
+    {
+        CrashReporterWindow.Show();
+        CrashReporterWindow.RefreshCrashReport();
+    }
+    #endregion
     #region RelayCommand
 
     [RelayCommand]
@@ -243,12 +261,6 @@ internal partial class MainWindowViewModel : ObservableObject
     {
         CloseExtensionPages();
         InitializeExtensionPages();
-    }
-
-    [RelayCommand]
-    private void ShowCrashReporter()
-    {
-        _crashReporterWindow.Show();
     }
     #endregion RelayCommand
 }

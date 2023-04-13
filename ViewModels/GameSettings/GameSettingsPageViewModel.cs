@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using HKW.Libs;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
@@ -12,6 +13,7 @@ using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
+using StarsectorToolbox.Models.Messages;
 using StarsectorToolbox.Models.ST;
 using I18nRes = StarsectorToolbox.Langs.Pages.GameSettings.GameSettingsPageI18nRes;
 
@@ -297,5 +299,11 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             Logger.Error(I18nRes.CustomResolutionResetError, ex);
             MessageBoxVM.Show(new(I18nRes.CustomResolutionResetError) { Icon = MessageBoxVM.Icon.Error });
         }
+    }
+
+    [RelayCommand]
+    private void ShowCrashReporter()
+    {
+        WeakReferenceMessenger.Default.Send<ShowCrashReporterMessage>(new(64));
     }
 }

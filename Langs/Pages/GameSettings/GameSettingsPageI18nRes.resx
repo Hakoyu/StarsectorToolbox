@@ -260,4 +260,7 @@
     <value>用于对游戏进行设置
 能修改游戏内存,清理存档和战役配装等</value>
   </data>
+  <data name="CrashReporter" xml:space="preserve">
+    <value>异常信息收集</value>
+  </data>
 </root>
