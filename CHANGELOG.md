@@ -1,5 +1,10 @@
 ﻿# StarsectorToolboxChangeLog
 
+## 0.8.8.0
+
+优化软件的启动速度
+实装CrashReporter
+
 ## 0.8.7.3
 
 修复 json 中单引号的问题
