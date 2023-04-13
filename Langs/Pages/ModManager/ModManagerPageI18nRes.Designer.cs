@@ -860,11 +860,10 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 存在相同的模组
+        ///   查找类似 以下模组存在相同项
         ///游戏只会加载按文件夹名称正序的首个为此Id的模组并忽视后面的同Id模组
         ///请检查你的模组, 并删除多余的同Id模组
-        ///首次载入位置: {0}
-        ///再次载入位置: {1} 的本地化字符串。
+        ///在日志中查看详细信息 的本地化字符串。
         /// </summary>
         public static string ModIsContainsMessage {
             get {

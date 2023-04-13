@@ -572,11 +572,10 @@ Submit the issue with its ID and the category it should be in</value>
     <value>Last update time</value>
   </data>
   <data name="ModIsContainsMessage" xml:space="preserve">
-    <value>The same mod exists
+    <value>The following mod have identical items
 The game will only load the first mod with this Id in the correct order by folder name and ignore the following mod with the same Id
-Please check your mod, and remove any extra mod with the same ID
-First load location: {0}
-Reload location: {1}</value>
+Please check your mod, and delete the extra mod with the same Id
+Check the details in the log</value>
   </data>
   <data name="ModIsContains" xml:space="preserve">
     <value>The same mod exists

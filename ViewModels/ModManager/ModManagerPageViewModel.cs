@@ -259,17 +259,17 @@ internal partial class ModManagerPageViewModel : ObservableObject
             _nowSelectedGroup.IsSelected = false;
         _nowSelectedGroup = item;
         var group = item.Tag!.ToString()!;
-        if (_allUserGroups.ContainsKey(group))
+        if (r_allUserGroups.ContainsKey(group))
             NowSelectedIsUserGroup = true;
         else
             NowSelectedIsUserGroup = false;
         ClearSelectedMods(_nowSelectedMods);
         CheckFilterAndRefreshShowMods();
         RefreshAllModsContextMenu();
-        if (group == nameof(ModTypeGroup.UnknownMods) && _allModShowInfoGroups[group].Count > 0)
+        if (group == nameof(ModTypeGroup.UnknownMods) && r_allModShowInfoGroups[group].Count > 0)
         {
             MessageBoxVM.Show(
-                new(string.Format(I18nRes.UnknownModsMessage, _allModShowInfoGroups[group].Count))
+                new(string.Format(I18nRes.UnknownModsMessage, r_allModShowInfoGroups[group].Count))
             );
         }
     }
@@ -353,7 +353,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         StringBuilder errSB = new();
         foreach (var dependencie in NowSelectedMod.DependenciesSet!)
         {
-            if (_allModInfos.ContainsKey(dependencie.Id) is false)
+            if (r_allModInfos.ContainsKey(dependencie.Id) is false)
             {
                 errSB.AppendLine(dependencie.ToString());
                 continue;
@@ -387,9 +387,9 @@ internal partial class ModManagerPageViewModel : ObservableObject
     [RelayCommand]
     private static void OpenBackupDirectory()
     {
-        if (Directory.Exists(_BackupDirectory) is false)
-            Directory.CreateDirectory(_BackupDirectory);
-        Utils.OpenLink(_BackupDirectory);
+        if (Directory.Exists(sr_backupDirectory) is false)
+            Directory.CreateDirectory(sr_backupDirectory);
+        Utils.OpenLink(sr_backupDirectory);
     }
 
     [RelayCommand]
@@ -493,7 +493,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
             return;
         foreach (string id in list)
         {
-            if (_allModInfos.ContainsKey(id) is false)
+            if (r_allModInfos.ContainsKey(id) is false)
             {
                 Logger.Warring($"{I18nRes.NotFoundMod} {id}");
                 errSB.AppendLine(id);
@@ -541,7 +541,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         string groupName = NowSelectedGroupName;
         int minSize = int.Parse(MinRandomSize);
         int maxSize = int.Parse(MaxRandomSize);
-        int count = _allUserGroups[groupName].Count;
+        int count = r_allUserGroups[groupName].Count;
         if (maxSize > count)
         {
             MessageBoxVM.Show(
@@ -559,10 +559,10 @@ internal partial class ModManagerPageViewModel : ObservableObject
             );
             return;
         }
-        foreach (var id in _allUserGroups[groupName])
+        foreach (var id in r_allUserGroups[groupName])
             ChangeModEnabled(id, false);
         int requestSize = new Random(Guid.NewGuid().GetHashCode()).Next(minSize, maxSize + 1);
-        var randomList = _allUserGroups[groupName].OrderBy(
+        var randomList = r_allUserGroups[groupName].OrderBy(
             s => new Random(Guid.NewGuid().GetHashCode()).Next()
         );
         foreach (var id in randomList.Take(requestSize))

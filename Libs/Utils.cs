@@ -59,7 +59,7 @@ public static class Utils
     /// <returns>格式化后的数据</returns>
     public static string? JsonParse2String(string file)
     {
-        if (FileExists(file) is false)
+        if (File.Exists(file) is false)
             return null;
         string jsonData = File.ReadAllText(file);
         // 清除json中的注释
