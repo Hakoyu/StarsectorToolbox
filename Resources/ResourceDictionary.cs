@@ -5,10 +5,9 @@ namespace StarsectorToolbox.Resources;
 
 internal class ResourceDictionary
 {
-    private static Assembly assembly = Assembly.GetExecutingAssembly();
-    public const string Config_toml = $"StarsectorToolbox.Resources.Config.toml";
+    private static readonly Assembly sr_assembly = Assembly.GetExecutingAssembly();
     public const string ModTypeGroup_toml = "StarsectorToolbox.Resources.ModTypeGroup.toml";
 
     public static StreamReader GetResourceStream(string name)
-        => new(assembly.GetManifestResourceStream(name)!);
+        => new(sr_assembly.GetManifestResourceStream(name)!);
 }

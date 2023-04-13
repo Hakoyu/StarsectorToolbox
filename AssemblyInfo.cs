@@ -1,18 +1,18 @@
 using System.Windows;
 
 // 程序信息
-//[assembly: AssemblyTitle(nameof(StarsectorToolbox))]
-//[assembly: AssemblyDescription(nameof(StarsectorToolbox))]
-//[assembly: AssemblyConfiguration("")]
-//[assembly: AssemblyCompany("")]
-//[assembly: AssemblyProduct(nameof(StarsectorToolbox))]
-//[assembly: AssemblyCopyright("Copyright ©2022-2023 HKW")]
-//[assembly: AssemblyTrademark("")]
-//[assembly: AssemblyCulture("")]
+//[sr_assembly: AssemblyTitle(nameof(StarsectorToolbox))]
+//[sr_assembly: AssemblyDescription(nameof(StarsectorToolbox))]
+//[sr_assembly: AssemblyConfiguration("")]
+//[sr_assembly: AssemblyCompany("")]
+//[sr_assembly: AssemblyProduct(nameof(StarsectorToolbox))]
+//[sr_assembly: AssemblyCopyright("Copyright ©2022-2023 HKW")]
+//[sr_assembly: AssemblyTrademark("")]
+//[sr_assembly: AssemblyCulture("")]
 
 // 版本信息
-//[assembly: AssemblyVersion(ST.Version)]
-//[assembly: AssemblyFileVersion(ST.Version)]
+//[sr_assembly: AssemblyVersion(ST.Version)]
+//[sr_assembly: AssemblyFileVersion(ST.Version)]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
