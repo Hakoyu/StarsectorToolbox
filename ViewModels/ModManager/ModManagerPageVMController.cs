@@ -1197,7 +1197,7 @@ internal partial class ModManagerPageViewModel
 
     #region AddUserGroup
 
-    private void InitializeAddUserGroupWindowViewMode(AddUserGroupWindowViewMode viewModel)
+    private void InitializeAddUserGroupWindowViewMode(AddUserGroupWindowViewModel viewModel)
     {
         viewModel.OKEvent += () =>
         {
