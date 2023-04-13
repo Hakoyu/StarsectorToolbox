@@ -18,7 +18,7 @@ namespace StarsectorToolbox.ViewModels.CrashReporter;
 internal partial class CrashReporterWindowViewModel : WindowVM
 {
     [ObservableProperty]
-    private bool _closeToHide = false;
+    private bool _closeToHide = true;
     [ObservableProperty]
     private string _crashReport = string.Empty;
     [ObservableProperty]

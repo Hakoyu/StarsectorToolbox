@@ -25,24 +25,25 @@ internal class STSettings : ITomlClassComment
     public Dictionary<string, string> ValueComments { get; set; } = new();
 
     [TomlSortOrder(0)]
-    public string Language { get; set; } = "en-US";
+    public string Language { get; set; } = "zh-CN";
     [TomlSortOrder(1)]
     public string LogLevel { get; set; } = HKW.Libs.Log4Cs.LogLevel.INFO.ToString();
     [TomlSortOrder(2)]
-    public GameClass Game { get; set; } = null!;
+    public GameClass Game { get; set; } = new();
     [TomlSortOrder(3)]
-    public ExtensionClass Extension { get; set; } = null!;
+    public ExtensionClass Extension { get; set; } = new();
 
     public static void Initialize(string tomlFile)
     {
         SettingsFile = tomlFile;
         Instance = TomlDeserializer.DeserializeFromFile<STSettings>(tomlFile);
     }
-    public static void Reset()
+    public static void Reset(string tomlFile)
     {
-        TomlSerializer.SerializeToFile(new STSettings(), SettingsFile);
-        Instance = TomlDeserializer.DeserializeFromFile<STSettings>(SettingsFile);
-        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}");
+        SettingsFile = tomlFile;
+        TomlSerializer.SerializeToFile(new STSettings(), tomlFile);
+        Instance = TomlDeserializer.DeserializeFromFile<STSettings>(tomlFile);
+        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.SettingsTomlFile}");
     }
 
     public static void Save()

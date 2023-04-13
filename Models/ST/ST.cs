@@ -12,7 +12,7 @@ public class ST
     public static string ExtensionDirectories => "STExtension";
 
     /// <summary>配置文件</summary>
-    public static string ConfigTomlFile => $"{CoreDirectory}\\Config.toml";
+    public static string SettingsTomlFile => $"{CoreDirectory}\\Settings.toml";
 
     /// <summary>日志文件</summary>
     public static string LogFile => $"{CoreDirectory}\\{nameof(StarsectorToolbox)}.log";

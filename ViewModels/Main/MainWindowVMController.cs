@@ -392,17 +392,21 @@ internal partial class MainWindowViewModel
     {
         try
         {
-            STSettings.Initialize(ST.ConfigTomlFile);
-            if (Utils.FileExists(ST.ConfigTomlFile, false))
+            if (File.Exists(ST.SettingsTomlFile))
+            {
+                STSettings.Initialize(ST.SettingsTomlFile);
                 return GetConfig();
+            }
             else
-                return FirstCreateConfig();
+            {
+                return FirstCreateConfig(ST.SettingsTomlFile);
+            }
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.ConfigTomlFile}", ex);
+            Logger.Error($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.SettingsTomlFile}", ex);
             MessageBoxVM.Show(
-                new($"{I18nRes.ConfigFileError}\n{I18nRes.Path}: {ST.ConfigTomlFile}")
+                new($"{I18nRes.ConfigFileError}\n{I18nRes.Path}: {ST.SettingsTomlFile}")
                 {
                     Icon = MessageBoxVM.Icon.Error,
                 }
@@ -457,7 +461,7 @@ internal partial class MainWindowViewModel
         return true;
     }
 
-    private static bool FirstCreateConfig()
+    private static bool FirstCreateConfig(string tomlFile)
     {
         if (
             MessageBoxVM.Show(
@@ -475,7 +479,8 @@ internal partial class MainWindowViewModel
             );
             return false;
         }
-        STSettings.Reset();
+        File.Create(tomlFile).Close();
+        STSettings.Reset(tomlFile);
         STSettings.Instance.Game.Path = GameInfo.BaseDirectory;
         STSettings.Save();
         return true;
@@ -489,8 +494,8 @@ internal partial class MainWindowViewModel
         using StreamReader sr = ResourceDictionary.GetResourceStream(
             ResourceDictionary.Config_toml
         );
-        File.WriteAllText(ST.ConfigTomlFile, sr.ReadToEnd());
-        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.ConfigTomlFile}");
+        File.WriteAllText(ST.SettingsTomlFile, sr.ReadToEnd());
+        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.SettingsTomlFile}");
     }
 
     #endregion InitializeConfig
