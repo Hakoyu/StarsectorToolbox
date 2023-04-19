@@ -508,6 +508,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
                 new($"{I18nRes.NotFoundMod}\n{errSB}") { Icon = MessageBoxVM.Icon.Warning }
             );
         }
+        CheckAndRefreshDisplayData();
     }
 
     [RelayCommand]

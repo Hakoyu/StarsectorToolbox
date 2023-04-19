@@ -11,7 +11,10 @@ namespace HKW.ViewModels.Controls;
 public partial class MenuItemVM : HeaderedItemsControlVM<MenuItemVM>
 {
     [ObservableProperty]
-    private object? icon;
+    private object? _icon;
+
+    [ObservableProperty]
+    private bool _isVisible;
 
     /// <summary>
     /// 初始化

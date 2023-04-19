@@ -97,6 +97,15 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 添加组内模组至用户分组 的本地化字符串。
+        /// </summary>
+        public static string AddToUserGroupToolTip {
+            get {
+                return ResourceManager.GetString("AddToUserGroupToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 添加用户分组 的本地化字符串。
         /// </summary>
         public static string AddUserGroup {
@@ -1095,6 +1104,15 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         public static string RemoveFromUserGroup {
             get {
                 return ResourceManager.GetString("RemoveFromUserGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 删除用户分组中包含的组内模组 的本地化字符串。
+        /// </summary>
+        public static string RemoveFromUserGroupToolTip {
+            get {
+                return ResourceManager.GetString("RemoveFromUserGroupToolTip", resourceCulture);
             }
         }
         

@@ -26,6 +26,10 @@
 
 ![](https://s2.loli.net/2023/01/12/wR5JV7gS9qP2c6u.png)
 
+### 异常信息收集工具
+
+![](https://s2.loli.net/2023/04/13/JX6aTINGVxLmCg1.png)
+
 ## 插件列表
 
 **插件的使用方式:**

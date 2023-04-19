@@ -582,4 +582,10 @@ Check the details in the log</value>
 First load location: {0}
 Reload location: {1}</value>
   </data>
+  <data name="RemoveFromUserGroupToolTip" xml:space="preserve">
+    <value>Delete the group mod contained in the user group</value>
+  </data>
+  <data name="AddToUserGroupToolTip" xml:space="preserve">
+    <value>Add in-group mod to user group</value>
+  </data>
 </root>

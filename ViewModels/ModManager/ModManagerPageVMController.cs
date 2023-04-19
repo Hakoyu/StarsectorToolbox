@@ -122,7 +122,6 @@ internal partial class ModManagerPageViewModel
         CheckUserData();
         RefreshGroupModCount(false);
         RefreshAllGroupItemContextMenus();
-        GC.Collect();
     }
 
     private void GetAllModInfos()
@@ -133,9 +132,10 @@ internal partial class ModManagerPageViewModel
         var errSB = new StringBuilder();
         var errRepeat = new StringBuilder();
         var dirInfo = new DirectoryInfo(GameInfo.ModsDirectory);
-        var dirs = dirInfo.GetDirectories();
         // 使用并行循环提高性能
-        var allModInfo = dirs.AsParallel()
+        var allModInfo = dirInfo
+            .EnumerateDirectories()
+            .AsParallel()
             .AsOrdered()
             .Select(dir => (dir, ModInfo.Parse(Path.Combine(dir.FullName, c_modInfoFile))));
         foreach ((var dir, var info) in allModInfo)
@@ -337,16 +337,53 @@ internal partial class ModManagerPageViewModel
         return new(
             (list) =>
             {
-                list.Add(AddModsToUserGroupMenuItem(group));
-                list.Add(RemoveModsFromUserGroupMenuItem(group));
+                list.Add(EnableAllModsMenuItem(group));
+                list.Add(DisableAllModsMenuItem(group));
+                if (r_allUserGroups.Count > 0)
+                {
+                    list.Add(AddModsToUserGroupMenuItem(group));
+                    list.Add(RemoveModsFromUserGroupMenuItem(group));
+                }
             }
         );
 
+        MenuItemVM EnableAllModsMenuItem(string group)
+        {
+            // 启用列表中的所有模组
+            MenuItemVM menuItem = new();
+            menuItem.Icon = "✅";
+            menuItem.Header = I18nRes.DisableAllMods;
+            menuItem.ItemsSource = new();
+            menuItem.CommandEvent += (p) =>
+            {
+                ChangeModsEnabled(r_allModShowInfoGroups[group], true);
+                CheckAndRefreshDisplayData();
+            };
+            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            return menuItem;
+        }
+        MenuItemVM DisableAllModsMenuItem(string group)
+        {
+            // 禁用列表中的所有模组
+            MenuItemVM menuItem = new();
+            menuItem.Icon = "❎";
+            menuItem.Header = I18nRes.DisableAllMods;
+            menuItem.ItemsSource = new();
+            menuItem.CommandEvent += (p) =>
+            {
+                ChangeModsEnabled(r_allModShowInfoGroups[group], false);
+                CheckAndRefreshDisplayData();
+            };
+            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            return menuItem;
+        }
         MenuItemVM AddModsToUserGroupMenuItem(string group)
         {
             // 添加组内模组至用户分组
             MenuItemVM menuItem = new();
+            menuItem.Icon = "➡";
             menuItem.Header = I18nRes.AddToUserGroup;
+            menuItem.ToolTip = I18nRes.AddToUserGroupToolTip;
             menuItem.ItemsSource = new();
             foreach (var userGroup in r_allUserGroups)
             {
@@ -365,9 +402,11 @@ internal partial class ModManagerPageViewModel
         }
         MenuItemVM RemoveModsFromUserGroupMenuItem(string group)
         {
-            // 删除用户分组中包含的组内分组
+            // 删除用户分组中包含的组内模组
             MenuItemVM menuItem = new();
+            menuItem.Icon = "⬅";
             menuItem.Header = I18nRes.RemoveFromUserGroup;
+            menuItem.ToolTip = I18nRes.RemoveFromUserGroupToolTip;
             menuItem.ItemsSource = new();
             foreach (var userGroup in r_allUserGroups)
             {
@@ -749,20 +788,10 @@ internal partial class ModManagerPageViewModel
 
     private void CheckAndRefreshDisplayData(string group = "")
     {
-        if (string.IsNullOrWhiteSpace(group) is false)
-        {
-            if (NowSelectedGroupName == group)
-            {
-                CheckFilterAndRefreshShowMods();
-                ShowSpin = false;
-            }
-            RefreshGroupModCount();
-        }
-        else
-        {
-            CheckFilterAndRefreshShowMods();
-            RefreshGroupModCount();
-        }
+        if (NowSelectedGroupName == group)
+            ShowSpin = false;
+        CheckFilterAndRefreshShowMods();
+        RefreshGroupModCount();
     }
 
     private void CheckFilterAndRefreshShowMods()
@@ -934,21 +963,21 @@ internal partial class ModManagerPageViewModel
     #region ChangeUserGroupContainsMods
 
     private void ChangeUserGroupContainsMods(
-        IList<ModShowInfo> mods,
+        IList<ModShowInfo> modShowInfos,
         string userGroup,
         bool isInGroup
     )
     {
-        int count = mods.Count;
-        for (int i = 0; i < mods.Count;)
+        int count = modShowInfos.Count;
+        for (int i = 0; i < modShowInfos.Count;)
         {
-            ChangeUserGroupContainsMod(userGroup, mods[i].Id, isInGroup);
+            ChangeUserGroupContainsMod(userGroup, modShowInfos[i].Id, isInGroup);
             // 如果已选择数量没有变化,则继续下一个选项
-            if (count == mods.Count)
+            if (count == modShowInfos.Count)
                 i++;
         }
         // 判断显示的数量与原来的数量是否一致
-        if (count != mods.Count)
+        if (count != modShowInfos.Count)
             CloseModDetails();
         CheckAndRefreshDisplayData(userGroup);
     }
@@ -979,18 +1008,18 @@ internal partial class ModManagerPageViewModel
 
     #region ChangeModEnabled
 
-    private void ChangeModsEnabled(IList<ModShowInfo> mods, bool? enabled = null)
+    private void ChangeModsEnabled(IList<ModShowInfo> modShowInfos, bool? enabled = null)
     {
-        int count = mods.Count;
-        for (int i = 0; i < mods.Count;)
+        int count = modShowInfos.Count;
+        for (int i = 0; i < modShowInfos.Count;)
         {
-            ChangeModEnabled(mods[i].Id, enabled);
+            ChangeModEnabled(modShowInfos[i].Id, enabled);
             // 如果已选择数量没有变化,则继续下一个选项
-            if (count == mods.Count)
+            if (count == modShowInfos.Count)
                 i++;
         }
         // 判断显示的数量与原来的数量是否一致
-        if (count != mods.Count)
+        if (count != modShowInfos.Count)
             CloseModDetails();
         CheckAndRefreshDisplayData(nameof(ModTypeGroup.Enabled));
         CheckEnabledModsDependencies();
@@ -1278,15 +1307,14 @@ internal partial class ModManagerPageViewModel
 
         MenuItemVM EnableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
         {
-            // 启用所有用户分组内模组
+            // 启用用户分组内的所有模组
             MenuItemVM menuItem = new();
-            menuItem.Header = I18nRes.EnableAllMods;
             menuItem.Icon = "✅";
+            menuItem.Header = I18nRes.EnableAllMods;
             menuItem.CommandEvent += (p) =>
             {
-                var modIds = r_allUserGroups[listBoxItem.ToolTip!.ToString()!];
-                foreach (var id in modIds)
-                    ChangeModEnabled(id, true);
+                var name = listBoxItem.ToolTip!.ToString()!;
+                ChangeModsEnabled(r_allModShowInfoGroups[name], true);
                 CheckAndRefreshDisplayData();
             };
             Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
@@ -1294,15 +1322,14 @@ internal partial class ModManagerPageViewModel
         }
         MenuItemVM DisableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
         {
-            // 禁用所有用户分组内模组
+            // 禁用用户分组内所有模组
             MenuItemVM menuItem = new();
-            menuItem.Header = I18nRes.DisableAllMods;
             menuItem.Icon = "❎";
+            menuItem.Header = I18nRes.DisableAllMods;
             menuItem.CommandEvent += (p) =>
             {
-                var modIds = r_allUserGroups[listBoxItem.ToolTip!.ToString()!];
-                foreach (var id in modIds)
-                    ChangeModEnabled(id, false);
+                var name = listBoxItem.ToolTip!.ToString()!;
+                ChangeModsEnabled(r_allModShowInfoGroups[name], false);
                 CheckAndRefreshDisplayData();
             };
             Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
@@ -1328,6 +1355,7 @@ internal partial class ModManagerPageViewModel
         {
             // 重命名分组
             MenuItemVM menuItem = new();
+            menuItem.Icon = "🔄";
             menuItem.Header = I18nRes.RenameUserGroup;
             menuItem.CommandEvent += (p) => PrepareRenameUserGroup(listBoxItem);
             Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
@@ -1337,7 +1365,7 @@ internal partial class ModManagerPageViewModel
         {
             // 删除分组
             MenuItemVM menuItem = new();
-            menuItem = new();
+            menuItem.Icon = "❌";
             menuItem.Header = I18nRes.RemoveUserGroup;
             menuItem.CommandEvent += (p) => RemoveUserGroup(listBoxItem);
             Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");

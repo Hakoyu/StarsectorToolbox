@@ -582,4 +582,10 @@
 首次载入位置: {0}
 再次载入位置: {1}</value>
   </data>
+  <data name="RemoveFromUserGroupToolTip" xml:space="preserve">
+    <value>删除用户分组中包含的组内模组</value>
+  </data>
+  <data name="AddToUserGroupToolTip" xml:space="preserve">
+    <value>添加组内模组至用户分组</value>
+  </data>
 </root>
