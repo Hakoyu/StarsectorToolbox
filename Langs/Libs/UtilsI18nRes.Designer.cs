@@ -70,6 +70,15 @@ namespace StarsectorToolbox.Langs.Libs {
         }
         
         /// <summary>
+        ///   查找类似 模组类型分组中有重复项: 的本地化字符串。
+        /// </summary>
+        public static string DuplicateItemsInModTypeGroup {
+            get {
+                return ResourceManager.GetString("DuplicateItemsInModTypeGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 过长的消息 的本地化字符串。
         /// </summary>
         public static string ExcessivelyLongMessages {

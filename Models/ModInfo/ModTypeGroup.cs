@@ -1,41 +1,156 @@
-﻿namespace StarsectorToolbox.Models.ModInfo;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HKW.Libs.Log4Cs;
+using HKW.TOML;
+using HKW.TOML.TomlAttribute;
+using HKW.TOML.TomlInterface;
+using I18nRes = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
-/// <summary>模组分组类型</summary>
+namespace StarsectorToolbox.Models.ModInfo;
+
+internal class SetConverter : ITomlConverter<IReadOnlySet<string>>
+{
+    public IReadOnlySet<string> Read(TomlNode node)
+    {
+        return node.AsTomlArray.Select(n => n.AsString).ToHashSet();
+    }
+
+    public TomlNode Write(IReadOnlySet<string> value)
+    {
+        var array = new TomlArray();
+        foreach (var item in value)
+            array.Add(item);
+        return array;
+    }
+}
+
+/// <summary>
+/// 模组分组类型
+/// </summary>
 public static class ModTypeGroup
 {
-    /// <summary>全部模组</summary>
-    public const string All = nameof(All);
+    /// <summary>
+    /// 文件
+    /// </summary>
+    [TomlIgnore]
+    public static string File => $"{ST.ST.CoreDirectory}\\ModTypeGroup.toml";
 
-    /// <summary>已启用模组</summary>
-    public const string Enabled = nameof(Enabled);
+    /// <summary>
+    /// 前置模组
+    /// </summary>
+    [TomlPropertyOrder(0)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> Libraries { get; internal set; } = null!;
 
-    /// <summary>未启用模组</summary>
-    public const string Disabled = nameof(Disabled);
+    /// <summary>
+    /// 大型模组
+    /// </summary>
+    [TomlPropertyOrder(1)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> MegaMods { get; internal set; } = null!;
 
-    /// <summary>前置模组</summary>
-    public const string Libraries = nameof(Libraries);
+    /// <summary>
+    /// 内容模组
+    /// </summary>
+    [TomlPropertyOrder(2)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> ContentExtensions { get; internal set; } = null!;
 
-    /// <summary>大型模组</summary>
-    public const string MegaMods = nameof(MegaMods);
+    /// <summary>
+    /// 派系模组
+    /// </summary>
+    [TomlPropertyOrder(3)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> FactionMods { get; internal set; } = null!;
 
-    /// <summary>派系模组</summary>
-    public const string FactionMods = nameof(FactionMods);
+    /// <summary>
+    /// 美化模组
+    /// </summary>
+    [TomlPropertyOrder(4)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> BeautifyMods { get; internal set; } = null!;
 
-    /// <summary>内容模组</summary>
-    public const string ContentExtensions = nameof(ContentExtensions);
+    /// <summary>
+    /// 功能模组
+    /// </summary>
+    [TomlPropertyOrder(5)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> UtilityMods { get; internal set; } = null!;
 
-    /// <summary>功能模组</summary>
-    public const string UtilityMods = nameof(UtilityMods);
+    /// <summary>
+    /// 闲杂模组
+    /// </summary>
+    [TomlPropertyOrder(6)]
+    [TomlConverter(typeof(SetConverter))]
+    public static IReadOnlySet<string> MiscellaneousMods { get; internal set; } = null!;
 
-    /// <summary>闲杂模组</summary>
-    public const string MiscellaneousMods = nameof(MiscellaneousMods);
+    /// <summary>
+    /// 所有类型分组
+    /// <para><see langword="Key"/>: 模组Id</para>
+    /// <para><see langword="Value"/>: 模组所在的分组</para>
+    /// </summary>
+    [TomlIgnore]
+    public static ReadOnlyDictionary<string, IReadOnlySet<string>> AllModTypeGroup
+    {
+        get;
+        private set;
+    } = null!;
 
-    /// <summary>美化模组</summary>
-    public const string BeautifyMods = nameof(BeautifyMods);
+    private static readonly Dictionary<string, string> sr_groupNameFromModId = new();
 
-    /// <summary>全部模组</summary>
-    public const string UnknownMods = nameof(UnknownMods);
+    [RunOnTomlDeserialized]
+    internal static void SetAllModTypeGroup()
+    {
+        sr_groupNameFromModId.Clear();
+        AllModTypeGroup = new(
+            new Dictionary<string, IReadOnlySet<string>>()
+            {
+                [ModTypeGroupName.Libraries] = Libraries,
+                [ModTypeGroupName.MegaMods] = MegaMods,
+                [ModTypeGroupName.ContentExtensions] = ContentExtensions,
+                [ModTypeGroupName.FactionMods] = FactionMods,
+                [ModTypeGroupName.BeautifyMods] = BeautifyMods,
+                [ModTypeGroupName.UtilityMods] = UtilityMods,
+                [ModTypeGroupName.MiscellaneousMods] = MiscellaneousMods,
+            }
+        );
+        var count = 0;
+        var itemRecorder = new Dictionary<string, List<string>>();
+        foreach (var kv in AllModTypeGroup)
+        {
+            foreach (var modId in kv.Value)
+            {
+                if (sr_groupNameFromModId.TryAdd(modId, kv.Key) is false)
+                {
+                    if (itemRecorder.TryAdd(modId, new() { kv.Key }))
+                        itemRecorder[modId].Add(sr_groupNameFromModId[modId]);
+                    else
+                        itemRecorder[modId].Add(kv.Key);
+                }
+                count++;
+            }
+        }
+        if (count != sr_groupNameFromModId.Count)
+        {
+            Logger.Warring(
+                $"{I18nRes.DuplicateItemsInModTypeGroup}\n{string.Join("\n", itemRecorder.Select(kv => $"{kv.Key} : {string.Join(", ", kv.Value)}"))}"
+            );
+        }
+    }
 
-    /// <summary>已收藏模组</summary>
-    public const string Collected = nameof(Collected);
+    /// <summary>
+    /// 获取模组所在的组
+    /// </summary>
+    /// <param name="modId">模组Id</param>
+    /// <returns>模组所在的组名</returns>
+    public static string GetGroupNameFromId(string modId)
+    {
+        return sr_groupNameFromModId.ContainsKey(modId)
+            ? sr_groupNameFromModId[modId]
+            : ModTypeGroupName.UnknownMods;
+    }
 }

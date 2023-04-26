@@ -43,11 +43,11 @@
     <PackageReference Include="Aspose.Zip" Version="23.3.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
-    <PackageReference Include="HKWToml" Version="1.0.10" />
+    <PackageReference Include="HKWToml" Version="1.1.6" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Panuon.WPF.UI" Version="1.1.9.3" />
     <PackageReference Include="SharpCompress" Version="0.33.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
   </ItemGroup>
 

@@ -3,7 +3,7 @@
 namespace StarsectorToolbox.Models.ST;
 
 /// <summary>StarsectorToolbox数据</summary>
-public class ST
+public static class ST
 {
     /// <summary>核心文件夹</summary>
     public static string CoreDirectory => "STCore";

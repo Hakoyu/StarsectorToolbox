@@ -39,7 +39,7 @@
           <Label
             Height="NaN"
             Background="{x:Null}"
-            Content="0.8.0"
+            Content="{Binding CurrentVersion}"
             Style="{StaticResource LabelBaseStyle}" />
           <Button
             x:Name="Button_CheckUpdate"

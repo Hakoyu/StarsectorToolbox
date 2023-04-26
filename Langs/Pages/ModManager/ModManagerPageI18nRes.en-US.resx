@@ -588,4 +588,7 @@ Reload location: {1}</value>
   <data name="AddToUserGroupToolTip" xml:space="preserve">
     <value>Add in-group mod to user group</value>
   </data>
+  <data name="ModTypeGroupFileError" xml:space="preserve">
+    <value>Mod type group file error</value>
+  </data>
 </root>

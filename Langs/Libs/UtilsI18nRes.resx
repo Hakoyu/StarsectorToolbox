@@ -146,4 +146,7 @@
   <data name="UnsupportedCompressedFiles" xml:space="preserve">
     <value>不支持的压缩文件</value>
   </data>
+  <data name="DuplicateItemsInModTypeGroup" xml:space="preserve">
+    <value>模组类型分组中有重复项:</value>
+  </data>
 </root>

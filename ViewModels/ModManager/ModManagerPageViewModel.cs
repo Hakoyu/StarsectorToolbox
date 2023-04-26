@@ -97,21 +97,21 @@ internal partial class ModManagerPageViewModel : ObservableObject
                 Icon = "🅰",
                 Content = I18nRes.AllMods,
                 ToolTip = I18nRes.AllMods,
-                Tag = ModTypeGroup.All
+                Tag = ModTypeGroupName.All
             },
             new()
             {
                 Icon = "✅",
                 Content = I18nRes.EnabledMods,
                 ToolTip = I18nRes.EnabledMods,
-                Tag = ModTypeGroup.Enabled,
+                Tag = ModTypeGroupName.Enabled,
             },
             new()
             {
                 Icon = "❎",
                 Content = I18nRes.DisabledMods,
                 ToolTip = I18nRes.DisabledMods,
-                Tag = ModTypeGroup.Disabled
+                Tag = ModTypeGroupName.Disabled
             },
         };
 
@@ -124,56 +124,56 @@ internal partial class ModManagerPageViewModel : ObservableObject
                 Icon = "🔝",
                 Content = I18nRes.Libraries,
                 ToolTip = I18nRes.Libraries,
-                Tag = ModTypeGroup.Libraries
+                Tag = ModTypeGroupName.Libraries
             },
             new()
             {
                 Icon = "☢",
                 Content = I18nRes.MegaMods,
                 ToolTip = I18nRes.MegaMods,
-                Tag = ModTypeGroup.MegaMods
+                Tag = ModTypeGroupName.MegaMods
             },
             new()
             {
                 Icon = "🏁",
                 Content = I18nRes.FactionMods,
                 ToolTip = I18nRes.FactionMods,
-                Tag = ModTypeGroup.FactionMods
+                Tag = ModTypeGroupName.FactionMods
             },
             new()
             {
                 Icon = "🆙",
                 Content = I18nRes.ContentExtensions,
                 ToolTip = I18nRes.ContentExtensions,
-                Tag = ModTypeGroup.ContentExtensions
+                Tag = ModTypeGroupName.ContentExtensions
             },
             new()
             {
                 Icon = "🛠",
                 Content = I18nRes.UtilityMods,
                 ToolTip = I18nRes.UtilityMods,
-                Tag = ModTypeGroup.UtilityMods
+                Tag = ModTypeGroupName.UtilityMods
             },
             new()
             {
                 Icon = "🛄",
                 Content = I18nRes.MiscellaneousMods,
                 ToolTip = I18nRes.MiscellaneousMods,
-                Tag = ModTypeGroup.MiscellaneousMods
+                Tag = ModTypeGroupName.MiscellaneousMods
             },
             new()
             {
                 Icon = "✨",
                 Content = I18nRes.BeautifyMods,
                 ToolTip = I18nRes.BeautifyMods,
-                Tag = ModTypeGroup.BeautifyMods
+                Tag = ModTypeGroupName.BeautifyMods
             },
             new()
             {
                 Icon = "🆓",
                 Content = I18nRes.UnknownMods,
                 ToolTip = I18nRes.UnknownMods,
-                Tag = ModTypeGroup.UnknownMods
+                Tag = ModTypeGroupName.UnknownMods
             },
         };
 
@@ -186,7 +186,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
                 Icon = "🌟",
                 Content = I18nRes.CollectedMods,
                 ToolTip = I18nRes.CollectedMods,
-                Tag = ModTypeGroup.Collected
+                Tag = ModTypeGroupName.Collected
             },
         };
 
@@ -249,7 +249,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         RefreshGroupModCount(false);
         RefreshModsContextMenuI18n();
     }
-
+    private bool _remindUnknownMods = false;
     private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
     {
         if (item is null || _nowSelectedGroup == item)
@@ -266,11 +266,12 @@ internal partial class ModManagerPageViewModel : ObservableObject
         ClearSelectedMods(_nowSelectedMods);
         CheckFilterAndRefreshShowMods();
         RefreshAllModsContextMenu();
-        if (group == nameof(ModTypeGroup.UnknownMods) && r_allModShowInfoGroups[group].Count > 0)
+        if (_remindUnknownMods is false && group == nameof(ModTypeGroupName.UnknownMods) && r_allModShowInfoGroups[group].Count > 0)
         {
             MessageBoxVM.Show(
                 new(string.Format(I18nRes.UnknownModsMessage, r_allModShowInfoGroups[group].Count))
             );
+            _remindUnknownMods = true;
         }
     }
 
@@ -595,7 +596,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
     [RelayCommand]
     private void AddUserGroup()
     {
-        _addUserGroupWindow.ShowDialog();
+        AddUserGroupWindow.ShowDialog();
     }
     #endregion RelayCommand
 }

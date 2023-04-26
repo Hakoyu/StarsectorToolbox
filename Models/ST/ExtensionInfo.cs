@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HKW.TOML;
+using HKW.TOML.TomlAttribute;
+using HKW.TOML.TomlInterface;
 
 namespace StarsectorToolbox.Models.ST;
 
@@ -16,55 +18,55 @@ internal class ExtensionInfo : ITomlClassComment
     /// <summary>
     /// ID
     /// </summary>
-    [TomlSortOrder(0)]
+    [TomlPropertyOrder(0)]
     public string Id { get; set; } = string.Empty;
 
     /// <summary>
     /// 图标
     /// </summary>
-    [TomlSortOrder(1)]
+    [TomlPropertyOrder(1)]
     public string Icon { get; set; } = string.Empty;
 
     /// <summary>
     /// 名称
     /// </summary>
-    [TomlSortOrder(2)]
+    [TomlPropertyOrder(2)]
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// 作者
     /// </summary>
-    [TomlSortOrder(3)]
+    [TomlPropertyOrder(3)]
     public string Author { get; set; } = string.Empty;
 
     /// <summary>
     /// 版本
     /// </summary>
-    [TomlSortOrder(4)]
+    [TomlPropertyOrder(4)]
     public string Version { get; set; } = string.Empty;
 
     /// <summary>
     /// 支持的工具箱版本
     /// </summary>
-    [TomlSortOrder(5)]
+    [TomlPropertyOrder(5)]
     public string ToolboxVersion { get; set; } = string.Empty;
 
     /// <summary>
     /// 描述
     /// </summary>
-    [TomlSortOrder(6)]
+    [TomlPropertyOrder(6)]
     public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// 入口文件
     /// </summary>
-    [TomlSortOrder(7)]
+    [TomlPropertyOrder(7)]
     public string ExtensionFile { get; set; } = string.Empty;
 
     /// <summary>
     /// 入口
     /// </summary>
-    [TomlSortOrder(8)]
+    [TomlPropertyOrder(8)]
     public string ExtensionPublic { get; set; } = string.Empty;
 
     /// <summary>源位置</summary>

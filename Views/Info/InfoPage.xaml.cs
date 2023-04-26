@@ -13,6 +13,6 @@ internal partial class InfoPage : Page
     internal InfoPage()
     {
         InitializeComponent();
-        DataContext = new InfoPageViewModel();
+        DataContext = new InfoPageViewModel(true);
     }
 }

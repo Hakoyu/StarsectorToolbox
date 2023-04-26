@@ -47,7 +47,7 @@ internal partial class CrashReporterWindowViewModel
     }
     private void GameExited(int exitCode)
     {
-        if (exitCode is 0)
+        if (exitCode is not -1)
             return;
         if (
             MessageBoxVM.Show(
@@ -163,7 +163,7 @@ internal partial class CrashReporterWindowViewModel
         foreach (var id in enabledModIds)
         {
             if (allModInfos.ContainsKey(id) is false)
-                sb.Append(id + ", ");
+                sb.AppendJoin(", ", id);
         }
         if (sb.Length > 0)
         {

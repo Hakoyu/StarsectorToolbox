@@ -588,4 +588,7 @@
   <data name="AddToUserGroupToolTip" xml:space="preserve">
     <value>添加组内模组至用户分组</value>
   </data>
+  <data name="ModTypeGroupFileError" xml:space="preserve">
+    <value>模组类型文件错误</value>
+  </data>
 </root>

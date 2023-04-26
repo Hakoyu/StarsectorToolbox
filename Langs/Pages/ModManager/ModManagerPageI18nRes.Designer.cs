@@ -909,6 +909,15 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 模组类型文件错误 的本地化字符串。
+        /// </summary>
+        public static string ModTypeGroupFileError {
+            get {
+                return ResourceManager.GetString("ModTypeGroupFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 名称 的本地化字符串。
         /// </summary>
         public static string Name {

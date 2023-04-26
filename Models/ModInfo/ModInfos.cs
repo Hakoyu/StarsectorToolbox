@@ -10,7 +10,7 @@ using StarsectorToolbox.Libs;
 namespace StarsectorToolbox.Models.ModInfo;
 
 /// <summary>所有模组信息</summary>
-public class ModInfos
+public static class ModInfos
 {
     private const string c_strEnabledMods = "enabledMods";
 

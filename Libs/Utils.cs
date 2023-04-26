@@ -24,6 +24,11 @@ namespace StarsectorToolbox.Libs;
 /// <summary>通用方法</summary>
 public static class Utils
 {
+    private static readonly Regex _jsonCommentsRegex = new(@"[\t ]*(#|//)[\S ]*", RegexOptions.Compiled);
+    private static readonly Regex _jsonQuotesRegex = new(@"'([\S]*)'", RegexOptions.Compiled);
+    private static readonly Regex _jsonCommasRegex = new(@",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", RegexOptions.Compiled);
+    private static readonly Regex _jsonIdRegex = new(@"id:""", RegexOptions.Compiled);
+
     /// <summary>
     /// 检测文件是否存在
     /// </summary>
@@ -63,13 +68,13 @@ public static class Utils
             return null;
         string jsonData = File.ReadAllText(file);
         // 清除json中的注释
-        jsonData = Regex.Replace(jsonData, @"[\t ]*(#|//)[\S ]*", "");
+        jsonData = _jsonCommentsRegex.Replace(jsonData, "");
         // 将单引号转换成双引号
-        jsonData = Regex.Replace(jsonData, @"'([\S]*)'", "$1");
+        jsonData = _jsonQuotesRegex.Replace(jsonData, "$1");
         // 清除json中不符合规定的逗号
-        jsonData = Regex.Replace(jsonData, @",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", "");
+        jsonData = _jsonCommasRegex.Replace(jsonData, "");
         // 将异常格式 id:" 变为 "id":"
-        jsonData = Regex.Replace(jsonData, @"id:""", @"""id"":""");
+        jsonData = _jsonIdRegex.Replace(jsonData, @"""id"":""");
         return jsonData;
     }
 
@@ -375,7 +380,7 @@ public static class Utils
     }
 
     /// <summary>
-    /// 为主窗口设置模糊效果,用于聚焦弹窗
+    /// 为主窗口设置模糊效果
     /// </summary>
     public static void SetMainWindowBlurEffect(bool mainWindowIsEnabled = false) =>
         MainWindowViewModel.Instance.SetBlurEffect(mainWindowIsEnabled);

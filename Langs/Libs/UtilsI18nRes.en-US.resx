@@ -166,4 +166,7 @@ Please restart the toolbox after starting the game once</value>
   <data name="UnsupportedCompressedFiles" xml:space="preserve">
     <value>Unsupported compressed files</value>
   </data>
+  <data name="DuplicateItemsInModTypeGroup" xml:space="preserve">
+    <value>Duplicate items in ModTypeGroup:</value>
+  </data>
 </root>

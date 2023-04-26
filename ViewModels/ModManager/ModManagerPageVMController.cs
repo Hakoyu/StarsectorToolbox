@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using HKW.Extension;
 using HKW.Libs.Log4Cs;
 using HKW.TOML;
+using HKW.TOML.TomlDeserializer;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
 using StarsectorToolbox.Libs;
@@ -63,13 +64,6 @@ internal partial class ModManagerPageViewModel
     private readonly Dictionary<string, ModShowInfo> r_allModsShowInfo = new();
 
     /// <summary>
-    /// <para>全部模组所在的类型分组</para>
-    /// <para><see langword="Key"/>: 模组ID</para>
-    /// <para><see langword="Value"/>: 所在分组</para>
-    /// </summary>
-    private readonly Dictionary<string, string> r_allModsTypeGroup = new();
-
-    /// <summary>
     /// <para>全部用户分组</para>
     /// <para><see langword="Key"/>: 分组名称</para>
     /// <para><see langword="Value"/>: 包含的模组</para>
@@ -84,18 +78,18 @@ internal partial class ModManagerPageViewModel
     private readonly Dictionary<string, ObservableCollection<ModShowInfo>> r_allModShowInfoGroups =
         new()
         {
-            [ModTypeGroup.All] = new(),
-            [ModTypeGroup.Enabled] = new(),
-            [ModTypeGroup.Disabled] = new(),
-            [ModTypeGroup.Libraries] = new(),
-            [ModTypeGroup.MegaMods] = new(),
-            [ModTypeGroup.FactionMods] = new(),
-            [ModTypeGroup.ContentExtensions] = new(),
-            [ModTypeGroup.UtilityMods] = new(),
-            [ModTypeGroup.MiscellaneousMods] = new(),
-            [ModTypeGroup.BeautifyMods] = new(),
-            [ModTypeGroup.UnknownMods] = new(),
-            [ModTypeGroup.Collected] = new(),
+            [ModTypeGroupName.All] = new(),
+            [ModTypeGroupName.Enabled] = new(),
+            [ModTypeGroupName.Disabled] = new(),
+            [ModTypeGroupName.Libraries] = new(),
+            [ModTypeGroupName.MegaMods] = new(),
+            [ModTypeGroupName.FactionMods] = new(),
+            [ModTypeGroupName.ContentExtensions] = new(),
+            [ModTypeGroupName.UtilityMods] = new(),
+            [ModTypeGroupName.MiscellaneousMods] = new(),
+            [ModTypeGroupName.BeautifyMods] = new(),
+            [ModTypeGroupName.UnknownMods] = new(),
+            [ModTypeGroupName.Collected] = new(),
         };
 
     /// <summary>
@@ -112,10 +106,9 @@ internal partial class ModManagerPageViewModel
             HashSet<string>,
             IReadOnlySet<string>
         >();
-        // TODO: 优化启动速度
         GetAllModInfos();
         GetAllListBoxItems();
-        GetTypeGroup();
+        TryGetModTypeGroup(ModTypeGroup.File);
         GetAllModShowInfos();
         CheckEnabledMods();
         CheckEnabledModsDependencies();
@@ -244,17 +237,17 @@ internal partial class ModManagerPageViewModel
         ModShowInfo showInfo = CreateModShowInfo(modInfo);
         // 添加至总分组
         r_allModsShowInfo.Add(showInfo.Id, showInfo);
-        r_allModShowInfoGroups[ModTypeGroup.All].Add(showInfo);
+        r_allModShowInfoGroups[ModTypeGroupName.All].Add(showInfo);
         // 添加至类型分组
-        r_allModShowInfoGroups[CheckTypeGroup(modInfo.Id)].Add(showInfo);
+        r_allModShowInfoGroups[ModTypeGroup.GetGroupNameFromId(modInfo.Id)].Add(showInfo);
         // 添加至已启用或已禁用分组
         if (showInfo.IsEnabled)
-            r_allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);
+            r_allModShowInfoGroups[ModTypeGroupName.Enabled].Add(showInfo);
         else
-            r_allModShowInfoGroups[ModTypeGroup.Disabled].Add(showInfo);
+            r_allModShowInfoGroups[ModTypeGroupName.Disabled].Add(showInfo);
         // 添加至已收藏分组
         if (showInfo.IsCollected)
-            r_allModShowInfoGroups[ModTypeGroup.Collected].Add(showInfo);
+            r_allModShowInfoGroups[ModTypeGroupName.Collected].Add(showInfo);
         // 添加至用户分组
         foreach (var userGroup in r_allUserGroups)
         {
@@ -285,29 +278,26 @@ internal partial class ModManagerPageViewModel
         var modShowInfo = r_allModsShowInfo[id];
         // 从总分组中删除
         r_allModsShowInfo.Remove(id);
-        r_allModShowInfoGroups[ModTypeGroup.All].Remove(modShowInfo);
+        r_allModShowInfoGroups[ModTypeGroupName.All].Remove(modShowInfo);
         // 从类型分组中删除
-        r_allModShowInfoGroups[CheckTypeGroup(id)].Remove(modShowInfo);
+        r_allModShowInfoGroups[ModTypeGroup.GetGroupNameFromId(id)].Remove(modShowInfo);
         // 从已启用或已禁用分组中删除
-        if (modShowInfo.IsEnabled)
+        if (r_allEnabledModsId.Remove(id))
         {
-            r_allEnabledModsId.Remove(id);
-            r_allModShowInfoGroups[ModTypeGroup.Enabled].Remove(modShowInfo);
+            r_allModShowInfoGroups[ModTypeGroupName.Enabled].Remove(modShowInfo);
         }
         else
-            r_allModShowInfoGroups[ModTypeGroup.Disabled].Remove(modShowInfo);
+            r_allModShowInfoGroups[ModTypeGroupName.Disabled].Remove(modShowInfo);
         // 从已收藏中删除
-        if (modShowInfo.IsCollected)
+        if (r_allCollectedModsId.Remove(id))
         {
-            r_allCollectedModsId.Remove(id);
-            r_allModShowInfoGroups[ModTypeGroup.Collected].Remove(modShowInfo);
+            r_allModShowInfoGroups[ModTypeGroupName.Collected].Remove(modShowInfo);
         }
         // 从用户分组中删除
         foreach (var userGroup in r_allUserGroups)
         {
-            if (userGroup.Value.Contains(id))
+            if (userGroup.Value.Remove(id))
             {
-                userGroup.Value.Remove(id);
                 r_allModShowInfoGroups[userGroup.Key].Remove(modShowInfo);
             }
         }
@@ -328,7 +318,7 @@ internal partial class ModManagerPageViewModel
             item.ContextMenu = CreateGroupItemContextMenu(group);
         }
         ListBox_UserGroupMenu[0].ContextMenu = CreateGroupItemContextMenu(
-            nameof(ModTypeGroup.Collected)
+            nameof(ModTypeGroupName.Collected)
         );
     }
 
@@ -352,7 +342,7 @@ internal partial class ModManagerPageViewModel
             // 启用列表中的所有模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "✅";
-            menuItem.Header = I18nRes.DisableAllMods;
+            menuItem.Header = I18nRes.EnableAllMods;
             menuItem.ItemsSource = new();
             menuItem.CommandEvent += (p) =>
             {
@@ -628,7 +618,7 @@ internal partial class ModManagerPageViewModel
             TomlTable toml = TOML.ParseFromFile(filePath);
             foreach (var kv in toml)
             {
-                if (kv.Key == ModTypeGroup.Collected || kv.Key == c_strUserCustomData)
+                if (kv.Key == ModTypeGroupName.Collected || kv.Key == c_strUserCustomData)
                     continue;
                 string group = kv.Key;
                 if (r_allUserGroups.ContainsKey(group))
@@ -678,7 +668,7 @@ internal partial class ModManagerPageViewModel
         try
         {
             TomlTable toml = TOML.ParseFromFile(filePath);
-            if (GetUserCollectedMods(toml[ModTypeGroup.Collected].AsTomlArray) is StringBuilder err)
+            if (GetUserCollectedMods(toml[ModTypeGroupName.Collected].AsTomlArray) is StringBuilder err)
             {
                 MessageBoxVM.Show(
                     new($"{I18nRes.CollectedModList} {I18nRes.NotFoundMod}\n{err}")
@@ -764,22 +754,37 @@ internal partial class ModManagerPageViewModel
 
     #region TypeGroup
 
-    private void GetTypeGroup()
+    private static void TryGetModTypeGroup(string file)
     {
-        using var sr = ResourceDictionary.GetResourceStream(ResourceDictionary.ModTypeGroup_toml);
-        ;
-        TomlTable toml = TOML.Parse(sr);
-        foreach (var kv in toml)
-            foreach (string id in kv.Value.AsTomlArray)
-                r_allModsTypeGroup.Add(id, kv.Key);
+        try
+        {
+            GetModTypeGroup(file);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(I18nRes.ModTypeGroupFileError, ex);
+            if (File.Exists(file))
+                File.Delete(file);
+            GetModTypeGroup(file);
+        }
         Logger.Info(I18nRes.TypeGroupRetrievalCompleted);
     }
 
-    private string CheckTypeGroup(string id)
+    private static void GetModTypeGroup(string file)
     {
-        return r_allModsTypeGroup.ContainsKey(id)
-            ? r_allModsTypeGroup[id]
-            : ModTypeGroup.UnknownMods;
+        CreateModTypeGroup(file);
+        using var sr = new StreamReader(file);
+        TomlTable table = TOML.Parse(sr);
+        TomlDeserializer.DeserializeStatic(table, typeof(ModTypeGroup));
+    }
+
+    private static void CreateModTypeGroup(string file)
+    {
+        if (File.Exists(file) is false)
+        {
+            using var sw = new StreamWriter(file);
+            ResourceDictionary.GetResourceStream(ResourceDictionary.ModTypeGroup_toml).BaseStream.CopyTo(sw.BaseStream);
+        }
     }
 
     #endregion TypeGroup
@@ -1021,7 +1026,7 @@ internal partial class ModManagerPageViewModel
         // 判断显示的数量与原来的数量是否一致
         if (count != modShowInfos.Count)
             CloseModDetails();
-        CheckAndRefreshDisplayData(nameof(ModTypeGroup.Enabled));
+        CheckAndRefreshDisplayData(nameof(ModTypeGroupName.Enabled));
         CheckEnabledModsDependencies();
     }
 
@@ -1041,16 +1046,16 @@ internal partial class ModManagerPageViewModel
         {
             if (r_allEnabledModsId.Add(showInfo.Id))
             {
-                r_allModShowInfoGroups[ModTypeGroup.Enabled].Add(showInfo);
-                r_allModShowInfoGroups[ModTypeGroup.Disabled].Remove(showInfo);
+                r_allModShowInfoGroups[ModTypeGroupName.Enabled].Add(showInfo);
+                r_allModShowInfoGroups[ModTypeGroupName.Disabled].Remove(showInfo);
             }
         }
         else
         {
             if (r_allEnabledModsId.Remove(showInfo.Id))
             {
-                r_allModShowInfoGroups[ModTypeGroup.Enabled].Remove(showInfo);
-                r_allModShowInfoGroups[ModTypeGroup.Disabled].Add(showInfo);
+                r_allModShowInfoGroups[ModTypeGroupName.Enabled].Remove(showInfo);
+                r_allModShowInfoGroups[ModTypeGroupName.Disabled].Add(showInfo);
                 showInfo.MissDependencies = false;
             }
         }
@@ -1061,7 +1066,7 @@ internal partial class ModManagerPageViewModel
 
     private void CheckEnabledModsDependencies()
     {
-        foreach (var showInfo in r_allModShowInfoGroups[ModTypeGroup.Enabled])
+        foreach (var showInfo in r_allModShowInfoGroups[ModTypeGroupName.Enabled])
         {
             if (showInfo.DependenciesSet is null)
                 continue;
@@ -1097,7 +1102,7 @@ internal partial class ModManagerPageViewModel
         // 判断显示的数量与原来的数量是否一致
         if (count != mods.Count)
             CloseModDetails();
-        CheckAndRefreshDisplayData(nameof(ModTypeGroup.Collected));
+        CheckAndRefreshDisplayData(nameof(ModTypeGroupName.Collected));
     }
 
     private void ChangeModCollected(string id, bool? collected = null)
@@ -1108,12 +1113,12 @@ internal partial class ModManagerPageViewModel
         if (showInfo.IsCollected is true)
         {
             if (r_allCollectedModsId.Add(showInfo.Id))
-                r_allModShowInfoGroups[ModTypeGroup.Collected].Add(showInfo);
+                r_allModShowInfoGroups[ModTypeGroupName.Collected].Add(showInfo);
         }
         else
         {
             if (r_allCollectedModsId.Remove(showInfo.Id))
-                r_allModShowInfoGroups[ModTypeGroup.Collected].Remove(showInfo);
+                r_allModShowInfoGroups[ModTypeGroupName.Collected].Remove(showInfo);
         }
         Logger.Debug($"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}");
     }
@@ -1143,13 +1148,13 @@ internal partial class ModManagerPageViewModel
         TomlTable table =
             new()
             {
-                [ModTypeGroup.Collected] = new TomlArray(),
+                [ModTypeGroupName.Collected] = new TomlArray(),
                 [c_strUserCustomData] = new TomlArray(),
             };
         foreach (var info in r_allModsShowInfo.Values)
         {
             if (info.IsCollected is true)
-                table[ModTypeGroup.Collected].Add(info.Id);
+                table[ModTypeGroupName.Collected].Add(info.Id);
             if (info.UserDescription!.Length > 0)
             {
                 table[c_strUserCustomData].Add(
@@ -1252,12 +1257,12 @@ internal partial class ModManagerPageViewModel
             string.IsNullOrWhiteSpace(group) is false && r_allUserGroups.ContainsKey(group) is false
         )
         {
-            if (group == ModTypeGroup.Collected || group == c_strUserCustomData)
+            if (group == ModTypeGroupName.Collected || group == c_strUserCustomData)
                 MessageBoxVM.Show(
                     new(
                         string.Format(
                             I18nRes.UserGroupCannotNamed,
-                            ModTypeGroup.Collected,
+                            ModTypeGroupName.Collected,
                             c_strUserCustomData
                         )
                     )
@@ -1409,13 +1414,13 @@ internal partial class ModManagerPageViewModel
 
     private bool TryRenameUserGroup(ListBoxItemVM listBoxItem, string newIcon, string newName)
     {
-        if (newName == ModTypeGroup.Collected || newName == c_strUserCustomData)
+        if (newName == ModTypeGroupName.Collected || newName == c_strUserCustomData)
         {
             MessageBoxVM.Show(
                 new(
                     string.Format(
                         I18nRes.UserGroupCannotNamed,
-                        ModTypeGroup.Collected,
+                        ModTypeGroupName.Collected,
                         c_strUserCustomData
                     )
                 )
