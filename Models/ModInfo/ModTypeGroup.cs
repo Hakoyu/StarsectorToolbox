@@ -28,6 +28,7 @@ internal class SetConverter : ITomlConverter<IReadOnlySet<string>>
     }
 }
 
+// TODO: ModTypeGroup联网更新
 /// <summary>
 /// 模组分组类型
 /// </summary>

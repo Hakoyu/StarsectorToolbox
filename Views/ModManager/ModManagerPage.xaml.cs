@@ -22,9 +22,9 @@ internal partial class ModManagerPage : Page, ISTPage
     /// </summary>
     public ModManagerPage()
     {
-        InitializeComponent();
         DataContext = new ModManagerPageViewModel(true);
         ViewModel.AddUserGroupWindow = new AddUserGroupWindowViewModel(new AddUserGroupWindow());
+        InitializeComponent();
     }
 
     private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");

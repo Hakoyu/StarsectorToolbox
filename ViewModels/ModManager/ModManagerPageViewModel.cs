@@ -218,6 +218,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
 
     public ModManagerPageViewModel(bool noop)
     {
+        MessageBoxVM.Show(new(""));
         InitializeData();
         I18n.AddPropertyChangedAction(I18nPropertyChangeAction);
         ListBox_MainMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
