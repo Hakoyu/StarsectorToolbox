@@ -20,6 +20,15 @@ public static class ST
     /// <summary>拓展信息文件</summary>
     public static string ExtensionInfoFile => "Extension.toml";
 
+    private static string s_version = string.Empty;
     /// <summary>工具箱版本</summary>
-    public static string Version => Assembly.GetEntryAssembly()!.GetName().Version!.ToString();
+    public static string Version => GetVersion();
+
+    private static string GetVersion()
+    {
+        if (string.IsNullOrWhiteSpace(s_version))
+            return s_version = Assembly.GetEntryAssembly()!.GetName().Version!.ToString()[..^2];
+        else
+            return s_version;
+    }
 }
