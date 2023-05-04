@@ -668,7 +668,10 @@ internal partial class ModManagerPageViewModel
         try
         {
             TomlTable toml = TOML.ParseFromFile(filePath);
-            if (GetUserCollectedMods(toml[ModTypeGroupName.Collected].AsTomlArray) is StringBuilder err)
+            if (
+                GetUserCollectedMods(toml[ModTypeGroupName.Collected].AsTomlArray)
+                is StringBuilder err
+            )
             {
                 MessageBoxVM.Show(
                     new($"{I18nRes.CollectedModList} {I18nRes.NotFoundMod}\n{err}")
@@ -783,7 +786,9 @@ internal partial class ModManagerPageViewModel
         if (File.Exists(file) is false)
         {
             using var sw = new StreamWriter(file);
-            ResourceDictionary.GetResourceStream(ResourceDictionary.ModTypeGroup_toml).BaseStream.CopyTo(sw.BaseStream);
+            ResourceDictionary
+                .GetResourceStream(ResourceDictionary.ModTypeGroup_toml)
+                .BaseStream.CopyTo(sw.BaseStream);
         }
     }
 
@@ -974,7 +979,7 @@ internal partial class ModManagerPageViewModel
     )
     {
         int count = modShowInfos.Count;
-        for (int i = 0; i < modShowInfos.Count;)
+        for (int i = 0; i < modShowInfos.Count; )
         {
             ChangeUserGroupContainsMod(userGroup, modShowInfos[i].Id, isInGroup);
             // 如果已选择数量没有变化,则继续下一个选项
@@ -1016,7 +1021,7 @@ internal partial class ModManagerPageViewModel
     private void ChangeModsEnabled(IList<ModShowInfo> modShowInfos, bool? enabled = null)
     {
         int count = modShowInfos.Count;
-        for (int i = 0; i < modShowInfos.Count;)
+        for (int i = 0; i < modShowInfos.Count; )
         {
             ChangeModEnabled(modShowInfos[i].Id, enabled);
             // 如果已选择数量没有变化,则继续下一个选项
@@ -1093,7 +1098,7 @@ internal partial class ModManagerPageViewModel
     private void ChangeModsCollected(IList<ModShowInfo> mods, bool? collected = null)
     {
         int count = mods.Count;
-        for (int i = 0; i < mods.Count;)
+        for (int i = 0; i < mods.Count; )
         {
             ChangeModCollected(mods[i].Id, collected);
             if (count == mods.Count)
@@ -1623,7 +1628,10 @@ internal partial class ModManagerPageViewModel
                 );
                 return null;
             }
-            var filesInfo = tempDirectoryInfo.GetFiles(c_modInfoFile, SearchOption.AllDirectories);
+            var filesInfo = tempDirectoryInfo.EnumerateFiles(
+                c_modInfoFile,
+                SearchOption.AllDirectories
+            );
             if (
                 !(
                     filesInfo.FirstOrDefault(defaultValue: null) is FileInfo fileInfo

@@ -78,6 +78,7 @@ public class ModInfo : IModInfo
             // 获取所有文件的修改时间,取最近的
             var lastWriteTime = Directory
                 .EnumerateFiles(Path.GetDirectoryName(jsonFile)!, "*", SearchOption.AllDirectories)
+                .AsParallel()
                 .Max(f => new FileInfo(f).LastWriteTime);
             return new(jsonNode, lastWriteTime, jsonFile);
         }

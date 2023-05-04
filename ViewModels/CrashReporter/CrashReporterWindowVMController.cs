@@ -42,12 +42,14 @@ internal partial class CrashReporterWindowViewModel
             exitCode = _gameProcess.ExitCode;
         };
         await _gameProcess.WaitForExitAsync();
+        Logger.Info($"Game exit code: {exitCode}");
         GameExited(exitCode);
         _gameProcess = null;
     }
+
     private void GameExited(int exitCode)
     {
-        if (exitCode is not -1)
+        if (exitCode is 0)
             return;
         if (
             MessageBoxVM.Show(

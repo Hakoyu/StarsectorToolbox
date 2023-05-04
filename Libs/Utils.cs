@@ -24,9 +24,14 @@ namespace StarsectorToolbox.Libs;
 /// <summary>通用方法</summary>
 public static class Utils
 {
-    private static readonly Regex sr_jsonCommentsRegex = new(@"[\t ]*(#|//)[\S ]*", RegexOptions.Compiled);
-    private static readonly Regex sr_jsonCommasRegex = new(@",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", RegexOptions.Compiled);
-    private static readonly Regex sr_jsonQuotesRegex = new(@"(""\w*""[ \t]*:[ \t]*)'(\w*)'", RegexOptions.Compiled);
+    private const string c_ZipFileHeadCode = "8075";
+    private const string c_RarFileHeadCode = "8297";
+    private const string c_7ZFileHeadCode = "55122";
+    private static readonly Regex sr_jsonCommentsRegex = new(@"[ \t]*#.*", RegexOptions.Compiled);
+    private static readonly Regex sr_jsonCommasRegex =
+        new(@",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", RegexOptions.Compiled);
+    private static readonly Regex sr_jsonQuotesRegex =
+        new(@"(""\w*""[ \t]*:[ \t]*)'(\w*)'", RegexOptions.Compiled);
     private static readonly Regex sr_jsonPropertyRegex = new(@"id:""", RegexOptions.Compiled);
 
     /// <summary>
@@ -309,7 +314,7 @@ public static class Utils
     /// <returns>解压成功为<see langword="true"/>,失败为<see langword="false"/></returns>
     public static async Task<bool> UnArchiveFileToDirectory(string sourceFile, string destDirectory)
     {
-        if (!FileExists(sourceFile))
+        if (FileExists(sourceFile) is false)
             return false;
         //读取压缩文件头,以判断压缩文件类型
         using StreamReader sr = new(sourceFile);
@@ -325,17 +330,17 @@ public static class Utils
         {
             await Task.Run(() =>
             {
-                if (head == "8075") //Zip文件
+                if (head == c_ZipFileHeadCode) //Zip文件
                 {
                     using var archive = new Archive(sourceFile, new() { Encoding = Encoding.UTF8 });
                     archive.ExtractToDirectory(destDirectory);
                 }
-                else if (head == "8297") //Rar文件
+                else if (head == c_RarFileHeadCode) //Rar文件
                 {
                     using var archive = new RarArchive(sourceFile);
                     archive.ExtractToDirectory(destDirectory);
                 }
-                else if (head == "55122") //7z文件
+                else if (head == c_7ZFileHeadCode) //7z文件
                 {
                     using var archive = new SevenZipArchive(sourceFile);
                     archive.ExtractToDirectory(destDirectory);

@@ -19,12 +19,18 @@ internal partial class CrashReporterWindowViewModel : WindowVM
 {
     [ObservableProperty]
     private bool _closeToHide = true;
+
     [ObservableProperty]
     private string _crashReport = string.Empty;
+
     [ObservableProperty]
     private string _lastLog = string.Empty;
-    public CrashReporterWindowViewModel() : base(new()) { }
-    public CrashReporterWindowViewModel(object window) : base(window)
+
+    public CrashReporterWindowViewModel()
+        : base(new()) { }
+
+    public CrashReporterWindowViewModel(object window)
+        : base(window)
     {
         DataContext = this;
         Closing += (s, e) =>
@@ -50,6 +56,7 @@ internal partial class CrashReporterWindowViewModel : WindowVM
         //    s => new Random(Guid.NewGuid().GetHashCode()).Next()
         //).Take(20).ToDictionary(i => i.Key, i => i.Value), ModInfos.AllEnabledModIds).ToString();
     }
+
     [RelayCommand]
     private static void OpenGameLog()
     {
