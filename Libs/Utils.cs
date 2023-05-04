@@ -27,7 +27,8 @@ public static class Utils
     private const string c_ZipFileHeadCode = "8075";
     private const string c_RarFileHeadCode = "8297";
     private const string c_7ZFileHeadCode = "55122";
-    private static readonly Regex sr_jsonCommentsRegex = new(@"[ \t]*#.*", RegexOptions.Compiled);
+    private static readonly Regex sr_jsonCommentsRegex =
+        new(@"(?<!:""[^""]*)#.*", RegexOptions.Compiled);
     private static readonly Regex sr_jsonCommasRegex =
         new(@",(?=[ \t\r\n]*[\]\}])|(?<=[\]\}]),[ \t\r\n]*\Z", RegexOptions.Compiled);
     private static readonly Regex sr_jsonQuotesRegex =
