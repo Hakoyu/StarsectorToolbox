@@ -17,7 +17,13 @@
     "luddenhance",
     "swp",
     "ApproLightPlus",
-    "SEEKER"
+    "SEEKER",
+    "AMerchantsLegend",
+    "niko_morePlanetaryConditions",
+    "planet_search",
+    "secretsofthefrontier",
+    "StopGapMeasures3",
+    "The_Lengend_Of_Tenshi",
 ]
 # 派系模组
 "FactionMods" = [
@@ -54,6 +60,17 @@
     "underworld",
     "diableavionics",
     "shadow_ships",
+    "jc_asm",
+    "star_federation",
+    "HMI",
+    "HMI_brighton",
+    "HMI_SV",
+    "mik",
+    "Templars",
+    "adversary",
+    "fairyempire",
+    "Mayasuran Navy",
+    "Prasrity_Scrap_Master",
 ]
 # 美化模组
 "BeautifyMods" = [
@@ -63,6 +80,8 @@
     "Touhou Portrait Mod",
     "intothebreachportraitpack",
     "Gia_Portrait_Pack",
+    "synDawnSkinPack",
+    "BlueArchive Portrait Packv",
 ]
 # 功能模组
 "UtilityMods" = [
@@ -86,6 +105,14 @@
     "advanced_gunnery_control_dbeaa06e",
     "TAR",
     "VariantAcknowledged",
+    "fast_engine_rendering",
+    "leadingPip",
+    "speedUp",
+    "dynamictariffs",
+    "sun_flux_reticle",
+    "presmattdamon_takenoprisoners",
+    "whichmod",
+    "capturecrew"
 ]
 # 闲杂模组
 "MiscellaneousMods" = [
@@ -110,4 +137,6 @@
     "more_hullmods",
     "US",
     "efficientPop",
+    "stop_remove_dmod",
+    "ly_this_is_trash",
 ]

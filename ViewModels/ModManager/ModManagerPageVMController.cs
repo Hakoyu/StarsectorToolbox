@@ -775,21 +775,35 @@ internal partial class ModManagerPageViewModel
 
     private static void GetModTypeGroup(string file)
     {
-        CreateModTypeGroup(file);
+        CheckModTypeGroup(file);
         using var sr = new StreamReader(file);
-        TomlTable table = TOML.Parse(sr);
+        var table = TOML.Parse(sr);
         TomlDeserializer.DeserializeStatic(table, typeof(ModTypeGroup));
     }
 
-    private static void CreateModTypeGroup(string file)
+    private static void CheckModTypeGroup(string file)
     {
+        using var resourceStream = ResourceDictionary
+            .GetResourceStream(ResourceDictionary.ModTypeGroup_toml)
+            .BaseStream;
         if (File.Exists(file) is false)
         {
-            using var sw = new StreamWriter(file);
-            ResourceDictionary
-                .GetResourceStream(ResourceDictionary.ModTypeGroup_toml)
-                .BaseStream.CopyTo(sw.BaseStream);
+            CreateModTypeGroup(file, resourceStream);
         }
+        else
+        {
+            var fileInfo = new FileInfo(file);
+            if (resourceStream.Length != fileInfo.Length)
+            {
+                CreateModTypeGroup(file, resourceStream);
+            }
+        }
+    }
+
+    private static void CreateModTypeGroup(string file, Stream resourceStream)
+    {
+        using var sw = new StreamWriter(file);
+        resourceStream.CopyTo(sw.BaseStream);
     }
 
     #endregion TypeGroup
