@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 using HKW.Extension;
 using HKW.Libs.Log4Cs;
 using HKW.TOML;
-using HKW.TOML.TomlDeserializer;
+using HKW.TOML.Deserializer;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
 using StarsectorToolbox.Libs;
@@ -92,6 +92,11 @@ internal partial class ModManagerPageViewModel
             [ModTypeGroupName.Collected] = new(),
         };
 
+    internal void Close()
+    {
+        AddUserGroupWindow.Close();
+    }
+
     /// <summary>
     /// 初始化数据
     /// </summary>
@@ -115,6 +120,7 @@ internal partial class ModManagerPageViewModel
         CheckUserData();
         RefreshGroupModCount(false);
         RefreshAllGroupItemContextMenus();
+        InitializeOtherContextMenu();
     }
 
     private void GetAllModInfos()
@@ -1725,8 +1731,36 @@ internal partial class ModManagerPageViewModel
 
     #endregion DropFile
 
-    internal void Close()
+    #region InitializeOtherContextMenu
+    private void InitializeOtherContextMenu()
     {
-        AddUserGroupWindow.Close();
+        InitializeGroupTypeExpanderContextMenu();
     }
+
+    private void InitializeGroupTypeExpanderContextMenu()
+    {
+        GroupTypeExpanderContextMenu = new(
+            (list) =>
+            {
+                list.Add(ModTypeGroupUpdateMenuItem());
+            }
+        );
+
+        MenuItemVM ModTypeGroupUpdateMenuItem()
+        {
+            // 启用列表中的所有模组
+            MenuItemVM menuItem = new();
+            menuItem.Icon = "📨";
+            menuItem.Header = I18nRes.ModTypeGroupUpdate;
+            menuItem.ItemsSource = new();
+            menuItem.CommandEvent += async (p) => {
+                //await ModTypeGroupUpdate();
+            };
+            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            return menuItem;
+        }
+    }
+
+    //private Task ModTypeGroupUpdate() { }
+    #endregion
 }

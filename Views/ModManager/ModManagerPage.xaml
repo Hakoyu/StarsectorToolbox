@@ -132,7 +132,7 @@
                 <ListBox
                   x:Name="ListBox_ModsGroupMenu"
                   HorizontalContentAlignment="Stretch"
-                  ItemContainerStyle="{StaticResource ListBoxItemView}"
+                  ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
                   ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
                   PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                   PreviewMouseWheel="ListBox_PreviewMouseWheel"
@@ -147,11 +147,25 @@
                 <Expander
                   Padding="0"
                   Header="{Binding I18n.I18nRes.GroupedByModType}"
-                  Style="{StaticResource ExpanderSelectedItem}">
+                  Style="{StaticResource ExpanderSelectedItemStyle}">
+                  <Expander.ContextMenu>
+                    <ContextMenu
+                      DataContext="{Binding GroupTypeExpanderContextMenu}"
+                      ItemContainerStyle="{StaticResource MenuItemViewStyle}"
+                      ItemsSource="{Binding ItemsSource}"
+                      Style="{StaticResource ContextMenuBaseStyle}">
+                      <i:Interaction.Triggers>
+                        <!--  使用Loaded时,如果有多个未载入的菜单,使用右键逐个点击只会载入第一个,故使用Opened  -->
+                        <i:EventTrigger EventName="Opened">
+                          <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
+                        </i:EventTrigger>
+                      </i:Interaction.Triggers>
+                    </ContextMenu>
+                  </Expander.ContextMenu>
                   <ListBox
                     x:Name="ListBox_ModTypeGroup"
                     HorizontalContentAlignment="Stretch"
-                    ItemContainerStyle="{StaticResource ListBoxItemView}"
+                    ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
                     ItemsSource="{Binding ListBox_TypeGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                     PreviewMouseWheel="ListBox_PreviewMouseWheel"
@@ -168,11 +182,11 @@
                   Padding="0"
                   Header="{Binding I18n.I18nRes.UserGroup}"
                   IsExpanded="True"
-                  Style="{StaticResource ExpanderSelectedItem}">
+                  Style="{StaticResource ExpanderSelectedItemStyle}">
                   <ListBox
                     x:Name="ListBox_UserGroup"
                     HorizontalContentAlignment="Stretch"
-                    ItemContainerStyle="{StaticResource ListBoxItemView}"
+                    ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
                     ItemsSource="{Binding ListBox_UserGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                     PreviewMouseWheel="ListBox_PreviewMouseWheel"
@@ -236,11 +250,9 @@
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
               ItemsSource="{Binding NowShowMods, IsAsync=True}"
-              LoadingRow="DataGrid_ModsShowList_LoadingRow"
               RowDetailsVisibilityMode="Visible"
               RowHeight="50"
               Style="{StaticResource DataGridBaseStyle}"
-              UnloadingRow="DataGrid_ModsShowList_UnloadingRow"
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.VirtualizationMode="Recycling">
               <i:Interaction.Triggers>
@@ -261,7 +273,7 @@
                   <Setter Property="ContextMenu">
                     <Setter.Value>
                       <ContextMenu
-                        ItemContainerStyle="{StaticResource MenuItemView}"
+                        ItemContainerStyle="{StaticResource MenuItemViewStyle}"
                         ItemsSource="{Binding ContextMenu.ItemsSource}"
                         Style="{StaticResource ContextMenuBaseStyle}">
                         <i:Interaction.Triggers>
@@ -506,7 +518,7 @@
               VerticalAlignment="Top"
               ItemsSource="{Binding ComboBox_ModFilterType.ItemsSource}"
               SelectedItem="{Binding ComboBox_ModFilterType.SelectedItem}"
-              Style="{StaticResource ComboBoxView}">
+              Style="{StaticResource ComboBoxViewStyle}">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                   <i:InvokeCommandAction Command="{Binding ComboBox_ModFilterType.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_ModFilterType.SelectedItem}" />

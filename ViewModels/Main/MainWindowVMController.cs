@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading;
 using HKW.Libs.Log4Cs;
 using HKW.TOML;
-using HKW.TOML.TomlDeserializer;
+using HKW.TOML.Deserializer;
 using HKW.ViewModels;
 using HKW.ViewModels.Controls;
 using HKW.ViewModels.Dialogs;
@@ -182,7 +182,7 @@ internal partial class MainWindowViewModel
 
     private void CheckGameStartOption()
     {
-        if (_clearGameLogOnStart)
+        if (ClearGameLogOnStart)
             Utils.ClearGameLog();
     }
 

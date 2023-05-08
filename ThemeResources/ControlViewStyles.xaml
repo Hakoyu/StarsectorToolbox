@@ -25,7 +25,7 @@
     FontSize="16"
     Text="{Binding Icon}" />
   <Style
-    x:Key="MenuItemView"
+    x:Key="MenuItemViewStyle"
     BasedOn="{StaticResource MenuItemBaseStyle}"
     TargetType="MenuItem">
     <Setter Property="Tag" Value="{Binding Tag}" />
@@ -65,7 +65,7 @@
     </Style.Triggers>
   </Style>
   <Style
-    x:Key="MenuItemView2ListBoxItem"
+    x:Key="MenuItemViewStyleOnListBoxItem"
     BasedOn="{StaticResource MenuItemBaseStyle}"
     TargetType="MenuItem">
     <Setter Property="Tag" Value="{Binding Tag}" />
@@ -108,7 +108,7 @@
     </Style.Triggers>
   </Style>
   <Style
-    x:Key="ListBoxItemView"
+    x:Key="ListBoxItemViewStyle"
     BasedOn="{StaticResource ListBoxItemBaseStyle}"
     TargetType="ListBoxItem">
     <Setter Property="Tag" Value="{Binding Tag}" />
@@ -118,11 +118,11 @@
     <Setter Property="ContextMenu">
       <Setter.Value>
         <ContextMenu
-          ItemContainerStyle="{StaticResource MenuItemView2ListBoxItem}"
+          ItemContainerStyle="{StaticResource MenuItemViewStyleOnListBoxItem}"
           ItemsSource="{Binding ContextMenu.ItemsSource}"
           Style="{StaticResource ContextMenuBaseStyle}">
           <i:Interaction.Triggers>
-            <!--  使用Loaded时,如果有多个未载入的菜单,使用右键挨个点击只会载入第一个,故使用Opened  -->
+            <!--  使用Loaded时,如果有多个未载入的菜单,使用右键逐个点击只会载入第一个,故使用Opened  -->
             <i:EventTrigger EventName="Opened">
               <i:InvokeCommandAction Command="{Binding ContextMenu.LoadedCommand}" />
             </i:EventTrigger>
@@ -163,7 +163,7 @@
     </Style.Triggers>
   </Style>
   <Style
-    x:Key="ExpanderSelectedItem"
+    x:Key="ExpanderSelectedItemStyle"
     BasedOn="{StaticResource ExpanderBaseStyle}"
     TargetType="Expander">
     <Setter Property="Background" Value="{DynamicResource ColorAqua1}" />
@@ -174,7 +174,7 @@
     </Style.Triggers>
   </Style>
   <Style
-    x:Key="ComboBoxView"
+    x:Key="ComboBoxViewStyle"
     BasedOn="{StaticResource ComboBoxBaseStyle}"
     TargetType="ComboBox">
     <Setter Property="DisplayMemberPath" Value="Content" />

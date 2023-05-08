@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
+using Microsoft.Toolkit.Uwp.Notifications;
 using StarsectorToolbox.ViewModels.Main;
 using StarsectorToolbox.Views.CrashReporter;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
@@ -33,13 +34,11 @@ internal partial class MainWindow : Window
         // 获取系统主题色
         Application.Current.Resources["WindowGlassBrush"] = SystemParameters.WindowGlassBrush;
         // 根据主题色的明亮程度来设置字体颜色
-        var color = (Color)
-            ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
+        var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
         if (IsLightColor(color))
             Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
         // 注册数据
         RegisterData();
-
         // 初始化ViewModel
         try
         {

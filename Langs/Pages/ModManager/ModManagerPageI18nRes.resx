@@ -591,4 +591,7 @@
   <data name="ModTypeGroupFileError" xml:space="preserve">
     <value>模组类型文件错误</value>
   </data>
+  <data name="ModTypeGroupUpdate" xml:space="preserve">
+    <value>更新模组类型分组</value>
+  </data>
 </root>

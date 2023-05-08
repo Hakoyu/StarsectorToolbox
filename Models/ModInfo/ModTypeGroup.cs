@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
 using HKW.TOML;
-using HKW.TOML.TomlAttribute;
-using HKW.TOML.TomlInterface;
+using HKW.TOML.Attributes;
+using HKW.TOML.Interfaces;
 using I18nRes = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorToolbox.Models.ModInfo;

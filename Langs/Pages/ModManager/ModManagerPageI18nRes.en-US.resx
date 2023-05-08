@@ -591,4 +591,7 @@ Reload location: {1}</value>
   <data name="ModTypeGroupFileError" xml:space="preserve">
     <value>Mod type group file error</value>
   </data>
+  <data name="ModTypeGroupUpdate" xml:space="preserve">
+    <value>Mod type group update</value>
+  </data>
 </root>

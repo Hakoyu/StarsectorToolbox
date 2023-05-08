@@ -918,6 +918,15 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         }
         
         /// <summary>
+        ///   查找类似 更新模组类型分组 的本地化字符串。
+        /// </summary>
+        public static string ModTypeGroupUpdate {
+            get {
+                return ResourceManager.GetString("ModTypeGroupUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 名称 的本地化字符串。
         /// </summary>
         public static string Name {

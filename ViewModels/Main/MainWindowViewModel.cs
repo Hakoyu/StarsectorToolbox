@@ -217,7 +217,7 @@ internal partial class MainWindowViewModel : ObservableObject
         InfoButtonIsChecked = false;
         SettingsButtonIsChecked = false;
         // 设置选中状态
-        if (page == _infoPage)
+        if (page == InfoPage)
         {
             InfoButtonIsChecked = true;
             _selectedItem =
@@ -225,7 +225,7 @@ internal partial class MainWindowViewModel : ObservableObject
                 ListBox_ExtensionMenu.SelectedItem =
                     null;
         }
-        else if (page == _settingsPage)
+        else if (page == SettingsPage)
         {
             SettingsButtonIsChecked = true;
             _selectedItem =

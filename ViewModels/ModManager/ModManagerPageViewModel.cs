@@ -46,7 +46,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
     partial void OnShowSpinChanged(bool value)
     {
         if (NowShowMods.Count is 0)
-            _showSpin = false;
+            ShowSpin = false;
     }
 
     /// <summary>当前选择的模组</summary>
@@ -78,6 +78,9 @@ internal partial class ModManagerPageViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _nowSelectedIsUserGroup = false;
+
+    [ObservableProperty]
+    private ContextMenuVM _groupTypeExpanderContextMenu;
 
     #endregion ObservableProperty
 
@@ -249,7 +252,9 @@ internal partial class ModManagerPageViewModel : ObservableObject
         RefreshGroupModCount(false);
         RefreshModsContextMenuI18n();
     }
+
     private bool _remindUnknownMods = false;
+
     private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
     {
         if (item is null || _nowSelectedGroup == item)
@@ -266,7 +271,11 @@ internal partial class ModManagerPageViewModel : ObservableObject
         ClearSelectedMods(_nowSelectedMods);
         CheckFilterAndRefreshShowMods();
         RefreshAllModsContextMenu();
-        if (_remindUnknownMods is false && group == nameof(ModTypeGroupName.UnknownMods) && r_allModShowInfoGroups[group].Count > 0)
+        if (
+            _remindUnknownMods is false
+            && group == nameof(ModTypeGroupName.UnknownMods)
+            && r_allModShowInfoGroups[group].Count > 0
+        )
         {
             MessageBoxVM.Show(
                 new(string.Format(I18nRes.UnknownModsMessage, r_allModShowInfoGroups[group].Count))

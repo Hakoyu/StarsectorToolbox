@@ -27,7 +27,8 @@ internal partial class ModManagerPage : Page, ISTPage
         InitializeComponent();
     }
 
-    private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) => e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
+    private void TextBox_NumberInput(object sender, TextCompositionEventArgs e) =>
+        e.Handled = !Regex.IsMatch(e.Text, "[0-9]");
 
     private async void DataGrid_ModsShowList_Drop(object sender, DragEventArgs e)
     {
@@ -54,15 +55,5 @@ internal partial class ModManagerPage : Page, ISTPage
         if (sender is Control control && control.Parent is UIElement ui)
             ui.RaiseEvent(eventArg);
         e.Handled = true;
-    }
-
-    private void DataGrid_ModsShowList_LoadingRow(object sender, DataGridRowEventArgs e)
-    {
-        ViewModel.ShowSpin = false;
-    }
-
-    private void DataGrid_ModsShowList_UnloadingRow(object sender, DataGridRowEventArgs e)
-    {
-        ViewModel.ShowSpin = true;
     }
 }

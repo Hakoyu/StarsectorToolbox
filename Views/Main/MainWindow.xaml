@@ -175,7 +175,7 @@
           <StackPanel>
             <ListBox
               FontSize="16"
-              ItemContainerStyle="{StaticResource ListBoxItemView}"
+              ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
               ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
               ScrollViewer.VerticalScrollBarVisibility="Hidden"
               SelectedItem="{Binding ListBox_MainMenu.SelectedItem}"
@@ -191,7 +191,7 @@
               FontSize="16"
               Header="{Binding I18n.I18nRes.Extension}"
               IsExpanded="True"
-              Style="{StaticResource ExpanderSelectedItem}">
+              Style="{StaticResource ExpanderSelectedItemStyle}">
               <Expander.ContextMenu>
                 <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
                   <MenuItem Command="{Binding RefreshExtensionMenuCommand}" Header="{Binding I18n.I18nRes.RefreshExtensionList}">
@@ -202,7 +202,7 @@
                 </ContextMenu>
               </Expander.ContextMenu>
               <ListBox
-                ItemContainerStyle="{StaticResource ListBoxItemView}"
+                ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
                 ItemsSource="{Binding ListBox_ExtensionMenu.ItemsSource}"
                 SelectedItem="{Binding ListBox_ExtensionMenu.SelectedItem}"
                 Style="{StaticResource ListBoxBaseStyle}">

@@ -219,7 +219,7 @@
                   ItemsSource="{Binding ComboBox_MissionsLoadouts.ItemsSource}"
                   SelectedIndex="{Binding ComboBox_MissionsLoadouts.SelectedIndex}"
                   SelectedItem="{Binding ComboBox_MissionsLoadouts.SelectedItem}"
-                  Style="{StaticResource ComboBoxView}" />
+                  Style="{StaticResource ComboBoxViewStyle}" />
                 <Button
                   x:Name="Button_ClearMissionsLoadouts"
                   Margin="0,0,0,5"

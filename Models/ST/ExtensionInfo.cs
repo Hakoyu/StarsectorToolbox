@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HKW.TOML;
-using HKW.TOML.TomlAttribute;
-using HKW.TOML.TomlInterface;
+using HKW.TOML.Attributes;
+using HKW.TOML.Interfaces;
 
 namespace StarsectorToolbox.Models.ST;
 
