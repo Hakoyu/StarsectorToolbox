@@ -667,9 +667,11 @@ internal partial class MainWindowViewModel
     private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
         var ex = (Exception)e.ExceptionObject;
-        if (ex.InnerException is not null)
-            ex = ex.InnerException;
-        if (ex.Source is nameof(StarsectorToolbox))
+        var sourceException = ex;
+        // 获取源异常
+        while (sourceException.InnerException is not null)
+            sourceException = sourceException.InnerException;
+        if (sourceException.Source is nameof(StarsectorToolbox))
         {
             Logger.Error(I18nRes.GlobalException, ex, false);
             MessageBoxVM.Show(

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels;
 using HKW.ViewModels.Dialogs;
+using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
 using StarsectorToolbox.Models.System;
@@ -68,7 +69,7 @@ internal partial class CrashReporterWindowViewModel
     private void SetCrashReport()
     {
         CrashReport = CreateCrashReport();
-        LastLog = GetLastLog();
+        LastLog = GetLastLog(GameInfo.LogFile);
     }
 
     private static Process? GetGameProcess()
@@ -237,28 +238,36 @@ internal partial class CrashReporterWindowViewModel
         s_versionMaxLength = s_ModsBytesLength.Values.Max(i => i.VersionLength);
     }
 
-    private static string GetLastLog()
+    private static string GetLastLog(string file)
     {
-        var lines = GetLines().ToArray();
+        if (File.Exists(file) is false)
+            return $"!!! {I18nRes.LogFileNotExist} !!!";
+        var lines = GetLines(file).ToArray();
         if (lines.Length < 100)
             return string.Join("\n", lines);
         else
             return string.Join("\n", lines[^100..]);
     }
 
-    private static IEnumerable<string> GetLines()
+    private static IEnumerable<string> GetLines(string file)
     {
-        if (ObservableI18n.Language is "zh-CN")
+        if (ObservableI18n.Language == "zh-CN")
         {
             var EncodingGBK = Encoding.GetEncoding("GBK");
-            var lines = File.ReadAllLines(GameInfo.LogFile, EncodingGBK);
-            return lines.Select(s =>
-            {
-                var bytes = Encoding.Convert(EncodingGBK, Encoding.UTF8, EncodingGBK.GetBytes(s));
-                return Encoding.UTF8.GetString(bytes);
-            });
+            using var sr = Utils.StreamReaderOnReadOnly(file, EncodingGBK);
+            return Utils
+                .GetLinesOnStreamReader(sr)
+                .Select(s =>
+                {
+                    var bytes = Encoding.Convert(
+                        EncodingGBK,
+                        Encoding.UTF8,
+                        EncodingGBK.GetBytes(s)
+                    );
+                    return Encoding.UTF8.GetString(bytes);
+                });
         }
         else
-            return File.ReadLines(GameInfo.LogFile);
+            return File.ReadLines(file);
     }
 }

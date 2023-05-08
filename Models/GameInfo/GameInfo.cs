@@ -8,7 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
-using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
+using StarsectorToolbox.Libs;
+using I18nRes = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorToolbox.Models.GameInfo;
 
@@ -64,9 +65,12 @@ public static class GameInfo
     {
         if (CheckGameDirectory(gameDirectory, out var exeFile) is false)
         {
-            Logger.Error($"{I18n.GameDirectoryError} {I18n.Path}: {gameDirectory}");
+            Logger.Error($"{I18nRes.GameDirectoryError} {I18nRes.Path}: {gameDirectory}");
             MessageBoxVM.Show(
-                new($"{I18n.GameDirectoryError}\n{I18n.Path}") { Icon = MessageBoxVM.Icon.Error }
+                new($"{I18nRes.GameDirectoryError}\n{I18nRes.Path}")
+                {
+                    Icon = MessageBoxVM.Icon.Error
+                }
             );
             return false;
         }
@@ -84,8 +88,8 @@ public static class GameInfo
         Version = TryGetGameVersion(LogFile);
         if (string.IsNullOrWhiteSpace(Version))
         {
-            Logger.Info(I18n.GameVersionAccessFailed);
-            MessageBoxVM.Show(new(I18n.GameVersionAccessFailedMessage));
+            Logger.Info(I18nRes.GameVersionAccessFailed);
+            MessageBoxVM.Show(new(I18nRes.GameVersionAccessFailedMessage));
         }
         return true;
     }
@@ -123,24 +127,15 @@ public static class GameInfo
         }
         catch (Exception ex)
         {
-            Logger.Error("", ex);
+            Logger.Error(I18nRes.GameVersionAccessFailed, ex);
         }
         return string.Empty;
 
         static string? CheckGameVersion(string logFile)
         {
             // 因为游戏可能会处于运行状态,所以使用只读打开日志文件
-            using var sr = new StreamReader(
-                logFile,
-                new FileStreamOptions()
-                {
-                    Access = FileAccess.Read,
-                    Mode = FileMode.Open,
-                    Share = FileShare.ReadWrite
-                }
-            );
-            var line = string.Empty;
-            while ((line = sr.ReadLine()) is not null)
+            using var sr = Utils.StreamReaderOnReadOnly(logFile);
+            foreach (var line in Utils.GetLinesOnStreamReader(sr))
             {
                 if (
                     s_checkLauncher.Match(line).Value is string launcherData
@@ -159,14 +154,14 @@ public static class GameInfo
     internal static bool GetGameDirectory()
     {
         var fileNames = OpenFileDialogVM.Show(
-            new() { Filter = $"Exe {I18n.File}|starsector.exe" }
+            new() { Filter = $"Exe {I18nRes.File}|starsector.exe" }
         );
         if (fileNames?.Any() is true && fileNames.First() is string fileName)
         {
             string directory = Path.GetDirectoryName(fileName)!;
             if (SetGameData(directory))
             {
-                Logger.Info($"{I18n.GameDirectorySetCompleted} {I18n.Path}: {directory}");
+                Logger.Info($"{I18nRes.GameDirectorySetCompleted} {I18nRes.Path}: {directory}");
                 return true;
             }
         }

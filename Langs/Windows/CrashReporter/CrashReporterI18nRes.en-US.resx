@@ -174,4 +174,7 @@
   <data name="GameAbnormalExit" xml:space="preserve">
     <value>The game quit abnormally, need to enable exception information collection tool?</value>
   </data>
+  <data name="LogFileNotExist" xml:space="preserve">
+    <value>Log file does not exist</value>
+  </data>
 </root>

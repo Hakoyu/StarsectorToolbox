@@ -154,4 +154,7 @@
   <data name="GameAbnormalExit" xml:space="preserve">
     <value>游戏非正常退出, 需要启用异常信息收集工具吗?</value>
   </data>
+  <data name="LogFileNotExist" xml:space="preserve">
+    <value>未找到日志文件</value>
+  </data>
 </root>

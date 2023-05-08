@@ -115,6 +115,15 @@ namespace StarsectorToolbox.Langs.Windows.CrashReporter {
         }
         
         /// <summary>
+        ///   查找类似 未找到日志文件 的本地化字符串。
+        /// </summary>
+        internal static string LogFileNotExist {
+            get {
+                return ResourceManager.GetString("LogFileNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 模组Id 的本地化字符串。
         /// </summary>
         internal static string ModId {

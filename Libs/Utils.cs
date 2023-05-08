@@ -386,6 +386,47 @@ public static class Utils
     }
 
     /// <summary>
+    /// 从文件获取只读流 (用于目标文件被其它进程访问的情况)
+    /// </summary>
+    /// <param name="file">文件</param>
+    /// <param name="encoding">编码</param>
+    /// <param name="detectEncodingFromByteOrderMarks">从字节顺序标记检测编码</param>
+    /// <returns>流读取器</returns>
+    public static StreamReader StreamReaderOnReadOnly(
+        string file,
+        Encoding? encoding = null,
+        bool detectEncodingFromByteOrderMarks = false
+    )
+    {
+        encoding ??= Encoding.UTF8;
+        return new StreamReader(
+            file,
+            encoding,
+            detectEncodingFromByteOrderMarks,
+            new FileStreamOptions()
+            {
+                Access = FileAccess.Read,
+                Mode = FileMode.Open,
+                Share = FileShare.ReadWrite
+            }
+        );
+    }
+
+    /// <summary>
+    /// 从流中读取行
+    /// </summary>
+    /// <param name="sr">流读取器</param>
+    /// <returns>行数据</returns>
+    public static IEnumerable<string> GetLinesOnStreamReader(StreamReader sr)
+    {
+        string? line;
+        while ((line = sr.ReadLine()) is not null)
+        {
+            yield return line;
+        }
+    }
+
+    /// <summary>
     /// 为主窗口设置模糊效果
     /// </summary>
     public static void SetMainWindowBlurEffect(bool mainWindowIsEnabled = false) =>
