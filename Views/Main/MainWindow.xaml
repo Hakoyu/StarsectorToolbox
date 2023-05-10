@@ -16,8 +16,6 @@
   Height="500"
   MinWidth="800"
   MinHeight="400"
-  MaxWidth="{x:Static sys:SystemParameters.MaximizedPrimaryScreenWidth}"
-  MaxHeight="{x:Static sys:SystemParameters.MaximizedPrimaryScreenHeight}"
   Padding="5"
   x:ClassModifier="internal"
   FontFamily="Consolas"

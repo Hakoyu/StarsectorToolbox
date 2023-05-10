@@ -6,6 +6,7 @@ using System.Windows.Media;
 using HKW.Libs.Log4Cs;
 using HKW.ViewModels.Dialogs;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Panuon.WPF.UI;
 using StarsectorToolbox.ViewModels.Main;
 using StarsectorToolbox.Views.CrashReporter;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;

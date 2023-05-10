@@ -25,14 +25,13 @@
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <Title>$(AssemblyName)</Title>
     <Authors>HKW</Authors>
-    <Version>0.8.9</Version>
-    <AssemblyVersion>0.8.9</AssemblyVersion>
+    <Version>0.8.10</Version>
+    <AssemblyVersion>0.8.10</AssemblyVersion>
     <Copyright>Copyright ©2022-2023 HKW</Copyright>
     <RepositoryType>https://github.com/Hakoyu/StarsectorTools</RepositoryType>
     <IncludeSymbols>False</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
