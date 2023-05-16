@@ -16,7 +16,7 @@
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <pu:WindowXCaption.CloseButtonStyle>
-    <Style BasedOn="{StaticResource {x:Static pu:WindowXCaption.CloseButtonStyle}}" TargetType="Button">
+    <Style BasedOn="{StaticResource {x:Static pu:WindowXCaption.CloseButtonStyleKey}}" TargetType="Button">
       <Setter Property="Command" Value="{Binding DataContext.CloseCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=pu:WindowX}}" />
     </Style>
   </pu:WindowXCaption.CloseButtonStyle>

@@ -22,7 +22,7 @@
             OKButtonContent="{x:Static I18n:MessageBoxXI18nRes.OK}"
             YesButtonContent="{x:Static I18n:MessageBoxXI18nRes.YES}">
             <pu:MessageBoxXSettings.WindowXStyle>
-              <Style BasedOn="{StaticResource {ComponentResourceKey ResourceId=WindowXStyle, TypeInTargetAssembly={x:Type pu:MessageBoxX}}}" TargetType="pu:WindowX">
+              <Style BasedOn="{StaticResource {x:Static pu:MessageBoxX.WindowXStyleKey}}" TargetType="pu:WindowX">
                 <Setter Property="Topmost" Value="True" />
                 <Setter Property="Width" Value="NaN" />
                 <Setter Property="Height" Value="NaN" />
@@ -111,7 +111,7 @@
           </pu:MessageBoxXSettings>
           <pu:PendingBoxSettings x:Key="pendingSettings">
             <pu:PendingBoxSettings.WindowStyle>
-              <Style BasedOn="{StaticResource {x:Static pu:PendingBox.WindowStyle}}" TargetType="Window">
+              <Style BasedOn="{StaticResource {x:Static pu:PendingBox.WindowStyleKey}}" TargetType="Window">
                 <Setter Property="Width" Value="NaN" />
                 <Setter Property="Height" Value="NaN" />
                 <Setter Property="MinWidth" Value="300" />
@@ -125,7 +125,7 @@
               </Style>
             </pu:PendingBoxSettings.WindowStyle>
             <pu:PendingBoxSettings.SpinStyle>
-              <Style BasedOn="{StaticResource {x:Static pu:PendingBox.SpinStyle}}" TargetType="pu:Spin">
+              <Style BasedOn="{StaticResource {x:Static pu:PendingBox.SpinStyleKey}}" TargetType="pu:Spin">
                 <Setter Property="SpinStyle" Value="Ring2" />
                 <Setter Property="Width" Value="50" />
                 <Setter Property="Height" Value="50" />

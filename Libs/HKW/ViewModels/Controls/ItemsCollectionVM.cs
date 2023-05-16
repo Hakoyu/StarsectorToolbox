@@ -19,7 +19,11 @@ public partial class ItemsCollectionVM<T> : ControlVMBase, IList<T>, IEnumerable
     private ObservableCollection<T> _itemsSource = null!;
 
     /// <inheritdoc/>
-    public T this[int index] { get => ItemsSource[index]; set => ItemsSource[index] = value; }
+    public T this[int index]
+    {
+        get => ItemsSource[index];
+        set => ItemsSource[index] = value;
+    }
 
     /// <inheritdoc/>
     public int Count => ItemsSource.Count;

@@ -17,10 +17,10 @@ public partial class MenuItemVM : HeaderedItemsControlVM<MenuItemVM>
     [ObservableProperty]
     private bool _isVisible;
 
-    [ObservableProperty]
+    //[ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(MenuItemCommand))]
     //[NotifyCanExecuteChangedFor(nameof(MenuItemAsyncCommand))]
-    private bool _canExecute;
+    //private bool _canExecute;
 
     /// <summary>
     /// 初始化
@@ -40,8 +40,8 @@ public partial class MenuItemVM : HeaderedItemsControlVM<MenuItemVM>
     //    CommandEventAsync += handlerAsync;
     //}
 
-    //[RelayCommand(CanExecute = nameof(CanExecute))]
-    //private void MenuItem(object parameter) => CommandEvent?.Invoke(parameter);
+    [RelayCommand]
+    private void MenuItem(object parameter) => CommandEvent?.Invoke(parameter);
 
     //[RelayCommand(CanExecute = nameof(CanExecute))]
     //private async Task MenuItemAsync(object parameter)
@@ -62,14 +62,14 @@ public partial class MenuItemVM : HeaderedItemsControlVM<MenuItemVM>
     /// </summary>
     public event CommandHandler? CommandEvent;
 
-    /// <summary>
-    /// 异步委托
-    /// </summary>
-    /// <param name="parameter">参数</param>
-    public delegate Task CommandHandlerAsync(object parameter);
+    ///// <summary>
+    ///// 异步委托
+    ///// </summary>
+    ///// <param name="parameter">参数</param>
+    //public delegate Task CommandHandlerAsync(object parameter);
 
-    /// <summary>
-    /// 异步事件
-    /// </summary>
-    public event CommandHandlerAsync? CommandEventAsync;
+    ///// <summary>
+    ///// 异步事件
+    ///// </summary>
+    //public event CommandHandlerAsync? CommandEventAsync;
 }
