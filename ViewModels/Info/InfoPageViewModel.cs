@@ -1,11 +1,9 @@
 ﻿using System.Net.Http;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.ST;
 using I18nRes = StarsectorToolbox.Langs.Pages.Info.InfoPageI18nRes;
@@ -14,6 +12,8 @@ namespace StarsectorToolbox.ViewModels.Info;
 
 internal partial class InfoPageViewModel : ObservableObject
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     [ObservableProperty]
     private string _currentVersion = ST.Version;
 
@@ -23,13 +23,9 @@ internal partial class InfoPageViewModel : ObservableObject
     [ObservableProperty]
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
-    public InfoPageViewModel()
-    {
-    }
+    public InfoPageViewModel() { }
 
-    public InfoPageViewModel(bool noop)
-    {
-    }
+    public InfoPageViewModel(bool noop) { }
 
     [RelayCommand]
     private static void OpenGitHub()
@@ -42,8 +38,13 @@ internal partial class InfoPageViewModel : ObservableObject
     {
         CheckUpdateIcon = c_runIcon;
         using var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36");
-        var response = await httpClient.GetAsync("https://api.github.com/repos/Hakoyu/StarsectorToolbox/releases/latest");
+        httpClient.DefaultRequestHeaders.Add(
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36"
+        );
+        var response = await httpClient.GetAsync(
+            "https://api.github.com/repos/Hakoyu/StarsectorToolbox/releases/latest"
+        );
         var releases = await response.Content.ReadAsStringAsync();
         var tagName = Regex.Match(releases, @"(?<=""name"": "")[^""]+").Value;
         //if (string.IsNullOrWhiteSpace(tagName) is false)

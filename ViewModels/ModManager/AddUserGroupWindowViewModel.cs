@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HKW.ViewModels.Controls;
+using HKW.HKWViewModels.Controls;
 using StarsectorToolbox.Libs;
 
 namespace StarsectorToolbox.ViewModels.ModManager;
@@ -14,7 +14,10 @@ internal partial class AddUserGroupWindowViewModel : WindowVM
     private string _userGroupName = string.Empty;
 
     public ListBoxItemVM? BaseListBoxItem;
-    public AddUserGroupWindowViewModel() : base(new()) { }
+
+    public AddUserGroupWindowViewModel()
+        : base(new()) { }
+
     public AddUserGroupWindowViewModel(object window)
         : base(window)
     {

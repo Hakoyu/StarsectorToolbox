@@ -1,11 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Dialogs;
-using Panuon.WPF.UI;
+using StarsectorToolbox.Libs;
 using StarsectorToolbox.ViewModels.Main;
 using StarsectorToolbox.Views.CrashReporter;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
@@ -17,6 +14,7 @@ namespace StarsectorToolbox.Views.Main;
 /// </summary>
 internal partial class MainWindow : Window
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
     internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
 
     /// <summary>
@@ -46,11 +44,7 @@ internal partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            Logger.Error(
-                $"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}",
-                ex,
-                false
-            );
+            sr_logger.Error(ex, $"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}");
             //MessageBoxVM.Show(
             //    new($"{I18nRes.InitializationError}: {nameof(MainWindowViewModel)}")
             //    {
@@ -66,7 +60,7 @@ internal partial class MainWindow : Window
         InitializePage();
 
         ViewModel.CrashReporterWindow = new(new CrashReporterWindow());
-        Logger.Info(I18nRes.InitializationCompleted);
+        sr_logger.Info(I18nRes.InitializationCompleted);
         GC.Collect();
     }
 
@@ -122,6 +116,7 @@ internal partial class MainWindow : Window
     {
         if (sender is not Frame frame)
             return;
+        // 清理过时页面
         while (frame.CanGoBack)
             frame.RemoveBackEntry();
         GC.Collect();

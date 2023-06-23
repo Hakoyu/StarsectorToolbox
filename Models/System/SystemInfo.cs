@@ -1,12 +1,6 @@
-﻿using System;
-using System.Management;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Management;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using HKW.Libs;
-using HKW.Libs.Log4Cs;
+using StarsectorToolbox.Libs;
 using I18nRes = StarsectorToolbox.Langs.Models.ModelsI18nRes;
 
 namespace StarsectorToolbox.Models.System;
@@ -16,6 +10,8 @@ namespace StarsectorToolbox.Models.System;
 /// </summary>
 public class SystemInfo
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     /// <summary>
     /// 平台名称
     /// </summary>
@@ -32,25 +28,35 @@ public class SystemInfo
     public static string PlatformVersion { get; private set; } = string.Empty;
 
     /// <summary>
-    /// 内存总量
+    /// 内存总量 (MB为单位)
     /// </summary>
-    public static int TotalMemory { get; private set; } = 0;
+    public static uint TotalMemory { get; private set; } = 0;
 
     internal static void Initialize()
     {
-        TotalMemory = ManagementMemoryMetrics.GetMemoryMetricsNow().Total;
+        if (MemoryMetrics.GetMemoryMetrics() is MemoryMetrics memoryMetrics)
+            TotalMemory = (uint)MemoryMetrics.ByteToMB(memoryMetrics.TotalVirtual);
+        // TODO: GetMemoryMetrics Fail
         TryGetPlatformInfo();
     }
 
     private static void TryGetPlatformInfo()
     {
-        GetPlatformInfo(out var platformName, out var platformArchitecture, out var platformVersion);
+        GetPlatformInfo(
+            out var platformName,
+            out var platformArchitecture,
+            out var platformVersion
+        );
         PlatformName = platformName;
         PlatformArchitecture = platformArchitecture;
         PlatformVersion = platformVersion;
     }
 
-    private static void GetPlatformInfo(out string platformName, out string platformArchitecture, out string platformVersion)
+    private static void GetPlatformInfo(
+        out string platformName,
+        out string platformArchitecture,
+        out string platformVersion
+    )
     {
         platformName = string.Empty;
         platformArchitecture = string.Empty;
@@ -63,12 +69,17 @@ public class SystemInfo
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.SystemInfoAcquisitionFailed, ex);
+            sr_logger.Error(I18nRes.SystemInfoAcquisitionFailed, ex);
             return;
         }
     }
+
     //#pragma warning disable CA1416
-    private static void GetWindowsInfo(out string platformName, out string platformArchitecture, out string platformVersion)
+    private static void GetWindowsInfo(
+        out string platformName,
+        out string platformArchitecture,
+        out string platformVersion
+    )
     {
         platformName = string.Empty;
         platformArchitecture = string.Empty;

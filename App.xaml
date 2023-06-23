@@ -4,6 +4,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:I18n="clr-namespace:StarsectorToolbox.Langs"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  x:ClassModifier="internal"
   StartupUri="Views/Main/MainWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>

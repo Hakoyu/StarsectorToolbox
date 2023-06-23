@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HKW.ViewModels;
-using HKW.ViewModels.Controls;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Controls;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
-using StarsectorToolbox.Models.ModInfo;
 
 namespace StarsectorToolbox.ViewModels.CrashReporter;
 
 internal partial class CrashReporterWindowViewModel : WindowVM
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     [ObservableProperty]
     private bool _closeToHide = true;
 

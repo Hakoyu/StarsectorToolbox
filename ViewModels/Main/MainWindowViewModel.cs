@@ -1,12 +1,10 @@
-﻿using System;
+﻿using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Controls;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Controls;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.Messages;
@@ -22,6 +20,8 @@ namespace StarsectorToolbox.ViewModels.Main;
 /// </summary>
 internal partial class MainWindowViewModel : ObservableObject
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     #region ObservableProperty
 
     [ObservableProperty]
@@ -88,8 +88,6 @@ internal partial class MainWindowViewModel : ObservableObject
         SystemInfo.Initialize();
         InitializeData();
         InitializeDirectories();
-        // 注册日志
-        Logger.Initialize(ST.LogFile);
         // 设置全局异常捕获
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         // 初始化设置
@@ -97,7 +95,7 @@ internal partial class MainWindowViewModel : ObservableObject
             throw new(I18nRes.GameNotFound_SoftwareExit);
         // 初始化消息
         InitializeMessenger();
-        I18n.AddPropertyChangedAction(I18nChangedAction);
+        I18n.AddCultureChangedAction(CultureChangedAction);
         if (ListBox_MainMenu.SelectedIndex == -1)
             ListBox_MainMenu.SelectedIndex = 0;
     }
@@ -126,7 +124,7 @@ internal partial class MainWindowViewModel : ObservableObject
         );
     }
 
-    private void I18nChangedAction()
+    private void CultureChangedAction(CultureInfo cultureInfo)
     {
         foreach (var item in ListBox_MainMenu)
         {
@@ -233,7 +231,7 @@ internal partial class MainWindowViewModel : ObservableObject
                 ListBox_ExtensionMenu.SelectedItem =
                     null;
         }
-        Logger.Info($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
+        sr_logger.Info($"{I18nRes.ShowPage}: {page?.GetType().FullName}");
     }
 
     [RelayCommand]

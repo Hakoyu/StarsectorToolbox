@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using HKW.Libs;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Controls;
+using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.Messages;
@@ -21,6 +17,8 @@ namespace StarsectorToolbox.ViewModels.GameSettings;
 
 internal partial class GameSettingsPageViewModel : ObservableObject
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     [ObservableProperty]
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
@@ -54,7 +52,8 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     private string _realGameKey = string.Empty;
     private string _hideGameKey = string.Empty;
 
-    private static readonly string sr_missionsLoadoutsDirectory = $"{GameInfo.SaveDirectory}\\missions";
+    private static readonly string sr_missionsLoadoutsDirectory =
+        $"{GameInfo.SaveDirectory}\\missions";
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_MissionsLoadouts =
@@ -63,8 +62,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             new() { Content = I18nRes.All, ToolTip = nameof(I18nRes.All) }
         };
 
-    public GameSettingsPageViewModel()
-    { }
+    public GameSettingsPageViewModel() { }
 
     public GameSettingsPageViewModel(bool noop)
     {
@@ -72,11 +70,11 @@ internal partial class GameSettingsPageViewModel : ObservableObject
         GetVmparamsData();
         GetMissionsLoadouts();
         GetCustomResolution();
-        I18n.AddPropertyChangedAction(I18nChangedAction);
+        I18n.AddCultureChangedAction(CultureChangedAction);
         ComboBox_MissionsLoadouts.SelectedIndex = 0;
     }
 
-    private void I18nChangedAction()
+    private void CultureChangedAction(CultureInfo cultureInfo)
     {
         ComboBox_MissionsLoadouts[0].Content = I18nRes.All;
     }
@@ -130,15 +128,23 @@ internal partial class GameSettingsPageViewModel : ObservableObject
         string unit = GameMemory.Last().ToString();
         int memory = int.Parse(Regex.Match(GameMemory, "[0-9]+").Value);
         int memoryMB = memory * (unit == "m" ? 1 : 1024);
-        if (CheckMemorySize(memoryMB) is int sizeMB)
+        if (CheckMemorySize(memoryMB) is uint sizeMB)
         {
-            int size = unit == "m" ? sizeMB : sizeMB / 1024;
+            var size = unit == "m" ? sizeMB : sizeMB / 1024;
             GameMemory = $"{size}{unit}";
             return;
         }
         _vmparamsData.xmsx = $"{memory}{unit}";
-        File.WriteAllText($"{GameInfo.BaseDirectory}\\vmparams", Regex.Replace(_vmparamsData.data, @"(?<=-xm[sx])[0-9]+[mg]", _vmparamsData.xmsx, RegexOptions.IgnoreCase));
-        Logger.Info($"{I18nRes.VmparamsMemorySet}: {_vmparamsData.xmsx}");
+        File.WriteAllText(
+            $"{GameInfo.BaseDirectory}\\vmparams",
+            Regex.Replace(
+                _vmparamsData.data,
+                @"(?<=-xm[sx])[0-9]+[mg]",
+                _vmparamsData.xmsx,
+                RegexOptions.IgnoreCase
+            )
+        );
+        sr_logger.Info($"{I18nRes.VmparamsMemorySet}: {_vmparamsData.xmsx}");
         MessageBoxVM.Show(new(I18nRes.VmparamsMemorySetComplete));
     }
 
@@ -186,9 +192,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             }
             if (Utils.DeleteDirectoryToRecycleBin(selected) is false)
             {
-                Logger.Warring(
-                    $"{I18nRes.MissionsLoadoutsNotExist} {I18nRes.Path}: {selected}"
-                );
+                sr_logger.Warn($"{I18nRes.MissionsLoadoutsNotExist} {I18nRes.Path}: {selected}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.MissionsLoadoutsNotExist}\n{I18nRes.Path}: {selected}")
                     {
@@ -198,7 +202,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             }
             ComboBox_MissionsLoadouts.Remove(ComboBox_MissionsLoadouts.SelectedItem!);
         }
-        Logger.Info(I18nRes.MissionsLoadoutsClearCompleted);
+        sr_logger.Info(I18nRes.MissionsLoadoutsClearCompleted);
         MessageBoxVM.Show(new(I18nRes.MissionsLoadoutsClearCompleted));
     }
 
@@ -230,10 +234,12 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             dirsPath.Add(dir.FullName, dir.LastWriteTime);
         dirsPath.Remove(Path.Combine(GameInfo.SaveDirectory, "missions"));
         var list = dirsPath.OrderBy(kv => kv.Value);
-        int count = string.IsNullOrEmpty(RetainRecentSaveCount) ? 0 : dirsPath.Count - int.Parse(RetainRecentSaveCount);
+        int count = string.IsNullOrEmpty(RetainRecentSaveCount)
+            ? 0
+            : dirsPath.Count - int.Parse(RetainRecentSaveCount);
         for (int i = 0; i < count; i++)
             Utils.DeleteDirectoryToRecycleBin(list.ElementAt(i).Key);
-        Logger.Info(I18nRes.SaveCleanComplete);
+        sr_logger.Info(I18nRes.SaveCleanComplete);
         MessageBoxVM.Show(new(I18nRes.SaveCleanComplete));
     }
 
@@ -244,8 +250,13 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             Utils.OpenLink(GameInfo.SaveDirectory);
         else
         {
-            Logger.Warring($"{I18nRes.SaveNotExist} {I18nRes.Path}: {GameInfo.SaveDirectory}");
-            MessageBoxVM.Show(new($"{I18nRes.SaveNotExist}\n{I18nRes.Path}: {GameInfo.SaveDirectory}") { Icon = MessageBoxVM.Icon.Warning });
+            sr_logger.Warn($"{I18nRes.SaveNotExist} {I18nRes.Path}: {GameInfo.SaveDirectory}");
+            MessageBoxVM.Show(
+                new($"{I18nRes.SaveNotExist}\n{I18nRes.Path}: {GameInfo.SaveDirectory}")
+                {
+                    Icon = MessageBoxVM.Icon.Warning
+                }
+            );
         }
     }
 
@@ -254,25 +265,41 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     {
         if (string.IsNullOrEmpty(ResolutionWidth) || string.IsNullOrEmpty(ResolutionHeight))
         {
-            MessageBoxVM.Show(new(I18nRes.WidthAndHeightCannotBeEmpty) { Icon = MessageBoxVM.Icon.Warning });
+            MessageBoxVM.Show(
+                new(I18nRes.WidthAndHeightCannotBeEmpty) { Icon = MessageBoxVM.Icon.Warning }
+            );
             return;
         }
         try
         {
             string data = File.ReadAllText(GameInfo.SettingsFile);
             // 设置无边框
-            data = Regex.Replace(data, @"(?<=undecoratedWindow"":)(?:false|true)", BorderlessWindow.ToString().ToLower());
+            data = Regex.Replace(
+                data,
+                @"(?<=undecoratedWindow"":)(?:false|true)",
+                BorderlessWindow.ToString().ToLower()
+            );
             // 设置自定义分辨率
-            data = Regex.Replace(data, @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",", @$"""resolutionOverride"":""{ResolutionWidth}x{ResolutionHeight}"",");
+            data = Regex.Replace(
+                data,
+                @"(?:#|)""resolutionOverride"":""[0-9]+x[0-9]+"",",
+                @$"""resolutionOverride"":""{ResolutionWidth}x{ResolutionHeight}"","
+            );
             File.WriteAllText(GameInfo.SettingsFile, data);
             CustomResolutionCanReset = true;
-            Logger.Info($"{I18nRes.CustomResolutionSetComplete} {ResolutionWidth}x{ResolutionHeight}");
-            MessageBoxVM.Show(new($"{I18nRes.CustomResolutionSetComplete}\n{I18nRes.CustomResolutionHelp}"));
+            sr_logger.Info(
+                $"{I18nRes.CustomResolutionSetComplete} {ResolutionWidth}x{ResolutionHeight}"
+            );
+            MessageBoxVM.Show(
+                new($"{I18nRes.CustomResolutionSetComplete}\n{I18nRes.CustomResolutionHelp}")
+            );
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.CustomResolutionSetupError, ex);
-            MessageBoxVM.Show(new(I18nRes.CustomResolutionSetupError) { Icon = MessageBoxVM.Icon.Error });
+            sr_logger.Error(ex, I18nRes.CustomResolutionSetupError);
+            MessageBoxVM.Show(
+                new(I18nRes.CustomResolutionSetupError) { Icon = MessageBoxVM.Icon.Error }
+            );
         }
     }
 
@@ -285,19 +312,25 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             // 取消无边框
             data = Regex.Replace(data, @"(?<=undecoratedWindow"":)(?:false|true)", "false");
             // 注释吊自定义分辨率
-            data = Regex.Replace(data, @"(?<=[ \t]+)""resolutionOverride""", @"#""resolutionOverride""");
+            data = Regex.Replace(
+                data,
+                @"(?<=[ \t]+)""resolutionOverride""",
+                @"#""resolutionOverride"""
+            );
             File.WriteAllText(GameInfo.SettingsFile, data);
             BorderlessWindow = false;
             CustomResolutionCanReset = false;
             ResolutionWidth = string.Empty;
             ResolutionHeight = string.Empty;
-            Logger.Info(I18nRes.ResetSuccessful);
+            sr_logger.Info(I18nRes.ResetSuccessful);
             MessageBoxVM.Show(new(I18nRes.ResetSuccessful));
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.CustomResolutionResetError, ex);
-            MessageBoxVM.Show(new(I18nRes.CustomResolutionResetError) { Icon = MessageBoxVM.Icon.Error });
+            sr_logger.Error(ex, I18nRes.CustomResolutionResetError);
+            MessageBoxVM.Show(
+                new(I18nRes.CustomResolutionResetError) { Icon = MessageBoxVM.Icon.Error }
+            );
         }
     }
 

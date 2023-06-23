@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using I18nRes = StarsectorToolbox.Langs.Libs.GameInfoI18nRes;
 
 namespace StarsectorToolbox.Models.GameInfo;

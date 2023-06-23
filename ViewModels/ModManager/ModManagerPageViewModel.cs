@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Controls;
+using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
@@ -21,6 +18,8 @@ namespace StarsectorToolbox.ViewModels.ModManager;
 
 internal partial class ModManagerPageViewModel : ObservableObject
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     [ObservableProperty]
     private AddUserGroupWindowViewModel _addUserGroupWindow = null!;
 
@@ -80,7 +79,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
     private bool _nowSelectedIsUserGroup = false;
 
     [ObservableProperty]
-    private ContextMenuVM _groupTypeExpanderContextMenu;
+    private ContextMenuVM _groupTypeExpanderContextMenu = null!;
 
     #endregion ObservableProperty
 
@@ -222,7 +221,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
     public ModManagerPageViewModel(bool noop)
     {
         InitializeData();
-        I18n.AddPropertyChangedAction(I18nPropertyChangeAction);
+        I18n.AddCultureChangedAction(CultureChangedAction);
         ListBox_MainMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
         ListBox_TypeGroupMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
         ListBox_UserGroupMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
@@ -231,7 +230,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         ComboBox_ExportUserGroup.SelectedIndex = 0;
     }
 
-    private void I18nPropertyChangeAction()
+    private void CultureChangedAction(CultureInfo cultureInfo)
     {
         ListBox_MainMenu[0].ToolTip = I18nRes.AllMods;
         ListBox_MainMenu[1].ToolTip = I18nRes.EnabledMods;
@@ -373,7 +372,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         if (errSB.Length > 0)
         {
             string err = errSB.ToString();
-            Logger.Warring(err);
+            sr_logger.Warn(err);
             MessageBoxVM.Show(new(err) { Icon = MessageBoxVM.Icon.Warning });
         }
         CheckEnabledModsDependencies();
@@ -481,9 +480,9 @@ internal partial class ModManagerPageViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.FileError} {I18nRes.Path}: {filePath}\n", ex);
+            sr_logger.Error(ex, $"{I18nRes.FileError} {I18nRes.Path}: {filePath}");
             MessageBoxVM.Show(
-                new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}\n")
+                new($"{I18nRes.FileError}\n{I18nRes.Path}: {filePath}")
                 {
                     Icon = MessageBoxVM.Icon.Question
                 }
@@ -505,7 +504,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         {
             if (r_allModInfos.ContainsKey(id) is false)
             {
-                Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                sr_logger.Warn($"{I18nRes.NotFoundMod} {id}");
                 errSB.AppendLine(id);
                 continue;
             }
@@ -513,7 +512,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
         }
         if (errSB.Length > 0)
         {
-            Logger.Warring($"{I18nRes.NotFoundMod}\n{errSB}");
+            sr_logger.Warn($"{I18nRes.NotFoundMod}\n{errSB}");
             MessageBoxVM.Show(
                 new($"{I18nRes.NotFoundMod}\n{errSB}") { Icon = MessageBoxVM.Icon.Warning }
             );

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using HKW.ViewModels.Controls;
+using HKW.HKWViewModels.Controls;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
 

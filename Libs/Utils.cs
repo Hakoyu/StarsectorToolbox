@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Aspose.Zip;
 using Aspose.Zip.Rar;
 using Aspose.Zip.SevenZip;
-using HKW.Libs.Log4Cs;
 using Microsoft.VisualBasic.FileIO;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Zip;
@@ -24,6 +20,7 @@ namespace StarsectorToolbox.Libs;
 /// <summary>通用方法</summary>
 public static class Utils
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
     private const string c_ZipFileHeadCode = "8075";
     private const string c_RarFileHeadCode = "8297";
     private const string c_7ZFileHeadCode = "55122";
@@ -45,7 +42,7 @@ public static class Utils
     {
         bool isExists = File.Exists(file);
         if (isExists is false && outputLog)
-            Logger.Warring($"{I18nRes.FileNotFound} {I18nRes.Path}: {file}");
+            sr_logger.Warn($"{I18nRes.FileNotFound} {I18nRes.Path}: {file}");
         return isExists;
     }
 
@@ -59,7 +56,7 @@ public static class Utils
     {
         bool exists = Directory.Exists(directory);
         if (exists is false && outputLog)
-            Logger.Warring($"{I18nRes.DirectoryNotFound} {I18nRes.Path}: {directory}");
+            sr_logger.Warn($"{I18nRes.DirectoryNotFound} {I18nRes.Path}: {directory}");
         return exists;
     }
 
@@ -109,7 +106,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.LoadError} {file}", ex);
+            sr_logger.Error(ex, $"{I18nRes.LoadError} {file}");
         }
         return jsonObject;
     }
@@ -157,7 +154,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.LoadError, ex);
+            sr_logger.Error(ex, I18nRes.LoadError);
             return false;
         }
     }
@@ -181,7 +178,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.LoadError, ex);
+            sr_logger.Error(ex, I18nRes.LoadError);
             return false;
         }
     }
@@ -200,7 +197,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.LoadError, ex);
+            sr_logger.Error(ex, I18nRes.LoadError);
             return false;
         }
     }
@@ -223,7 +220,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.LoadError, ex);
+            sr_logger.Error(ex, I18nRes.LoadError);
             return false;
         }
     }
@@ -242,7 +239,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ProcessStartError} {link}", ex);
+            sr_logger.Error(ex, $"{I18nRes.ProcessStartError} {link}");
             return false;
         }
     }
@@ -261,7 +258,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ProcessStartError} {file}", ex);
+            sr_logger.Error(ex, $"{I18nRes.ProcessStartError} {file}");
             return false;
         }
     }
@@ -301,7 +298,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ZipFileError} {I18nRes.Path}: {sourceDirectory}", ex);
+            sr_logger.Error(ex, $"{I18nRes.ZipFileError} {I18nRes.Path}: {sourceDirectory}");
             return false;
         }
     }
@@ -352,7 +349,7 @@ public static class Utils
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ZipFileError}  {I18nRes.Path}: {sourceFile}", ex);
+            sr_logger.Error(ex, $"{I18nRes.ZipFileError}  {I18nRes.Path}: {sourceFile}");
             if (destDirectoryExists is false && Directory.Exists(destDirectory))
                 Directory.Delete(destDirectory);
             return false;
@@ -382,7 +379,7 @@ public static class Utils
             if (File.Exists(gFile))
                 File.Delete(gFile);
         }
-        Logger.Info(I18nRes.GameLogCleanupCompleted);
+        sr_logger.Info(I18nRes.GameLogCleanupCompleted);
     }
 
     /// <summary>

@@ -1,12 +1,11 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Globalization;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Controls;
+using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.Messages;
 using StarsectorToolbox.Models.ST;
@@ -16,21 +15,14 @@ namespace StarsectorToolbox.ViewModels.Settings;
 
 internal partial class SettingsPageViewModel : ObservableObject
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     [ObservableProperty]
     private ObservableI18n<I18nRes> _i18n = ObservableI18n<I18nRes>.Create(new());
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ClearExtensionDebugPathCommand))]
     private string? _extensionDebugPath;
-
-    [ObservableProperty]
-    private ComboBoxVM _comboBox_LogLevel =
-        new()
-        {
-            new() { Content = I18nRes.LogLevel_DEBUG, ToolTip = LogLevel.DEBUG },
-            new() { Content = I18nRes.LogLevel_INFO, ToolTip = LogLevel.INFO },
-            new() { Content = I18nRes.LogLevel_WARN, ToolTip = LogLevel.WARN },
-        };
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_Language =
@@ -48,35 +40,32 @@ internal partial class SettingsPageViewModel : ObservableObject
 
     public SettingsPageViewModel(bool noop)
     {
-        I18n.AddPropertyChangedAction(I18nChangedAction);
-        ExtensionDebugPath =
-            WeakReferenceMessenger.Default.Send<ExtensionDebugPathRequestMessage>().Response;
-        // 设置LogLevel初始值
-        ComboBox_LogLevel.SelectedItem = ComboBox_LogLevel.First(
-            i => i.ToolTip is LogLevel level && level == Logger.DefaultOptions.Level
-        );
+        I18n.AddCultureChangedAction(CultureChangedAction);
+        ExtensionDebugPath = WeakReferenceMessenger.Default
+            .Send<ExtensionDebugPathRequestMessage>()
+            .Response;
         // 设置Language初始值
         ComboBox_Language.SelectedItem = ComboBox_Language.FirstOrDefault(
             i => i.ToolTip is string language && language == ObservableI18n.Language,
             ComboBox_Language[0]
         );
         // 注册事件
-        ComboBox_LogLevel.SelectionChangedEvent += ComboBox_LogLevel_SelectionChangedEvent;
         ComboBox_Language.SelectionChangedEvent += ComboBox_Language_SelectionChangedEvent;
-        WeakReferenceMessenger.Default.Register<ExtensionDebugPathErrorMessage>(this, ExtensionDebugPathErrorReceive);
+        WeakReferenceMessenger.Default.Register<ExtensionDebugPathErrorMessage>(
+            this,
+            ExtensionDebugPathErrorReceive
+        );
     }
 
-    private void ExtensionDebugPathErrorReceive(object recipient, ExtensionDebugPathErrorMessage message)
+    private void ExtensionDebugPathErrorReceive(
+        object recipient,
+        ExtensionDebugPathErrorMessage message
+    )
     {
         ExtensionDebugPath = string.Empty;
     }
 
-    private void I18nChangedAction()
-    {
-        ComboBox_LogLevel[0].Content = I18nRes.LogLevel_DEBUG;
-        ComboBox_LogLevel[1].Content = I18nRes.LogLevel_INFO;
-        ComboBox_LogLevel[2].Content = I18nRes.LogLevel_WARN;
-    }
+    private void CultureChangedAction(CultureInfo cultureInfo) { }
 
     private void ComboBox_Language_SelectionChangedEvent(object parameter)
     {
@@ -88,20 +77,7 @@ internal partial class SettingsPageViewModel : ObservableObject
         ObservableI18n.Language = item.ToolTip!.ToString()!;
         STSettings.Instance.Language = ObservableI18n.Language;
         STSettings.Save();
-        Logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
-    }
-
-    private void ComboBox_LogLevel_SelectionChangedEvent(object parameter)
-    {
-        if (parameter is not ComboBoxItemVM item)
-            return;
-        var level = item.ToolTip!.ToString()!;
-        if (Logger.DefaultOptions.Level.ToString() == level)
-            return;
-        STSettings.Instance.LogLevel = level;
-        STSettings.Save();
-        Logger.DefaultOptions.Level = Logger.LogLevelConverter(level);
-        Logger.Info($"{I18nRes.LogLevelSwitch}: {Logger.DefaultOptions.Level}");
+        sr_logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
     }
 
     [RelayCommand]
@@ -131,7 +107,7 @@ internal partial class SettingsPageViewModel : ObservableObject
             WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangedMessage>(
                 new(ExtensionDebugPath)
             );
-            Logger.Info($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
+            sr_logger.Info($"{I18nRes.SetExtensionDebugPath}: {ExtensionDebugPath}");
         }
     }
 
@@ -152,7 +128,7 @@ internal partial class SettingsPageViewModel : ObservableObject
             WeakReferenceMessenger.Default.Send<ExtensionDebugPathChangedMessage>(
                 new(ExtensionDebugPath)
             );
-            Logger.Info($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
+            sr_logger.Info($"{I18nRes.ClearExtensionDebugPath}: {ExtensionDebugPath}");
         }
     }
 
@@ -161,6 +137,6 @@ internal partial class SettingsPageViewModel : ObservableObject
     [RelayCommand]
     private static void OpenLogFile()
     {
-        Utils.OpenLink(Logger.LogFile);
+        Utils.OpenLink(ST.LogFile);
     }
 }

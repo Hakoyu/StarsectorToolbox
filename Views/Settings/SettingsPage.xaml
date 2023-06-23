@@ -5,7 +5,6 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:local="clr-namespace:StarsectorToolbox.Views.Settings"
-  xmlns:log="clr-namespace:HKW.Libs.Log4Cs"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
   xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.Settings"
@@ -49,23 +48,6 @@
               Command="{Binding OpenLogFileCommand}"
               Content="{Binding I18n.I18nRes.OpenLogFile}"
               Style="{StaticResource ButtonBaseStyle}" />
-            <Label
-              x:Name="Label_LogLevel"
-              Content="{Binding I18n.I18nRes.LogLevel}"
-              Style="{StaticResource LabelBaseStyle}" />
-            <ComboBox
-              x:Name="ComboBox_LogLevel"
-              Margin="0,0,5,0"
-              DisplayMemberPath="Content"
-              ItemsSource="{Binding ComboBox_LogLevel.ItemsSource}"
-              SelectedItem="{Binding ComboBox_LogLevel.SelectedItem}"
-              Style="{StaticResource ComboBoxBaseStyle}">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Loaded">
-                  <i:InvokeCommandAction Command="{Binding ComboBox_LogLevel.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_LogLevel.SelectedItem}" />
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </ComboBox>
             <Label
               x:Name="Label_Language"
               Content="{Binding I18n.I18nRes.Language}"

@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text.RegularExpressions;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels.Dialogs;
 using Microsoft.Win32;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
@@ -57,7 +54,7 @@ internal partial class GameSettingsPageViewModel
         }
     }
 
-    private static int? CheckMemorySize(int size)
+    private static uint? CheckMemorySize(int size)
     {
         if (size < 1024)
         {
@@ -108,7 +105,7 @@ internal partial class GameSettingsPageViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.CustomResolutionGetFailed, ex);
+            sr_logger.Error(ex, I18nRes.CustomResolutionGetFailed);
             MessageBoxVM.Show(
                 new(I18nRes.CustomResolutionGetFailed) { Icon = MessageBoxVM.Icon.Error }
             );

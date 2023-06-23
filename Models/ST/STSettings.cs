@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HKW.Libs.Log4Cs;
-using HKW.TOML;
-using HKW.TOML.Attributes;
+﻿using HKW.TOML.Attributes;
 using HKW.TOML.Deserializer;
 using HKW.TOML.Interfaces;
 using HKW.TOML.Serializer;
-using HKW.ViewModels;
-using StarsectorToolbox.Resources;
+using StarsectorToolbox.Libs;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorToolbox.Models.ST;
 
 internal class STSettings : ITomlClassComment
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     [TomlIgnore]
     public static STSettings Instance { get; set; } = null!;
 
@@ -34,12 +27,9 @@ internal class STSettings : ITomlClassComment
     public string Language { get; set; } = "zh-CN";
 
     [TomlPropertyOrder(1)]
-    public string LogLevel { get; set; } = HKW.Libs.Log4Cs.LogLevel.INFO.ToString();
-
-    [TomlPropertyOrder(2)]
     public GameClass Game { get; set; } = new();
 
-    [TomlPropertyOrder(3)]
+    [TomlPropertyOrder(2)]
     public ExtensionClass Extension { get; set; } = new();
 
     public static void Initialize(string tomlFile)
@@ -53,7 +43,9 @@ internal class STSettings : ITomlClassComment
         SettingsFile = tomlFile;
         TomlSerializer.SerializeToFile(tomlFile, new STSettings());
         Instance = TomlDeserializer.DeserializeFromFile<STSettings>(tomlFile);
-        Logger.Info($"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.SettingsTomlFile}");
+        sr_logger.Info(
+            $"{I18nRes.ConfigFileCreationCompleted} {I18nRes.Path}: {ST.SettingsTomlFile}"
+        );
     }
 
     public static void Save()

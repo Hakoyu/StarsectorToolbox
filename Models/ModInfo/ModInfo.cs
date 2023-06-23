@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text.Json.Nodes;
-using HKW.Libs.Log4Cs;
 using StarsectorToolbox.Libs;
 using I18n = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
@@ -14,6 +10,8 @@ namespace StarsectorToolbox.Models.ModInfo;
 [DebuggerDisplay("{Name},Version = {Version}")]
 public class ModInfo : IModInfo
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     /// <inheritdoc/>
     public string Id { get; private set; } = null!;
 
@@ -84,7 +82,7 @@ public class ModInfo : IModInfo
         }
         catch (Exception ex)
         {
-            Logger.Error(I18n.ModInfoError, ex);
+            sr_logger.Error(I18n.ModInfoError, ex);
             return null;
         }
     }
@@ -104,7 +102,7 @@ public class ModInfo : IModInfo
         }
         catch (Exception ex)
         {
-            Logger.Error(I18n.ModInfoError, ex);
+            sr_logger.Error(I18n.ModInfoError, ex);
             return null;
         }
     }

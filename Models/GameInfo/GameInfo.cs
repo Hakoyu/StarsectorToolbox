@@ -1,13 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using I18nRes = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
@@ -16,6 +10,8 @@ namespace StarsectorToolbox.Models.GameInfo;
 /// <summary>游戏信息</summary>
 public static class GameInfo
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     /// <summary>游戏目录</summary>
     public static string BaseDirectory { get; private set; } = string.Empty;
 
@@ -65,7 +61,7 @@ public static class GameInfo
     {
         if (CheckGameDirectory(gameDirectory, out var exeFile) is false)
         {
-            Logger.Error($"{I18nRes.GameDirectoryError} {I18nRes.Path}: {gameDirectory}");
+            sr_logger.Error($"{I18nRes.GameDirectoryError} {I18nRes.Path}: {gameDirectory}");
             MessageBoxVM.Show(
                 new($"{I18nRes.GameDirectoryError}\n{I18nRes.Path}")
                 {
@@ -88,7 +84,7 @@ public static class GameInfo
         Version = TryGetGameVersion(LogFile);
         if (string.IsNullOrWhiteSpace(Version))
         {
-            Logger.Info(I18nRes.GameVersionAccessFailed);
+            sr_logger.Info(I18nRes.GameVersionAccessFailed);
             MessageBoxVM.Show(new(I18nRes.GameVersionAccessFailedMessage));
         }
         return true;
@@ -127,7 +123,7 @@ public static class GameInfo
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.GameVersionAccessFailed, ex);
+            sr_logger.Error(ex, I18nRes.GameVersionAccessFailed);
         }
         return string.Empty;
 
@@ -161,7 +157,7 @@ public static class GameInfo
             string directory = Path.GetDirectoryName(fileName)!;
             if (SetGameData(directory))
             {
-                Logger.Info($"{I18nRes.GameDirectorySetCompleted} {I18nRes.Path}: {directory}");
+                sr_logger.Info($"{I18nRes.GameDirectorySetCompleted} {I18nRes.Path}: {directory}");
                 return true;
             }
         }

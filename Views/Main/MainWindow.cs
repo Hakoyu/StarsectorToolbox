@@ -1,13 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.Messaging;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Dialogs;
 using Panuon.WPF.UI;
+using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.Messages;
 using I18n = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
@@ -68,7 +66,7 @@ internal partial class MainWindow
                 MessageBoxResult result;
                 if (IsLoaded)
                 {
-                    if (d.ShowMainWindowBlurEffect is true)
+                    if (d.SetMainWindowBlurEffect is true)
                     {
                         SetBlurEffect(false);
                         result = MessageBoxX.Show(this, message, d.Caption, button, icon);
@@ -81,7 +79,7 @@ internal partial class MainWindow
                 }
                 else
                 {
-                    if (d.ShowMainWindowBlurEffect is true)
+                    if (d.SetMainWindowBlurEffect is true)
                     {
                         SetBlurEffect(false);
                         result = MessageBoxX.Show(message, d.Caption, button, icon);
@@ -224,7 +222,7 @@ internal partial class MainWindow
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18n.PageInitializeError}: {type.FullName}", ex);
+            sr_logger.Error(ex, $"{I18n.PageInitializeError}: {type.FullName}");
             MessageBoxVM.Show(
                 new($"{I18n.PageInitializeError}:\n{type.FullName}")
                 {

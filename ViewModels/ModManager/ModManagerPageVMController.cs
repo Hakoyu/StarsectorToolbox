@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using HKW.Extension;
-using HKW.Libs.Log4Cs;
+using HKW.HKWUtils.Extensions;
+using HKW.HKWViewModels.Controls;
+using HKW.HKWViewModels.Dialogs;
 using HKW.TOML;
 using HKW.TOML.Deserializer;
-using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
@@ -106,7 +101,7 @@ internal partial class ModManagerPageViewModel
         ModInfos.AllModInfos = new(r_allModInfos);
         ModInfos.AllEnabledModIds = r_allEnabledModsId;
         ModInfos.AllCollectedModIds = r_allCollectedModsId;
-        ModInfos.AllUserGroups = r_allUserGroups.AsReadOnly<
+        ModInfos.AllUserGroups = r_allUserGroups.AsReadOnlyOnWrapper<
             string,
             HashSet<string>,
             IReadOnlySet<string>
@@ -149,7 +144,7 @@ internal partial class ModManagerPageViewModel
             {
                 repeatSize++;
                 var modInfo = r_allModInfos[info.Id];
-                Logger.Warring(
+                sr_logger.Warn(
                     string.Format(I18nRes.ModIsContains, modInfo.ModDirectory, info.ModDirectory)
                 );
                 errRepeat.AppendJoin(", ", info.Id);
@@ -162,7 +157,7 @@ internal partial class ModManagerPageViewModel
                 new(I18nRes.ModIsContainsMessage) { Icon = MessageBoxVM.Icon.Warning }
             );
         }
-        Logger.Info(string.Format(I18nRes.ModAddCompleted, r_allModInfos.Count, errSize));
+        sr_logger.Info(string.Format(I18nRes.ModAddCompleted, r_allModInfos.Count, errSize));
         if (errSize is not 0)
         {
             MessageBoxVM.Show(
@@ -178,7 +173,7 @@ internal partial class ModManagerPageViewModel
     {
         foreach (var modInfo in r_allModInfos.Values)
             AddModShowInfo(modInfo);
-        Logger.Info($"{I18nRes.ModShowInfoSetSuccess} {I18nRes.Size}: {r_allModInfos.Count}");
+        sr_logger.Info($"{I18nRes.ModShowInfoSetSuccess} {I18nRes.Size}: {r_allModInfos.Count}");
     }
 
     private ModShowInfo CreateModShowInfo(ModInfo info)
@@ -221,7 +216,7 @@ internal partial class ModManagerPageViewModel
             }
             catch (Exception ex)
             {
-                Logger.Error($"{I18nRes.IconLoadError} {I18nRes.Path}: {filePath}", ex);
+                sr_logger.Error(ex, $"{I18nRes.IconLoadError} {I18nRes.Path}: {filePath}");
                 return null;
             }
         }
@@ -233,7 +228,7 @@ internal partial class ModManagerPageViewModel
     {
         r_allModInfos.Add(modInfo.Id, modInfo);
         AddModShowInfo(modInfo);
-        Logger.Debug($"{I18nRes.AddMod} {modInfo.Id} {modInfo.Version}");
+        sr_logger.Debug($"{I18nRes.AddMod} {modInfo.Id} {modInfo.Version}");
     }
 
     private void AddModShowInfo(ModInfo modInfo)
@@ -264,7 +259,7 @@ internal partial class ModManagerPageViewModel
             }
         }
         showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
-        Logger.Debug($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}");
+        sr_logger.Debug($"{I18nRes.AddMod} {showInfo.Id} {showInfo.Version}");
     }
 
     #endregion AddMod
@@ -276,7 +271,7 @@ internal partial class ModManagerPageViewModel
         var modInfo = r_allModInfos[id];
         r_allModInfos.Remove(id);
         RemoveModShowInfo(id);
-        Logger.Debug($"{I18nRes.RemoveMod} {id} {modInfo.Version}");
+        sr_logger.Debug($"{I18nRes.RemoveMod} {id} {modInfo.Version}");
     }
 
     private void RemoveModShowInfo(string id)
@@ -355,7 +350,7 @@ internal partial class ModManagerPageViewModel
                 ChangeModsEnabled(r_allModShowInfoGroups[group], true);
                 CheckAndRefreshDisplayData();
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM DisableAllModsMenuItem(string group)
@@ -370,7 +365,7 @@ internal partial class ModManagerPageViewModel
                 ChangeModsEnabled(r_allModShowInfoGroups[group], false);
                 CheckAndRefreshDisplayData();
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM AddModsToUserGroupMenuItem(string group)
@@ -393,7 +388,7 @@ internal partial class ModManagerPageViewModel
                 };
                 menuItem.Add(userGroupMenuItem);
             }
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM RemoveModsFromUserGroupMenuItem(string group)
@@ -420,7 +415,7 @@ internal partial class ModManagerPageViewModel
                 };
                 menuItem.Add(userGroupMenuItem);
             }
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
     }
@@ -429,7 +424,7 @@ internal partial class ModManagerPageViewModel
 
     private ContextMenuVM CreateModShowContextMenu(ModShowInfo showInfo)
     {
-        Logger.Debug($"{showInfo.Id} {I18nRes.AddContextMenu}");
+        sr_logger.Debug($"{showInfo.Id} {I18nRes.AddContextMenu}");
         ContextMenuVM contextMenu =
             new(
                 (list) =>
@@ -450,7 +445,7 @@ internal partial class ModManagerPageViewModel
                 ? I18nRes.DisableSelectedMods
                 : I18nRes.EnableSelectedMods;
             menuItem.CommandEvent += (p) => ChangeModsEnabled(mods);
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM CollectOrUncollectSelectedModsMenuItem(IList<ModShowInfo> mods)
@@ -461,7 +456,7 @@ internal partial class ModManagerPageViewModel
                 ? I18nRes.UncollectSelectedMods
                 : I18nRes.CollectSelectedMods;
             menuItem.CommandEvent += (p) => ChangeModsCollected(mods);
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM OpenModDirectoryMenuItem(ModShowInfo showInfo)
@@ -471,12 +466,12 @@ internal partial class ModManagerPageViewModel
             menuItem.Header = I18nRes.OpenModDirectory;
             menuItem.CommandEvent += (p) =>
             {
-                Logger.Info(
+                sr_logger.Info(
                     $"{I18nRes.OpenModDirectory} {I18nRes.Path}: {r_allModInfos[showInfo.Id].ModDirectory}"
                 );
                 Utils.OpenLink(r_allModInfos[showInfo.Id].ModDirectory);
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM DeleteModMenuItem(ModShowInfo showInfo)
@@ -500,7 +495,7 @@ internal partial class ModManagerPageViewModel
                     is not MessageBoxVM.Result.Yes
                 )
                     return;
-                Logger.Info(
+                sr_logger.Info(
                     $"{I18nRes.ConfirmModDeletion}?\nID: {showInfo.Id}\n{I18nRes.Path}: {path}\n"
                 );
                 RemoveMod(showInfo.Id);
@@ -509,7 +504,7 @@ internal partial class ModManagerPageViewModel
                 CloseModDetails();
                 Utils.DeleteDirectoryToRecycleBin(path);
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
     }
@@ -539,7 +534,7 @@ internal partial class ModManagerPageViewModel
                 return;
             if (enabledModsJson[c_strEnabledMods]?.AsArray() is not JsonArray enabledModsJsonArray)
                 throw new();
-            Logger.Info($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
+            sr_logger.Info($"{I18nRes.LoadEnabledModsFile} {I18nRes.Path}: {filePath}");
             if (GetEnabledMods(enabledModsJsonArray) is StringBuilder err)
             {
                 MessageBoxVM.Show(
@@ -549,11 +544,11 @@ internal partial class ModManagerPageViewModel
                     }
                 );
             }
-            Logger.Info($"{I18nRes.EnableMod} {I18nRes.Size}: {r_allEnabledModsId.Count}");
+            sr_logger.Info($"{I18nRes.EnableMod} {I18nRes.Size}: {r_allEnabledModsId.Count}");
         }
-        catch
+        catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.LoadError} {I18nRes.Path}: {filePath}");
+            sr_logger.Error(ex, $"{I18nRes.LoadError} {I18nRes.Path}: {filePath}");
             MessageBoxVM.Show(
                 new($"{I18nRes.LoadError}\n{I18nRes.Path}: {filePath}")
                 {
@@ -573,12 +568,12 @@ internal partial class ModManagerPageViewModel
                 continue;
             if (r_allModInfos.ContainsKey(id) is false)
             {
-                Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                sr_logger.Warn($"{I18nRes.NotFoundMod} {id}");
                 err.AppendLine(id);
                 continue;
             }
             ChangeModEnabled(id, true);
-            Logger.Debug($"{I18nRes.EnableMod} {id}");
+            sr_logger.Debug($"{I18nRes.EnableMod} {id}");
         }
         return err.Length > 0 ? err : null;
     }
@@ -617,7 +612,7 @@ internal partial class ModManagerPageViewModel
 
     private void GetAllUserGroup(string filePath)
     {
-        Logger.Info($"{I18nRes.LoadUserGroup} {I18nRes.Path}: {filePath}");
+        sr_logger.Info($"{I18nRes.LoadUserGroup} {I18nRes.Path}: {filePath}");
         try
         {
             StringBuilder errSB = new();
@@ -629,7 +624,7 @@ internal partial class ModManagerPageViewModel
                 string group = kv.Key;
                 if (r_allUserGroups.ContainsKey(group))
                 {
-                    Logger.Info($"{I18nRes.DuplicateUserGroupName} {group}");
+                    sr_logger.Info($"{I18nRes.DuplicateUserGroupName} {group}");
                     errSB.AppendLine($"{I18nRes.DuplicateUserGroupName} {group}");
                     continue;
                 }
@@ -642,7 +637,7 @@ internal partial class ModManagerPageViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.FileError} {filePath}", ex);
+            sr_logger.Error(ex, $"{I18nRes.FileError} {filePath}");
             MessageBoxVM.Show(
                 new($"{I18nRes.FileError} {filePath}") { Icon = MessageBoxVM.Icon.Error }
             );
@@ -658,7 +653,7 @@ internal partial class ModManagerPageViewModel
                 continue;
             if (r_allModsShowInfo.ContainsKey(id) is false)
             {
-                Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                sr_logger.Warn($"{I18nRes.NotFoundMod} {id}");
                 err.AppendLine(id);
                 continue;
             }
@@ -670,7 +665,7 @@ internal partial class ModManagerPageViewModel
 
     private void GetUserData(string filePath)
     {
-        Logger.Info($"{I18nRes.LoadUserData} {I18nRes.Path}: {filePath}");
+        sr_logger.Info($"{I18nRes.LoadUserData} {I18nRes.Path}: {filePath}");
         try
         {
             TomlTable toml = TOML.ParseFromFile(filePath);
@@ -698,7 +693,7 @@ internal partial class ModManagerPageViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.UserDataLoadError} {I18nRes.Path}: {filePath}", ex);
+            sr_logger.Error(ex, $"{I18nRes.UserDataLoadError} {I18nRes.Path}: {filePath}");
             MessageBoxVM.Show(
                 new($"{I18nRes.UserDataLoadError}\n{I18nRes.Path}: {filePath}")
                 {
@@ -710,7 +705,7 @@ internal partial class ModManagerPageViewModel
 
     private StringBuilder? GetUserCollectedMods(TomlArray array)
     {
-        Logger.Info(I18nRes.LoadCollectedModList);
+        sr_logger.Info(I18nRes.LoadCollectedModList);
         StringBuilder errSB = new();
         foreach (string id in array)
         {
@@ -718,7 +713,7 @@ internal partial class ModManagerPageViewModel
                 continue;
             if (r_allModsShowInfo.ContainsKey(id) is false)
             {
-                Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                sr_logger.Warn($"{I18nRes.NotFoundMod} {id}");
                 errSB.AppendLine(id);
                 continue;
             }
@@ -729,7 +724,7 @@ internal partial class ModManagerPageViewModel
 
     private StringBuilder? GetUserCustomData(TomlArray array)
     {
-        Logger.Info(I18nRes.LoadUserCustomData);
+        sr_logger.Info(I18nRes.LoadUserCustomData);
         StringBuilder err = new();
         foreach (var dict in array)
         {
@@ -738,7 +733,7 @@ internal partial class ModManagerPageViewModel
                 continue;
             if (r_allModsShowInfo.ContainsKey(id) is false)
             {
-                Logger.Warring($"{I18nRes.NotFoundMod} {id}");
+                sr_logger.Warn($"{I18nRes.NotFoundMod} {id}");
                 err.AppendLine(id);
                 continue;
             }
@@ -758,7 +753,7 @@ internal partial class ModManagerPageViewModel
             r_allListBoxItems.Add(item.Tag!.ToString()!, item);
         foreach (var item in ListBox_UserGroupMenu)
             r_allListBoxItems.Add(item.Tag!.ToString()!, item);
-        Logger.Info(I18nRes.ListBoxItemsRetrievalCompleted);
+        sr_logger.Info(I18nRes.ListBoxItemsRetrievalCompleted);
     }
 
     #region TypeGroup
@@ -771,12 +766,12 @@ internal partial class ModManagerPageViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error(I18nRes.ModTypeGroupFileError, ex);
+            sr_logger.Error(ex, I18nRes.ModTypeGroupFileError);
             if (File.Exists(file))
                 File.Delete(file);
             GetModTypeGroup(file);
         }
-        Logger.Info(I18nRes.TypeGroupRetrievalCompleted);
+        sr_logger.Info(I18nRes.TypeGroupRetrievalCompleted);
     }
 
     private static void GetModTypeGroup(string file)
@@ -789,8 +784,8 @@ internal partial class ModManagerPageViewModel
 
     private static void CheckModTypeGroup(string file)
     {
-        using var resourceStream = ResourceDictionary
-            .GetResourceStream(ResourceDictionary.ModTypeGroup_toml)
+        using var resourceStream = STResources
+            .GetResourceStream(STResources.ModTypeGroup)
             .BaseStream;
         if (File.Exists(file) is false)
         {
@@ -831,12 +826,12 @@ internal partial class ModManagerPageViewModel
         if (string.IsNullOrWhiteSpace(text) is false)
         {
             RefreshNowShowMods(GetFilterModsShowInfo(text, type));
-            Logger.Info($"{I18nRes.SearchMod} {text}");
+            sr_logger.Info($"{I18nRes.SearchMod} {text}");
         }
         else
         {
             RefreshNowShowMods(r_allModShowInfoGroups[NowSelectedGroupName]);
-            Logger.Info($"{I18nRes.ShowGroup} {NowSelectedGroupName}");
+            sr_logger.Info($"{I18nRes.ShowGroup} {NowSelectedGroupName}");
         }
     }
 
@@ -879,11 +874,11 @@ internal partial class ModManagerPageViewModel
         {
             int size = r_allModShowInfoGroups[item!.Tag!.ToString()!].Count;
             item.Content = $"{item.ToolTip} ({size})";
-            Logger.Debug($"{I18nRes.ModCountInGroupRefresh} {item.Content}");
+            sr_logger.Debug($"{I18nRes.ModCountInGroupRefresh} {item.Content}");
         }
         if (remindSave)
             IsRemindSave = true;
-        Logger.Debug(I18nRes.ModCountInGroupRefreshCompleted);
+        sr_logger.Debug(I18nRes.ModCountInGroupRefreshCompleted);
     }
 
     #endregion RefreshDisplayData
@@ -892,7 +887,7 @@ internal partial class ModManagerPageViewModel
     {
         foreach (var showInfo in r_allModsShowInfo.Values)
             RefreshModContextMenu(showInfo, true);
-        Logger.Info(
+        sr_logger.Info(
             $"{I18nRes.ContextMenuRefreshCompleted} {I18nRes.Size}: {r_allModsShowInfo.Values.Count}"
         );
     }
@@ -944,7 +939,7 @@ internal partial class ModManagerPageViewModel
                     ChangeUserGroupContainsMods(_nowSelectedMods, group, true);
                 menuItem.Add(groupItem);
             }
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem.Any() ? menuItem : null;
             ;
         }
@@ -957,7 +952,7 @@ internal partial class ModManagerPageViewModel
             menuItem.ItemsSource = new();
             menuItem.CommandEvent += (p) =>
                 ChangeUserGroupContainsMods(_nowSelectedMods, group, false);
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
     }
@@ -1020,7 +1015,7 @@ internal partial class ModManagerPageViewModel
             if (r_allUserGroups[userGroup].Add(id))
             {
                 r_allModShowInfoGroups[userGroup].Add(r_allModsShowInfo[id]);
-                Logger.Debug($"{id} {I18nRes.AddToUserGroup} {userGroup}");
+                sr_logger.Debug($"{id} {I18nRes.AddToUserGroup} {userGroup}");
             }
         }
         else
@@ -1028,7 +1023,7 @@ internal partial class ModManagerPageViewModel
             if (r_allUserGroups[userGroup].Remove(id))
             {
                 r_allModShowInfoGroups[userGroup].Remove(r_allModsShowInfo[id]);
-                Logger.Debug($"{id} {I18nRes.RemoveFromUserGroup} {userGroup}");
+                sr_logger.Debug($"{id} {I18nRes.RemoveFromUserGroup} {userGroup}");
             }
         }
         showInfo.ContextMenu = CreateModShowContextMenu(showInfo);
@@ -1059,7 +1054,7 @@ internal partial class ModManagerPageViewModel
     {
         while (r_allEnabledModsId.Count > 0)
             ChangeModEnabled(r_allEnabledModsId.ElementAt(0), false);
-        Logger.Info(I18nRes.DisableAllEnabledMods);
+        sr_logger.Info(I18nRes.DisableAllEnabledMods);
     }
 
     private void ChangeModEnabled(string id, bool? enabled = null)
@@ -1084,7 +1079,7 @@ internal partial class ModManagerPageViewModel
                 showInfo.MissDependencies = false;
             }
         }
-        Logger.Debug($"{id} {I18nRes.ChangeEnabledStateTo} {showInfo.IsEnabled}");
+        sr_logger.Debug($"{id} {I18nRes.ChangeEnabledStateTo} {showInfo.IsEnabled}");
     }
 
     #endregion ChangeModEnabled
@@ -1105,7 +1100,7 @@ internal partial class ModManagerPageViewModel
                 showInfo.MissDependencies = false;
             else
             {
-                Logger.Info(
+                sr_logger.Info(
                     $"{showInfo.Id} {I18nRes.NotEnableDependencies} {showInfo.DependenciesSet}"
                 );
                 showInfo.MissDependencies = true;
@@ -1145,7 +1140,7 @@ internal partial class ModManagerPageViewModel
             if (r_allCollectedModsId.Remove(showInfo.Id))
                 r_allModShowInfoGroups[ModTypeGroupName.Collected].Remove(showInfo);
         }
-        Logger.Debug($"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}");
+        sr_logger.Debug($"{id} {I18nRes.ChangeCollectStateTo} {showInfo.IsCollected}");
     }
 
     #endregion ChangeModCollected
@@ -1165,7 +1160,7 @@ internal partial class ModManagerPageViewModel
         foreach (var mod in r_allEnabledModsId)
             jsonObject[c_strEnabledMods]!.AsArray().Add(mod);
         jsonObject.SaveTo(filePath);
-        Logger.Info($"{I18nRes.EnabledListSaveCompleted} {I18nRes.Path}: {filePath}");
+        sr_logger.Info($"{I18nRes.EnabledListSaveCompleted} {I18nRes.Path}: {filePath}");
     }
 
     private void SaveUserData(string filePath)
@@ -1193,7 +1188,7 @@ internal partial class ModManagerPageViewModel
             }
         }
         table.SaveToFile(filePath);
-        Logger.Info($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
+        sr_logger.Info($"{I18nRes.SaveUserDataSuccess} {I18nRes.Path}: {filePath}");
     }
 
     private void SaveAllUserGroup(string filePath, string group = c_strAll)
@@ -1209,7 +1204,7 @@ internal partial class ModManagerPageViewModel
             Save(group);
         }
         table.SaveToFile(filePath);
-        Logger.Info($"{I18nRes.UserGroupSaveCompleted} {I18nRes.Path}: {filePath}");
+        sr_logger.Info($"{I18nRes.UserGroupSaveCompleted} {I18nRes.Path}: {filePath}");
         void Save(string name)
         {
             var mods = r_allUserGroups[name];
@@ -1243,13 +1238,13 @@ internal partial class ModManagerPageViewModel
     private void ShowModDetails(ModShowInfo showInfo)
     {
         IsShowModDetails = true;
-        Logger.Debug($"{I18nRes.ShowDetails} {showInfo.Id}");
+        sr_logger.Debug($"{I18nRes.ShowDetails} {showInfo.Id}");
     }
 
     private void CloseModDetails()
     {
         IsShowModDetails = false;
-        Logger.Debug($"{I18nRes.CloseDetails}");
+        sr_logger.Debug($"{I18nRes.CloseDetails}");
     }
 
     #endregion ModDetails
@@ -1292,7 +1287,7 @@ internal partial class ModManagerPageViewModel
                         )
                     )
                     {
-                        ShowMainWindowBlurEffect = false
+                        SetMainWindowBlurEffect = false
                     }
                 );
             else
@@ -1317,7 +1312,7 @@ internal partial class ModManagerPageViewModel
         r_allListBoxItems.Add(group, listBoxItem);
         r_allModShowInfoGroups.Add(group, new());
         AddExportUserGroupItem(group);
-        Logger.Info($"{I18nRes.AddUserGroup} {icon} {group}");
+        sr_logger.Info($"{I18nRes.AddUserGroup} {icon} {group}");
         RefreshGroupModCount(remindSave);
         RefreshAllGroupItemContextMenus();
     }
@@ -1347,7 +1342,7 @@ internal partial class ModManagerPageViewModel
                 ChangeModsEnabled(r_allModShowInfoGroups[name], true);
                 CheckAndRefreshDisplayData();
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM DisableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
@@ -1362,7 +1357,7 @@ internal partial class ModManagerPageViewModel
                 ChangeModsEnabled(r_allModShowInfoGroups[name], false);
                 CheckAndRefreshDisplayData();
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM CleanAllModsMenuItem(ListBoxItemVM listBoxItem)
@@ -1378,7 +1373,7 @@ internal partial class ModManagerPageViewModel
                 r_allModShowInfoGroups[name].Clear();
                 CheckAndRefreshDisplayData();
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM RenameUserGroupMenuItem(ListBoxItemVM listBoxItem)
@@ -1388,7 +1383,7 @@ internal partial class ModManagerPageViewModel
             menuItem.Icon = "🔄";
             menuItem.Header = I18nRes.RenameUserGroup;
             menuItem.CommandEvent += (p) => PrepareRenameUserGroup(listBoxItem);
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
         MenuItemVM RemoveUserGroupMenuItem(ListBoxItemVM listBoxItem)
@@ -1398,7 +1393,7 @@ internal partial class ModManagerPageViewModel
             menuItem.Icon = "❌";
             menuItem.Header = I18nRes.RemoveUserGroup;
             menuItem.CommandEvent += (p) => RemoveUserGroup(listBoxItem);
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
     }
@@ -1451,7 +1446,7 @@ internal partial class ModManagerPageViewModel
                 )
                 {
                     Icon = MessageBoxVM.Icon.Warning,
-                    ShowMainWindowBlurEffect = false
+                    SetMainWindowBlurEffect = false
                 }
             );
             return false;
@@ -1524,7 +1519,7 @@ internal partial class ModManagerPageViewModel
         var tempPath = "Temp";
         var tempDirectoryInfo = new DirectoryInfo(tempPath);
         var completed = 0;
-        Logger.Info($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {count}");
+        sr_logger.Info($"{I18nRes.ConfirmDragFiles} {I18nRes.Size}: {count}");
         using var pendingHandler = PendingBoxVM.Show(
             string.Format(I18nRes.UnArchiveFileMessage, count, completed, count - completed, "")
         );
@@ -1554,7 +1549,7 @@ internal partial class ModManagerPageViewModel
         await Task.Delay(1);
         if (Directory.Exists(path))
         {
-            Logger.Info($"{I18nRes.ParseDirectory} {path}");
+            sr_logger.Info($"{I18nRes.ParseDirectory} {path}");
             var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)!;
             count += files.Length;
             foreach (var subFile in files)
@@ -1591,7 +1586,7 @@ internal partial class ModManagerPageViewModel
 
     private async Task AddModFromFile(string file, DirectoryInfo tempDirectoryInfo)
     {
-        Logger.Info($"{I18nRes.ParseFile} {file}");
+        sr_logger.Info($"{I18nRes.ParseFile} {file}");
         if (
             await TryGetModInfoPath(file, tempDirectoryInfo.Name, tempDirectoryInfo)
             is not string jsonFile
@@ -1612,7 +1607,7 @@ internal partial class ModManagerPageViewModel
             MessageBoxVM.Show(
                 new($"{I18nRes.FileError}\n{I18nRes.Path}: {file}")
                 {
-                    ShowMainWindowBlurEffect = false
+                    SetMainWindowBlurEffect = false
                 }
             );
             return;
@@ -1643,7 +1638,7 @@ internal partial class ModManagerPageViewModel
                 MessageBoxVM.Show(
                     new($"{I18nRes.UnzipError}\n {I18nRes.Path}:{file}")
                     {
-                        ShowMainWindowBlurEffect = false
+                        SetMainWindowBlurEffect = false
                     }
                 );
                 return null;
@@ -1659,11 +1654,11 @@ internal partial class ModManagerPageViewModel
                 )
             )
             {
-                Logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {file}");
+                sr_logger.Info($"{I18nRes.ZipFileError} {I18nRes.Path}: {file}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.ZipFileError}\n{I18nRes.Path}: {file}")
                     {
-                        ShowMainWindowBlurEffect = false
+                        SetMainWindowBlurEffect = false
                     }
                 );
                 return null;
@@ -1685,7 +1680,7 @@ internal partial class ModManagerPageViewModel
                 {
                     Button = MessageBoxVM.Button.YesNoCancel,
                     Icon = MessageBoxVM.Icon.Question,
-                    ShowMainWindowBlurEffect = false,
+                    SetMainWindowBlurEffect = false,
                 }
             );
             var showInfo = r_allModsShowInfo[modInfo.Id];
@@ -1709,7 +1704,7 @@ internal partial class ModManagerPageViewModel
                 RemoveMod(newModInfo.Id);
                 AddMod(newModInfo);
                 IsRemindSave = true;
-                Logger.Info(
+                sr_logger.Info(
                     $"{I18nRes.ReplaceMod} {newModInfo.Id} {modInfo.Version} => {newModInfo.Version}"
                 );
             }
@@ -1720,7 +1715,7 @@ internal partial class ModManagerPageViewModel
                 RemoveMod(newModInfo.Id);
                 AddMod(newModInfo);
                 IsRemindSave = true;
-                Logger.Info(
+                sr_logger.Info(
                     $"{I18nRes.ReplaceMod} {newModInfo.Id} {modInfo.Version} => {newModInfo.Version}"
                 );
             }
@@ -1746,7 +1741,7 @@ internal partial class ModManagerPageViewModel
             }
         );
 
-        MenuItemVM ModTypeGroupUpdateMenuItem()
+        static MenuItemVM ModTypeGroupUpdateMenuItem()
         {
             // 启用列表中的所有模组
             MenuItemVM menuItem = new();
@@ -1756,7 +1751,7 @@ internal partial class ModManagerPageViewModel
             menuItem.CommandEvent += async (p) => {
                 //await ModTypeGroupUpdate();
             };
-            Logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
+            sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
     }

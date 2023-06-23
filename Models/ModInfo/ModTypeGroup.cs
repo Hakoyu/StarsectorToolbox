@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HKW.Libs.Log4Cs;
+﻿using System.Collections.ObjectModel;
 using HKW.TOML;
 using HKW.TOML.Attributes;
 using HKW.TOML.Interfaces;
+using StarsectorToolbox.Libs;
 using I18nRes = StarsectorToolbox.Langs.Libs.UtilsI18nRes;
 
 namespace StarsectorToolbox.Models.ModInfo;
@@ -34,6 +29,8 @@ internal class SetConverter : ITomlConverter<IReadOnlySet<string>>
 /// </summary>
 public static class ModTypeGroup
 {
+    private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
+
     /// <summary>
     /// 文件
     /// </summary>
@@ -137,7 +134,7 @@ public static class ModTypeGroup
         }
         if (count != sr_groupNameFromModId.Count)
         {
-            Logger.Warring(
+            sr_logger.Warn(
                 $"{I18nRes.DuplicateItemsInModTypeGroup}\n{string.Join("\n", itemRecorder.Select(kv => $"{kv.Key} : {string.Join(", ", kv.Value)}"))}"
             );
         }

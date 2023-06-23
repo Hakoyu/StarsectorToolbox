@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using HKW.Libs.Log4Cs;
-using HKW.ViewModels;
-using HKW.ViewModels.Dialogs;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
@@ -43,7 +36,7 @@ internal partial class CrashReporterWindowViewModel
             exitCode = _gameProcess.ExitCode;
         };
         await _gameProcess.WaitForExitAsync();
-        Logger.Info($"Game exit code: {exitCode}");
+        sr_logger.Info($"Game exit code: {exitCode}");
         GameExited(exitCode);
         _gameProcess = null;
     }
@@ -242,14 +235,14 @@ internal partial class CrashReporterWindowViewModel
     {
         if (File.Exists(file) is false)
             return $"!!! {I18nRes.LogFileNotExist} !!!";
-        var lines = GetLines(file).ToArray();
+        var lines = GetLines(file);
         if (lines.Length < 100)
             return string.Join("\n", lines);
         else
             return string.Join("\n", lines[^100..]);
     }
 
-    private static IEnumerable<string> GetLines(string file)
+    private static string[] GetLines(string file)
     {
         if (ObservableI18n.Language == "zh-CN")
         {
@@ -265,9 +258,10 @@ internal partial class CrashReporterWindowViewModel
                         EncodingGBK.GetBytes(s)
                     );
                     return Encoding.UTF8.GetString(bytes);
-                });
+                })
+                .ToArray();
         }
         else
-            return File.ReadLines(file);
+            return File.ReadLines(file).ToArray();
     }
 }

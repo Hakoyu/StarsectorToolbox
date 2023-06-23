@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
-using System.Threading;
-using HKW.Libs.Log4Cs;
-using HKW.TOML;
+using HKW.HKWViewModels;
+using HKW.HKWViewModels.Controls;
+using HKW.HKWViewModels.Dialogs;
 using HKW.TOML.Deserializer;
-using HKW.ViewModels;
-using HKW.ViewModels.Controls;
-using HKW.ViewModels.Dialogs;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ST;
-using StarsectorToolbox.Resources;
 using I18nRes = StarsectorToolbox.Langs.Windows.MainWindow.MainWindowI18nRes;
 
 namespace StarsectorToolbox.ViewModels.Main;
@@ -91,7 +84,7 @@ internal partial class MainWindowViewModel
         item.Tag = CreatePage(type);
         if (item.IsSelected)
             ShowPage(item.Tag);
-        Logger.Info($"{I18nRes.RefreshPage}: {type.FullName}");
+        sr_logger.Info($"{I18nRes.RefreshPage}: {type.FullName}");
     }
 
     private static object? CreatePage(Type type)
@@ -102,7 +95,7 @@ internal partial class MainWindowViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.PageInitializeError}: {type.FullName}", ex);
+            sr_logger.Error(ex, $"{I18nRes.PageInitializeError}: {type.FullName}");
             MessageBoxVM.Show(
                 new($"{I18nRes.PageInitializeError}:\n{type.FullName}")
                 {
@@ -242,7 +235,7 @@ internal partial class MainWindowViewModel
                 extensionInfo.ExtensionPage = vm.Tag = CreatePage(extensionInfo.ExtensionType)!;
                 if (vm.IsSelected)
                     ShowPage(vm.Tag);
-                Logger.Info($"{I18nRes.RefreshPage}: {extensionInfo.Id}");
+                sr_logger.Info($"{I18nRes.RefreshPage}: {extensionInfo.Id}");
                 GC.Collect();
             };
             return menuItem;
@@ -253,7 +246,7 @@ internal partial class MainWindowViewModel
     {
         if (string.IsNullOrWhiteSpace(file))
         {
-            Logger.Warring(I18nRes.ExtensionPathIsEmpty);
+            sr_logger.Warn(I18nRes.ExtensionPathIsEmpty);
             MessageBoxVM.Show(
                 new(I18nRes.ExtensionPathIsEmpty) { Icon = MessageBoxVM.Icon.Warning }
             );
@@ -267,7 +260,7 @@ internal partial class MainWindowViewModel
             // 判断组件文件是否存在
             if (File.Exists(assemblyFile) is false)
             {
-                Logger.Warring($"{I18nRes.ExtensionFileError} {I18nRes.Path}: {tomlFile}");
+                sr_logger.Warn($"{I18nRes.ExtensionFileError} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.ExtensionFileError}\n{I18nRes.Path}: {tomlFile}")
                     {
@@ -288,7 +281,7 @@ internal partial class MainWindowViewModel
             // 判断页面是否实现了接口
             if (extensionInfo.ExtensionPage is not ISTPage)
             {
-                Logger.Warring(
+                sr_logger.Warn(
                     $"{I18nRes.ExtensionPageError}: {I18nRes.NotImplementedISTPage}\n{I18nRes.Path}: {tomlFile}"
                 );
                 MessageBoxVM.Show(
@@ -305,7 +298,7 @@ internal partial class MainWindowViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}", ex);
+            sr_logger.Error(ex, $"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}");
             MessageBoxVM.Show(
                 new($"{I18nRes.ExtensionLoadError}\n{I18nRes.Path}: {tomlFile}")
                 {
@@ -319,7 +312,7 @@ internal partial class MainWindowViewModel
             // 判断文件存在性
             if (File.Exists(tomlFile) is false)
             {
-                Logger.Warring($"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}");
+                sr_logger.Warn($"{I18nRes.ExtensionTomlFileNotFound} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.ExtensionTomlFileNotFound}\n{I18nRes.Path}: {tomlFile}")
                     {
@@ -332,7 +325,7 @@ internal partial class MainWindowViewModel
             // 检测是否有相同的拓展
             if (r_allExtensionsInfo.ContainsKey(extensionInfo.ExtensionPublic))
             {
-                Logger.Warring($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
+                sr_logger.Warn($"{I18nRes.ExtensionAlreadyExists} {I18nRes.Path}: {tomlFile}");
                 MessageBoxVM.Show(
                     new($"{I18nRes.ExtensionAlreadyExists}\n{I18nRes.Path}: {tomlFile}")
                     {
@@ -368,7 +361,7 @@ internal partial class MainWindowViewModel
             if (type is null)
             {
                 var assemblyStr = string.Join("\t\n", assembly.ExportedTypes);
-                Logger.Warring(
+                sr_logger.Warn(
                     $"{I18nRes.ExtensionPublicError} {I18nRes.Path}: {tomlFile}\n{I18nRes.ExtensionContainedClass}:\n{assemblyStr}"
                 );
                 MessageBoxVM.Show(
@@ -405,7 +398,7 @@ internal partial class MainWindowViewModel
         }
         catch (Exception ex)
         {
-            Logger.Error($"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.SettingsTomlFile}", ex);
+            sr_logger.Error(ex, $"{I18nRes.ConfigFileError} {I18nRes.Path}: {ST.SettingsTomlFile}");
             MessageBoxVM.Show(
                 new($"{I18nRes.ConfigFileError}\n{I18nRes.Path}: {ST.SettingsTomlFile}")
                 {
@@ -420,8 +413,6 @@ internal partial class MainWindowViewModel
     {
         // 设置语言
         ObservableI18n.Language = STSettings.Instance.Language;
-        // 设置日志等级
-        Logger.DefaultOptions.Level = Logger.LogLevelConverter(STSettings.Instance.LogLevel);
         // 设置游戏目录
         if (GameInfo.SetGameData(STSettings.Instance.Game.Path) is false)
         {
@@ -566,9 +557,9 @@ internal partial class MainWindowViewModel
         catch (Exception ex)
         {
             var type = page.GetType();
-            Logger.Error($"{I18nRes.PageSaveError} {type.FullName}", ex);
+            sr_logger.Error(ex, $"{I18nRes.PageSaveError} {type.FullName}");
             MessageBoxVM.Show(
-                new($"{I18nRes.PageSaveError} {type.FullName}\n{Logger.FilterException(ex)}")
+                new($"{I18nRes.PageSaveError} {type.FullName}\n{ex}")
                 {
                     Icon = MessageBoxVM.Icon.Error
                 }
@@ -609,9 +600,9 @@ internal partial class MainWindowViewModel
         catch (Exception ex)
         {
             var type = page.GetType();
-            Logger.Error($"{I18nRes.PageSaveError} {type.FullName}", ex);
+            sr_logger.Error(ex, $"{I18nRes.PageSaveError} {type.FullName}");
             MessageBoxVM.Show(
-                new($"{I18nRes.PageSaveError} {type.FullName}\n{Logger.FilterException(ex)}")
+                new($"{I18nRes.PageSaveError} {type.FullName}\n{ex}")
                 {
                     Icon = MessageBoxVM.Icon.Error
                 }
@@ -652,9 +643,9 @@ internal partial class MainWindowViewModel
         catch (Exception ex)
         {
             var type = page.GetType();
-            Logger.Error($"{I18nRes.PageCloseError} {type.FullName}", ex);
+            sr_logger.Error(ex, $"{I18nRes.PageCloseError} {type.FullName}", ex);
             MessageBoxVM.Show(
-                new($"{I18nRes.PageCloseError} {type.FullName}\n{Logger.FilterException(ex)}")
+                new($"{I18nRes.PageCloseError} {type.FullName}\n{ex}")
                 {
                     Icon = MessageBoxVM.Icon.Error
                 }
@@ -673,21 +664,16 @@ internal partial class MainWindowViewModel
             sourceException = sourceException.InnerException;
         if (sourceException.Source is nameof(StarsectorToolbox))
         {
-            Logger.Error(I18nRes.GlobalException, ex, false);
+            sr_logger.Error(ex, I18nRes.GlobalException);
             MessageBoxVM.Show(
-                new($"{I18nRes.GlobalExceptionMessage}\n\n{Logger.FilterException(ex)}")
-                {
-                    Icon = MessageBoxVM.Icon.Error,
-                }
+                new($"{I18nRes.GlobalExceptionMessage}\n\n{ex}") { Icon = MessageBoxVM.Icon.Error, }
             );
         }
         else
         {
-            Logger.Error($"{I18nRes.GlobalExtensionException}: {ex.Source}", ex, false);
+            sr_logger.Error(ex, $"{I18nRes.GlobalExtensionException}: {ex.Source}");
             MessageBoxVM.Show(
-                new(
-                    $"{string.Format(I18nRes.GlobalExtensionExceptionMessage, ex.Source)}\n\n{Logger.FilterException(ex)}"
-                )
+                new($"{string.Format(I18nRes.GlobalExtensionExceptionMessage, ex.Source)}\n\n{ex}")
                 {
                     Icon = MessageBoxVM.Icon.Error,
                 }
