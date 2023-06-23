@@ -216,7 +216,7 @@
         <StackPanel VerticalAlignment="Bottom">
           <Button
             Height="30"
-            Padding="0,0,5,0"
+            Padding="0"
             VerticalAlignment="Bottom"
             HorizontalContentAlignment="Left"
             Command="{Binding StartGameCommand}"
@@ -238,7 +238,7 @@
           <Button
             x:Name="Button_InfoPage"
             Height="30"
-            Padding="0,0,5,0"
+            Padding="0"
             VerticalAlignment="Bottom"
             HorizontalContentAlignment="Left"
             Command="{Binding ShowPageCommand}"

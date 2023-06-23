@@ -30,7 +30,8 @@ internal partial class MainWindow : Window
         // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
 
         // 获取系统主题色
-        Application.Current.Resources["WindowGlassBrush"] = SystemParameters.WindowGlassBrush;
+        Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] =
+            SystemParameters.WindowGlassBrush;
         // 根据主题色的明亮程度来设置字体颜色
         var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
         if (IsLightColor(color))
@@ -58,7 +59,7 @@ internal partial class MainWindow : Window
         ViewModel.RegisterChangeWindowEffectEvent(SetBlurEffect, RemoveBlurEffect);
         // 初始化页面
         InitializePage();
-
+        // 初始化游戏异常收集器
         ViewModel.CrashReporterWindow = new(new CrashReporterWindow());
         sr_logger.Info(I18nRes.InitializationCompleted);
         GC.Collect();

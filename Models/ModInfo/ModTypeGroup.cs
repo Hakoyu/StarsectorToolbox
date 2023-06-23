@@ -34,8 +34,7 @@ public static class ModTypeGroup
     /// <summary>
     /// 文件
     /// </summary>
-    [TomlIgnore]
-    public static string File => $"{ST.ST.CoreDirectory}\\ModTypeGroup.toml";
+    public const string File = $"{ST.ST.CoreDirectory}\\ModTypeGroup.toml";
 
     /// <summary>
     /// 前置模组
