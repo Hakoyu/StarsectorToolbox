@@ -227,7 +227,6 @@
             <Button
               x:Name="Button_AddUserGroup"
               Height="30"
-              Padding="0"
               VerticalAlignment="Bottom"
               HorizontalContentAlignment="Left"
               pu:ButtonHelper.Icon="➕"

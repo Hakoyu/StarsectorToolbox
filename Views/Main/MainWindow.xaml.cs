@@ -32,6 +32,7 @@ internal partial class MainWindow : Window
         // 获取系统主题色
         Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] =
             SystemParameters.WindowGlassBrush;
+        Application.Current.Resources["MainFontSize"] = 24.0;
         // 根据主题色的明亮程度来设置字体颜色
         var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
         if (IsLightColor(color))

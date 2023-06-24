@@ -13,6 +13,7 @@
         <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlStyles.xaml" />-->
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlViewStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/ThemeResources/ColorStyles.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/ThemeResources/FontStyles.xaml" />
         <!--  TODO: 设置全局样式出现问题,需解决  -->
         <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/OverwrideDefaultControlStyles.xaml" />-->
         <ResourceDictionary>

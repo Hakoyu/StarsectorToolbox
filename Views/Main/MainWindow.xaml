@@ -43,6 +43,9 @@
         <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
           <Setter Property="Background" Value="{DynamicResource ColorAqua3}" />
         </DataTrigger>
+        <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
+          <Setter Property="pu:IconHelper.Margin" Value="0" />
+        </DataTrigger>
       </Style.Triggers>
     </Style>
   </Window.Resources>
@@ -55,8 +58,8 @@
       <Grid HorizontalAlignment="Center">
         <Image
           x:Name="Image_Title"
-          Width="20"
-          Height="20"
+          MinWidth="20"
+          MinHeight="20"
           Margin="5,5,0,0"
           HorizontalAlignment="Left"
           VerticalAlignment="Top" />
@@ -117,17 +120,16 @@
         Style="{StaticResource ButtonBaseStyle}" />
       <Button
         x:Name="Button_MainMenu"
-        Width="30"
-        Height="30"
-        Padding="0"
+        Padding="5,0,5,0"
         HorizontalAlignment="Left"
-        VerticalAlignment="Center"
+        pu:IconHelper.Margin="0"
         Command="{Binding MenuExpandCommand}"
-        Style="{StaticResource ButtonBaseStyle}">
+        Style="{StaticResource ButtonBaseStyle}"
+        Tag="{Binding Tag, ElementName=Grid_MainMenu}">
         <pu:ButtonHelper.Icon>
-          <emoji:TextBlock FontSize="16">
+          <emoji:TextBlock>
             <TextBlock.Style>
-              <Style TargetType="emoji:TextBlock">
+              <Style BasedOn="{StaticResource EmojiTextBlockBaseStyle}" TargetType="emoji:TextBlock">
                 <Setter Property="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
                 <Style.Triggers>
                   <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="True">
@@ -149,17 +151,19 @@
         x:Name="Grid_MainMenu"
         d:Tag="True"
         Tag="{Binding MenuIsExpand}">
-        <Grid.Style>
-          <Style TargetType="Grid">
-            <Setter Property="Width" Value="30" />
-            <Style.Triggers>
-              <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
-                <Setter Property="Width" Value="NaN" />
-              </DataTrigger>
-            </Style.Triggers>
-          </Style>
-        </Grid.Style>
-        <ScrollViewer Margin="0,0,0,90">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <i:Interaction.Triggers>
+          <i:DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
+            <i:ChangePropertyAction PropertyName="Width" Value="{Binding ActualWidth, ElementName=Button_MainMenu}" />
+          </i:DataTrigger>
+          <i:DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="True">
+            <i:ChangePropertyAction PropertyName="Width" Value="NaN" />
+          </i:DataTrigger>
+        </i:Interaction.Triggers>
+        <ScrollViewer>
           <ScrollViewer.Style>
             <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
               <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
@@ -172,7 +176,6 @@
           </ScrollViewer.Style>
           <StackPanel>
             <ListBox
-              FontSize="16"
               ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
               ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
               ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -185,8 +188,7 @@
               </i:Interaction.Triggers>
             </ListBox>
             <Expander
-              Padding="0"
-              FontSize="16"
+              MinHeight="30"
               Header="{Binding I18n.I18nRes.Extension}"
               IsExpanded="True"
               Style="{StaticResource ExpanderSelectedItemStyle}">
@@ -194,7 +196,7 @@
                 <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
                   <MenuItem Command="{Binding RefreshExtensionMenuCommand}" Header="{Binding I18n.I18nRes.RefreshExtensionList}">
                     <MenuItem.Icon>
-                      <emoji:TextBlock FontSize="16" Text="🔄" />
+                      <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="🔄" />
                     </MenuItem.Icon>
                   </MenuItem>
                 </ContextMenu>
@@ -213,18 +215,15 @@
             </Expander>
           </StackPanel>
         </ScrollViewer>
-        <StackPanel VerticalAlignment="Bottom">
+        <StackPanel Grid.Row="1" VerticalAlignment="Center">
           <Button
-            Height="30"
-            Padding="0"
             VerticalAlignment="Bottom"
             HorizontalContentAlignment="Left"
             Command="{Binding StartGameCommand}"
             Content="{Binding I18n.I18nRes.StartGame}"
-            FontSize="16"
-            Style="{StaticResource ButtonBaseStyle}">
+            Tag="{Binding Tag, ElementName=Grid_MainMenu}">
             <pu:ButtonHelper.Icon>
-              <emoji:TextBlock FontSize="16" Text="▶" />
+              <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="▶" />
             </pu:ButtonHelper.Icon>
             <Button.ContextMenu>
               <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
@@ -234,38 +233,40 @@
                   Style="{StaticResource CheckBoxBaseStyle}" />
               </ContextMenu>
             </Button.ContextMenu>
+            <Button.Style>
+              <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
+                    <Setter Property="pu:IconHelper.Margin" Value="0" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Button.Style>
           </Button>
           <Button
             x:Name="Button_InfoPage"
-            Height="30"
-            Padding="0"
             VerticalAlignment="Bottom"
             HorizontalContentAlignment="Left"
             Command="{Binding ShowPageCommand}"
             CommandParameter="{Binding InfoPage}"
             Content="{Binding I18n.I18nRes.Info}"
-            FontSize="16"
             Style="{StaticResource ButtonPressed}"
             Tag="{Binding InfoButtonIsChecked}">
             <pu:ButtonHelper.Icon>
-              <emoji:TextBlock FontSize="16" Text="ℹ" />
+              <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="ℹ" />
             </pu:ButtonHelper.Icon>
           </Button>
           <Button
             x:Name="Button_SettingsPage"
-            Height="30"
-            Margin="0,0,0,0"
-            Padding="0,0,5,0"
-            VerticalAlignment="Bottom"
+            Padding="5,5,5,5"
             HorizontalContentAlignment="Left"
             Command="{Binding ShowPageCommand}"
             CommandParameter="{Binding SettingsPage}"
             Content="{Binding I18n.I18nRes.Settings}"
-            FontSize="16"
             Style="{StaticResource ButtonPressed}"
             Tag="{Binding SettingsButtonIsChecked}">
             <pu:ButtonHelper.Icon>
-              <emoji:TextBlock FontSize="16" Text="⚙" />
+              <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="⚙" />
             </pu:ButtonHelper.Icon>
           </Button>
         </StackPanel>
