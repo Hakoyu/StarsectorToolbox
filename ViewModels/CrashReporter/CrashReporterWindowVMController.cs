@@ -244,7 +244,7 @@ internal partial class CrashReporterWindowViewModel
 
     private static string[] GetLines(string file)
     {
-        if (ObservableI18n.Language == "zh-CN")
+        if (ObservableI18n.CurrentCulture.Name == "zh-CN")
         {
             var EncodingGBK = Encoding.GetEncoding("GBK");
             using var sr = Utils.StreamReaderOnReadOnly(file, EncodingGBK);

@@ -46,7 +46,7 @@ internal partial class SettingsPageViewModel : ObservableObject
             .Response;
         // 设置Language初始值
         ComboBox_Language.SelectedItem = ComboBox_Language.FirstOrDefault(
-            i => i.ToolTip is string language && language == ObservableI18n.Language,
+            i => i.ToolTip is string language && language == ObservableI18n.CurrentCulture.Name,
             ComboBox_Language[0]
         );
         // 注册事件
@@ -72,12 +72,12 @@ internal partial class SettingsPageViewModel : ObservableObject
         if (parameter is not ComboBoxItemVM item)
             return;
         var language = item.ToolTip!.ToString()!;
-        if (ObservableI18n.Language == language)
+        if (ObservableI18n.CurrentCulture.Name == language)
             return;
-        ObservableI18n.Language = item.ToolTip!.ToString()!;
-        STSettings.Instance.Language = ObservableI18n.Language;
+        ObservableI18n.CurrentCulture = CultureInfo.GetCultureInfo(item.ToolTip!.ToString()!);
+        STSettings.Instance.Language = ObservableI18n.CurrentCulture.Name;
         STSettings.Save();
-        sr_logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.Language}");
+        sr_logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.CurrentCulture.Name}");
     }
 
     [RelayCommand]

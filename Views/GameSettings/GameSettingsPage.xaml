@@ -17,10 +17,7 @@
     <vm:GameSettingsPageViewModel />
   </d:Page.DataContext>
   <Grid>
-    <GroupBox
-      pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-      Header="{Binding I18n.I18nRes.GameSettings}"
-      Style="{StaticResource GroupBoxBaseStyle}">
+    <GroupBox pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Header="{Binding I18n.I18nRes.GameSettings}">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="250" />
@@ -34,16 +31,14 @@
           Grid.Column="1"
           Width="100"
           HorizontalAlignment="Left"
-          Content="{Binding I18n.I18nRes.GameDirectory}"
-          Style="{StaticResource LabelBaseStyle}" />
+          Content="{Binding I18n.I18nRes.GameDirectory}" />
         <Label
           x:Name="Label_GamePath"
           Grid.Column="1"
           Margin="100,0,165,0"
           HorizontalContentAlignment="Left"
           Background="{DynamicResource ColorDeep2}"
-          Content="{Binding GamePath}"
-          Style="{StaticResource LabelBaseStyle}" />
+          Content="{Binding GamePath}" />
         <Button
           x:Name="Button_SetGameDirectory"
           Grid.Column="1"
@@ -51,16 +46,14 @@
           Margin="0,0,85,0"
           HorizontalAlignment="Right"
           Command="{Binding SetGameDirectoryCommand}"
-          Content="{Binding I18n.I18nRes.SetDirectory}"
-          Style="{StaticResource ButtonBaseStyle}" />
+          Content="{Binding I18n.I18nRes.SetDirectory}" />
         <Button
           x:Name="Button_OpenGameDirectory"
           Grid.Column="1"
           Width="80"
           HorizontalAlignment="Right"
           Command="{Binding OpenGameDirectoryCommand}"
-          Content="{Binding I18n.I18nRes.OpenDirectory}"
-          Style="{StaticResource ButtonBaseStyle}" />
+          Content="{Binding I18n.I18nRes.OpenDirectory}" />
         <GroupBox
           Grid.Row="1"
           Grid.Column="1"
@@ -70,8 +63,7 @@
           HorizontalAlignment="Left"
           VerticalAlignment="Top"
           pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-          Header="{Binding I18n.I18nRes.SetMemory}"
-          Style="{StaticResource GroupBoxBaseStyle}">
+          Header="{Binding I18n.I18nRes.SetMemory}">
           <Grid VerticalAlignment="Center">
             <TextBox
               x:Name="TextBox_Memory"
@@ -82,7 +74,6 @@
               VerticalAlignment="Center"
               HorizontalContentAlignment="Center"
               InputMethod.IsInputMethodEnabled="False"
-              Style="{StaticResource TextBoxBaseStyle}"
               Text="{Binding GameMemory}" />
             <Button
               x:Name="Button_SetMemory"
@@ -92,16 +83,14 @@
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
               Command="{Binding SetMemoryCommand}"
-              Content="{Binding I18n.I18nRes.Used}"
-              Style="{StaticResource ButtonBaseStyle}" />
+              Content="{Binding I18n.I18nRes.Used}" />
             <Button
               x:Name="Button_Help"
               Width="45"
               Height="30"
               HorizontalAlignment="Right"
               VerticalAlignment="Top"
-              Content="{Binding I18n.I18nRes.Help}"
-              Style="{StaticResource ButtonBaseStyle}" />
+              Content="{Binding I18n.I18nRes.Help}" />
           </Grid>
         </GroupBox>
         <GroupBox
@@ -113,8 +102,7 @@
           HorizontalAlignment="Left"
           VerticalAlignment="Top"
           pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-          Header="{Binding I18n.I18nRes.GameKey}"
-          Style="{StaticResource GroupBoxBaseStyle}">
+          Header="{Binding I18n.I18nRes.GameKey}">
           <Grid>
             <Label
               x:Name="Label_GameKey"
@@ -123,8 +111,7 @@
               VerticalAlignment="Top"
               Content="{Binding GameKey}"
               FontSize="16"
-              FontWeight="Bold"
-              Style="{StaticResource LabelBaseStyle}" />
+              FontWeight="Bold" />
             <Button
               x:Name="Button_CopyKey"
               Width="80"
@@ -134,8 +121,7 @@
               VerticalAlignment="Bottom"
               d:IsEnabled="False"
               Command="{Binding CopyGameKeyCommand}"
-              Content="{Binding I18n.I18nRes.Copy}"
-              Style="{StaticResource ButtonBaseStyle}" />
+              Content="{Binding I18n.I18nRes.Copy}" />
             <Button
               x:Name="Button_ShowKey"
               Width="80"
@@ -146,7 +132,7 @@
               d:IsEnabled="False"
               Command="{Binding ShowGameKeyCommand}">
               <Button.Style>
-                <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
+                <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
                   <Setter Property="Content" Value="{Binding I18n.I18nRes.Hide}" />
                   <Style.Triggers>
                     <DataTrigger Binding="{Binding GameKey}" Value="***********************">
@@ -161,15 +147,13 @@
         <Label
           Width="100"
           HorizontalAlignment="Left"
-          Content="{Binding I18n.I18nRes.GameVersion}"
-          Style="{StaticResource LabelBaseStyle}" />
+          Content="{Binding I18n.I18nRes.GameVersion}" />
         <Label
           x:Name="Label_GameVersion"
           Margin="100,0,0,0"
           HorizontalContentAlignment="Left"
           Background="{DynamicResource ColorDeep2}"
-          Content="{Binding GameVersion}"
-          Style="{StaticResource LabelBaseStyle}" />
+          Content="{Binding GameVersion}" />
         <ScrollViewer
           Grid.Row="1"
           Grid.Column="0"
@@ -178,8 +162,7 @@
             <Expander
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
-              Header="{Binding I18n.I18nRes.GameLogClean}"
-              Style="{StaticResource ExpanderBaseStyle}">
+              Header="{Binding I18n.I18nRes.GameLogClean}">
               <StackPanel>
                 <Button
                   Height="30"
@@ -187,8 +170,7 @@
                   Padding="0,0,5,0"
                   VerticalAlignment="Bottom"
                   Command="{Binding ShowCrashReporterCommand}"
-                  Content="{Binding I18n.I18nRes.CrashReporter}"
-                  Style="{StaticResource ButtonBaseStyle}">
+                  Content="{Binding I18n.I18nRes.CrashReporter}">
                   <pu:ButtonHelper.Icon>
                     <emoji:TextBlock FontSize="16" Text="⁉" />
                   </pu:ButtonHelper.Icon>
@@ -197,21 +179,18 @@
                   x:Name="Button_OpenLogFile"
                   Margin="0,0,0,5"
                   Command="{Binding OpenGameLogFileCommand}"
-                  Content="{Binding I18n.I18nRes.OpenLogFile}"
-                  Style="{StaticResource ButtonBaseStyle}" />
+                  Content="{Binding I18n.I18nRes.OpenLogFile}" />
                 <Button
                   x:Name="Button_ClearLogFile"
                   Margin="0,0,0,5"
                   Command="{Binding ClearGameLogFileCommand}"
-                  Content="{Binding I18n.I18nRes.ClearLogFile}"
-                  Style="{StaticResource ButtonBaseStyle}" />
+                  Content="{Binding I18n.I18nRes.ClearLogFile}" />
               </StackPanel>
             </Expander>
             <Expander
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
-              Header="{Binding I18n.I18nRes.MissionsLoadoutsClean}"
-              Style="{StaticResource ExpanderBaseStyle}">
+              Header="{Binding I18n.I18nRes.MissionsLoadoutsClean}">
               <StackPanel>
                 <ComboBox
                   x:Name="ComboBox_MissionsLoadouts"
@@ -224,35 +203,31 @@
                   x:Name="Button_ClearMissionsLoadouts"
                   Margin="0,0,0,5"
                   Command="{Binding ClearMissionsLoadoutsCommand}"
-                  Content="{Binding I18n.I18nRes.ClearMissionsLoadouts}"
-                  Style="{StaticResource ButtonBaseStyle}" />
+                  Content="{Binding I18n.I18nRes.ClearMissionsLoadouts}" />
                 <Button
                   x:Name="Button_OpenMissionsLoadoutsDirectory"
                   Margin="0,0,0,5"
                   Command="{Binding OpenMissionsLoadoutsDirectoryCommand}"
-                  Content="{Binding I18n.I18nRes.OpenMissionsLoadoutsDirectory}"
-                  Style="{StaticResource ButtonBaseStyle}" />
+                  Content="{Binding I18n.I18nRes.OpenMissionsLoadoutsDirectory}" />
               </StackPanel>
             </Expander>
             <Expander
               x:Name="Expander_Save"
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
-              Header="{Binding I18n.I18nRes.SaveClean}"
-              Style="{StaticResource ExpanderBaseStyle}">
+              Header="{Binding I18n.I18nRes.SaveClean}">
               <StackPanel Background="{DynamicResource ColorBB}">
                 <Grid Margin="0,0,0,5">
                   <TextBox
                     x:Name="TextBox_ReservedSaveSize"
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding RetainRecentSaveCount}"
                     ToolTip="{Binding I18n.I18nRes.RetainRecentSaveCount}" />
                   <!--  TextBox输入占位符  -->
                   <Label Background="{x:Null}" Content="{Binding I18n.I18nRes.ClearAll}">
                     <Label.Style>
-                      <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
+                      <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
                         <Setter Property="Visibility" Value="Hidden" />
                         <Style.Triggers>
                           <MultiDataTrigger>
@@ -273,22 +248,19 @@
                   x:Name="Button_ClearSave"
                   Margin="0,0,0,5"
                   Command="{Binding ClearSaveCommand}"
-                  Content="{Binding I18n.I18nRes.ClearSave}"
-                  Style="{StaticResource ButtonBaseStyle}" />
+                  Content="{Binding I18n.I18nRes.ClearSave}" />
                 <Button
                   x:Name="Button_OpenSaveDirectory"
                   Margin="0,0,0,5"
                   Command="{Binding OpenSaveDirectoryCommand}"
-                  Content="{Binding I18n.I18nRes.OpenSaveDirectory}"
-                  Style="{StaticResource ButtonBaseStyle}" />
+                  Content="{Binding I18n.I18nRes.OpenSaveDirectory}" />
               </StackPanel>
             </Expander>
             <Expander
               x:Name="Expander_CustomResolution"
               Margin="0,0,0,5"
               pu:ExpanderHelper.HeaderHorizontalContentAlignment="Center"
-              Header="{Binding I18n.I18nRes.CustomResolution}"
-              Style="{StaticResource ExpanderBaseStyle}">
+              Header="{Binding I18n.I18nRes.CustomResolution}">
               <StackPanel Background="{DynamicResource ColorBB}">
                 <Grid Margin="0,0,0,5">
                   <Grid.ColumnDefinitions>
@@ -300,7 +272,6 @@
                     x:Name="TextBox_ResolutionWidth"
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding ResolutionWidth}"
                     ToolTip="{Binding I18n.I18nRes.Width}" />
                   <!--  TextBox输入占位符  -->
@@ -315,7 +286,7 @@
                     IsEnabled="False"
                     IsHitTestVisible="False">
                     <Label.Style>
-                      <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
+                      <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
                         <Setter Property="Visibility" Value="Hidden" />
                         <Style.Triggers>
                           <MultiDataTrigger>
@@ -331,16 +302,12 @@
                       </Style>
                     </Label.Style>
                   </Label>
-                  <Label
-                    Grid.Column="1"
-                    Content="X"
-                    Style="{StaticResource LabelBaseStyle}" />
+                  <Label Grid.Column="1" Content="X" />
                   <TextBox
                     x:Name="TextBox_ResolutionHeight"
                     Grid.Column="2"
                     InputMethod.IsInputMethodEnabled="False"
                     PreviewTextInput="TextBox_NumberInput"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding ResolutionHeight}"
                     ToolTip="{Binding I18n.I18nRes.Height}" />
                   <!--  TextBox输入占位符  -->
@@ -356,7 +323,7 @@
                     IsEnabled="False"
                     IsHitTestVisible="False">
                     <Label.Style>
-                      <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
+                      <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
                         <Setter Property="Visibility" Value="Hidden" />
                         <Style.Triggers>
                           <MultiDataTrigger>
@@ -379,8 +346,7 @@
                   Margin="0,0,0,5"
                   Padding="-20,0,0,0"
                   Content="{Binding I18n.I18nRes.BorderlessWindow}"
-                  IsChecked="{Binding BorderlessWindow}"
-                  Style="{StaticResource CheckBoxBaseStyle}" />
+                  IsChecked="{Binding BorderlessWindow}" />
                 <Grid Margin="0,0,0,5">
                   <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -390,14 +356,12 @@
                     Margin="10,0,10,0"
                     Command="{Binding ResetCustomResolutionCommand}"
                     Content="{Binding I18n.I18nRes.Reset}"
-                    IsEnabled="{Binding CustomResolutionCanReset}"
-                    Style="{StaticResource ButtonBaseStyle}" />
+                    IsEnabled="{Binding CustomResolutionCanReset}" />
                   <Button
                     Grid.Column="1"
                     Margin="10,0,10,0"
                     Command="{Binding SetCustomResolutionCommand}"
-                    Content="{Binding I18n.I18nRes.Setup}"
-                    Style="{StaticResource ButtonBaseStyle}" />
+                    Content="{Binding I18n.I18nRes.Setup}" />
                 </Grid>
               </StackPanel>
             </Expander>

@@ -12,7 +12,6 @@
   Height="450"
   x:ClassModifier="internal"
   FontFamily="Consolas"
-  Style="{StaticResource WindowXBaseStyle}"
   WindowStartupLocation="CenterScreen"
   mc:Ignorable="d">
   <pu:WindowXCaption.CloseButtonStyle>
@@ -23,7 +22,7 @@
   <d:Window.DataContext>
     <vm:CrashReporterWindowViewModel />
   </d:Window.DataContext>
-  <Grid Style="{StaticResource WindowPanelStyle}">
+  <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="*" />
       <RowDefinition Height="5" />
@@ -41,7 +40,6 @@
         VerticalContentAlignment="Top"
         AcceptsReturn="True"
         FontSize="16"
-        Style="{StaticResource TextBoxBaseStyle}"
         Text="{Binding CrashReport}"
         TextWrapping="Wrap" />
     </ScrollViewer>
@@ -62,7 +60,6 @@
         VerticalContentAlignment="Top"
         AcceptsReturn="True"
         FontSize="16"
-        Style="{StaticResource TextBoxBaseStyle}"
         Text="{Binding LastLog}"
         TextWrapping="Wrap" />
     </ScrollViewer>
@@ -77,23 +74,20 @@
         Height="NaN"
         Margin="50,5,50,5"
         Command="{Binding OpenGameLogCommand}"
-        Content="打开游戏日志"
-        Style="{StaticResource ButtonBaseStyle}" />
+        Content="打开游戏日志" />
       <Button
         Grid.Column="1"
         Width="100"
         Height="NaN"
         Margin="10,5,10,5"
         Command="{Binding RefreshCrashReportCommand}"
-        Content="刷新"
-        Style="{StaticResource ButtonBaseStyle}" />
+        Content="刷新" />
       <Button
         Grid.Column="2"
         Height="NaN"
         Margin="50,5,50,5"
         Command="{Binding CopyCrashReportCommand}"
-        Content="复制错误信息"
-        Style="{StaticResource ButtonBaseStyle}" />
+        Content="复制错误信息" />
     </Grid>
   </Grid>
 </pu:WindowX>

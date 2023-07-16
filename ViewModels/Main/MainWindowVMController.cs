@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Reflection;
 using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
@@ -412,7 +413,7 @@ internal partial class MainWindowViewModel
     private bool GetConfig()
     {
         // 设置语言
-        ObservableI18n.Language = STSettings.Instance.Language;
+        ObservableI18n.CurrentCulture = CultureInfo.GetCultureInfo(STSettings.Instance.Language);
         // 设置游戏目录
         if (GameInfo.SetGameData(STSettings.Instance.Game.Path) is false)
         {

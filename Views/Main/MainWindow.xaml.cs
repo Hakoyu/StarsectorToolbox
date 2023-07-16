@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Panuon.WPF.UI;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.ViewModels.Main;
 using StarsectorToolbox.Views.CrashReporter;
@@ -12,7 +14,7 @@ namespace StarsectorToolbox.Views.Main;
 /// <summary>
 /// Interaction logic for Main.xaml
 /// </summary>
-internal partial class MainWindow : Window
+internal partial class MainWindow : WindowX
 {
     private static readonly NLog.Logger sr_logger = NLog.LogManager.GetCurrentClassLogger();
     internal MainWindowViewModel ViewModel => (MainWindowViewModel)DataContext;
@@ -26,17 +28,16 @@ internal partial class MainWindow : Window
         // 限制最大化区域,不然会盖住任务栏(已在XAML中实现)
         // MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         // MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
-        // 亚克力背景
-        // WindowAccent.SetBlurBehind(this, Color.FromArgb(64, 0, 0, 0));
-
         // 获取系统主题色
-        Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] =
-            SystemParameters.WindowGlassBrush;
-        Application.Current.Resources["MainFontSize"] = 24.0;
-        // 根据主题色的明亮程度来设置字体颜色
-        var color = (Color)ColorConverter.ConvertFromString(Grid_TitleBar.Background.ToString());
-        if (IsLightColor(color))
-            Label_Title.Foreground = (Brush)Application.Current.Resources["ColorBG"];
+        //Application.Current.Resources["MainFontSize"] = 24.0;
+
+        //var windowGlassBrush = SystemParameters.WindowGlassBrush;
+        //Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] = windowGlassBrush;
+        //WindowXCaption.SetBackground(this, windowGlassBrush);
+        //// 根据主题色的明亮程度来设置字体颜色
+        //var color = (Color)ColorConverter.ConvertFromString(windowGlassBrush.ToString());
+        //if (IsLightColor(color))
+        //    WindowXCaption.SetForeground(this, windowGlassBrush);
         // 注册数据
         RegisterData();
         // 初始化ViewModel
@@ -63,36 +64,23 @@ internal partial class MainWindow : Window
         // 初始化游戏异常收集器
         ViewModel.CrashReporterWindow = new(new CrashReporterWindow());
         sr_logger.Info(I18nRes.InitializationCompleted);
-        GC.Collect();
     }
 
-    //窗体移动
-    private void Grid_TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void SystemParameters_StaticPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        DragMove();
-    }
-
-    //最小化
-    private void Button_TitleMin_Click(object sender, RoutedEventArgs e)
-    {
-        WindowState = WindowState.Minimized;
-    }
-
-    //最大化
-    private void Button_TitleMax_Click(object sender, RoutedEventArgs e)
-    {
-        //检测当前窗口状态
-        if (WindowState == WindowState.Normal)
-            WindowState = WindowState.Maximized;
-        else
-            WindowState = WindowState.Normal;
+        if (e.PropertyName == nameof(SystemParameters.WindowGlassColor))
+        {
+            Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] =
+                SystemParameters.WindowGlassBrush;
+            Application.Current.Resources["ShadowColor"] = SystemParameters.WindowGlassColor;
+        }
     }
 
     //关闭
-    private void Button_TitleClose_Click(object sender, RoutedEventArgs e)
+    protected override void OnClosing(CancelEventArgs e)
     {
+        base.OnClosing(e);
         ViewModel.Close();
-        Close();
     }
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

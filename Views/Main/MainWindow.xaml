@@ -1,4 +1,4 @@
-﻿<Window
+﻿<pu:WindowX
   x:Class="StarsectorToolbox.Views.Main.MainWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,7 +7,7 @@
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:sys="clr-namespace:System.Windows;assembly=PresentationFramework"
   xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.Main"
   x:Name="Window_MainWindow"
@@ -20,24 +20,16 @@
   x:ClassModifier="internal"
   FontFamily="Consolas"
   MouseLeftButtonDown="Window_MouseLeftButtonDown"
-  Style="{StaticResource WindowBaseStyle}"
-  WindowStartupLocation="CenterScreen"
-  WindowStyle="None"
+  Style="{StaticResource WindowXBaseStyle}"
   mc:Ignorable="d">
   <!--  使用SystemParameters中的MaximizedPrimaryScreenWidth和MaximizedPrimaryScreenHeight来指定最大化范围,不然会覆盖任务栏  -->
   <d:Window.DataContext>
     <vm:MainWindowViewModel />
   </d:Window.DataContext>
-  <WindowChrome.WindowChrome>
-    <WindowChrome
-      CaptionHeight="0"
-      GlassFrameThickness="0,0,0,1"
-      ResizeBorderThickness="5" />
-  </WindowChrome.WindowChrome>
   <Window.Resources>
     <Style
       x:Key="ButtonPressed"
-      BasedOn="{StaticResource ButtonBaseStyle}"
+      BasedOn="{StaticResource {x:Type Button}}"
       TargetType="Button">
       <Style.Triggers>
         <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
@@ -49,234 +41,158 @@
       </Style.Triggers>
     </Style>
   </Window.Resources>
-  <Grid Style="{StaticResource WindowPanelStyle}">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
     <Grid
-      x:Name="Grid_TitleBar"
-      VerticalAlignment="Top"
-      Background="{DynamicResource WindowGlassBrush}"
-      MouseLeftButtonDown="Grid_TitleBar_MouseLeftButtonDown">
-      <Grid HorizontalAlignment="Center">
-        <Image
-          x:Name="Image_Title"
-          MinWidth="20"
-          MinHeight="20"
-          Margin="5,5,0,0"
-          HorizontalAlignment="Left"
-          VerticalAlignment="Top" />
-        <Label
-          x:Name="Label_Title"
-          Margin="30,0,0,0"
-          Padding="0"
-          HorizontalAlignment="Center"
-          Background="{x:Null}"
-          Content="{Binding I18n.I18nRes.StarsectorToolbox}"
-          FontSize="20"
-          FontWeight="Bold"
-          Style="{StaticResource LabelBaseStyle}" />
-      </Grid>
-      <Button
-        x:Name="Button_TitleMin"
-        Width="40"
-        Height="30"
-        Margin="0,0,80,0"
-        HorizontalAlignment="Right"
-        pu:ButtonHelper.ClickBackground="LightBlue"
-        pu:ButtonHelper.HoverBackground="Aqua"
-        Click="Button_TitleMin_Click"
-        Content="➖"
-        FontSize="16"
-        Style="{StaticResource ButtonBaseStyle}" />
-      <Button
-        x:Name="Button_TitleMax"
-        Width="40"
-        Height="30"
-        Margin="0,0,40,0"
-        HorizontalAlignment="Right"
-        pu:ButtonHelper.ClickBackground="LightBlue"
-        pu:ButtonHelper.HoverBackground="Aqua"
-        Click="Button_TitleMax_Click"
-        FontSize="16">
-        <Button.Style>
-          <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
-            <Setter Property="Content" Value="🔲" />
+      x:Name="Grid_MainMenu"
+      Width="NaN"
+      MinWidth="30">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      <i:Interaction.Triggers>
+        <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
+          <i:ChangePropertyAction PropertyName="Width" Value="{Binding ActualWidth, ElementName=Button_MainMenuToggleExpand}" />
+        </i:DataTrigger>
+        <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
+          <i:ChangePropertyAction PropertyName="Width" Value="NaN" />
+        </i:DataTrigger>
+      </i:Interaction.Triggers>
+      <ToggleButton
+        x:Name="Button_MainMenuToggleExpand"
+        Grid.Row="0"
+        MinWidth="30"
+        MinHeight="30"
+        Padding="5,0,5,0"
+        HorizontalAlignment="Left"
+        d:IsChecked="True"
+        pu:IconHelper.Margin="0"
+        Background="{x:Null}"
+        Command="{Binding MenuExpandCommand}">
+        <emoji:TextBlock Text="{x:Static ST:STIcon.MenuOpenIcon}">
+          <i:Interaction.Triggers>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
+              <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
+            </i:DataTrigger>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
+              <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
+            </i:DataTrigger>
+          </i:Interaction.Triggers>
+        </emoji:TextBlock>
+      </ToggleButton>
+      <ScrollViewer Grid.Row="1">
+        <ScrollViewer.Style>
+          <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
             <Style.Triggers>
-              <DataTrigger Binding="{Binding WindowState, ElementName=Window_MainWindow}" Value="{x:Static sys:WindowState.Maximized}">
-                <Setter Property="Content" Value="🔳" />
+              <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="True">
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
               </DataTrigger>
             </Style.Triggers>
           </Style>
-        </Button.Style>
-      </Button>
-      <Button
-        x:Name="Button_TitleClose"
-        Width="40"
-        Height="30"
-        HorizontalAlignment="Right"
-        pu:ButtonHelper.ClickBackground="IndianRed"
-        pu:ButtonHelper.HoverBackground="Red"
-        Click="Button_TitleClose_Click"
-        Content="❌"
-        FontSize="16"
-        Style="{StaticResource ButtonBaseStyle}" />
-      <Button
-        x:Name="Button_MainMenu"
-        Padding="5,0,5,0"
-        HorizontalAlignment="Left"
-        pu:IconHelper.Margin="0"
-        Command="{Binding MenuExpandCommand}"
-        Style="{StaticResource ButtonBaseStyle}"
-        Tag="{Binding Tag, ElementName=Grid_MainMenu}">
-        <pu:ButtonHelper.Icon>
-          <emoji:TextBlock>
-            <TextBlock.Style>
-              <Style BasedOn="{StaticResource EmojiTextBlockBaseStyle}" TargetType="emoji:TextBlock">
-                <Setter Property="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
-                <Style.Triggers>
-                  <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="True">
-                    <Setter Property="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
-                  </DataTrigger>
-                </Style.Triggers>
-              </Style>
-            </TextBlock.Style>
-          </emoji:TextBlock>
-        </pu:ButtonHelper.Icon>
-      </Button>
-    </Grid>
-    <Grid Margin="0,30,0,0">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition />
-      </Grid.ColumnDefinitions>
-      <Grid
-        x:Name="Grid_MainMenu"
-        d:Tag="True"
-        Tag="{Binding MenuIsExpand}">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="*" />
-          <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <i:Interaction.Triggers>
-          <i:DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
-            <i:ChangePropertyAction PropertyName="Width" Value="{Binding ActualWidth, ElementName=Button_MainMenu}" />
-          </i:DataTrigger>
-          <i:DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="True">
-            <i:ChangePropertyAction PropertyName="Width" Value="NaN" />
-          </i:DataTrigger>
-        </i:Interaction.Triggers>
-        <ScrollViewer>
-          <ScrollViewer.Style>
-            <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
-              <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
-              <Style.Triggers>
-                <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="True">
-                  <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-                </DataTrigger>
-              </Style.Triggers>
-            </Style>
-          </ScrollViewer.Style>
-          <StackPanel>
+        </ScrollViewer.Style>
+        <StackPanel>
+          <ListBox
+            ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
+            ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
+            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+            SelectedItem="{Binding ListBox_MainMenu.SelectedItem}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="SelectionChanged">
+                <i:InvokeCommandAction Command="{Binding ListBox_MainMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_MainMenu.SelectedItem}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </ListBox>
+          <Expander
+            Background="{x:Null}"
+            BorderThickness="0"
+            Header="{Binding I18n.I18nRes.Extension}"
+            IsExpanded="False"
+            Style="{StaticResource ExpanderSelectedItemStyle}">
+            <Expander.ContextMenu>
+              <ContextMenu>
+                <MenuItem Command="{Binding RefreshExtensionMenuCommand}" Header="{Binding I18n.I18nRes.RefreshExtensionList}">
+                  <MenuItem.Icon>
+                    <emoji:TextBlock Text="🔄" />
+                  </MenuItem.Icon>
+                </MenuItem>
+              </ContextMenu>
+            </Expander.ContextMenu>
             <ListBox
               ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
-              ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
-              ScrollViewer.VerticalScrollBarVisibility="Hidden"
-              SelectedItem="{Binding ListBox_MainMenu.SelectedItem}"
-              Style="{StaticResource ListBoxBaseStyle}">
+              ItemsSource="{Binding ListBox_ExtensionMenu.ItemsSource}"
+              SelectedItem="{Binding ListBox_ExtensionMenu.SelectedItem}">
               <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                  <i:InvokeCommandAction Command="{Binding ListBox_MainMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_MainMenu.SelectedItem}" />
+                  <i:InvokeCommandAction Command="{Binding ListBox_ExtensionMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_ExtensionMenu.SelectedItem}" />
                 </i:EventTrigger>
               </i:Interaction.Triggers>
             </ListBox>
-            <Expander
-              MinHeight="30"
-              Header="{Binding I18n.I18nRes.Extension}"
-              IsExpanded="True"
-              Style="{StaticResource ExpanderSelectedItemStyle}">
-              <Expander.ContextMenu>
-                <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                  <MenuItem Command="{Binding RefreshExtensionMenuCommand}" Header="{Binding I18n.I18nRes.RefreshExtensionList}">
-                    <MenuItem.Icon>
-                      <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="🔄" />
-                    </MenuItem.Icon>
-                  </MenuItem>
-                </ContextMenu>
-              </Expander.ContextMenu>
-              <ListBox
-                ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
-                ItemsSource="{Binding ListBox_ExtensionMenu.ItemsSource}"
-                SelectedItem="{Binding ListBox_ExtensionMenu.SelectedItem}"
-                Style="{StaticResource ListBoxBaseStyle}">
-                <i:Interaction.Triggers>
-                  <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding ListBox_ExtensionMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_ExtensionMenu.SelectedItem}" />
-                  </i:EventTrigger>
-                </i:Interaction.Triggers>
-              </ListBox>
-            </Expander>
-          </StackPanel>
-        </ScrollViewer>
-        <StackPanel Grid.Row="1" VerticalAlignment="Center">
-          <Button
-            VerticalAlignment="Bottom"
-            HorizontalContentAlignment="Left"
-            Command="{Binding StartGameCommand}"
-            Content="{Binding I18n.I18nRes.StartGame}"
-            Tag="{Binding Tag, ElementName=Grid_MainMenu}">
-            <pu:ButtonHelper.Icon>
-              <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="▶" />
-            </pu:ButtonHelper.Icon>
-            <Button.ContextMenu>
-              <ContextMenu Style="{StaticResource ContextMenuBaseStyle}">
-                <CheckBox
-                  Content="{Binding I18n.I18nRes.ClearGameLogOnStart}"
-                  IsChecked="{Binding ClearGameLogOnStart, UpdateSourceTrigger=PropertyChanged}"
-                  Style="{StaticResource CheckBoxBaseStyle}" />
-              </ContextMenu>
-            </Button.ContextMenu>
-            <Button.Style>
-              <Style BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
-                <Style.Triggers>
-                  <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
-                    <Setter Property="pu:IconHelper.Margin" Value="0" />
-                  </DataTrigger>
-                </Style.Triggers>
-              </Style>
-            </Button.Style>
-          </Button>
-          <Button
-            x:Name="Button_InfoPage"
-            VerticalAlignment="Bottom"
-            HorizontalContentAlignment="Left"
-            Command="{Binding ShowPageCommand}"
-            CommandParameter="{Binding InfoPage}"
-            Content="{Binding I18n.I18nRes.Info}"
-            Style="{StaticResource ButtonPressed}"
-            Tag="{Binding InfoButtonIsChecked}">
-            <pu:ButtonHelper.Icon>
-              <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="ℹ" />
-            </pu:ButtonHelper.Icon>
-          </Button>
-          <Button
-            x:Name="Button_SettingsPage"
-            Padding="5,5,5,5"
-            HorizontalContentAlignment="Left"
-            Command="{Binding ShowPageCommand}"
-            CommandParameter="{Binding SettingsPage}"
-            Content="{Binding I18n.I18nRes.Settings}"
-            Style="{StaticResource ButtonPressed}"
-            Tag="{Binding SettingsButtonIsChecked}">
-            <pu:ButtonHelper.Icon>
-              <emoji:TextBlock Style="{StaticResource EmojiTextBlockBaseStyle}" Text="⚙" />
-            </pu:ButtonHelper.Icon>
-          </Button>
+          </Expander>
         </StackPanel>
-      </Grid>
-      <Frame
-        x:Name="Frame_MainFrame"
-        Grid.Column="1"
-        Content="{Binding NowPage}"
-        ContentRendered="Frame_MainFrame_ContentRendered"
-        NavigationUIVisibility="Hidden" />
+      </ScrollViewer>
+      <StackPanel Grid.Row="2" VerticalAlignment="Center">
+        <Button
+          VerticalAlignment="Bottom"
+          HorizontalContentAlignment="Left"
+          Command="{Binding StartGameCommand}"
+          Content="{Binding I18n.I18nRes.StartGame}"
+          Tag="{Binding Tag, ElementName=Grid_MainMenu}">
+          <pu:ButtonHelper.Icon>
+            <emoji:TextBlock Text="▶" />
+          </pu:ButtonHelper.Icon>
+          <Button.ContextMenu>
+            <ContextMenu>
+              <CheckBox Content="{Binding I18n.I18nRes.ClearGameLogOnStart}" IsChecked="{Binding ClearGameLogOnStart, UpdateSourceTrigger=PropertyChanged}" />
+            </ContextMenu>
+          </Button.ContextMenu>
+          <Button.Style>
+            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
+                  <Setter Property="pu:IconHelper.Margin" Value="0" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </Button.Style>
+        </Button>
+        <Button
+          x:Name="Button_InfoPage"
+          VerticalAlignment="Bottom"
+          HorizontalContentAlignment="Left"
+          Command="{Binding ShowPageCommand}"
+          CommandParameter="{Binding InfoPage}"
+          Content="{Binding I18n.I18nRes.Info}"
+          Style="{StaticResource ButtonPressed}"
+          Tag="{Binding InfoButtonIsChecked}">
+          <pu:ButtonHelper.Icon>
+            <emoji:TextBlock Text="ℹ" />
+          </pu:ButtonHelper.Icon>
+        </Button>
+        <Button
+          x:Name="Button_SettingsPage"
+          HorizontalContentAlignment="Left"
+          Command="{Binding ShowPageCommand}"
+          CommandParameter="{Binding SettingsPage}"
+          Content="{Binding I18n.I18nRes.Settings}"
+          Style="{StaticResource ButtonPressed}"
+          Tag="{Binding SettingsButtonIsChecked}">
+          <pu:ButtonHelper.Icon>
+            <emoji:TextBlock Text="⚙" />
+          </pu:ButtonHelper.Icon>
+        </Button>
+      </StackPanel>
     </Grid>
+    <Frame
+      x:Name="Frame_MainFrame"
+      Grid.Column="1"
+      Content="{Binding NowPage}"
+      ContentRendered="Frame_MainFrame_ContentRendered"
+      NavigationUIVisibility="Hidden" />
   </Grid>
-</Window>
+</pu:WindowX>

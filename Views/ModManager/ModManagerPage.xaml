@@ -22,7 +22,7 @@
   <Page.Resources>
     <Style
       x:Key="CenterAlignmentStyle"
-      BasedOn="{StaticResource TextBlockBaseStyle}"
+      BasedOn="{StaticResource {x:Type TextBlock}}"
       TargetType="TextBlock">
       <Setter Property="TextAlignment" Value="Center" />
       <Setter Property="VerticalAlignment" Value="Center" />
@@ -31,7 +31,7 @@
     </Style>
     <Style
       x:Key="EnabledStyle"
-      BasedOn="{StaticResource ButtonBaseStyle}"
+      BasedOn="{StaticResource {x:Type Button}}"
       TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource ColorAqua2}" />
       <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Enabled, ElementName=Page_MainPage}" />
@@ -46,7 +46,7 @@
     </Style>
     <Style
       x:Key="CollectedStyle"
-      BasedOn="{StaticResource ButtonBaseStyle}"
+      BasedOn="{StaticResource {x:Type Button}}"
       TargetType="Button">
       <Setter Property="Background" Value="{DynamicResource ColorYellow2}" />
       <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Collected, ElementName=Page_MainPage}" />
@@ -95,7 +95,7 @@
     </Style>
   </Page.Resources>
   <Grid>
-    <GroupBox Header="{Binding I18n.I18nRes.ModManager}" Style="{StaticResource GroupBoxBaseStyle}">
+    <GroupBox Header="{Binding I18n.I18nRes.ModManager}">
       <Grid>
         <Grid>
           <Grid.ColumnDefinitions>
@@ -136,8 +136,7 @@
                   ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
                   PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                   PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                  SelectedItem="{Binding ListBox_MainMenu.SelectedItem}"
-                  Style="{StaticResource ListBoxBaseStyle}">
+                  SelectedItem="{Binding ListBox_MainMenu.SelectedItem}">
                   <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                       <i:InvokeCommandAction Command="{Binding ListBox_MainMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_MainMenu.SelectedItem}" />
@@ -152,8 +151,7 @@
                     <ContextMenu
                       DataContext="{Binding GroupTypeExpanderContextMenu}"
                       ItemContainerStyle="{StaticResource MenuItemViewStyle}"
-                      ItemsSource="{Binding ItemsSource}"
-                      Style="{StaticResource ContextMenuBaseStyle}">
+                      ItemsSource="{Binding ItemsSource}">
                       <i:Interaction.Triggers>
                         <!--  使用Loaded时,如果有多个未载入的菜单,使用右键逐个点击只会载入第一个,故使用Opened  -->
                         <i:EventTrigger EventName="Opened">
@@ -169,8 +167,7 @@
                     ItemsSource="{Binding ListBox_TypeGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                     PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                    SelectedItem="{Binding ListBox_TypeGroupMenu.SelectedItem}"
-                    Style="{StaticResource ListBoxBaseStyle}">
+                    SelectedItem="{Binding ListBox_TypeGroupMenu.SelectedItem}">
                     <i:Interaction.Triggers>
                       <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding ListBox_TypeGroupMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_TypeGroupMenu.SelectedItem}" />
@@ -190,8 +187,7 @@
                     ItemsSource="{Binding ListBox_UserGroupMenu.ItemsSource}"
                     PreviewMouseRightButtonDown="ListBox_PreviewMouseRightButtonDown"
                     PreviewMouseWheel="ListBox_PreviewMouseWheel"
-                    SelectedItem="{Binding ListBox_UserGroupMenu.SelectedItem}"
-                    Style="{StaticResource ListBoxBaseStyle}">
+                    SelectedItem="{Binding ListBox_UserGroupMenu.SelectedItem}">
                     <i:Interaction.Triggers>
                       <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding ListBox_UserGroupMenu.SelectionChangedCommand}" CommandParameter="{Binding ListBox_UserGroupMenu.SelectedItem}" />
@@ -203,12 +199,10 @@
             </ScrollViewer>
             <Button
               x:Name="Button_ExpandGroupMenu"
-              Height="30"
-              Padding="0"
+              MinHeight="30"
               VerticalAlignment="Top"
               HorizontalContentAlignment="Left"
-              Command="{Binding GroupMenuExpandCommand}"
-              Style="{StaticResource ButtonBaseStyle}">
+              Command="{Binding GroupMenuExpandCommand}">
               <pu:ButtonHelper.Icon>
                 <emoji:TextBlock FontSize="16">
                   <TextBlock.Style>
@@ -231,8 +225,7 @@
               HorizontalContentAlignment="Left"
               pu:ButtonHelper.Icon="➕"
               Command="{Binding AddUserGroupCommand}"
-              Content="{Binding I18n.I18nRes.AddUserGroup}"
-              Style="{StaticResource ButtonBaseStyle}" />
+              Content="{Binding I18n.I18nRes.AddUserGroup}" />
           </Grid>
           <Grid
             x:Name="Grid_DataGrid"
@@ -246,12 +239,12 @@
               AllowDrop="True"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
+              ColumnHeaderHeight="50"
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
               ItemsSource="{Binding NowShowMods, IsAsync=True}"
               RowDetailsVisibilityMode="Visible"
-              RowHeight="50"
-              Style="{StaticResource DataGridBaseStyle}"
+              RowHeight="NaN"
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.VirtualizationMode="Recycling">
               <i:Interaction.Triggers>
@@ -271,10 +264,7 @@
                   <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                   <Setter Property="ContextMenu">
                     <Setter.Value>
-                      <ContextMenu
-                        ItemContainerStyle="{StaticResource MenuItemViewStyle}"
-                        ItemsSource="{Binding ContextMenu.ItemsSource}"
-                        Style="{StaticResource ContextMenuBaseStyle}">
+                      <ContextMenu ItemContainerStyle="{StaticResource MenuItemViewStyle}" ItemsSource="{Binding ContextMenu.ItemsSource}">
                         <i:Interaction.Triggers>
                           <!--  使用Loaded时,如果有多个未载入的菜单,使用右键挨个点击只会载入第一个,故使用Opened  -->
                           <i:EventTrigger EventName="Opened">
@@ -316,7 +306,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.EnabledState, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowModEnableState, ElementName=Page_MainPage}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
@@ -335,7 +324,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.Icon, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowModIcon, ElementName=Page_MainPage}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
@@ -354,7 +342,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.Name, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowModName, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -367,7 +354,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.Author, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowModAuthor, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -379,7 +365,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.Version, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowModVersion, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -393,7 +378,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.GameVersion, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowGameVersion, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -406,7 +390,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.Utility, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowUtility, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -424,7 +407,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.LastUpdateTime, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.LastUpdateTime, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -438,7 +420,6 @@
                     <Label
                       Background="{x:Null}"
                       Content="{Binding DataContext.I18n.I18nRes.UserDescription, ElementName=Page_MainPage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding DataContext.I18n.I18nRes.ShowUserDescription, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -452,13 +433,11 @@
                       Padding="5,0,5,0"
                       Command="{Binding DataContext.EnableDependenciesCommand, ElementName=Page_MainPage}"
                       Content="{Binding DataContext.I18n.I18nRes.EnableDependencies, ElementName=Page_MainPage}"
-                      Style="{StaticResource ButtonBaseStyle}"
                       ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                     <Label
                       HorizontalContentAlignment="Left"
                       Background="{x:Null}"
                       Content="{Binding MissDependenciesMessage}"
-                      Style="{StaticResource LabelBaseStyle}"
                       ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                   </StackPanel>
                 </DataTemplate>
@@ -469,14 +448,12 @@
               x:Name="Spin"
               Width="100"
               Height="100"
-              Style="{StaticResource SpinBaseStyle}"
               Tag="{Binding ShowSpin}" />-->
             <TextBox
               x:Name="TextBox_SearchMods"
               Height="30"
               Margin="0,0,120,0"
               VerticalAlignment="Top"
-              Style="{StaticResource TextBoxBaseStyle}"
               Text="{Binding ModFilterText, UpdateSourceTrigger=PropertyChanged}"
               TextWrapping="Wrap"
               ToolTip="{Binding I18n.I18nRes.SearchMod}" />
@@ -493,7 +470,7 @@
               IsEnabled="False"
               IsHitTestVisible="False">
               <Label.Style>
-                <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
+                <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
                   <Setter Property="Visibility" Value="Hidden" />
                   <Style.Triggers>
                     <MultiDataTrigger>
@@ -531,38 +508,31 @@
             MinWidth="120">
             <ScrollViewer Margin="0,0,0,45" VerticalScrollBarVisibility="Auto">
               <StackPanel>
-                <Expander
-                  Margin="0,0,0,5"
-                  Header="{Binding I18n.I18nRes.OpenDirectory}"
-                  Style="{StaticResource ExpanderBaseStyle}">
+                <Expander Margin="0,0,0,5" Header="{Binding I18n.I18nRes.OpenDirectory}">
                   <StackPanel>
                     <Button
                       x:Name="Button_OpenModDirectory"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding OpenModDirectoryCommand}"
-                      Content="{Binding I18n.I18nRes.OpenModsDirectory}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.OpenModsDirectory}" />
                     <Button
                       x:Name="Button_OpenBackupDirectory"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding OpenBackupDirectoryCommand}"
-                      Content="{Binding I18n.I18nRes.OpenBackupDirectory}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.OpenBackupDirectory}" />
                     <Button
                       x:Name="Button_OpenSaveDirectory"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding OpenSaveDirectoryCommand}"
-                      Content="{Binding I18n.I18nRes.OpenSaveDirectory}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.OpenSaveDirectory}" />
                   </StackPanel>
                 </Expander>
                 <Expander
                   Margin="0,0,0,5"
                   Header="{Binding I18n.I18nRes.ManipulateUserData}"
-                  Style="{StaticResource ExpanderBaseStyle}"
                   ToolTip="{Binding I18n.I18nRes.ManipulateUserDataToolTip}">
                   <StackPanel>
                     <Button
@@ -570,29 +540,23 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ImportUserDataCommand}"
-                      Content="{Binding I18n.I18nRes.ImportUserData}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ImportUserData}" />
                     <Button
                       x:Name="Button_ExportUserData"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ExportUserDataCommand}"
-                      Content="{Binding I18n.I18nRes.ExportUserData}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ExportUserData}" />
                   </StackPanel>
                 </Expander>
-                <Expander
-                  Margin="0,0,0,5"
-                  Header="{Binding I18n.I18nRes.ManipulateUserGroup}"
-                  Style="{StaticResource ExpanderBaseStyle}">
+                <Expander Margin="0,0,0,5" Header="{Binding I18n.I18nRes.ManipulateUserGroup}">
                   <StackPanel>
                     <Button
                       x:Name="Button_ImportUserGroup"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ImportUserGroupCommand}"
-                      Content="{Binding I18n.I18nRes.ImportUserGroup}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ImportUserGroup}" />
                     <ComboBox
                       x:Name="ComboBox_ExportUserGroup"
                       Height="30"
@@ -601,43 +565,35 @@
                       DisplayMemberPath="Content"
                       ItemsSource="{Binding ComboBox_ExportUserGroup.ItemsSource}"
                       SelectedIndex="0"
-                      SelectedItem="{Binding ComboBox_ExportUserGroup.SelectedItem}"
-                      Style="{StaticResource ComboBoxBaseStyle}" />
+                      SelectedItem="{Binding ComboBox_ExportUserGroup.SelectedItem}" />
                     <Button
                       x:Name="Button_ExportUserGroup"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ExportUserGroupCommand}"
-                      Content="{Binding I18n.I18nRes.ExportUserGroup}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ExportUserGroup}" />
                   </StackPanel>
                 </Expander>
-                <Expander
-                  Margin="0,0,0,5"
-                  Header="{Binding I18n.I18nRes.ManipulateEnabledList}"
-                  Style="{StaticResource ExpanderBaseStyle}">
+                <Expander Margin="0,0,0,5" Header="{Binding I18n.I18nRes.ManipulateEnabledList}">
                   <StackPanel>
                     <Button
                       x:Name="Button_ImportEnabledListFromSave"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ImportEnabledListFromSaveCommand}"
-                      Content="{Binding I18n.I18nRes.ImportFromSave}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ImportFromSave}" />
                     <Button
                       x:Name="Button_ImportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ImportEnabledListCommand}"
-                      Content="{Binding I18n.I18nRes.ImportEnabledList}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ImportEnabledList}" />
                     <Button
                       x:Name="Button_ExportEnabledList"
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding ExportEnabledListCommand}"
-                      Content="{Binding I18n.I18nRes.ExportEnabledList}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.ExportEnabledList}" />
                   </StackPanel>
                 </Expander>
                 <Expander
@@ -645,7 +601,7 @@
                   Margin="0,0,0,5"
                   Header="{Binding I18n.I18nRes.RandomEnableMods}">
                   <Expander.Style>
-                    <Style BasedOn="{StaticResource ExpanderBaseStyle}" TargetType="Expander">
+                    <Style BasedOn="{StaticResource {x:Type Expander}}" TargetType="Expander">
                       <Setter Property="Visibility" Value="Collapsed" />
                       <Style.Triggers>
                         <DataTrigger Binding="{Binding NowSelectedIsUserGroup}" Value="True">
@@ -661,7 +617,6 @@
                         Height="30"
                         InputMethod.IsInputMethodEnabled="False"
                         PreviewTextInput="TextBox_NumberInput"
-                        Style="{StaticResource TextBoxBaseStyle}"
                         Text="{Binding MinRandomSize, UpdateSourceTrigger=PropertyChanged}"
                         ToolTip="{Binding I18n.I18nRes.MinRandomNumber}" />
                       <!--  TextBox输入占位符  -->
@@ -676,7 +631,7 @@
                         IsEnabled="False"
                         IsHitTestVisible="False">
                         <Label.Style>
-                          <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
+                          <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
                             <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
                               <MultiDataTrigger>
@@ -699,7 +654,6 @@
                         Height="30"
                         InputMethod.IsInputMethodEnabled="False"
                         PreviewTextInput="TextBox_NumberInput"
-                        Style="{StaticResource TextBoxBaseStyle}"
                         Text="{Binding MaxRandomSize, UpdateSourceTrigger=PropertyChanged}"
                         ToolTip="{Binding I18n.I18nRes.MaxRandomNumber}" />
                       <!--  TextBox输入占位符  -->
@@ -714,7 +668,7 @@
                         IsEnabled="False"
                         IsHitTestVisible="False">
                         <Label.Style>
-                          <Style BasedOn="{StaticResource LabelBaseStyle}" TargetType="Label">
+                          <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
                             <Setter Property="Visibility" Value="Hidden" />
                             <Style.Triggers>
                               <MultiDataTrigger>
@@ -736,8 +690,7 @@
                       Height="30"
                       Margin="0,0,0,5"
                       Command="{Binding RandomEnableModsCommand}"
-                      Content="{Binding I18n.I18nRes.RandomEnableMods}"
-                      Style="{StaticResource ButtonBaseStyle}" />
+                      Content="{Binding I18n.I18nRes.RandomEnableMods}" />
                   </StackPanel>
                 </Expander>
               </StackPanel>
@@ -791,15 +744,13 @@
             HorizontalAlignment="Left"
             Background="{DynamicResource ColorBB}"
             Command="{Binding CloseModDetailsButtonCommand}"
-            Content="》"
-            Style="{StaticResource ButtonBaseStyle}" />
+            Content="》" />
           <GroupBox
             x:Name="GroupBox_ModDetails"
             Grid.Column="1"
             Margin="9,0,0,0"
             Background="{DynamicResource ColorBG}"
-            Header="{Binding I18n.I18nRes.ModInfo}"
-            Style="{StaticResource GroupBoxBaseStyle}">
+            Header="{Binding I18n.I18nRes.ModInfo}">
             <i:Interaction.Triggers>
               <i:PropertyChangedTrigger Binding="{Binding IsMouseOver, ElementName=GroupBox_ModDetails, UpdateSourceTrigger=PropertyChanged}">
                 <i:InvokeCommandAction Command="{Binding ModDetailsMouseOverCommand}" CommandParameter="{Binding IsMouseOver, ElementName=GroupBox_ModDetails}" />
@@ -820,13 +771,11 @@
                   <Label
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
-                    Content="ID:"
-                    Style="{StaticResource LabelBaseStyle}" />
+                    Content="ID:" />
                   <TextBox
                     x:Name="Label_ModId"
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Id, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
@@ -839,14 +788,12 @@
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Content="{Binding I18n.I18nRes.Name}"
-                    Style="{StaticResource LabelBaseStyle}" />
+                    Content="{Binding I18n.I18nRes.Name}" />
                   <TextBox
                     x:Name="Label_ModName"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Name, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
@@ -857,13 +804,11 @@
                   <Label
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
-                    Content="{Binding I18n.I18nRes.Version}"
-                    Style="{StaticResource LabelBaseStyle}" />
+                    Content="{Binding I18n.I18nRes.Version}" />
                   <TextBox
                     x:Name="Label_ModVersion"
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Version, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
@@ -872,14 +817,12 @@
                     Height="30"
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
-                    Content="{Binding I18n.I18nRes.GameVersion}"
-                    Style="{StaticResource LabelBaseStyle}" />
+                    Content="{Binding I18n.I18nRes.GameVersion}" />
                   <TextBox
                     x:Name="Label_GameVersion"
                     Height="30"
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.GameVersion, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
@@ -890,12 +833,10 @@
                   <Label
                     Margin="0,0,5,0"
                     HorizontalContentAlignment="Left"
-                    Content="{Binding I18n.I18nRes.LastUpdateTime}"
-                    Style="{StaticResource LabelBaseStyle}" />
+                    Content="{Binding I18n.I18nRes.LastUpdateTime}" />
                   <TextBox
                     HorizontalContentAlignment="Left"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.LastUpdateTimeString, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </StackPanel>
@@ -909,18 +850,13 @@
                   CommandParameter="{Binding NowSelectedMod.ModDirectory}"
                   Content="{Binding NowSelectedMod.ModDirectory, Mode=OneWay}"
                   Cursor="Hand"
-                  Style="{StaticResource ButtonBaseStyle}"
                   ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
-                <GroupBox
-                  Margin="0,0,0,5"
-                  Header="{Binding I18n.I18nRes.Author}"
-                  Style="{StaticResource GroupBoxBaseStyle}">
+                <GroupBox Margin="0,0,0,5" Header="{Binding I18n.I18nRes.Author}">
                   <TextBox
                     x:Name="TextBlock_ModAuthor"
                     Height="NaN"
                     VerticalAlignment="Top"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Author, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
@@ -932,7 +868,7 @@
                   Header="{Binding I18n.I18nRes.Dependencies}"
                   Tag="{Binding Text, ElementName=TextBlock_ModDependencies}">
                   <GroupBox.Style>
-                    <Style BasedOn="{StaticResource GroupBoxBaseStyle}" TargetType="GroupBox">
+                    <Style BasedOn="{StaticResource {x:Type GroupBox}}" TargetType="GroupBox">
                       <Setter Property="Visibility" Value="Visible" />
                       <Style.Triggers>
                         <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="">
@@ -945,29 +881,23 @@
                     x:Name="TextBlock_ModDependencies"
                     Height="NaN"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.DependenciesMessage, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
-                <GroupBox
-                  Margin="0,0,0,5"
-                  Header="{Binding I18n.I18nRes.Description}"
-                  Style="{StaticResource GroupBoxBaseStyle}">
+                <GroupBox Margin="0,0,0,5" Header="{Binding I18n.I18nRes.Description}">
                   <TextBox
                     x:Name="TextBlock_ModDescription"
                     Height="NaN"
                     IsReadOnly="True"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.Description, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
-                <GroupBox Header="{Binding I18n.I18nRes.UserDescription}" Style="{StaticResource GroupBoxBaseStyle}">
+                <GroupBox>
                   <TextBox
                     x:Name="TextBox_UserDescription"
                     Height="NaN"
-                    Style="{StaticResource TextBoxBaseStyle}"
                     Text="{Binding NowSelectedMod.UserDescription, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />

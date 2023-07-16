@@ -244,7 +244,7 @@ internal partial class MainWindow
         Dispatcher.Invoke(() =>
         {
             IsEnabled = isEnabled;
-            Effect = _blurEffect;
+            (this as Window).Effect = _blurEffect;
         });
     }
 
@@ -256,7 +256,7 @@ internal partial class MainWindow
         Dispatcher.Invoke(() =>
         {
             IsEnabled = true;
-            Effect = null;
+            (this as Window).Effect = null;
         });
     }
 

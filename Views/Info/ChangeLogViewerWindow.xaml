@@ -10,7 +10,6 @@
   Width="800"
   Height="450"
   x:ClassModifier="internal"
-  Style="{StaticResource WindowXBaseStyle}"
   mc:Ignorable="d">
   <Grid>
     <Grid.RowDefinitions>
@@ -25,7 +24,7 @@
       </Grid.ColumnDefinitions>
       <Label />
     </Grid>
-    <GroupBox Grid.Row="1" Style="{StaticResource GroupBoxBaseStyle}" />
+    <GroupBox Grid.Row="1" />
     <Grid Grid.Row="2" />
   </Grid>
 </pu:WindowX>

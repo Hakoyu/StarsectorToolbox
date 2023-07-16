@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <SolidColorBrush x:Key="BackgroundColor">#FF202020</SolidColorBrush>
+  <SolidColorBrush x:Key="ForegroundColor">#FF2B2B2B</SolidColorBrush>
+  <SolidColorBrush x:Key="BorderColor">#FF1D1D1D</SolidColorBrush>
+  <SolidColorBrush x:Key="ButtonColor">#FF383838</SolidColorBrush>
+  <SolidColorBrush x:Key="FontColor">#FFFFFFFF</SolidColorBrush>
+  <SolidColorBrush x:Key="TipColor">#FFBFBFBF</SolidColorBrush>
+  <SolidColorBrush x:Key="HoverColor">#FF2D2D2D</SolidColorBrush>
+  <SolidColorBrush x:Key="ClickColor">#FF292929</SolidColorBrush>
+  <SolidColorBrush x:Key="ClickedColor">#FF2D2D2D</SolidColorBrush>
+</ResourceDictionary>
