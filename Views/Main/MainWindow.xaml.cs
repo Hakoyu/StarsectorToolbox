@@ -31,13 +31,13 @@ internal partial class MainWindow : WindowX
         // 获取系统主题色
         //Application.Current.Resources["MainFontSize"] = 24.0;
 
-        //var windowGlassBrush = SystemParameters.WindowGlassBrush;
-        //Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] = windowGlassBrush;
-        //WindowXCaption.SetBackground(this, windowGlassBrush);
+        var windowGlassBrush = SystemParameters.WindowGlassBrush;
+        Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] = windowGlassBrush;
+        WindowXCaption.SetBackground(this, windowGlassBrush);
+        WindowXCaption.SetForeground(this, (Brush)Application.Current.Resources["FontColor"]);
         //// 根据主题色的明亮程度来设置字体颜色
         //var color = (Color)ColorConverter.ConvertFromString(windowGlassBrush.ToString());
         //if (IsLightColor(color))
-        //    WindowXCaption.SetForeground(this, windowGlassBrush);
         // 注册数据
         RegisterData();
         // 初始化ViewModel
@@ -73,6 +73,7 @@ internal partial class MainWindow : WindowX
             Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] =
                 SystemParameters.WindowGlassBrush;
             Application.Current.Resources["ShadowColor"] = SystemParameters.WindowGlassColor;
+            WindowXCaption.SetForeground(this, (Brush)Application.Current.Resources["FontColor"]);
         }
     }
 

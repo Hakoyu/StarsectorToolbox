@@ -12,6 +12,7 @@
     <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/ContextMenuStyle.xaml" />
     <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/GroupBoxStyle.xaml" />
     <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/ListBoxStyle.xaml" />
+    <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/ListBoxItemStyle.xaml" />
     <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/PasswordBoxStyle.xaml" />
     <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/ProgressBarStyle.xaml" />
     <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/RadioButtonStyle.xaml" />
@@ -27,6 +28,8 @@
     <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
     <Setter Property="Padding" Value="5,0,5,0" />
     <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="5" />
+    <Setter Property="pu:ExpanderHelper.HeaderBorderThickness" Value="1" />
+    <Setter Property="pu:ExpanderHelper.HeaderBorderBrush" Value="{DynamicResource BorderColor}" />
     <Setter Property="Foreground" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="Background" Value="{DynamicResource ForegroundColor}" />
     <Setter Property="pu:ExpanderHelper.CornerRadius" Value="4,4,4,4" />
@@ -41,6 +44,8 @@
   </Style>
 
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ButtonStyle}}" TargetType="{x:Type Button}">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
     <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
@@ -54,6 +59,8 @@
 
 
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ToggleButtonStyle}}" TargetType="{x:Type ToggleButton}">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
     <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
@@ -63,6 +70,7 @@
     <Setter Property="pu:ToggleButtonHelper.CornerRadius" Value="4,4,4,4" />
     <Setter Property="pu:ToggleButtonHelper.HoverShadowColor" Value="{DynamicResource ShadowColor}" />
     <Setter Property="pu:ToggleButtonHelper.CheckedShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:IconHelper.Margin" Value="5,0,0,0" />
   </Style>
 
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.CheckBoxStyle}}" TargetType="{x:Type CheckBox}">
@@ -171,20 +179,29 @@
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ListBoxStyle}}" TargetType="{x:Type ListBox}">
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Background" Value="{x:Null}" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
     <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:ListBoxHelper.ShadowColor" Value="#FF2B97FF" />
-    <Setter Property="pu:ListBoxHelper.ItemsHeight" Value="NaN" />
-    <Setter Property="pu:ListBoxHelper.ItemsPadding" Value="5,5,5,5" />
-    <Setter Property="pu:ListBoxHelper.ItemsBackground" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ListBoxHelper.ItemsHoverBackground" Value="{DynamicResource HoverColor}" />
-    <Setter Property="pu:ListBoxHelper.ItemsSelectedBackground" Value="#FF2B97FF" />
-    <Setter Property="pu:ListBoxHelper.ItemsSelectedBorderThickness" Value="0,0,0,0" />
-    <Setter Property="pu:ListBoxHelper.ItemsSelectedCornerRadius" Value="4,4,4,4" />
-    <Setter Property="Foreground" Value="#FF000000" />
-    <Setter Property="pu:ListBoxHelper.ItemsSelectedForeground" Value="#FFFFFFFF" />
+    <Setter Property="pu:ListBoxHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
   </Style>
-
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ListBoxItemStyle}}" TargetType="{x:Type ListBoxItem}">
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="pu:ListBoxItemHelper.CornerRadius" Value="0" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedBorderThickness" Value="0" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ListBoxItemHelper.HoverBackground" Value="{DynamicResource HoverColor}" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedBorderBrush" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedForeground" Value="{DynamicResource FontColor}" />
+    <Style.Triggers>
+      <Trigger Property="IsSelected" Value="True">
+        <Setter Property="pu:ListBoxItemHelper.SelectedBorderThickness" Value="3,0,0,0" />
+        <Setter Property="Padding" Value="8,5,5,5" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.PasswordBoxStyle}}" TargetType="{x:Type PasswordBox}">
     <Setter Property="Padding" Value="7,0,7,0" />
     <Setter Property="Foreground" Value="#FF000000" />

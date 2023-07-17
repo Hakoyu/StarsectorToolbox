@@ -49,7 +49,7 @@
     <Grid
       x:Name="Grid_MainMenu"
       Width="NaN"
-      MinWidth="30">
+      MinWidth="32">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
@@ -68,22 +68,25 @@
         Grid.Row="0"
         MinWidth="30"
         MinHeight="30"
-        Padding="5,0,5,0"
+        Padding="0,0,5,0"
         HorizontalAlignment="Left"
         d:IsChecked="True"
-        pu:IconHelper.Margin="0"
+        pu:ToggleButtonHelper.CornerRadius="0"
         Background="{x:Null}"
+        BorderThickness="0"
         Command="{Binding MenuExpandCommand}">
-        <emoji:TextBlock Text="{x:Static ST:STIcon.MenuOpenIcon}">
-          <i:Interaction.Triggers>
-            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
-              <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
-            </i:DataTrigger>
-            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
-              <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
-            </i:DataTrigger>
-          </i:Interaction.Triggers>
-        </emoji:TextBlock>
+        <pu:ToggleButtonHelper.Icon>
+          <emoji:TextBlock Text="{x:Static ST:STIcon.MenuOpenIcon}">
+            <i:Interaction.Triggers>
+              <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
+                <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
+              </i:DataTrigger>
+              <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
+                <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
+              </i:DataTrigger>
+            </i:Interaction.Triggers>
+          </emoji:TextBlock>
+        </pu:ToggleButtonHelper.Icon>
       </ToggleButton>
       <ScrollViewer Grid.Row="1">
         <ScrollViewer.Style>
@@ -98,6 +101,9 @@
         </ScrollViewer.Style>
         <StackPanel>
           <ListBox
+            d:ItemContainerStyle="{x:Null}"
+            d:ItemsSource="{d:SampleData ItemCount=5}"
+            d:SelectedIndex="3"
             ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
             ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
             ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -109,6 +115,8 @@
             </i:Interaction.Triggers>
           </ListBox>
           <Expander
+            Padding="0"
+            pu:ExpanderHelper.CornerRadius="0"
             Background="{x:Null}"
             BorderThickness="0"
             Header="{Binding I18n.I18nRes.Extension}"
@@ -124,6 +132,9 @@
               </ContextMenu>
             </Expander.ContextMenu>
             <ListBox
+              d:ItemContainerStyle="{x:Null}"
+              d:ItemsSource="{d:SampleData ItemCount=5}"
+              d:SelectedIndex="2"
               ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
               ItemsSource="{Binding ListBox_ExtensionMenu.ItemsSource}"
               SelectedItem="{Binding ListBox_ExtensionMenu.SelectedItem}">
@@ -138,11 +149,19 @@
       </ScrollViewer>
       <StackPanel Grid.Row="2" VerticalAlignment="Center">
         <Button
-          VerticalAlignment="Bottom"
           HorizontalContentAlignment="Left"
+          pu:ButtonHelper.CornerRadius="0"
+          BorderThickness="0"
           Command="{Binding StartGameCommand}"
-          Content="{Binding I18n.I18nRes.StartGame}"
-          Tag="{Binding Tag, ElementName=Grid_MainMenu}">
+          Content="{Binding I18n.I18nRes.StartGame}">
+          <i:Interaction.Triggers>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
+              <i:ChangePropertyAction PropertyName="Padding" Value="5,5,0,5" />
+            </i:DataTrigger>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
+              <i:ChangePropertyAction PropertyName="Padding" Value="5" />
+            </i:DataTrigger>
+          </i:Interaction.Triggers>
           <pu:ButtonHelper.Icon>
             <emoji:TextBlock Text="▶" />
           </pu:ButtonHelper.Icon>
@@ -151,41 +170,57 @@
               <CheckBox Content="{Binding I18n.I18nRes.ClearGameLogOnStart}" IsChecked="{Binding ClearGameLogOnStart, UpdateSourceTrigger=PropertyChanged}" />
             </ContextMenu>
           </Button.ContextMenu>
-          <Button.Style>
-            <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-              <Style.Triggers>
-                <DataTrigger Binding="{Binding Tag, ElementName=Grid_MainMenu}" Value="False">
-                  <Setter Property="pu:IconHelper.Margin" Value="0" />
-                </DataTrigger>
-              </Style.Triggers>
-            </Style>
-          </Button.Style>
         </Button>
-        <Button
+        <ToggleButton
           x:Name="Button_InfoPage"
-          VerticalAlignment="Bottom"
           HorizontalContentAlignment="Left"
+          pu:ToggleButtonHelper.CheckedBorderBrush="{DynamicResource WindowGlassBrush}"
+          pu:ToggleButtonHelper.CheckedBorderThickness="3,0,0,0"
+          pu:ToggleButtonHelper.CheckedCornerRadius="0"
+          pu:ToggleButtonHelper.CornerRadius="0"
+          BorderBrush="{DynamicResource WindowGlassBrush}"
+          BorderThickness="0"
           Command="{Binding ShowPageCommand}"
           CommandParameter="{Binding InfoPage}"
           Content="{Binding I18n.I18nRes.Info}"
-          Style="{StaticResource ButtonPressed}"
-          Tag="{Binding InfoButtonIsChecked}">
-          <pu:ButtonHelper.Icon>
+          IsChecked="{Binding InfoButtonIsChecked, Mode=OneWay}">
+          <i:Interaction.Triggers>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
+              <i:ChangePropertyAction PropertyName="Padding" Value="5,5,0,5" />
+            </i:DataTrigger>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
+              <i:ChangePropertyAction PropertyName="Padding" Value="5" />
+            </i:DataTrigger>
+          </i:Interaction.Triggers>
+          <pu:ToggleButtonHelper.Icon>
             <emoji:TextBlock Text="ℹ" />
-          </pu:ButtonHelper.Icon>
-        </Button>
-        <Button
+          </pu:ToggleButtonHelper.Icon>
+        </ToggleButton>
+        <ToggleButton
           x:Name="Button_SettingsPage"
           HorizontalContentAlignment="Left"
+          pu:ToggleButtonHelper.CheckedBorderBrush="{DynamicResource WindowGlassBrush}"
+          pu:ToggleButtonHelper.CheckedBorderThickness="3,0,0,0"
+          pu:ToggleButtonHelper.CheckedCornerRadius="0"
+          pu:ToggleButtonHelper.CornerRadius="0"
+          BorderBrush="{DynamicResource WindowGlassBrush}"
+          BorderThickness="0"
           Command="{Binding ShowPageCommand}"
           CommandParameter="{Binding SettingsPage}"
           Content="{Binding I18n.I18nRes.Settings}"
-          Style="{StaticResource ButtonPressed}"
-          Tag="{Binding SettingsButtonIsChecked}">
-          <pu:ButtonHelper.Icon>
+          IsChecked="{Binding SettingsButtonIsChecked, Mode=OneWay}">
+          <i:Interaction.Triggers>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="False">
+              <i:ChangePropertyAction PropertyName="Padding" Value="5,5,0,5" />
+            </i:DataTrigger>
+            <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_MainMenuToggleExpand}" Value="True">
+              <i:ChangePropertyAction PropertyName="Padding" Value="5" />
+            </i:DataTrigger>
+          </i:Interaction.Triggers>
+          <pu:ToggleButtonHelper.Icon>
             <emoji:TextBlock Text="⚙" />
-          </pu:ButtonHelper.Icon>
-        </Button>
+          </pu:ToggleButtonHelper.Icon>
+        </ToggleButton>
       </StackPanel>
     </Grid>
     <Frame
