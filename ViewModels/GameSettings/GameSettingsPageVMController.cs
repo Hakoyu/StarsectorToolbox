@@ -50,7 +50,9 @@ internal partial class GameSettingsPageViewModel
         DirectoryInfo dirs = new(dirParh);
         foreach (var dir in dirs.GetDirectories())
         {
-            ComboBox_MissionsLoadouts.Add(new() { Content = dir.Name, ToolTip = dir.FullName, });
+            ComboBox_MissionsLoadouts.ItemsSource.Add(
+                new() { Content = dir.Name, ToolTip = dir.FullName, }
+            );
         }
     }
 

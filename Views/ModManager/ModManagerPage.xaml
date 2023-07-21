@@ -24,40 +24,10 @@
       x:Key="CenterAlignmentStyle"
       BasedOn="{StaticResource {x:Type TextBlock}}"
       TargetType="TextBlock">
+      <Setter Property="MaxHeight" Value="{Binding ActualHeight, ElementName=Button_AddUserGroup}" />
       <Setter Property="TextAlignment" Value="Center" />
       <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="Background" Value="{x:Null}" />
       <Setter Property="ToolTip" Value="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-    </Style>
-    <Style
-      x:Key="EnabledStyle"
-      BasedOn="{StaticResource {x:Type Button}}"
-      TargetType="Button">
-      <Setter Property="Background" Value="{DynamicResource ColorAqua2}" />
-      <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Enabled, ElementName=Page_MainPage}" />
-      <Setter Property="Tag" Value="true" />
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding IsEnabled}" Value="False">
-          <Setter Property="Background" Value="{DynamicResource ColorRed2}" />
-          <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Disabled, ElementName=Page_MainPage}" />
-          <Setter Property="Tag" Value="false" />
-        </DataTrigger>
-      </Style.Triggers>
-    </Style>
-    <Style
-      x:Key="CollectedStyle"
-      BasedOn="{StaticResource {x:Type Button}}"
-      TargetType="Button">
-      <Setter Property="Background" Value="{DynamicResource ColorYellow2}" />
-      <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.Collected, ElementName=Page_MainPage}" />
-      <Setter Property="Tag" Value="true" />
-      <Style.Triggers>
-        <DataTrigger Binding="{Binding IsCollected}" Value="False">
-          <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
-          <Setter Property="Content" Value="{Binding DataContext.I18n.I18nRes.UnCollected, ElementName=Page_MainPage}" />
-          <Setter Property="Tag" Value="false" />
-        </DataTrigger>
-      </Style.Triggers>
     </Style>
     <Style
       x:Key="GameVersionStyle"
@@ -86,7 +56,7 @@
       </Style.Triggers>
     </Style>
     <Style x:Key="MissDependenciesStyle" TargetType="StackPanel">
-      <Setter Property="Height" Value="30" />
+      <Setter Property="Height" Value="NaN" />
       <Style.Triggers>
         <DataTrigger Binding="{Binding MissDependencies}" Value="false">
           <Setter Property="Height" Value="0" />
@@ -103,31 +73,49 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <Grid
-            x:Name="Grid_GroupMenu"
-            d:Tag="True"
-            Tag="{Binding GroupMenuIsExpand}">
-            <Grid.Style>
-              <Style TargetType="Grid">
-                <Setter Property="Width" Value="30" />
-                <Style.Triggers>
-                  <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource Mode=Self}}" Value="True">
-                    <Setter Property="Width" Value="NaN" />
-                  </DataTrigger>
-                </Style.Triggers>
-              </Style>
-            </Grid.Style>
-            <ScrollViewer Margin="0,30,0,30">
-              <ScrollViewer.Style>
-                <Style BasedOn="{StaticResource {x:Type ScrollViewer}}" TargetType="ScrollViewer">
-                  <Setter Property="VerticalScrollBarVisibility" Value="Hidden" />
-                  <Style.Triggers>
-                    <DataTrigger Binding="{Binding Tag, ElementName=Grid_GroupMenu}" Value="True">
-                      <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-                    </DataTrigger>
-                  </Style.Triggers>
-                </Style>
-              </ScrollViewer.Style>
+          <Grid x:Name="Grid_GroupMenu">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <i:Interaction.Triggers>
+              <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_ExpandGroupMenu}" Value="True">
+                <i:ChangePropertyAction PropertyName="Width" Value="NaN" />
+              </i:DataTrigger>
+              <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_ExpandGroupMenu}" Value="False">
+                <i:ChangePropertyAction PropertyName="Width" Value="{Binding ActualWidth, ElementName=Button_ExpandGroupMenu}" />
+              </i:DataTrigger>
+            </i:Interaction.Triggers>
+            <ToggleButton
+              x:Name="Button_ExpandGroupMenu"
+              Grid.Row="0"
+              MinWidth="30"
+              MinHeight="30"
+              Padding="0,5,5,5"
+              HorizontalAlignment="Left">
+              <pu:ToggleButtonHelper.Icon>
+                <emoji:TextBlock Text="{x:Static ST:STIcon.MenuOpenIcon}">
+                  <i:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_ExpandGroupMenu}" Value="True">
+                      <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
+                    </i:DataTrigger>
+                    <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_ExpandGroupMenu}" Value="False">
+                      <i:ChangePropertyAction PropertyName="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
+                    </i:DataTrigger>
+                  </i:Interaction.Triggers>
+                </emoji:TextBlock>
+              </pu:ToggleButtonHelper.Icon>
+            </ToggleButton>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+              <i:Interaction.Triggers>
+                <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_ExpandGroupMenu}" Value="True">
+                  <i:ChangePropertyAction PropertyName="VerticalScrollBarVisibility" Value="Auto" />
+                </i:DataTrigger>
+                <i:DataTrigger Binding="{Binding IsChecked, ElementName=Button_ExpandGroupMenu}" Value="False">
+                  <i:ChangePropertyAction PropertyName="VerticalScrollBarVisibility" Value="Hidden" />
+                </i:DataTrigger>
+              </i:Interaction.Triggers>
               <StackPanel>
                 <ListBox
                   x:Name="ListBox_ModsGroupMenu"
@@ -143,10 +131,7 @@
                     </i:EventTrigger>
                   </i:Interaction.Triggers>
                 </ListBox>
-                <Expander
-                  Padding="0"
-                  Header="{Binding I18n.I18nRes.GroupedByModType}"
-                  Style="{StaticResource ExpanderSelectedItemStyle}">
+                <Expander Header="{Binding I18n.I18nRes.GroupedByModType}" Style="{StaticResource ExpanderSelectedItemStyle}">
                   <Expander.ContextMenu>
                     <ContextMenu
                       DataContext="{Binding GroupTypeExpanderContextMenu}"
@@ -176,7 +161,6 @@
                   </ListBox>
                 </Expander>
                 <Expander
-                  Padding="0"
                   Header="{Binding I18n.I18nRes.UserGroup}"
                   IsExpanded="True"
                   Style="{StaticResource ExpanderSelectedItemStyle}">
@@ -198,30 +182,9 @@
               </StackPanel>
             </ScrollViewer>
             <Button
-              x:Name="Button_ExpandGroupMenu"
-              MinHeight="30"
-              VerticalAlignment="Top"
-              HorizontalContentAlignment="Left"
-              Command="{Binding GroupMenuExpandCommand}">
-              <pu:ButtonHelper.Icon>
-                <emoji:TextBlock FontSize="16">
-                  <TextBlock.Style>
-                    <Style TargetType="emoji:TextBlock">
-                      <Setter Property="Text" Value="{x:Static ST:STIcon.MenuCloseIcon}" />
-                      <Style.Triggers>
-                        <DataTrigger Binding="{Binding Tag, ElementName=Grid_GroupMenu}" Value="True">
-                          <Setter Property="Text" Value="{x:Static ST:STIcon.MenuOpenIcon}" />
-                        </DataTrigger>
-                      </Style.Triggers>
-                    </Style>
-                  </TextBlock.Style>
-                </emoji:TextBlock>
-              </pu:ButtonHelper.Icon>
-            </Button>
-            <Button
               x:Name="Button_AddUserGroup"
-              Height="30"
-              VerticalAlignment="Bottom"
+              Grid.Row="2"
+              MinHeight="30"
               HorizontalContentAlignment="Left"
               pu:ButtonHelper.Icon="➕"
               Command="{Binding AddUserGroupCommand}"
@@ -231,20 +194,46 @@
             x:Name="Grid_DataGrid"
             Grid.Column="1"
             Margin="0,0,5,0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <TextBox
+                x:Name="TextBox_SearchMods"
+                Grid.Column="0"
+                pu:TextBoxHelper.Watermark="{Binding I18n.I18nRes.SearchMod}"
+                Text="{Binding ModFilterText, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap"
+                ToolTip="{Binding I18n.I18nRes.SearchMod}" />
+              <ComboBox
+                x:Name="ComboBox_SearchType"
+                Grid.Column="1"
+                ItemsSource="{Binding ComboBox_ModFilterType.ItemsSource}"
+                SelectedItem="{Binding ComboBox_ModFilterType.SelectedItem}"
+                Style="{StaticResource ComboBoxViewStyle}">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ComboBox_ModFilterType.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_ModFilterType.SelectedItem}" />
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </ComboBox>
+            </Grid>
             <DataGrid
               x:Name="DataGrid_ModsShowList"
-              Margin="0,30,0,0"
+              Grid.Row="1"
               d:ItemsSource="{d:SampleData ItemCount=5}"
+              d:SelectedIndex="1"
               pu:DataGridHelper.ColumnHeaderHorizontalContentAlignment="Center"
               AllowDrop="True"
-              AutoGenerateColumns="False"
-              CanUserAddRows="False"
-              ColumnHeaderHeight="50"
               Drop="DataGrid_ModsShowList_Drop"
               GridLinesVisibility="Horizontal"
               ItemsSource="{Binding NowShowMods, IsAsync=True}"
               RowDetailsVisibilityMode="Visible"
-              RowHeight="NaN"
               VirtualizingStackPanel.IsVirtualizing="True"
               VirtualizingStackPanel.VirtualizationMode="Recycling">
               <i:Interaction.Triggers>
@@ -259,7 +248,7 @@
                 <KeyBinding Command="ApplicationCommands.NotACommand" Gesture="Delete" />
               </DataGrid.InputBindings>
               <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
+                <Style BasedOn="{StaticResource {x:Type DataGridRow}}" TargetType="DataGridRow">
                   <Setter Property="Tag" Value="{Binding Id}" />
                   <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                   <Setter Property="ContextMenu">
@@ -284,51 +273,50 @@
               <DataGrid.Columns>
                 <DataGridTemplateColumn CanUserSort="True" SortMemberPath="IsCollected">
                   <DataGridTemplateColumn.Header>
-                    <emoji:TextBlock
-                      Background="{x:Null}"
-                      FontSize="20"
-                      Text="🌟"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModCollectState, ElementName=Page_MainPage}" />
+                    <emoji:TextBlock Text="🌟" ToolTip="{Binding DataContext.I18n.I18nRes.ShowModCollectState, ElementName=Page_MainPage}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <Button
+                      <ToggleButton
                         x:Name="Button_Collected"
-                        Margin="0,5,0,5"
-                        Padding="5,0,5,0"
+                        pu:ToggleButtonHelper.CheckedBackground="{DynamicResource WindowGlassBrush}"
+                        pu:ToggleButtonHelper.CheckedContent="{Binding DataContext.I18n.I18nRes.Collected, ElementName=Page_MainPage}"
                         Command="{Binding DataContext.CollectedCommand, ElementName=Page_MainPage}"
-                        Style="{StaticResource CollectedStyle}" />
+                        Content="{Binding DataContext.I18n.I18nRes.UnCollected, ElementName=Page_MainPage}" />
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn CanUserSort="True" SortMemberPath="IsEnabled">
                   <DataGridTemplateColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.EnabledState, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModEnableState, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.EnabledState, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowModEnableState, ElementName=Page_MainPage}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <Button
+                      <ToggleButton
                         x:Name="Button_Enabled"
-                        Margin="0,5,0,5"
-                        Padding="5,0,5,0"
+                        pu:ToggleButtonHelper.CheckedBackground="{DynamicResource WindowGlassBrush}"
+                        pu:ToggleButtonHelper.CheckedContent="{Binding DataContext.I18n.I18nRes.Enabled, ElementName=Page_MainPage}"
                         Command="{Binding DataContext.EnabledCommand, ElementName=Page_MainPage}"
-                        Style="{StaticResource EnabledStyle}" />
+                        Content="{Binding DataContext.I18n.I18nRes.Disabled, ElementName=Page_MainPage}" />
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn IsReadOnly="True">
                   <DataGridTemplateColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.Icon, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModIcon, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.Icon, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowModIcon, ElementName=Page_MainPage}" />
                   </DataGridTemplateColumn.Header>
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <Image Source="{Binding ImageSource}" />
+                      <!--  TODO: 图片自适应大小  -->
+                      <Image
+                        MinWidth="64"
+                        MinHeight="64"
+                        MaxWidth="64"
+                        MaxHeight="64"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Source="{Binding ImageSource, IsAsync=True}"
+                        Stretch="Uniform" />
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -339,10 +327,7 @@
                   IsReadOnly="True"
                   SortMemberPath="Name">
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.Name, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModName, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.Name, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowModName, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -351,10 +336,7 @@
                   ElementStyle="{StaticResource CenterAlignmentStyle}"
                   IsReadOnly="True">
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.Author, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModAuthor, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.Author, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowModAuthor, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -362,10 +344,7 @@
                   ElementStyle="{StaticResource CenterAlignmentStyle}"
                   IsReadOnly="True">
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.Version, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowModVersion, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.Version, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowModVersion, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -375,10 +354,7 @@
                   IsReadOnly="True"
                   SortMemberPath="IsSameToGameVersion">
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.GameVersion, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowGameVersion, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.GameVersion, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowGameVersion, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -387,10 +363,7 @@
                   IsReadOnly="True"
                   SortMemberPath="IsUtility">
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.Utility, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowUtility, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.Utility, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowUtility, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn
@@ -404,10 +377,7 @@
                     </Style>
                   </DataGridTextColumn.ElementStyle>
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.LastUpdateTime, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.LastUpdateTime, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.LastUpdateTime, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.LastUpdateTime, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding UserDescription}" IsReadOnly="True">
@@ -417,10 +387,7 @@
                     </Style>
                   </DataGridTextColumn.ElementStyle>
                   <DataGridTextColumn.Header>
-                    <Label
-                      Background="{x:Null}"
-                      Content="{Binding DataContext.I18n.I18nRes.UserDescription, ElementName=Page_MainPage}"
-                      ToolTip="{Binding DataContext.I18n.I18nRes.ShowUserDescription, ElementName=Page_MainPage}" />
+                    <Label Content="{Binding DataContext.I18n.I18nRes.UserDescription, ElementName=Page_MainPage}" ToolTip="{Binding DataContext.I18n.I18nRes.ShowUserDescription, ElementName=Page_MainPage}" />
                   </DataGridTextColumn.Header>
                 </DataGridTextColumn>
               </DataGrid.Columns>
@@ -429,84 +396,31 @@
                   <StackPanel Orientation="Horizontal" Style="{StaticResource MissDependenciesStyle}">
                     <Button
                       x:Name="Button_EnableDependencies"
-                      Margin="10,0,0,0"
-                      Padding="5,0,5,0"
+                      Margin="5,0,0,0"
                       Command="{Binding DataContext.EnableDependenciesCommand, ElementName=Page_MainPage}"
                       Content="{Binding DataContext.I18n.I18nRes.EnableDependencies, ElementName=Page_MainPage}"
                       ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                     <Label
                       HorizontalContentAlignment="Left"
-                      Background="{x:Null}"
                       Content="{Binding MissDependenciesMessage}"
                       ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
                   </StackPanel>
                 </DataTemplate>
               </DataGrid.RowDetailsTemplate>
             </DataGrid>
-            <!--  有问题 暂时不用  -->
-            <!--<pu:Spin
-              x:Name="Spin"
-              Width="100"
-              Height="100"
-              Tag="{Binding ShowSpin}" />-->
-            <TextBox
-              x:Name="TextBox_SearchMods"
-              Height="30"
-              Margin="0,0,120,0"
-              VerticalAlignment="Top"
-              Text="{Binding ModFilterText, UpdateSourceTrigger=PropertyChanged}"
-              TextWrapping="Wrap"
-              ToolTip="{Binding I18n.I18nRes.SearchMod}" />
-            <!--  TextBox输入占位符  -->
-            <Label
-              Width="{Binding Width, ElementName=TextBox_SearchMods}"
-              Height="{Binding Height, ElementName=TextBox_SearchMods}"
-              Margin="{Binding Margin, ElementName=TextBox_SearchMods}"
-              HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_SearchMods}"
-              VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_SearchMods}"
-              Background="{x:Null}"
-              Content="{Binding I18n.I18nRes.SearchMod}"
-              FontSize="16"
-              IsEnabled="False"
-              IsHitTestVisible="False">
-              <Label.Style>
-                <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
-                  <Setter Property="Visibility" Value="Hidden" />
-                  <Style.Triggers>
-                    <MultiDataTrigger>
-                      <MultiDataTrigger.Conditions>
-                        <Condition Binding="{Binding Text, ElementName=TextBox_SearchMods}" Value="" />
-                        <Condition Binding="{Binding IsFocused, ElementName=TextBox_SearchMods}" Value="False" />
-                      </MultiDataTrigger.Conditions>
-                      <MultiDataTrigger.Setters>
-                        <Setter Property="Visibility" Value="Visible" />
-                      </MultiDataTrigger.Setters>
-                    </MultiDataTrigger>
-                  </Style.Triggers>
-                </Style>
-              </Label.Style>
-            </Label>
-            <ComboBox
-              x:Name="ComboBox_SearchType"
-              Width="120"
-              Height="30"
-              HorizontalAlignment="Right"
-              VerticalAlignment="Top"
-              ItemsSource="{Binding ComboBox_ModFilterType.ItemsSource}"
-              SelectedItem="{Binding ComboBox_ModFilterType.SelectedItem}"
-              Style="{StaticResource ComboBoxViewStyle}">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                  <i:InvokeCommandAction Command="{Binding ComboBox_ModFilterType.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_ModFilterType.SelectedItem}" />
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </ComboBox>
           </Grid>
           <Grid
             x:Name="Grid_RightSide"
             Grid.Column="2"
             MinWidth="120">
-            <ScrollViewer Margin="0,0,0,45" VerticalScrollBarVisibility="Auto">
+            <Grid.RowDefinitions>
+              <RowDefinition />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ScrollViewer
+              Grid.Row="0"
+              Margin="0,0,0,5"
+              VerticalScrollBarVisibility="Auto">
               <StackPanel>
                 <Expander Margin="0,0,0,5" Header="{Binding I18n.I18nRes.OpenDirectory}">
                   <StackPanel>
@@ -626,7 +540,6 @@
                         Margin="{Binding Margin, ElementName=TextBox_MinRandomSize}"
                         HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MinRandomSize}"
                         VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MinRandomSize}"
-                        Background="{x:Null}"
                         Content="{Binding I18n.I18nRes.MinRandomNumber}"
                         IsEnabled="False"
                         IsHitTestVisible="False">
@@ -663,7 +576,6 @@
                         Margin="{Binding Margin, ElementName=TextBox_MaxRandomSize}"
                         HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_MaxRandomSize}"
                         VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_MaxRandomSize}"
-                        Background="{x:Null}"
                         Content="{Binding I18n.I18nRes.MaxRandomNumber}"
                         IsEnabled="False"
                         IsHitTestVisible="False">
@@ -697,9 +609,7 @@
             </ScrollViewer>
             <Button
               x:Name="Button_Save"
-              Height="30"
-              Margin="5,0,5,5"
-              VerticalAlignment="Bottom"
+              Grid.Row="1"
               Command="{Binding SaveCommand}"
               Content="{Binding I18n.I18nRes.SaveConfig}"
               Style="{StaticResource RemindStyle}"

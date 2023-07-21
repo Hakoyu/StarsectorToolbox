@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -26,11 +27,13 @@ internal partial class SettingsPageViewModel : ObservableObject
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_Language =
-        new()
-        {
-            new() { Content = "English", ToolTip = "en-US" },
-            new() { Content = "简体中文", ToolTip = "zh-CN" },
-        };
+        new(
+            new ObservableCollection<ComboBoxItemVM>()
+            {
+                new() { Content = "English", ToolTip = "en-US" },
+                new() { Content = "简体中文", ToolTip = "zh-CN" },
+            }
+        );
 
     public SettingsPageViewModel()
     {
@@ -45,9 +48,9 @@ internal partial class SettingsPageViewModel : ObservableObject
             .Send<ExtensionDebugPathRequestMessage>()
             .Response;
         // 设置Language初始值
-        ComboBox_Language.SelectedItem = ComboBox_Language.FirstOrDefault(
+        ComboBox_Language.SelectedItem = ComboBox_Language.ItemsSource.FirstOrDefault(
             i => i.ToolTip is string language && language == ObservableI18n.CurrentCulture.Name,
-            ComboBox_Language[0]
+            ComboBox_Language.ItemsSource[0]
         );
         // 注册事件
         ComboBox_Language.SelectionChangedEvent += ComboBox_Language_SelectionChangedEvent;

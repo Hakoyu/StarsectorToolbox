@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -57,10 +58,17 @@ internal partial class GameSettingsPageViewModel : ObservableObject
 
     [ObservableProperty]
     private ComboBoxVM _comboBox_MissionsLoadouts =
-        new()
+        new(() =>
         {
-            new() { Content = I18nRes.All, ToolTip = nameof(I18nRes.All) }
-        };
+            ObservableCollection<ComboBoxItemVM> items = new();
+            ComboBoxItemVM item = new() { ToolTip = nameof(I18nRes.All) };
+            item.Content = ObservableI18n.BindingValue(
+                (value) => item.Content = value,
+                () => I18nRes.All
+            );
+            items.Add(item);
+            return items;
+        });
 
     public GameSettingsPageViewModel() { }
 
@@ -74,10 +82,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
         ComboBox_MissionsLoadouts.SelectedIndex = 0;
     }
 
-    private void CultureChangedAction(CultureInfo cultureInfo)
-    {
-        ComboBox_MissionsLoadouts[0].Content = I18nRes.All;
-    }
+    private void CultureChangedAction(CultureInfo cultureInfo) { }
 
     [RelayCommand]
     private static void SetGameDirectory()
@@ -200,7 +205,7 @@ internal partial class GameSettingsPageViewModel : ObservableObject
                     }
                 );
             }
-            ComboBox_MissionsLoadouts.Remove(ComboBox_MissionsLoadouts.SelectedItem!);
+            ComboBox_MissionsLoadouts.ItemsSource.Remove(ComboBox_MissionsLoadouts.SelectedItem!);
         }
         sr_logger.Info(I18nRes.MissionsLoadoutsClearCompleted);
         MessageBoxVM.Show(new(I18nRes.MissionsLoadoutsClearCompleted));

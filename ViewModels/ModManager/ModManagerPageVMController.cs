@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Windows.Media.Imaging;
 using HKW.HKWUtils.Extensions;
+using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
 using HKW.HKWViewModels.Dialogs;
 using HKW.TOML;
@@ -308,17 +309,17 @@ internal partial class ModManagerPageViewModel
 
     private void RefreshAllGroupItemContextMenus()
     {
-        foreach (var item in ListBox_MainMenu)
+        foreach (var item in ListBox_MainMenu.ItemsSource)
         {
             var group = item.Tag!.ToString()!;
             item.ContextMenu = CreateGroupItemContextMenu(group);
         }
-        foreach (var item in ListBox_TypeGroupMenu)
+        foreach (var item in ListBox_TypeGroupMenu.ItemsSource)
         {
             var group = item.Tag!.ToString()!;
             item.ContextMenu = CreateGroupItemContextMenu(group);
         }
-        ListBox_UserGroupMenu[0].ContextMenu = CreateGroupItemContextMenu(
+        ListBox_UserGroupMenu.ItemsSource[0].ContextMenu = CreateGroupItemContextMenu(
             nameof(ModTypeGroupName.Collected)
         );
     }
@@ -343,7 +344,10 @@ internal partial class ModManagerPageViewModel
             // 启用列表中的所有模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "✅";
-            menuItem.Header = I18nRes.EnableAllMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.EnableAllMods
+            );
             menuItem.ItemsSource = new();
             menuItem.CommandEvent += (p) =>
             {
@@ -358,7 +362,10 @@ internal partial class ModManagerPageViewModel
             // 禁用列表中的所有模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "❎";
-            menuItem.Header = I18nRes.DisableAllMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.DisableAllMods
+            );
             menuItem.ItemsSource = new();
             menuItem.CommandEvent += (p) =>
             {
@@ -373,8 +380,14 @@ internal partial class ModManagerPageViewModel
             // 添加组内模组至用户分组
             MenuItemVM menuItem = new();
             menuItem.Icon = "➡";
-            menuItem.Header = I18nRes.AddToUserGroup;
-            menuItem.ToolTip = I18nRes.AddToUserGroupToolTip;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.AddToUserGroup
+            );
+            menuItem.ToolTip = ObservableI18n.BindingValue(
+                (value) => menuItem.ToolTip = value,
+                () => I18nRes.AddToUserGroupToolTip
+            );
             menuItem.ItemsSource = new();
             foreach (var userGroup in r_allUserGroups)
             {
@@ -386,7 +399,7 @@ internal partial class ModManagerPageViewModel
                     ChangeUserGroupContainsMods(r_allModShowInfoGroups[group], userGroupName, true);
                     CheckAndRefreshDisplayData(userGroupName);
                 };
-                menuItem.Add(userGroupMenuItem);
+                menuItem.ItemsSource.Add(userGroupMenuItem);
             }
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
@@ -396,8 +409,14 @@ internal partial class ModManagerPageViewModel
             // 删除用户分组中包含的组内模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "⬅";
-            menuItem.Header = I18nRes.RemoveFromUserGroup;
-            menuItem.ToolTip = I18nRes.RemoveFromUserGroupToolTip;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RemoveFromUserGroup
+            );
+            menuItem.ToolTip = ObservableI18n.BindingValue(
+                (value) => menuItem.ToolTip = value,
+                () => I18nRes.RemoveFromUserGroupToolTip
+            );
             menuItem.ItemsSource = new();
             foreach (var userGroup in r_allUserGroups)
             {
@@ -413,7 +432,7 @@ internal partial class ModManagerPageViewModel
                     );
                     CheckAndRefreshDisplayData(userGroupName);
                 };
-                menuItem.Add(userGroupMenuItem);
+                menuItem.ItemsSource.Add(userGroupMenuItem);
             }
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
@@ -441,9 +460,10 @@ internal partial class ModManagerPageViewModel
         {
             // 启用或禁用
             MenuItemVM menuItem = new();
-            menuItem.Header = showInfo.IsEnabled
-                ? I18nRes.DisableSelectedMods
-                : I18nRes.EnableSelectedMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => showInfo.IsEnabled ? I18nRes.DisableSelectedMods : I18nRes.EnableSelectedMods
+            );
             menuItem.CommandEvent += (p) => ChangeModsEnabled(mods);
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
@@ -452,9 +472,13 @@ internal partial class ModManagerPageViewModel
         {
             // 收藏或取消收藏
             MenuItemVM menuItem = new();
-            menuItem.Header = showInfo.IsCollected
-                ? I18nRes.UncollectSelectedMods
-                : I18nRes.CollectSelectedMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () =>
+                    showInfo.IsCollected
+                        ? I18nRes.UncollectSelectedMods
+                        : I18nRes.CollectSelectedMods
+            );
             menuItem.CommandEvent += (p) => ChangeModsCollected(mods);
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
@@ -463,7 +487,10 @@ internal partial class ModManagerPageViewModel
         {
             // 打开模组文件夹
             MenuItemVM menuItem = new();
-            menuItem.Header = I18nRes.OpenModDirectory;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.OpenModDirectory
+            );
             menuItem.CommandEvent += (p) =>
             {
                 sr_logger.Info(
@@ -478,7 +505,10 @@ internal partial class ModManagerPageViewModel
         {
             // 删除模组至回收站
             MenuItemVM menuItem = new();
-            menuItem.Header = I18nRes.DeleteMod;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.DeleteMod
+            );
             menuItem.CommandEvent += (p) =>
             {
                 string path = r_allModInfos[showInfo.Id].ModDirectory;
@@ -747,11 +777,11 @@ internal partial class ModManagerPageViewModel
 
     private void GetAllListBoxItems()
     {
-        foreach (var item in ListBox_MainMenu)
+        foreach (var item in ListBox_MainMenu.ItemsSource)
             r_allListBoxItems.Add(item.Tag!.ToString()!, item);
-        foreach (var item in ListBox_TypeGroupMenu)
+        foreach (var item in ListBox_TypeGroupMenu.ItemsSource)
             r_allListBoxItems.Add(item.Tag!.ToString()!, item);
-        foreach (var item in ListBox_UserGroupMenu)
+        foreach (var item in ListBox_UserGroupMenu.ItemsSource)
             r_allListBoxItems.Add(item.Tag!.ToString()!, item);
         sr_logger.Info(I18nRes.ListBoxItemsRetrievalCompleted);
     }
@@ -875,26 +905,26 @@ internal partial class ModManagerPageViewModel
             return;
         // 添加至用户分组
         if (
-            contextMenu.LastOrDefault(i => i.Id == nameof(I18nRes.AddToUserGroup))
+            contextMenu.ItemsSource.LastOrDefault(i => i.Id == nameof(I18nRes.AddToUserGroup))
             is MenuItemVM addToUserGroupMenu
         )
         {
-            contextMenu.Remove(addToUserGroupMenu);
+            contextMenu.ItemsSource.Remove(addToUserGroupMenu);
         }
         if (AddToUserGroup(showInfo) is MenuItemVM newMenuItem)
-            contextMenu.Add(newMenuItem);
+            contextMenu.ItemsSource.Add(newMenuItem);
         // 从用户分组删除
         if (
-            contextMenu.LastOrDefault(i => i.Id == nameof(I18nRes.RemoveFromUserGroup))
+            contextMenu.ItemsSource.LastOrDefault(i => i.Id == nameof(I18nRes.RemoveFromUserGroup))
             is MenuItemVM removeFromUserGroupMenu
         )
         {
-            contextMenu.Remove(removeFromUserGroupMenu);
+            contextMenu.ItemsSource.Remove(removeFromUserGroupMenu);
         }
         if (NowSelectedIsUserGroup)
         {
             if (r_allUserGroups[NowSelectedGroupName].Contains(showInfo.Id))
-                contextMenu.Add(RemoveFromUserGroup(NowSelectedGroupName, showInfo));
+                contextMenu.ItemsSource.Add(RemoveFromUserGroup(NowSelectedGroupName, showInfo));
         }
         MenuItemVM? AddToUserGroup(ModShowInfo showInfo)
         {
@@ -903,7 +933,10 @@ internal partial class ModManagerPageViewModel
             if (r_allUserGroups.Any() is false)
                 return menuItem;
             menuItem = new();
-            menuItem.Header = I18nRes.AddToUserGroup;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.AddToUserGroup
+            );
             menuItem.ItemsSource = new();
             foreach (var group in r_allUserGroups.Keys)
             {
@@ -913,51 +946,25 @@ internal partial class ModManagerPageViewModel
                 groupItem.Header = group;
                 groupItem.CommandEvent += (p) =>
                     ChangeUserGroupContainsMods(_nowSelectedMods, group, true);
-                menuItem.Add(groupItem);
+                menuItem.ItemsSource.Add(groupItem);
             }
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
-            return menuItem.Any() ? menuItem : null;
-            ;
+            return menuItem.ItemsSource.Any() ? menuItem : null;
         }
         MenuItemVM RemoveFromUserGroup(string group, ModShowInfo showInfo)
         {
             // 从用户分组中删除
             MenuItemVM menuItem = new();
             menuItem.Id = nameof(I18nRes.RemoveFromUserGroup);
-            menuItem.Header = I18nRes.RemoveFromUserGroup;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RemoveFromUserGroup
+            );
             menuItem.ItemsSource = new();
             menuItem.CommandEvent += (p) =>
                 ChangeUserGroupContainsMods(_nowSelectedMods, group, false);
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
-        }
-    }
-
-    private void RefreshModsContextMenuI18n()
-    {
-        foreach (var showInfo in r_allModsShowInfo.Values)
-        {
-            var contextMenu = showInfo.ContextMenu;
-            if (contextMenu.IsLoaded is false)
-                continue;
-            contextMenu[0].Header = showInfo.IsEnabled
-                ? I18nRes.DisableSelectedMods
-                : I18nRes.EnableSelectedMods;
-            contextMenu[1].Header = showInfo.IsCollected
-                ? I18nRes.UncollectSelectedMods
-                : I18nRes.CollectSelectedMods;
-            contextMenu[2].Header = I18nRes.OpenModDirectory;
-            contextMenu[3].Header = I18nRes.DeleteMod;
-            if (
-                contextMenu.LastOrDefault(i => i.Id == nameof(I18nRes.AddToUserGroup))
-                is MenuItemVM addToUserGroupMenu
-            )
-                addToUserGroupMenu.Header = I18nRes.AddToUserGroup;
-            if (
-                contextMenu.LastOrDefault(i => i.Id == nameof(I18nRes.RemoveFromUserGroup))
-                is MenuItemVM removeFromUserGroupMenu
-            )
-                removeFromUserGroupMenu.Header = I18nRes.RemoveFromUserGroup;
         }
     }
 
@@ -1283,7 +1290,7 @@ internal partial class ModManagerPageViewModel
         SetListBoxItemData(listBoxItem, group);
         listBoxItem.ContextMenu = CreateUserGroupItemContextMenu(listBoxItem);
         listBoxItem.Icon = icon;
-        ListBox_UserGroupMenu.Add(listBoxItem);
+        ListBox_UserGroupMenu.ItemsSource.Add(listBoxItem);
         r_allUserGroups.Add(group, new());
         r_allListBoxItems.Add(group, listBoxItem);
         r_allModShowInfoGroups.Add(group, new());
@@ -1311,7 +1318,10 @@ internal partial class ModManagerPageViewModel
             // 启用用户分组内的所有模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "✅";
-            menuItem.Header = I18nRes.EnableAllMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.EnableAllMods
+            );
             menuItem.CommandEvent += (p) =>
             {
                 var name = listBoxItem.ToolTip!.ToString()!;
@@ -1326,7 +1336,10 @@ internal partial class ModManagerPageViewModel
             // 禁用用户分组内所有模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "❎";
-            menuItem.Header = I18nRes.DisableAllMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.DisableAllMods
+            );
             menuItem.CommandEvent += (p) =>
             {
                 var name = listBoxItem.ToolTip!.ToString()!;
@@ -1340,7 +1353,10 @@ internal partial class ModManagerPageViewModel
         {
             // 清空所有模组
             MenuItemVM menuItem = new();
-            menuItem.Header = I18nRes.CleanAllMods;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.CleanAllMods
+            );
             menuItem.Icon = "🗑";
             menuItem.CommandEvent += (p) =>
             {
@@ -1357,7 +1373,10 @@ internal partial class ModManagerPageViewModel
             // 重命名分组
             MenuItemVM menuItem = new();
             menuItem.Icon = "🔄";
-            menuItem.Header = I18nRes.RenameUserGroup;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RenameUserGroup
+            );
             menuItem.CommandEvent += (p) => PrepareRenameUserGroup(listBoxItem);
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
@@ -1367,7 +1386,10 @@ internal partial class ModManagerPageViewModel
             // 删除分组
             MenuItemVM menuItem = new();
             menuItem.Icon = "❌";
-            menuItem.Header = I18nRes.RemoveUserGroup;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RemoveUserGroup
+            );
             menuItem.CommandEvent += (p) => RemoveUserGroup(listBoxItem);
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
@@ -1389,7 +1411,7 @@ internal partial class ModManagerPageViewModel
         var name = listBoxItem!.Tag!.ToString()!;
         if (_nowSelectedGroup == listBoxItem)
             ListBox_MainMenu.SelectedIndex = 0;
-        ListBox_UserGroupMenu.Remove(listBoxItem);
+        ListBox_UserGroupMenu.ItemsSource.Remove(listBoxItem);
         r_allUserGroups.Remove(name);
         r_allListBoxItems.Remove(name);
         r_allModShowInfoGroups.Remove(name);
@@ -1467,20 +1489,20 @@ internal partial class ModManagerPageViewModel
 
     private void AddExportUserGroupItem(string group)
     {
-        ComboBox_ExportUserGroup.Add(new() { Content = group });
+        ComboBox_ExportUserGroup.ItemsSource.Add(new() { Content = group });
     }
 
     private void RenameExportUserGroupItem(string group, string newGroup)
     {
-        var item = ComboBox_ExportUserGroup.First(i => i.Content!.ToString() == group);
+        var item = ComboBox_ExportUserGroup.ItemsSource.First(i => i.Content!.ToString() == group);
         item.Content = newGroup;
     }
 
     private void RemoveExportUserGroupItem(string group)
     {
         // 删除导出用户分组下拉列表的此分组选择
-        var item = ComboBox_ExportUserGroup.First(i => i.Content!.ToString() == group);
-        ComboBox_ExportUserGroup.Remove(item);
+        var item = ComboBox_ExportUserGroup.ItemsSource.First(i => i.Content!.ToString() == group);
+        ComboBox_ExportUserGroup.ItemsSource.Remove(item);
         if (ComboBox_ExportUserGroup.SelectedItem is null)
             ComboBox_ExportUserGroup.SelectedIndex = 0;
     }
@@ -1722,7 +1744,10 @@ internal partial class ModManagerPageViewModel
             // 启用列表中的所有模组
             MenuItemVM menuItem = new();
             menuItem.Icon = "📨";
-            menuItem.Header = I18nRes.ModTypeGroupUpdate;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.ModTypeGroupUpdate
+            );
             menuItem.ItemsSource = new();
             menuItem.CommandEvent += async (p) => {
                 //await ModTypeGroupUpdate();

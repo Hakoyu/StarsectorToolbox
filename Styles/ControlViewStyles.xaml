@@ -101,11 +101,6 @@
         </Style>
       </Setter.Value>
     </Setter>
-    <Style.Triggers>
-      <DataTrigger Binding="{Binding ItemsSource}" Value="{x:Null}">
-        <Setter Property="ItemContainerStyle" Value="{StaticResource {x:Type MenuItem}}" />
-      </DataTrigger>
-    </Style.Triggers>
   </Style>
   <Style
     x:Key="ListBoxItemViewStyle"

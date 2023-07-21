@@ -5,7 +5,8 @@
   <SolidColorBrush x:Key="ButtonColor">#FF383838</SolidColorBrush>
   <SolidColorBrush x:Key="FontColor">#FFFFFFFF</SolidColorBrush>
   <SolidColorBrush x:Key="TipColor">#FFBFBFBF</SolidColorBrush>
+  <SolidColorBrush x:Key="WatermarkColor">#FF747474</SolidColorBrush>
   <SolidColorBrush x:Key="HoverColor">#FF2D2D2D</SolidColorBrush>
   <SolidColorBrush x:Key="ClickColor">#FF292929</SolidColorBrush>
-  <SolidColorBrush x:Key="ClickedColor">#FF2D2D2D</SolidColorBrush>
+  <SolidColorBrush x:Key="CheckedColor">#FF2D2D2D</SolidColorBrush>
 </ResourceDictionary>

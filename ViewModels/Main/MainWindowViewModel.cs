@@ -124,25 +124,7 @@ internal partial class MainWindowViewModel : ObservableObject
         );
     }
 
-    private void CultureChangedAction(CultureInfo cultureInfo)
-    {
-        foreach (var item in ListBox_MainMenu)
-        {
-            if (item is ISTPage iPage)
-            {
-                item.Content = iPage.GetNameI18n();
-                item.ToolTip = iPage.GetDescriptionI18n();
-            }
-        }
-        foreach (var item in ListBox_ExtensionMenu)
-        {
-            if (item is ISTPage iPage)
-            {
-                item.Content = iPage.GetNameI18n();
-                item.ToolTip = iPage.GetDescriptionI18n();
-            }
-        }
-    }
+    private void CultureChangedAction(CultureInfo cultureInfo) { }
 
     private void InitializeData()
     {

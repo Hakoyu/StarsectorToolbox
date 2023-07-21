@@ -43,7 +43,7 @@ internal partial class MainWindowViewModel
     internal void AddMainPageItem(ListBoxItemVM item)
     {
         DetectPageItemData(ref item);
-        ListBox_MainMenu.Add(item);
+        ListBox_MainMenu.ItemsSource.Add(item);
     }
 
     private void DetectPageItemData(ref ListBoxItemVM item)
@@ -51,20 +51,32 @@ internal partial class MainWindowViewModel
         if (item?.Tag is not ISTPage page)
             return;
         item.Id = page.GetType().FullName;
-        item.Content = page.GetNameI18n();
-        item.ToolTip = page.GetDescriptionI18n();
+        item.Content = ObservableI18n.BindingValue(
+            item,
+            (value, target) => target.Content = value,
+            () => page.GetNameI18n()
+        );
+        item.ToolTip = ObservableI18n.BindingValue(
+            item,
+            (value, target) => target.ToolTip = value,
+            () => page.GetDescriptionI18n()
+        );
         item.ContextMenu = CreateItemContextMenu();
     }
 
     private ContextMenuVM CreateItemContextMenu()
     {
-        ContextMenuVM contextMenu = new() { RefreshPageMenuItem() };
+        ContextMenuVM contextMenu = new();
+        contextMenu.ItemsSource.Add(RefreshPageMenuItem());
         return contextMenu;
         MenuItemVM RefreshPageMenuItem()
         {
             MenuItemVM menuItem = new();
             menuItem.Icon = "🔄";
-            menuItem.Header = I18nRes.RefreshPage;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RefreshPage
+            );
             menuItem.CommandEvent += (p) =>
             {
                 if (p is not ListBoxItemVM vm)
@@ -116,20 +128,32 @@ internal partial class MainWindowViewModel
         if (item?.Tag is not ISTPage page)
             return;
         item.Id = page.GetType().FullName;
-        item.Content = page.GetNameI18n();
-        item.ToolTip = page.GetDescriptionI18n();
+        item.Content = ObservableI18n.BindingValue(
+            item,
+            (value, target) => target.Content = value,
+            () => page.GetNameI18n()
+        );
+        item.ToolTip = ObservableI18n.BindingValue(
+            item,
+            (value, target) => target.ToolTip = value,
+            () => page.GetDescriptionI18n()
+        );
         item.ContextMenu = CreateExtensionDebugItemContextMenu();
     }
 
     private ContextMenuVM CreateExtensionDebugItemContextMenu()
     {
-        ContextMenuVM contextMenu = new() { RefreshDebugPageMenuItem() };
+        ContextMenuVM contextMenu = new();
+        contextMenu.ItemsSource.Add(RefreshDebugPageMenuItem());
         return contextMenu;
         MenuItemVM RefreshDebugPageMenuItem()
         {
             MenuItemVM menuItem = new();
             menuItem.Icon = "🔄";
-            menuItem.Header = I18nRes.RefreshPage;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RefreshPage
+            );
             menuItem.CommandEvent += (p) =>
             {
                 if (p is not ListBoxItemVM vm)
@@ -149,12 +173,12 @@ internal partial class MainWindowViewModel
 
     private void RefreshExtensionDebugPage()
     {
-        ListBox_MainMenu.Remove(_deubgItem!);
+        ListBox_MainMenu.ItemsSource.Remove(_deubgItem!);
         if (TryGetExtensionDebugItem() is not ListBoxItemVM item)
             return;
         DetectDebugPageItemData(item);
         _deubgItem = item;
-        ListBox_MainMenu.Add(item);
+        ListBox_MainMenu.ItemsSource.Add(item);
         ListBox_MainMenu.SelectedItem = _deubgItem;
         NowPage = _deubgItem?.Tag;
     }
@@ -200,7 +224,7 @@ internal partial class MainWindowViewModel
                     )
                 );
             }
-            ListBox_ExtensionMenu.Add(
+            ListBox_ExtensionMenu.ItemsSource.Add(
                 new()
                 {
                     Id = extensionInfo.Id,
@@ -218,13 +242,17 @@ internal partial class MainWindowViewModel
 
     private ContextMenuVM CreateExtensionItemContextMenu()
     {
-        ContextMenuVM contextMenu = new() { RefreshExtensionPageMenuItem() };
+        ContextMenuVM contextMenu = new();
+        contextMenu.ItemsSource.Add(RefreshExtensionPageMenuItem());
         return contextMenu;
         MenuItemVM RefreshExtensionPageMenuItem()
         {
             MenuItemVM menuItem = new();
             menuItem.Icon = "🔄";
-            menuItem.Header = I18nRes.RefreshPage;
+            menuItem.Header = ObservableI18n.BindingValue(
+                (value) => menuItem.Header = value,
+                () => I18nRes.RefreshPage
+            );
             menuItem.CommandEvent += (p) =>
             {
                 if (p is not ListBoxItemVM vm)
@@ -485,12 +513,12 @@ internal partial class MainWindowViewModel
     /// <summary>
     /// 设置窗口效果委托
     /// </summary>
-    internal Action<bool> _setWindowEffectAction = null!;
+    private Action<bool> _setWindowEffectAction = null!;
 
     /// <summary>
     /// 取消窗口效果委托
     /// </summary>
-    internal Action _removeWindowEffectAction = null!;
+    private Action _removeWindowEffectAction = null!;
 
     internal void RegisterChangeWindowEffectEvent(
         Action<bool> setWindowEffectAction,
@@ -524,13 +552,13 @@ internal partial class MainWindowViewModel
 
     private void ReminderSaveMainPages()
     {
-        foreach (var item in ListBox_MainMenu)
+        foreach (var item in ListBox_MainMenu.ItemsSource)
             ReminderSavePage(item);
     }
 
     private void ReminderSaveExtensionPages()
     {
-        foreach (var item in ListBox_ExtensionMenu)
+        foreach (var item in ListBox_ExtensionMenu.ItemsSource)
             ReminderSavePage(item);
     }
 
@@ -580,13 +608,13 @@ internal partial class MainWindowViewModel
 
     private void SaveMainPages()
     {
-        foreach (var item in ListBox_MainMenu)
+        foreach (var item in ListBox_MainMenu.ItemsSource)
             SavePage(item);
     }
 
     private void SaveExtensionPages()
     {
-        foreach (var item in ListBox_ExtensionMenu)
+        foreach (var item in ListBox_ExtensionMenu.ItemsSource)
             SavePage(item);
     }
 
@@ -623,13 +651,13 @@ internal partial class MainWindowViewModel
 
     private void CloseMainPages()
     {
-        foreach (var page in ListBox_MainMenu)
+        foreach (var page in ListBox_MainMenu.ItemsSource)
             ClosePage(page);
     }
 
     private void CloseExtensionPages()
     {
-        foreach (var page in ListBox_ExtensionMenu)
+        foreach (var page in ListBox_ExtensionMenu.ItemsSource)
             ClosePage(page);
     }
 
