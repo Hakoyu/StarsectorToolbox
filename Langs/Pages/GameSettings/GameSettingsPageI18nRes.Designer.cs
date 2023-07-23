@@ -223,6 +223,15 @@ namespace StarsectorToolbox.Langs.Pages.GameSettings {
         }
         
         /// <summary>
+        ///   查找类似 游戏信息 的本地化字符串。
+        /// </summary>
+        public static string GameInfo {
+            get {
+                return ResourceManager.GetString("GameInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 游戏序列码 的本地化字符串。
         /// </summary>
         public static string GameKey {
@@ -232,11 +241,11 @@ namespace StarsectorToolbox.Langs.Pages.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 游戏日志清理 的本地化字符串。
+        ///   查找类似 游戏日志清理器 的本地化字符串。
         /// </summary>
-        public static string GameLogClean {
+        public static string GameLogCleaner {
             get {
-                return ResourceManager.GetString("GameLogClean", resourceCulture);
+                return ResourceManager.GetString("GameLogCleaner", resourceCulture);
             }
         }
         
@@ -332,11 +341,11 @@ namespace StarsectorToolbox.Langs.Pages.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 战役装配清理 的本地化字符串。
+        ///   查找类似 战役装配清理器 的本地化字符串。
         /// </summary>
-        public static string MissionsLoadoutsClean {
+        public static string MissionsLoadoutsCleaner {
             get {
-                return ResourceManager.GetString("MissionsLoadoutsClean", resourceCulture);
+                return ResourceManager.GetString("MissionsLoadoutsCleaner", resourceCulture);
             }
         }
         
@@ -440,20 +449,20 @@ namespace StarsectorToolbox.Langs.Pages.GameSettings {
         }
         
         /// <summary>
-        ///   查找类似 存档清理 的本地化字符串。
+        ///   查找类似 存档清理器 的本地化字符串。
         /// </summary>
-        public static string SaveClean {
+        public static string SaveCleaner {
             get {
-                return ResourceManager.GetString("SaveClean", resourceCulture);
+                return ResourceManager.GetString("SaveCleaner", resourceCulture);
             }
         }
         
         /// <summary>
         ///   查找类似 存档清理完成 的本地化字符串。
         /// </summary>
-        public static string SaveCleanComplete {
+        public static string SaveCleanupComplete {
             get {
-                return ResourceManager.GetString("SaveCleanComplete", resourceCulture);
+                return ResourceManager.GetString("SaveCleanupComplete", resourceCulture);
             }
         }
         

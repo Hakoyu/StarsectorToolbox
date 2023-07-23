@@ -154,4 +154,10 @@
   <data name="EffectiveAfterReload" xml:space="preserve">
     <value>重新载入后生效,需要重载吗?</value>
   </data>
+  <data name="STSetting" xml:space="preserve">
+    <value>ST设置</value>
+  </data>
+  <data name="ExtensionDebugPathSetting" xml:space="preserve">
+    <value>拓展调试路径设置</value>
+  </data>
 </root>

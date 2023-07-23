@@ -36,8 +36,7 @@ internal partial class GameSettingsPageViewModel
             var serialKey = key.GetValue("serial") as string;
             if (string.IsNullOrWhiteSpace(serialKey) is false)
             {
-                _realGameKey = serialKey.Replace("/", "");
-                GameKey = _hideGameKey = new string('*', 23);
+                GameKey = serialKey.Replace("/", "");
             }
         }
     }

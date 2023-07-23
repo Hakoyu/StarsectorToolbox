@@ -115,7 +115,7 @@
   <data name="MissionsLoadoutsClearCompleted" xml:space="preserve">
     <value>战役配装文件清理完成</value>
   </data>
-  <data name="SaveCleanComplete" xml:space="preserve">
+  <data name="SaveCleanupComplete" xml:space="preserve">
     <value>存档清理完成</value>
   </data>
   <data name="SaveNotExist" xml:space="preserve">
@@ -151,8 +151,8 @@
   <data name="GameVersion" xml:space="preserve">
     <value>游戏版本</value>
   </data>
-  <data name="GameLogClean" xml:space="preserve">
-    <value>游戏日志清理</value>
+  <data name="GameLogCleaner" xml:space="preserve">
+    <value>游戏日志清理器</value>
   </data>
   <data name="OpenLogFile" xml:space="preserve">
     <value>打开日志文件</value>
@@ -160,8 +160,8 @@
   <data name="ClearLogFile" xml:space="preserve">
     <value>清理日志文件</value>
   </data>
-  <data name="MissionsLoadoutsClean" xml:space="preserve">
-    <value>战役装配清理</value>
+  <data name="MissionsLoadoutsCleaner" xml:space="preserve">
+    <value>战役装配清理器</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>全部</value>
@@ -172,8 +172,8 @@
   <data name="OpenMissionsLoadoutsDirectory" xml:space="preserve">
     <value>打开配装目录</value>
   </data>
-  <data name="SaveClean" xml:space="preserve">
-    <value>存档清理</value>
+  <data name="SaveCleaner" xml:space="preserve">
+    <value>存档清理器</value>
   </data>
   <data name="RetainRecentSaveCount" xml:space="preserve">
     <value>保留最近存档数</value>
@@ -262,5 +262,8 @@
   </data>
   <data name="CrashReporter" xml:space="preserve">
     <value>异常信息收集</value>
+  </data>
+  <data name="GameInfo" xml:space="preserve">
+    <value>游戏信息</value>
   </data>
 </root>

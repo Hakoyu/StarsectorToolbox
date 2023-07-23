@@ -134,7 +134,6 @@
     x:Key="RemindStyle"
     BasedOn="{StaticResource {x:Type Button}}"
     TargetType="Button">
-    <Setter Property="Background" Value="{DynamicResource ColorLight3}" />
     <Style.Triggers>
       <DataTrigger Binding="{Binding IsRemindSave}" Value="True">
         <DataTrigger.EnterActions>
@@ -143,7 +142,7 @@
               <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Background.(Color)">
                 <!--  使用其它绑定方式设置值  -->
                 <DiscreteColorKeyFrame KeyTime="0:0:1" Value="Aqua" />
-                <DiscreteColorKeyFrame KeyTime="0:0:1.5" Value="White" />
+                <DiscreteColorKeyFrame KeyTime="0:0:1.5" Value="#00FFFFFF" />
               </ColorAnimationUsingKeyFrames>
             </Storyboard>
           </BeginStoryboard>

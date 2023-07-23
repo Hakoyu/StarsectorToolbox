@@ -106,6 +106,15 @@ namespace StarsectorToolbox.Langs.Pages.Settings {
         }
         
         /// <summary>
+        ///   查找类似 拓展调试路径设置 的本地化字符串。
+        /// </summary>
+        public static string ExtensionDebugPathSetting {
+            get {
+                return ResourceManager.GetString("ExtensionDebugPathSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 用于指定拓展的路径,方便开发者调试. 的本地化字符串。
         /// </summary>
         public static string ExtensionDebugPathToolTip {
@@ -228,6 +237,15 @@ namespace StarsectorToolbox.Langs.Pages.Settings {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 ST设置 的本地化字符串。
+        /// </summary>
+        public static string STSetting {
+            get {
+                return ResourceManager.GetString("STSetting", resourceCulture);
             }
         }
     }

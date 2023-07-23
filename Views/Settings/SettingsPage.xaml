@@ -6,7 +6,7 @@
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:local="clr-namespace:StarsectorToolbox.Views.Settings"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:pu="clr-namespace:Panuon.WPF.UI;assembly=Panuon.WPF.UI"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.Settings"
   Title="Setting"
   d:DesignHeight="450"
@@ -16,107 +16,104 @@
   <Page.DataContext>
     <vm:SettingsPageViewModel />
   </Page.DataContext>
-  <Grid>
-    <GroupBox
-      x:Name="GroupBox_Settings"
-      pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
-      Header="{Binding I18n.I18nRes.Settings}">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="250" />
-          <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <ScrollViewer>
-          <StackPanel />
-        </ScrollViewer>
-        <Grid Grid.Column="1">
-          <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="50" />
-          </Grid.RowDefinitions>
-          <StackPanel
-            Grid.Row="1"
-            Margin="5,0,5,0"
-            VerticalAlignment="Center"
-            Orientation="Horizontal">
-            <Button
-              x:Name="Button_OpenLogFile"
-              Margin="0,0,5,0"
-              Padding="5,0,5,0"
-              HorizontalAlignment="Left"
-              Command="{Binding OpenLogFileCommand}"
-              Content="{Binding I18n.I18nRes.OpenLogFile}" />
-            <Label x:Name="Label_Language" Content="{Binding I18n.I18nRes.Language}" />
-            <ComboBox
-              x:Name="ComboBox_Language"
-              Margin="0,0,5,0"
-              DisplayMemberPath="Content"
-              ItemsSource="{Binding ComboBox_Language.ItemsSource}"
-              SelectedItem="{Binding ComboBox_Language.SelectedItem}">
-              <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectionChanged">
-                  <i:InvokeCommandAction Command="{Binding ComboBox_Language.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_Language.SelectedItem}" />
-                </i:EventTrigger>
-              </i:Interaction.Triggers>
-            </ComboBox>
-          </StackPanel>
-          <Grid VerticalAlignment="Top" Cursor="">
-            <TextBox
-              x:Name="TextBox_ExtensionDebugPath"
-              Margin="0,0,125,0"
-              VerticalAlignment="Top"
-              Cursor="Arrow"
-              InputMethod.IsInputMethodEnabled="False"
-              IsReadOnly="True"
-              Text="{Binding ExtensionDebugPath}"
-              ToolTip="{Binding I18n.I18nRes.ExtensionDebugPathToolTip}" />
-            <!--  TextBox输入占位符  -->
-            <Label
-              Width="{Binding Width, ElementName=TextBox_ExtensionDebugPath}"
-              Height="{Binding Height, ElementName=TextBox_ExtensionDebugPath}"
-              Margin="{Binding Margin, ElementName=TextBox_ExtensionDebugPath}"
-              HorizontalAlignment="{Binding HorizontalAlignment, ElementName=TextBox_ExtensionDebugPath}"
-              VerticalAlignment="{Binding VerticalAlignment, ElementName=TextBox_ExtensionDebugPath}"
-              Background="{x:Null}"
-              Content="{Binding I18n.I18nRes.ExtensionDebugPath}"
-              IsEnabled="False"
-              IsHitTestVisible="False">
-              <Label.Style>
-                <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
-                  <Setter Property="Visibility" Value="Hidden" />
-                  <Style.Triggers>
-                    <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExtensionDebugPath}" Value="">
-                      <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                  </Style.Triggers>
-                </Style>
-              </Label.Style>
-            </Label>
-            <Button
-              Width="60"
-              Margin="0,0,65,0"
-              HorizontalAlignment="Right"
-              Command="{Binding SetExtensionDebugPathCommand}"
-              Content="{Binding I18n.I18nRes.Set}" />
-            <Button
-              Width="60"
-              HorizontalAlignment="Right"
-              Command="{Binding ClearExtensionDebugPathCommand}"
-              Content="{Binding I18n.I18nRes.Clear}">
-              <Button.Style>
-                <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
-                  <Setter Property="IsEnabled" Value="True" />
-                  <Style.Triggers>
-                    <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExtensionDebugPath}" Value="">
-                      <Setter Property="IsEnabled" Value="False" />
-                    </DataTrigger>
-                  </Style.Triggers>
-                </Style>
-              </Button.Style>
-            </Button>
-          </Grid>
-        </Grid>
-      </Grid>
-    </GroupBox>
-  </Grid>
+  <GroupBox
+    x:Name="GroupBox_Settings"
+    pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center"
+    Header="{Binding I18n.I18nRes.Settings}">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="100" />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+      <ScrollViewer
+        x:Name="ScrollViewer_Catalog"
+        Margin="0,0,5,0"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+          <Button Content="{Binding I18n.I18nRes.STSetting}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <local:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=Button_DDD}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+          <Button Content="{Binding I18n.I18nRes.ExtensionDebugPathSetting}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <local:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_ExtensionDebugPathSetting}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+        </StackPanel>
+      </ScrollViewer>
+      <ScrollViewer
+        x:Name="ScrollViewer_Main"
+        Grid.Column="1"
+        VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+          <GroupBox x:Name="GroupBox_STSetting" Header="{Binding I18n.I18nRes.STSetting}">
+            <StackPanel
+              Grid.Row="1"
+              VerticalAlignment="Center"
+              Orientation="Horizontal">
+              <Button
+                x:Name="Button_OpenLogFile"
+                Margin="0,0,5,0"
+                Padding="5,0,5,0"
+                HorizontalAlignment="Left"
+                Command="{Binding OpenLogFileCommand}"
+                Content="{Binding I18n.I18nRes.OpenLogFile}" />
+              <Label x:Name="Label_Language" Content="{Binding I18n.I18nRes.Language}" />
+              <ComboBox
+                x:Name="ComboBox_Language"
+                Margin="0,0,5,0"
+                DisplayMemberPath="Content"
+                ItemsSource="{Binding ComboBox_Language.ItemsSource}"
+                SelectedItem="{Binding ComboBox_Language.SelectedItem}">
+                <i:Interaction.Triggers>
+                  <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding ComboBox_Language.SelectionChangedCommand}" CommandParameter="{Binding ComboBox_Language.SelectedItem}" />
+                  </i:EventTrigger>
+                </i:Interaction.Triggers>
+              </ComboBox>
+            </StackPanel>
+          </GroupBox>
+          <GroupBox x:Name="GroupBox_ExtensionDebugPathSetting" Header="{Binding I18n.I18nRes.ExtensionDebugPathSetting}">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+                <ColumnDefinition Width="Auto" MinWidth="100" />
+              </Grid.ColumnDefinitions>
+              <TextBox
+                x:Name="TextBox_ExtensionDebugPath"
+                pu:TextBoxHelper.Watermark="{Binding I18n.I18nRes.ExtensionDebugPath}"
+                IsReadOnly="True"
+                Text="{Binding ExtensionDebugPath, Mode=OneWay}"
+                ToolTip="{Binding I18n.I18nRes.ExtensionDebugPathToolTip}" />
+              <Button
+                Grid.Column="1"
+                Command="{Binding SetExtensionDebugPathCommand}"
+                Content="{Binding I18n.I18nRes.Set}" />
+              <Button
+                Grid.Column="2"
+                Command="{Binding ClearExtensionDebugPathCommand}"
+                Content="{Binding I18n.I18nRes.Clear}">
+                <Button.Style>
+                  <Style BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+                    <Setter Property="IsEnabled" Value="True" />
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding Text, ElementName=TextBox_ExtensionDebugPath}" Value="">
+                        <Setter Property="IsEnabled" Value="False" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Button.Style>
+              </Button>
+            </Grid>
+          </GroupBox>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+  </GroupBox>
 </Page>

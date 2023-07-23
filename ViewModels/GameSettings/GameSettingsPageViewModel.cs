@@ -50,9 +50,6 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     [ObservableProperty]
     private string _gameKey = string.Empty;
 
-    private string _realGameKey = string.Empty;
-    private string _hideGameKey = string.Empty;
-
     private static readonly string sr_missionsLoadoutsDirectory =
         $"{GameInfo.SaveDirectory}\\missions";
 
@@ -112,14 +109,6 @@ internal partial class GameSettingsPageViewModel : ObservableObject
     }
 
     private bool CopyGameKeyCanExecute() => !string.IsNullOrWhiteSpace(GameKey);
-
-    [RelayCommand(CanExecute = nameof(ShowGameKeyCanExecute))]
-    private void ShowGameKey()
-    {
-        GameKey = GameKey == _hideGameKey ? _realGameKey : _hideGameKey;
-    }
-
-    private bool ShowGameKeyCanExecute() => !string.IsNullOrWhiteSpace(GameKey);
 
     [RelayCommand]
     private void SetMemory()
@@ -244,8 +233,8 @@ internal partial class GameSettingsPageViewModel : ObservableObject
             : dirsPath.Count - int.Parse(RetainRecentSaveCount);
         for (int i = 0; i < count; i++)
             Utils.DeleteDirectoryToRecycleBin(list.ElementAt(i).Key);
-        sr_logger.Info(I18nRes.SaveCleanComplete);
-        MessageBoxVM.Show(new(I18nRes.SaveCleanComplete));
+        sr_logger.Info(I18nRes.SaveCleanupComplete);
+        MessageBoxVM.Show(new(I18nRes.SaveCleanupComplete));
     }
 
     [RelayCommand]

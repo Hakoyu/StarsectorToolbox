@@ -2,11 +2,11 @@
   x:Class="StarsectorToolbox.Views.Info.InfoPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:I18n="clr-namespace:StarsectorToolbox.Langs.Pages.Info"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
   xmlns:local="clr-namespace:StarsectorToolbox.Views.Info"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:pu="https://opensource.panuon.com/wpf-ui"
   xmlns:vm="clr-namespace:StarsectorToolbox.ViewModels.Info"
   Title="Info"
   d:DesignHeight="450"
@@ -17,7 +17,7 @@
     <vm:InfoPageViewModel />
   </d:Page.DataContext>
   <Grid>
-    <GroupBox Header="{Binding I18n.I18nRes.Info}">
+    <GroupBox pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Header="{Binding I18n.I18nRes.Info}">
       <StackPanel HorizontalAlignment="Center">
         <Label
           Height="NaN"
@@ -30,36 +30,29 @@
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
           Orientation="Horizontal">
-          <Label
-            Height="NaN"
-            Background="{x:Null}"
-            Content="{Binding I18n.I18nRes.Version}" />
-          <Label
-            Height="NaN"
-            Background="{x:Null}"
-            Content="{Binding CurrentVersion}" />
+          <Label Content="{Binding I18n.I18nRes.Version}" />
+          <Label Content="{Binding CurrentVersion}" />
           <Button
             x:Name="Button_CheckUpdate"
-            Padding="5,0,5,0"
             Command="{Binding CheckUpdateCommand}"
             Content="{Binding I18n.I18nRes.CheckUpdate}" />
           <emoji:TextBlock
             x:Name="TextBlock_CheckUpdateIcon"
             Margin="5,0,0,0"
             VerticalAlignment="Center"
-            FontSize="16"
             Text="{Binding CheckUpdateIcon}" />
         </StackPanel>
         <StackPanel
           Margin="0,0,0,5"
           HorizontalAlignment="Center"
           VerticalAlignment="Center"
+          Cursor="Hand"
           Orientation="Horizontal">
           <Label
             Height="NaN"
             Background="{x:Null}"
             Content="Github:" />
-          <Label Background="{x:Null}">
+          <Label>
             <Hyperlink Command="{Binding OpenGitHubCommand}">
               https://github.com/Hakoyu/StarsectorToolbox
             </Hyperlink>

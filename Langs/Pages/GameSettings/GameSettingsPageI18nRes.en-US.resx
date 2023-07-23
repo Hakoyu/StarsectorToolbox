@@ -115,7 +115,7 @@
   <data name="MissionsLoadoutsClearCompleted" xml:space="preserve">
     <value>Missions loadouts cleanup completed</value>
   </data>
-  <data name="SaveCleanComplete" xml:space="preserve">
+  <data name="SaveCleanupComplete" xml:space="preserve">
     <value>Save cleanup complete</value>
   </data>
   <data name="SaveNotExist" xml:space="preserve">
@@ -151,8 +151,8 @@
   <data name="GameVersion" xml:space="preserve">
     <value>Game version</value>
   </data>
-  <data name="GameLogClean" xml:space="preserve">
-    <value>Game log clean</value>
+  <data name="GameLogCleaner" xml:space="preserve">
+    <value>Game log cleaner</value>
   </data>
   <data name="OpenLogFile" xml:space="preserve">
     <value>Open game log file</value>
@@ -160,8 +160,8 @@
   <data name="ClearLogFile" xml:space="preserve">
     <value>Clear log file</value>
   </data>
-  <data name="MissionsLoadoutsClean" xml:space="preserve">
-    <value>Missions loadouts clean</value>
+  <data name="MissionsLoadoutsCleaner" xml:space="preserve">
+    <value>Missions loadouts cleaner</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
@@ -172,8 +172,8 @@
   <data name="OpenMissionsLoadoutsDirectory" xml:space="preserve">
     <value>Open missions loadouts directory</value>
   </data>
-  <data name="SaveClean" xml:space="preserve">
-    <value>Save clean</value>
+  <data name="SaveCleaner" xml:space="preserve">
+    <value>Save cleaner</value>
   </data>
   <data name="RetainRecentSaveCount" xml:space="preserve">
     <value>Retain recent save count</value>
@@ -262,5 +262,8 @@ Can modify the game memory, clean up archives and campaign outfits, etc</value>
   </data>
   <data name="CrashReporter" xml:space="preserve">
     <value>Crash reporter</value>
+  </data>
+  <data name="GameInfo" xml:space="preserve">
+    <value>Game Info</value>
   </data>
 </root>

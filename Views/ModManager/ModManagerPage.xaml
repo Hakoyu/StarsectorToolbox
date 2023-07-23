@@ -65,7 +65,7 @@
     </Style>
   </Page.Resources>
   <Grid>
-    <GroupBox Header="{Binding I18n.I18nRes.ModManager}">
+    <GroupBox pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Header="{Binding I18n.I18nRes.ModManager}">
       <Grid>
         <Grid>
           <Grid.ColumnDefinitions>
@@ -73,7 +73,7 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
           </Grid.ColumnDefinitions>
-          <Grid x:Name="Grid_GroupMenu">
+          <Grid x:Name="Grid_GroupMenu" MinWidth="32">
             <Grid.RowDefinitions>
               <RowDefinition Height="Auto" />
               <RowDefinition />
@@ -90,8 +90,7 @@
             <ToggleButton
               x:Name="Button_ExpandGroupMenu"
               Grid.Row="0"
-              MinWidth="30"
-              MinHeight="30"
+              Margin="0"
               Padding="0,5,5,5"
               HorizontalAlignment="Left">
               <pu:ToggleButtonHelper.Icon>
@@ -184,7 +183,7 @@
             <Button
               x:Name="Button_AddUserGroup"
               Grid.Row="2"
-              MinHeight="30"
+              Margin="0"
               HorizontalContentAlignment="Left"
               pu:ButtonHelper.Icon="➕"
               Command="{Binding AddUserGroupCommand}"
@@ -201,7 +200,7 @@
             <Grid Grid.Row="0">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" MinWidth="150" />
               </Grid.ColumnDefinitions>
               <TextBox
                 x:Name="TextBox_SearchMods"
@@ -279,6 +278,7 @@
                     <DataTemplate>
                       <ToggleButton
                         x:Name="Button_Collected"
+                        Margin="0,10,0,10"
                         pu:ToggleButtonHelper.CheckedBackground="{DynamicResource WindowGlassBrush}"
                         pu:ToggleButtonHelper.CheckedContent="{Binding DataContext.I18n.I18nRes.Collected, ElementName=Page_MainPage}"
                         Command="{Binding DataContext.CollectedCommand, ElementName=Page_MainPage}"
@@ -294,6 +294,7 @@
                     <DataTemplate>
                       <ToggleButton
                         x:Name="Button_Enabled"
+                        Margin="0,10,0,10"
                         pu:ToggleButtonHelper.CheckedBackground="{DynamicResource WindowGlassBrush}"
                         pu:ToggleButtonHelper.CheckedContent="{Binding DataContext.I18n.I18nRes.Enabled, ElementName=Page_MainPage}"
                         Command="{Binding DataContext.EnabledCommand, ElementName=Page_MainPage}"
@@ -622,9 +623,9 @@
         </Grid>
         <Grid
           x:Name="Grid_ModDetails"
-          Width="360"
+          Width="400"
           HorizontalAlignment="Right"
-          d:Tag="false"
+          d:Tag="True"
           Tag="{Binding IsShowModDetails}">
           <Grid.Style>
             <Style TargetType="Grid">
@@ -637,29 +638,33 @@
             </Style>
           </Grid.Style>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="11*" />
-            <ColumnDefinition Width="25*" MinWidth="200" />
+            <ColumnDefinition MinWidth="30" />
+            <ColumnDefinition Width="*" MinWidth="300" />
           </Grid.ColumnDefinitions>
           <GridSplitter
+            Grid.Column="0"
             Width="5"
-            Margin="0,0,0,0"
-            Background="{DynamicResource ColorFG}"
-            Foreground="{x:Null}" />
+            Margin="0,0,10,0"
+            HorizontalContentAlignment="Right"
+            VerticalContentAlignment="Stretch"
+            Background="#11FFFFFF" />
           <Button
             x:Name="Button_CLoseModDetails"
-            Grid.Column="1"
+            Grid.Column="0"
             Width="10"
-            Height="NaN"
+            MinWidth="0"
+            MinHeight="0"
+            Margin="0"
             Padding="0"
-            HorizontalAlignment="Left"
-            Background="{DynamicResource ColorBB}"
+            HorizontalAlignment="Right"
+            pu:ButtonHelper.CornerRadius="4,0,0,4"
+            pu:ButtonHelper.ShadowColor="{DynamicResource ShadowColor}"
+            Background="{DynamicResource BackgroundColor}"
             Command="{Binding CloseModDetailsButtonCommand}"
             Content="》" />
           <GroupBox
             x:Name="GroupBox_ModDetails"
             Grid.Column="1"
-            Margin="9,0,0,0"
-            Background="{DynamicResource ColorBG}"
             Header="{Binding I18n.I18nRes.ModInfo}">
             <i:Interaction.Triggers>
               <i:PropertyChangedTrigger Binding="{Binding IsMouseOver, ElementName=GroupBox_ModDetails, UpdateSourceTrigger=PropertyChanged}">
@@ -674,97 +679,90 @@
                     MaxHeight="100"
                     Source="{Binding NowSelectedMod.ImageSource}" />
                 </Grid>
-                <StackPanel
-                  Height="30"
-                  Margin="0,0,0,5"
-                  Orientation="Horizontal">
-                  <Label
-                    Margin="0,0,5,0"
-                    HorizontalContentAlignment="Left"
-                    Content="ID:" />
-                  <TextBox
-                    x:Name="Label_ModId"
-                    HorizontalContentAlignment="Left"
-                    IsReadOnly="True"
-                    Text="{Binding NowSelectedMod.Id, Mode=OneWay}"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-                </StackPanel>
-                <StackPanel
-                  Height="30"
-                  Margin="0,0,0,5"
-                  Orientation="Horizontal">
+                <Grid Margin="0,0,0,5">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                  </Grid.RowDefinitions>
                   <!--  TODO 需要解决冒号问题  -->
+                  <Label HorizontalContentAlignment="Left" Content="ID" />
                   <Label
-                    Margin="0,0,5,0"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
+                    Grid.Row="1"
+                    HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.Name}" />
-                  <TextBox
-                    x:Name="Label_ModName"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    IsReadOnly="True"
-                    Text="{Binding NowSelectedMod.Name, Mode=OneWay}"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-                </StackPanel>
-                <StackPanel
-                  Height="30"
-                  Margin="0,0,0,5"
-                  Orientation="Horizontal">
                   <Label
-                    Margin="0,0,5,0"
+                    Grid.Row="2"
                     HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.Version}" />
-                  <TextBox
-                    x:Name="Label_ModVersion"
-                    HorizontalContentAlignment="Left"
-                    IsReadOnly="True"
-                    Text="{Binding NowSelectedMod.Version, Mode=OneWay}"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-                </StackPanel>
-                <StackPanel Margin="0,0,0,5" Orientation="Horizontal">
                   <Label
-                    Height="30"
-                    Margin="0,0,5,0"
+                    Grid.Row="3"
                     HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.GameVersion}" />
-                  <TextBox
-                    x:Name="Label_GameVersion"
-                    Height="30"
-                    HorizontalContentAlignment="Left"
-                    IsReadOnly="True"
-                    Text="{Binding NowSelectedMod.GameVersion, Mode=OneWay}"
-                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-                </StackPanel>
-                <StackPanel
-                  Height="30"
-                  Margin="0,0,0,5"
-                  Orientation="Horizontal">
                   <Label
-                    Margin="0,0,5,0"
+                    Grid.Row="4"
                     HorizontalContentAlignment="Left"
                     Content="{Binding I18n.I18nRes.LastUpdateTime}" />
                   <TextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
                     HorizontalContentAlignment="Left"
+                    BorderThickness="0"
+                    IsReadOnly="True"
+                    Text="{Binding NowSelectedMod.Id, Mode=OneWay}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                  <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    BorderThickness="0"
+                    IsReadOnly="True"
+                    Text="{Binding NowSelectedMod.Name, Mode=OneWay}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                  <TextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Left"
+                    BorderThickness="0"
+                    IsReadOnly="True"
+                    Text="{Binding NowSelectedMod.Version, Mode=OneWay}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                  <TextBox
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Left"
+                    BorderThickness="0"
+                    IsReadOnly="True"
+                    Text="{Binding NowSelectedMod.GameVersion, Mode=OneWay}"
+                    ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                  <TextBox
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    HorizontalContentAlignment="Left"
+                    BorderThickness="0"
                     IsReadOnly="True"
                     Text="{Binding NowSelectedMod.LastUpdateTimeString, Mode=OneWay}"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
-                </StackPanel>
-                <Button
-                  x:Name="Button_ModPath"
-                  Height="30"
-                  Margin="0,0,0,5"
-                  Padding="5,0,5,0"
-                  HorizontalContentAlignment="Left"
-                  Command="{Binding OpenModPathCommand}"
-                  CommandParameter="{Binding NowSelectedMod.ModDirectory}"
-                  Content="{Binding NowSelectedMod.ModDirectory, Mode=OneWay}"
-                  Cursor="Hand"
-                  ToolTip="{Binding Content, RelativeSource={RelativeSource Mode=Self}}" />
+                </Grid>
+                <Label Margin="0,0,0,5">
+                  <Hyperlink
+                    Command="{Binding OpenModPathCommand}"
+                    CommandParameter="{Binding NowSelectedMod.ModDirectory}"
+                    Cursor="Hand"
+                    NavigateUri="{Binding NowSelectedMod.ModDirectory, Mode=OneWay}">
+                    <TextBlock Text="{Binding NowSelectedMod.ModDirectory, Mode=OneWay}" ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
+                  </Hyperlink>
+                </Label>
                 <GroupBox Margin="0,0,0,5" Header="{Binding I18n.I18nRes.Author}">
                   <TextBox
                     x:Name="TextBlock_ModAuthor"
-                    Height="NaN"
                     VerticalAlignment="Top"
                     IsReadOnly="True"
                     Text="{Binding NowSelectedMod.Author, Mode=OneWay}"
@@ -789,7 +787,6 @@
                   </GroupBox.Style>
                   <TextBox
                     x:Name="TextBlock_ModDependencies"
-                    Height="NaN"
                     IsReadOnly="True"
                     Text="{Binding NowSelectedMod.DependenciesMessage, Mode=OneWay}"
                     TextWrapping="Wrap"
@@ -798,16 +795,14 @@
                 <GroupBox Margin="0,0,0,5" Header="{Binding I18n.I18nRes.Description}">
                   <TextBox
                     x:Name="TextBlock_ModDescription"
-                    Height="NaN"
                     IsReadOnly="True"
                     Text="{Binding NowSelectedMod.Description, Mode=OneWay}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />
                 </GroupBox>
-                <GroupBox>
+                <GroupBox Header="{Binding I18n.I18nRes.UserDescription}">
                   <TextBox
                     x:Name="TextBox_UserDescription"
-                    Height="NaN"
                     Text="{Binding NowSelectedMod.UserDescription, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     ToolTip="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" />

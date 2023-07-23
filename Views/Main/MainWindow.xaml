@@ -66,8 +66,7 @@
       <ToggleButton
         x:Name="Button_MainMenuToggleExpand"
         Grid.Row="0"
-        MinWidth="30"
-        MinHeight="30"
+        Margin="0"
         Padding="0,5,5,5"
         HorizontalAlignment="Left"
         d:IsChecked="True"
@@ -149,6 +148,7 @@
       </ScrollViewer>
       <StackPanel Grid.Row="2" VerticalAlignment="Center">
         <Button
+          Margin="0"
           HorizontalContentAlignment="Left"
           pu:ButtonHelper.CornerRadius="0"
           BorderThickness="0"
@@ -173,6 +173,7 @@
         </Button>
         <ToggleButton
           x:Name="Button_InfoPage"
+          Margin="0"
           HorizontalContentAlignment="Left"
           pu:ToggleButtonHelper.CheckedBorderBrush="{DynamicResource WindowGlassBrush}"
           pu:ToggleButtonHelper.CheckedBorderThickness="3,0,0,0"
@@ -198,6 +199,7 @@
         </ToggleButton>
         <ToggleButton
           x:Name="Button_SettingsPage"
+          Margin="0"
           HorizontalContentAlignment="Left"
           pu:ToggleButtonHelper.CheckedBorderBrush="{DynamicResource WindowGlassBrush}"
           pu:ToggleButtonHelper.CheckedBorderThickness="3,0,0,0"

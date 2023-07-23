@@ -24,32 +24,13 @@
     <!--<ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Styles/WindowXStyle.xaml" />-->
   </ResourceDictionary.MergedDictionaries>
 
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ExpanderStyle}}" TargetType="{x:Type Expander}">
-    <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="5" />
-    <Setter Property="pu:ExpanderHelper.HeaderBorderThickness" Value="1" />
-    <Setter Property="pu:ExpanderHelper.HeaderBorderBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="Foreground" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="Background" Value="{DynamicResource ForegroundColor}" />
-    <Setter Property="pu:ExpanderHelper.CornerRadius" Value="0" />
-    <Setter Property="pu:ExpanderHelper.HeaderForeground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ExpanderHelper.HeaderBackground" Value="{DynamicResource ForegroundColor}" />
-    <Setter Property="pu:ExpanderHelper.HeaderSeparatorVisibility" Value="Collapsed" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:ExpanderHelper.ShadowColor" Value="{DynamicResource ShadowColor_Color}" />
-    <Setter Property="pu:ExpanderHelper.ToggleArrowPlacement" Value="Right" />
-    <Setter Property="pu:ExpanderHelper.AnimationEasing" Value="BackIn" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ButtonStyle}}" TargetType="{x:Type Button}">
-    <Setter Property="MinHeight" Value="30" />
-    <Setter Property="MinWidth" Value="30" />
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="MinWidth" Value="32" />
     <Setter Property="Padding" Value="5" />
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
     <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="Background" Value="{DynamicResource ForegroundColor}" />
@@ -61,13 +42,16 @@
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
 
-
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ToggleButtonStyle}}" TargetType="{x:Type ToggleButton}">
-    <Setter Property="MinHeight" Value="30" />
-    <Setter Property="MinWidth" Value="30" />
+    <Setter Property="MinHeight" Value="32" />
+    <Setter Property="MinWidth" Value="32" />
     <Setter Property="Padding" Value="5" />
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
     <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="Background" Value="{DynamicResource ForegroundColor}" />
@@ -80,236 +64,59 @@
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.CheckBoxStyle}}" TargetType="{x:Type CheckBox}">
-    <Setter Property="Padding" Value="7,0,0,0" />
-    <Setter Property="pu:CheckBoxHelper.BoxWidth" Value="16" />
-    <Setter Property="pu:CheckBoxHelper.BoxHeight" Value="16" />
-    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:CheckBoxHelper.CheckedForeground" Value="{DynamicResource CheckedColor}" />
-    <Setter Property="Background" Value="#00FFFFFF" />
-    <Setter Property="BorderBrush" Value="#FF000000" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:CheckBoxHelper.CornerRadius" Value="2,2,2,2" />
-    <Setter Property="pu:CheckBoxHelper.HoverBorderBrush" Value="{x:Null}" />
-    <Setter Property="pu:CheckBoxHelper.HoverBorderThickness" Value="{x:Null}" />
-    <Setter Property="pu:CheckBoxHelper.HoverCornerRadius" Value="{x:Null}" />
-    <Setter Property="pu:CheckBoxHelper.CheckedBorderBrush" Value="#FF2B97FF" />
-    <Setter Property="pu:CheckBoxHelper.CheckedBorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:CheckBoxHelper.CheckedCornerRadius" Value="2,2,2,2" />
-    <Setter Property="pu:CheckBoxHelper.GlyphBrush" Value="#00FFFFFF" />
-    <Setter Property="pu:CheckBoxHelper.CheckedGlyphBrush" Value="{DynamicResource CheckedColor}" />
-    <Setter Property="pu:CheckBoxHelper.ShadowColor" Value="#FFE5E6E7" />
-    <Setter Property="pu:CheckBoxHelper.CheckedShadowColor" Value="{DynamicResource ShadowColor_Color}" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ComboBoxStyle}}" TargetType="{x:Type ComboBox}">
-    <Setter Property="Padding" Value="7,0,7,0" />
-    <Setter Property="Background" Value="#FFFFFFFF" />
-    <Setter Property="pu:ComboBoxHelper.HoverBackground" Value="{x:Null}" />
-    <Setter Property="pu:ComboBoxHelper.FocusedBackground" Value="{x:Null}" />
-    <Setter Property="BorderBrush" Value="#FFAAAAAA" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:ComboBoxHelper.CornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:ComboBoxHelper.HoverBorderBrush" Value="#FF268AEB" />
-    <Setter Property="pu:ComboBoxHelper.HoverBorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:ComboBoxHelper.HoverCornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:ComboBoxHelper.FocusedBorderBrush" Value="#FF157DE2" />
-    <Setter Property="pu:ComboBoxHelper.FocusedBorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:ComboBoxHelper.FocusedCornerRadius" Value="4,4,4,4" />
-    <Setter Property="Foreground" Value="#FF000000" />
-    <Setter Property="pu:ComboBoxHelper.WatermarkForeground" Value="#FF808080" />
-    <Setter Property="pu:ComboBoxHelper.FocusedWatermarkForeground" Value="#FFB3B3B3" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:ComboBoxHelper.ShadowColor" Value="#FFE5E6E7" />
-    <Setter Property="pu:ComboBoxHelper.FocusedShadowColor" Value="#FF2B97FF" />
-    <Setter Property="pu:DropDownHelper.Background" Value="#FFFFFFFF" />
-    <Setter Property="pu:DropDownHelper.BorderBrush" Value="#FF000000" />
-    <Setter Property="pu:DropDownHelper.BorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:DropDownHelper.CornerRadius" Value="2,2,2,2" />
-    <Setter Property="pu:DropDownHelper.ShadowColor" Value="#FF2B97FF" />
-    <Setter Property="pu:ComboBoxHelper.ItemsHeight" Value="35" />
-    <Setter Property="pu:ComboBoxHelper.ItemsPadding" Value="7,0,7,0" />
-    <Setter Property="pu:ComboBoxHelper.ItemsBackground" Value="#00FFFFFF" />
-    <Setter Property="pu:ComboBoxHelper.ItemsHoverBackground" Value="#192B97FF" />
-    <Setter Property="pu:ComboBoxHelper.ItemsSelectedBackground" Value="#332B97FF" />
-    <Setter Property="pu:ComboBoxHelper.ItemsForeground" Value="#FF000000" />
-    <Setter Property="pu:ComboBoxHelper.ItemsSelectedForeground" Value="#FF2B97FF" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ContextMenuStyle}}" TargetType="{x:Type ContextMenu}">
-    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ContextMenuHelper.CornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="25" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.5" />
-    <Setter Property="pu:ContextMenuHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:ContextMenuHelper.MenuItemStyleKey}}" TargetType="{x:Type MenuItem}">
-    <Setter Property="Width" Value="NaN" />
-    <Setter Property="Height" Value="NaN" />
-    <Setter Property="Padding" Value="5" />
-    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{DynamicResource HoverColor}" />
-    <Setter Property="pu:MenuItemHelper.ClickBackground" Value="{DynamicResource ClickColor}" />
-    <Setter Property="pu:MenuItemHelper.CheckedBackground" Value="{DynamicResource CheckedColor}" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.GroupBoxStyle}}" TargetType="{x:Type GroupBox}">
-    <Setter Property="Padding" Value="5,5,5,5" />
-    <Setter Property="Foreground" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:GroupBoxHelper.CornerRadius" Value="0,0,0,0" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:GroupBoxHelper.HeaderPadding" Value="5,5,5,5" />
-    <Setter Property="pu:GroupBoxHelper.HeaderForeground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:GroupBoxHelper.HeaderBackground" Value="{DynamicResource ForegroundColor}" />
-    <Setter Property="pu:GroupBoxHelper.HeaderSeparatorVisibility" Value="Collapsed" />
-    <Setter Property="pu:GroupBoxHelper.HeaderShadowColor" Value="{DynamicResource ShadowColor}" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.LabelStyle}}" TargetType="{x:Type Label}">
-    <Setter Property="Padding" Value="7,5,7,5" />
-    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="Background" Value="{x:Null}" />
-    <Setter Property="BorderBrush" Value="{x:Null}" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:LabelHelper.CornerRadius" Value="2,2,2,2" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ListBoxStyle}}" TargetType="{x:Type ListBox}">
-    <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Background" Value="{x:Null}" />
-    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:ListBoxHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ListBoxItemStyle}}" TargetType="{x:Type ListBoxItem}">
-    <Setter Property="Height" Value="NaN" />
-    <Setter Property="Padding" Value="5" />
-    <Setter Property="pu:ListBoxItemHelper.CornerRadius" Value="0" />
-    <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="pu:ListBoxItemHelper.SelectedBorderThickness" Value="0" />
-    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ListBoxItemHelper.HoverBackground" Value="{DynamicResource HoverColor}" />
-    <Setter Property="pu:ListBoxItemHelper.SelectedBorderBrush" Value="{DynamicResource WindowGlassBrush}" />
-    <Setter Property="pu:ListBoxItemHelper.SelectedShadowColor" Value="{DynamicResource ShadowColor}" />
-    <Setter Property="pu:ListBoxItemHelper.SelectedForeground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-    <Style.Triggers>
-      <Trigger Property="IsSelected" Value="True">
-        <Setter Property="pu:ListBoxItemHelper.SelectedBorderThickness" Value="3,0,0,0" />
-        <Setter Property="Padding" Value="8,5,5,5" />
-      </Trigger>
-    </Style.Triggers>
-  </Style>
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.PasswordBoxStyle}}" TargetType="{x:Type PasswordBox}">
-    <Setter Property="Padding" Value="7,0,7,0" />
-    <Setter Property="Foreground" Value="#FF000000" />
-    <Setter Property="Background" Value="#FFFFFFFF" />
-    <Setter Property="pu:PasswordBoxHelper.HoverBackground" Value="{x:Null}" />
-    <Setter Property="pu:PasswordBoxHelper.FocusedBackground" Value="{x:Null}" />
-    <Setter Property="BorderBrush" Value="#FFAAAAAA" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:PasswordBoxHelper.CornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:PasswordBoxHelper.HoverBorderBrush" Value="#FF268AEB" />
-    <Setter Property="pu:PasswordBoxHelper.HoverBorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:PasswordBoxHelper.HoverCornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:PasswordBoxHelper.FocusedBorderBrush" Value="#FF157DE2" />
-    <Setter Property="pu:PasswordBoxHelper.FocusedBorderThickness" Value="1,1,1,1" />
-    <Setter Property="pu:PasswordBoxHelper.FocusedCornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:PasswordBoxHelper.WatermarkForeground" Value="#FF808080" />
-    <Setter Property="pu:PasswordBoxHelper.FocusedWatermarkForeground" Value="#FFB3B3B3" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:PasswordBoxHelper.ShadowColor" Value="#FFE5E6E7" />
-    <Setter Property="pu:PasswordBoxHelper.FocusedShadowColor" Value="#FF2B97FF" />
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
-  </Style>
-
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ProgressBarStyle}}" TargetType="{x:Type ProgressBar}">
-    <Setter Property="pu:ProgressBarHelper.IsPercentVisible" Value="True" />
-    <Setter Property="pu:ProgressBarHelper.PercentStringFormat" Value="P0" />
-    <Setter Property="Background" Value="#192B97FF" />
-    <Setter Property="pu:ProgressBarHelper.CornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="25" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:ProgressBarHelper.ShadowColor" Value="#FF2B97FF" />
-    <Setter Property="pu:ProgressBarHelper.AnimationEasing" Value="BackIn" />
-    <Setter Property="Foreground">
-      <Setter.Value>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-          <LinearGradientBrush.GradientStops>
-            <GradientStop Offset="0" Color="#FF3D6BED" />
-            <GradientStop Offset="0.5" Color="#FF2B97FF" />
-            <GradientStop Offset="1" Color="#FF3DC3ED" />
-          </LinearGradientBrush.GradientStops>
-        </LinearGradientBrush>
-      </Setter.Value>
-    </Setter>
-    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
 
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.RadioButtonStyle}}" TargetType="{x:Type RadioButton}">
+    <Setter Property="Margin" Value="5" />
     <Setter Property="Padding" Value="7,0,0,0" />
     <Setter Property="pu:RadioButtonHelper.BoxRadius" Value="8" />
     <Setter Property="Foreground" Value="#FF000000" />
-    <Setter Property="pu:RadioButtonHelper.CheckedForeground" Value="{DynamicResource CheckedColor}" />
     <Setter Property="Background" Value="#00FFFFFF" />
-    <Setter Property="pu:RadioButtonHelper.HoverBackground" Value="{x:Null}" />
-    <Setter Property="pu:RadioButtonHelper.CheckedBackground" Value="{x:Null}" />
     <Setter Property="BorderBrush" Value="#FF000000" />
     <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:RadioButtonHelper.CheckedForeground" Value="{DynamicResource CheckedColor}" />
+    <Setter Property="pu:RadioButtonHelper.HoverBackground" Value="{x:Null}" />
+    <Setter Property="pu:RadioButtonHelper.CheckedBackground" Value="{x:Null}" />
     <Setter Property="pu:RadioButtonHelper.CheckedBorderBrush" Value="#FF2B97FF" />
     <Setter Property="pu:RadioButtonHelper.CheckedBorderThickness" Value="1,1,1,1" />
     <Setter Property="pu:RadioButtonHelper.ToggleBrush" Value="#00FFFFFF" />
     <Setter Property="pu:RadioButtonHelper.CheckedToggleBrush" Value="{DynamicResource CheckedColor}" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
     <Setter Property="pu:RadioButtonHelper.ShadowColor" Value="#FFE5E6E7" />
     <Setter Property="pu:RadioButtonHelper.CheckedShadowColor" Value="{DynamicResource ShadowColor_Color}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.CheckBoxStyle}}" TargetType="{x:Type CheckBox}">
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:CheckBoxHelper.BoxWidth" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:CheckBoxHelper.BoxHeight" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:CheckBoxHelper.CornerRadius" Value="2,2,2,2" />
+    <Setter Property="pu:CheckBoxHelper.HoverShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:CheckBoxHelper.CheckedBorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="pu:CheckBoxHelper.CheckedBorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:CheckBoxHelper.CheckedCornerRadius" Value="2,2,2,2" />
+    <Setter Property="pu:CheckBoxHelper.CheckedBackground" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="pu:CheckBoxHelper.CheckedForeground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:CheckBoxHelper.CheckedShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
 
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.SwitchStyle}}" TargetType="{x:Type pu:Switch}">
+    <Setter Property="Margin" Value="5" />
     <Setter Property="Padding" Value="7,0,0,0" />
     <Setter Property="BoxWidth" Value="25" />
     <Setter Property="BoxHeight" Value="16" />
@@ -332,55 +139,37 @@
     <Setter Property="ToggleCornerRadius" Value="8,8,8,8" />
     <Setter Property="HoverToggleCornerRadius" Value="{x:Null}" />
     <Setter Property="CheckedToggleCornerRadius" Value="{x:Null}" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
     <Setter Property="ShadowColor" Value="#FFE5E6E7" />
     <Setter Property="CheckedShadowColor" Value="#FF2B97FF" />
     <Setter Property="ToggleShadowColor" Value="#FFE5E6E7" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
 
-  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.DataGridStyle}}" TargetType="{x:Type DataGrid}">
-    <Setter Property="RowHeight" Value="NaN" />
-    <Setter Property="ColumnHeaderHeight" Value="NaN" />
-    <Setter Property="AutoGenerateColumns" Value="False" />
-    <Setter Property="CanUserAddRows" Value="False" />
-    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="BorderThickness" Value="1,1,1,1" />
-    <Setter Property="Padding" Value="5,5,5,5" />
-    <Setter Property="GridLinesVisibility" Value="Horizontal" />
-    <Setter Property="RowBackground" Value="{DynamicResource BackgroundColor}" />
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.LabelStyle}}" TargetType="{x:Type Label}">
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
-    <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BorderColor}" />
-    <Setter Property="pu:DataGridHelper.CornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
-    <Setter Property="pu:DataGridHelper.ShadowColor" Value="#FFE5E6E7" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderPanelBackground" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderBackground" Value="{DynamicResource BackgroundColor}" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderHoverBackground" Value="{DynamicResource HoverColor}" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderClickBackground" Value="{DynamicResource ClickColor}" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderBorderThickness" Value="1" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderCornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderForeground" Value="{DynamicResource FontColor}" />
-    <Setter Property="pu:DataGridHelper.ColumnHeaderHoverForeground" Value="{DynamicResource ForegroundColor}" />
-    <Setter Property="pu:DataGridHelper.RowHoverBackground" Value="{DynamicResource HoverColor}" />
-    <Setter Property="pu:DataGridHelper.RowSelectedBackground" Value="{DynamicResource CheckedColor}" />
-    <Setter Property="pu:DataGridHelper.RowBorderThickness" Value="1" />
-    <Setter Property="pu:DataGridHelper.RowCornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:DataGridHelper.RowSelectedBorderThickness" Value="0,0,0,0" />
-    <Setter Property="pu:DataGridHelper.RowSelectedCornerRadius" Value="4,4,4,4" />
-    <Setter Property="pu:DataGridHelper.RowSelectedForeground" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="Background" Value="{x:Null}" />
+    <Setter Property="BorderBrush" Value="{x:Null}" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:LabelHelper.CornerRadius" Value="2,2,2,2" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
+
   <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.TextBoxStyle}}" TargetType="{x:Type TextBox}">
+    <Setter Property="Margin" Value="5" />
     <Setter Property="Padding" Value="5" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:TextBoxHelper.HoverBackground" Value="{x:Null}" />
@@ -395,35 +184,268 @@
     <Setter Property="pu:TextBoxHelper.FocusedBorderThickness" Value="1,1,1,1" />
     <Setter Property="pu:TextBoxHelper.FocusedCornerRadius" Value="4,4,4,4" />
     <Setter Property="pu:TextBoxHelper.WatermarkForeground" Value="{DynamicResource WatermarkColor}" />
-    <Setter Property="pu:TextBoxHelper.FocusedWatermarkForeground" Value="{DynamicResource FocusedTipColor}" />
-    <Setter Property="pu:ShadowHelper.BlurRadius" Value="15" />
-    <Setter Property="pu:ShadowHelper.Opacity" Value="0.7" />
+    <Setter Property="pu:TextBoxHelper.FocusedWatermarkForeground" Value="{DynamicResource WatermarkColor}" />
     <Setter Property="pu:TextBoxHelper.FocusedShadowColor" Value="{DynamicResource ShadowColor}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.PasswordBoxStyle}}" TargetType="{x:Type PasswordBox}">
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="BorderBrush" Value="#FFAAAAAA" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:PasswordBoxHelper.HoverBackground" Value="{x:Null}" />
+    <Setter Property="pu:PasswordBoxHelper.FocusedBackground" Value="{x:Null}" />
+    <Setter Property="pu:PasswordBoxHelper.CornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:PasswordBoxHelper.HoverBorderBrush" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="pu:PasswordBoxHelper.HoverBorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:PasswordBoxHelper.HoverCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:PasswordBoxHelper.FocusedBorderBrush" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="pu:PasswordBoxHelper.FocusedBorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:PasswordBoxHelper.FocusedCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:PasswordBoxHelper.WatermarkForeground" Value="{DynamicResource WatermarkColor}" />
+    <Setter Property="pu:PasswordBoxHelper.FocusedWatermarkForeground" Value="{DynamicResource WatermarkColor}" />
+    <Setter Property="pu:PasswordBoxHelper.FocusedShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ListBoxStyle}}" TargetType="{x:Type ListBox}">
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Background" Value="{x:Null}" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:ListBoxHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ListBoxItemStyle}}" TargetType="{x:Type ListBoxItem}">
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:ListBoxItemHelper.CornerRadius" Value="0" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedBorderThickness" Value="0" />
+    <Setter Property="pu:ListBoxItemHelper.HoverBackground" Value="{DynamicResource HoverColor}" />
+    <!--<Setter Property="pu:ListBoxItemHelper.HoverShadowColor" Value="{DynamicResource ShadowColor}" />-->
+    <Setter Property="pu:ListBoxItemHelper.SelectedBorderBrush" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ListBoxItemHelper.SelectedForeground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+    <Style.Triggers>
+      <Trigger Property="IsSelected" Value="True">
+        <Setter Property="pu:ListBoxItemHelper.SelectedBorderThickness" Value="3,0,0,0" />
+        <Setter Property="Padding" Value="8,5,5,5" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ExpanderStyle}}" TargetType="{x:Type Expander}">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="Foreground" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="Background" Value="{DynamicResource ForegroundColor}" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="5" />
+    <Setter Property="pu:ExpanderHelper.HeaderBorderThickness" Value="1" />
+    <Setter Property="pu:ExpanderHelper.HeaderBorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="pu:ExpanderHelper.CornerRadius" Value="0" />
+    <Setter Property="pu:ExpanderHelper.HeaderForeground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ExpanderHelper.HeaderBackground" Value="{DynamicResource ForegroundColor}" />
+    <Setter Property="pu:ExpanderHelper.HeaderSeparatorVisibility" Value="Collapsed" />
+    <Setter Property="pu:ExpanderHelper.ToggleArrowPlacement" Value="Right" />
+    <Setter Property="pu:ExpanderHelper.AnimationEasing" Value="BackIn" />
+    <Setter Property="pu:ExpanderHelper.ExpandedShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ComboBoxStyle}}" TargetType="{x:Type ComboBox}">
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="Padding" Value="7,0,7,0" />
+    <Setter Property="Background" Value="#FFFFFFFF" />
+    <Setter Property="BorderBrush" Value="#FFAAAAAA" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="Foreground" Value="#FF000000" />
+    <Setter Property="pu:ComboBoxHelper.HoverBackground" Value="{x:Null}" />
+    <Setter Property="pu:ComboBoxHelper.FocusedBackground" Value="{x:Null}" />
+    <Setter Property="pu:ComboBoxHelper.CornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:ComboBoxHelper.HoverBorderBrush" Value="#FF268AEB" />
+    <Setter Property="pu:ComboBoxHelper.HoverBorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:ComboBoxHelper.HoverCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:ComboBoxHelper.FocusedBorderBrush" Value="#FF157DE2" />
+    <Setter Property="pu:ComboBoxHelper.FocusedBorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:ComboBoxHelper.FocusedCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:ComboBoxHelper.WatermarkForeground" Value="#FF808080" />
+    <Setter Property="pu:ComboBoxHelper.FocusedWatermarkForeground" Value="#FFB3B3B3" />
+    <Setter Property="pu:ComboBoxHelper.ShadowColor" Value="#FFE5E6E7" />
+    <Setter Property="pu:ComboBoxHelper.FocusedShadowColor" Value="#FF2B97FF" />
+    <Setter Property="pu:DropDownHelper.Background" Value="#FFFFFFFF" />
+    <Setter Property="pu:DropDownHelper.BorderBrush" Value="#FF000000" />
+    <Setter Property="pu:DropDownHelper.BorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:DropDownHelper.CornerRadius" Value="2,2,2,2" />
+    <Setter Property="pu:DropDownHelper.ShadowColor" Value="#FF2B97FF" />
+    <Setter Property="pu:ComboBoxHelper.ItemsHeight" Value="35" />
+    <Setter Property="pu:ComboBoxHelper.ItemsPadding" Value="7,0,7,0" />
+    <Setter Property="pu:ComboBoxHelper.ItemsBackground" Value="#00FFFFFF" />
+    <Setter Property="pu:ComboBoxHelper.ItemsHoverBackground" Value="#192B97FF" />
+    <Setter Property="pu:ComboBoxHelper.ItemsSelectedBackground" Value="#332B97FF" />
+    <Setter Property="pu:ComboBoxHelper.ItemsForeground" Value="#FF000000" />
+    <Setter Property="pu:ComboBoxHelper.ItemsSelectedForeground" Value="#FF2B97FF" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ContextMenuStyle}}" TargetType="{x:Type ContextMenu}">
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:ContextMenuHelper.CornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:ContextMenuHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:ContextMenuHelper.MenuItemStyleKey}}" TargetType="{x:Type MenuItem}">
+    <Setter Property="Width" Value="NaN" />
+    <Setter Property="Height" Value="NaN" />
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{DynamicResource HoverColor}" />
+    <Setter Property="pu:MenuItemHelper.ClickBackground" Value="{DynamicResource ClickColor}" />
+    <Setter Property="pu:MenuItemHelper.CheckedBackground" Value="{DynamicResource CheckedColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.GroupBoxStyle}}" TargetType="{x:Type GroupBox}">
+    <Setter Property="Padding" Value="5" />
+    <Setter Property="Foreground" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="pu:GroupBoxHelper.HeaderFontSize" Value="{DynamicResource TitleFontSize}" />
+    <Setter Property="pu:GroupBoxHelper.HeaderPadding" Value="10" />
+    <Setter Property="pu:GroupBoxHelper.HeaderForeground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:GroupBoxHelper.HeaderBackground" Value="{DynamicResource ForegroundColor}" />
+    <Setter Property="pu:GroupBoxHelper.HeaderSeparatorVisibility" Value="Collapsed" />
+    <Setter Property="pu:GroupBoxHelper.HeaderShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.ProgressBarStyle}}" TargetType="{x:Type ProgressBar}">
+    <Setter Property="Margin" Value="5" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:ProgressBarHelper.IsPercentVisible" Value="True" />
+    <Setter Property="pu:ProgressBarHelper.PercentStringFormat" Value="P0" />
+    <Setter Property="Background" Value="#192B97FF" />
+    <Setter Property="pu:ProgressBarHelper.CornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:ProgressBarHelper.ShadowColor" Value="#FF2B97FF" />
+    <Setter Property="pu:ProgressBarHelper.AnimationEasing" Value="BackIn" />
+    <Setter Property="Foreground">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+          <LinearGradientBrush.GradientStops>
+            <GradientStop Offset="0" Color="#FF3D6BED" />
+            <GradientStop Offset="0.5" Color="#FF2B97FF" />
+            <GradientStop Offset="1" Color="#FF3DC3ED" />
+          </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
+  </Style>
+
+  <Style BasedOn="{StaticResource {x:Static pu:StyleKeys.DataGridStyle}}" TargetType="{x:Type DataGrid}">
+    <Setter Property="RowHeight" Value="NaN" />
+    <Setter Property="ColumnHeaderHeight" Value="NaN" />
+    <Setter Property="AutoGenerateColumns" Value="False" />
+    <Setter Property="CanUserAddRows" Value="False" />
+    <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="BorderThickness" Value="1,1,1,1" />
+    <Setter Property="Padding" Value="5,5,5,5" />
+    <Setter Property="GridLinesVisibility" Value="Horizontal" />
+    <Setter Property="RowBackground" Value="{x:Null}" />
+    <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource BorderColor}" />
+    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:DataGridHelper.CornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderFontSize" Value="{DynamicResource TitleFontSize}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderBackground" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderHoverBackground" Value="{DynamicResource HoverColor}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderClickBackground" Value="{DynamicResource ClickColor}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderBorderThickness" Value="1" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderForeground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderHoverForeground" Value="{DynamicResource ForegroundColor}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderPanelBackground" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:DataGridHelper.ColumnHeaderPanelShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:DataGridHelper.RowHoverBackground" Value="{DynamicResource HoverColor}" />
+    <Setter Property="pu:DataGridHelper.RowSelectedBackground" Value="{DynamicResource CheckedColor}" />
+    <Setter Property="pu:DataGridHelper.RowBorderThickness" Value="1" />
+    <Setter Property="pu:DataGridHelper.RowCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:DataGridHelper.RowSelectedBorderThickness" Value="0,0,0,0" />
+    <Setter Property="pu:DataGridHelper.RowSelectedCornerRadius" Value="4,4,4,4" />
+    <Setter Property="pu:DataGridHelper.RowSelectedForeground" Value="{DynamicResource WindowGlassBrush}" />
+    <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+    <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+    <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
 
   <Style
     x:Key="WindowXBaseStyle"
     BasedOn="{StaticResource {x:Type pu:WindowX}}"
     TargetType="{x:Type pu:WindowX}">
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
     <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <!--<Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />-->
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
   <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type Window}">
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
     <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
-    <!--<Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />-->
     <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+    <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
   </Style>
   <Style TargetType="{x:Type emoji:TextBlock}">
     <!--<Setter Property="Margin" Value="0,0,0,2" />-->

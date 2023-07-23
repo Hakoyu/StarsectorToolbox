@@ -174,4 +174,10 @@
   <data name="EffectiveAfterReload" xml:space="preserve">
     <value>Effective after reload, do you need to reload?</value>
   </data>
+  <data name="STSetting" xml:space="preserve">
+    <value>STSetting</value>
+  </data>
+  <data name="ExtensionDebugPathSetting" xml:space="preserve">
+    <value>Extension debug path setting</value>
+  </data>
 </root>
