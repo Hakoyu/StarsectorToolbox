@@ -49,7 +49,8 @@
     <Grid
       x:Name="Grid_MainMenu"
       Width="NaN"
-      MinWidth="32">
+      MinWidth="32"
+      Margin="0,0,10,0">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
@@ -71,7 +72,7 @@
         HorizontalAlignment="Left"
         d:IsChecked="True"
         pu:ToggleButtonHelper.CornerRadius="0"
-        Background="{x:Null}"
+        Background="#01FFFFFF"
         BorderThickness="0"
         Command="{Binding MenuExpandCommand}">
         <pu:ToggleButtonHelper.Icon>
@@ -102,7 +103,7 @@
           <ListBox
             d:ItemContainerStyle="{x:Null}"
             d:ItemsSource="{d:SampleData ItemCount=5}"
-            d:SelectedIndex="3"
+            d:SelectedIndex="2"
             ItemContainerStyle="{StaticResource ListBoxItemViewStyle}"
             ItemsSource="{Binding ListBox_MainMenu.ItemsSource}"
             ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -116,7 +117,7 @@
           <Expander
             Padding="0"
             pu:ExpanderHelper.CornerRadius="0"
-            Background="{x:Null}"
+            Background="#01FFFFFF"
             BorderThickness="0"
             Header="{Binding I18n.I18nRes.Extension}"
             IsExpanded="False"
@@ -151,6 +152,7 @@
           Margin="0"
           HorizontalContentAlignment="Left"
           pu:ButtonHelper.CornerRadius="0"
+          Background="#01FFFFFF"
           BorderThickness="0"
           Command="{Binding StartGameCommand}"
           Content="{Binding I18n.I18nRes.StartGame}">
@@ -179,6 +181,7 @@
           pu:ToggleButtonHelper.CheckedBorderThickness="3,0,0,0"
           pu:ToggleButtonHelper.CheckedCornerRadius="0"
           pu:ToggleButtonHelper.CornerRadius="0"
+          Background="#01FFFFFF"
           BorderBrush="{DynamicResource WindowGlassBrush}"
           BorderThickness="0"
           Command="{Binding ShowPageCommand}"
@@ -205,6 +208,7 @@
           pu:ToggleButtonHelper.CheckedBorderThickness="3,0,0,0"
           pu:ToggleButtonHelper.CheckedCornerRadius="0"
           pu:ToggleButtonHelper.CornerRadius="0"
+          Background="#01FFFFFF"
           BorderBrush="{DynamicResource WindowGlassBrush}"
           BorderThickness="0"
           Command="{Binding ShowPageCommand}"

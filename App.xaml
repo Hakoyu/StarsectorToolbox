@@ -20,7 +20,7 @@
         <ResourceDictionary Source="pack://application:,,,/Converters.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Themes/SystemColor.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Styles/FontStyles.xaml" />
-        <ResourceDictionary Source="pack://application:,,,/Themes/Light.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Themes/Dark.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Styles/ControlStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Styles/ControlViewStyles.xaml" />
@@ -47,15 +47,14 @@
                 <Setter Property="MaxWidth" Value="1280" />
                 <Setter Property="MaxHeight" Value="720" />
                 <Setter Property="SizeToContent" Value="WidthAndHeight" />
-                <Setter Property="Background" Value="{DynamicResource ColorBG}" />
-                <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
-                <Setter Property="pu:WindowX.BorderThickness" Value="1" />
-                <Setter Property="pu:WindowX.BorderBrush" Value="{DynamicResource ColorAqua0}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+                <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+                <Setter Property="pu:WindowX.BorderThickness" Value="0" />
                 <Setter Property="pu:WindowX.DisableDragMove" Value="False" />
                 <Setter Property="pu:WindowXModalDialog.ButtonPanelHorizontalAlignment" Value="Center" />
                 <Setter Property="pu:WindowXCaption.Height" Value="30" />
                 <Setter Property="pu:WindowXCaption.Buttons" Value="None" />
-                <Setter Property="pu:WindowXCaption.ShadowColor" Value="{DynamicResource ColorAqua}" />
+                <Setter Property="pu:WindowXCaption.ShadowColor" Value="{DynamicResource ShadowColor}" />
                 <Setter Property="pu:WindowXCaption.Background" Value="{DynamicResource WindowGlassBrush}" />
               </Style>
             </pu:MessageBoxXSettings.WindowXStyle>
@@ -100,7 +99,7 @@
                         VerticalAlignment="Stretch"
                         Background="{x:Null}"
                         BorderBrush="{x:Null}"
-                        Foreground="{DynamicResource ColorFG}"
+                        Foreground="{DynamicResource FontColor}"
                         IsReadOnly="True"
                         Text="{Binding Message}"
                         TextWrapping="Wrap" />
@@ -134,10 +133,10 @@
                 <Setter Property="MinHeight" Value="200" />
                 <Setter Property="MaxWidth" Value="1280" />
                 <Setter Property="MaxHeight" Value="720" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ColorAqua0}" />
                 <Setter Property="SizeToContent" Value="WidthAndHeight" />
-                <Setter Property="Background" Value="{DynamicResource ColorBG}" />
-                <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
+                <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+                <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+                <Setter Property="BorderThickness" Value="0" />
               </Style>
             </pu:PendingBoxSettings.WindowStyle>
             <pu:PendingBoxSettings.SpinStyle>
@@ -147,7 +146,7 @@
                 <Setter Property="Height" Value="50" />
                 <Setter Property="Margin" Value="0,0,0,10" />
                 <Setter Property="GlyphSize" Value="6" />
-                <Setter Property="GlyphBrush" Value="{DynamicResource ColorAqua0}" />
+                <Setter Property="GlyphBrush" Value="{DynamicResource WindowGlassBrush}" />
               </Style>
             </pu:PendingBoxSettings.SpinStyle>
             <pu:PendingBoxSettings.ContentTemplate>
@@ -183,14 +182,24 @@
             </pu:PendingBoxSettings.ContentTemplate>
             <pu:PendingBoxSettings.CancelButtonStyle>
               <Style TargetType="Button">
-                <Setter Property="Background" Value="{DynamicResource ColorLight3}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />
-                <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
-                <Setter Property="Width" Value="60" />
-                <Setter Property="Height" Value="30" />
-                <Setter Property="Padding" Value="5,0,5,0" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="MinHeight" Value="32" />
+                <Setter Property="MinWidth" Value="32" />
+                <Setter Property="Padding" Value="5" />
+                <Setter Property="Margin" Value="5" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+                <Setter Property="Foreground" Value="{DynamicResource FontColor}" />
+                <Setter Property="Background" Value="{DynamicResource ButtonColor}" />
+                <Setter Property="pu:ButtonHelper.HoverBackground" Value="{DynamicResource HoverColor}" />
+                <Setter Property="pu:ButtonHelper.ClickBackground" Value="{DynamicResource ClickColor}" />
+                <Setter Property="pu:ButtonHelper.CornerRadius" Value="4,4,4,4" />
+                <Setter Property="pu:ButtonHelper.HoverShadowColor" Value="{DynamicResource ShadowColor}" />
+                <Setter Property="pu:ButtonHelper.ClickEffect" Value="Sink" />
+                <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource BackgroundColor}" />
+                <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource FontColor}" />
+                <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ShadowColor}" />
+                <Setter Property="pu:ToolTipHelper.FontSize" Value="{DynamicResource ToolTipFontSize}" />
               </Style>
             </pu:PendingBoxSettings.CancelButtonStyle>
           </pu:PendingBoxSettings>

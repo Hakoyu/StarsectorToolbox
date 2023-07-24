@@ -1,12 +1,14 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
 using HKW.HKWViewModels.Dialogs;
+using Microsoft.Win32;
 using StarsectorToolbox.Libs;
 using StarsectorToolbox.Models.Messages;
 using StarsectorToolbox.Models.ST;
@@ -35,6 +37,38 @@ internal partial class SettingsPageViewModel : ObservableObject
             }
         );
 
+    [ObservableProperty]
+    private ComboBoxVM _comboBox_Theme =
+        new(() =>
+        {
+            var items = new ObservableCollection<ComboBoxItemVM>();
+            var item = new ComboBoxItemVM();
+            item.Tag = nameof(I18nRes.WindowsDefault);
+            item.Content = ObservableI18n.BindingValue(
+                item,
+                (value, taget) => taget.Content = value,
+                () => I18nRes.WindowsDefault
+            );
+            items.Add(item);
+            item = new ComboBoxItemVM();
+            item.Tag = nameof(I18nRes.Light);
+            item.Content = ObservableI18n.BindingValue(
+                item,
+                (value, taget) => taget.Content = value,
+                () => I18nRes.Light
+            );
+            items.Add(item);
+            item = new ComboBoxItemVM();
+            item.Tag = nameof(I18nRes.Dark);
+            item.Content = ObservableI18n.BindingValue(
+                item,
+                (value, taget) => taget.Content = value,
+                () => I18nRes.Dark
+            );
+            items.Add(item);
+            return items;
+        });
+
     public SettingsPageViewModel()
     {
         // https://github.com/CommunityToolkit/dotnet/issues/604
@@ -52,6 +86,16 @@ internal partial class SettingsPageViewModel : ObservableObject
             i => i.ToolTip is string language && language == ObservableI18n.CurrentCulture.Name,
             ComboBox_Language.ItemsSource[0]
         );
+        // 设置Theme初始值
+        ComboBox_Theme.SelectedItem = ComboBox_Theme.ItemsSource.FirstOrDefault(
+            i => i.Tag is string theme && theme == STSettings.Instance.Theme,
+            ComboBox_Theme.ItemsSource[0]
+        );
+        if (ComboBox_Theme.SelectedItem.Tag is string theme && theme != STSettings.Instance.Theme)
+        {
+            STSettings.Instance.Theme = nameof(I18nRes.WindowsDefault);
+            STSettings.Save();
+        }
         // 注册事件
         ComboBox_Language.SelectionChangedEvent += ComboBox_Language_SelectionChangedEvent;
         WeakReferenceMessenger.Default.Register<ExtensionDebugPathErrorMessage>(
@@ -70,10 +114,8 @@ internal partial class SettingsPageViewModel : ObservableObject
 
     private void CultureChangedAction(CultureInfo cultureInfo) { }
 
-    private void ComboBox_Language_SelectionChangedEvent(object parameter)
+    private void ComboBox_Language_SelectionChangedEvent(ComboBoxItemVM item)
     {
-        if (parameter is not ComboBoxItemVM item)
-            return;
         var language = item.ToolTip!.ToString()!;
         if (ObservableI18n.CurrentCulture.Name == language)
             return;
@@ -82,6 +124,17 @@ internal partial class SettingsPageViewModel : ObservableObject
         STSettings.Save();
         sr_logger.Info($"{I18nRes.LanguageSwitch}: {ObservableI18n.CurrentCulture.Name}");
     }
+
+    //private void ComboBox_Theme_SelectionChangedEvent(ComboBoxItemVM item)
+    //{
+    //    if (item.Tag is not string themeName)
+    //        return;
+    //    STSettings.Instance.Theme = themeName;
+    //    STSettings.Save();
+    //    if (themeName == nameof(I18nRes.WindowsDefault))
+    //        themeName = WindowsThemeIsLight() ? nameof(I18nRes.Light) : nameof(I18nRes.Dark);
+    //    GlobalSettings.ChangeTheme(themeName);
+    //}
 
     [RelayCommand]
     private void SetExtensionDebugPath()

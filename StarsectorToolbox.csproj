@@ -52,6 +52,9 @@
     <Reference Include="HKW.ViewModels">
       <HintPath>..\HKW.ViewModels\HKW.ViewModels\bin\Release\net6.0\HKW.ViewModels.dll</HintPath>
     </Reference>
+    <Reference Include="HKW.WPF">
+      <HintPath>..\HKW.WPF\bin\Release\net6.0-windows\HKW.WPF.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

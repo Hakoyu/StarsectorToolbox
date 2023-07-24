@@ -5,6 +5,7 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:dpu="https://opensource.panuon.com/wpf-ui"
   xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+  xmlns:hkw="https://hkw.com/wpf"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:local="clr-namespace:StarsectorToolbox.Views.GameSettings"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -26,20 +27,48 @@
       </Grid.ColumnDefinitions>
       <ScrollViewer x:Name="ScrollViewer_Catalog" VerticalScrollBarVisibility="Auto">
         <StackPanel>
-          <!--<Button Content="{Binding I18n.I18nRes.STSetting}">
+          <Button Content="{Binding I18n.I18nRes.GameInfo}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
-                <local:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_MainScrollViewer}" TargetControl="{Binding ElementName=Button_DDD}" />
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_GameInfo}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
-          <Button Content="{Binding I18n.I18nRes.ExtensionDebugPathSetting}">
+          <Button Content="{Binding I18n.I18nRes.SetMemory}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
-                <local:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_MainScrollViewer}" TargetControl="{Binding ElementName=GroupBox_ExtensionDebugPathSetting}" />
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_SetMemory}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
-          </Button>-->
+          </Button>
+          <Button Content="{Binding I18n.I18nRes.GameLogCleaner}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=Group_GameLogCleaner}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+          <Button Content="{Binding I18n.I18nRes.MissionsLoadoutsCleaner}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_MissionsLoadoutsCleaner}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+          <Button Content="{Binding I18n.I18nRes.SaveCleaner}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_SaveClear}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+          <Button Content="{Binding I18n.I18nRes.CustomResolution}">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_CustomResolution}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
         </StackPanel>
       </ScrollViewer>
       <ScrollViewer

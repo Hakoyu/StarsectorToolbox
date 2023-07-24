@@ -160,4 +160,16 @@
   <data name="ExtensionDebugPathSetting" xml:space="preserve">
     <value>拓展调试路径设置</value>
   </data>
+  <data name="Theme" xml:space="preserve">
+    <value>主题</value>
+  </data>
+  <data name="WindowsDefault" xml:space="preserve">
+    <value>Windows默认</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>明亮</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>深色</value>
+  </data>
 </root>

@@ -140,7 +140,7 @@
           <BeginStoryboard x:Name="RemindSaveStoryboard">
             <Storyboard RepeatBehavior="Forever">
               <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Background.(Color)">
-                <!--  使用其它绑定方式设置值  -->
+                <!--  TODO: 使用其它绑定方式设置值  -->
                 <DiscreteColorKeyFrame KeyTime="0:0:1" Value="Aqua" />
                 <DiscreteColorKeyFrame KeyTime="0:0:1.5" Value="#00FFFFFF" />
               </ColorAnimationUsingKeyFrames>

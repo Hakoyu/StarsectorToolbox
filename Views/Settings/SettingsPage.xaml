@@ -3,6 +3,7 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:hkw="https://hkw.com/wpf"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   xmlns:local="clr-namespace:StarsectorToolbox.Views.Settings"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -33,14 +34,14 @@
           <Button Content="{Binding I18n.I18nRes.STSetting}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
-                <local:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=Button_DDD}" />
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_STSetting}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
           <Button Content="{Binding I18n.I18nRes.ExtensionDebugPathSetting}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
-                <local:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_ExtensionDebugPathSetting}" />
+                <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_ExtensionDebugPathSetting}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
@@ -51,22 +52,33 @@
         Grid.Column="1"
         VerticalScrollBarVisibility="Auto">
         <StackPanel>
-          <GroupBox x:Name="GroupBox_STSetting" Header="{Binding I18n.I18nRes.STSetting}">
-            <StackPanel
-              Grid.Row="1"
-              VerticalAlignment="Center"
-              Orientation="Horizontal">
+          <GroupBox
+            x:Name="GroupBox_STSetting"
+            Margin="0,0,0,10"
+            Header="{Binding I18n.I18nRes.STSetting}">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+              </Grid.RowDefinitions>
               <Button
                 x:Name="Button_OpenLogFile"
-                Margin="0,0,5,0"
-                Padding="5,0,5,0"
-                HorizontalAlignment="Left"
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
                 Command="{Binding OpenLogFileCommand}"
                 Content="{Binding I18n.I18nRes.OpenLogFile}" />
-              <Label x:Name="Label_Language" Content="{Binding I18n.I18nRes.Language}" />
+              <Label
+                Grid.Row="1"
+                HorizontalContentAlignment="Left"
+                Content="{Binding I18n.I18nRes.Language}" />
               <ComboBox
-                x:Name="ComboBox_Language"
-                Margin="0,0,5,0"
+                Grid.Row="1"
+                Grid.Column="1"
                 DisplayMemberPath="Content"
                 ItemsSource="{Binding ComboBox_Language.ItemsSource}"
                 SelectedItem="{Binding ComboBox_Language.SelectedItem}">
@@ -76,9 +88,23 @@
                   </i:EventTrigger>
                 </i:Interaction.Triggers>
               </ComboBox>
-            </StackPanel>
+              <Label
+                Grid.Row="2"
+                HorizontalContentAlignment="Left"
+                Content="{Binding I18n.I18nRes.Theme}" />
+              <ComboBox
+                Grid.Row="2"
+                Grid.Column="1"
+                DisplayMemberPath="Content"
+                ItemsSource="{Binding ComboBox_Theme.ItemsSource}"
+                SelectedItem="{Binding ComboBox_Theme.SelectedItem}"
+                SelectionChanged="ComboBox_SelectionChanged" />
+            </Grid>
           </GroupBox>
-          <GroupBox x:Name="GroupBox_ExtensionDebugPathSetting" Header="{Binding I18n.I18nRes.ExtensionDebugPathSetting}">
+          <GroupBox
+            x:Name="GroupBox_ExtensionDebugPathSetting"
+            Margin="0,0,0,10"
+            Header="{Binding I18n.I18nRes.ExtensionDebugPathSetting}">
             <Grid>
               <Grid.ColumnDefinitions>
                 <ColumnDefinition />

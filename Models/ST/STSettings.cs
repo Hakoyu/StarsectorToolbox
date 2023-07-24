@@ -27,9 +27,12 @@ internal class STSettings : ITomlClassComment
     public string Language { get; set; } = "zh-CN";
 
     [TomlPropertyOrder(1)]
-    public GameClass Game { get; set; } = new();
+    public string Theme { get; set; } = "WindowsDefault";
 
     [TomlPropertyOrder(2)]
+    public GameClass Game { get; set; } = new();
+
+    [TomlPropertyOrder(3)]
     public ExtensionClass Extension { get; set; } = new();
 
     public static void Initialize(string tomlFile)

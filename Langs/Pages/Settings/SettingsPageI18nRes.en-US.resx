@@ -180,4 +180,16 @@
   <data name="ExtensionDebugPathSetting" xml:space="preserve">
     <value>Extension debug path setting</value>
   </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="WindowsDefault" xml:space="preserve">
+    <value>Windows default</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
 </root>

@@ -88,6 +88,15 @@ namespace StarsectorToolbox.Langs.Pages.Settings {
         }
         
         /// <summary>
+        ///   查找类似 深色 的本地化字符串。
+        /// </summary>
+        public static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 重新载入后生效,需要重载吗? 的本地化字符串。
         /// </summary>
         public static string EffectiveAfterReload {
@@ -147,6 +156,15 @@ namespace StarsectorToolbox.Langs.Pages.Settings {
         public static string LanguageSwitch {
             get {
                 return ResourceManager.GetString("LanguageSwitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 明亮 的本地化字符串。
+        /// </summary>
+        public static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
             }
         }
         
@@ -246,6 +264,24 @@ namespace StarsectorToolbox.Langs.Pages.Settings {
         public static string STSetting {
             get {
                 return ResourceManager.GetString("STSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 主题 的本地化字符串。
+        /// </summary>
+        public static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Windows默认 的本地化字符串。
+        /// </summary>
+        public static string WindowsDefault {
+            get {
+                return ResourceManager.GetString("WindowsDefault", resourceCulture);
             }
         }
     }
