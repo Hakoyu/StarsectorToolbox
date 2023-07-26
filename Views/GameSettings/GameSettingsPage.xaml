@@ -19,7 +19,7 @@
   <d:Page.DataContext>
     <vm:GameSettingsPageViewModel />
   </d:Page.DataContext>
-  <GroupBox pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Header="{Binding I18n.I18nRes.GameSettings}">
+  <GroupBox Header="{Binding I18n.I18nRes.GameSettings}" Style="{StaticResource PageGroupBox}">
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto" MinWidth="100" />
@@ -27,42 +27,42 @@
       </Grid.ColumnDefinitions>
       <ScrollViewer x:Name="ScrollViewer_Catalog" VerticalScrollBarVisibility="Auto">
         <StackPanel>
-          <Button Content="{Binding I18n.I18nRes.GameInfo}">
+          <Button Content="{Binding I18n.I18nRes.GameInfo}" Style="{StaticResource Navigation}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_GameInfo}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
-          <Button Content="{Binding I18n.I18nRes.SetMemory}">
+          <Button Content="{Binding I18n.I18nRes.SetMemory}" Style="{StaticResource Navigation}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_SetMemory}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
-          <Button Content="{Binding I18n.I18nRes.GameLogCleaner}">
+          <Button Content="{Binding I18n.I18nRes.GameLogCleaner}" Style="{StaticResource Navigation}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=Group_GameLogCleaner}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
-          <Button Content="{Binding I18n.I18nRes.MissionsLoadoutsCleaner}">
+          <Button Content="{Binding I18n.I18nRes.MissionsLoadoutsCleaner}" Style="{StaticResource Navigation}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_MissionsLoadoutsCleaner}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
-          <Button Content="{Binding I18n.I18nRes.SaveCleaner}">
+          <Button Content="{Binding I18n.I18nRes.SaveCleaner}" Style="{StaticResource Navigation}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_SaveClear}" />
               </i:EventTrigger>
             </i:Interaction.Triggers>
           </Button>
-          <Button Content="{Binding I18n.I18nRes.CustomResolution}">
+          <Button Content="{Binding I18n.I18nRes.CustomResolution}" Style="{StaticResource Navigation}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <hkw:ScrollToControlAction ScrollViewer="{Binding ElementName=ScrollViewer_Main}" TargetControl="{Binding ElementName=GroupBox_CustomResolution}" />
@@ -74,7 +74,8 @@
       <ScrollViewer
         x:Name="ScrollViewer_Main"
         Grid.Column="1"
-        dpu:ScrollViewerHelper.VerticalOffset="0"
+        Padding="10"
+        dpu:ScrollViewerHelper.VerticalOffset="100"
         VerticalScrollBarVisibility="Auto">
         <StackPanel>
           <GroupBox
@@ -87,7 +88,7 @@
                   <ColumnDefinition Width="Auto" />
                   <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Label Content="{Binding I18n.I18nRes.GameVersion}" />
+                <Label Content="常规" />
                 <Label
                   Grid.Column="1"
                   HorizontalContentAlignment="Left"
@@ -120,7 +121,7 @@
                   <ColumnDefinition />
                   <ColumnDefinition Width="Auto" MinWidth="100" />
                 </Grid.ColumnDefinitions>
-                <Label Content="{Binding I18n.I18nRes.GameKey}" />
+                <Label Content="{Binding I18n.I18nRes.GameKey}" FontSize="14" />
                 <PasswordBox
                   Grid.Column="1"
                   pu:PasswordBoxHelper.Password="{Binding GameKey}"

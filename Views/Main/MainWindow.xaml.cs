@@ -29,7 +29,7 @@ internal partial class MainWindow : WindowX
         // MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         // MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
         // 获取系统主题色
-        //Application.Current.Resources["MainFontSize"] = 24.0;
+        //Application.Current.Resources["BodyFontSize"] = 24.0;
 
         var windowGlassBrush = SystemParameters.WindowGlassBrush;
         Application.Current.Resources[nameof(SystemParameters.WindowGlassBrush)] = windowGlassBrush;

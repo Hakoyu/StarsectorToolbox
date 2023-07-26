@@ -22,7 +22,7 @@
   <emoji:TextBlock
     x:Key="EmojiTextBlock"
     x:Shared="false"
-    FontSize="{DynamicResource MainFontSize}"
+    FontSize="{DynamicResource BodyFontSize}"
     Text="{Binding Icon}" />
   <Style
     x:Key="MenuItemViewStyle"

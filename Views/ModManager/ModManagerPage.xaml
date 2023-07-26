@@ -65,7 +65,7 @@
     </Style>
   </Page.Resources>
   <Grid>
-    <GroupBox pu:GroupBoxHelper.HeaderHorizontalContentAlignment="Center" Header="{Binding I18n.I18nRes.ModManager}">
+    <GroupBox Header="{Binding I18n.I18nRes.ModManager}" Style="{StaticResource PageGroupBox}">
       <Grid>
         <Grid>
           <Grid.ColumnDefinitions>

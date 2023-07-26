@@ -11,9 +11,9 @@
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:GroupBoxHelper.HeaderHeight" Value="20" />
-    <Setter Property="pu:GroupBoxHelper.HeaderFontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:GroupBoxHelper.HeaderFontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:GroupBoxHelper.HeaderHorizontalContentAlignment" Value="Center" />
     <Setter Property="pu:GroupBoxHelper.HeaderPadding" Value="0" />
     <Setter Property="pu:GroupBoxHelper.HeaderFontWeight" Value="Bold" />
@@ -33,8 +33,8 @@
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource TitleFontSize}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource SubTitleFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
@@ -49,7 +49,7 @@
     <Setter Property="Background" Value="{DynamicResource ColorLight1}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="pu:ToolTipHelper.Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="pu:ToolTipHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
@@ -64,11 +64,11 @@
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
     <Setter Property="pu:ButtonHelper.HoverShadowColor" Value="{DynamicResource ColorAqua}" />
@@ -84,7 +84,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside" />
     <Setter Property="pu:ListBoxHelper.ItemsHoverBackground" Value="{DynamicResource ColorLight2}" />
     <Setter Property="pu:ToolTipHelper.Background" Value="{DynamicResource ColorLight2}" />
@@ -102,8 +102,8 @@
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
@@ -129,9 +129,9 @@
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="MinWidth" Value="30" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="ItemContainerStyle" Value="{DynamicResource ComboBoxItemBaseStyle}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
@@ -150,8 +150,8 @@
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
@@ -174,7 +174,7 @@
     <Setter Property="Background" Value="{DynamicResource ColorLight2}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:ExpanderHelper.HeaderPadding" Value="5" />
     <!--<Setter Property="pu:ExpanderHelper.HeaderHeight" Value="30" />-->
     <Setter Property="pu:ExpanderHelper.HeaderHorizontalContentAlignment" Value="Center" />
@@ -194,7 +194,7 @@
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="RowHeaderWidth" Value="0" />
     <Setter Property="RowBackground" Value="{DynamicResource ColorBG}" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:ScrollViewerHelper.ScrollBarPosition" Value="Outside" />
     <Setter Property="pu:DataGridHelper.ColumnHeaderFontSize" Value="16" />
     <Setter Property="pu:DataGridHelper.ColumnHeaderSeparatorVisibility" Value="Collapsed" />
@@ -219,8 +219,8 @@
     <Setter Property="MinHeight" Value="30" />
     <Setter Property="MinWidth" Value="30" />
     <Setter Property="Padding" Value="5" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:IconHelper.HorizontalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.VerticalAlignment" Value="Center" />
     <Setter Property="pu:IconHelper.Margin" Value="0,0,5,0" />
@@ -237,7 +237,7 @@
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="ItemContainerStyle" Value="{DynamicResource MenuItemBaseStyle}" />
     <Setter Property="pu:ShadowHelper.ShadowDepth" Value="3" />
     <Setter Property="pu:ContextMenuHelper.ShadowColor" Value="{DynamicResource ColorAqua}" />
@@ -252,19 +252,19 @@
     x:Key="MenuItemBaseStyle"
     BasedOn="{StaticResource {x:Static pu:ContextMenuHelper.MenuItemStyleKey}}"
     TargetType="MenuItem">
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight3}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="ItemContainerStyle" Value="{DynamicResource MenuItemBaseStyle}" />
-    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="pu:IconHelper.FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="pu:MenuItemHelper.HoverBackground" Value="{DynamicResource ColorSelected}" />
   </Style>
   <Style
     x:Key="WindowBaseStyle"
     BasedOn="{StaticResource {x:Type Window}}"
     TargetType="Window">
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
@@ -276,7 +276,7 @@
     x:Key="WindowXBaseStyle"
     BasedOn="{StaticResource {x:Type pu:WindowX}}"
     TargetType="pu:WindowX">
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="BorderBrush" Value="{DynamicResource ColorLight2}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
@@ -299,7 +299,7 @@
     x:Key="CheckBoxBaseStyle"
     BasedOn="{StaticResource {x:Type CheckBox}}"
     TargetType="CheckBox">
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
     <Setter Property="Background" Value="{DynamicResource ColorBG}" />
     <Setter Property="Foreground" Value="{DynamicResource ColorFG}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -310,6 +310,6 @@
   </Style>
   <Style x:Key="EmojiTextBlockBaseStyle" TargetType="emoji:TextBlock">
     <!--<Setter Property="Margin" Value="0,0,0,2" />-->
-    <Setter Property="FontSize" Value="{DynamicResource MainFontSize}" />
+    <Setter Property="FontSize" Value="{DynamicResource BodyFontSize}" />
   </Style>
 </ResourceDictionary>
