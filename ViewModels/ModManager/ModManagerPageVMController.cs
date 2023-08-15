@@ -309,35 +309,34 @@ internal partial class ModManagerPageViewModel
 
     private void RefreshAllGroupItemContextMenus()
     {
-        foreach (var item in ListBox_MainMenu.ItemsSource)
-        {
-            var group = item.Tag!.ToString()!;
-            item.ContextMenu = CreateGroupItemContextMenu(group);
-        }
-        foreach (var item in ListBox_TypeGroupMenu.ItemsSource)
-        {
-            var group = item.Tag!.ToString()!;
-            item.ContextMenu = CreateGroupItemContextMenu(group);
-        }
-        ListBox_UserGroupMenu.ItemsSource[0].ContextMenu = CreateGroupItemContextMenu(
+        //foreach (var item in ListBox_MainMenu.ItemsSource)
+        //{
+        //    var group = item.Tag!.ToString()!;
+        //    item.ContextMenu = CreateGroupItemContextMenu(group);
+        //}
+        //foreach (var item in ListBox_TypeGroupMenu.ItemsSource)
+        //{
+        //    var group = item.Tag!.ToString()!;
+        //    item.ContextMenu = CreateGroupItemContextMenu(group);
+        //}
+        ComboBox_UserGroup.ItemsSource[0].ContextMenu = CreateGroupItemContextMenu(
             nameof(ModTypeGroupName.Collected)
         );
     }
 
     private ContextMenuVM CreateGroupItemContextMenu(string group)
     {
-        return new(
-            (list) =>
+        return new(() =>
+        {
+            ObservableCollection<MenuItemVM> items =
+                new() { EnableAllModsMenuItem(group), DisableAllModsMenuItem(group) };
+            if (r_allUserGroups.Count > 0)
             {
-                list.Add(EnableAllModsMenuItem(group));
-                list.Add(DisableAllModsMenuItem(group));
-                if (r_allUserGroups.Count > 0)
-                {
-                    list.Add(AddModsToUserGroupMenuItem(group));
-                    list.Add(RemoveModsFromUserGroupMenuItem(group));
-                }
+                items.Add(AddModsToUserGroupMenuItem(group));
+                items.Add(RemoveModsFromUserGroupMenuItem(group));
             }
-        );
+            return items;
+        });
 
         MenuItemVM EnableAllModsMenuItem(string group)
         {
@@ -445,16 +444,19 @@ internal partial class ModManagerPageViewModel
     {
         sr_logger.Debug($"{showInfo.Id} {I18nRes.AddContextMenu}");
         ContextMenuVM contextMenu =
-            new(
-                (list) =>
-                {
-                    list.Add(EnableOrDisableSelectedModsMenuItem(_nowSelectedMods));
-                    list.Add(CollectOrUncollectSelectedModsMenuItem(_nowSelectedMods));
-                    list.Add(OpenModDirectoryMenuItem(showInfo));
-                    list.Add(DeleteModMenuItem(showInfo));
-                    RefreshModContextMenu(showInfo, false);
-                }
-            );
+            new(() =>
+            {
+                ObservableCollection<MenuItemVM> items =
+                    new()
+                    {
+                        EnableOrDisableSelectedModsMenuItem(_nowSelectedMods),
+                        CollectOrUncollectSelectedModsMenuItem(_nowSelectedMods),
+                        OpenModDirectoryMenuItem(showInfo),
+                        DeleteModMenuItem(showInfo)
+                    };
+                RefreshModContextMenu(showInfo, false);
+                return items;
+            });
         return contextMenu;
         MenuItemVM EnableOrDisableSelectedModsMenuItem(IList<ModShowInfo> mods)
         {
@@ -777,12 +779,12 @@ internal partial class ModManagerPageViewModel
 
     private void GetAllListBoxItems()
     {
-        foreach (var item in ListBox_MainMenu.ItemsSource)
-            r_allListBoxItems.Add(item.Tag!.ToString()!, item);
-        foreach (var item in ListBox_TypeGroupMenu.ItemsSource)
-            r_allListBoxItems.Add(item.Tag!.ToString()!, item);
-        foreach (var item in ListBox_UserGroupMenu.ItemsSource)
-            r_allListBoxItems.Add(item.Tag!.ToString()!, item);
+        //foreach (var item in ListBox_MainMenu.ItemsSource)
+        //    r_allListBoxItems.Add(item.Tag!.ToString()!, item);
+        //foreach (var item in ListBox_TypeGroupMenu.ItemsSource)
+        //    r_allListBoxItems.Add(item.Tag!.ToString()!, item);
+        //foreach (var item in ComboBox_UserGroup.ItemsSource)
+        //    r_allListBoxItems.Add(item.Tag!.ToString()!, item);
         sr_logger.Info(I18nRes.ListBoxItemsRetrievalCompleted);
     }
 
@@ -1241,8 +1243,8 @@ internal partial class ModManagerPageViewModel
             var icon = viewModel.UserGroupIcon;
             var name = viewModel.UserGroupName;
             if (
-                viewModel.BaseListBoxItem is not null
-                && TryRenameUserGroup(viewModel.BaseListBoxItem!, icon, name)
+                viewModel.BaseComboBoxItem is not null
+                && TryRenameUserGroup(viewModel.BaseComboBoxItem!, icon, name)
             )
                 viewModel.Hide();
             else if (TryAddUserGroup(icon, name))
@@ -1286,13 +1288,13 @@ internal partial class ModManagerPageViewModel
 
     private void AddUserGroup(string icon, string group, bool remindSave = true)
     {
-        ListBoxItemVM listBoxItem = new();
-        SetListBoxItemData(listBoxItem, group);
-        listBoxItem.ContextMenu = CreateUserGroupItemContextMenu(listBoxItem);
-        listBoxItem.Icon = icon;
-        ListBox_UserGroupMenu.ItemsSource.Add(listBoxItem);
+        ComboBoxItemVM comboBoxItem = new();
+        SetComboBoxItemData(comboBoxItem, group);
+        comboBoxItem.ContextMenu = CreateUserGroupItemContextMenu(comboBoxItem);
+        comboBoxItem.Icon = icon;
+        //ComboBox_UserGroup.ItemsSource.Add(comboBoxItem);
         r_allUserGroups.Add(group, new());
-        r_allListBoxItems.Add(group, listBoxItem);
+        //r_allListBoxItems.Add(group, comboBoxItem);
         r_allModShowInfoGroups.Add(group, new());
         AddExportUserGroupItem(group);
         sr_logger.Info($"{I18nRes.AddUserGroup} {icon} {group}");
@@ -1300,20 +1302,23 @@ internal partial class ModManagerPageViewModel
         RefreshAllGroupItemContextMenus();
     }
 
-    private ContextMenuVM CreateUserGroupItemContextMenu(ListBoxItemVM listBoxItem)
+    private ContextMenuVM CreateUserGroupItemContextMenu(ComboBoxItemVM listBoxItem)
     {
-        return new(
-            (list) =>
-            {
-                list.Add(EnableAllUserGroupModsMenuItem(listBoxItem));
-                list.Add(DisableAllUserGroupModsMenuItem(listBoxItem));
-                list.Add(CleanAllModsMenuItem(listBoxItem));
-                list.Add(RenameUserGroupMenuItem(listBoxItem));
-                list.Add(RemoveUserGroupMenuItem(listBoxItem));
-            }
-        );
+        return new(() =>
+        {
+            ObservableCollection<MenuItemVM> items =
+                new()
+                {
+                    EnableAllUserGroupModsMenuItem(listBoxItem),
+                    DisableAllUserGroupModsMenuItem(listBoxItem),
+                    CleanAllModsMenuItem(listBoxItem),
+                    RenameUserGroupMenuItem(listBoxItem),
+                    RemoveUserGroupMenuItem(listBoxItem)
+                };
+            return items;
+        });
 
-        MenuItemVM EnableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
+        MenuItemVM EnableAllUserGroupModsMenuItem(ComboBoxItemVM listBoxItem)
         {
             // 启用用户分组内的所有模组
             MenuItemVM menuItem = new();
@@ -1331,7 +1336,7 @@ internal partial class ModManagerPageViewModel
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
-        MenuItemVM DisableAllUserGroupModsMenuItem(ListBoxItemVM listBoxItem)
+        MenuItemVM DisableAllUserGroupModsMenuItem(ComboBoxItemVM listBoxItem)
         {
             // 禁用用户分组内所有模组
             MenuItemVM menuItem = new();
@@ -1349,7 +1354,7 @@ internal partial class ModManagerPageViewModel
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
-        MenuItemVM CleanAllModsMenuItem(ListBoxItemVM listBoxItem)
+        MenuItemVM CleanAllModsMenuItem(ComboBoxItemVM listBoxItem)
         {
             // 清空所有模组
             MenuItemVM menuItem = new();
@@ -1368,7 +1373,7 @@ internal partial class ModManagerPageViewModel
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
-        MenuItemVM RenameUserGroupMenuItem(ListBoxItemVM listBoxItem)
+        MenuItemVM RenameUserGroupMenuItem(ComboBoxItemVM comboBoxItem)
         {
             // 重命名分组
             MenuItemVM menuItem = new();
@@ -1377,11 +1382,11 @@ internal partial class ModManagerPageViewModel
                 (value) => menuItem.Header = value,
                 () => I18nRes.RenameUserGroup
             );
-            menuItem.CommandEvent += (p) => PrepareRenameUserGroup(listBoxItem);
+            menuItem.CommandEvent += (p) => PreviewRenameUserGroup(comboBoxItem);
             sr_logger.Debug($"{I18nRes.AddMenuItem} {menuItem.Header}");
             return menuItem;
         }
-        MenuItemVM RemoveUserGroupMenuItem(ListBoxItemVM listBoxItem)
+        MenuItemVM RemoveUserGroupMenuItem(ComboBoxItemVM listBoxItem)
         {
             // 删除分组
             MenuItemVM menuItem = new();
@@ -1396,7 +1401,7 @@ internal partial class ModManagerPageViewModel
         }
     }
 
-    private void RemoveUserGroup(ListBoxItemVM listBoxItem)
+    private void RemoveUserGroup(ComboBoxItemVM comboBoxItem)
     {
         if (
             MessageBoxVM.Show(
@@ -1408,10 +1413,10 @@ internal partial class ModManagerPageViewModel
             ) is MessageBoxVM.Result.No
         )
             return;
-        var name = listBoxItem!.Tag!.ToString()!;
-        if (_nowSelectedGroup == listBoxItem)
-            ListBox_MainMenu.SelectedIndex = 0;
-        ListBox_UserGroupMenu.ItemsSource.Remove(listBoxItem);
+        var name = comboBoxItem!.Tag!.ToString()!;
+        //if (_nowSelectedGroup == listBoxItem)
+        //    ListBox_MainMenu.SelectedIndex = 0;
+        //ComboBox_UserGroup.ItemsSource.Remove(comboBoxItem);
         r_allUserGroups.Remove(name);
         r_allListBoxItems.Remove(name);
         r_allModShowInfoGroups.Remove(name);
@@ -1420,17 +1425,17 @@ internal partial class ModManagerPageViewModel
         RemoveExportUserGroupItem(name);
     }
 
-    private void PrepareRenameUserGroup(ListBoxItemVM listBoxItem)
+    private void PreviewRenameUserGroup(ComboBoxItemVM comboBoxItem)
     {
-        string icon = listBoxItem.Icon!.ToString()!;
-        string name = listBoxItem.ToolTip!.ToString()!;
+        string icon = comboBoxItem.Icon!.ToString()!;
+        string name = comboBoxItem.ToolTip!.ToString()!;
         AddUserGroupWindow.UserGroupIcon = icon;
         AddUserGroupWindow.UserGroupName = name;
-        AddUserGroupWindow.BaseListBoxItem = listBoxItem;
+        AddUserGroupWindow.BaseComboBoxItem = comboBoxItem;
         AddUserGroupWindow.ShowDialog();
     }
 
-    private bool TryRenameUserGroup(ListBoxItemVM listBoxItem, string newIcon, string newName)
+    private bool TryRenameUserGroup(ComboBoxItemVM comboBoxItem, string newIcon, string newName)
     {
         if (newName == ModTypeGroupName.Collected || newName == c_strUserCustomData)
         {
@@ -1454,16 +1459,16 @@ internal partial class ModManagerPageViewModel
             MessageBoxVM.Show(new(I18nRes.UserGroupNamingFailed));
             return false;
         }
-        RenameUserGroup(listBoxItem, newIcon, newName);
+        RenameUserGroup(comboBoxItem, newIcon, newName);
         return true;
     }
 
-    private void RenameUserGroup(ListBoxItemVM listBoxItem, string newIcon, string newName)
+    private void RenameUserGroup(ComboBoxItemVM comboBoxItem, string newIcon, string newName)
     {
-        string name = listBoxItem.ToolTip!.ToString()!;
+        string name = comboBoxItem.ToolTip!.ToString()!;
         // 重命名图标
-        listBoxItem.Icon = newIcon;
-        SetListBoxItemData(listBoxItem, newName);
+        comboBoxItem.Icon = newIcon;
+        SetComboBoxItemData(comboBoxItem, newName);
         // 重命名组名称
         var tempUserGroup = r_allUserGroups[name];
         r_allUserGroups.Remove(name);
@@ -1474,13 +1479,13 @@ internal partial class ModManagerPageViewModel
         r_allModShowInfoGroups.Add(newName, tempShowInfos);
         // 重命名列表项
         r_allListBoxItems.Remove(name);
-        r_allListBoxItems.Add(newName, listBoxItem);
+        //r_allListBoxItems.Add(newName, comboBoxItem);
         RefreshGroupModCount();
         RefreshAllGroupItemContextMenus();
         RenameExportUserGroupItem(name, newName);
     }
 
-    private static void SetListBoxItemData(ListBoxItemVM item, string name)
+    private static void SetComboBoxItemData(ComboBoxItemVM item, string name)
     {
         item.Content = name;
         item.ToolTip = name;
@@ -1732,12 +1737,11 @@ internal partial class ModManagerPageViewModel
 
     private void InitializeGroupTypeExpanderContextMenu()
     {
-        GroupTypeExpanderContextMenu = new(
-            (list) =>
-            {
-                list.Add(ModTypeGroupUpdateMenuItem());
-            }
-        );
+        GroupTypeExpanderContextMenu = new(() =>
+        {
+            ObservableCollection<MenuItemVM> items = new() { ModTypeGroupUpdateMenuItem() };
+            return items;
+        });
 
         static MenuItemVM ModTypeGroupUpdateMenuItem()
         {

@@ -333,8 +333,8 @@ Original version: {0} =&gt; New version: {1}</value>
   <data name="DisabledMods" xml:space="preserve">
     <value>Disabled mods</value>
   </data>
-  <data name="GroupedByModType" xml:space="preserve">
-    <value>Grouped by mod type</value>
+  <data name="ModTypeGroup" xml:space="preserve">
+    <value>Mod type group</value>
   </data>
   <data name="Libraries" xml:space="preserve">
     <value>Libraries</value>

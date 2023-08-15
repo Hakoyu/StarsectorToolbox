@@ -38,36 +38,35 @@ internal partial class SettingsPageViewModel : ObservableObject
         );
 
     [ObservableProperty]
-    private ComboBoxVM _comboBox_Theme =
-        new(() =>
-        {
-            var items = new ObservableCollection<ComboBoxItemVM>();
-            var item = new ComboBoxItemVM();
-            item.Tag = nameof(I18nRes.WindowsDefault);
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, taget) => taget.Content = value,
-                () => I18nRes.WindowsDefault
-            );
-            items.Add(item);
-            item = new ComboBoxItemVM();
-            item.Tag = nameof(I18nRes.Light);
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, taget) => taget.Content = value,
-                () => I18nRes.Light
-            );
-            items.Add(item);
-            item = new ComboBoxItemVM();
-            item.Tag = nameof(I18nRes.Dark);
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, taget) => taget.Content = value,
-                () => I18nRes.Dark
-            );
-            items.Add(item);
-            return items;
-        });
+    private ComboBoxVM _comboBox_Theme = new(new Func<ObservableCollection<ComboBoxItemVM>>(() =>
+            {
+                var items = new ObservableCollection<ComboBoxItemVM>();
+                var item = new ComboBoxItemVM();
+                item.Tag = nameof(I18nRes.WindowsDefault);
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, taget) => taget.Content = value,
+                    () => I18nRes.WindowsDefault
+                );
+                items.Add(item);
+                item = new ComboBoxItemVM();
+                item.Tag = nameof(I18nRes.Light);
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, taget) => taget.Content = value,
+                    () => I18nRes.Light
+                );
+                items.Add(item);
+                item = new ComboBoxItemVM();
+                item.Tag = nameof(I18nRes.Dark);
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, taget) => taget.Content = value,
+                    () => I18nRes.Dark
+                );
+                items.Add(item);
+                return items;
+            })());
 
     public SettingsPageViewModel()
     {

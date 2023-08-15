@@ -54,18 +54,19 @@ internal partial class GameSettingsPageViewModel : ObservableObject
         $"{GameInfo.SaveDirectory}\\missions";
 
     [ObservableProperty]
-    private ComboBoxVM _comboBox_MissionsLoadouts =
-        new(() =>
-        {
-            ObservableCollection<ComboBoxItemVM> items = new();
-            ComboBoxItemVM item = new() { ToolTip = nameof(I18nRes.All) };
-            item.Content = ObservableI18n.BindingValue(
-                (value) => item.Content = value,
-                () => I18nRes.All
-            );
-            items.Add(item);
-            return items;
-        });
+    private ComboBoxVM _comboBox_MissionsLoadouts = new(new Func<
+                ObservableCollection<ComboBoxItemVM>
+            >(() =>
+            {
+                ObservableCollection<ComboBoxItemVM> items = new();
+                ComboBoxItemVM item = new() { ToolTip = nameof(I18nRes.All) };
+                item.Content = ObservableI18n.BindingValue(
+                    (value) => item.Content = value,
+                    () => I18nRes.All
+                );
+                items.Add(item);
+                return items;
+            })());
 
     public GameSettingsPageViewModel() { }
 

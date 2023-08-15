@@ -333,7 +333,7 @@
   <data name="DisabledMods" xml:space="preserve">
     <value>禁用的模组</value>
   </data>
-  <data name="GroupedByModType" xml:space="preserve">
+  <data name="ModTypeGroup" xml:space="preserve">
     <value>模组类型分组</value>
   </data>
   <data name="Libraries" xml:space="preserve">

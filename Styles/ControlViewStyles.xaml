@@ -24,6 +24,7 @@
     x:Shared="false"
     FontSize="{DynamicResource SubTitleFontSize}"
     Text="{Binding Icon}" />
+
   <Style
     x:Key="MenuItemViewStyle"
     BasedOn="{StaticResource {x:Type MenuItem}}"
@@ -64,6 +65,7 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
+
   <Style
     x:Key="MenuItemViewStyleOnListBoxItem"
     BasedOn="{StaticResource {x:Type MenuItem}}"
@@ -102,6 +104,7 @@
       </Setter.Value>
     </Setter>
   </Style>
+
   <Style
     x:Key="ListBoxItemViewStyle"
     BasedOn="{StaticResource {x:Type ListBoxItem}}"
@@ -130,6 +133,7 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
+
   <Style
     x:Key="RemindStyle"
     BasedOn="{StaticResource {x:Type Button}}"
@@ -153,6 +157,7 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
+
   <Style
     x:Key="ExpanderSelectedItemStyle"
     BasedOn="{StaticResource {x:Type Expander}}"
@@ -164,12 +169,14 @@
       </DataTrigger>
     </Style.Triggers>
   </Style>
+
   <Style
     x:Key="ComboBoxViewStyle"
     BasedOn="{StaticResource {x:Type ComboBox}}"
     TargetType="ComboBox">
     <Setter Property="DisplayMemberPath" Value="Content" />
   </Style>
+
   <!--<Style
     x:Key="ComboBoxItemView"
     BasedOn="{StaticResource ComboBoxItemBaseStyle}"

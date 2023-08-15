@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspose.Zip" Version="23.6.0" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Aspose.Zip" Version="23.7.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.4" />
     <PackageReference Include="HKW.TOML" Version="1.1.7" />
     <PackageReference Include="HKW.Utils" Version="0.1.4" />
@@ -40,8 +40,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="NLog" Version="5.2.2" />
-    <PackageReference Include="Panuon.WPF.UI" Version="1.1.15" />
+    <PackageReference Include="NLog" Version="5.2.3" />
+    <PackageReference Include="Panuon.WPF.UI" Version="1.1.15.5" />
     <PackageReference Include="SharpCompress" Version="0.33.0" />
     <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />

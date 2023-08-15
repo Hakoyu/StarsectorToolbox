@@ -13,7 +13,7 @@ internal partial class AddUserGroupWindowViewModel : WindowVM
     [ObservableProperty]
     private string _userGroupName = string.Empty;
 
-    public ListBoxItemVM? BaseListBoxItem;
+    public ComboBoxItemVM? BaseComboBoxItem;
 
     public AddUserGroupWindowViewModel()
         : base(new()) { }
@@ -27,7 +27,7 @@ internal partial class AddUserGroupWindowViewModel : WindowVM
         {
             UserGroupIcon = string.Empty;
             UserGroupName = string.Empty;
-            BaseListBoxItem = null;
+            BaseComboBoxItem = null;
             Utils.RemoveMainWindowBlurEffect();
         };
     }

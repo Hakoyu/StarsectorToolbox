@@ -24,12 +24,6 @@
         <ResourceDictionary Source="pack://application:,,,/Panuon.WPF.UI;component/Control.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Styles/ControlStyles.xaml" />
         <ResourceDictionary Source="pack://application:,,,/Styles/ControlViewStyles.xaml" />
-        <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlStyles.xaml" />-->
-        <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/ControlViewStyles.xaml" />-->
-        <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/ColorStyles.xaml" />-->
-        <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/FontStyles.xaml" />-->
-        <!--  TODO: 设置全局样式出现问题,需解决  -->
-        <!--<ResourceDictionary Source="pack://application:,,,/ThemeResources/OverwrideDefaultControlStyles.xaml" />-->
         <ResourceDictionary>
           <pu:MessageBoxXSettings
             x:Key="MessageBoxXSettings"

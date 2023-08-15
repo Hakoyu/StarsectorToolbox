@@ -551,15 +551,6 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         }
         
         /// <summary>
-        ///   查找类似 模组类型分组 的本地化字符串。
-        /// </summary>
-        public static string GroupedByModType {
-            get {
-                return ResourceManager.GetString("GroupedByModType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 图标 的本地化字符串。
         /// </summary>
         public static string Icon {
@@ -905,6 +896,15 @@ namespace StarsectorToolbox.Langs.Pages.ModManager {
         public static string ModShowInfoSetSuccess {
             get {
                 return ResourceManager.GetString("ModShowInfoSetSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 模组类型分组 的本地化字符串。
+        /// </summary>
+        public static string ModTypeGroup {
+            get {
+                return ResourceManager.GetString("ModTypeGroup", resourceCulture);
             }
         }
         

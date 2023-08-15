@@ -8,8 +8,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HKW.HKWViewModels;
 using HKW.HKWViewModels.Controls;
+using HKW.HKWViewModels.Controls.Attachments;
 using HKW.HKWViewModels.Dialogs;
 using StarsectorToolbox.Libs;
+using StarsectorToolbox.Models;
 using StarsectorToolbox.Models.GameInfo;
 using StarsectorToolbox.Models.ModInfo;
 using I18nRes = StarsectorToolbox.Langs.Pages.ModManager.ModManagerPageI18nRes;
@@ -84,179 +86,205 @@ internal partial class ModManagerPageViewModel : ObservableObject
     #endregion ObservableProperty
 
     /// <summary>当前选择的列表项</summary>
-    private ListBoxItemVM _nowSelectedGroup = null!;
+    private ComboBoxItemVM<ModTypeGroupItem> _nowSelectedGroup = null!;
 
     private string NowSelectedGroupName => _nowSelectedGroup!.Tag!.ToString()!;
 
     #region ListBox
 
     [ObservableProperty]
-    private ListBoxVM _listBox_MainMenu =
-        new(() =>
-        {
-            ObservableCollection<ListBoxItemVM> items = new();
-            ListBoxItemVM item = new() { Icon = "🅰", Tag = ModTypeGroupName.All };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.AllMods
-            );
-            items.Add(item);
-            item = new() { Icon = "✅", Tag = ModTypeGroupName.Enabled, };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.EnabledMods
-            );
-            items.Add(item);
-            item = new() { Icon = "❎", Tag = ModTypeGroupName.Disabled };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.DisabledMods
-            );
-            items.Add(item);
-            return items;
-        });
+    private ComboBoxVM<ModTypeGroupItem> _comboBox_MainGroup = new(new Func<
+                ObservableCollection<ComboBoxItemVM<ModTypeGroupItem>>
+            >(() =>
+            {
+                ObservableCollection<ComboBoxItemVM<ModTypeGroupItem>> items = new();
+                ComboBoxItemVM<ModTypeGroupItem> item =
+                    new() { Icon = "🅰", Tag = ModTypeGroupName.All };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.AllMods
+                );
+                items.Add(item);
+                item = new() { Icon = "✅", Tag = ModTypeGroupName.Enabled, };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.EnabledMods
+                );
+                items.Add(item);
+                item = new() { Icon = "❎", Tag = ModTypeGroupName.Disabled };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.DisabledMods
+                );
+                items.Add(item);
+                return items;
+            })());
 
     [ObservableProperty]
-    private ListBoxVM _listBox_TypeGroupMenu =
-        new(() =>
-        {
-            ObservableCollection<ListBoxItemVM> items = new();
-            ListBoxItemVM item = new() { Icon = "🔝", Tag = ModTypeGroupName.Libraries };
-            items.Add(item);
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.Libraries
-            );
-            item = new() { Icon = "☢", Tag = ModTypeGroupName.MegaMods };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.MegaMods
-            );
-            items.Add(item);
-            item = new() { Icon = "🏁", Tag = ModTypeGroupName.FactionMods };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.FactionMods
-            );
-            items.Add(item);
-            item = new() { Icon = "🆙", Tag = ModTypeGroupName.ContentExtensions };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.ContentExtensions
-            );
-            items.Add(item);
-            item = new() { Icon = "🛠", Tag = ModTypeGroupName.UtilityMods };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.UtilityMods
-            );
-            items.Add(item);
-            item = new() { Icon = "🛄", Tag = ModTypeGroupName.MiscellaneousMods };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.MiscellaneousMods
-            );
-            items.Add(item);
-            item = new() { Icon = "✨", Tag = ModTypeGroupName.BeautifyMods };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.BeautifyMods
-            );
-            items.Add(item);
-            item = new() { Icon = "🆓", Tag = ModTypeGroupName.UnknownMods };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.ToolTip = target.Content = value,
-                () => I18nRes.UnknownMods
-            );
-            items.Add(item);
-            return items;
-        });
+    private ComboBoxVM<ModTypeGroupItem> _comboBox_TypeGroup = new(new Func<
+                ObservableCollection<ComboBoxItemVM<ModTypeGroupItem>>
+            >(() =>
+            {
+                ObservableCollection<ComboBoxItemVM<ModTypeGroupItem>> items = new();
+                ComboBoxItemVM<ModTypeGroupItem> item =
+                    new() { Icon = "🔝", Tag = ModTypeGroupName.Libraries };
+                items.Add(item);
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.Libraries
+                );
+                item = new() { Icon = "☢", Tag = ModTypeGroupName.MegaMods };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.MegaMods
+                );
+                items.Add(item);
+                item = new() { Icon = "🏁", Tag = ModTypeGroupName.FactionMods };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.FactionMods
+                );
+                items.Add(item);
+                item = new() { Icon = "🆙", Tag = ModTypeGroupName.ContentExtensions };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.ContentExtensions
+                );
+                items.Add(item);
+                item = new() { Icon = "🛠", Tag = ModTypeGroupName.UtilityMods };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.UtilityMods
+                );
+                items.Add(item);
+                item = new() { Icon = "🛄", Tag = ModTypeGroupName.MiscellaneousMods };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.MiscellaneousMods
+                );
+                items.Add(item);
+                item = new() { Icon = "✨", Tag = ModTypeGroupName.BeautifyMods };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.BeautifyMods
+                );
+                items.Add(item);
+                item = new() { Icon = "🆓", Tag = ModTypeGroupName.UnknownMods };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.UnknownMods
+                );
+                items.Add(item);
+                return items;
+            })());
 
     [ObservableProperty]
-    private ListBoxVM _listBox_UserGroupMenu =
-        new(() =>
-        {
-            ObservableCollection<ListBoxItemVM> items = new();
-            ListBoxItemVM item = new() { Icon = "🌟", Tag = ModTypeGroupName.Collected };
-            item.ToolTip = item.Content = ObservableI18n.BindingValue(
-                (value) => item.ToolTip = item.Content = value,
-                () => I18nRes.CollectedMods
-            );
-            items.Add(item);
-            return items;
-        });
+    private ComboBoxVM<ModTypeGroupItem> _comboBox_UserGroup = new(new Func<
+                ObservableCollection<ComboBoxItemVM<ModTypeGroupItem>>
+            >(() =>
+            {
+                ObservableCollection<ComboBoxItemVM<ModTypeGroupItem>> items = new();
+                ComboBoxItemVM<ModTypeGroupItem> item =
+                    new() { Icon = "🌟", Tag = ModTypeGroupName.Collected };
+                item.Attachment = new();
+                item.Attachment.Name = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Attachment!.Name = value,
+                    () => I18nRes.CollectedMods
+                );
+                items.Add(item);
+                return items;
+            })());
 
     #endregion ListBox
 
     #region ComboBox
 
     [ObservableProperty]
-    private ComboBoxVM _comboBox_ModFilterType =
-        new(() =>
-        {
-            ObservableCollection<ComboBoxItemVM> items = new();
-            ComboBoxItemVM item = new() { Content = I18nRes.Name, Tag = nameof(ModShowInfo.Name) };
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => target.Content = value,
-                () => I18nRes.Name
-            );
-            items.Add(item);
-            item = new() { Content = nameof(ModShowInfo.Id), Tag = nameof(ModShowInfo.Id) };
-            items.Add(item);
-            item = new() { Content = I18nRes.Author, Tag = nameof(ModShowInfo.Author) };
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => items[1].Content = value,
-                () => I18nRes.Author
-            );
-            items.Add(item);
-            item = new() { Content = I18nRes.Description, Tag = nameof(ModShowInfo.Description) };
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => item.Content = value,
-                () => I18nRes.Description
-            );
-            items.Add(item);
-            item = new()
+    private ComboBoxVM _comboBox_ModFilterType = new(new Func<
+                ObservableCollection<ComboBoxItemVM>
+            >(() =>
             {
-                Content = I18nRes.UserDescription,
-                Tag = nameof(ModShowInfo.UserDescription)
-            };
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => item.Content = value,
-                () => I18nRes.UserDescription
-            );
-            items.Add(item);
-            return items;
-        });
+                ObservableCollection<ComboBoxItemVM> items = new();
+                ComboBoxItemVM item =
+                    new() { Content = I18nRes.Name, Tag = nameof(ModShowInfo.Name) };
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => target.Content = value,
+                    () => I18nRes.Name
+                );
+                items.Add(item);
+                item = new() { Content = nameof(ModShowInfo.Id), Tag = nameof(ModShowInfo.Id) };
+                items.Add(item);
+                item = new() { Content = I18nRes.Author, Tag = nameof(ModShowInfo.Author) };
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => items[1].Content = value,
+                    () => I18nRes.Author
+                );
+                items.Add(item);
+                item = new()
+                {
+                    Content = I18nRes.Description,
+                    Tag = nameof(ModShowInfo.Description)
+                };
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => item.Content = value,
+                    () => I18nRes.Description
+                );
+                items.Add(item);
+                item = new()
+                {
+                    Content = I18nRes.UserDescription,
+                    Tag = nameof(ModShowInfo.UserDescription)
+                };
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => item.Content = value,
+                    () => I18nRes.UserDescription
+                );
+                items.Add(item);
+                return items;
+            })());
 
     [ObservableProperty]
-    private ComboBoxVM _comboBox_ExportUserGroup =
-        new(() =>
-        {
-            ObservableCollection<ComboBoxItemVM> items = new();
-            ComboBoxItemVM item = new() { Content = I18nRes.All, Tag = nameof(I18nRes.All) };
-            item.Content = ObservableI18n.BindingValue(
-                item,
-                (value, target) => item.Content = value,
-                () => I18nRes.All
-            );
-            items.Add(item);
-            return items;
-        });
+    private ComboBoxVM _comboBox_ExportUserGroup = new(new Func<
+                ObservableCollection<ComboBoxItemVM>
+            >(() =>
+            {
+                ObservableCollection<ComboBoxItemVM> items = new();
+                ComboBoxItemVM item = new() { Content = I18nRes.All, Tag = nameof(I18nRes.All) };
+                item.Content = ObservableI18n.BindingValue(
+                    item,
+                    (value, target) => item.Content = value,
+                    () => I18nRes.All
+                );
+                items.Add(item);
+                return items;
+            })());
 
     #endregion ComboBox
 
@@ -266,11 +294,11 @@ internal partial class ModManagerPageViewModel : ObservableObject
     {
         InitializeData();
         I18n.AddCultureChangedAction(CultureChangedAction);
-        ListBox_MainMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
-        ListBox_TypeGroupMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
-        ListBox_UserGroupMenu.SelectionChangedEvent += ListBox_Menu_SelectionChangedEvent;
+        ComboBox_MainGroup.SelectionChangedEvent += ComboBox_TypeGroup_SelectionChangedEvent;
+        ComboBox_TypeGroup.SelectionChangedEvent += ComboBox_TypeGroup_SelectionChangedEvent;
+        ComboBox_UserGroup.SelectionChangedEvent += ComboBox_TypeGroup_SelectionChangedEvent;
+        ComboBox_MainGroup.SelectedIndex = 0;
         ComboBox_ModFilterType.SelectedIndex = 0;
-        ListBox_MainMenu.SelectedIndex = 0;
         ComboBox_ExportUserGroup.SelectedIndex = 0;
     }
 
@@ -281,7 +309,7 @@ internal partial class ModManagerPageViewModel : ObservableObject
 
     private bool _remindUnknownMods = false;
 
-    private void ListBox_Menu_SelectionChangedEvent(ListBoxItemVM item)
+    private void ComboBox_TypeGroup_SelectionChangedEvent(ComboBoxItemVM<ModTypeGroupItem> item)
     {
         if (item is null || _nowSelectedGroup == item)
             return;
@@ -289,28 +317,34 @@ internal partial class ModManagerPageViewModel : ObservableObject
         if (_nowSelectedGroup?.IsSelected is true)
             _nowSelectedGroup.IsSelected = false;
         _nowSelectedGroup = item;
-        var group = item.Tag!.ToString()!;
-        if (r_allUserGroups.ContainsKey(group))
-            NowSelectedIsUserGroup = true;
-        else
-            NowSelectedIsUserGroup = false;
-        ClearSelectedMods(_nowSelectedMods);
-        CheckFilterAndRefreshShowMods();
-        RefreshAllModsContextMenu();
-        if (
-            _remindUnknownMods is false
-            && group == nameof(ModTypeGroupName.UnknownMods)
-            && r_allModShowInfoGroups[group].Count > 0
-        )
-        {
-            MessageBoxVM.Show(
-                new(string.Format(I18nRes.UnknownModsMessage, r_allModShowInfoGroups[group].Count))
-            );
-            _remindUnknownMods = true;
-        }
+        //var group = item.Tag!.ToString()!;
+        //if (r_allUserGroups.ContainsKey(group))
+        //    NowSelectedIsUserGroup = true;
+        //else
+        //    NowSelectedIsUserGroup = false;
+        //ClearSelectedMods(_nowSelectedMods);
+        //CheckFilterAndRefreshShowMods();
+        //RefreshAllModsContextMenu();
+        //if (
+        //    _remindUnknownMods is false
+        //    && group == nameof(ModTypeGroupName.UnknownMods)
+        //    && r_allModShowInfoGroups[group].Count > 0
+        //)
+        //{
+        //    MessageBoxVM.Show(
+        //        new(string.Format(I18nRes.UnknownModsMessage, r_allModShowInfoGroups[group].Count))
+        //    );
+        //    _remindUnknownMods = true;
+        //}
     }
 
     #region RelayCommand
+
+    [RelayCommand]
+    private void SelectedMainGroup(ComboBoxItemVM<ModTypeGroupItem> item)
+    {
+        ComboBox_MainGroup.SelectedItem = item;
+    }
 
     [RelayCommand]
     private void GroupMenuExpand()
